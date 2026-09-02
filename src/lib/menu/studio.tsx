@@ -23,7 +23,8 @@ export function useStudioFlash() {
   const { setSnapshot } = useStudio();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [ok, setOk] = useState(false);
+  const [ok, setOkState] = useState(false);
+  const setOk = useCallback((value: boolean | string) => setOkState(value === true || typeof value === "string"), []);
   const run = useCallback(
     async <T,>(fn: () => Promise<FnResult<T>>): Promise<boolean> => {
       setBusy(true); setError(""); setOk(false);
@@ -37,7 +38,7 @@ export function useStudioFlash() {
         setError(err instanceof Error ? err.message : "تعذر الحفظ");
         return false;
       } finally { setBusy(false); }
-    }, [setSnapshot],
+    }, [setSnapshot, setOk],
   );
   return { busy, error, ok, setError, setOk, run };
 }
