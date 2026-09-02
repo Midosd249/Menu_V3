@@ -83,6 +83,48 @@ export type Product = {
   isAvailable: boolean;
   isFeatured: boolean;
   allergens: string;
+  tags: string[];
+  dietaryLabels: string[];
+};
+
+export type ProductVariant = {
+  id: string;
+  tenantId: string;
+  productId: string;
+  nameAr: string;
+  nameEn: string;
+  price: number;
+  sortOrder: number;
+  isAvailable: boolean;
+};
+
+export type ModifierGroup = {
+  id: string;
+  tenantId: string;
+  nameAr: string;
+  nameEn: string;
+  minSelect: number;
+  maxSelect: number;
+  sortOrder: number;
+  isRequired: boolean;
+  isActive: boolean;
+};
+
+export type ModifierOption = {
+  id: string;
+  tenantId: string;
+  groupId: string;
+  nameAr: string;
+  nameEn: string;
+  priceDelta: number;
+  sortOrder: number;
+  isAvailable: boolean;
+};
+
+export type ProductOptions = {
+  variants: ProductVariant[];
+  groups: ModifierGroup[];
+  options: ModifierOption[];
 };
 
 export type Membership = {
