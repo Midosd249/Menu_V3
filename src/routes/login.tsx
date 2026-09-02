@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/login")({ component: Login });
 
 function Login() {
   const { lang } = useLang();
+  const navigate = useNavigate();
   const { user, isPending } = useCurrentUserState();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [error, setError] = useState("");
@@ -23,21 +24,30 @@ function Login() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "");
+    const email = String(form.get("email") || "").trim();
     const password = String(form.get("password") || "");
-    const name = String(form.get("name") || "");
+    const name = String(form.get("name") || "").trim();
     setBusy(true);
     setError("");
     try {
       if (mode === "up") {
-        const result = await authClient.signUp.email({ email, password, name: name || email.split("@")[0] });
+        const result = await authClient.signUp.email({
+          email,
+          password,
+          name: name || email.split("@")[0],
+        });
         if (result.error) throw new Error(result.error.message);
       } else {
         const result = await authClient.signIn.email({ email, password });
         if (result.error) throw new Error(result.error.message);
       }
-      window.location.assign("/studio");
+
+      // Refresh Better Auth's session cache before routing. This avoids the
+      // old hard reload, which caused a visible second round of loading on /studio.
+      await authClient.getSession();
+      await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
     } finally {
@@ -66,6 +76,7 @@ function Login() {
                   key={p.providerId}
                   type="button"
                   variant="outline"
+                  disabled={busy}
                   onClick={() => signIn(p.providerId, { callbackURL: "/studio" })}
                 >
                   {p.providerId === "google" ? t(copy.auth.google, lang) : t(copy.auth.x, lang)}
@@ -85,7 +96,7 @@ function Login() {
               <Field label={t(copy.auth.password, lang)}>
                 <Input name="password" type="password" required minLength={8} autoComplete={mode === "up" ? "new-password" : "current-password"} />
               </Field>
-              {error ? <p className="text-sm text-bad">{error}</p> : null}
+              {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
               <Button type="submit" disabled={busy}>
                 {busy ? t(copy.state.loading, lang) : mode === "up" ? t(copy.auth.signUp, lang) : t(copy.auth.signIn, lang)}
               </Button>
@@ -93,6 +104,7 @@ function Login() {
             <button
               type="button"
               className="text-sm text-ink-soft underline-offset-4 hover:underline"
+              disabled={busy}
               onClick={() => setMode(mode === "up" ? "in" : "up")}
             >
               {mode === "up" ? t(copy.auth.haveAccount, lang) : t(copy.auth.noAccount, lang)}
