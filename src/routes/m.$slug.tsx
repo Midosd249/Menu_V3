@@ -26,10 +26,7 @@ function readCachedMenu(key: string): PublicMenu | null {
 function writeCachedMenu(key: string, menu: PublicMenu): void {
   if (typeof window === "undefined") return;
   try {
-    window.sessionStorage.setItem(
-      `${MENU_CACHE_PREFIX}${key}`,
-      JSON.stringify({ menu, at: Date.now() }),
-    );
+    window.sessionStorage.setItem(`${MENU_CACHE_PREFIX}${key}`, JSON.stringify({ menu, at: Date.now() }));
   } catch {
     /* Storage is an optional performance enhancement. */
   }
@@ -77,13 +74,7 @@ export function MenuLoader({ slug, branch }: { slug: string; branch?: string }) 
         setState({ status: "ok", menu: result.data });
       })
       .catch((err: unknown) => {
-        if (!instant) {
-          setState({
-            status: "error",
-            message: err instanceof Error ? err.message : "تعذر تحميل المنيو",
-            retry: load,
-          });
-        }
+        if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو", retry: load });
       });
   }
 
@@ -94,5 +85,5 @@ export function MenuLoader({ slug, branch }: { slug: string; branch?: string }) 
 
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />;
   if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
-  return <PublicMenuView menu={state.menu} />;
+  return <div className="menu-public-shell"><PublicMenuView menu={state.menu} /></div>;
 }
