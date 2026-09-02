@@ -24,13 +24,14 @@ const NAV = [
   { to: "/studio/menu", icon: UtensilsCrossed, label: copy.nav.menu },
   { to: "/studio/branches", icon: Building2, label: copy.nav.branches },
   { to: "/studio/brand", icon: Palette, label: copy.nav.brand },
+  { to: "/studio/design", icon: Palette, label: { ar: "التصميم", en: "Design" } },
   { to: "/studio/qr", icon: QrCode, label: copy.nav.qr },
   { to: "/studio/analytics", icon: BarChart3, label: copy.nav.analytics },
   { to: "/studio/import", icon: Upload, label: copy.nav.import },
   { to: "/studio/settings", icon: Settings, label: copy.nav.settings },
 ] as const;
 
-const MOBILE_PRIMARY = ["/studio", "/studio/menu", "/studio/qr"] as const;
+const MOBILE_PRIMARY = ["/studio", "/studio/menu", "/studio/design"] as const;
 
 export function StudioShell() {
   const { lang } = useLang();
