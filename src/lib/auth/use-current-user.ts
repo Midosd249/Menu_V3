@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { authClient, authEnabled } from "./client";
 
 export type AppUser = {
@@ -21,6 +21,7 @@ export type CurrentUserState = {
   user: AppUser | null;
   isPending: boolean;
   error: string | null;
+  refresh: () => Promise<void>;
 };
 
 const SESSION_TTL_MS = 15_000;
@@ -53,7 +54,6 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   }
 }
 
-/** Resolve the current session once and share the result between route guards. */
 export async function refreshCurrentUser(force = false): Promise<AppUser | null> {
   if (!authEnabled) return DEV_USER;
   const now = Date.now();
@@ -74,34 +74,51 @@ export async function refreshCurrentUser(force = false): Promise<AppUser | null>
   return sessionRequest;
 }
 
-/**
- * Fast session state for route guards. A recently verified session is rendered
- * immediately while a background refresh keeps it fresh. Failed session checks
- * become a visible error instead of an infinite spinner.
- */
 export function useCurrentUserState(): CurrentUserState {
-  if (!authEnabled) return { user: DEV_USER, isPending: false, error: null };
+  if (!authEnabled) {
+    return {
+      user: DEV_USER,
+      isPending: false,
+      error: null,
+      refresh: async () => undefined,
+    };
+  }
 
-  const initial = cachedSession?.user ?? null;
-  const [state, setState] = useState<CurrentUserState>({
-    user: initial,
+  const [state, setState] = useState<CurrentUserState>(() => ({
+    user: cachedSession?.user ?? null,
     isPending: !cachedSession,
     error: null,
-  });
+    refresh: async () => undefined,
+  }));
+
+  const refresh = useCallback(async () => {
+    try {
+      const user = await refreshCurrentUser(true);
+      setState((prev) => ({ ...prev, user, isPending: false, error: null }));
+    } catch (err: unknown) {
+      setState((prev) => ({
+        ...prev,
+        user: cachedSession?.user ?? null,
+        isPending: false,
+        error: err instanceof Error ? err.message : "تعذر التحقق من الجلسة",
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     let alive = true;
     void refreshCurrentUser()
       .then((user) => {
-        if (alive) setState({ user, isPending: false, error: null });
+        if (alive) setState((prev) => ({ ...prev, user, isPending: false, error: null }));
       })
       .catch((err: unknown) => {
         if (alive) {
-          setState({
+          setState((prev) => ({
+            ...prev,
             user: cachedSession?.user ?? null,
             isPending: false,
             error: err instanceof Error ? err.message : "تعذر التحقق من الجلسة",
-          });
+          }));
         }
       });
     return () => {
@@ -109,7 +126,7 @@ export function useCurrentUserState(): CurrentUserState {
     };
   }, []);
 
-  return state;
+  return { ...state, refresh };
 }
 
 export function useCurrentUser(): AppUser | null {
