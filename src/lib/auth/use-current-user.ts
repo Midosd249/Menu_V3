@@ -75,23 +75,18 @@ export async function refreshCurrentUser(force = false): Promise<AppUser | null>
 }
 
 export function useCurrentUserState(): CurrentUserState {
-  if (!authEnabled) {
-    return {
-      user: DEV_USER,
-      isPending: false,
-      error: null,
-      refresh: async () => undefined,
-    };
-  }
-
   const [state, setState] = useState<CurrentUserState>(() => ({
-    user: cachedSession?.user ?? null,
-    isPending: !cachedSession,
+    user: authEnabled ? cachedSession?.user ?? null : DEV_USER,
+    isPending: authEnabled && !cachedSession,
     error: null,
     refresh: async () => undefined,
   }));
 
   const refresh = useCallback(async () => {
+    if (!authEnabled) {
+      setState((prev) => ({ ...prev, user: DEV_USER, isPending: false, error: null }));
+      return;
+    }
     try {
       const user = await refreshCurrentUser(true);
       setState((prev) => ({ ...prev, user, isPending: false, error: null }));
@@ -106,6 +101,7 @@ export function useCurrentUserState(): CurrentUserState {
   }, []);
 
   useEffect(() => {
+    if (!authEnabled) return;
     let alive = true;
     void refreshCurrentUser()
       .then((user) => {
