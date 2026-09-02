@@ -49,7 +49,6 @@
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .hairline { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-ink) 10%, transparent); }
 
-/* Menu V3 hospitality layer: editorial, tactile, mobile-first. */
 .menu-public-shell { min-height: 100dvh; background: radial-gradient(circle at 50% 0%, rgba(154,90,56,.08), transparent 34rem), var(--color-paper); }
 .menu-public-shell > div { min-height: 100dvh; }
 .menu-public-shell header { box-shadow: 0 18px 50px rgba(23,20,17,.14); }
@@ -62,9 +61,72 @@
 .menu-public-shell img { background: var(--color-sand); }
 .menu-public-shell input { box-shadow: 0 6px 18px rgba(23,20,17,.04); }
 .menu-public-shell [class*="sticky"] { box-shadow: 0 10px 30px rgba(23,20,17,.05); }
-
-/* Keep the owner dashboard restrained while giving interactive controls a premium feel. */
 button, a { -webkit-tap-highlight-color: transparent; }
+
+/* Menu V3 Theme Engine — eight distinct hospitality compositions. */
+html[data-menu-theme="editorial"] .menu-public-shell { --theme-radius: 22px; }
+html[data-menu-theme="editorial"] .menu-public-shell header { border-radius: 0 0 34px 34px; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button { border-radius: var(--theme-radius); padding: 10px; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img { border-radius: 16px; }
+
+html[data-menu-theme="dark-dining"] .menu-public-shell { background: #11100f; color: #f4eee5; }
+html[data-menu-theme="dark-dining"] .menu-public-shell header { min-height: 72dvh; display: flex; align-items: end; border-radius: 0; }
+html[data-menu-theme="dark-dining"] .menu-public-shell header > div:last-child { width: 100%; }
+html[data-menu-theme="dark-dining"] .menu-public-shell main,
+html[data-menu-theme="dark-dining"] .menu-public-shell main > footer { color: #f4eee5; }
+html[data-menu-theme="dark-dining"] .menu-public-shell main ul > li > button,
+html[data-menu-theme="dark-dining"] .menu-public-shell main section > div > button { background: #1b1917; border-color: #39332d; color: #f4eee5; }
+html[data-menu-theme="dark-dining"] .menu-public-shell [class*="sticky"] { background: rgba(17,16,15,.94); border-color: #39332d; }
+html[data-menu-theme="dark-dining"] .menu-public-shell .bg-sand { background: #29241f; }
+
+html[data-menu-theme="coffee"] .menu-public-shell { background: #faf7f2; }
+html[data-menu-theme="coffee"] .menu-public-shell header { min-height: 360px; border-radius: 0 0 28px 28px; }
+html[data-menu-theme="coffee"] .menu-public-shell main { max-width: 48rem; }
+html[data-menu-theme="coffee"] .menu-public-shell main ul { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+html[data-menu-theme="coffee"] .menu-public-shell main ul > li > button { display: grid; grid-template-columns: 1fr; gap: 0; height: 100%; padding: 0; overflow: hidden; border-radius: 18px; }
+html[data-menu-theme="coffee"] .menu-public-shell main ul > li > button > :first-child { width: 100%; height: 145px; }
+html[data-menu-theme="coffee"] .menu-public-shell main ul > li > button > :last-child { padding: 12px; }
+
+html[data-menu-theme="heritage"] .menu-public-shell { background-color: #f4eadb; background-image: radial-gradient(rgba(115,72,40,.07) 1px, transparent 1px); background-size: 18px 18px; }
+html[data-menu-theme="heritage"] .menu-public-shell header { border-bottom: 4px double rgba(115,72,40,.35); }
+html[data-menu-theme="heritage"] .menu-public-shell main > section > h2 { font-family: Georgia, "Times New Roman", serif; }
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button { border-width: 2px; border-radius: 14px; background: rgba(255,250,244,.82); }
+
+html[data-menu-theme="fast-casual"] .menu-public-shell { background: #f8f7f3; }
+html[data-menu-theme="fast-casual"] .menu-public-shell header { border-radius: 0 0 22px 22px; }
+html[data-menu-theme="fast-casual"] .menu-public-shell main { max-width: 52rem; }
+html[data-menu-theme="fast-casual"] .menu-public-shell main ul { gap: 8px; }
+html[data-menu-theme="fast-casual"] .menu-public-shell main ul > li > button { border-width: 1px; border-radius: 14px; min-height: 92px; }
+html[data-menu-theme="fast-casual"] .menu-public-shell main ul > li > button > :first-child { width: 92px; }
+html[data-menu-theme="fast-casual"] .menu-public-shell main ul > li > button:hover { transform: translateX(-2px); }
+
+html[data-menu-theme="gallery"] .menu-public-shell { background: #f0ece6; }
+html[data-menu-theme="gallery"] .menu-public-shell main { max-width: 56rem; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button { display: grid; grid-template-columns: 1fr; padding: 0; overflow: hidden; border-radius: 20px; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :first-child { width: 100%; height: 220px; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child { padding: 16px; }
+html[data-menu-theme="gallery"] .menu-public-shell main section > div > button { width: 190px; border-radius: 20px; }
+
+html[data-menu-theme="immersive"] .menu-public-shell header { min-height: 82dvh; display: flex; align-items: end; }
+html[data-menu-theme="immersive"] .menu-public-shell header > div:last-child { width: 100%; padding-bottom: 42px; }
+html[data-menu-theme="immersive"] .menu-public-shell main { max-width: 60rem; }
+html[data-menu-theme="immersive"] .menu-public-shell main > section { padding-block: 18px; }
+html[data-menu-theme="immersive"] .menu-public-shell main ul { gap: 14px; }
+html[data-menu-theme="immersive"] .menu-public-shell main ul > li > button { border-radius: 24px; min-height: 112px; }
+
+html[data-menu-theme="minimal"] .menu-public-shell { background: #fff; }
+html[data-menu-theme="minimal"] .menu-public-shell header { background: #fff; color: #171411; box-shadow: none; border-bottom: 1px solid #e7e2da; }
+html[data-menu-theme="minimal"] .menu-public-shell main ul > li > button { border-color: #ece8e1; box-shadow: none; border-radius: 10px; }
+html[data-menu-theme="minimal"] .menu-public-shell main ul > li > button:hover { box-shadow: none; transform: none; }
+html[data-menu-theme="minimal"] .menu-public-shell [class*="sticky"] { box-shadow: none; }
+
+@media (max-width: 639px) {
+  html[data-menu-theme="coffee"] .menu-public-shell main ul,
+  html[data-menu-theme="gallery"] .menu-public-shell main ul { grid-template-columns: 1fr; }
+  html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :first-child { height: 190px; }
+  html[data-menu-theme="immersive"] .menu-public-shell header { min-height: 70dvh; }
+}
 
 @media (min-width: 640px) {
   .menu-public-shell main { max-width: 44rem; }
