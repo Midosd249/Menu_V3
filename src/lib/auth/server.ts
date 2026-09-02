@@ -1,13 +1,11 @@
-/**
- * Self-hosted Better Auth for THIS app (server-only).
- */
+/** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
 import { bearer, genericOAuth } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { randomBytes } from "node:crypto";
 import { Pool } from "pg";
-import { ensureDbReady, getPglite } from "../db";
+import { ensureDbReady, getPglite, POSTGRES_SCHEMA } from "../db";
 import { emailAndPasswordEnabled } from "./email-password";
 import { GATE_PROVIDER_ID, gateIdentitySessions } from "./gate-session.server";
 import { GROK_PROVIDERS } from "./providers";
@@ -21,14 +19,11 @@ import {
 
 void ensureDbReady();
 
-const globalAuthRef = globalThis as typeof globalThis & {
-  __grokAuthPreviewSecret__?: string;
-};
+const globalAuthRef = globalThis as typeof globalThis & { __grokAuthPreviewSecret__?: string };
 function previewAuthSecret(): string {
   globalAuthRef.__grokAuthPreviewSecret__ ??= randomBytes(32).toString("hex");
   return globalAuthRef.__grokAuthPreviewSecret__;
 }
-
 const env = (key: string): string | undefined => {
   const value = process.env[key]?.trim();
   return value ? value : undefined;
@@ -42,31 +37,19 @@ export const authConfigured = !authDisabled && Boolean(grokClientId && grokClien
 
 const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
-const LOCAL_DEV_ORIGINS: string[] = [
-  "http://localhost:8080",
-  "http://127.0.0.1:8080",
-  "http://[::1]:8080",
-];
-const VERCEL_ORIGINS: string[] = [
+const LOCAL_DEV_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080", "http://[::1]:8080"];
+const VERCEL_ORIGINS = [
   "https://menu-v3-kohl.vercel.app",
   "https://menu-v3-midosd2s-projects.vercel.app",
   "https://menu-v3-git-main-midosd2s-projects.vercel.app",
   "https://menu-v3-*.vercel.app",
 ];
-
 const baseURL = explicitBaseURL ?? {
-  allowedHosts: [
-    ...previewAllowedHosts,
-    "localhost",
-    "127.0.0.1",
-    "[::1]",
-    "menu-v3-*.vercel.app",
-  ],
+  allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]", "menu-v3-*.vercel.app"],
   protocol: "auto" as const,
   fallback: "https://menu-v3-kohl.vercel.app",
 };
-
-const trustedOrigins: string[] = explicitBaseURL
+const trustedOrigins = explicitBaseURL
   ? [explicitBaseURL, ...VERCEL_ORIGINS, ...LOCAL_DEV_ORIGINS]
   : [
       ...previewAllowedHosts,
@@ -82,13 +65,10 @@ const databaseUrl =
   env("SUPABASE_DB_URL") ??
   env("POSTGRES_URL_NON_POOLING");
 const issuerBase = grokIssuer.replace(/\/+$/, "");
-const grokAuthorizationUrl = `${issuerBase}/api/auth/oauth2/authorize`;
-const grokTokenUrl = `${issuerBase}/api/auth/oauth2/token`;
-const grokUserInfoUrl = `${issuerBase}/api/auth/oauth2/userinfo`;
-
 const database = databaseUrl
   ? new Pool({
       connectionString: databaseUrl,
+      options: `-c search_path=${POSTGRES_SCHEMA},public`,
       max: 5,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 10000,
@@ -96,23 +76,22 @@ const database = databaseUrl
     })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
-export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
-
 const grokOAuthPlugin = authConfigured
   ? genericOAuth({
       config: GROK_PROVIDERS.map(({ providerId, idp }) => ({
         providerId,
         clientId: grokClientId as string,
         clientSecret: grokClientSecret as string,
-        authorizationUrl: grokAuthorizationUrl,
-        tokenUrl: grokTokenUrl,
-        userInfoUrl: grokUserInfoUrl,
+        authorizationUrl: `${issuerBase}/api/auth/oauth2/authorize`,
+        tokenUrl: `${issuerBase}/api/auth/oauth2/token`,
+        userInfoUrl: `${issuerBase}/api/auth/oauth2/userinfo`,
         scopes: ["openid", "profile", "email"],
         authorizationUrlParams: { idp, prompt: "login" },
       })),
     })
   : null;
 
+export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
 export const auth = betterAuth({
   baseURL,
   secret: env("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
@@ -138,16 +117,10 @@ export const auth = betterAuth({
       dont_remember: { name: "__Host-grok-auth.dont_remember" },
     },
   },
-  plugins: [
-    gateIdentitySessions(),
-    ...(grokOAuthPlugin ? [grokOAuthPlugin] : []),
-    bearer(),
-    tanstackStartCookies(),
-  ],
+  plugins: [gateIdentitySessions(), ...(grokOAuthPlugin ? [grokOAuthPlugin] : []), bearer(), tanstackStartCookies()],
 });
 
 export function readSessionToken(): string | null {
   return getCookie(SESSION_TOKEN_COOKIE) ?? null;
 }
-
 export { GROK_PROVIDERS } from "./providers";
