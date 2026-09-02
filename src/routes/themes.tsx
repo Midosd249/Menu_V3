@@ -5,17 +5,6 @@ import { MENU_THEMES } from "@/lib/theme";
 
 export const Route = createFileRoute("/themes")({ component: ThemesPage });
 
-const descriptions: Record<string, { ar: string; en: string }> = {
-  editorial: { ar: "فخم وهادئ للمطاعم التي تريد هوية تحريرية راقية.", en: "Refined editorial presentation for premium hospitality." },
-  "dark-dining": { ar: "تجربة داكنة سينمائية للمطاعم الراقية والعشاء.", en: "Cinematic dark presentation for fine dining." },
-  coffee: { ar: "مصمم للمقاهي: سريع، بصري، ومناسب للاختيار السريع.", en: "Fast, visual and compact for specialty coffee." },
-  heritage: { ar: "دفء عربي بلمسة تراثية بدون زخرفة زائدة.", en: "Warm Arabic heritage without visual clutter." },
-  "fast-casual": { ar: "واضح وسريع للبرجر والبيتزا والمطاعم السريعة.", en: "Clear, energetic and fast for casual concepts." },
-  gallery: { ar: "الأطباق هي الأبطال؛ صور كبيرة وشبكة بصرية.", en: "Food-first gallery layout with large visual cards." },
-  immersive: { ar: "منيو غامر يبدأ بصورة كبيرة وقصة بصرية.", en: "Immersive, image-led experience with a cinematic entry." },
-  minimal: { ar: "نظيف جداً للعلامات التي تريد التركيز على المحتوى.", en: "Quiet, minimal and content-first." },
-};
-
 function ThemesPage() {
   const { lang } = useLang();
   return (
@@ -38,22 +27,25 @@ function ThemesPage() {
         </header>
 
         <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {MENU_THEMES.map((theme, index) => {
-            const d = descriptions[theme.key];
-            return (
-              <article key={theme.key} className="group overflow-hidden rounded-3xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <div className={`menu-theme-preview ${theme.preview.className}`}>
-                  <div className="preview-orb" />
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{lang === "ar" ? theme.name.ar : theme.name.en}</strong>
+          {MENU_THEMES.map((theme, index) => (
+            <article key={theme.key} className="group overflow-hidden rounded-3xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <div className={`menu-theme-preview ${theme.preview.className}`}>
+                <div className="preview-orb" />
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{lang === "ar" ? theme.name.ar : theme.name.en}</strong>
+              </div>
+              <div className="grid gap-3 p-5">
+                <div>
+                  <h2 className="font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h2>
+                  <p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? theme.description.ar : theme.description.en}</p>
                 </div>
-                <div className="grid gap-3 p-5">
-                  <div><h2 className="font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h2><p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? d.ar : d.en}</p></div>
-                  <a href={`/m/nafas?theme=${theme.key}`} className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-medium text-paper">{lang === "ar" ? "تجربة القالب" : "Try theme"}<ArrowUpLeft className="size-4" /></a>
-                </div>
-              </article>
-            );
-          })}
+                <Link to="/themes/preview" search={{ theme: theme.key }} className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-medium text-paper">
+                  {lang === "ar" ? "تجربة القالب" : "Try theme"}
+                  <ArrowUpLeft className="size-4" />
+                </Link>
+              </div>
+            </article>
+          ))}
         </section>
       </div>
     </main>
