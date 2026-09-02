@@ -65,9 +65,11 @@ function createPostgresSql(): Promise<Sql> {
     const pool = new Pool({
       connectionString: databaseUrl,
       options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      max: 5,
+      // Supavisor is already a connection pool. Keep the per-instance pool
+      // small so Vercel scale-out cannot exhaust the database connection budget.
+      max: 2,
       idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
       keepAlive: true,
     });
     return toSql(async <T>(text: string, params: unknown[]) => {
