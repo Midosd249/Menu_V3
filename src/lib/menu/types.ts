@@ -1,3 +1,5 @@
+import type { ThemeKey } from "@/lib/theme";
+
 export type Lang = "ar" | "en";
 export type Role = "owner" | "admin" | "editor";
 export type EventType = "visit" | "product_view" | "qr_scan" | "whatsapp";
@@ -25,6 +27,7 @@ export type Tenant = {
   whatsappTemplate: string;
   primaryColor: string;
   accentColor: string;
+  themeKey: ThemeKey;
   currency: string;
   city: string;
   country: string;
