@@ -12,6 +12,7 @@ import {
   SlidersHorizontal,
   ExternalLink,
   Ellipsis,
+  Users,
 } from "lucide-react";
 import { UserButton } from "@/lib/auth/gates";
 import { LangToggle } from "@/components/lang-toggle";
@@ -30,6 +31,7 @@ const NAV = [
   { to: "/studio/qr", icon: QrCode, label: copy.nav.qr },
   { to: "/studio/analytics", icon: BarChart3, label: copy.nav.analytics },
   { to: "/studio/import", icon: Upload, label: copy.nav.import },
+  { to: "/studio/team", icon: Users, label: { ar: "الفريق والصلاحيات", en: "Team & permissions" } },
   { to: "/studio/settings", icon: Settings, label: copy.nav.settings },
 ] as const;
 
