@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
-import { refreshCurrentUser, useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/login")({ component: Login });
 function Login() {
   const { lang } = useLang();
   const navigate = useNavigate();
-  const { user, isPending, error: sessionError } = useCurrentUserState();
+  const { user, isPending, error: sessionError, refresh } = useCurrentUserState();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -22,7 +22,7 @@ function Login() {
   if (isPending) return <LoadingState label="جارٍ التحقق…" />;
   if (user) return <Navigate to="/studio" />;
   if (sessionError && !busy) {
-    return <ErrorState message={sessionError} onRetry={() => void refreshCurrentUser(true)} />;
+    return <ErrorState message={sessionError} onRetry={refresh} />;
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -47,7 +47,7 @@ function Login() {
         if (result.error) throw new Error(result.error.message);
       }
 
-      await refreshCurrentUser(true);
+      await refresh();
       await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
