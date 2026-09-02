@@ -8,6 +8,17 @@ import type { FnResult } from "./types";
 export const ORDER_STATUSES = ["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
+export type OrderItemDetail = {
+  id: string;
+  productId: string;
+  productNameAr: string;
+  productNameEn: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+  selectedOptions: unknown;
+};
+
 export type AdminOrder = {
   id: string;
   orderNumber: number;
@@ -24,6 +35,7 @@ export type AdminOrder = {
   subtotal: number;
   total: number;
   itemCount: number;
+  items: OrderItemDetail[];
   createdAt: string;
   updatedAt: string;
 };
@@ -55,7 +67,21 @@ async function assertPlatformAdmin(userId: string): Promise<FnResult<true>> {
   }
 }
 
+function mapItem(row: Record<string, unknown>): OrderItemDetail {
+  return {
+    id: String(row.id),
+    productId: String(row.product_id ?? ""),
+    productNameAr: String(row.product_name_ar ?? ""),
+    productNameEn: String(row.product_name_en ?? ""),
+    quantity: Number(row.quantity ?? 0),
+    unitPrice: Number(row.unit_price ?? 0),
+    lineTotal: Number(row.line_total ?? 0),
+    selectedOptions: row.selected_options ?? null,
+  };
+}
+
 function mapOrder(row: Record<string, unknown>): AdminOrder {
+  const rawItems = Array.isArray(row.items) ? row.items : [];
   return {
     id: String(row.id),
     orderNumber: Number(row.order_number ?? 0),
@@ -71,11 +97,14 @@ function mapOrder(row: Record<string, unknown>): AdminOrder {
     currency: String(row.currency ?? "SAR"),
     subtotal: Number(row.subtotal ?? 0),
     total: Number(row.total ?? 0),
-    itemCount: Number(row.item_count ?? 0),
+    itemCount: Number(row.item_count ?? rawItems.length),
+    items: rawItems.map((item) => mapItem(item as Record<string, unknown>)),
     createdAt: new Date(String(row.created_at)).toISOString(),
     updatedAt: new Date(String(row.updated_at ?? row.created_at)).toISOString(),
   };
 }
+
+const orderSelect = (query: ReturnType<typeof String>) => query;
 
 export const getOrdersDashboard = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
@@ -89,7 +118,12 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
       const rows = await sql<Record<string, unknown>>`
         with filtered as (
           select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
-            (select count(*) from order_items oi where oi.order_id = o.id) as item_count
+            (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
+            coalesce((select jsonb_agg(jsonb_build_object(
+              'id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar,
+              'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price,
+              'line_total', oi.line_total, 'selected_options', oi.selected_options
+            ) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
           from orders o
           join tenants t on t.id = o.tenant_id
           left join branches b on b.id = o.branch_id
@@ -125,17 +159,27 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
+      const currentRows = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} limit 1`;
+      if (!currentRows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
+      const fromStatus = currentRows[0].status;
       const rows = await sql<Record<string, unknown>>`
         update orders set status = ${data.status}, updated_at = now() where id = ${data.id} returning *
       `;
       if (!rows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
-      await sql`
-        insert into order_status_events (id, order_id, to_status, actor_user_id)
-        values (${newId()}, ${data.id}, ${data.status}, ${context.userId})
-      `;
+      if (fromStatus !== data.status) {
+        await sql`
+          insert into order_status_events (id, order_id, from_status, to_status, actor_user_id)
+          values (${newId()}, ${data.id}, ${fromStatus}, ${data.status}, ${context.userId})
+        `;
+      }
       const detail = await sql<Record<string, unknown>>`
         select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
-          (select count(*) from order_items oi where oi.order_id = o.id) as item_count
+          (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
+          coalesce((select jsonb_agg(jsonb_build_object(
+            'id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar,
+            'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price,
+            'line_total', oi.line_total, 'selected_options', oi.selected_options
+          ) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
         from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
         where o.id = ${data.id} limit 1
       `;
