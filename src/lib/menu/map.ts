@@ -6,6 +6,11 @@ function str(value: unknown): string {
   return value == null ? "" : String(value);
 }
 
+function stringArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map(str).map((v) => v.trim()).filter(Boolean);
+  return [];
+}
+
 export function mapTenant(row: Record<string, unknown>): Tenant {
   const rawTheme = row.theme_key;
   return {
@@ -88,5 +93,7 @@ export function mapProduct(row: Record<string, unknown>): Product {
     isAvailable: bool(row.is_available),
     isFeatured: bool(row.is_featured),
     allergens: str(row.allergens),
+    tags: stringArray(row.tags),
+    dietaryLabels: stringArray(row.dietary_labels),
   };
 }
