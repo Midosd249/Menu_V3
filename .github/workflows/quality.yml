@@ -23,6 +23,7 @@ jobs:
           cache: npm
       - name: Install
         run: npm ci
+      # TanStack Start generates routeTree.gen.ts during Vite build; generate it before tsc.
       - name: Generate route tree
         run: npx vite build --mode development
       - name: Typecheck
