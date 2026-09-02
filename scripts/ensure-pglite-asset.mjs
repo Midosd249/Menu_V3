@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Ensure PGlite's runtime files are present in the TanStack Start/Vercel
- * server-function bundle. Vite/Nitro bundles the JS module, but the PGlite
- * package keeps pglite.wasm and pglite.data as external runtime assets.
+ * server-function bundle. PGlite 0.5.x requires three runtime artifacts:
+ * pglite.data, pglite.wasm and initdb.wasm.
  */
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
@@ -22,6 +22,7 @@ const serverLibs = join(
 const assets = [
   ["pglite.data", "pglite.data"],
   ["pglite.wasm", "pglite.wasm"],
+  ["initdb.wasm", "initdb.wasm"],
 ];
 
 if (!existsSync(join(root, ".vercel", "output"))) {
@@ -39,5 +40,7 @@ for (const [sourceName, targetName] of assets) {
     throw new Error(`Missing PGlite runtime asset: ${source}`);
   }
   copyFileSync(source, target);
-  console.log(`[pglite] copied ${sourceName} -> .vercel/output/functions/__server.func/_libs/${targetName}`);
+  console.log(
+    `[pglite] copied ${sourceName} -> .vercel/output/functions/__server.func/_libs/${targetName}`,
+  );
 }
