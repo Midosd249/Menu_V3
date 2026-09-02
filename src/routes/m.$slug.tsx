@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { getPublicMenu } from "@/lib/menu/public";
@@ -85,5 +86,10 @@ export function MenuLoader({ slug, branch }: { slug: string; branch?: string }) 
 
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />;
   if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
-  return <div className="menu-public-shell"><PublicMenuView menu={state.menu} /></div>;
+  return (
+    <div className="menu-public-shell">
+      <MenuThemeController theme={state.menu.tenant.themeKey} />
+      <PublicMenuView menu={state.menu} />
+    </div>
+  );
 }
