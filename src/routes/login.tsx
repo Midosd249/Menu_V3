@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { refreshCurrentUser, useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
-import { LoadingState } from "@/components/state-panel";
+import { LoadingState, ErrorState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 
@@ -14,13 +14,16 @@ export const Route = createFileRoute("/login")({ component: Login });
 function Login() {
   const { lang } = useLang();
   const navigate = useNavigate();
-  const { user, isPending } = useCurrentUserState();
+  const { user, isPending, error: sessionError } = useCurrentUserState();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  if (isPending) return <LoadingState />;
+  if (isPending) return <LoadingState label="جارٍ التحقق…" />;
   if (user) return <Navigate to="/studio" />;
+  if (sessionError && !busy) {
+    return <ErrorState message={sessionError} onRetry={() => void refreshCurrentUser(true)} />;
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,9 +47,7 @@ function Login() {
         if (result.error) throw new Error(result.error.message);
       }
 
-      // Refresh Better Auth's session cache before routing. This avoids the
-      // old hard reload, which caused a visible second round of loading on /studio.
-      await authClient.getSession();
+      await refreshCurrentUser(true);
       await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
