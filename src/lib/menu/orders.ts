@@ -8,6 +8,15 @@ import type { FnResult } from "./types";
 export const ORDER_STATUSES = ["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
+export type SelectedOrderOption = {
+  type: "variant" | "modifier";
+  id: string;
+  groupId?: string;
+  nameAr: string;
+  nameEn: string;
+  priceDelta: number;
+};
+
 export type OrderItemDetail = {
   id: string;
   productId: string;
@@ -16,7 +25,7 @@ export type OrderItemDetail = {
   quantity: number;
   unitPrice: number;
   lineTotal: number;
-  selectedOptions: unknown;
+  selectedOptions: SelectedOrderOption[];
 };
 
 export type AdminOrder = {
@@ -68,6 +77,7 @@ async function assertPlatformAdmin(userId: string): Promise<FnResult<true>> {
 }
 
 function mapItem(row: Record<string, unknown>): OrderItemDetail {
+  const rawOptions = Array.isArray(row.selected_options) ? row.selected_options : [];
   return {
     id: String(row.id),
     productId: String(row.product_id ?? ""),
@@ -76,7 +86,20 @@ function mapItem(row: Record<string, unknown>): OrderItemDetail {
     quantity: Number(row.quantity ?? 0),
     unitPrice: Number(row.unit_price ?? 0),
     lineTotal: Number(row.line_total ?? 0),
-    selectedOptions: row.selected_options ?? null,
+    selectedOptions: rawOptions.flatMap((item): SelectedOrderOption[] => {
+      if (!item || typeof item !== "object") return [];
+      const option = item as Record<string, unknown>;
+      const type = option.type === "variant" ? "variant" : option.type === "modifier" ? "modifier" : null;
+      if (!type || typeof option.id !== "string") return [];
+      return [{
+        type,
+        id: option.id,
+        ...(typeof option.groupId === "string" ? { groupId: option.groupId } : {}),
+        nameAr: String(option.nameAr ?? ""),
+        nameEn: String(option.nameEn ?? ""),
+        priceDelta: Number(option.priceDelta ?? 0),
+      }];
+    }),
   };
 }
 
