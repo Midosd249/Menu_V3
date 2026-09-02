@@ -2,6 +2,8 @@
 -- Orders are tenant/branch scoped and keep immutable item snapshots so menu edits
 -- never rewrite historical order records.
 
+set search_path to menu_v3, public;
+
 create table if not exists orders (
   id text primary key,
   tenant_id text not null references tenants(id) on delete cascade,
@@ -57,65 +59,36 @@ create index if not exists orders_customer_phone_idx on orders (customer_phone);
 create index if not exists order_items_order_idx on order_items (order_id, created_at);
 create index if not exists order_status_events_order_idx on order_status_events (order_id, created_at desc);
 
-create or replace function touch_orders_updated_at()
-returns trigger
-language plpgsql
-as $$
-begin
-  new.updated_at = now();
-  return new;
-end;
+create or replace function touch_orders_updated_at() returns trigger language plpgsql as $$
+begin new.updated_at = now(); return new; end;
 $$;
-
 drop trigger if exists orders_updated_at on orders;
-create trigger orders_updated_at
-before update on orders
-for each row execute function touch_orders_updated_at();
+create trigger orders_updated_at before update on orders for each row execute function touch_orders_updated_at();
 
--- Defensive tenant consistency: an order branch and product must belong to the same tenant.
-create or replace function enforce_order_tenant_consistency()
-returns trigger
-language plpgsql
-as $$
+create or replace function enforce_order_tenant_consistency() returns trigger language plpgsql as $$
 declare branch_tenant text;
 begin
   if new.branch_id is not null then
     select tenant_id into branch_tenant from branches where id = new.branch_id;
-    if branch_tenant is null or branch_tenant <> new.tenant_id then
-      raise exception 'order branch tenant mismatch';
-    end if;
+    if branch_tenant is null or branch_tenant <> new.tenant_id then raise exception 'order branch tenant mismatch'; end if;
   end if;
   return new;
 end;
 $$;
-
 drop trigger if exists order_tenant_guard on orders;
-create trigger order_tenant_guard
-before insert or update on orders
-for each row execute function enforce_order_tenant_consistency();
+create trigger order_tenant_guard before insert or update on orders for each row execute function enforce_order_tenant_consistency();
 
-create or replace function enforce_order_item_tenant_consistency()
-returns trigger
-language plpgsql
-as $$
-declare order_tenant text;
-declare product_tenant text;
+create or replace function enforce_order_item_tenant_consistency() returns trigger language plpgsql as $$
+declare order_tenant text; declare product_tenant text;
 begin
   select tenant_id into order_tenant from orders where id = new.order_id;
-  if order_tenant is null then
-    raise exception 'order not found';
-  end if;
+  if order_tenant is null then raise exception 'order not found'; end if;
   if new.product_id is not null then
     select tenant_id into product_tenant from products where id = new.product_id;
-    if product_tenant is null or product_tenant <> order_tenant then
-      raise exception 'order item product tenant mismatch';
-    end if;
+    if product_tenant is null or product_tenant <> order_tenant then raise exception 'order item product tenant mismatch'; end if;
   end if;
   return new;
 end;
 $$;
-
 drop trigger if exists order_item_tenant_guard on order_items;
-create trigger order_item_tenant_guard
-before insert or update on order_items
-for each row execute function enforce_order_item_tenant_consistency();
+create trigger order_item_tenant_guard before insert or update on order_items for each row execute function enforce_order_item_tenant_consistency();
