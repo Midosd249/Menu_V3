@@ -2,7 +2,7 @@
 /**
  * Ensure PGlite's runtime files are present in the TanStack Start/Vercel
  * server-function bundle. Vite/Nitro bundles the JS module, but the PGlite
- * package keeps postgres.wasm and postgres.data as external runtime assets.
+ * package keeps pglite.wasm and pglite.data as external runtime assets.
  */
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
@@ -20,8 +20,8 @@ const serverLibs = join(
 );
 
 const assets = [
-  ["postgres.data", "pglite.data"],
-  ["postgres.wasm", "pglite.wasm"],
+  ["pglite.data", "pglite.data"],
+  ["pglite.wasm", "pglite.wasm"],
 ];
 
 if (!existsSync(join(root, ".vercel", "output"))) {
