@@ -104,8 +104,6 @@ function mapOrder(row: Record<string, unknown>): AdminOrder {
   };
 }
 
-const orderSelect = (query: ReturnType<typeof String>) => query;
-
 export const getOrdersDashboard = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .validator(z.object({ status: z.enum(ORDER_STATUSES).optional(), q: z.string().trim().max(120).optional() }))
