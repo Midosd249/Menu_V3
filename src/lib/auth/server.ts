@@ -3,7 +3,7 @@ import { betterAuth } from "better-auth";
 import { bearer, genericOAuth } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
-import { randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
 import { Pool } from "pg";
 import { ensureDbReady, getPglite, POSTGRES_SCHEMA } from "../db";
 import { emailAndPasswordEnabled } from "./email-password";
@@ -21,7 +21,22 @@ void ensureDbReady();
 
 const globalAuthRef = globalThis as typeof globalThis & { __grokAuthPreviewSecret__?: string };
 function previewAuthSecret(): string {
-  globalAuthRef.__grokAuthPreviewSecret__ ??= randomBytes(32).toString("hex");
+  const explicit = process.env.BETTER_AUTH_SECRET?.trim();
+  if (explicit) return explicit;
+  // A random secret per serverless instance invalidates Better Auth's cookie
+  // cache whenever a request lands on a different instance. Derive a stable
+  // fallback from the production database credential when no explicit secret
+  // has been configured, so warm/cold instances agree on the same secret.
+  if (!globalAuthRef.__grokAuthPreviewSecret__) {
+    const stableSource =
+      process.env.SUPABASE_DB_URL?.trim() ??
+      process.env.DATABASE_URL?.trim() ??
+      process.env.POSTGRES_URL?.trim() ??
+      "menu-v3-local-development-secret";
+    globalAuthRef.__grokAuthPreviewSecret__ = createHash("sha256")
+      .update(`menu-v3-auth:${stableSource}`)
+      .digest("hex");
+  }
   return globalAuthRef.__grokAuthPreviewSecret__;
 }
 const env = (key: string): string | undefined => {
@@ -94,7 +109,7 @@ const grokOAuthPlugin = authConfigured
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
 export const auth = betterAuth({
   baseURL,
-  secret: env("BETTER_AUTH_SECRET") ?? previewAuthSecret(),
+  secret: previewAuthSecret(),
   database,
   trustedOrigins,
   account: {
