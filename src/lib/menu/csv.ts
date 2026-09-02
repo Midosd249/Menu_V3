@@ -10,19 +10,13 @@ function splitCsvLine(line: string): string[] {
       if (ch === '"' && line[i + 1] === '"') {
         current += '"';
         i += 1;
-      } else if (ch === '"') {
-        quoted = false;
-      } else {
-        current += ch;
-      }
-    } else if (ch === '"') {
-      quoted = true;
-    } else if (ch === ",") {
+      } else if (ch === '"') quoted = false;
+      else current += ch;
+    } else if (ch === '"') quoted = true;
+    else if (ch === ",") {
       out.push(current.trim());
       current = "";
-    } else {
-      current += ch;
-    }
+    } else current += ch;
   }
   out.push(current.trim());
   return out;
@@ -31,6 +25,14 @@ function splitCsvLine(line: string): string[] {
 function truthy(value: string): boolean {
   const v = value.trim().toLowerCase();
   return v === "1" || v === "true" || v === "yes" || v === "نعم";
+}
+
+function list(value: string): string[] {
+  return value
+    .split(/[|;،]/)
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .slice(0, 30);
 }
 
 export function parseMenuCsv(text: string): ImportRow[] {
@@ -50,6 +52,8 @@ export function parseMenuCsv(text: string): ImportRow[] {
     calories: idx(["calories", "سعرات"]),
     featured: idx(["featured", "is_featured", "مميز"]),
     available: idx(["available", "is_available", "متاح"]),
+    tags: idx(["tags", "الوسوم", "tag"]),
+    dietaryLabels: idx(["dietary_labels", "dietary", "الحمية", "التصنيف_الغذائي"]),
   };
 
   const rows: ImportRow[] = [];
@@ -65,9 +69,8 @@ export function parseMenuCsv(text: string): ImportRow[] {
     if (!nameAr) issues.push("الاسم العربي مطلوب");
     if (!categoryAr) issues.push("التصنيف مطلوب");
     if (!Number.isFinite(price) || price < 0) issues.push("السعر غير صالح");
-    const calories =
-      caloriesRaw === "" ? null : Number.isFinite(Number(caloriesRaw)) ? Number(caloriesRaw) : NaN;
-    if (caloriesRaw && !Number.isFinite(calories)) issues.push("السعرات غير صالحة");
+    const calories = caloriesRaw === "" ? null : Number(caloriesRaw);
+    if (caloriesRaw && (!Number.isFinite(calories) || calories < 0)) issues.push("السعرات غير صالحة");
     rows.push({
       nameAr,
       nameEn: at(col.nameEn),
@@ -77,16 +80,18 @@ export function parseMenuCsv(text: string): ImportRow[] {
       descriptionEn: at(col.descriptionEn),
       price: Number.isFinite(price) ? price : 0,
       imageUrl: at(col.imageUrl),
-      calories: Number.isFinite(calories as number) ? (calories as number) : null,
+      calories: calories == null || Number.isFinite(calories) ? calories : null,
       isFeatured: truthy(at(col.featured)),
       isAvailable: at(col.available) === "" ? true : truthy(at(col.available)),
+      tags: list(at(col.tags)),
+      dietaryLabels: list(at(col.dietaryLabels)),
       issues,
     });
   }
   return rows;
 }
 
-export const CSV_TEMPLATE = `name_ar,name_en,category_ar,category_en,description_ar,description_en,price,image_url,calories,featured,available
-فلت وايت,Flat White,القهوة,Coffee,حليب مبخر فوق إسبرسو,Steamed milk over espresso,18,,140,true,true
-كرواسون,Croissant,المخبوزات,Bakery,طبقات زبدة يومية,Daily butter layers,14,,280,false,true
+export const CSV_TEMPLATE = `name_ar,name_en,category_ar,category_en,description_ar,description_en,price,image_url,calories,featured,available,tags,dietary_labels
+فلت وايت,Flat White,القهوة,Coffee,حليب مبخر فوق إسبرسو,Steamed milk over espresso,18,,140,true,true,قهوة|ساخن,نباتي
+كرواسون,Croissant,المخبوزات,Bakery,طبقات زبدة يومية,Daily butter layers,14,,280,false,true,مخبوزات|فطور,يحتوي_على_جلوتين
 `;
