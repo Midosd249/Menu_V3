@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { Navigate, useRouterState } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
-import { refreshCurrentUser, useCurrentUserState } from "@/lib/auth/use-current-user";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getMyStudio } from "./owner";
 import type { FnErr, FnResult, StudioSnapshot } from "./types";
 import { LoadingState, ErrorState } from "@/components/state-panel";
@@ -54,7 +54,7 @@ export function useStudioFlash() {
 }
 
 export function StudioGate({ children }: { children: ReactNode }) {
-  const { user, isPending, error: sessionError } = useCurrentUserState();
+  const { user, isPending, error: sessionError, refresh: refreshSession } = useCurrentUserState();
   const path = useRouterState({ select: (s) => s.location.pathname });
   const [state, setState] = useState<
     | { status: "loading" }
@@ -95,7 +95,7 @@ export function StudioGate({ children }: { children: ReactNode }) {
 
   if (isPending) return <LoadingState label="جارٍ التحقق من الجلسة…" />;
   if (sessionError && !user) {
-    return <ErrorState message={sessionError} onRetry={() => void refreshCurrentUser(true)} />;
+    return <ErrorState message={sessionError} onRetry={refreshSession} />;
   }
   if (!user) return <RedirectToSignIn />;
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل لوحة الإدارة…" />;
