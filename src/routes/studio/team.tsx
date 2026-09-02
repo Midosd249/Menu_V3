@@ -15,9 +15,17 @@ const ROLE_LABELS: Record<Role, { ar: string; en: string }> = {
   editor: { ar: "محرر", en: "Editor" },
 };
 
+type TeamMember = {
+  userId: string;
+  name: string;
+  email: string;
+  role: Role;
+  createdAt: string;
+};
+
 function TeamPage() {
   const { lang } = useLang();
-  const [members, setMembers] = useState<Array<{ userId: string; name: string; email: string; role: Role; createdAt: string }>>([]);
+  const [members, setMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState("");
   const [error, setError] = useState("");
@@ -88,7 +96,7 @@ function TeamPage() {
         </div>
       </header>
 
-      <Flash error={error} ok={ok ? (lang === "ar" ? "تم تحديث الفريق" : "Team updated") : ""} />
+      <Flash error={error} ok={ok} />
 
       <section className="overflow-hidden rounded-2xl border border-line bg-paper">
         <div className="grid grid-cols-[1fr_150px_90px] gap-3 border-b border-line px-4 py-3 text-xs font-medium text-muted sm:grid-cols-[1fr_170px_120px]">
