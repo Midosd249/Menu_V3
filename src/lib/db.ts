@@ -1,11 +1,7 @@
 import { pendingMigrations } from "../../scripts/migration-plan.mjs";
 
-/** Which database backend is active. */
 export type DbSource = "postgres" | "pglite";
 
-// Accept the common Postgres variable names used by Vercel and Supabase.
-// DATABASE_URL remains the canonical option, but the aliases make an existing
-// deployment much harder to misconfigure.
 const databaseUrlCandidates =
   typeof process !== "undefined"
     ? [
@@ -16,17 +12,12 @@ const databaseUrlCandidates =
         process.env.POSTGRES_URL_NON_POOLING,
       ]
     : [];
-
 const databaseUrl = databaseUrlCandidates.find((value) => Boolean(value?.trim()))?.trim();
-
-/**
- * Active backend: real Postgres when a server-side connection string is set,
- * otherwise the embedded PGlite fallback used for local/demo operation.
- *
- * Production deployments should always provide one of the Postgres variables
- * above. PGlite is intentionally retained as a development fallback only.
- */
 export const dbSource: DbSource = databaseUrl ? "postgres" : "pglite";
+
+// Keep Menu V3 completely isolated from the older public-schema Menu V2 data.
+// PostgreSQL resolves all unqualified application tables against this schema.
+export const POSTGRES_SCHEMA = "menu_v3";
 
 export interface Sql {
   <T = Record<string, unknown>>(
@@ -49,7 +40,6 @@ const OID_INT8 = 20;
 const OID_DATE = 1082;
 const OID_INTERVAL = 1186;
 const identity = (v: string) => v;
-
 type Run = <T>(text: string, params: unknown[]) => Promise<T[]>;
 
 function toSql(run: Run): Sql {
@@ -74,6 +64,7 @@ function createPostgresSql(): Promise<Sql> {
     types.setTypeParser(OID_INTERVAL, identity);
     const pool = new Pool({
       connectionString: databaseUrl,
+      options: `-c search_path=${POSTGRES_SCHEMA},public`,
       max: 5,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 10000,
@@ -140,11 +131,8 @@ async function createPgliteSql(): Promise<Sql> {
 }
 
 let sqlPromise: Promise<Sql> | null = null;
-
 async function createSql(): Promise<Sql> {
-  if (typeof window !== "undefined") {
-    throw new Error("@/lib/db is server-only — call getSql() from a server function");
-  }
+  if (typeof window !== "undefined") throw new Error("@/lib/db is server-only");
   return dbSource === "postgres" ? createPostgresSql() : createPgliteSql();
 }
 
@@ -157,9 +145,7 @@ export function getSql(): Promise<Sql> {
 }
 
 export async function getPglite(): Promise<import("@electric-sql/pglite").PGlite> {
-  if (dbSource !== "pglite") {
-    throw new Error("getPglite() is only available when no Postgres connection string is configured");
-  }
+  if (dbSource !== "pglite") throw new Error("getPglite() is unavailable on Postgres");
   await getSql();
   const pg = await globalRef.__pgliteInstance__;
   if (!pg) throw new Error("PGlite instance failed to initialize");
@@ -171,9 +157,7 @@ export function ensureDbReady(): Promise<void> {
   return getSql().then(() => undefined);
 }
 
-const globalBoot = globalThis as typeof globalThis & {
-  __pgBootstrapPromise__?: Promise<void>;
-};
+const globalBoot = globalThis as typeof globalThis & { __pgBootstrapPromise__?: Promise<void> };
 if (typeof window === "undefined" && dbSource === "pglite") {
   globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
     globalBoot.__pgBootstrapPromise__ = undefined;
