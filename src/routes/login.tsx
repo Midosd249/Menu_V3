@@ -57,18 +57,21 @@ function Login() {
   }
 
   return (
-    <main className="grid min-h-dvh place-items-center px-5 py-10">
-      <div className="w-full max-w-sm grid gap-6">
+    <main className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
+      <div className="w-full max-w-md grid gap-6">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-semibold">
             {t(copy.brand, lang)}
           </Link>
           <LangToggle />
         </div>
+
         <div className="grid gap-2">
+          <p className="text-sm font-medium text-accent">{lang === "ar" ? "بوابة Menu V3" : "Menu V3 workspace"}</p>
           <h1 className="font-display text-2xl font-semibold">{t(copy.auth.title, lang)}</h1>
-          <p className="text-sm text-muted">{t(copy.auth.subtitle, lang)}</p>
+          <p className="text-sm leading-6 text-muted">{t(copy.auth.subtitle, lang)}</p>
         </div>
+
         {authEnabled ? (
           <>
             <div className="grid gap-2">
@@ -114,6 +117,24 @@ function Login() {
         ) : (
           <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>
         )}
+
+        <section className="grid gap-3 border-t border-line pt-5" aria-label={lang === "ar" ? "مساحات العمل" : "Workspaces"}>
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">{lang === "ar" ? "مساحات العمل" : "Workspaces"}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Link to="/studio" className="rounded-xl border border-line p-4 text-sm hover:bg-sand">
+              <span className="font-semibold">{lang === "ar" ? "Studio" : "Studio"}</span>
+              <span className="mt-1 block text-xs leading-5 text-muted">{lang === "ar" ? "إدارة المنيو والمنتجات والتصميم والفروع" : "Menu, products, design and branches"}</span>
+            </Link>
+            <Link to="/owner" className="rounded-xl border border-line p-4 text-sm hover:bg-sand">
+              <span className="font-semibold">{lang === "ar" ? "Owner" : "Owner"}</span>
+              <span className="mt-1 block text-xs leading-5 text-muted">{lang === "ar" ? "مركز الطلبات والعملاء المحتملين" : "Orders and lead center"}</span>
+            </Link>
+          </div>
+        </section>
+
+        <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">
+          {lang === "ar" ? "العودة إلى الموقع" : "Back to website"}
+        </Link>
       </div>
     </main>
   );
