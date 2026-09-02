@@ -4,6 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { isThemeKey, type ThemeKey } from "./registry";
 import type { FnResult } from "@/lib/menu/types";
+import { invalidatePublicMenuCache } from "@/lib/menu/public";
 
 const themeSchema = z.string().trim().min(1).max(40);
 
@@ -17,7 +18,9 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
 
     try {
       const sql = await getSql();
-      const members = await sql<{ tenant_id: string; role: "owner" | "admin" | "editor" }>`
+      // Tenant is resolved exclusively from the authenticated user's membership.
+      // The client never supplies a tenant_id for this mutation.
+      const members = await sql<{ tenant_id: string; role: "owner" | "admin" }>`
         select tenant_id, role
         from tenant_members
         where user_id = ${context.userId}
@@ -28,14 +31,22 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
       const member = members[0];
       if (!member) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية تغيير التصميم" };
 
-      const rows = await sql<{ theme_key: string }>`
+      const rows = await sql<{ theme_key: string; slug: string }>`
         update tenants
         set theme_key = ${data.themeKey}, updated_at = now()
         where id = ${member.tenant_id}
-        returning theme_key
+        returning theme_key, slug
       `;
       const saved = rows[0]?.theme_key;
-      if (!isThemeKey(saved)) return { ok: false, code: "unavailable", error: "تعذر تأكيد حفظ القالب" };
+      const slug = rows[0]?.slug;
+      if (!isThemeKey(saved) || !slug) {
+        return { ok: false, code: "unavailable", error: "تعذر تأكيد حفظ القالب" };
+      }
+
+      // Invalidate this process's public-menu cache immediately. The public
+      // loader remains DB-backed; cache is only a performance layer.
+      invalidatePublicMenuCache(slug);
+
       return { ok: true, data: { themeKey: saved } };
     } catch (err) {
       console.error("saveTenantTheme failed", err);
