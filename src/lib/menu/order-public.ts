@@ -140,9 +140,16 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const subtotal = prepared.reduce((sum, item) => sum + item.lineTotal, 0);
       const orderId = newId();
       const eventId = newId();
+      // Keep the JSON record keys aligned with the snake_case database columns used by jsonb_to_recordset below.
       const itemsJson = JSON.stringify(prepared.map((item) => ({
-        id: item.id, productId: item.productId, quantity: item.quantity, unitPrice: item.unitPrice, lineTotal: item.lineTotal,
-        productNameAr: item.productNameAr, productNameEn: item.productNameEn, selectedOptions: item.selectedOptions,
+        id: item.id,
+        product_id: item.productId,
+        quantity: item.quantity,
+        unit_price: item.unitPrice,
+        line_total: item.lineTotal,
+        product_name_ar: item.productNameAr,
+        product_name_en: item.productNameEn,
+        selected_options: item.selectedOptions,
       })));
 
       const created = await sql<{ id: string; order_number: number }>`
