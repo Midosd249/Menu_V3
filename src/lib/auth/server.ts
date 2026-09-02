@@ -84,9 +84,11 @@ const database = databaseUrl
   ? new Pool({
       connectionString: databaseUrl,
       options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      max: 5,
+      // Better Auth and application queries share the same Supavisor-backed
+      // database. Keep this pool small to avoid connection spikes on Vercel.
+      max: 2,
       idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
       keepAlive: true,
     })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
