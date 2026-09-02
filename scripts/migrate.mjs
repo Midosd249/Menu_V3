@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-/**
- * Deploy-time database migrator (node-postgres, `pg`).
- * Uses the same connection-string aliases as the runtime database layer.
- */
 import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import pg from "pg";
 import { pendingMigrations } from "./migration-plan.mjs";
 
+const POSTGRES_SCHEMA = "menu_v3";
 const databaseUrl =
   process.env.DATABASE_URL?.trim() ||
   process.env.POSTGRES_URL?.trim() ||
@@ -17,9 +14,7 @@ const databaseUrl =
   process.env.POSTGRES_URL_NON_POOLING?.trim();
 
 if (!databaseUrl) {
-  console.log(
-    "[migrate] no Postgres connection string configured — skipping (PGlite fallback migrates itself).",
-  );
+  console.log("[migrate] no Postgres connection string configured — skipping (PGlite fallback migrates itself).");
   process.exit(0);
 }
 
@@ -40,17 +35,18 @@ async function main() {
 
   const pool = new pg.Pool({
     connectionString: databaseUrl,
+    options: `-c search_path=${POSTGRES_SCHEMA},public`,
     max: 1,
     connectionTimeoutMillis: 15000,
   });
   const client = await pool.connect();
   try {
+    await client.query(`CREATE SCHEMA IF NOT EXISTS ${POSTGRES_SCHEMA}`);
+    await client.query(`SET search_path TO ${POSTGRES_SCHEMA}, public`);
     await client.query(
       "CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())",
     );
-    const applied = (await client.query("SELECT name FROM _migrations")).rows.map(
-      (r) => r.name,
-    );
+    const applied = (await client.query("SELECT name FROM _migrations")).rows.map((r) => r.name);
 
     let count = 0;
     for (const { name } of pendingMigrations(entries, applied)) {
@@ -62,11 +58,7 @@ async function main() {
         await client.query("COMMIT");
       } catch (err) {
         console.error(`[migrate] error applying ${name}`);
-        try {
-          await client.query("ROLLBACK");
-        } catch {
-          // Keep the original error when the connection has already failed.
-        }
+        try { await client.query("ROLLBACK"); } catch { /* preserve original error */ }
         throw err;
       }
       console.log(`[migrate] applied ${name}`);
