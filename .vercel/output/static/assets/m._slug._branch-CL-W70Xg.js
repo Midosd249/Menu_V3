@@ -1,0 +1,1 @@
+import{d as e}from"./i18n-D9L5nJAc.js";import{t}from"./m._slug-Bb66HkU8.js";import{t as n}from"./index-CWHrKusS.js";var r=e();function i(){let{slug:e,branch:i}=n.useParams();return(0,r.jsx)(t,{slug:e,branch:i})}export{i as component};

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 892,
+      "bodyTextHash": "80764311d3d89f5b365010f5af55313475f446b1b42c3203633f6bcb41739224",
+      "bodyTextPrefix": "منيو عربي EN عربي أولاً · جاهز للمسح منيو مطعمك كما يجب أن يظهر.",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 892,
+      "bodyTextHash": "80764311d3d89f5b365010f5af55313475f446b1b42c3203633f6bcb41739224",
+      "bodyTextPrefix": "منيو عربي EN عربي أولاً · جاهز للمسح منيو مطعمك كما يجب أن يظهر.",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

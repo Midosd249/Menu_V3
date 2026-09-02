@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/login",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 169,
+      "bodyTextHash": "de83de5cc6c495e6f2b20d936d5dccad83d5dc09b69c53a089e9564f28978e4e",
+      "bodyTextPrefix": "منيو عربي EN دخول الاستوديو لمالك المطعم ومدير القائمة. الضيف لا",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/login.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 169,
+      "bodyTextHash": "de83de5cc6c495e6f2b20d936d5dccad83d5dc09b69c53a089e9564f28978e4e",
+      "bodyTextPrefix": "منيو عربي EN دخول الاستوديو لمالك المطعم ومدير القائمة. الضيف لا",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/login-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/login.json"
+}
