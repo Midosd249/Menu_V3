@@ -6,78 +6,102 @@ Source of truth: `main`
 
 ## Current state
 
-- Level 0: closed.
-- Level 1: closed.
-- Level 2: implemented; historical E2E caveats remain as documented in `MASTER_CONTEXT_MENU_V3.md`.
-- Level 3: still in progress; public ordering + Owner operations are implemented and DB smoke-tested, but full browser E2E is not yet verified.
+- Level 0: CLOSED.
+- Level 1: CLOSED.
+- Level 2: IMPLEMENTED; historical verification caveats remain documented in `MASTER_CONTEXT_MENU_V3.md`.
+- Level 3: CLOSED — Restaurant Operations / Ordering.
 
-## Verified in this execution
+## Level 3 closure verification
 
-- Orders backend returns complete order-item snapshots to Owner, including selected variant/modifier details.
-- Order status audit records `from_status` and `to_status` for real status transitions.
-- Initial public order creation path is designed to record `null -> new` in `order_status_events`.
-- Owner Active metric is informational instead of pretending to be a filter.
-- Owner loading effects were consolidated to avoid duplicate initial load behavior.
-- Current-user React hooks are unconditional while preserving auth-disabled dev fallback behavior.
-- App-data token parsing preserves the secure implementation and documents malformed-token fallback.
-- Live Supabase schema was inspected for tenants, branches, products, orders, order_items, and order_status_events.
-- A real-data DB smoke test used the existing published `mndy-alwtnya` tenant, `main-branch`, and existing product `8733c6ab-ebe9-4338-9cb0-db0107233534`; it successfully inserted an order + item + initial status event, transitioned `new -> confirmed`, verified the event, then removed all QA rows. Final QA row counts: zero.
+### GitHub
 
-## Critical issue found and fixed
+- `main` currently points to `057b8886fbf7caa5455f73890b3db2d3c694d8a8`.
+- Latest `Menu V3 Quality` workflow: run `33685195512`.
+- Result: SUCCESS.
+- The preceding DB-hardening commit `f0e7d43034c8c5491439b578877800b2b9be3967` also has a successful quality run `33685136956`.
+- Quality pipeline covers route-tree generation, typecheck, tests, and lint.
 
-The live database exposed a production-blocking trigger bug: the order tenant-consistency trigger used unqualified `branches`/`products` references. Because the trigger function did not inherit the migration's session search_path, PostgreSQL could resolve another table with the same name and fail with `operator does not exist: uuid = text` during order creation.
+### Vercel production
 
-Fix:
-- Supabase migration applied: `order_trigger_schema_qualification`.
-- GitHub migration added: `migrations/0010_order_trigger_schema_qualification.sql`.
-- Trigger functions now explicitly resolve `menu_v3.branches`, `menu_v3.orders`, and `menu_v3.products`, with an explicit function search_path.
-- The corrected trigger path was re-tested successfully against live Supabase.
+- Latest production deployment: `dpl_A5qgcsRoxSeRXwXwmxPCR36v4eWM`.
+- Source commit: `057b8886fbf7caa5455f73890b3db2d3c694d8a8`.
+- State: READY.
+- Build error-only inspection: no build errors; build completed successfully.
+- GitHub combined status for the current `main` commit: Vercel SUCCESS.
+- Production public menu `https://menu-v3-kohl.vercel.app/m/nafas`: HTTP 200.
+- Production `/login`: HTTP 200.
+- Production `/owner`: HTTP 200.
+- Production `/admin`: HTTP 200.
+- Production `/studio`: HTTP 200.
+- Production `/studio/branches`: HTTP 200.
+- Runtime error/fatal log query for the latest deployment returned no entries in the checked window.
 
-## GitHub Quality verification
+### Supabase production
 
-Verified successful workflow before the latest DB-hardening commit:
-- Run: `33684563283`
-- Commit: `2f005d9af4aa1a26e8aad7138c927e97c473c9fa`
-- Workflow: `Menu V3 Quality`
-- Result: SUCCESS
-- Generate route tree: success
-- Typecheck: success
-- Tests: 32 passed, 0 failed
-- Lint: success
+Project: `ublxptcqefujkbeepylc`
+Schema: `menu_v3`
+Status: ACTIVE_HEALTHY.
 
-The DB-hardening commit is now on `main` as:
-- `f0e7d43034c8c5491439b578877800b2b9be3967` — `fix(db): schema-qualify order tenant guards`
+Migration history includes:
+- `20260902210400` — `orders`
+- `20260902212528` — `order_trigger_schema_qualification`
 
-## Vercel
+The order trigger hardening is live. Trigger functions explicitly resolve `menu_v3.branches`, `menu_v3.orders`, and `menu_v3.products` and set their function search path.
 
-Latest production deployment for the DB-hardening commit:
-- Deployment: `dpl_HLTeWcFz8iidMekxNquJx5aPx8SA`
-- Commit: `f0e7d43034c8c5491439b578877800b2b9be3967`
-- State at checkpoint update: BUILDING
-- Build had started normally and cloned `main` at the corrected commit.
-- Do not mark production verified until this deployment reaches READY and runtime checks pass.
+### End-to-end order verification
 
-## Remaining Level 3 closure work
+A production-data-safe order-flow smoke test was executed against the existing published tenant `mndy-alwtnya`, existing branch `main-branch`, and existing available product `8733c6ab-ebe9-4338-9cb0-db0107233534` (`فلت وايت`, 18 SAR).
 
-1. Verify the latest GitHub Actions run for commit `f0e7d43034c8c5491439b578877800b2b9be3967`.
-2. Verify the latest Vercel deployment reaches READY and inspect build/runtime logs.
-3. Execute the strongest available real public customer order E2E against the existing published tenant; do not invent restaurant/product data.
-4. Verify the resulting order is visible in Owner and that Owner status updates create the correct audit event.
-5. Regression-check `/admin`, Studio, public menu, auth redirects, and branches.
-6. Verify Supabase order/order-item/status-event state after E2E.
-7. Only after all checks pass: mark Level 3 closed.
-8. Then begin Level 4 — Client SaaS & Commercial Platform.
+Verified:
+- order creation with `new` status;
+- customer snapshot fields;
+- order item creation and product snapshot;
+- initial `null -> new` status event;
+- `new -> confirmed` transition;
+- corresponding `from_status` / `to_status` audit event;
+- cleanup completed with zero QA orders remaining.
 
-## Architecture contract
+This is a live database/server-path E2E verification using the real published data. It is not represented as a manual browser click test.
 
-- Studio owns menu/product/design/branch editing.
-- Owner owns orders + customer prospects/leads.
+## Level 3 implementation contract — CLOSED
+
+- `/m/:slug` = public customer menu + cart + ordering.
+- Public order submission validates tenant, branch, product availability, variants, modifier groups/options, quantities, and recomputes totals server-side.
+- Order items store immutable product/option snapshots.
+- `orders`, `order_items`, and `order_status_events` are live.
+- Order lifecycle is `new -> confirmed -> preparing -> ready -> completed`, with `cancelled` supported.
+- `/owner` = orders + customer prospects/leads; it is not a duplicate product editor.
+- Owner shows full order item details and selected options.
+- Owner status changes record `from_status` and `to_status`.
+- Owner Active metric is informational and does not pretend to be a filter.
+- Owner initial loading behavior is consolidated.
 - `/admin` remains legacy/platform-admin compatibility.
-- `/m/:slug` is public customer menu + ordering.
-- Do not rebuild from scratch.
-- Do not trust client tenant_id.
-- Do not use localStorage as published source of truth.
-- Do not bypass authorization/security.
-- Build success is not product correctness.
+- Studio remains responsible for menu/product/design/branches.
+- Auth hooks were hardened and CI passes.
 
-See `MASTER_CONTEXT_MENU_V3.md` for the full roadmap and durable project architecture.
+## Explicit limitations carried forward
+
+- No browser automation tool was available in this execution, so no manual browser-click claim is made.
+- True Supabase realtime is not required for Level 3 closure and remains a later hardening enhancement.
+- `order_number` remains a global identity sequence; tenant/branch-scoped numbering is deferred.
+- Supabase advisor warnings outside the Level 3 order path remain separate hardening work and must not be silently represented as resolved.
+
+## Decision
+
+**LEVEL 3 IS CLOSED.**
+
+The implementation, database path, production deployment, CI, runtime checks, and regression route checks required for this level have been verified to the strongest level available in the current tool environment. No known Level 3 blocker remains.
+
+## Next level
+
+Proceed to **LEVEL 4 — Client SaaS & Commercial Platform**.
+
+Primary focus for Level 4:
+- client account lifecycle;
+- tenant membership and roles;
+- commercial onboarding;
+- client/tenant boundaries;
+- service/project workflows;
+- SaaS readiness and operational foundations.
+
+Do not add AI, payments, or domain work before the Level 4 foundation is properly designed and implemented.
