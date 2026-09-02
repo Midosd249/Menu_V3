@@ -33,6 +33,19 @@ function DesignPage() {
         setMessage(result.error);
         return;
       }
+
+      // The server already invalidates its public-menu cache. Clear the browser
+      // performance cache too so the same browser does not briefly render an
+      // older published menu after a successful theme change.
+      if (typeof window !== "undefined") {
+        for (let i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
+          const key = window.sessionStorage.key(i);
+          if (key?.startsWith("menu-v3:public:")) window.sessionStorage.removeItem(key);
+        }
+      }
+
+      // Reload from the server rather than trusting the selected client state.
+      // This makes the UI's Saved state evidence-based.
       await reload();
       setMessage(lang === "ar" ? "تم حفظ القالب ونشره للمنيو." : "Theme saved and published to the menu.");
     } catch (err) {
@@ -65,7 +78,7 @@ function DesignPage() {
             </button>
           </div>
         </div>
-        {message ? <p role="status" className="text-sm text-muted">{message}</p> : null}
+        {message ? <p role="status" className="text-sm text-muted" aria-live="polite">{message}</p> : null}
       </header>
 
       <section aria-label={lang === "ar" ? "قوالب التصميم" : "Theme options"} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
