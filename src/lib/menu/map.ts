@@ -1,3 +1,4 @@
+import { isThemeKey, DEFAULT_THEME_KEY } from "@/lib/theme";
 import { bool, num } from "@/lib/utils";
 import type { Branch, BranchHour, Category, Product, Tenant } from "./types";
 
@@ -6,6 +7,7 @@ function str(value: unknown): string {
 }
 
 export function mapTenant(row: Record<string, unknown>): Tenant {
+  const rawTheme = row.theme_key;
   return {
     id: str(row.id),
     ownerUserId: str(row.owner_user_id),
@@ -21,6 +23,7 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
     whatsappTemplate: str(row.whatsapp_template) || "السلام عليكم، أريد الاستفسار عن {product} من {restaurant}.",
     primaryColor: str(row.primary_color) || "#171411",
     accentColor: str(row.accent_color) || "#8f4e32",
+    themeKey: isThemeKey(rawTheme) ? rawTheme : DEFAULT_THEME_KEY,
     currency: str(row.currency) || "SAR",
     city: str(row.city),
     country: str(row.country) || "SA",
