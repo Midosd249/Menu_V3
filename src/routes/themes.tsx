@@ -1,7 +1,7 @@
 import { ArrowUpLeft, Check } from "lucide-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/lang";
-import { MENU_THEMES } from "@/components/menu-theme-controller";
+import { MENU_THEMES } from "@/lib/theme";
 
 export const Route = createFileRoute("/themes")({ component: ThemesPage });
 
@@ -42,13 +42,13 @@ function ThemesPage() {
             const d = descriptions[theme.key];
             return (
               <article key={theme.key} className="group overflow-hidden rounded-3xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <div className={`menu-theme-preview preview-${theme.key}`}>
+                <div className={`menu-theme-preview ${theme.preview.className}`}>
                   <div className="preview-orb" />
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{lang === "ar" ? theme.ar : theme.en}</strong>
+                  <strong>{lang === "ar" ? theme.name.ar : theme.name.en}</strong>
                 </div>
                 <div className="grid gap-3 p-5">
-                  <div><h2 className="font-semibold">{lang === "ar" ? theme.ar : theme.en}</h2><p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? d.ar : d.en}</p></div>
+                  <div><h2 className="font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h2><p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? d.ar : d.en}</p></div>
                   <a href={`/m/nafas?theme=${theme.key}`} className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-medium text-paper">{lang === "ar" ? "تجربة القالب" : "Try theme"}<ArrowUpLeft className="size-4" /></a>
                 </div>
               </article>
