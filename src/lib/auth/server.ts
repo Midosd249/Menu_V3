@@ -38,8 +38,7 @@ const authDisabled = env("VITE_AUTH_ENABLED") === "false";
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
 const grokClientId = env("GROK_AUTH_CLIENT_ID") ?? PREVIEW_CLIENT_ID;
 const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
-export const authConfigured =
-  !authDisabled && Boolean(grokClientId && grokClientSecret);
+export const authConfigured = !authDisabled && Boolean(grokClientId && grokClientSecret);
 
 const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
@@ -48,9 +47,6 @@ const LOCAL_DEV_ORIGINS: string[] = [
   "http://127.0.0.1:8080",
   "http://[::1]:8080",
 ];
-
-// Vercel creates a unique hostname for every deployment. Keep the allowlist
-// scoped to this project rather than trusting every *.vercel.app origin.
 const VERCEL_ORIGINS: string[] = [
   "https://menu-v3-kohl.vercel.app",
   "https://menu-v3-midosd2s-projects.vercel.app",
@@ -79,14 +75,25 @@ const trustedOrigins: string[] = explicitBaseURL
       ...LOCAL_DEV_ORIGINS,
     ];
 
-const databaseUrl = env("DATABASE_URL");
+const databaseUrl =
+  env("DATABASE_URL") ??
+  env("POSTGRES_URL") ??
+  env("POSTGRES_PRISMA_URL") ??
+  env("SUPABASE_DB_URL") ??
+  env("POSTGRES_URL_NON_POOLING");
 const issuerBase = grokIssuer.replace(/\/+$/, "");
 const grokAuthorizationUrl = `${issuerBase}/api/auth/oauth2/authorize`;
 const grokTokenUrl = `${issuerBase}/api/auth/oauth2/token`;
 const grokUserInfoUrl = `${issuerBase}/api/auth/oauth2/userinfo`;
 
 const database = databaseUrl
-  ? new Pool({ connectionString: databaseUrl })
+  ? new Pool({
+      connectionString: databaseUrl,
+      max: 5,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 10000,
+      keepAlive: true,
+    })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
@@ -115,10 +122,7 @@ export const auth = betterAuth({
     encryptOAuthTokens: true,
     accountLinking: {
       enabled: true,
-      trustedProviders: [
-        ...GROK_PROVIDERS.map((p) => p.providerId),
-        GATE_PROVIDER_ID,
-      ],
+      trustedProviders: [...GROK_PROVIDERS.map((p) => p.providerId), GATE_PROVIDER_ID],
       requireLocalEmailVerified: false,
     },
   },
