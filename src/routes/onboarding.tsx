@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
-import { Flash, LoadingState } from "@/components/state-panel";
+import { Flash, LoadingState, ErrorState } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
@@ -18,6 +18,7 @@ function Onboarding() {
   const navigate = useNavigate();
   const { user, isPending } = useCurrentUserState();
   const [checking, setChecking] = useState(true);
+  const [checkError, setCheckError] = useState("");
   const [hasTenant, setHasTenant] = useState(false);
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -39,26 +40,44 @@ function Onboarding() {
     { categoryAr: "المطبخ", categoryEn: "Kitchen", nameAr: "", nameEn: "", price: "" },
   ]);
 
-  useEffect(() => {
+  const checkStudio = useCallback(async () => {
     if (!user) {
       setChecking(false);
       return;
     }
-    void getMyStudio().then((result) => {
-      if (result.ok && "tenant" in result.data && result.data.tenant) setHasTenant(true);
+    setChecking(true);
+    setCheckError("");
+    try {
+      const result = await getMyStudio();
+      if (!result.ok) {
+        setCheckError(result.error);
+        return;
+      }
+      setHasTenant("tenant" in result.data && Boolean(result.data.tenant));
+    } catch (err) {
+      setCheckError(err instanceof Error ? err.message : t(copy.state.error, lang));
+    } finally {
       setChecking(false);
-    });
-  }, [user]);
+    }
+  }, [user, lang]);
+
+  useEffect(() => {
+    void checkStudio();
+  }, [checkStudio]);
 
   if (isPending || checking) return <LoadingState />;
   if (!user) return <RedirectToSignIn />;
-  if (hasTenant) return <Navigate to="/studio" />;
+  if (checkError) {
+    return <ErrorState message={checkError} onRetry={() => void checkStudio()} />;
+  }
+  if (hasTenant) return <Navigate to="/studio" replace />;
 
   function set<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
   async function finish(publish: boolean) {
+    if (busy) return;
     setBusy(true);
     setError("");
     setOk(false);
@@ -79,6 +98,7 @@ function Onboarding() {
         setError(created.error);
         return;
       }
+
       const starter = items
         .filter((row) => row.nameAr.trim() && Number(row.price) >= 0 && row.price !== "")
         .map((row) => ({
@@ -88,6 +108,7 @@ function Onboarding() {
           nameEn: row.nameEn.trim(),
           price: Number(row.price),
         }));
+
       if (starter.length) {
         const seeded = await seedStarterItems({ data: { items: starter } });
         if (!seeded.ok) {
@@ -95,6 +116,7 @@ function Onboarding() {
           return;
         }
       }
+
       if (publish) {
         const published = await updateTenant({ data: { isPublished: true } });
         if (!published.ok) {
@@ -102,8 +124,9 @@ function Onboarding() {
           return;
         }
       }
+
       setOk(true);
-      await navigate({ to: "/studio" });
+      await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t(copy.state.error, lang));
     } finally {
@@ -125,7 +148,7 @@ function Onboarding() {
           {step + 1} / 3 · {t([copy.onboarding.step1, copy.onboarding.step2, copy.onboarding.step3][step], lang)}
         </p>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2" aria-label={`${step + 1} / 3`}>
         {[0, 1, 2].map((i) => (
           <div key={i} className={`h-1 rounded-full ${i <= step ? "bg-accent" : "bg-sand"}`} />
         ))}
@@ -170,25 +193,19 @@ function Onboarding() {
               <Input
                 placeholder={t(copy.studio.nameAr, lang)}
                 value={row.nameAr}
-                onChange={(e) =>
-                  setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, nameAr: e.target.value } : r)))
-                }
+                onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, nameAr: e.target.value } : r)))}
               />
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   placeholder={t(copy.studio.price, lang)}
                   inputMode="decimal"
                   value={row.price}
-                  onChange={(e) =>
-                    setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, price: e.target.value } : r)))
-                  }
+                  onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, price: e.target.value } : r)))}
                 />
                 <Input
                   placeholder={lang === "ar" ? "التصنيف" : "Category"}
                   value={row.categoryAr}
-                  onChange={(e) =>
-                    setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, categoryAr: e.target.value } : r)))
-                  }
+                  onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, categoryAr: e.target.value } : r)))}
                 />
               </div>
             </div>
@@ -199,14 +216,14 @@ function Onboarding() {
       <Flash error={error} ok={ok} />
       <div className="flex flex-wrap gap-2">
         {step > 0 ? (
-          <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
+          <Button type="button" variant="outline" disabled={busy} onClick={() => setStep(step - 1)}>
             {t(copy.onboarding.back, lang)}
           </Button>
         ) : null}
         {step < 2 ? (
           <Button
             type="button"
-            disabled={step === 0 && form.nameAr.trim().length < 2}
+            disabled={busy || (step === 0 && form.nameAr.trim().length < 2)}
             onClick={() => setStep(step + 1)}
           >
             {t(copy.onboarding.continue, lang)}
