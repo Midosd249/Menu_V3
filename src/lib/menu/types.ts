@@ -140,6 +140,8 @@ export type PublicMenu = {
   hours: BranchHour[];
   categories: Category[];
   products: Product[];
+  /** Public, read-only option data keyed by product id. */
+  productOptions?: Record<string, ProductOptions>;
 };
 
 export type AttentionItem = {
@@ -195,5 +197,7 @@ export type ImportRow = {
   calories: number | null;
   isFeatured: boolean;
   isAvailable: boolean;
+  tags: string[];
+  dietaryLabels: string[];
   issues: string[];
 };
