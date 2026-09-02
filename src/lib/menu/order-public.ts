@@ -155,7 +155,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const created = await sql<{ id: string; order_number: number }>`
         with new_order as (
           insert into orders (id, tenant_id, branch_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
-          values (${orderId}, ${tenant.id}, ${branchId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || null}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
+          values (${orderId}, ${tenant.id}, ${branchId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
           returning id, order_number
         ),
         inserted_items as (
