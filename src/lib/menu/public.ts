@@ -23,6 +23,14 @@ type PublicMenuRow = {
 const menuCache = new Map<string, { menu: PublicMenu; expiresAt: number }>();
 const MENU_CACHE_TTL_MS = 15_000;
 
+/** Invalidate all cached public menu variants for one tenant immediately. */
+export function invalidatePublicMenuCache(tenantSlug: string): void {
+  const prefix = `${tenantSlug}:`;
+  for (const key of menuCache.keys()) {
+    if (key.startsWith(prefix)) menuCache.delete(key);
+  }
+}
+
 async function loadPublicMenu(
   tenantSlug: string,
   branchSlug?: string | null,
