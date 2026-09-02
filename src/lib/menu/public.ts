@@ -11,50 +11,87 @@ const slugSchema = z
   .max(63)
   .regex(/^[a-z0-9][a-z0-9-]*$/);
 
+type PublicMenuRow = {
+  tenant: Record<string, unknown>;
+  branch: Record<string, unknown>;
+  branches: Record<string, unknown>[];
+  hours: Record<string, unknown>[];
+  categories: Record<string, unknown>[];
+  products: Record<string, unknown>[];
+};
+
+const menuCache = new Map<string, { menu: PublicMenu; expiresAt: number }>();
+const MENU_CACHE_TTL_MS = 15_000;
+
 async function loadPublicMenu(
   tenantSlug: string,
   branchSlug?: string | null,
 ): Promise<FnResult<PublicMenu>> {
+  const cacheKey = `${tenantSlug}:${branchSlug ?? "default"}`;
+  const cached = menuCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
+
   try {
     const sql = await getSql();
-    const tenants = await sql`select * from tenants where slug = ${tenantSlug} and is_active = true limit 1`;
-    if (!tenants[0]) {
+    // One PostgreSQL round trip for the complete public menu. The previous
+    // implementation needed a tenant query, a branch query, then three more
+    // queries for hours/categories/products, which was especially noticeable on
+    // a serverless cold start from a phone.
+    const rows = await sql<PublicMenuRow>`
+      select
+        to_jsonb(t) as tenant,
+        to_jsonb(b) as branch,
+        coalesce((
+          select jsonb_agg(to_jsonb(b2) order by b2.created_at)
+          from branches b2
+          where b2.tenant_id = t.id and b2.is_active = true
+        ), '[]'::jsonb) as branches,
+        coalesce((
+          select jsonb_agg(to_jsonb(h) order by h.weekday)
+          from branch_hours h
+          where h.branch_id = b.id
+        ), '[]'::jsonb) as hours,
+        coalesce((
+          select jsonb_agg(to_jsonb(c) order by c.sort_order, c.created_at)
+          from categories c
+          where c.tenant_id = t.id and c.is_active = true
+        ), '[]'::jsonb) as categories,
+        coalesce((
+          select jsonb_agg(to_jsonb(p) order by p.sort_order, p.created_at)
+          from products p
+          where p.tenant_id = t.id
+        ), '[]'::jsonb) as products
+      from tenants t
+      join lateral (
+        select b0.*
+        from branches b0
+        where b0.tenant_id = t.id
+          and b0.is_active = true
+          and (${branchSlug ?? null}::text is null or b0.slug = ${branchSlug ?? null})
+        order by b0.created_at
+        limit 1
+      ) b on true
+      where t.slug = ${tenantSlug}
+        and t.is_active = true
+        and t.is_published = true
+      limit 1
+    `;
+
+    const row = rows[0];
+    if (!row) {
       return { ok: false, code: "not_found", error: "المنيو غير موجود" };
     }
-    const tenant = mapTenant(tenants[0] as Record<string, unknown>);
-    if (!tenant.isPublished) {
-      return { ok: false, code: "not_found", error: "المنيو غير موجود" };
-    }
 
-    const branchRows = await sql`select * from branches where tenant_id = ${tenant.id} and is_active = true order by created_at`;
-    const branches = branchRows.map((r) => mapBranch(r as Record<string, unknown>));
-    if (branches.length === 0) {
-      return { ok: false, code: "unavailable", error: "لا يوجد فرع نشط لهذا المنيو" };
-    }
-
-    const branch =
-      (branchSlug ? branches.find((b) => b.slug === branchSlug) : null) ?? branches[0];
-    if (branchSlug && !branches.some((b) => b.slug === branchSlug)) {
-      return { ok: false, code: "not_found", error: "الفرع غير موجود" };
-    }
-
-    const [hourRows, catRows, prodRows] = await Promise.all([
-      sql`select * from branch_hours where branch_id = ${branch.id} order by weekday`,
-      sql`select * from categories where tenant_id = ${tenant.id} and is_active = true order by sort_order, created_at`,
-      sql`select * from products where tenant_id = ${tenant.id} order by sort_order, created_at`,
-    ]);
-
-    return {
-      ok: true,
-      data: {
-        tenant,
-        branch,
-        branches,
-        hours: hourRows.map((r) => mapHour(r as Record<string, unknown>)),
-        categories: catRows.map((r) => mapCategory(r as Record<string, unknown>)),
-        products: prodRows.map((r) => mapProduct(r as Record<string, unknown>)),
-      },
+    const menu: PublicMenu = {
+      tenant: mapTenant(row.tenant),
+      branch: mapBranch(row.branch),
+      branches: (row.branches ?? []).map(mapBranch),
+      hours: (row.hours ?? []).map(mapHour),
+      categories: (row.categories ?? []).map(mapCategory),
+      products: (row.products ?? []).map(mapProduct),
     };
+    menuCache.set(cacheKey, { menu, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
+    return { ok: true, data: menu };
   } catch (err) {
     console.error("loadPublicMenu failed", err);
     return { ok: false, code: "unavailable", error: "تعذر تحميل المنيو حالياً" };
