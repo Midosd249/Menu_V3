@@ -5,10 +5,43 @@ import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { getPublicMenu } from "@/lib/menu/public";
+import { getPublicMenuSeo } from "@/lib/menu/seo";
 import { getThemeFamily } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
-export const Route = createFileRoute("/m/$slug")({ component: PublicMenuPage });
+export const Route = createFileRoute("/m/$slug")({
+  loader: async ({ params, location }) => {
+    const branch = new URLSearchParams(location.searchStr).get("branch") ?? undefined;
+    return getPublicMenu({ data: { slug: params.slug, branch } });
+  },
+  head: ({ loaderData, params, location }) => {
+    const pathname = `/m/${encodeURIComponent(params.slug)}`;
+    if (loaderData.ok) {
+      const branch = new URLSearchParams(location.searchStr).get("branch");
+      const canonical = branch ? `/m/${encodeURIComponent(params.slug)}/${encodeURIComponent(branch)}` : pathname;
+      const seo = getPublicMenuSeo(loaderData.data, canonical);
+      return {
+        meta: [
+          { title: seo.title },
+          { name: "description", content: seo.description },
+          { name: "robots", content: "index, follow" },
+          { property: "og:type", content: "website" },
+          { property: "og:title", content: seo.title },
+          { property: "og:description", content: seo.description },
+          { property: "og:locale", content: "ar_SA" },
+          ...(seo.image ? [{ property: "og:image", content: seo.image }] : []),
+        ],
+        links: [{ rel: "canonical", href: seo.canonical }],
+        scripts: [{ type: "application/ld+json", children: JSON.stringify(seo.schema) }],
+      };
+    }
+    return {
+      meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: "noindex, nofollow" }],
+      links: [{ rel: "canonical", href: pathname }],
+    };
+  },
+  component: PublicMenuPage,
+});
 
 const MENU_TIMEOUT_MS = 10_000;
 const MENU_CACHE_PREFIX = "menu-v3:public:";
@@ -39,17 +72,19 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 function PublicMenuPage() {
   const { slug } = Route.useParams();
   const search = Route.useSearch() as { branch?: string };
-  return <MenuLoader slug={slug} branch={search.branch} />;
+  const loaderData = Route.useLoaderData();
+  return <MenuLoader slug={slug} branch={search.branch} initialMenu={loaderData.ok ? loaderData.data : undefined} />;
 }
 
-export function MenuLoader({ slug, branch }: { slug: string; branch?: string }) {
+export function MenuLoader({ slug, branch, initialMenu }: { slug: string; branch?: string; initialMenu?: PublicMenu }) {
   const cacheKey = `${slug}:${branch ?? "default"}`;
   const cached = readCachedMenu(cacheKey);
-  const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(cached ? { status: "ok", menu: cached } : { status: "loading" });
+  const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" });
 
   function load() {
     const instant = readCachedMenu(cacheKey);
-    if (instant) setState({ status: "ok", menu: instant }); else setState({ status: "loading" });
+    if (instant) setState({ status: "ok", menu: instant });
+    else setState((previous) => previous.status === "ok" ? previous : { status: "loading" });
     withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => {
       if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; }
       writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data });
