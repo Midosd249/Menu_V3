@@ -39,9 +39,8 @@ jobs:
       - name: Start built preview
         run: |
           mkdir -p .grok
-          nohup npx vite preview --host 127.0.0.1 --port 8081 > .grok/preview.log 2>&1 &
-          echo $! > .grok/preview.pid
-          for attempt in $(seq 1 120); do
+          nohup npm run preview > .grok/preview.log 2>&1 &
+          for attempt in $(seq 1 240); do
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
               echo "[preview] serving http://127.0.0.1:8081/"
               exit 0
