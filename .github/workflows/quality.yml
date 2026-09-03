@@ -30,6 +30,8 @@ jobs:
         run: npm run typecheck
       - name: Tests
         run: npm test
+      - name: Platform tests
+        run: npm run test:platform
       - name: Lint
         run: npm run lint
       - name: Production build
