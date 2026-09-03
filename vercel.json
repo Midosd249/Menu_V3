@@ -1,7 +1,3 @@
 {
-  "regions": ["icn1"],
-  "rewrites": [
-    { "source": "/robots.txt", "destination": "/api/robots" },
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
-  ]
+  "regions": ["icn1"]
 }
