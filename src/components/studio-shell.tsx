@@ -12,26 +12,37 @@ import {
   SlidersHorizontal,
   ExternalLink,
   Ellipsis,
+  Users,
 } from "lucide-react";
 import { UserButton } from "@/lib/auth/gates";
 import { LangToggle } from "@/components/lang-toggle";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { useStudio } from "@/lib/menu/studio";
+import { canManageTeam, canWriteSettings, type Permission } from "@/lib/auth/permissions";
 import { cn } from "@/lib/utils";
 
-const NAV = [
+type NavItem = {
+  to: string;
+  icon: typeof LayoutDashboard;
+  label: { ar: string; en: string };
+  exact?: boolean;
+  permission?: Permission;
+};
+
+const NAV: readonly NavItem[] = [
   { to: "/studio", icon: LayoutDashboard, label: copy.nav.overview, exact: true },
   { to: "/studio/menu", icon: UtensilsCrossed, label: copy.nav.menu },
   { to: "/studio/options", icon: SlidersHorizontal, label: { ar: "خيارات الأصناف", en: "Item options" } },
-  { to: "/studio/branches", icon: Building2, label: copy.nav.branches },
-  { to: "/studio/brand", icon: Palette, label: copy.nav.brand },
-  { to: "/studio/design", icon: Palette, label: { ar: "التصميم", en: "Design" } },
+  { to: "/studio/branches", icon: Building2, label: copy.nav.branches, permission: "settings.write" },
+  { to: "/studio/brand", icon: Palette, label: copy.nav.brand, permission: "settings.write" },
+  { to: "/studio/design", icon: Palette, label: { ar: "التصميم", en: "Design" }, permission: "settings.write" },
   { to: "/studio/qr", icon: QrCode, label: copy.nav.qr },
   { to: "/studio/analytics", icon: BarChart3, label: copy.nav.analytics },
   { to: "/studio/import", icon: Upload, label: copy.nav.import },
-  { to: "/studio/settings", icon: Settings, label: copy.nav.settings },
-] as const;
+  { to: "/studio/team", icon: Users, label: { ar: "الفريق والصلاحيات", en: "Team & permissions" }, permission: "team.write" },
+  { to: "/studio/settings", icon: Settings, label: copy.nav.settings, permission: "settings.write" },
+];
 
 const MOBILE_PRIMARY = ["/studio", "/studio/menu", "/studio/design"] as const;
 
@@ -40,8 +51,15 @@ export function StudioShell() {
   const { snapshot } = useStudio();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const tenant = snapshot.tenant;
+  const role = snapshot.role;
   const [moreOpen, setMoreOpen] = useState(false);
   const publicHref = `/m/${tenant.slug}${snapshot.branches[0] ? `/${snapshot.branches[0].slug}` : ""}`;
+  const visibleNav = NAV.filter((item) => {
+    if (!item.permission) return true;
+    if (item.permission === "team.write") return canManageTeam(role);
+    if (item.permission === "settings.write") return canWriteSettings(role);
+    return false;
+  });
 
   return (
     <div className="min-h-dvh bg-paper lg:grid lg:grid-cols-[240px_1fr]">
@@ -51,8 +69,8 @@ export function StudioShell() {
           <p className="truncate text-sm text-muted">{lang === "ar" ? tenant.nameAr : tenant.nameEn || tenant.nameAr}</p>
         </div>
         <nav className="grid gap-1 px-3 pb-6">
-          {NAV.map((item) => {
-            const active = "exact" in item && item.exact ? pathname === item.to : pathname.startsWith(item.to);
+          {visibleNav.map((item) => {
+            const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
             const Icon = item.icon;
             return <Link key={item.to} to={item.to} className={cn("flex h-11 items-center gap-2 rounded-md px-3 text-sm", active ? "bg-ink text-paper" : "text-ink-soft hover:bg-sand")}><Icon className="size-4" />{t(item.label, lang)}</Link>;
           })}
@@ -71,12 +89,12 @@ export function StudioShell() {
         </header>
         <div className="flex-1 px-4 py-6 pb-28 lg:px-8"><Outlet /></div>
         <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 gap-1 border-t border-line bg-paper px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden">
-          {NAV.filter((item) => (MOBILE_PRIMARY as readonly string[]).includes(item.to)).map((item) => {
-            const active = "exact" in item && item.exact ? pathname === item.to : pathname.startsWith(item.to);
+          {visibleNav.filter((item) => MOBILE_PRIMARY.includes(item.to as typeof MOBILE_PRIMARY[number])).map((item) => {
+            const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
             const Icon = item.icon;
             return <Link key={item.to} to={item.to} className={cn("grid h-12 place-items-center rounded-md text-xs", active ? "bg-ink text-paper" : "text-muted")}><Icon className="size-4" />{t(item.label, lang)}</Link>;
           })}
-          <button type="button" onClick={() => setMoreOpen(true)} className={cn("grid h-12 place-items-center rounded-md text-xs", moreOpen || NAV.some((item) => !(MOBILE_PRIMARY as readonly string[]).includes(item.to) && ("exact" in item && item.exact ? pathname === item.to : pathname.startsWith(item.to))) ? "bg-ink text-paper" : "text-muted")}><Ellipsis className="size-4" />{t(copy.nav.more, lang)}</button>
+          <button type="button" onClick={() => setMoreOpen(true)} className={cn("grid h-12 place-items-center rounded-md text-xs", moreOpen || visibleNav.some((item) => !MOBILE_PRIMARY.includes(item.to as typeof MOBILE_PRIMARY[number]) && (item.exact ? pathname === item.to : pathname.startsWith(item.to))) ? "bg-ink text-paper" : "text-muted")}><Ellipsis className="size-4" />{t(copy.nav.more, lang)}</button>
         </nav>
       </div>
 
@@ -85,7 +103,7 @@ export function StudioShell() {
         <div className="absolute inset-x-0 bottom-0 rounded-t-xl bg-paper p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <p className="mb-3 text-sm font-medium">{t(copy.nav.more, lang)}</p>
           <div className="grid grid-cols-3 gap-2">
-            {NAV.filter((item) => !(MOBILE_PRIMARY as readonly string[]).includes(item.to)).map((item) => {
+            {visibleNav.filter((item) => !MOBILE_PRIMARY.includes(item.to as typeof MOBILE_PRIMARY[number])).map((item) => {
               const Icon = item.icon;
               const active = pathname.startsWith(item.to);
               return <Link key={item.to} to={item.to} onClick={() => setMoreOpen(false)} className={cn("grid h-20 place-items-center gap-1 rounded-lg border border-line text-xs", active ? "bg-ink text-paper" : "bg-paper text-ink-soft")}><Icon className="size-4" />{t(item.label, lang)}</Link>;
