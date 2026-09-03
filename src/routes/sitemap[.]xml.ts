@@ -7,7 +7,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async ({ request }) => {
         const sql = await getSql();
-        const rows = await sql<{ slug: string; branch_slug: string | null; updated_at: string | null }>`
+        const rows = await sql.query<{ slug: string; branch_slug: string | null; updated_at: string | null }>(`
           select
             t.slug,
             b.slug as branch_slug,
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           where t.is_active = true
             and t.is_published = true
           order by t.slug, b.created_at
-        `;
+        `);
 
         const entries = publicMenuSitemapEntries(
           rows.map((row) => ({
