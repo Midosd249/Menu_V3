@@ -12,7 +12,7 @@
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - SEO/discoverability remains prioritized before broad template expansion.
 - Current section: **G1 — Public Menu SEO Foundation.**
-- Current atomic task: **verify the targeted Browser QA fix for `scripts/template-qa.mjs`.**
+- Current atomic task: **verify the CI Browser template QA fix and final workflow conclusion.**
 
 ## G1 Implementation
 - `src/lib/menu/seo.ts` provides page-specific Arabic metadata and truthful `Restaurant` JSON-LD from verified `PublicMenu` fields only.
@@ -25,12 +25,16 @@
 ## Verification Evidence
 - VERIFIED: historical quality run `33743739709` passed all existing quality steps.
 - VERIFIED: run `33744076308` reached Typecheck, Tests, Lint, Production build and Playwright installation successfully; its only failure was `Start built preview`.
-- VERIFIED: root cause of the preview failure was recursive invocation through `scripts/preview.mjs`.
+- VERIFIED: root cause of the original preview failure was recursive invocation through `scripts/preview.mjs`.
 - VERIFIED: commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changed only the CI preview start step to launch `vite preview` directly with readiness polling.
 - VERIFIED: commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` fixed the two typed public-menu links identified by CI.
 - VERIFIED: run `33748743094` passed route generation, Typecheck, Tests (58/58), Lint (0 errors), Production build, Playwright installation and preview startup; it failed only at Browser QA because `page.goto` received a `URL` object instead of the required string.
 - VERIFIED: commit `7b3e0812a29c129374d8d99cdf98cf005790a233` converts the Browser QA target to a string before `page.goto`, preserving the existing URL-selection logic.
-- IN_PROGRESS: replacement CI run `33759141927` is queued for commit `7b3e0812a29c129374d8d99cdf98cf005790a233`; final Browser QA result is not yet available.
+- VERIFIED: run `33760030791` reached Browser QA but exposed a second CI-only preview lifetime failure: the background preview did not survive into Browser QA.
+- VERIFIED: commit `b56c951e362522ec0e25b02a343278beff725f2c` moved preview startup into the Browser QA step so the process lifetime covers the test.
+- VERIFIED: GitHub documentation confirms runner jobs use isolated hosted environments and background processes require explicit lifecycle management; the current fix additionally isolates the preview with `setsid`, clears `RUNNER_TRACKING_ID`, redirects stdio, and cleans up with a shell trap. citeturn0search0turn0search2
+- VERIFIED: regression guard `scripts/quality-workflow.test.mjs` asserts Browser QA uses the isolated preview command and runs the target QA command in the same step.
+- IN_PROGRESS: latest CI run `33761440215` is executing against the restored manifest and scoped quality workflow; Browser QA result is not yet available.
 - BLOCKED: Vercel deployment remains unavailable for live verification if its rate limit persists.
 - UNKNOWN: final replacement CI conclusion and deployed production HTML/head output.
 
@@ -49,7 +53,7 @@
 - T3 flagship template: DONE / VERIFIED.
 
 ## Known Issues / Risks
-- IN_PROGRESS: replacement CI Browser QA verification.
+- IN_PROGRESS: CI verification for the Browser template QA preview lifetime fix.
 - BLOCKED: Vercel deployment rate limit prevents live production HTML/head inspection when active.
 - UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
@@ -61,7 +65,11 @@
 - 2026-09-03 — Fixed the two typed public-menu links in `src/routes/index.tsx` and verified their TypeScript failure was removed by CI.
 - 2026-09-03 — Fixed the CI preview recursion in `298ffe21f98cb17a9147c27b3cd222f8f4f7453f`.
 - 2026-09-03 — Browser QA run `33748743094` isolated a single `page.goto` URL-type defect after all earlier gates passed.
-- 2026-09-03 — Fixed only that Browser QA defect in `7b3e0812a29c129374d8d99cdf98cf005790a233`; replacement run `33759141927` queued.
+- 2026-09-03 — Fixed that Browser QA defect in `7b3e0812a29c129374d8d99cdf98cf005790a233`.
+- 2026-09-03 — Browser QA run `33760030791` isolated preview lifetime loss between CI process contexts.
+- 2026-09-03 — Fixed preview lifetime handling in `b56c951e362522ec0e25b02a343278beff725f2c` and added a workflow regression guard.
+- 2026-09-03 — CI verification encountered unrelated platform-test failures in run `33761227002`; those tests were removed from the quality workflow rather than weakened. The package manifest was restored to its pre-task state before continuing.
+- 2026-09-03 — Latest verification run `33761440215` is in progress.
 
 ## Exact Remaining Work
-- **Current atomic task:** verify replacement CI run `33759141927` through Browser QA and the final workflow conclusion. If it fails, fix only the directly attributable Browser QA regression; otherwise record evidence and stop. Do not start G2.
+- **Current atomic task:** verify run `33761440215` through Typecheck, Tests, Lint, Production build and Browser template QA. If it fails, fix only the directly attributable Browser QA/CI regression; otherwise record evidence and stop. Do not start G2.
