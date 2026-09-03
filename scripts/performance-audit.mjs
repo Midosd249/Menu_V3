@@ -37,7 +37,7 @@ const browser = await chromium.launch({
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const response = await page.goto(target.toString(), {
-    waitUntil: "domcontentloaded",
+    waitUntil: "networkidle",
     timeout: 45000,
   });
   await page.waitForTimeout(1200);
@@ -68,29 +68,10 @@ try {
 
     const navigation = performance.getEntriesByType("navigation")[0];
     const paint = performance.getEntriesByType("paint");
-    const lcpEntries = [];
-    const clsEntries = [];
-    const inpEntries = [];
-
-    try {
-      const observer = new PerformanceObserver((list) => lcpEntries.push(...list.getEntries()));
-      observer.observe({ type: "largest-contentful-paint", buffered: true });
-      observer.disconnect();
-    } catch {}
-
-    try {
-      const observer = new PerformanceObserver((list) => clsEntries.push(...list.getEntries()));
-      observer.observe({ type: "layout-shift", buffered: true });
-      observer.disconnect();
-    } catch {}
-
-    let inpSupported = false;
-    try {
-      const observer = new PerformanceObserver((list) => inpEntries.push(...list.getEntries()));
-      observer.observe({ type: "event", buffered: true, durationThreshold: 40 });
-      inpSupported = true;
-      observer.disconnect();
-    } catch {}
+    const lcpEntries = performance.getEntriesByType("largest-contentful-paint");
+    const clsEntries = performance.getEntriesByType("layout-shift");
+    const inpEntries = performance.getEntriesByType("event");
+    const inpSupported = typeof PerformanceEventTiming !== "undefined";
 
     const lcp = lcpEntries.reduce((max, entry) => Math.max(max, entry.startTime || 0), 0);
     const cls = clsEntries.reduce(
