@@ -23,7 +23,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           order by t.slug, b.created_at
         `);
 
-        const entries = publicMenuSitemapEntries(rows);
+        const entries = publicMenuSitemapEntries(
+          rows.map((row) => ({ slug: row.slug, branchSlug: row.branch_slug })),
+        );
         return new Response(buildSitemapXml(new URL(request.url).origin, entries), {
           headers: {
             "Content-Type": "application/xml; charset=utf-8",
