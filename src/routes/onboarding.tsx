@@ -95,6 +95,14 @@ function Onboarding() {
         },
       });
       if (!created.ok) {
+        // A second tab/request can race the first onboarding request. The database
+        // owner uniqueness guard makes one request authoritative; reconcile here
+        // by reading the trusted server-side membership before showing an error.
+        const existing = await getMyStudio();
+        if (existing.ok && "tenant" in existing.data && existing.data.tenant) {
+          await navigate({ to: "/studio", replace: true });
+          return;
+        }
         setError(created.error);
         return;
       }
