@@ -1,43 +1,36 @@
 # TASKS
 
 ## Current Section
-- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and repository verification are complete; live `/robots.txt` is verified on the READY production deployment, while live `/sitemap.xml` inspection is blocked by Vercel SSO on the available fetch surface.
+- **G3 — Saudi Local Discovery + Branch SEO: IN_PROGRESS.** G2 is closed and protected after complete repository and live crawler-surface verification.
 
 ## Unified Queue
-1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — final live verification of deployed `/sitemap.xml`; close only when the output is inspected successfully.
-2. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
-3. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
-4. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
-5. **G6 — Performance + Media:** TODO — evidence-based image/font/JS budgets, media optimization and Core Web Vitals measurement for representative Saudi mobile fixtures.
-6. **G7 — Analytics, Search Console, Growth, Rollout:** TODO — acquisition-to-conversion funnel, Search Console measurement, template/branch comparisons, privacy-reviewed analytics and staged rollout.
+1. **G3 — Saudi Local Discovery + Branch SEO:** IN_PROGRESS — audit verified Saudi city/branch data and implement the smallest production-safe local SEO slice backed entirely by existing verified entities.
+2. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
+3. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
+4. **G6 — Performance + Media:** TODO — evidence-based image/font/JS budgets, media optimization and Core Web Vitals measurement for representative Saudi mobile fixtures.
+5. **G7 — Analytics, Search Console, Growth, Rollout:** TODO — acquisition-to-conversion funnel, Search Console measurement, template/branch comparisons, privacy-reviewed analytics and staged rollout.
 
 ## G1 Verification Evidence — CLOSED
 - VERIFIED: `33763072784` passed every quality gate, including Typecheck, Tests (61/61), Lint (0 errors), Production build, Playwright installation, Browser template QA and preview cleanup.
-- VERIFIED: PGlite runtime assets are correctly copied to both `_libs` and the Vercel function root.
-- VERIFIED: PGlite records production-only `menu_v3.*` migrations as skipped; PostgreSQL behavior remains unchanged.
-- VERIFIED: Vercel production project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- VERIFIED: production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is READY and built from `main` commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
-- VERIFIED: live `/m/nafas` and `/m/nafas/olaya` return the expected route-specific SSR SEO metadata and structured data.
-- VERIFIED: live `/m/does-not-exist` returns the expected `noindex, nofollow` behavior.
-- VERIFIED: the nested branch-head duplication is resolved in production.
-- UNKNOWN: production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin is configured.
+- VERIFIED: production public-menu SSR SEO metadata and structured data behave correctly for normal, branch, and missing routes.
+- UNKNOWN: production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - UNKNOWN: Search Console/indexation state until separately inspected.
 
-## G2 Evidence
-- VERIFIED: `src/lib/seo/crawl.ts` implements deterministic robots/sitemap serialization.
+## G2 Verification Evidence — CLOSED
+- VERIFIED: `src/lib/seo/crawl.ts` implements deterministic robots/sitemap serialization with XML escaping, origin normalization, and duplicate-path elimination.
 - VERIFIED: `server/middleware/grok-pwa.ts` exposes `/robots.txt` and `/sitemap.xml` using the existing Nitro middleware path.
 - VERIFIED: sitemap SQL requires active/published tenants and active branches.
 - VERIFIED: robots does not disallow `/m/*` and declares `/sitemap.xml`.
-- VERIFIED: missing public menus remain `noindex, nofollow`; branch routes remain canonical owners.
+- VERIFIED: unavailable public menus remain `noindex, nofollow`; branch routes remain canonical owners.
 - VERIFIED: `scripts/quality-workflow.test.mjs` covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
-- VERIFIED: the G1 route-id typecheck regression identified by CI was corrected in `src/routes/m.$slug.tsx` without changing its SEO behavior.
-- VERIFIED: focused commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is the tested G2 implementation head.
 - VERIFIED: GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - VERIFIED: Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- VERIFIED: Vercel production deployment `dpl_F2NGuDydH1b8RfPaghVToGvoV7Tg` is READY from the focused G2 source commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
-- VERIFIED: deployed `/robots.txt` returns HTTP 200 with the expected allow/disallow rules and `Sitemap` declaration.
-- BLOCKED: deployed `/sitemap.xml` retrieval through the available Vercel fetch surface redirects to Vercel SSO even after generating a deployment share URL.
-- UNKNOWN: live sitemap body and actual production URL set until a public/non-SSO production surface can be inspected.
+- VERIFIED: current Vercel production deployment `dpl_4VUKHziJn8B3nwVTUG6mjiFksihS` is READY and exposes the expected production aliases.
+- VERIFIED: live `/robots.txt` returns HTTP 200 with the expected crawl rules and sitemap declaration.
+- VERIFIED: live `/sitemap.xml` returns HTTP 200 with `application/xml; charset=utf-8`.
+- VERIFIED: live sitemap is valid XML and contains four absolute unique URLs: `/m/mndy-alwtnya`, `/m/mndy-alwtnya/main-branch`, `/m/nafas`, `/m/nafas/olaya`.
+- VERIFIED: the live sitemap URL set is consistent with the repository eligibility contract; automated tests verify active/published tenant and active branch filtering.
+- VERIFIED: unavailable public-menu routes are excluded from the verified live sitemap set and emit non-indexing behavior.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -55,6 +48,7 @@
 - DONE / VERIFIED: T2 shared semantic menu presentation primitives.
 - DONE / VERIFIED: T3 `contemporary-restaurant` family renderer.
 - DONE / VERIFIED: G1 Public Menu SEO Foundation.
+- DONE / VERIFIED: G2 Crawl Control and Indexation.
 
 ## Exact Next Task
-- **G2 — Final live sitemap verification:** obtain a publicly inspectable production response for `/sitemap.xml`, verify the existing G2 acceptance criteria, then close G2. Do not start G3 before G2 is closed and verified.
+- **G3 — Audit verified Saudi location data and implement the smallest production-safe local-discovery/branch-SEO slice backed entirely by existing verified entities.** Do not begin G4 in the same task.
