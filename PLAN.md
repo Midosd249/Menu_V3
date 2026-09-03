@@ -6,7 +6,7 @@
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
 - **Current section:** G1 — Public Menu SEO Foundation.
-- **Current atomic task:** verify the CI Browser template QA fix and final workflow conclusion.
+- **Current atomic task:** verify the CI Browser template QA fix after correcting the PGlite runtime asset placement.
 
 ## G1 Status
 
@@ -15,12 +15,13 @@
 - Historical quality and Browser QA gates through preview startup are verified.
 - `7b3e0812a29c129374d8d99cdf98cf005790a233` fixed the `page.goto` URL-type defect.
 - `b56c951e362522ec0e25b02a343278beff725f2c` moved preview startup into the Browser QA step.
-- The current workflow isolates the preview with `setsid`, clears `RUNNER_TRACKING_ID`, redirects stdio, waits for readiness, runs Browser QA in the same step, and cleans up with a trap.
-- `scripts/quality-workflow.test.mjs` guards the Browser QA preview-isolation contract.
-- `package.json` was restored to its pre-task state except for including that targeted regression test in `npm test`.
+- `69544f9f55f06c85e70a703765f62ed6a16cf3f1` copies all PGlite runtime files to the server-function root as well as `_libs`, matching the runtime paths observed in CI.
+- `scripts/quality-workflow.test.mjs` guards Browser QA preview isolation.
+- `scripts/pglite-asset.test.mjs` guards PGlite function-root asset placement.
+- `package.json` includes both targeted regression tests without adding dependencies.
 
 ### UNKNOWN / BLOCKED
-- UNKNOWN: final current CI Browser QA result and workflow conclusion.
+- UNKNOWN: final post-fix CI Browser QA result.
 - BLOCKED: Vercel deployment may remain rate-limited; live production inspection is not claimed without direct evidence.
 - UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
