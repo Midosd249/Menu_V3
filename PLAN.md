@@ -7,36 +7,25 @@
 - G2 — Crawl Control and Indexation: **DONE / VERIFIED**.
 - G3 — Saudi Local Discovery + Branch SEO: **DONE / VERIFIED / CLOSED**.
 - G4 — Arabic/English SEO Architecture: **DONE / VERIFIED / CLOSED**.
+- G5 — Template Ecosystem Expansion: **DONE / VERIFIED / CLOSED**.
 - **Current section:** G6 — Performance + Media.
-- **Current atomic milestone:** evidence-based performance audit and first targeted optimization.
+- **Current atomic milestone:** evidence-based performance audit and first targeted optimization guard.
 
-## G5 — Template Ecosystem Expansion — DONE / VERIFIED / CLOSED
-### Specialty Cafe milestone
-- **DONE / VERIFIED / CLOSED:** dedicated specialty-cafe renderer with cafe-specific hierarchy, barista picks, compact navigation, product details/modifiers, cart, and public ordering.
-- **DONE / VERIFIED / CLOSED:** `specialty-cafe` routing and `coffee` family regression contract.
-- **VERIFIED:** GitHub Actions quality run `33803091905` passed the complete quality workflow including Browser Template QA.
+## G6 — Performance + Media — IN_PROGRESS
+### Initial audit
+- **VERIFIED:** `src/components/public-menu.tsx` uses native `loading="lazy"` for product media.
+- **VERIFIED:** existing product-media call sites provide explicit rendered dimensions through CSS classes.
+- **VERIFIED:** `src/styles.css` uses IBM Plex Sans Arabic with system fallbacks.
+- **VERIFIED:** no new runtime dependency was introduced for the initial G6 work.
+- **VERIFIED:** `scripts/quality-workflow.test.mjs` now protects the product-image lazy-loading contract.
+- **VERIFIED:** initial audit is documented in `docs/G6_PERFORMANCE_AUDIT.md`.
+- **UNKNOWN:** production font/image/JavaScript transfer sizes, cache behavior, and Core Web Vitals until a reproducible browser measurement is captured.
+- **BLOCKED:** Vercel provider build-rate-limit prevents using a provider deployment as the current measurement source; repository CI remains the verification source.
 
-### Bakery / Dessert milestone
-- **DONE / VERIFIED / CLOSED:** `src/components/templates/bakery-dessert.tsx` provides a dedicated bakery/dessert presentation shell with image-led bakery identity while preserving the established public-menu behavior.
-- **DONE / VERIFIED / CLOSED:** `src/routes/m.$slug.tsx` routes the `bakery-dessert` family to `BakeryDessertTemplate`.
-- **DONE / VERIFIED / CLOSED:** `src/lib/theme/registry.test.ts` protects the `gallery` → `bakery-dessert` family mapping.
-- **VERIFIED:** GitHub Actions quality run `33803745535` passed the complete quality workflow.
-
-### Fast Casual / QSR milestone
-- **DONE / VERIFIED / CLOSED:** dedicated fast-casual renderer, routing, family regression contract, and complete quality verification.
-- **VERIFIED:** GitHub Actions quality run `33804153009` passed the complete quality workflow including Browser Template QA.
-
-### Fine Dining / Hospitality milestone
-- **DONE / VERIFIED / CLOSED:** dedicated dark editorial hospitality renderer, routing, `dark-dining` / `immersive` family contracts, and complete quality verification.
-- **VERIFIED:** GitHub Actions quality run `33804331728` passed the complete quality workflow including Browser Template QA.
-
-### Small Menu / Food Truck / Single-Concept milestone
-- **DONE / VERIFIED / CLOSED:** `src/components/templates/small-menu.tsx` provides a dedicated focused-menu presentation shell with compact identity, concept-focused hero, active-section count, and language control.
-- **DONE / VERIFIED / CLOSED:** `src/routes/m.$slug.tsx` routes the `small-menu` family to `SmallMenuTemplate` while preserving existing template fallbacks.
-- **DONE / VERIFIED / CLOSED:** `src/lib/theme/registry.test.ts` protects the `minimal` → `small-menu` family mapping.
-- **DONE / VERIFIED / CLOSED:** `PublicMenuView` remains the source of truth for menu browsing, product details, ordering, locale, analytics, and accessibility behavior.
-- **DONE / VERIFIED / CLOSED:** no database, authorization, tenant-isolation, ordering, or public-data contract was changed.
-- **VERIFIED:** final GitHub Actions quality run `33804946380` passed Route tree generation, Typecheck, Tests, Lint, Production build, Playwright Chromium installation, Browser Template QA, and cleanup.
+### G6 guardrails
+- Preserve G1–G5 contracts.
+- Do not add image/font/runtime dependencies without evidence.
+- Do not choose hard performance budgets from guesses; establish a baseline first.
 
 ## G1 — Public Menu SEO Foundation — CLOSED
 - Existing implementation and evidence remain protected; do not rebuild.
@@ -63,5 +52,5 @@
 - G3 — Saudi Local Discovery + Branch SEO: **DONE / VERIFIED / CLOSED**.
 - G4 — Arabic/English SEO Architecture: **DONE / VERIFIED / CLOSED**.
 - G5 — Template Ecosystem Expansion: **DONE / VERIFIED / CLOSED**.
-- G6 — Performance + Media: **IN_PROGRESS / NEXT**.
+- G6 — Performance + Media: **IN_PROGRESS**.
 - G7 — Analytics, Search Console, Growth, Rollout: TODO.
