@@ -23,7 +23,7 @@
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
 
 ## G2 — Crawl Control and Indexation
-- **Status:** IN_PROGRESS — implementation and regression coverage are present; final executable verification is pending.
+- **Status:** IN_PROGRESS — implementation and regression coverage are complete; final live verification is blocked by the current Vercel deployment rate limit.
 - **Objective:** establish deterministic crawler controls so only intentionally published public menu pages can be discovered/indexed, while unavailable/unpublished content is excluded without harming valid public pages.
 
 ### Scope
@@ -40,10 +40,11 @@
 - **VERIFIED:** sitemap SQL selects only active/published tenants and active branches, with deterministic ordering.
 - **VERIFIED:** sitemap output uses absolute URLs and optional `lastmod` values.
 - **VERIFIED:** robots allows public pages, disallows private application surfaces, and declares `/sitemap.xml`.
-- **VERIFIED:** public menu loading already requires `t.is_active = true` and `t.is_published = true`; inactive branches are excluded.
-- **VERIFIED:** missing public menu routes emit `noindex, nofollow` and existing branch canonical ownership prevents duplicate canonical/JSON-LD output.
+- **VERIFIED:** public menu loading requires active/published tenant state and inactive branches are excluded.
+- **VERIFIED:** missing public menu routes emit `noindex, nofollow` and branch routes remain canonical owners.
 - **VERIFIED:** regression coverage was restored and expanded in `scripts/quality-workflow.test.mjs`.
-- **VERIFIED:** the preceding CI run isolated a typecheck regression in `src/routes/m.$slug.tsx`; the focused route-id comparison correction is included in the G2 commit.
+- **VERIFIED:** the preceding CI typecheck regression in `src/routes/m.$slug.tsx` was corrected without changing SEO behavior.
+- **VERIFIED:** the duplicate-path sitemap regression was corrected in `e0a007a4a45362494d26ff801a833708b17d4fb7`.
 
 ### Research Decisions
 - Use root-level `/sitemap.xml` with fully qualified URLs and optional truthful `lastmod` values.
@@ -66,10 +67,11 @@
 - Existing G1 behavior remains intact.
 - `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, and CI/browser QA remain successful.
 
-## Verification Blocker
-- **BLOCKED:** the repository has no new GitHub Actions run for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` in the available tool window, and the local execution environment cannot clone GitHub because outbound DNS/network access is unavailable.
-- **UNKNOWN:** final CI results for the focused G2 commit.
-- **UNKNOWN:** final Vercel deployment result and live `/robots.txt`/`/sitemap.xml` output for the focused G2 commit.
+## Verification Checkpoint
+- **VERIFIED:** GitHub Actions run `33769708337` for focused commit `e0a007a4a45362494d26ff801a833708b17d4fb7` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
+- **VERIFIED:** Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
+- **BLOCKED:** Vercel reports `Deployment rate limited — retry in 24 hours` for the focused commit, so live `/robots.txt` and `/sitemap.xml` inspection cannot yet be performed against that deployment.
+- **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output for the focused commit until a deployment is available.
 
 ## Unified milestones
 
@@ -77,7 +79,7 @@
 - **Status:** DONE / VERIFIED.
 
 ### G2 — Crawl Control and Indexation
-- **Status:** IN_PROGRESS — implementation complete, final verification blocked.
+- **Status:** IN_PROGRESS — implementation complete; live deployment verification blocked.
 
 ### G3 — Saudi Local Discovery + Branch SEO
 - **Status:** TODO.
