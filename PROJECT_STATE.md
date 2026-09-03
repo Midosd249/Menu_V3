@@ -4,7 +4,7 @@
 - Status: VERIFIED
 - Repository: `Midosd249/Menu_V3`
 - Source of truth: `main`
-- Current repository HEAD after onboarding hardening and continuity documentation: `4b59305eb1d29c3475a0389b2f2780f0015714fb`.
+- Current repository HEAD after onboarding hardening and continuity documentation: `7528565961fd36ebfd223e93ce302d0aabb78b36`.
 - Current audited application implementation before Level 4B hardening: `46b5b42a56ba93f9715a511a6062f39a0f739ace`.
 - Product: Menu V3, an Arabic-first bilingual multi-tenant digital-menu SaaS.
 
