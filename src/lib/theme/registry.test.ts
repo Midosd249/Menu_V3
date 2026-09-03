@@ -5,7 +5,6 @@ import { TEMPLATE_FAMILIES } from "./types.ts";
 
 test("all registered themes belong to a supported template family", () => {
   const families = new Set<string>(TEMPLATE_FAMILIES);
-
   assert.equal(MENU_THEMES.length, 8);
   for (const theme of MENU_THEMES) {
     assert.ok(families.has(theme.family));
@@ -19,6 +18,10 @@ test("specialty cafe themes resolve to the dedicated family", () => {
 
 test("bakery dessert themes resolve to the dedicated family", () => {
   assert.equal(getThemeFamily("gallery"), "bakery-dessert");
+});
+
+test("fast casual themes resolve to the dedicated family", () => {
+  assert.equal(getThemeFamily("fast-casual"), "fast-casual");
 });
 
 test("theme resolution remains backward compatible", () => {
