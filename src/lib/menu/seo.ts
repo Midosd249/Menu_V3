@@ -74,7 +74,6 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string) {
     } : {}),
     openingHoursSpecification: openingHoursSpecification(menu.hours),
     ...(mapsUrl ? { hasMap: mapsUrl } : {}),
-    menu: canonical,
   };
   if (image) schema.image = image;
   if (logo) schema.logo = logo;
