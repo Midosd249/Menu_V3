@@ -9,13 +9,28 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
 const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
+const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
+
 
 test("Browser template QA isolates the preview from runner process cleanup", () => {
   const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Stop built preview)/)?.[1] ?? "";
 
   assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
+  assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
   assert.match(qaStep, /npm run qa:template http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
   assert.match(qaStep, /Browser QA failed — preview log follows/);
+});
+
+test("performance audit measures the G6 baseline without imposing guessed budgets", () => {
+  assert.match(PERFORMANCE_AUDIT, /largest-contentful-paint/);
+  assert.match(PERFORMANCE_AUDIT, /layout-shift/);
+  assert.match(PERFORMANCE_AUDIT, /type: "event"/);
+  assert.match(PERFORMANCE_AUDIT, /transferSize/);
+  assert.match(PERFORMANCE_AUDIT, /isFont/);
+  assert.match(PERFORMANCE_AUDIT, /lazyImageCount/);
+  assert.match(PERFORMANCE_AUDIT, /cachedResourceCount/);
+  assert.match(PERFORMANCE_AUDIT, /schemaVersion: 1/);
+  assert.doesNotMatch(PERFORMANCE_AUDIT, /LCP.*(?:budget|threshold)|CLS.*(?:budget|threshold)|INP.*(?:budget|threshold)/i);
 });
 
 test("robots.txt allows public pages, protects private surfaces, and declares the sitemap", () => {
