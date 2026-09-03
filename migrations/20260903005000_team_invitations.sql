@@ -24,5 +24,4 @@ create index if not exists team_invitations_token_hash_idx
 alter table team_invitations enable row level security;
 
 -- Server-side application code is the authorization boundary for this table.
--- Do not expose direct anonymous/authenticated table access.
-revoke all on table team_invitations from anon, authenticated;
+-- No direct client grants are added here.
