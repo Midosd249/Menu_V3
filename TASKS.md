@@ -1,10 +1,10 @@
 # TASKS
 
 ## Current Section
-- **G1 — Public Menu SEO Foundation: IN_PROGRESS.** CI implementation and Browser template QA verification are complete. Deployment inspection remains blocked by Vercel rate limiting.
+- **G1 — Public Menu SEO Foundation: IN_PROGRESS.** CI implementation and Browser template QA verification are complete. Live Vercel inspection found duplicate branch canonical/JSON-LD head output; the repository fix is committed and awaits production redeployment.
 
 ## Unified Queue
-1. **G1 — Public Menu SEO Foundation:** IN_PROGRESS — verify the deployed Vercel build and generated HTML/head once the deployment rate limit clears.
+1. **G1 — Public Menu SEO Foundation:** IN_PROGRESS — redeploy the fixed `main` commit and verify generated HTML/head for `/m/nafas` and `/m/nafas/olaya`.
 2. **G2 — Crawl Control and Indexation:** TODO — `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and tests.
 3. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
 4. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
@@ -23,8 +23,16 @@
 - VERIFIED: PGlite now records `menu_v3.*` production-only migrations as skipped; PostgreSQL behavior is unchanged.
 - VERIFIED: `33763072784` passed every quality gate, including Typecheck, Tests (61/61), Lint (0 errors), Production build, Playwright installation, Browser template QA and preview cleanup.
 - VERIFIED: regression coverage exists for Browser QA preview isolation, PGlite assets and PGlite migration isolation.
-- BLOCKED: Vercel deployment rate limit prevents live production HTML/head inspection while active.
-- UNKNOWN: live production canonical origin and Search Console/indexation state until deployment can be inspected.
+- VERIFIED: Vercel production project `menu-v3` is linked to `Midosd249/Menu_V3` and has a READY production deployment.
+- VERIFIED: live `/m/nafas` and `/m/nafas/olaya` return SSR menu content with Arabic SEO metadata and Restaurant JSON-LD.
+- VERIFIED: live `/m/does-not-exist` returns `noindex, nofollow`.
+- VERIFIED: no production error/fatal runtime events were observed in the last hour at verification time.
+- VERIFIED: live branch output exposed duplicate canonical and duplicate Restaurant JSON-LD caused by nested route heads.
+- VERIFIED: `62df67e5d2597dcc3f4132354cefe750ae2c2188` fixes the nested-head duplication in `src/routes/m.$slug.tsx`.
+- VERIFIED: continuity docs were updated after the finding.
+- BLOCKED: no new Vercel deployment was created for the fixed `main` commit during the verification window.
+- UNKNOWN: whether the Git integration webhook is delayed, paused, or requires a manual re-trigger.
+- UNKNOWN: production canonical origin for JSON-LD and Search Console/indexation state.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -43,4 +51,4 @@
 - DONE / VERIFIED: T3 `contemporary-restaurant` family renderer.
 
 ## Exact Next Task
-- **Verify the deployed Vercel build and generated HTML/head for G1 after the deployment rate limit clears. Do not start G2.**
+- **Redeploy the fixed `main` commit to Vercel production and re-inspect `/m/nafas` and `/m/nafas/olaya` HTML/head. Close G1 only after one canonical and one relevant Restaurant JSON-LD payload are verified per page. Do not start G2.**
