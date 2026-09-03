@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { PlanLimitError, assertLimit } from "./subscriptions";
+import { PlanLimitError, assertLimit } from "./subscription-limits.ts";
 
 test("plan limit accepts a resource below its cap", () => {
   assert.doesNotThrow(() => assertLimit(2, 3, "branches"));
