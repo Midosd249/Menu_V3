@@ -1,10 +1,10 @@
 # TASKS
 
 ## Current Section
-- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and regression coverage are present; final executable verification is blocked pending a runnable repository environment/CI result for the current commit.
+- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and repository verification are complete; final live crawler-surface verification is blocked by the current Vercel deployment rate limit.
 
 ## Unified Queue
-1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — complete verification of `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/noindex policy and regression coverage; close only with green verification evidence.
+1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — final live verification of deployed `/robots.txt` and `/sitemap.xml`; close only when those outputs are inspected successfully.
 2. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
 3. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
 4. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
@@ -17,26 +17,24 @@
 - VERIFIED: PGlite records production-only `menu_v3.*` migrations as skipped; PostgreSQL behavior remains unchanged.
 - VERIFIED: Vercel production project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - VERIFIED: production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is READY and built from `main` commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
-- VERIFIED: GitHub comparison confirms `30325490ed502344360e86e31ae0d13d3fe5eae2` is directly ahead of SEO fix commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`.
-- VERIFIED: live `/m/nafas` returns SSR menu content with Arabic SEO metadata, one canonical and one Restaurant JSON-LD payload.
-- VERIFIED: live `/m/nafas/olaya` returns SSR branch content with branch-specific SEO metadata, one canonical and one Restaurant JSON-LD payload.
+- VERIFIED: live `/m/nafas` and `/m/nafas/olaya` return the expected route-specific SSR SEO metadata and structured data.
 - VERIFIED: live `/m/does-not-exist` returns the expected `noindex, nofollow` behavior.
-- VERIFIED: the deployment-protection `x-robots-tag: noindex` header is absent on the public production domain; it was only observed on protected Vercel deployment hostnames.
 - VERIFIED: the nested branch-head duplication is resolved in production.
 - UNKNOWN: production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin is configured.
 - UNKNOWN: Search Console/indexation state until separately inspected.
 
 ## G2 Evidence
-- VERIFIED: `src/lib/seo/crawl.ts` exists and implements deterministic robots/sitemap serialization.
+- VERIFIED: `src/lib/seo/crawl.ts` implements deterministic robots/sitemap serialization.
 - VERIFIED: `server/middleware/grok-pwa.ts` exposes `/robots.txt` and `/sitemap.xml` using the existing Nitro middleware path.
 - VERIFIED: sitemap SQL requires active/published tenants and active branches.
 - VERIFIED: robots does not disallow `/m/*` and declares `/sitemap.xml`.
 - VERIFIED: missing public menus remain `noindex, nofollow`; branch routes remain canonical owners.
-- VERIFIED: `scripts/quality-workflow.test.mjs` now covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
+- VERIFIED: `scripts/quality-workflow.test.mjs` covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
 - VERIFIED: the G1 route-id typecheck regression identified by CI was corrected in `src/routes/m.$slug.tsx` without changing its SEO behavior.
-- VERIFIED: focused commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` is the current `main` head.
-- BLOCKED: no GitHub Actions run is available yet for the focused commit.
-- BLOCKED: local verification cannot run because the current execution environment cannot access GitHub over the network.
+- VERIFIED: focused commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is the tested G2 implementation head.
+- VERIFIED: GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
+- VERIFIED: Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
+- BLOCKED: Vercel deployment for the focused commit is rate-limited (`retry in 24 hours`), so live `/robots.txt` and `/sitemap.xml` output cannot yet be inspected for that deployment.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -56,4 +54,4 @@
 - DONE / VERIFIED: G1 Public Menu SEO Foundation.
 
 ## Exact Next Task
-- **G2 — Crawl Control and Indexation:** obtain executable verification for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`, then inspect deployed `/robots.txt` and `/sitemap.xml`; close G2 only if all acceptance gates pass. Do not start G3.
+- **G2 — Final live crawler-surface verification:** when Vercel permits a deployment for the focused commit, inspect `/robots.txt` and `/sitemap.xml`, verify the existing G2 acceptance criteria, then close G2. Do not start G3 before G2 is closed and verified.
