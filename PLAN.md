@@ -60,6 +60,7 @@
 - **BLOCKED:** the new incomplete-location guard and `hasMap` behavior therefore have not been proven on the current production deployment.
 - **UNKNOWN:** why the Vercel Git integration has not created a deployment for the later G3 commits.
 - **Next action:** verify/trigger the Vercel production deployment from the current `main` commit, fetch `/m/nafas/olaya`, confirm the expected structured data, then close G3. Do not begin G4.
+- **VERIFIED:** a fresh `main` documentation commit was created specifically to re-trigger the repository's configured Vercel Git integration without changing application behavior; production verification remains pending until Vercel reports a deployment built from this current commit or a later descendant.
 
 ## Unified milestones
 - G1 — Public Menu SEO Foundation: **DONE / VERIFIED**.
