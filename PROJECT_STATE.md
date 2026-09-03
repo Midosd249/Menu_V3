@@ -12,8 +12,8 @@
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
 - **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
-- **G3 implementation is complete and repository verification is green; final production deployment verification is BLOCKED by Vercel build-rate limiting.**
-- **Current atomic task:** finish G3 by verifying a production deployment built from the current `main` commit after the provider rate limit clears, then close G3. Do not start G4.
+- **G3 — Saudi Local Discovery + Branch SEO is DONE / VERIFIED and CLOSED.**
+- **Current atomic task:** G4 — Arabic/English SEO Architecture. Do not start G5.
 
 ## G2 — Crawl Control and Indexation — CLOSED
 ### Implementation
@@ -39,7 +39,7 @@
 - **VERIFIED:** the live sitemap URL set is consistent with the repository contract that includes only active/published tenants and active branches; automated regression coverage verifies the eligibility predicate.
 - **VERIFIED:** unavailable public-menu routes emit `noindex, nofollow` and are not represented in the verified live sitemap set.
 
-## G3 — Saudi Local Discovery + Branch SEO
+## G3 — Saudi Local Discovery + Branch SEO — CLOSED
 ### Implementation
 - **VERIFIED:** repository schema provides tenant `city`/`country`, branch name/address/Maps URL/phone/activity, and branch hours.
 - **VERIFIED:** current production payload for `/m/nafas/olaya` contains `country=SA`, `city=الرياض`, branch name, Arabic/English address, Maps URL, phone, and branch hours.
@@ -50,13 +50,12 @@
 - **VERIFIED:** full repository quality workflow run `33782244590` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup for commit `6982c586fb0455405f04ea1625c494638bf7b1d6`.
 - **VERIFIED:** the final G3 code diff against the G2 baseline is limited to `src/lib/menu/seo.ts` and `src/lib/menu/seo.test.ts`.
 
-### Verification Blocker
-- **BLOCKED:** Vercel project `menu-v3` reports production deployment `dpl_BfbtHk39MdNakPrVEZzdHAhZWoqB`, built from `5dd7549d534f2003e2fc95563fbfd4ebee6c81d5`.
-- **VERIFIED:** GitHub Vercel status for current commit `54e6b68c9e7177f3d21565bc00cfcc6f508894d9` is `failure` with target `https://vercel.com/midosd2s-projects?upgradeToPro=build-rate-limit`, directly identifying the provider build-rate-limit as the deployment blocker.
-- **VERIFIED:** commit `5dd7549d534f2003e2fc95563fbfd4ebee6c81d5` is the G3 pre-change baseline; comparing it to G3 implementation commit `6982c586fb0455405f04ea1625c494638bf7b1d6` shows four commits ahead and only `src/lib/menu/seo.ts` plus `src/lib/menu/seo.test.ts` changed.
-- **VERIFIED:** an attempted direct Vercel deployment without files was rejected by the deployment API; no speculative or incomplete deployment was created.
-- **UNKNOWN:** when the Vercel build-rate limit will clear and whether the current project plan permits another production build.
-- **BLOCKED:** production structured-data verification cannot be honestly marked complete until a deployment containing the G3 source changes is READY.
+### Final Production Verification
+- **VERIFIED:** Vercel production deployment `dpl_CPvXFBZgh439e94rUHCJf3GFwWBC` is `READY`, targets production, and was built from current `main` commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f`.
+- **VERIFIED:** GitHub Vercel status for commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f` is `success`.
+- **VERIFIED:** production `/m/nafas/olaya` returns HTTP 200 with `lang="ar"`, `dir="rtl"`, Saudi branch metadata, `PostalAddress`, and absolute Google Maps `hasMap` in Restaurant JSON-LD.
+- **VERIFIED:** production branch page remains indexable with `robots=index, follow` and preserves the expected canonical path `/m/nafas/olaya`.
+- **VERIFIED:** no G3 source workaround or unrelated application change was required; the deployment-rate-limit blocker is cleared for this deployment.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -73,6 +72,7 @@
 - T3 flagship template: DONE / VERIFIED.
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
+- G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED.
 
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
@@ -100,7 +100,8 @@
 - 2026-09-03 — Confirmed Vercel production remains on the G3 pre-change baseline.
 - 2026-09-03 — Confirmed current GitHub Vercel status is a provider `build-rate-limit` failure; no source workaround is appropriate.
 - 2026-09-03 — Created a fresh documentation commit to retry the Vercel Git trigger; Vercel still reports the build-rate-limit failure.
+- 2026-09-03 — Verified production deployment `dpl_CPvXFBZgh439e94rUHCJf3GFwWBC` built successfully from current `main` commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f`.
+- 2026-09-03 — Verified live `/m/nafas/olaya` HTTP 200 and confirmed Saudi `PostalAddress`, absolute `hasMap`, canonical path, and indexable robots metadata; G3 CLOSED.
 
 ## Exact Remaining Work
-- **Current atomic task:** finish G3 only after the Vercel build-rate limit clears: trigger/verify a production deployment from current `main`, fetch `/m/nafas/olaya`, confirm the Saudi `PostalAddress` and `hasMap` output plus no regressions, then close G3.
-- **Do not start G4, G5, G6, or G7 in the same task.**
+- **Current atomic task:** G4 — Arabic/English SEO Architecture. Audit the existing locale model and public URL contract, then implement only real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` when both versions actually exist. Do not start G5.
