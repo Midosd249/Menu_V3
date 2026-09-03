@@ -10,25 +10,38 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as ThemesRouteImport } from './routes/themes'
+import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MSlugRouteImport } from './routes/m.$slug'
 import { Route as StudioIndexRouteImport } from './routes/studio/index'
 import { Route as StudioAnalyticsRouteImport } from './routes/studio/analytics'
 import { Route as StudioBranchesRouteImport } from './routes/studio/branches'
 import { Route as StudioBrandRouteImport } from './routes/studio/brand'
+import { Route as StudioDesignRouteImport } from './routes/studio/design'
 import { Route as StudioImportRouteImport } from './routes/studio/import'
 import { Route as StudioMenuRouteImport } from './routes/studio/menu'
+import { Route as StudioOptionsRouteImport } from './routes/studio/options'
 import { Route as StudioPreviewRouteImport } from './routes/studio/preview'
 import { Route as StudioQrRouteImport } from './routes/studio/qr'
 import { Route as StudioSettingsRouteImport } from './routes/studio/settings'
+import { Route as StudioTeamRouteImport } from './routes/studio/team'
+import { Route as ThemesPreviewRouteImport } from './routes/themes/preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MSlugBranchRouteImport } from './routes/m.$slug.$branch'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -41,9 +54,24 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesRoute = ThemesRouteImport.update({
+  id: '/themes',
+  path: '/themes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MSlugRoute = MSlugRouteImport.update({
@@ -71,6 +99,11 @@ const StudioBrandRoute = StudioBrandRouteImport.update({
   path: '/brand',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
 const StudioImportRoute = StudioImportRouteImport.update({
   id: '/import',
   path: '/import',
@@ -79,6 +112,11 @@ const StudioImportRoute = StudioImportRouteImport.update({
 const StudioMenuRoute = StudioMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
   getParentRoute: () => StudioRoute,
 } as any)
 const StudioPreviewRoute = StudioPreviewRouteImport.update({
@@ -96,6 +134,16 @@ const StudioSettingsRoute = StudioSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => ThemesRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -109,35 +157,51 @@ const MSlugBranchRoute = MSlugBranchRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/owner': typeof OwnerRoute
   '/studio': typeof StudioRouteWithChildren
+  '/themes': typeof ThemesRouteWithChildren
+  '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
   '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
   '/studio/': typeof StudioIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/owner': typeof OwnerRoute
+  '/themes': typeof ThemesRouteWithChildren
+  '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
   '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
   '/studio': typeof StudioIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
@@ -145,18 +209,26 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/owner': typeof OwnerRoute
   '/studio': typeof StudioRouteWithChildren
+  '/themes': typeof ThemesRouteWithChildren
+  '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
   '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
   '/studio/': typeof StudioIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
@@ -165,53 +237,77 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/login'
     | '/onboarding'
+    | '/owner'
     | '/studio'
+    | '/themes'
+    | '/invite/$token'
     | '/m/$slug'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
+    | '/studio/design'
     | '/studio/import'
     | '/studio/menu'
+    | '/studio/options'
     | '/studio/preview'
     | '/studio/qr'
     | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
     | '/studio/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/login'
     | '/onboarding'
+    | '/owner'
+    | '/themes'
+    | '/invite/$token'
     | '/m/$slug'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
+    | '/studio/design'
     | '/studio/import'
     | '/studio/menu'
+    | '/studio/options'
     | '/studio/preview'
     | '/studio/qr'
     | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
     | '/studio'
     | '/api/auth/$'
     | '/m/$slug/$branch'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/login'
     | '/onboarding'
+    | '/owner'
     | '/studio'
+    | '/themes'
+    | '/invite/$token'
     | '/m/$slug'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
+    | '/studio/design'
     | '/studio/import'
     | '/studio/menu'
+    | '/studio/options'
     | '/studio/preview'
     | '/studio/qr'
     | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
     | '/studio/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
@@ -219,9 +315,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
+  OwnerRoute: typeof OwnerRoute
   StudioRoute: typeof StudioRouteWithChildren
+  ThemesRoute: typeof ThemesRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
   MSlugRoute: typeof MSlugRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -233,6 +333,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -249,11 +356,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/studio': {
       id: '/studio'
       path: '/studio'
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes': {
+      id: '/themes'
+      path: '/themes'
+      fullPath: '/themes'
+      preLoaderRoute: typeof ThemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/m/$slug': {
@@ -291,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioBrandRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
     '/studio/import': {
       id: '/studio/import'
       path: '/import'
@@ -303,6 +438,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/studio/menu'
       preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
       parentRoute: typeof StudioRoute
     }
     '/studio/preview': {
@@ -326,6 +468,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioSettingsRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof ThemesRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -347,11 +503,14 @@ interface StudioRouteChildren {
   StudioAnalyticsRoute: typeof StudioAnalyticsRoute
   StudioBranchesRoute: typeof StudioBranchesRoute
   StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
   StudioImportRoute: typeof StudioImportRoute
   StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
   StudioPreviewRoute: typeof StudioPreviewRoute
   StudioQrRoute: typeof StudioQrRoute
   StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
   StudioIndexRoute: typeof StudioIndexRoute
 }
 
@@ -359,16 +518,30 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioAnalyticsRoute: StudioAnalyticsRoute,
   StudioBranchesRoute: StudioBranchesRoute,
   StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
   StudioImportRoute: StudioImportRoute,
   StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
   StudioPreviewRoute: StudioPreviewRoute,
   StudioQrRoute: StudioQrRoute,
   StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
   StudioIndexRoute: StudioIndexRoute,
 }
 
 const StudioRouteWithChildren =
   StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface ThemesRouteChildren {
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+}
+
+const ThemesRouteChildren: ThemesRouteChildren = {
+  ThemesPreviewRoute: ThemesPreviewRoute,
+}
+
+const ThemesRouteWithChildren =
+  ThemesRoute._addFileChildren(ThemesRouteChildren)
 
 interface MSlugRouteChildren {
   MSlugBranchRoute: typeof MSlugBranchRoute
@@ -382,9 +555,13 @@ const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
+  OwnerRoute: OwnerRoute,
   StudioRoute: StudioRouteWithChildren,
+  ThemesRoute: ThemesRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
   MSlugRoute: MSlugRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
