@@ -1,4 +1,4 @@
-import { getSql, type Sql } from "../db.ts";
+import type { Sql } from "../db.ts";
 import { hasPermission, type Permission } from "./permissions.ts";
 import type { Role } from "../menu/types.ts";
 
@@ -59,6 +59,7 @@ export async function requireMembership(
   userId: string,
   tenantId?: string,
 ): Promise<Membership> {
+  const { getSql } = await import("../db.ts");
   const sql = await getSql();
   const membership = await getMembership(sql, userId, tenantId);
   if (!membership) throw new AuthorizationError("forbidden");
@@ -109,6 +110,7 @@ export async function requireBranchAccess(
   membership: Membership,
   branchId: string,
 ): Promise<AuthorizationContext> {
+  const { getSql } = await import("../db.ts");
   const sql = await getSql();
   if (!(await canAccessBranch(sql, membership, branchId))) {
     throw new AuthorizationError("forbidden");
