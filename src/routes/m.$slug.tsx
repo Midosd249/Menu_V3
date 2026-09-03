@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
@@ -9,15 +10,16 @@ import { getPublicMenuSeo } from "@/lib/menu/seo";
 import { getThemeFamily } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
+const menuSearchSchema = z.object({ branch: z.string().max(63).optional() });
+
 export const Route = createFileRoute("/m/$slug")({
-  loaderDeps: ({ search }) => ({ branch: typeof search.branch === "string" ? search.branch : undefined }),
+  validateSearch: menuSearchSchema,
+  loaderDeps: ({ search }) => ({ branch: search.branch }),
   loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
-  head: ({ loaderData, params, location }) => {
+  head: ({ loaderData, params }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
-    if (loaderData?.ok) {
-      const branch = new URLSearchParams(location.searchStr).get("branch");
-      const canonical = branch ? `/m/${encodeURIComponent(params.slug)}/${encodeURIComponent(branch)}` : pathname;
-      const seo = getPublicMenuSeo(loaderData.data, canonical);
+    if (loaderData && "data" in loaderData) {
+      const seo = getPublicMenuSeo(loaderData.data, pathname);
       return {
         meta: [
           { title: seo.title },
@@ -69,9 +71,9 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 
 function PublicMenuPage() {
   const { slug } = Route.useParams();
-  const search = Route.useSearch() as { branch?: string };
+  const { branch } = Route.useSearch();
   const loaderData = Route.useLoaderData();
-  return <MenuLoader slug={slug} branch={search.branch} initialMenu={loaderData?.ok ? loaderData.data : undefined} />;
+  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData && "data" in loaderData ? loaderData.data : undefined} />;
 }
 
 export function MenuLoader({ slug, branch, initialMenu }: { slug: string; branch?: string; initialMenu?: PublicMenu }) {
