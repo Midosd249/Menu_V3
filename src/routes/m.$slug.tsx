@@ -10,10 +10,8 @@ import { getThemeFamily } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/m/$slug")({
-  loader: async ({ params, location }) => {
-    const branch = new URLSearchParams(location.searchStr).get("branch") ?? undefined;
-    return getPublicMenu({ data: { slug: params.slug, branch } });
-  },
+  loaderDeps: ({ search }) => ({ branch: typeof search.branch === "string" ? search.branch : undefined }),
+  loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
   head: ({ loaderData, params, location }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
     if (loaderData.ok) {
