@@ -6,7 +6,7 @@
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
 - **Current section:** G1 — Public Menu SEO Foundation.
-- **Completed atomic task:** CI Browser template QA repair and verification.
+- **Current atomic task:** complete Vercel production verification after the live inspection found and the repository fixed a nested branch-head duplication.
 
 ## G1 Status
 
@@ -18,16 +18,30 @@
 - PGlite skips production-only `menu_v3.*` migrations while preserving those migrations for PostgreSQL.
 - Regression coverage exists for Browser QA preview isolation, PGlite assets, migration portability and migration isolation.
 - **CI run `33763072784` passed all quality gates, including Browser template QA and cleanup.**
+- Production `/m/nafas` and `/m/nafas/olaya` return SSR menu content with route-specific SEO metadata.
+- Production missing-menu output is `noindex, nofollow`.
+- No production error/fatal runtime events were observed in the last hour at verification time.
+- TanStack Router documents nested route head composition and exposes `matches` to route `head`; this supports suppressing parent canonical/JSON-LD entries when the branch child is active. citeturn0search0turn0search3
+
+### FINDING
+- **VERIFIED:** live `/m/nafas/olaya` initially emitted two canonical links and two Restaurant JSON-LD scripts because both `/m/$slug` and `/m/$slug/$branch` supplied head entries.
+- **VERIFIED:** this is a metadata correctness defect, not a runtime rendering failure.
+
+### FIX
+- **VERIFIED:** commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` changes only `src/routes/m.$slug.tsx` so the parent route omits canonical and JSON-LD when the branch child is present. The branch route remains the sole owner of branch canonical/schema metadata.
+- **VERIFIED:** continuity documentation was updated in commit `30325490ed502344360e86e31ae0d13d3fe5eae2` to preserve the finding and blocker evidence.
 
 ### BLOCKED / UNKNOWN
-- BLOCKED: Vercel live deployment verification may remain rate-limited.
-- UNKNOWN: production HTML/head output, canonical origin and Search Console/indexation state until live deployment is inspectable.
+- **BLOCKED:** Vercel has not created a new deployment for the fixed `main` commit during the current verification window, so the fix cannot yet be rechecked in production.
+- **UNKNOWN:** whether the Git integration webhook is delayed, paused, or requires manual re-triggering.
+- **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified canonical public origin has been configured in the application.
+- **UNKNOWN:** Search Console/indexation state until separately inspected.
 
 ## Unified milestones
 
 ### G1 — Public Menu SEO Foundation
-- **Status:** IN_PROGRESS — CI implementation/verification complete; deployment inspection remains blocked.
-- **Acceptance:** useful SSR menu content; truthful metadata/schema; missing menus noindex; renderer/order behavior preserved; generated route search types compile; CI/browser QA passes; deployed HTML/head inspected.
+- **Status:** IN_PROGRESS — implementation and CI are verified; production verification found a nested-head defect, the repository fix is committed, and deployment of that fix remains pending.
+- **Acceptance:** useful SSR menu content; truthful metadata/schema; missing menus noindex; renderer/order behavior preserved; generated route search types compile; CI/browser QA passes; deployed HTML/head inspected with no duplicate canonical/schema output.
 - **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI/browser QA and deployed HTML/head inspection.
 
 ### G2 — Crawl Control and Indexation
@@ -48,5 +62,5 @@
 ### G7 — Analytics, Search Console, Growth, Rollout
 - **Status:** TODO.
 
-## Exact Current Section Exit Criteria
-**G1 is not marked DONE until the successful CI evidence above is complemented by inspection of the deployed build's generated HTML/head when the Vercel rate limit clears. Do not start G2 before G1 is closed.**
+## Exact Current Task Exit Criteria
+**Close G1 only after the fixed `main` commit is deployed to Vercel production and the generated HTML/head for `/m/nafas` and `/m/nafas/olaya` confirms one canonical per page, one relevant Restaurant JSON-LD payload per page, correct indexation directives, SSR menu content, and no production runtime errors attributable to this task. Do not start G2 before G1 is closed.**
