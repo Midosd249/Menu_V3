@@ -27,7 +27,8 @@ function Login() {
   const invite = invitationToken();
 
   if (isPending) return <LoadingState label="جارٍ التحقق…" />;
-  if (user) return <Navigate to={invite ? "/invite/$token" : "/studio"} params={invite ? { token: invite } : undefined} />;
+  if (user && invite) return <Navigate to="/invite/$token" params={{ token: invite }} />;
+  if (user) return <Navigate to="/studio" />;
   if (sessionError && !busy) return <ErrorState message={sessionError} onRetry={refresh} />;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -37,8 +38,7 @@ function Login() {
     const email = String(form.get("email") || "").trim();
     const password = String(form.get("password") || "");
     const name = String(form.get("name") || "").trim();
-    setBusy(true);
-    setError("");
+    setBusy(true); setError("");
     try {
       if (mode === "up") {
         const result = await authClient.signUp.email({ email, password, name: name || email.split("@")[0] });
@@ -52,9 +52,7 @@ function Login() {
       else await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
-    } finally {
-      setBusy(false);
-    }
+    } finally { setBusy(false); }
   }
 
   return (
