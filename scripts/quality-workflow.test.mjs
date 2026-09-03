@@ -8,6 +8,7 @@ import { buildRobotsTxt, buildSitemapXml, publicMenuSitemapEntries } from "../sr
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
 const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
+const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup", () => {
   const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Stop built preview)/)?.[1] ?? "";
@@ -57,4 +58,8 @@ test("sitemap middleware exposes only published active tenants and active branch
   assert.match(CRAWL_MIDDLEWARE, /from tenants t\n\s+join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
   assert.match(CRAWL_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
   assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
+});
+
+test("public menu keeps below-the-fold product media lazy-loaded", () => {
+  assert.match(PUBLIC_MENU, /loading="lazy"/);
 });
