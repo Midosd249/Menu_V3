@@ -14,11 +14,11 @@
 - **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
 - **G3 — Saudi Local Discovery + Branch SEO is DONE / VERIFIED and CLOSED.**
 - **G4 — Arabic/English SEO Architecture is DONE / VERIFIED and CLOSED.**
-- **G5 — Template Ecosystem Expansion implementation is complete; final quality verification is IN_PROGRESS.**
-- Current atomic milestone: **G5 final verification for Small Menu / Food Truck / Single-Concept.**
-- Completed G5 implementations: Specialty Cafe, Bakery / Dessert, Fast Casual / QSR, Fine Dining / Hospitality, Small Menu / Food Truck / Single-Concept.
+- **G5 — Template Ecosystem Expansion is DONE / VERIFIED and CLOSED.**
+- Current atomic milestone: **G6 — Performance + Media.**
+- Completed G5 families: Specialty Cafe, Bakery / Dessert, Fast Casual / QSR, Fine Dining / Hospitality, Small Menu / Food Truck / Single-Concept.
 
-## G5 — Template Ecosystem Expansion — VERIFICATION IN_PROGRESS
+## G5 — Template Ecosystem Expansion — CLOSED
 ### Specialty Cafe
 - **VERIFIED / CLOSED:** dedicated specialty-cafe renderer, routing, family contract, and complete quality verification.
 - **VERIFIED:** GitHub Actions quality run `33803091905` passed all gates including Browser Template QA.
@@ -36,12 +36,12 @@
 - **VERIFIED:** GitHub Actions quality run `33804331728` passed all gates including Browser Template QA.
 
 ### Small Menu / Food Truck / Single-Concept
-- **IMPLEMENTED:** `src/components/templates/small-menu.tsx` provides a dedicated focused-menu presentation shell with compact identity, concept-focused hero, active-section count, and language control.
-- **IMPLEMENTED:** `src/routes/m.$slug.tsx` routes the `small-menu` family to `SmallMenuTemplate` while preserving existing template fallbacks.
-- **IMPLEMENTED:** `src/lib/theme/registry.test.ts` protects the `minimal` → `small-menu` family mapping.
-- **IMPLEMENTED:** `PublicMenuView` remains the source of truth for menu browsing, product details, ordering, locale, analytics, and accessibility behavior.
-- **IMPLEMENTED:** no database, authorization, tenant-isolation, ordering, or public-data contract was changed.
-- **PENDING VERIFICATION:** final GitHub Actions quality workflow for the final G5 commit chain.
+- **VERIFIED / CLOSED:** `src/components/templates/small-menu.tsx` provides a dedicated focused-menu presentation shell with compact identity, concept-focused hero, active-section count, and language control.
+- **VERIFIED / CLOSED:** `src/routes/m.$slug.tsx` routes the `small-menu` family to `SmallMenuTemplate` while preserving existing template fallbacks.
+- **VERIFIED / CLOSED:** `src/lib/theme/registry.test.ts` locks `minimal` to the `small-menu` family.
+- **VERIFIED / CLOSED:** `PublicMenuView` remains the source of truth for menu browsing, product details, ordering, locale, analytics, and accessibility behavior.
+- **VERIFIED / CLOSED:** no database, authorization, tenant-isolation, ordering, or public-data contract was changed.
+- **VERIFIED:** final GitHub Actions quality run `33804946380` passed Route tree generation, Typecheck, Tests, Lint, Production build, Playwright Chromium installation, Browser Template QA, and cleanup.
 
 ## G4 — Arabic/English SEO Architecture — CLOSED
 - Existing implementation and verification evidence remain protected; do not rebuild.
@@ -63,10 +63,7 @@
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
 - G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED.
 - G4 Arabic/English SEO Architecture: DONE / VERIFIED.
-- G5 Specialty Cafe: DONE / VERIFIED / CLOSED.
-- G5 Bakery / Dessert: DONE / VERIFIED / CLOSED.
-- G5 Fast Casual / QSR: DONE / VERIFIED / CLOSED.
-- G5 Fine Dining / Hospitality: DONE / VERIFIED / CLOSED.
+- G5 Template Ecosystem: DONE / VERIFIED / CLOSED.
 
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
@@ -77,9 +74,10 @@
 ## Session Log
 - 2026-09-03 — Implemented the final Small Menu / Food Truck / Single-Concept renderer, integrated routing, and protected the `minimal` → `small-menu` family contract.
 - 2026-09-03 — Identified and corrected the Small Menu TypeScript issue (`Branch` has no `city`; header now uses `tenant.city`).
-- 2026-09-03 — Final G5 quality verification triggered; closure remains pending until the quality workflow passes.
+- 2026-09-03 — Final G5 quality run `33804946380` passed every quality gate.
+- 2026-09-03 — Closed G5 after final verification across all six template families.
 
 ## Exact Remaining Work
-- **G5:** final quality verification, then close G5.
+- **G5:** DONE / VERIFIED / CLOSED.
 - **G6:** Performance + Media — TODO / NEXT.
 - **G7:** Analytics, Search Console, Growth, Rollout — TODO.
