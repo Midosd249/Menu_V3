@@ -35,9 +35,12 @@ export function buildRobotsTxt(origin: string): string {
 
 export function buildSitemapXml(origin: string, entries: PublicSitemapEntry[]): string {
   const base = normalizeOrigin(origin);
-  const uniqueEntries = Array.from(
-    new Map(entries.map((entry) => [entry.path, entry])).values(),
-  );
+  const seenPaths = new Set<string>();
+  const uniqueEntries = entries.filter((entry) => {
+    if (seenPaths.has(entry.path)) return false;
+    seenPaths.add(entry.path);
+    return true;
+  });
 
   const urls = uniqueEntries.map(({ path, lastModified }) => {
     const loc = `${base}${path.startsWith("/") ? path : `/${path}`}`;
