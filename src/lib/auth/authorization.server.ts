@@ -116,6 +116,26 @@ export async function requireBranchAccess(
   return { ...membership, branchId };
 }
 
+/**
+ * Single server-side authorization boundary for mutations.
+ * The caller supplies only the verified user id; role/tenant/branch authority
+ * is resolved from trusted database state.
+ */
+export async function authorizeMutation(
+  userId: string,
+  permission: Permission,
+  options?: { tenantId?: string; branchId?: string },
+): Promise<AuthorizationContext> {
+  const membership = await requireMembership(userId, options?.tenantId);
+  requirePermissionForRole(membership.role, permission);
+
+  if (options?.branchId) {
+    return requireBranchAccess(membership, options.branchId);
+  }
+
+  return { ...membership, branchId: null };
+}
+
 /** Verify that a resource belongs to the caller's tenant before a mutation. */
 export async function requireTenantResource(
   sql: Sql,
