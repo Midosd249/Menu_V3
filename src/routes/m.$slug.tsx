@@ -4,6 +4,7 @@ import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
+import { SpecialtyCafeTemplate } from "@/components/templates/specialty-cafe";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getPublicMenu } from "@/lib/menu/public";
@@ -133,5 +134,5 @@ export function MenuLoader({ slug, branch, locale, initialMenu }: { slug: string
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />;
   if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
   const family = getThemeFamily(state.menu.tenant.themeKey);
-  return <div className="menu-public-shell"><MenuThemeController theme={state.menu.tenant.themeKey} />{family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={state.menu} /> : <PublicMenuView menu={state.menu} />}</div>;
+  return <div className="menu-public-shell"><MenuThemeController theme={state.menu.tenant.themeKey} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={state.menu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={state.menu} /> : <PublicMenuView menu={state.menu} />}</div>;
 }
