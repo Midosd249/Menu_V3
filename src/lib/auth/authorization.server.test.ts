@@ -13,8 +13,8 @@ test("authorization boundary allows owner and admin settings writes", () => {
 });
 
 test("authorization boundary denies editor settings and team writes", () => {
-  assert.throws(() => requirePermissionForRole("editor", "settings.write"), /Forbidden: settings\\.write/);
-  assert.throws(() => requirePermissionForRole("editor", "team.write"), /Forbidden: team\\.write/);
+  assert.throws(() => requirePermissionForRole("editor", "settings.write"), /Forbidden: settings\.write/);
+  assert.throws(() => requirePermissionForRole("editor", "team.write"), /Forbidden: team\.write/);
 });
 
 test("authorization boundary uses a stable forbidden error", () => {
