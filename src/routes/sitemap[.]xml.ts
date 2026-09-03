@@ -7,7 +7,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async ({ request }) => {
         const sql = await getSql();
-        const rows = await sql<Array<{ slug: string; branch_slug: string | null; updated_at: string | null }>>`
+        const rows = await sql<{ slug: string; branch_slug: string | null; updated_at: string | null }>`
           select
             t.slug,
             b.slug as branch_slug,
