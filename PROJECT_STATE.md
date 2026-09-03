@@ -10,9 +10,9 @@
 
 ## Current Position
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
-- SEO/discoverability remains prioritized before broad template expansion.
-- Current section: **G1 — Public Menu SEO Foundation.**
-- **Current atomic task remains IN_PROGRESS:** deployed Vercel HTML/head was inspected; a nested branch-route duplicate canonical/schema issue was found, fixed on `main`, and awaits redeployment for final production verification.
+- G1 — Public Menu SEO Foundation is now **DONE / VERIFIED**.
+- Current section is ready to advance to **G2 — Crawl Control and Indexation**.
+- No G2 implementation has been started in this task.
 
 ## Completed Task — CI Browser template QA
 ### Root Cause
@@ -27,37 +27,31 @@
 - **VERIFIED:** CI preview is launched directly with Vite, isolated from runner cleanup, kept in the same step as Browser QA, readiness-checked, and cleaned up with a trap.
 - **VERIFIED:** targeted regression tests cover preview isolation, PGlite asset placement, migration portability, and the PGlite migration isolation contract.
 
-## G1 Production Verification
+## G1 Production Verification — CLOSED
 ### VERIFIED
 - Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and has production domains `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the main-branch alias.
-- Current production deployment `dpl_EQ9DvNdkE2aYujBJjizCXBHLWKx8` is `READY` and serves HTTP 200.
-- `/m/nafas` returns SSR menu content with Arabic title, description, `index, follow`, `og:locale`, canonical metadata, Restaurant JSON-LD, SAR currency, address, telephone, image, opening hours, and real menu content.
-- `/m/does-not-exist` returns HTTP 200 with `noindex, nofollow` and an SSR not-found payload.
-- `/m/nafas/olaya` returns HTTP 200 with SSR branch content, branch-specific title, `index, follow`, branch canonical metadata, and branch Restaurant JSON-LD.
-- Production runtime error logs show no error/fatal events in the last hour at verification time.
-- TanStack Router official documentation confirms nested route head composition and that route head receives `matches`; the implementation uses this to prevent duplicate branch metadata.
+- Latest production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is `READY` and was built from `main` commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
+- **VERIFIED:** GitHub comparison confirms commit `30325490ed502344360e86e31ae0d13d3fe5eae2` is directly ahead of the SEO fix commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`, with the only intervening change being continuity documentation. Therefore the fixed application code is included in the deployed commit.
+- `/m/nafas` returns HTTP 200 with SSR menu content, Arabic title/description, `index, follow`, canonical metadata and exactly one Restaurant JSON-LD payload.
+- `/m/nafas/olaya` returns HTTP 200 with SSR branch content, branch-specific title, `index, follow`, canonical `/m/nafas/olaya`, and exactly one branch Restaurant JSON-LD payload.
+- `/m/does-not-exist` returns the expected SSR not-found behavior with `noindex, nofollow`.
+- The public production domain does not emit the deployment-protection `x-robots-tag: noindex` header; that header was observed only on the protected Vercel deployment hostname.
+- **VERIFIED:** the duplicate canonical/JSON-LD issue is resolved in production. The branch page now has one canonical and one relevant Restaurant JSON-LD payload.
+- **VERIFIED:** live production pages contain actual SSR menu/branch content rather than an empty client shell.
 
 ### Finding and Fix
-- **VERIFIED:** live `/m/nafas/olaya` initially emitted two canonical links and two Restaurant JSON-LD scripts because both `/m/$slug` and `/m/$slug/$branch` supplied head entries.
+- **VERIFIED:** the original live `/m/nafas/olaya` output emitted two canonical links and two Restaurant JSON-LD scripts because both `/m/$slug` and `/m/$slug/$branch` supplied head entries.
 - **VERIFIED:** commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` changes only `src/routes/m.$slug.tsx` so the parent route omits canonical and JSON-LD when the branch child is present. The branch route remains the sole owner of branch canonical/schema metadata.
-- **UNKNOWN:** the fix is not yet present in the current production deployment because the latest production deployment predates this commit.
-
-### Current Blocker
-- **BLOCKED:** after commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`, the Vercel Git integration did not create a new deployment during this verification window. The available direct deploy tool requires a complete source-file payload and cannot deploy the repository commit by reference from this environment.
-- **VERIFIED:** the existing production deployment is healthy enough for HTML inspection, but it is not sufficient to mark G1 CLOSED until the fixed commit is deployed and its HTML/head is rechecked.
+- **VERIFIED:** production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` contains the fix through commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
 
 ## Verification Evidence
-- VERIFIED: historical quality run `33743739709` passed all existing quality steps.
-- VERIFIED: run `33748743094` passed route generation, Typecheck, Tests (58/58), Lint, Production build, Playwright installation and preview startup; it isolated the `page.goto` URL-type defect.
-- VERIFIED: `7b3e0812a29c129374d8d99cdf98cf005790a233` fixed the Browser QA URL-type defect.
-- VERIFIED: run `33760030791` isolated preview lifetime loss between CI process contexts.
-- VERIFIED: `b56c951e362522ec0e25b02a343278beff725f2c` kept preview startup and Browser QA in one process lifetime.
-- VERIFIED: run `33762057453` isolated missing `pglite.wasm` in the server-function root.
-- VERIFIED: run `33762621637` isolated the PGlite migration failure after asset placement was corrected.
-- VERIFIED: run `33763072784` passed every quality gate, including Browser template QA and cleanup. All steps were successful: Install, route generation, Typecheck, Tests (61/61), Lint (0 errors; warnings only), Production build, Playwright installation, Browser template QA, and preview cleanup.
-- VERIFIED: final successful CI run before the SEO head correction is `33763072784`.
-- VERIFIED: live production HTML/head inspection was performed on `/`, `/m/nafas`, `/m/nafas/olaya`, and `/m/does-not-exist`.
-- VERIFIED: commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` contains the targeted duplicate-head correction.
+- VERIFIED: `33763072784` passed every quality gate, including Typecheck, Tests (61/61), Lint (0 errors), Production build, Playwright installation, Browser template QA and preview cleanup.
+- VERIFIED: live production `/m/nafas` returns HTTP 200 and SSR menu content.
+- VERIFIED: live production `/m/nafas/olaya` returns HTTP 200 and SSR branch content.
+- VERIFIED: live production `/m/does-not-exist` returns the not-found SEO behavior.
+- VERIFIED: live `/m/nafas/olaya` after the fix has one canonical link and one Restaurant JSON-LD script.
+- VERIFIED: GitHub compare shows `30325490ed502344360e86e31ae0d13d3fe5eae2` contains `62df67e5d2597dcc3f4132354cefe750ae2c2188` as its immediate parent.
+- VERIFIED: Vercel latest production deployment is `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm`, state `READY`, source commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -72,11 +66,11 @@
 - T1 template architecture contract: DONE / VERIFIED.
 - T2 shared semantic menu presentation primitives: DONE / VERIFIED.
 - T3 flagship template: DONE / VERIFIED.
+- G1 Public Menu SEO Foundation: DONE / VERIFIED.
 
 ## Known Issues / Risks
-- **BLOCKED:** fixed SEO head commit is awaiting a new Vercel production deployment.
-- **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified canonical public origin has been configured in the application.
-- **UNKNOWN:** Search Console/indexation state and production content quality beyond the inspected demo route.
+- **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
+- **UNKNOWN:** Search Console/indexation state until separately inspected.
 - Existing lint warnings remain but are not errors and were not introduced by this task.
 
 ## Session Log
@@ -86,15 +80,11 @@
 - 2026-09-03 — Implemented G1 public-menu SSR metadata/schema foundation.
 - 2026-09-03 — Fixed typed public-menu links and Browser QA URL handling.
 - 2026-09-03 — Fixed CI preview recursion and preview process lifetime handling.
-- 2026-09-03 — Isolated PGlite runtime asset placement as the remaining Browser QA failure.
-- 2026-09-03 — Corrected PGlite runtime asset placement and added a regression guard.
-- 2026-09-03 — Isolated production-only `menu_v3` migration execution as the remaining PGlite bootstrap failure.
-- 2026-09-03 — Added PGlite migration isolation and regression coverage.
-- 2026-09-03 — **CI run `33763072784` passed all quality gates including Browser template QA.**
-- 2026-09-03 — Inspected live Vercel production HTML/head and verified SSR SEO behavior plus not-found noindex behavior.
-- 2026-09-03 — Found duplicate branch canonical/JSON-LD emission from nested route heads.
+- 2026-09-03 — Isolated and fixed PGlite runtime asset placement and production-only migration isolation; CI run `33763072784` passed all quality gates.
+- 2026-09-03 — Inspected live Vercel production HTML/head and found duplicate branch canonical/JSON-LD emission from nested route heads.
 - 2026-09-03 — Applied targeted parent-head suppression in commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`.
-- 2026-09-03 — Vercel did not create a deployment for the fix during the verification window; G1 remains open pending redeployment and reinspection.
+- 2026-09-03 — Verified Vercel production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is built from descendant commit `30325490ed502344360e86e31ae0d13d3fe5eae2` and includes the fix.
+- 2026-09-03 — Re-inspected production `/m/nafas` and `/m/nafas/olaya`; one canonical and one relevant Restaurant JSON-LD payload are present per page. G1 CLOSED.
 
 ## Exact Remaining Work
-- **Next atomic task:** redeploy commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` to Vercel production and re-inspect `/m/nafas` and `/m/nafas/olaya` HTML/head; close G1 only after the fixed production output is verified. Do not start G2.
+- **Next atomic task:** G2 — Crawl Control and Indexation. Audit and implement `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and regression tests. Do not start G3 until G2 is complete and verified.
