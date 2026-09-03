@@ -44,7 +44,7 @@ function RootDocument() {
         <MenuThemeController />
         <PreviewHostBridge />
         <AuthProvider>
-          <LangProvider>
+          <LangProvider initialLang={locale}>
             <Outlet />
           </LangProvider>
         </AuthProvider>
