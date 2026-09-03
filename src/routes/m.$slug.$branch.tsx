@@ -7,7 +7,7 @@ export const Route = createFileRoute("/m/$slug/$branch")({
   loader: ({ params }) => getPublicMenu({ data: { slug: params.slug, branch: params.branch } }),
   head: ({ loaderData, params }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}/${encodeURIComponent(params.branch)}`;
-    if (loaderData && "data" in loaderData) {
+    if (loaderData?.ok) {
       const seo = getPublicMenuSeo(loaderData.data, pathname);
       return {
         meta: [
@@ -35,5 +35,5 @@ export const Route = createFileRoute("/m/$slug/$branch")({
 function BranchMenuPage() {
   const { slug, branch } = Route.useParams();
   const loaderData = Route.useLoaderData();
-  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData && "data" in loaderData ? loaderData.data : undefined} />;
+  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData?.ok ? loaderData.data : undefined} />;
 }
