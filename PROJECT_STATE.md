@@ -13,7 +13,7 @@
 - G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
 - **G2 — Crawl Control and Indexation is IN_PROGRESS.** The production crawl-control implementation is present and its regression coverage is restored and expanded.
 - A pre-existing G1 typecheck regression in `src/routes/m.$slug.tsx` was found by CI evidence and corrected without reopening G1.
-- The focused G2 commit has now passed the complete repository quality workflow. G2 remains open only because the current Vercel deployment is rate-limited, preventing live inspection of `/robots.txt` and `/sitemap.xml` for the focused commit.
+- The focused G2 implementation commit has passed the complete repository quality workflow. G2 remains open only because the current Vercel deployment is rate-limited, preventing live inspection of `/robots.txt` and `/sitemap.xml` for the focused commit.
 
 ## Completed Task — CI Browser template QA
 ### Root Cause
@@ -46,12 +46,12 @@
 - **VERIFIED:** Google documents the `Sitemap` robots.txt field as a fully qualified URL.
 
 ## Verification Evidence
-- **VERIFIED:** focused G2 implementation commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is present on `main` and triggered GitHub Actions run `33769708337`.
+- **VERIFIED:** focused G2 implementation commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is present on `main` history and triggered GitHub Actions run `33769708337`.
 - **VERIFIED:** run `33769708337` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - **VERIFIED:** the repository test suite reported 66 tests passed and 0 failed.
 - **VERIFIED:** Browser template QA passed for mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
 - **VERIFIED:** the production build completed successfully and generated the Vercel Nitro output; the database migration step safely skipped because no Postgres connection string was configured in CI.
-- **VERIFIED:** a dedicated session log records this verification checkpoint.
+- **VERIFIED:** the verification checkpoint is recorded in the dated session log `SESSION_LOG_2026-09-03_G2.md`.
 - **BLOCKED:** Vercel reports `Deployment rate limited — retry in 24 hours` for the focused commit, so no new production deployment is available for live crawler-surface inspection.
 - **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output for the focused commit until Vercel permits a deployment.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
@@ -90,7 +90,7 @@
 - 2026-09-03 — Resumed G2 from repository evidence; confirmed crawl-control implementation already existed but its regression coverage had been reverted.
 - 2026-09-03 — Restored and expanded G2 regression coverage and corrected the typecheck regression found in `src/routes/m.$slug.tsx`.
 - 2026-09-03 — Committed focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
-- 2026-09-03 — Fixed sitemap duplicate-path handling in `e0a007a4a45362494d26ff801a833708b17d4fb7b7`; GitHub Actions run `33769708337` passed every repository quality gate.
+- 2026-09-03 — Fixed sitemap duplicate-path handling in `e0a007a4a45362494d26ff801a833708b17d4fb7`; GitHub Actions run `33769708337` passed every repository quality gate.
 - 2026-09-03 — Confirmed Vercel deployment for the focused commit is rate-limited, so live crawler-surface verification remains blocked.
 
 ## Exact Remaining Work
