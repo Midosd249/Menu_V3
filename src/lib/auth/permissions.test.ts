@@ -6,6 +6,7 @@ import {
   canWriteSettings,
   hasPermission,
 } from "./permissions";
+import { roleCanAccessAssignedBranch } from "./authorization.server";
 
 const roles = ["owner", "admin", "editor"] as const;
 
@@ -44,4 +45,14 @@ test("every defined role has an explicit decision for every permission", () => {
       assert.equal(typeof hasPermission(role, permission), "boolean");
     }
   }
+});
+
+test("branch scope is fail-closed for an unassigned editor", () => {
+  assert.equal(roleCanAccessAssignedBranch("editor", false), false);
+  assert.equal(roleCanAccessAssignedBranch("editor", true), true);
+});
+
+test("owner and admin have tenant-wide branch access", () => {
+  assert.equal(roleCanAccessAssignedBranch("owner", false), true);
+  assert.equal(roleCanAccessAssignedBranch("admin", false), true);
 });
