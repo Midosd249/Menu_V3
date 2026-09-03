@@ -1,12 +1,8 @@
 import type { Sql } from "@/lib/db";
+import { assertLimit, type PlanResource } from "./subscription-limits";
 
-export type PlanResource = "branches" | "products" | "team_members";
-
-export type PlanLimits = {
-  branches: number;
-  products: number;
-  team_members: number;
-};
+export type { PlanResource } from "./subscription-limits";
+export { PlanLimitError, assertLimit } from "./subscription-limits";
 
 export type SubscriptionSummary = {
   code: string;
@@ -20,27 +16,6 @@ export type SubscriptionSummary = {
   trialEndsAt: string | null;
   currentPeriodEnd: string | null;
 };
-
-export class PlanLimitError extends Error {
-  readonly resource: PlanResource;
-  readonly current: number;
-  readonly max: number;
-
-  constructor(resource: PlanResource, current: number, max: number) {
-    super(`PLAN_LIMIT:${resource}:${current}:${max}`);
-    this.name = "PlanLimitError";
-    this.resource = resource;
-    this.current = current;
-    this.max = max;
-  }
-}
-
-export function assertLimit(current: number, max: number, resource: PlanResource) {
-  if (!Number.isFinite(current) || !Number.isFinite(max) || max < 0) {
-    throw new Error("INVALID_PLAN_LIMIT");
-  }
-  if (current >= max) throw new PlanLimitError(resource, current, max);
-}
 
 export async function getSubscription(sql: Sql, tenantId: string): Promise<SubscriptionSummary | null> {
   const rows = await sql<{
