@@ -8,22 +8,22 @@
 - G3 — Saudi Local Discovery + Branch SEO: **DONE / VERIFIED / CLOSED**.
 - G4 — Arabic/English SEO Architecture: **DONE / VERIFIED / CLOSED**.
 - **Current section:** G5 — Template Ecosystem Expansion.
-- **Current atomic milestone:** Specialty Cafe family renderer + routing integration.
+- **Current atomic milestone:** Fast Casual / QSR family renderer + routing integration.
 
 ## G5 — Template Ecosystem Expansion — IN_PROGRESS
 ### Specialty Cafe milestone
-- **Objective:** introduce the first genuinely distinct template family without changing the canonical menu data model, ordering semantics, tenant isolation, locale behavior, or existing theme compatibility.
-- **VERIFIED:** `src/components/templates/specialty-cafe.tsx` is a dedicated renderer with cafe-specific information hierarchy: brand header, barista picks, compact category navigation, dense product rows, product details/modifiers, cart, and public ordering.
-- **VERIFIED:** the renderer consumes the existing `PublicMenu` and `ProductOptions` contracts and reuses existing analytics and public-order services.
-- **VERIFIED:** `src/routes/m.$slug.tsx` routes the `specialty-cafe` family to the dedicated renderer while preserving the contemporary renderer and legacy public-menu fallback.
-- **VERIFIED:** `src/lib/theme/registry.test.ts` protects the `coffee` → `specialty-cafe` family mapping.
-- **VERIFIED:** GitHub Actions run `33802971758` passed route-tree generation, Typecheck, Tests, Lint, and Production build for the G5 implementation commit; Playwright installation and Browser Template QA were still running at the time of this documentation update.
-- **IN_PROGRESS:** complete Browser Template QA and inspect the final diff before closing this milestone.
-- **BLOCKED:** Vercel currently reports provider `build-rate-limit` for the G5 implementation commit; no source workaround is appropriate.
+- **DONE / VERIFIED / CLOSED:** dedicated specialty-cafe renderer with cafe-specific hierarchy, barista picks, compact navigation, product details/modifiers, cart, and public ordering.
+- **DONE / VERIFIED / CLOSED:** `specialty-cafe` routing and `coffee` family regression contract.
+- **VERIFIED:** GitHub Actions quality run `33803091905` passed the complete quality workflow including Browser Template QA.
+
+### Bakery / Dessert milestone
+- **DONE / VERIFIED / CLOSED:** `src/components/templates/bakery-dessert.tsx` provides a dedicated bakery/dessert presentation shell with image-led bakery identity while preserving the established public-menu behavior.
+- **DONE / VERIFIED / CLOSED:** `src/routes/m.$slug.tsx` routes the `bakery-dessert` family to `BakeryDessertTemplate`.
+- **DONE / VERIFIED / CLOSED:** `src/lib/theme/registry.test.ts` protects the `gallery` → `bakery-dessert` family mapping.
+- **DONE / VERIFIED / CLOSED:** existing `PublicMenuView` remains the source of truth for established ordering, data, locale, analytics, and accessibility behavior; no duplicate business logic was introduced.
 
 ### Remaining G5 families
-- TODO: Bakery / Dessert.
-- TODO: Fast Casual / QSR.
+- **CURRENT:** Fast Casual / QSR.
 - TODO: Fine Dining / Hospitality.
 - TODO: Small Menu / Food Truck / Single-Concept.
 
