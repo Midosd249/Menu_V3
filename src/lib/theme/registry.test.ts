@@ -17,6 +17,10 @@ test("specialty cafe themes resolve to the dedicated family", () => {
   assert.equal(getThemeFamily("coffee"), "specialty-cafe");
 });
 
+test("bakery dessert themes resolve to the dedicated family", () => {
+  assert.equal(getThemeFamily("gallery"), "bakery-dessert");
+});
+
 test("theme resolution remains backward compatible", () => {
   assert.equal(isThemeKey("editorial"), true);
   assert.equal(isThemeKey("unknown-theme"), false);
