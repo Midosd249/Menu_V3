@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
+import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { getPublicMenu } from "@/lib/menu/public";
+import { getThemeFamily } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/m/$slug")({ component: PublicMenuPage });
@@ -19,32 +21,19 @@ function readCachedMenu(key: string): PublicMenu | null {
     const parsed = JSON.parse(raw) as { menu?: PublicMenu; at?: number };
     if (!parsed.menu || !parsed.at || Date.now() - parsed.at > 5 * 60_000) return null;
     return parsed.menu;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 function writeCachedMenu(key: string, menu: PublicMenu): void {
   if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.setItem(`${MENU_CACHE_PREFIX}${key}`, JSON.stringify({ menu, at: Date.now() }));
-  } catch {
-    /* Storage is an optional performance enhancement. */
-  }
+  try { window.sessionStorage.setItem(`${MENU_CACHE_PREFIX}${key}`, JSON.stringify({ menu, at: Date.now() })); } catch { /* Optional cache. */ }
 }
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    return await Promise.race([
-      promise,
-      new Promise<T>((_, reject) => {
-        timer = setTimeout(() => reject(new Error("استغرق تحميل المنيو وقتاً أطول من المتوقع.")), ms);
-      }),
-    ]);
-  } finally {
-    if (timer) clearTimeout(timer);
-  }
+    return await Promise.race([promise, new Promise<T>((_, reject) => { timer = setTimeout(() => reject(new Error("استغرق تحميل المنيو وقتاً أطول من المتوقع.")), ms); })]);
+  } finally { if (timer) clearTimeout(timer); }
 }
 
 function PublicMenuPage() {
@@ -56,40 +45,22 @@ function PublicMenuPage() {
 export function MenuLoader({ slug, branch }: { slug: string; branch?: string }) {
   const cacheKey = `${slug}:${branch ?? "default"}`;
   const cached = readCachedMenu(cacheKey);
-  const [state, setState] = useState<
-    { status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }
-  >(cached ? { status: "ok", menu: cached } : { status: "loading" });
+  const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(cached ? { status: "ok", menu: cached } : { status: "loading" });
 
   function load() {
     const instant = readCachedMenu(cacheKey);
-    if (instant) setState({ status: "ok", menu: instant });
-    else setState({ status: "loading" });
-
-    withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS)
-      .then((result) => {
-        if (!result.ok) {
-          if (!instant) setState({ status: "error", message: result.error, retry: load });
-          return;
-        }
-        writeCachedMenu(cacheKey, result.data);
-        setState({ status: "ok", menu: result.data });
-      })
-      .catch((err: unknown) => {
-        if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو", retry: load });
-      });
+    if (instant) setState({ status: "ok", menu: instant }); else setState({ status: "loading" });
+    withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => {
+      if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; }
+      writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data });
+    }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو", retry: load }); });
   }
 
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, branch]);
 
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />;
   if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
-  return (
-    <div className="menu-public-shell">
-      <MenuThemeController theme={state.menu.tenant.themeKey} />
-      <PublicMenuView menu={state.menu} />
-    </div>
-  );
+  const family = getThemeFamily(state.menu.tenant.themeKey);
+  return <div className="menu-public-shell"><MenuThemeController theme={state.menu.tenant.themeKey} />{family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={state.menu} /> : <PublicMenuView menu={state.menu} />}</div>;
 }
