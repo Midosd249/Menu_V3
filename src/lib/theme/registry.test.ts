@@ -24,6 +24,11 @@ test("fast casual themes resolve to the dedicated family", () => {
   assert.equal(getThemeFamily("fast-casual"), "fast-casual");
 });
 
+test("fine dining themes resolve to the dedicated family", () => {
+  assert.equal(getThemeFamily("dark-dining"), "fine-dining-hospitality");
+  assert.equal(getThemeFamily("immersive"), "fine-dining-hospitality");
+});
+
 test("theme resolution remains backward compatible", () => {
   assert.equal(isThemeKey("editorial"), true);
   assert.equal(isThemeKey("unknown-theme"), false);
