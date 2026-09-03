@@ -27,12 +27,32 @@ test("public menu SEO derives Arabic title, canonical, and restaurant schema fro
   assert.equal(seo.schema["@type"], "Restaurant");
   assert.equal(seo.schema.name, "فرع العليا");
   assert.equal(seo.schema.currenciesAccepted, "SAR");
+  assert.equal(seo.schema.menu, "/m/najd-kitchen/olaya");
+  assert.equal(seo.localSeoEligible, true);
+  assert.deepEqual(seo.schema.address, {
+    "@type": "PostalAddress",
+    streetAddress: "شارع العليا",
+    addressLocality: "الرياض",
+    addressCountry: "SA",
+  });
   assert.deepEqual(seo.schema.openingHoursSpecification, [{
     "@type": "OpeningHoursSpecification",
     dayOfWeek: "https://schema.org/Monday",
     opens: "10:00",
     closes: "23:00",
   }]);
+});
+
+test("local SEO omits location markup when verified Saudi location data is incomplete", () => {
+  const incomplete = {
+    ...menu,
+    tenant: { ...menu.tenant, city: "" },
+    branch: { ...menu.branch, addressAr: "", mapsUrl: "https://maps.google.com/?q=unknown" },
+  } satisfies PublicMenu;
+  const seo = getPublicMenuSeo(incomplete, "/m/najd-kitchen/olaya");
+  assert.equal(seo.localSeoEligible, false);
+  assert.equal("address" in seo.schema, false);
+  assert.equal(seo.schema.hasMap, "https://maps.google.com/?q=unknown");
 });
 
 test("missing public menu SEO is explicitly noindex", () => {
