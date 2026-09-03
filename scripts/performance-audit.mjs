@@ -68,10 +68,14 @@ try {
 
     const navigation = performance.getEntriesByType("navigation")[0];
     const paint = performance.getEntriesByType("paint");
+    const lcpObserver = PerformanceObserver.supportedEntryTypes?.includes("largest-contentful-paint")
+      ? new PerformanceObserver(() => {}).observe({ type: "largest-contentful-paint", buffered: true })
+      : undefined;
     const lcpEntries = performance.getEntriesByType("largest-contentful-paint");
     const clsEntries = performance.getEntriesByType("layout-shift");
     const inpEntries = performance.getEntriesByType("event");
     const inpSupported = typeof PerformanceEventTiming !== "undefined";
+    void lcpObserver;
 
     const lcp = lcpEntries.reduce((max, entry) => Math.max(max, entry.startTime || 0), 0);
     const cls = clsEntries.reduce(
