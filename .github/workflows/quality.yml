@@ -39,7 +39,7 @@ jobs:
       - name: Browser template QA
         run: |
           mkdir -p .grok
-          nohup npx vite preview --host 127.0.0.1 --port 8081 > .grok/preview.log 2>&1 &
+          setsid env -u RUNNER_TRACKING_ID npx vite preview --host 127.0.0.1 --port 8081 > .grok/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
