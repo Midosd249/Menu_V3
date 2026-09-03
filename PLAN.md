@@ -35,7 +35,8 @@
 - The root `AGENTS.md` is the concise autonomous repository operating manual and requires evidence-driven discovery, research when consequential, a pre-edit planning gate, task-scoped verification, continuity updates, and a hard stop after one task.
 - Client onboarding ownership is enforced by a database-level unique index on `tenants.owner_user_id`; this closes the check-then-insert race that could otherwise create duplicate client tenants.
 - The existing onboarding UI reconciles a concurrent create conflict by re-reading trusted server-side studio membership and routing to `/studio` when the tenant already exists.
-- Research decision: PostgreSQL unique-index enforcement is the smallest compatible concurrency boundary for the existing PostgreSQL/PGLite schema. PostgreSQL documents that unique indexes enforce duplicate prevention and that concurrent conflicting inserts are serialized by the uniqueness check; `ON CONFLICT` is the native atomic alternative for future server-side create-or-get refinement. citeturn0search0turn0search2
+- Research decision: PostgreSQL unique-index enforcement is the smallest compatible concurrency boundary for the existing PostgreSQL/PGLite schema. PostgreSQL documentation states that unique indexes enforce duplicate prevention and that `ON CONFLICT` provides a native atomic alternative for future server-side create-or-get refinement.
+- Research sources: PostgreSQL `INSERT` documentation (https://www.postgresql.org/docs/current/sql-insert.html) and PostgreSQL unique-index documentation (https://www.postgresql.org/docs/current/indexes-unique.html).
 - Official references for future hardening: https://www.postgresql.org/docs/current/ddl-rowsecurity.html ; https://www.postgresql.org/docs/current/sql-createfunction.html ; https://supabase.com/docs/guides/database/postgres/row-level-security ; https://tanstack.com/start/latest/docs/framework/react/guide/server-functions .
 
 ## Risks
