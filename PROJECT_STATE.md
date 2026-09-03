@@ -14,49 +14,18 @@
 - **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
 - **G3 — Saudi Local Discovery + Branch SEO is DONE / VERIFIED and CLOSED.**
 - **G4 — Arabic/English SEO Architecture is DONE / VERIFIED and CLOSED.**
-- **Session stopping point:** G4 is complete. G5 is not started.
+- **G5 — Template Ecosystem Expansion is IN_PROGRESS.**
+- Current atomic milestone: **Specialty Cafe family renderer + routing integration**.
 
-## G2 — Crawl Control and Indexation — CLOSED
-### Implementation
-- **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic `robots.txt` and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
-- **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` through the existing Nitro middleware.
-- **VERIFIED:** sitemap database selection requires `tenants.is_active = true`, `tenants.is_published = true`, and `branches.is_active = true`, ordered deterministically.
-- **VERIFIED:** sitemap output uses absolute URLs and optional `lastmod` values.
-- **VERIFIED:** robots allows public pages, disallows private application surfaces, and declares `/sitemap.xml`.
-- **VERIFIED:** public-menu routes enforce active/published tenant state and emit `noindex, nofollow` for missing/unavailable menu data.
-- **VERIFIED:** branch routes own their canonical and Restaurant JSON-LD metadata; the parent route suppresses duplicate branch metadata.
-- **VERIFIED:** `scripts/quality-workflow.test.mjs` covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
-- **VERIFIED:** the route-id typecheck regression in `src/routes/m.$slug.tsx` is corrected by comparing the route id as a string.
-- **VERIFIED:** duplicate-path sitemap handling was corrected in `e0a007a4a45362494d26ff801a833708b17d4fb7`.
-
-### Verification Evidence
-- **VERIFIED:** GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
-- **VERIFIED:** Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- **VERIFIED:** Vercel production deployment `dpl_4VUKHziJn8B3nwVTUG6mjiFksihS` is `READY` and was used for live crawler verification.
-- **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
-- **VERIFIED:** live `/robots.txt` returns HTTP 200 with `Allow: /`, private-surface disallows for `/admin`, `/studio`, `/owner`, `/onboarding`, `/login`, `/invite`, and `/api/`, plus a `Sitemap` declaration.
-- **VERIFIED:** live `/sitemap.xml` returns HTTP 200 with `Content-Type: application/xml; charset=utf-8`.
-- **VERIFIED:** live sitemap is valid XML in the expected `<urlset>` form and contains four absolute URLs with no duplicate paths: `/m/mndy-alwtnya`, `/m/mndy-alwtnya/main-branch`, `/m/nafas`, and `/m/nafas/olaya`.
-- **VERIFIED:** the live sitemap URL set is consistent with the repository contract that includes only active/published tenants and active branches; automated regression coverage verifies the eligibility predicate.
-- **VERIFIED:** unavailable public-menu routes emit `noindex, nofollow` and are not represented in the verified live sitemap set.
-
-## G3 — Saudi Local Discovery + Branch SEO — CLOSED
-### Implementation
-- **VERIFIED:** repository schema provides tenant `city`/`country`, branch name/address/Maps URL/phone/activity, and branch hours.
-- **VERIFIED:** current production payload for `/m/nafas/olaya` contains `country=SA`, `city=الرياض`, branch name, Arabic/English address, Maps URL, phone, and branch hours.
-- **VERIFIED:** `src/lib/menu/seo.ts` now gates local location markup on `country=SA`, non-empty verified city, branch name, and Arabic address.
-- **VERIFIED:** eligible branch schema emits `PostalAddress` from verified fields only and emits `hasMap` only when the stored Maps URL is absolute HTTP(S).
-- **VERIFIED:** `src/lib/menu/seo.test.ts` covers eligible Saudi branch data and incomplete location data.
-- **VERIFIED:** G3 does not create a new city-directory URL family, preserving existing public menu canonical ownership and avoiding thin/doorway pages.
-- **VERIFIED:** full repository quality workflow run `33782244590` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup for commit `6982c586fb0455405f04ea1625c494638bf7b1d6`.
-- **VERIFIED:** the final G3 code diff against the G2 baseline is limited to `src/lib/menu/seo.ts` and `src/lib/menu/seo.test.ts`.
-
-### Final Production Verification
-- **VERIFIED:** Vercel production deployment `dpl_CPvXFBZgh439e94rUHCJf3GFwWBC` is `READY`, targets production, and was built from current `main` commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f`.
-- **VERIFIED:** GitHub Vercel status for commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f` is `success`.
-- **VERIFIED:** production `/m/nafas/olaya` returns HTTP 200 with `lang="ar"`, `dir="rtl"`, Saudi branch metadata, `PostalAddress`, and absolute Google Maps `hasMap` in Restaurant JSON-LD.
-- **VERIFIED:** production branch page remains indexable with `robots=index, follow` and preserves the expected canonical path `/m/nafas/olaya`.
-- **VERIFIED:** no G3 source workaround or unrelated application change was required; the deployment-rate-limit blocker is cleared for this deployment.
+## G5 — Template Ecosystem Expansion — IN_PROGRESS
+### Specialty Cafe milestone
+- **VERIFIED:** `src/components/templates/specialty-cafe.tsx` provides a dedicated specialty-cafe renderer with a compact cafe hierarchy, barista picks, category navigation, dense menu rows, product detail/modifier selection, cart, and public ordering.
+- **VERIFIED:** the renderer is presentation-only and consumes the existing `PublicMenu`, product options, locale, analytics, and ordering contracts.
+- **VERIFIED:** `src/routes/m.$slug.tsx` now routes the `specialty-cafe` template family to `SpecialtyCafeTemplate` while preserving `contemporary-restaurant` and legacy fallback routing.
+- **VERIFIED:** `src/lib/theme/registry.test.ts` locks `coffee` to the `specialty-cafe` family.
+- **VERIFIED:** Typecheck, repository tests, lint, and production build have passed in GitHub Actions run `33802971758` through the production-build stage.
+- **IN_PROGRESS:** Playwright installation and Browser Template QA are still running in the same GitHub Actions run; the milestone is not yet closed.
+- **BLOCKED:** the Vercel status for commit `17955813a3a601cc7d26cf12b94cd7b3dbf841c1` reports provider `build-rate-limit`; no source workaround is being introduced.
 
 ## G4 — Arabic/English SEO Architecture — CLOSED
 ### Implementation
@@ -70,16 +39,6 @@
 - **VERIFIED:** parent menu routes suppress duplicate head metadata when a branch child owns the canonical route.
 - **VERIFIED:** `src/lib/menu/seo.test.ts` covers locale availability, resolution, reciprocal alternates, missing English data, Saudi local SEO, and missing-menu noindex behavior.
 - **VERIFIED:** the G4 TypeScript regression in `src/components/lang-toggle.tsx` was fixed and the resulting CI run passed.
-
-### Verification Evidence
-- **VERIFIED:** GitHub Actions run `33801648459` for commit `4cb283ab8037506374f9711788cd0e576207e260` passed route-tree generation, Typecheck, Tests (69/69), Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup.
-- **VERIFIED:** Typecheck completed successfully.
-- **VERIFIED:** all 69 repository tests passed.
-- **VERIFIED:** Lint completed with 10 existing warnings and 0 errors; warnings were not introduced by the G4 locale fix.
-- **VERIFIED:** Production build completed successfully, including Vite/Nitro output and PGlite asset checks.
-- **VERIFIED:** Browser Template QA passed mobile, tablet, and desktop with HTTP 200, RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- **VERIFIED:** the G4 code is present on `main` and the CI checkout used the exact commit `4cb283ab8037506374f9711788cd0e576207e260`.
-- **INFERRED:** a fresh Vercel deployment of the G4 commit was not independently available for live SEO-head inspection because the provider status reported a `build-rate-limit` failure; repository CI and browser-preview verification passed completely.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -102,35 +61,17 @@
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
+- **BLOCKED:** Vercel provider build-rate-limit for the current G5 commit; repository CI remains the verification source until the provider accepts a build.
 - Existing lint warnings remain but are not errors and were not introduced by G4.
 
 ## Session Log
-- 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
-- 2026-09-03 — Researched Saudi restaurant/delivery competitors and official Google/TanStack/SDAIA guidance.
-- 2026-09-03 — Archived the superseded template-only plan and created the unified growth/Saudi SEO active plan.
-- 2026-09-03 — Implemented G1 public-menu SSR metadata/schema foundation.
-- 2026-09-03 — Fixed typed public-menu links and Browser QA URL handling.
-- 2026-09-03 — Fixed CI preview recursion and preview process lifetime handling.
-- 2026-09-03 — Isolated and fixed PGlite runtime asset placement and production-only migration isolation; CI run `33763072784` passed all quality gates.
-- 2026-09-03 — Inspected live Vercel production HTML/head and fixed duplicate branch canonical/JSON-LD emission.
-- 2026-09-03 — Re-inspected production `/m/nafas` and `/m/nafas/olaya`; G1 CLOSED.
-- 2026-09-03 — Resumed G2 from repository evidence; confirmed crawl-control implementation already existed but its regression coverage had been reverted.
-- 2026-09-03 — Restored and expanded G2 regression coverage and corrected the typecheck regression found in `src/routes/m.$slug.tsx`.
-- 2026-09-03 — Committed focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
-- 2026-09-03 — Fixed sitemap duplicate-path handling in `e0a007a4a45362494d26ff801a833708b17d4fb7`; GitHub Actions run `33769708337` passed every repository quality gate.
-- 2026-09-03 — Verified READY Vercel production deployment and live `/robots.txt`.
-- 2026-09-03 — Verified live `/sitemap.xml` over the public `menu-v3-kohl.vercel.app` alias: HTTP 200, XML content type, four absolute unique URLs, and expected public menu/branch paths.
-- 2026-09-03 — Closed G2 after all repository and live crawler-surface acceptance criteria passed.
-- 2026-09-03 — Implemented G3 branch-level Saudi local SEO eligibility and regression tests; GitHub Actions run `33782244590` passed all quality gates.
-- 2026-09-03 — Confirmed Vercel production remains on the G3 pre-change baseline.
-- 2026-09-03 — Confirmed current GitHub Vercel status is a provider `build-rate-limit` failure; no source workaround is appropriate.
-- 2026-09-03 — Created a fresh documentation commit to retry the Vercel Git trigger; Vercel still reports the build-rate-limit failure.
-- 2026-09-03 — Verified production deployment `dpl_CPvXFBZgh439e94rUHCJf3GFwWBC` built successfully from current `main` commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f`.
-- 2026-09-03 — Verified live `/m/nafas/olaya` HTTP 200 and confirmed Saudi `PostalAddress`, absolute `hasMap`, canonical path, and indexable robots metadata; G3 CLOSED.
-- 2026-09-03 — Completed G4 Arabic/English SEO Architecture with URL-level locale handling, reciprocal hreflang, locale-aware metadata, missing-variant noindex behavior, and language-toggle URL synchronization.
-- 2026-09-03 — Fixed the G4 locale-toggle TypeScript regression in `4cb283ab8037506374f9711788cd0e576207e260`.
-- 2026-09-03 — Verified GitHub Actions run `33801648459`: 69/69 tests passed, Typecheck passed, Lint had 0 errors, Production build passed, and Browser Template QA passed across mobile/tablet/desktop.
-- 2026-09-03 — Closed G4. G5 intentionally not started in this session.
+- 2026-09-03 — Resumed G5 from repository evidence after closing G4.
+- 2026-09-03 — Implemented dedicated Specialty Cafe template renderer with compact cafe hierarchy, barista picks, category navigation, product details/modifiers, cart, and public ordering.
+- 2026-09-03 — Integrated `specialty-cafe` family routing in `src/routes/m.$slug.tsx` without changing legacy theme fallbacks.
+- 2026-09-03 — Added registry regression coverage for the `coffee` → `specialty-cafe` family contract.
+- 2026-09-03 — GitHub Actions run `33802979434` passed route-tree generation, Typecheck, Tests, Lint, and Production build; Playwright installation and Browser Template QA remained in progress at the stopping point.
+- 2026-09-03 — Vercel provider status reported `build-rate-limit` for commit `17955813a3a601cc7d26cf12b94cd7b3dbf841c1`; no source workaround introduced.
 
 ## Exact Remaining Work
-- **Session stopping point:** G4 — Arabic/English SEO Architecture is DONE / VERIFIED / CLOSED. G5 is the next queued task, but must not be started in this session.
+- **G5 Specialty Cafe milestone:** finish Playwright installation and Browser Template QA for the current commit; close the milestone only after the full quality workflow passes.
+- **G5 remaining families:** Bakery/Dessert, Fast Casual/QSR, Fine Dining/Hospitality, and Small Menu remain TODO.
