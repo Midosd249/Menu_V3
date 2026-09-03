@@ -15,8 +15,9 @@ export const Route = createFileRoute("/m/$slug")({
   }),
   loaderDeps: ({ search }) => ({ branch: search.branch }),
   loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
-  head: ({ loaderData, params }) => {
+  head: ({ loaderData, params, matches }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
+    const hasBranchChild = matches.some((match) => match.routeId === "/m/$slug/$branch");
     if (loaderData?.ok) {
       const seo = getPublicMenuSeo(loaderData.data, pathname);
       return {
@@ -30,13 +31,13 @@ export const Route = createFileRoute("/m/$slug")({
           { property: "og:locale", content: "ar_SA" },
           ...(seo.image ? [{ property: "og:image", content: seo.image }] : []),
         ],
-        links: [{ rel: "canonical", href: seo.canonical }],
-        scripts: [{ type: "application/ld+json", children: JSON.stringify(seo.schema) }],
+        links: hasBranchChild ? [] : [{ rel: "canonical", href: seo.canonical }],
+        scripts: hasBranchChild ? [] : [{ type: "application/ld+json", children: JSON.stringify(seo.schema) }],
       };
     }
     return {
       meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: "noindex, nofollow" }],
-      links: [{ rel: "canonical", href: pathname }],
+      links: hasBranchChild ? [] : [{ rel: "canonical", href: pathname }],
     };
   },
   component: PublicMenuPage,
