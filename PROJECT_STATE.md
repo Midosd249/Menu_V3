@@ -10,9 +10,10 @@
 
 ## Current Position
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
-- G1 — Public Menu SEO Foundation is now **DONE / VERIFIED**.
-- Current section is ready to advance to **G2 — Crawl Control and Indexation**.
-- No G2 implementation has been started in this task.
+- G1 — Public Menu SEO Foundation is now DONE / VERIFIED and protected.
+- **G2 — Crawl Control and Indexation is IN_PROGRESS.** The production crawl-control implementation is present in `server/middleware/grok-pwa.ts` and `src/lib/seo/crawl.ts`; regression coverage has now been restored and expanded.
+- A pre-existing G1 typecheck regression in `src/routes/m.$slug.tsx` was found by CI evidence and corrected without reopening the G1 milestone.
+- G2 cannot be marked DONE until the full repository verification suite runs successfully against the new commit.
 
 ## Completed Task — CI Browser template QA
 ### Root Cause
@@ -27,31 +28,32 @@
 - **VERIFIED:** CI preview is launched directly with Vite, isolated from runner cleanup, kept in the same step as Browser QA, readiness-checked, and cleaned up with a trap.
 - **VERIFIED:** targeted regression tests cover preview isolation, PGlite asset placement, migration portability, and the PGlite migration isolation contract.
 
-## G1 Production Verification — CLOSED
-### VERIFIED
-- Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and has production domains `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the main-branch alias.
-- Latest production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is `READY` and was built from `main` commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
-- **VERIFIED:** GitHub comparison confirms commit `30325490ed502344360e86e31ae0d13d3fe5eae2` is directly ahead of the SEO fix commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`, with the only intervening change being continuity documentation. Therefore the fixed application code is included in the deployed commit.
-- `/m/nafas` returns HTTP 200 with SSR menu content, Arabic title/description, `index, follow`, canonical metadata and exactly one Restaurant JSON-LD payload.
-- `/m/nafas/olaya` returns HTTP 200 with SSR branch content, branch-specific title, `index, follow`, canonical `/m/nafas/olaya`, and exactly one branch Restaurant JSON-LD payload.
-- `/m/does-not-exist` returns the expected SSR not-found behavior with `noindex, nofollow`.
-- The public production domain does not emit the deployment-protection `x-robots-tag: noindex` header; that header was observed only on the protected Vercel deployment hostname.
-- **VERIFIED:** the duplicate canonical/JSON-LD issue is resolved in production. The branch page now has one canonical and one relevant Restaurant JSON-LD payload.
-- **VERIFIED:** live production pages contain actual SSR menu/branch content rather than an empty client shell.
+## G2 — Crawl Control and Indexation
+### Implementation
+- **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic `robots.txt` and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
+- **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` directly through the deployed Nitro middleware.
+- **VERIFIED:** sitemap database selection requires `tenants.is_active = true`, `tenants.is_published = true`, and `branches.is_active = true`, ordered deterministically by tenant slug and branch creation time.
+- **VERIFIED:** sitemap output uses absolute URLs and optional `lastmod` values.
+- **VERIFIED:** robots allows public pages, disallows private application surfaces, and declares `/sitemap.xml`.
+- **VERIFIED:** existing public-menu routes enforce `is_active` and `is_published` at the database boundary and emit `noindex, nofollow` for missing/unavailable menu data.
+- **VERIFIED:** branch routes own their canonical and Restaurant JSON-LD metadata; the parent route suppresses duplicate branch metadata.
+- **VERIFIED:** regression coverage was restored in `scripts/quality-workflow.test.mjs` for robots, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
+- **VERIFIED:** the typecheck failure from the immediately preceding CI run was isolated to the existing `matches.some(...)` route-id comparison in `src/routes/m.$slug.tsx`; the targeted correction now compares the route id as a string.
 
-### Finding and Fix
-- **VERIFIED:** the original live `/m/nafas/olaya` output emitted two canonical links and two Restaurant JSON-LD scripts because both `/m/$slug` and `/m/$slug/$branch` supplied head entries.
-- **VERIFIED:** commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` changes only `src/routes/m.$slug.tsx` so the parent route omits canonical and JSON-LD when the branch child is present. The branch route remains the sole owner of branch canonical/schema metadata.
-- **VERIFIED:** production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` contains the fix through commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
+### Research / Design Evidence
+- **VERIFIED:** Google Search Central recommends absolute URLs in sitemaps, root-level sitemap placement, and using sitemaps for canonical/indexable URLs.
+- **VERIFIED:** Google Search Central distinguishes robots.txt crawl control from `noindex`; robots.txt must not be used as the mechanism for preventing indexing.
+- **VERIFIED:** Google documents the `Sitemap` robots.txt field as a fully qualified URL.
 
 ## Verification Evidence
-- VERIFIED: `33763072784` passed every quality gate, including Typecheck, Tests (61/61), Lint (0 errors), Production build, Playwright installation, Browser template QA and preview cleanup.
-- VERIFIED: live production `/m/nafas` returns HTTP 200 and SSR menu content.
-- VERIFIED: live production `/m/nafas/olaya` returns HTTP 200 and SSR branch content.
-- VERIFIED: live production `/m/does-not-exist` returns the not-found SEO behavior.
-- VERIFIED: live `/m/nafas/olaya` after the fix has one canonical link and one Restaurant JSON-LD script.
-- VERIFIED: GitHub compare shows `30325490ed502344360e86e31ae0d13d3fe5eae2` contains `62df67e5d2597dcc3f4132354cefe750ae2c2188` as its immediate parent.
-- VERIFIED: Vercel latest production deployment is `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm`, state `READY`, source commit `30325490ed502344360e86e31ae0d13d3fe5eae2`.
+- **VERIFIED:** commit `141cb949e0d3d0ac8b081aed1c9be97607e6febb` was the prior `main` head and its CI run `33767726530` reached typecheck after successful route-tree generation/build setup, then failed on the G1 route-id comparison.
+- **VERIFIED:** commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` is now `main` and contains only the targeted G2 regression coverage plus the typecheck correction.
+- **VERIFIED:** Vercel has accepted the new commit and currently reports the deployment status as pending.
+- **BLOCKED:** the new commit has no GitHub Actions workflow run yet; the available workflow history shows the previous failure, but the API-authored commit has not produced a new Actions run in the available execution window.
+- **BLOCKED:** local `git clone` is unavailable in this execution environment because outbound DNS/network access to GitHub is unavailable, so the repository-defined local commands cannot be executed here.
+- **UNKNOWN:** final CI test/typecheck/lint/build result for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
+- **UNKNOWN:** final Vercel deployment result for that commit.
+- **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output after the new deployment completes.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -72,6 +74,7 @@
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
 - Existing lint warnings remain but are not errors and were not introduced by this task.
+- **BLOCKED:** final G2 verification is waiting for executable CI/deployment evidence against commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
@@ -85,6 +88,11 @@
 - 2026-09-03 — Applied targeted parent-head suppression in commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`.
 - 2026-09-03 — Verified Vercel production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is built from descendant commit `30325490ed502344360e86e31ae0d13d3fe5eae2` and includes the fix.
 - 2026-09-03 — Re-inspected production `/m/nafas` and `/m/nafas/olaya`; one canonical and one relevant Restaurant JSON-LD payload are present per page. G1 CLOSED.
+- 2026-09-03 — Resumed G2 from repository evidence; confirmed crawl-control implementation already existed but its regression coverage had been reverted.
+- 2026-09-03 — Restored and expanded G2 regression coverage and corrected the typecheck regression found in `src/routes/m.$slug.tsx`.
+- 2026-09-03 — Committed the focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` and advanced `main` to that commit.
 
 ## Exact Remaining Work
-- **Next atomic task:** G2 — Crawl Control and Indexation. Audit and implement `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and regression tests. Do not start G3 until G2 is complete and verified.
+- **Current atomic task remains G2 — Crawl Control and Indexation.**
+- **Exact next action:** obtain executable verification for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` (GitHub Actions or equivalent repository environment), then inspect the deployed `/robots.txt` and `/sitemap.xml` responses and close G2 only if all acceptance gates pass.
+- Do not start G3 until G2 is closed and verified.

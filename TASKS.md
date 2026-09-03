@@ -1,10 +1,10 @@
 # TASKS
 
 ## Current Section
-- **G2 — Crawl Control and Indexation: TODO / READY.** G1 Public Menu SEO Foundation is DONE / VERIFIED, including production deployment and live HTML/head verification.
+- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and regression coverage are present; final executable verification is blocked pending a runnable repository environment/CI result for the current commit.
 
 ## Unified Queue
-1. **G2 — Crawl Control and Indexation:** TODO — audit and implement `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and regression tests.
+1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — complete verification of `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/noindex policy and regression coverage; close only with green verification evidence.
 2. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
 3. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
 4. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
@@ -26,6 +26,18 @@
 - UNKNOWN: production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin is configured.
 - UNKNOWN: Search Console/indexation state until separately inspected.
 
+## G2 Evidence
+- VERIFIED: `src/lib/seo/crawl.ts` exists and implements deterministic robots/sitemap serialization.
+- VERIFIED: `server/middleware/grok-pwa.ts` exposes `/robots.txt` and `/sitemap.xml` using the existing Nitro middleware path.
+- VERIFIED: sitemap SQL requires active/published tenants and active branches.
+- VERIFIED: robots does not disallow `/m/*` and declares `/sitemap.xml`.
+- VERIFIED: missing public menus remain `noindex, nofollow`; branch routes remain canonical owners.
+- VERIFIED: `scripts/quality-workflow.test.mjs` now covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
+- VERIFIED: the G1 route-id typecheck regression identified by CI was corrected in `src/routes/m.$slug.tsx` without changing its SEO behavior.
+- VERIFIED: focused commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` is the current `main` head.
+- BLOCKED: no GitHub Actions run is available yet for the focused commit.
+- BLOCKED: local verification cannot run because the current execution environment cannot access GitHub over the network.
+
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
 - DONE / VERIFIED: Level 1 Theme Engine Hardening.
@@ -44,4 +56,4 @@
 - DONE / VERIFIED: G1 Public Menu SEO Foundation.
 
 ## Exact Next Task
-- **G2 — Crawl Control and Indexation:** audit and implement `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and regression tests. Before coding, inspect the existing route/static-file structure and current crawler/indexation behavior. Do not start G3.
+- **G2 — Crawl Control and Indexation:** obtain executable verification for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`, then inspect deployed `/robots.txt` and `/sitemap.xml`; close G2 only if all acceptance gates pass. Do not start G3.
