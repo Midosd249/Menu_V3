@@ -11,7 +11,6 @@ const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
-
 test("Browser template QA isolates the preview from runner process cleanup", () => {
   const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Stop built preview)/)?.[1] ?? "";
 
@@ -24,7 +23,7 @@ test("Browser template QA isolates the preview from runner process cleanup", () 
 test("performance audit measures the G6 baseline without imposing guessed budgets", () => {
   assert.match(PERFORMANCE_AUDIT, /largest-contentful-paint/);
   assert.match(PERFORMANCE_AUDIT, /layout-shift/);
-  assert.match(PERFORMANCE_AUDIT, /type: "event"/);
+  assert.match(PERFORMANCE_AUDIT, /getEntriesByType\("event"\)/);
   assert.match(PERFORMANCE_AUDIT, /transferSize/);
   assert.match(PERFORMANCE_AUDIT, /isFont/);
   assert.match(PERFORMANCE_AUDIT, /lazyImageCount/);
