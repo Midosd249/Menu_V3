@@ -4,7 +4,7 @@ import {
   AuthorizationError,
   requirePermissionForRole,
   roleCanAccessAssignedBranch,
-} from "./authorization.server";
+} from "./authorization.server.ts";
 
 test("authorization boundary allows owner and admin settings writes", () => {
   assert.doesNotThrow(() => requirePermissionForRole("owner", "settings.write"));
