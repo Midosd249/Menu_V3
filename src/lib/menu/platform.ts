@@ -1,45 +1,148 @@
-import { useEffect, useMemo, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Building2, ExternalLink, LayoutDashboard, RefreshCw, Search, ShieldCheck, Store, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getAdminDashboard, LEAD_STATUSES, updateLead, type AdminDashboard, type AdminLead, type LeadStatus } from "@/lib/menu/admin";
-import { getPlatformDashboard, updatePlatformTenantStatus, type PlatformDashboard, type PlatformTenant } from "@/lib/menu/platform";
-import { cn } from "@/lib/utils";
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { authMiddleware } from "@/lib/auth/middleware";
+import { getSql } from "@/lib/db";
+import type { FnResult } from "./types";
 
-export const Route = createFileRoute("/admin")({ component: PlatformAdminPage });
-type Tab = "overview" | "tenants" | "leads";
-const STATUS_LABELS: Record<LeadStatus, string> = { new: "جديد", contacted: "تم التواصل", qualified: "مؤهل", converted: "تم التحويل", lost: "مغلق" };
-function emptyPlatform(): PlatformDashboard { return { tenants: [], tenantCount: 0, activeTenantCount: 0, publishedTenantCount: 0, branchCount: 0, productCount: 0, orderCount: 0, openOrderCount: 0, leadCount: 0, newLeadCount: 0, menuEventCount: 0, activeSubscriptionCount: 0, trialSubscriptionCount: 0 }; }
-function emptyLeads(): AdminDashboard { return { total: 0, newCount: 0, contactedCount: 0, qualifiedCount: 0, convertedCount: 0, lostCount: 0, leads: [] }; }
-function date(v: string) { try { return new Intl.DateTimeFormat("ar-SA", { dateStyle: "medium", timeStyle: "short" }).format(new Date(v)); } catch { return v; } }
-function phone(v: string) { return v.replace(/[^\d+]/g, ""); }
+export type PlatformTenant = {
+  id: string;
+  ownerUserId: string;
+  slug: string;
+  nameAr: string;
+  nameEn: string;
+  city: string;
+  country: string;
+  isPublished: boolean;
+  isActive: boolean;
+  createdAt: string;
+  branchCount: number;
+  productCount: number;
+  orderCount: number;
+  planCode: string;
+};
 
-function PlatformAdminPage() {
-  const navigate = useNavigate(); const { user, isPending } = useCurrentUserState();
-  const [tab, setTab] = useState<Tab>("overview"); const [platform, setPlatform] = useState(emptyPlatform); const [leads, setLeads] = useState(emptyLeads);
-  const [leadStatus, setLeadStatus] = useState<LeadStatus | "all">("all"); const [leadQuery, setLeadQuery] = useState(""); const [tenantQuery, setTenantQuery] = useState("");
-  const [selectedLead, setSelectedLead] = useState<AdminLead | null>(null); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [savingTenant, setSavingTenant] = useState<string | null>(null);
-  const tenants = useMemo(() => { const q = tenantQuery.trim().toLowerCase(); return q ? platform.tenants.filter(t => [t.nameAr,t.nameEn,t.slug,t.city,t.ownerUserId].some(v => v.toLowerCase().includes(q))) : platform.tenants; }, [platform.tenants, tenantQuery]);
-  async function load() { setLoading(true); setError(""); try { const [p,l] = await Promise.all([getPlatformDashboard(), getAdminDashboard({ data: { status: leadStatus === "all" ? undefined : leadStatus, q: leadQuery.trim() || undefined } })]); if (!p.ok) setError(p.error); else setPlatform(p.data); if (!l.ok) setError(c => c || l.error); else { setLeads(l.data); setSelectedLead(l.data.leads.find(x => x.id === selectedLead?.id) ?? l.data.leads[0] ?? null); } } catch(e) { setError(e instanceof Error ? e.message : "تعذر تحميل مركز المنصة"); } finally { setLoading(false); } }
-  useEffect(() => { if (isPending) return; if (!user) { void navigate({ to: "/login", search: { redirect: "/admin" } as never, replace: true }); return; } void load(); }, [isPending,user]);
-  useEffect(() => { if (isPending || !user) return; const t = window.setTimeout(() => void load(), 220); return () => window.clearTimeout(t); }, [leadStatus,leadQuery]);
-  async function toggle(t: PlatformTenant) { setSavingTenant(t.id); const r = await updatePlatformTenantStatus({ data: { tenantId: t.id, isActive: !t.isActive } }); if (!r.ok) setError(r.error); else setPlatform(c => ({...c, activeTenantCount:c.activeTenantCount+(r.data.isActive?1:-1), tenants:c.tenants.map(x=>x.id===t.id?{...x,isActive:r.data.isActive}:x)})); setSavingTenant(null); }
-  async function saveLead(l: AdminLead, status: LeadStatus, notes: string) { const r = await updateLead({ data: { id:l.id,status,notes } }); if (!r.ok) setError(r.error); else setLeads(c=>({...c,leads:c.leads.map(x=>x.id===l.id?r.data:x)})); }
-  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات مالك المنصة...</div>;
-  return <main className="mx-auto grid max-w-7xl gap-6 py-4 lg:py-8">
-    <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"><div><div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5"/> Platform Owner</div><h1 className="font-display text-3xl font-semibold sm:text-4xl">مركز تحكم Menu V3</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-ink-soft">لوحة مالك المنصة لإدارة المطاعم والعملاء ومراقبة التشغيل. هذه ليست شاشة استقبال طلبات المطاعم.</p></div><Button variant="outline" disabled={loading} onClick={()=>void load()}><RefreshCw className={cn("size-4",loading&&"animate-spin")}/> تحديث</Button></header>
-    <nav className="grid grid-cols-3 gap-2 rounded-2xl border border-line bg-paper p-2"><Nav active={tab==="overview"} onClick={()=>setTab("overview")} icon={<LayoutDashboard className="size-4"/>} text="نظرة عامة"/><Nav active={tab==="tenants"} onClick={()=>setTab("tenants")} icon={<Building2 className="size-4"/>} text="المطاعم والعملاء"/><Nav active={tab==="leads"} onClick={()=>setTab("leads")} icon={<Users className="size-4"/>} text="العملاء المحتملون"/></nav>
-    {error?<div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm">{error}</div>:null}
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8"><K label="المطاعم" v={platform.tenantCount}/><K label="نشطة" v={platform.activeTenantCount}/><K label="منشورة" v={platform.publishedTenantCount}/><K label="الفروع" v={platform.branchCount}/><K label="الأصناف" v={platform.productCount}/><K label="الطلبات" v={platform.orderCount}/><K label="طلبات مفتوحة" v={platform.openOrderCount}/><K label="أحداث المنيو" v={platform.menuEventCount}/></div>
-    {tab==="overview"?<section className="grid gap-4 md:grid-cols-3"><Card icon={<Store className="size-5"/>} title="إدارة المطاعم" text={`${platform.tenantCount} مطعم مسجل، ${platform.activeTenantCount} نشطة.`} onClick={()=>setTab("tenants")}/><Card icon={<Users className="size-5"/>} title="العملاء المحتملون" text={`${platform.newLeadCount} جديد من إجمالي ${platform.leadCount}.`} onClick={()=>setTab("leads")}/><Card icon={<ShieldCheck className="size-5"/>} title="الحالة التجارية" text={`${platform.activeSubscriptionCount} نشطة و${platform.trialSubscriptionCount} تجارب.`} onClick={()=>setTab("tenants")}/></section>:null}
-    {tab==="tenants"?<section className="grid gap-4"><div className="rounded-2xl border border-line bg-paper p-3"><label className="relative block"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted"/><Input className="ps-9" value={tenantQuery} onChange={e=>setTenantQuery(e.target.value)} placeholder="ابحث باسم المطعم أو المدينة أو المعرّف"/></label></div><div className="overflow-x-auto rounded-2xl border border-line bg-paper"><table className="w-full min-w-[850px] text-sm"><thead className="bg-sand/40 text-xs text-muted"><tr>{["المطعم","الموقع","الفروع","الأصناف","الطلبات","الخطة","الحالة","إجراء"].map(h=><th key={h} className="p-4 text-start">{h}</th>)}</tr></thead><tbody>{tenants.map(t=><tr key={t.id} className="border-t border-line"><td className="p-4"><b>{t.nameAr||t.nameEn}</b><div className="text-xs text-muted">/{t.slug}</div></td><td className="p-4">{t.city||"—"} · {t.country}</td><td className="p-4">{t.branchCount}</td><td className="p-4">{t.productCount}</td><td className="p-4">{t.orderCount}</td><td className="p-4 uppercase">{t.planCode}</td><td className="p-4">{t.isActive?"نشط":"موقوف"}</td><td className="p-4"><div className="flex gap-2"><button disabled={savingTenant===t.id} onClick={()=>void toggle(t)} className="rounded-md border border-line px-3 py-2 text-xs">{savingTenant===t.id?"جارٍ...":t.isActive?"إيقاف":"تفعيل"}</button>{t.isPublished?<a target="_blank" rel="noreferrer" href={`/m/${t.slug}`} className="inline-flex items-center gap-1 rounded-md border border-line px-3 py-2 text-xs"><ExternalLink className="size-3"/>المنيو</a>:null}</div></td></tr>)}{!tenants.length?<tr><td colSpan={8} className="p-10 text-center text-muted">لا توجد مطاعم.</td></tr>:null}</tbody></table></div></section>:null}
-    {tab==="leads"?<Leads leads={leads} selected={selectedLead} filter={leadStatus} query={leadQuery} setFilter={setLeadStatus} setQuery={setLeadQuery} onSelect={setSelectedLead}/>:null}
-  </main>;
+export type PlatformDashboard = {
+  tenants: PlatformTenant[];
+  tenantCount: number;
+  activeTenantCount: number;
+  publishedTenantCount: number;
+  branchCount: number;
+  productCount: number;
+  orderCount: number;
+  openOrderCount: number;
+  leadCount: number;
+  newLeadCount: number;
+  menuEventCount: number;
+  activeSubscriptionCount: number;
+  trialSubscriptionCount: number;
+};
+
+function csvEnv(key: string): string[] {
+  return (process.env[key] ?? "").split(",").map((value) => value.trim().toLowerCase()).filter(Boolean);
 }
-function Nav({active,onClick,icon,text}:{active:boolean;onClick:()=>void;icon:React.ReactNode;text:string}){return <button onClick={onClick} className={cn("inline-flex h-10 items-center justify-center gap-2 rounded-xl text-sm",active?"bg-ink text-paper":"text-muted hover:bg-sand/50")}>{icon}{text}</button>}
-function K({label,v}:{label:string;v:number}){return <div className="grid gap-1 rounded-2xl border border-line bg-paper p-4"><span className="text-xs text-muted">{label}</span><strong className="text-2xl">{v.toLocaleString("ar-SA")}</strong></div>}
-function Card({icon,title,text,onClick}:{icon:React.ReactNode;title:string;text:string;onClick:()=>void}){return <article className="grid gap-4 rounded-2xl border border-line bg-paper p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-sand/60">{icon}</span><h2 className="font-semibold">{title}</h2></div><p className="text-sm leading-6 text-muted">{text}</p><Button variant="outline" onClick={onClick}>فتح</Button></article>}
-function Leads({leads,selected,filter,query,setFilter,setQuery,onSelect}:{leads:AdminDashboard;selected:AdminLead|null;filter:LeadStatus|"all";query:string;setFilter:(v:LeadStatus|"all")=>void;setQuery:(v:string)=>void;onSelect:(v:AdminLead)=>void}){return <section className="grid gap-4"><div className="grid gap-3 rounded-2xl border border-line bg-paper p-3 md:grid-cols-[1fr_220px]"><label className="relative"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted"/><Input className="ps-9" value={query} onChange={e=>setQuery(e.target.value)} placeholder="ابحث في العملاء المحتملين"/></label><select value={filter} onChange={e=>setFilter(e.target.value as LeadStatus|"all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{LEAD_STATUSES.map(s=><option key={s} value={s}>{STATUS_LABELS[s]}</option>)}</select></div><div className="grid gap-4 lg:grid-cols-[1.15fr_.85fr]"><div className="grid gap-2">{leads.leads.map(l=><button key={l.id} onClick={()=>onSelect(l)} className={cn("rounded-2xl border p-4 text-start",selected?.id===l.id?"border-ink bg-sand/40":"border-line bg-paper")}><div className="flex justify-between gap-3"><div><b>{l.businessName}</b><p className="text-sm text-muted">{l.contactName}{l.city?` · ${l.city}`:""}</p></div><span className="rounded-full bg-sand px-2 py-1 text-xs">{STATUS_LABELS[l.status]}</span></div><p className="mt-2 text-xs text-muted">{l.contactPhone} · {date(l.createdAt)}</p></button>)}{!leads.leads.length?<div className="rounded-2xl border border-dashed border-line p-10 text-center text-muted">لا توجد نتائج.</div>:null}</div><LeadDetail lead={selected}/></div></section>}
-function LeadDetail({lead}:{lead:AdminLead|null}){const [status,setStatus]=useState<LeadStatus>(lead?.status??"new");const [notes,setNotes]=useState(lead?.notes??"");useEffect(()=>{setStatus(lead?.status??"new");setNotes(lead?.notes??"")},[lead?.id,lead?.status,lead?.notes]);if(!lead)return <aside className="rounded-2xl border border-dashed border-line p-8 text-center text-muted">اختر عميلاً لعرض التفاصيل.</aside>;return <aside className="grid content-start gap-4 rounded-2xl border border-line bg-paper p-5"><h2 className="text-xl font-semibold">{lead.businessName}</h2><div className="grid gap-2 text-sm"><p>المسؤول: {lead.contactName}</p><p>الجوال: {lead.contactPhone}</p><p>البريد: {lead.contactEmail||"—"}</p><p>المدينة: {lead.city||"—"}</p></div>{lead.details?<div className="rounded-xl bg-sand/50 p-4 text-sm leading-6">{lead.details}</div>:null}<select value={status} onChange={e=>setStatus(e.target.value as LeadStatus)} className="h-10 rounded-md border border-line px-3 text-sm">{LEAD_STATUSES.map(s=><option key={s} value={s}>{STATUS_LABELS[s]}</option>)}</select><textarea value={notes} onChange={e=>setNotes(e.target.value)} className="min-h-24 rounded-md border border-line p-3 text-sm" placeholder="ملاحظات داخلية"/><Button onClick={()=>{const fn=(window as unknown as {__menuSaveLead?:()=>void}).__menuSaveLead;void fn;}}>حفظ</Button><div className="grid grid-cols-3 gap-2 text-xs"><a href={`tel:${phone(lead.contactPhone)}`} className="rounded-md border border-line p-2 text-center">اتصال</a><a href={`https://wa.me/${phone(lead.contactPhone).replace(/^\+/,'')}`} target="_blank" rel="noreferrer" className="rounded-md border border-line p-2 text-center">واتساب</a>{lead.contactEmail?<a href={`mailto:${lead.contactEmail}`} className="rounded-md border border-line p-2 text-center">إيميل</a>:null}</div></aside>}
+
+async function requirePlatformAdmin(userId: string) {
+  const allowedIds = csvEnv("PLATFORM_ADMIN_USER_IDS");
+  if (allowedIds.includes(userId.toLowerCase())) return;
+  const sql = await getSql();
+  const users = await sql<{ email: string }>`select "email" as email from "user" where "id" = ${userId} limit 1`;
+  const email = String(users[0]?.email ?? "").trim().toLowerCase();
+  if (!email || !csvEnv("PLATFORM_ADMIN_EMAILS").includes(email)) throw new Error("PLATFORM_ADMIN_REQUIRED");
+}
+
+async function assertPlatformAdmin(userId: string): Promise<FnResult<true>> {
+  try {
+    await requirePlatformAdmin(userId);
+    return { ok: true, data: true };
+  } catch (error) {
+    if (error instanceof Error && error.message === "PLATFORM_ADMIN_REQUIRED") {
+      return { ok: false, code: "forbidden", error: "هذه الصفحة مخصصة لمالك المنصة" };
+    }
+    console.error("platform admin authorization failed", error);
+    return { ok: false, code: "unavailable", error: "تعذر التحقق من صلاحيات مالك المنصة" };
+  }
+}
+
+function iso(value: unknown): string {
+  const date = new Date(String(value ?? ""));
+  return Number.isNaN(date.getTime()) ? new Date(0).toISOString() : date.toISOString();
+}
+
+export const getPlatformDashboard = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }): Promise<FnResult<PlatformDashboard>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const tenants = await sql<Record<string, unknown>>`
+        select
+          t.id, t.owner_user_id, t.slug, t.name_ar, t.name_en, t.city, t.country,
+          t.is_published, t.is_active, t.created_at,
+          (select count(*)::int from branches b where b.tenant_id = t.id) as branch_count,
+          (select count(*)::int from products p where p.tenant_id = t.id) as product_count,
+          (select count(*)::int from orders o where o.tenant_id = t.id) as order_count,
+          coalesce((select sp.code from tenant_subscriptions ts join subscription_plans sp on sp.id = ts.plan_id where ts.tenant_id = t.id limit 1), 'free') as plan_code
+        from tenants t
+        order by t.created_at desc
+        limit 500
+      `;
+      const counts = await sql<Record<string, number>>`
+        select
+          (select count(*)::int from tenants) as tenant_count,
+          (select count(*)::int from tenants where is_active) as active_tenant_count,
+          (select count(*)::int from tenants where is_published) as published_tenant_count,
+          (select count(*)::int from branches) as branch_count,
+          (select count(*)::int from products) as product_count,
+          (select count(*)::int from orders) as order_count,
+          (select count(*)::int from orders where status in ('new','confirmed','preparing','ready')) as open_order_count,
+          (select count(*)::int from leads) as lead_count,
+          (select count(*)::int from leads where status = 'new') as new_lead_count,
+          (select count(*)::int from menu_events) as menu_event_count,
+          (select count(*)::int from tenant_subscriptions where status = 'active') as active_subscription_count,
+          (select count(*)::int from tenant_subscriptions where status = 'trialing') as trial_subscription_count
+      `;
+      const c = counts[0] ?? {};
+      return {
+        ok: true,
+        data: {
+          tenants: tenants.map((t) => ({
+            id: String(t.id), ownerUserId: String(t.owner_user_id), slug: String(t.slug),
+            nameAr: String(t.name_ar ?? ""), nameEn: String(t.name_en ?? ""), city: String(t.city ?? ""),
+            country: String(t.country ?? ""), isPublished: Boolean(t.is_published), isActive: Boolean(t.is_active),
+            createdAt: iso(t.created_at), branchCount: Number(t.branch_count ?? 0), productCount: Number(t.product_count ?? 0),
+            orderCount: Number(t.order_count ?? 0), planCode: String(t.plan_code ?? "free"),
+          })),
+          tenantCount: Number(c.tenant_count ?? 0), activeTenantCount: Number(c.active_tenant_count ?? 0),
+          publishedTenantCount: Number(c.published_tenant_count ?? 0), branchCount: Number(c.branch_count ?? 0),
+          productCount: Number(c.product_count ?? 0), orderCount: Number(c.order_count ?? 0), openOrderCount: Number(c.open_order_count ?? 0),
+          leadCount: Number(c.lead_count ?? 0), newLeadCount: Number(c.new_lead_count ?? 0), menuEventCount: Number(c.menu_event_count ?? 0),
+          activeSubscriptionCount: Number(c.active_subscription_count ?? 0), trialSubscriptionCount: Number(c.trial_subscription_count ?? 0),
+        },
+      };
+    } catch (error) {
+      console.error("getPlatformDashboard failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحميل بيانات منصة Menu V3" };
+    }
+  });
+
+export const updatePlatformTenantStatus = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ tenantId: z.string().min(1).max(128), isActive: z.boolean() }))
+  .handler(async ({ context, data }): Promise<FnResult<{ id: string; isActive: boolean }>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const rows = await sql<{ id: string; is_active: boolean }>`
+        update tenants set is_active = ${data.isActive}, updated_at = now()
+        where id = ${data.tenantId}
+        returning id, is_active
+      `;
+      if (!rows[0]) return { ok: false, code: "not_found", error: "المطعم غير موجود" };
+      return { ok: true, data: { id: String(rows[0].id), isActive: Boolean(rows[0].is_active) } };
+    } catch (error) {
+      console.error("updatePlatformTenantStatus failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحديث حالة المطعم" };
+    }
+  });
