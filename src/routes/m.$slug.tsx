@@ -7,6 +7,7 @@ import { ContemporaryRestaurantTemplate } from "@/components/templates/contempor
 import { SpecialtyCafeTemplate } from "@/components/templates/specialty-cafe";
 import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
 import { FastCasualTemplate } from "@/components/templates/fast-casual";
+import { FineDiningHospitalityTemplate } from "@/components/templates/fine-dining-hospitality";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getPublicMenu } from "@/lib/menu/public";
@@ -52,5 +53,5 @@ export function MenuLoader({ slug, branch, locale, initialMenu }: { slug: string
   function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو", retry: load }); }); }
   useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, branch]);
-  if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const family = getThemeFamily(state.menu.tenant.themeKey); return <div className="menu-public-shell"><MenuThemeController theme={state.menu.tenant.themeKey} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={state.menu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={state.menu} /> : family === "fast-casual" ? <FastCasualTemplate menu={state.menu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={state.menu} /> : <PublicMenuView menu={state.menu} />}</div>;
+  if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const family = getThemeFamily(state.menu.tenant.themeKey); return <div className="menu-public-shell"><MenuThemeController theme={state.menu.tenant.themeKey} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={state.menu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={state.menu} /> : family === "fast-casual" ? <FastCasualTemplate menu={state.menu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={state.menu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={state.menu} /> : <PublicMenuView menu={state.menu} />}</div>;
 }
