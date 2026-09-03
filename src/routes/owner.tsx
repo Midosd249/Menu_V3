@@ -1,71 +1,7 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { BarChart3, Building2, ExternalLink, LayoutDashboard, Palette, QrCode, RefreshCw, Search, Settings, ShoppingBag, SlidersHorizontal, Store, Users, UtensilsCrossed } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getOrdersDashboard, ORDER_STATUSES, updateOrderStatus, type AdminOrder, type OrderStatus, type OrdersDashboard } from "@/lib/menu/orders";
-import { cn } from "@/lib/utils";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/owner")({ component: ClientPortalPage });
-const ORDER_LABELS: Record<OrderStatus, string> = { new: "جديد", confirmed: "مؤكد", preparing: "قيد التحضير", ready: "جاهز", completed: "مكتمل", cancelled: "ملغى" };
-function emptyOrders(): OrdersDashboard { return { total: 0, newCount: 0, activeCount: 0, completedCount: 0, cancelledCount: 0, orders: [] }; }
-function formatDate(v: string) { try { return new Intl.DateTimeFormat("ar-SA", { dateStyle: "medium", timeStyle: "short" }).format(new Date(v)); } catch { return v; } }
-function cleanPhone(v: string) { return v.replace(/[^\d+]/g, ""); }
-function whatsapp(v: string) { const d = cleanPhone(v).replace(/^\+/, ""); return d ? `https://wa.me/${d}` : "#"; }
-function selectedOptionText(value: unknown) { if (!Array.isArray(value)) return ""; return value.map((item) => { if (!item || typeof item !== "object") return ""; const option = item as { nameAr?: string; nameEn?: string }; return option.nameAr || option.nameEn || ""; }).filter(Boolean).join(" · "); }
-
-function ClientPortalPage() {
-  const navigate = useNavigate();
-  const { user, isPending } = useCurrentUserState();
-  const [tab, setTab] = useState<"overview" | "orders">("overview");
-  const [orders, setOrders] = useState<OrdersDashboard>(emptyOrders);
-  const [orderStatus, setOrderStatus] = useState<OrderStatus | "all">("all");
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
-
-  async function loadOrders() {
-    setLoading(true); setError("");
-    try {
-      const result = await getOrdersDashboard({ data: { status: orderStatus === "all" ? undefined : orderStatus, q: query.trim() || undefined } });
-      if (!result.ok) setError(result.error);
-      else { setOrders(result.data); setSelectedOrder((current) => current && result.data.orders.some((o) => o.id === current.id) ? result.data.orders.find((o) => o.id === current.id) ?? current : result.data.orders[0] ?? null); }
-    } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحميل الطلبات"); }
-    finally { setLoading(false); }
-  }
-
-  useEffect(() => { if (isPending) return; if (!user) { void navigate({ to: "/login", search: { redirect: "/owner" } as never, replace: true }); return; } void loadOrders(); }, [isPending, user, orderStatus, query]);
-
-  async function changeOrder(id: string, status: OrderStatus) {
-    const result = await updateOrderStatus({ data: { id, status } });
-    if (!result.ok) setError(result.error);
-    else { setOrders((current) => ({ ...current, orders: current.orders.map((o) => o.id === id ? result.data : o) })); setSelectedOrder(result.data); }
-  }
-
-  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات العميل...</div>;
-  return <main className="mx-auto grid max-w-7xl gap-6 py-4 lg:py-8">
-    <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"><div><div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><Store className="size-3.5" /> Client Workspace</div><h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">مساحة العميل</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-ink-soft">كل ما يخص نشاطك في مكان واحد. الطلبات هنا كنافذة تشغيل داخل مساحة العميل، بينما تحرير المنيو والفروع والتصميم والفريق يتم من Studio.</p></div><Button variant="outline" onClick={() => void loadOrders()} disabled={loading}><RefreshCw className={cn("size-4", loading && "animate-spin")} /> تحديث</Button></header>
-    <nav className="grid grid-cols-2 gap-2 rounded-2xl border border-line bg-paper p-2"><TabButton active={tab === "overview"} onClick={() => setTab("overview")} icon={<LayoutDashboard className="size-4" />}>الرئيسية</TabButton><TabButton active={tab === "orders"} onClick={() => setTab("orders")} icon={<ShoppingBag className="size-4" />}>الطلبات <span className="rounded-full bg-sand px-2 py-0.5 text-[11px]">{orders.newCount}</span></TabButton></nav>
-    {error ? <div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm">{error}</div> : null}
-    {tab === "overview" ? <Overview orders={orders} setTab={setTab} /> : null}
-    {tab === "orders" ? <OrdersWindow orders={orders} selected={selectedOrder} loading={loading} query={query} setQuery={setQuery} status={orderStatus} setStatus={setOrderStatus} onSelect={setSelectedOrder} onStatus={changeOrder} /> : null}
-  </main>;
-}
-
-function TabButton({ active, onClick, icon, children }: { active: boolean; onClick: () => void; icon: ReactNode; children: ReactNode }) { return <button type="button" onClick={onClick} className={cn("inline-flex h-11 items-center justify-center gap-2 rounded-xl text-sm", active ? "bg-ink text-paper" : "text-muted hover:bg-sand/50")}>{icon}{children}</button>; }
-function Overview({ orders, setTab }: { orders: OrdersDashboard; setTab: (tab: "overview" | "orders") => void }) { return <div className="grid gap-5">
-  <section className="grid grid-cols-2 gap-3 md:grid-cols-4"><Metric label="كل الطلبات" value={orders.total} onClick={() => setTab("orders")} icon={<ShoppingBag className="size-4" />} /><Metric label="جديدة" value={orders.newCount} onClick={() => setTab("orders")} /><Metric label="نشطة" value={orders.activeCount} onClick={() => setTab("orders")} /><Metric label="مكتملة" value={orders.completedCount} onClick={() => setTab("orders")} /></section>
-  <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"><WorkspaceCard icon={<UtensilsCrossed className="size-5" />} title="المنيو والمنتجات" text="إدارة التصنيفات والأصناف والخيارات والأسعار والصور." href="/studio/menu" label="فتح المنيو" /><WorkspaceCard icon={<Building2 className="size-5" />} title="الفروع" text="إدارة الفروع والعناوين وساعات العمل." href="/studio/branches" label="إدارة الفروع" /><WorkspaceCard icon={<Palette className="size-5" />} title="العلامة والتصميم" text="الهوية البصرية والثيم ومعاينة المنيو." href="/studio/design" label="فتح التصميم" /><WorkspaceCard icon={<QrCode className="size-5" />} title="QR" text="إنشاء ومراجعة رموز QR الخاصة بالمنيو." href="/studio/qr" label="إدارة QR" /><WorkspaceCard icon={<BarChart3 className="size-5" />} title="تحليلات النشاط" text="متابعة زيارات المنيو ومشاهدات الأصناف." href="/studio/analytics" label="فتح التحليلات" /><WorkspaceCard icon={<Users className="size-5" />} title="الفريق والصلاحيات" text="إدارة أعضاء فريق النشاط حسب الصلاحية." href="/studio/team" label="إدارة الفريق" /><WorkspaceCard icon={<SlidersHorizontal className="size-5" />} title="خيارات الأصناف" text="Variants وModifiers وربطها بالأصناف." href="/studio/options" label="إدارة الخيارات" /><WorkspaceCard icon={<Settings className="size-5" />} title="الإعدادات" text="إعدادات النشاط والحساب ومساحة التشغيل." href="/studio/settings" label="فتح الإعدادات" /><WorkspaceCard icon={<ExternalLink className="size-5" />} title="المنيو المنشور" text="فتح النسخة العامة للنشاط عند النشر." href="/studio/preview" label="المعاينة" /></section>
-</div>; }
-function Metric({ label, value, onClick, icon }: { label: string; value: number; onClick?: () => void; icon?: ReactNode }) { const content = <><span className="flex items-center gap-2 text-xs text-muted">{icon}{label}</span><strong className="text-2xl">{value.toLocaleString("ar-SA")}</strong></>; return onClick ? <button type="button" onClick={onClick} className="grid gap-1 rounded-2xl border border-line bg-paper p-4 text-start hover:bg-sand/40">{content}</button> : <div className="grid gap-1 rounded-2xl border border-line bg-paper p-4">{content}</div>; }
-function WorkspaceCard({ icon, title, text, href, label }: { icon: ReactNode; title: string; text: string; href: string; label: string }) { return <article className="grid gap-4 rounded-2xl border border-line bg-paper p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-sand/60">{icon}</span><h2 className="font-semibold">{title}</h2></div><p className="min-h-12 text-sm leading-6 text-muted">{text}</p><Link to={href} className="inline-flex h-10 items-center justify-center rounded-md border border-line px-4 text-sm hover:bg-sand/50">{label}</Link></article>; }
-
-function OrdersWindow({ orders, selected, loading, query, setQuery, status, setStatus, onSelect, onStatus }: { orders: OrdersDashboard; selected: AdminOrder | null; loading: boolean; query: string; setQuery: (v: string) => void; status: OrderStatus | "all"; setStatus: (v: OrderStatus | "all") => void; onSelect: (o: AdminOrder) => void; onStatus: (id: string, status: OrderStatus) => Promise<void> }) { return <section className="grid gap-4 rounded-3xl border border-line bg-sand/20 p-3 md:p-4">
-  <div className="flex flex-col gap-3 rounded-2xl border border-line bg-paper p-4 md:flex-row md:items-center md:justify-between"><div><h2 className="text-xl font-semibold">نافذة الطلبات</h2><p className="mt-1 text-sm text-muted">الطلبات الواردة من المنيو الخاص بنشاطك فقط.</p></div><div className="grid w-full gap-2 md:max-w-xl md:grid-cols-[1fr_190px]"><label className="relative"><Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="اسم العميل أو الجوال أو الفرع" className="ps-9" /></label><select value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | "all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{ORDER_STATUSES.map((s) => <option key={s} value={s}>{ORDER_LABELS[s]}</option>)}</select></div></div>
-  <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,.85fr)]"><div className="grid gap-2">{loading && !orders.orders.length ? <Empty text="جار تحميل الطلبات..." /> : !orders.orders.length ? <Empty text="لا توجد طلبات حتى الآن." /> : orders.orders.map((o) => <button key={o.id} type="button" onClick={() => onSelect(o)} className={cn("grid gap-2 rounded-2xl border bg-paper p-4 text-start", selected?.id === o.id ? "border-ink bg-sand/40" : "border-line hover:bg-sand/30")}><div className="flex items-start justify-between gap-3"><div><p className="font-semibold">#{o.orderNumber} · {o.customerName || "عميل"}</p><p className="mt-1 text-sm text-muted">{o.restaurantName} · {o.branchName}</p></div><Status label={ORDER_LABELS[o.status]} /></div><div className="flex justify-between text-xs text-muted"><span>{o.itemCount} عناصر · {o.total.toFixed(2)} {o.currency}</span><span>{formatDate(o.createdAt)}</span></div></button>)}</div><OrderDetail order={selected} onStatus={onStatus} /></div>
-</section>; }
-function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-muted">{text}</div>; }
-function Status({ label }: { label: string }) { return <span className="rounded-full bg-sand px-2.5 py-1 text-xs">{label}</span>; }
-function OrderDetail({ order, onStatus }: { order: AdminOrder | null; onStatus: (id: string, status: OrderStatus) => Promise<void> }) { if (!order) return <Empty text="اختر طلبًا لعرض التفاصيل." />; const phone = cleanPhone(order.customerPhone); return <aside className="grid content-start gap-5 rounded-2xl border border-line bg-paper p-5 lg:sticky lg:top-5 lg:h-fit"><div><p className="text-xs text-muted">طلب #{order.orderNumber}</p><h2 className="mt-1 text-2xl font-semibold">{order.customerName || "عميل"}</h2><p className="mt-1 text-sm text-muted">{order.restaurantName} · {order.branchName}</p></div><div className="grid gap-2 text-sm"><p><span className="text-muted">الجوال:</span> {order.customerPhone || "—"}</p>{order.customerEmail ? <p><span className="text-muted">البريد:</span> {order.customerEmail}</p> : null}<p><span className="text-muted">الإجمالي:</span> {order.total.toFixed(2)} {order.currency}</p><p><span className="text-muted">المصدر:</span> {order.source}</p><p><span className="text-muted">أُنشئ:</span> {formatDate(order.createdAt)}</p></div>{order.items.length ? <div className="grid gap-2 border-t border-line pt-4"><p className="text-sm font-semibold">تفاصيل الطلب</p>{order.items.map((item) => { const options = selectedOptionText(item.selectedOptions); return <div key={item.id} className="rounded-xl border border-line p-3"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="font-medium">{item.productNameAr || item.productNameEn || "صنف"}</p>{item.productNameEn && item.productNameAr ? <p className="text-xs text-muted">{item.productNameEn}</p> : null}{options ? <p className="mt-1 text-xs text-muted">{options}</p> : null}</div><span className="shrink-0 text-xs text-muted">× {item.quantity}</span></div><div className="mt-2 flex justify-between text-sm"><span>{item.unitPrice.toFixed(2)} {order.currency} / للقطعة</span><strong>{item.lineTotal.toFixed(2)} {order.currency}</strong></div></div>; })}<div className="flex justify-between border-t border-line pt-3 text-sm font-semibold"><span>الإجمالي</span><span>{order.total.toFixed(2)} {order.currency}</span></div></div> : null}{order.notes ? <div className="rounded-xl bg-sand/50 p-4 text-sm leading-6"><p className="mb-1 text-xs text-muted">ملاحظات</p>{order.notes}</div> : null}<div className="grid gap-2 sm:grid-cols-2">{phone ? <a href={`tel:${phone}`} className="inline-flex h-10 items-center justify-center rounded-md border border-line text-sm">اتصال</a> : null}{phone ? <a href={whatsapp(phone)} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center justify-center rounded-md border border-line text-sm">WhatsApp</a> : null}</div><label className="grid gap-2 text-xs font-medium">الحالة<select value={order.status} onChange={(e) => void onStatus(order.id, e.target.value as OrderStatus)} className="h-10 rounded-md border border-line bg-paper px-3 text-sm">{ORDER_STATUSES.map((s) => <option key={s} value={s}>{ORDER_LABELS[s]}</option>)}</select></label></aside>; }
+export const Route = createFileRoute("/owner")({
+  beforeLoad: () => {
+    throw redirect({ to: "/studio" });
+  },
+});
