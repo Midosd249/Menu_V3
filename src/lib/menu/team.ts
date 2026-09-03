@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql, type Sql } from "@/lib/db";
-import { requireMembership, requirePermissionForRole } from "@/lib/auth/authorization.server";
+import { authorizeMutation } from "@/lib/auth/authorization.server";
 import type { FnResult, Role } from "./types";
 
 const roleSchema = z.enum(["owner", "admin", "editor"]);
@@ -24,8 +24,7 @@ type TeamMember = {
 
 async function ownerContext(userId: string) {
   const sql = await getSql();
-  const member = await requireMembership(userId);
-  requirePermissionForRole(member.role, "team.write");
+  const member = await authorizeMutation(userId, "team.write");
   if (member.role !== "owner") return { sql, tenantId: null as string | null };
   return { sql, tenantId: member.tenantId };
 }
