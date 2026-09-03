@@ -8,9 +8,20 @@ alter table menu_v3.order_items
   add constraint order_items_line_total_ck
   check (line_total >= 0 and line_total = quantity * unit_price);
 
-alter table menu_v3.orders
-  add constraint orders_total_not_less_than_subtotal_ck
-  check (total >= subtotal);
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'orders_total_not_less_than_subtotal_ck'
+      and conrelid = 'menu_v3.orders'::regclass
+  ) then
+    alter table menu_v3.orders
+      add constraint orders_total_not_less_than_subtotal_ck
+      check (total >= subtotal);
+  end if;
+end;
+$$;
 
 create unique index if not exists orders_tenant_order_number_uidx
   on menu_v3.orders (tenant_id, order_number);
