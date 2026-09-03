@@ -1,11 +1,11 @@
 # TASKS
 
 ## Current Section
-- **G5 — Template Ecosystem Expansion: IN_PROGRESS.** Current atomic milestone: Fast Casual / QSR family renderer + routing integration.
+- **G5 — Template Ecosystem Expansion: IN_PROGRESS.** Current atomic milestone: Small Menu / Food Truck / Single-Concept family renderer + routing integration.
 
 ## Unified Queue
 1. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED — real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` behavior without fabricated translations.
-2. **G5 — Template Ecosystem Expansion:** IN_PROGRESS — Specialty Cafe and Bakery/Dessert are closed; Fast Casual / QSR is the next atomic milestone.
+2. **G5 — Template Ecosystem Expansion:** IN_PROGRESS — Specialty Cafe, Bakery/Dessert, Fast Casual/QSR, and Fine Dining/Hospitality are closed; Small Menu / Food Truck / Single-Concept is the final remaining G5 family.
 3. **G6 — Performance + Media:** TODO — evidence-based image/font/JS budgets, media optimization and Core Web Vitals measurement for representative Saudi mobile fixtures.
 4. **G7 — Analytics, Search Console, Growth, Rollout:** TODO — acquisition-to-conversion funnel, Search Console measurement, template/branch comparisons, privacy-reviewed analytics and staged rollout.
 
@@ -21,7 +21,18 @@
 - DONE / VERIFIED / CLOSED: `src/routes/m.$slug.tsx` routes the `bakery-dessert` family to `BakeryDessertTemplate`.
 - DONE / VERIFIED / CLOSED: `src/lib/theme/registry.test.ts` protects the `gallery` → `bakery-dessert` family mapping.
 - DONE / VERIFIED / CLOSED: the renderer reuses `PublicMenuView` for established menu, ordering, locale, analytics, and accessibility behavior instead of duplicating business logic.
-- DONE / VERIFIED / CLOSED: no data model, authorization, ordering, or tenant-isolation contract was changed.
+
+### Fast Casual / QSR
+- DONE / VERIFIED / CLOSED: `src/components/templates/fast-casual.tsx` provides a dedicated fast-casual renderer with high-contrast identity, rapid search, category navigation, featured items, dense menu rows, and quick-add affordances.
+- DONE / VERIFIED / CLOSED: `src/routes/m.$slug.tsx` routes the `fast-casual` family to `FastCasualTemplate` while preserving existing fallback behavior.
+- DONE / VERIFIED / CLOSED: `src/lib/theme/registry.test.ts` protects the `fast-casual` family mapping.
+- VERIFIED: GitHub Actions quality run `33804153009` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and cleanup.
+
+### Fine Dining / Hospitality
+- DONE / VERIFIED / CLOSED: `src/components/templates/fine-dining-hospitality.tsx` provides a dedicated dark editorial hospitality renderer with immersive identity, branch context, and chef-signature presentation.
+- DONE / VERIFIED / CLOSED: `src/routes/m.$slug.tsx` routes the `fine-dining-hospitality` family to `FineDiningHospitalityTemplate` while preserving existing fallback behavior.
+- DONE / VERIFIED / CLOSED: `src/lib/theme/registry.test.ts` protects both `dark-dining` and `immersive` mappings.
+- VERIFIED: GitHub Actions quality run `33804331728` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and cleanup.
 
 ## G4 Verification Evidence — CLOSED
 - VERIFIED: public menu search validation accepts only `ar` or `en` locale values.
@@ -33,7 +44,6 @@
 - VERIFIED: public language switching updates only the locale query parameter and preserves existing search state.
 - VERIFIED: parent menu routes suppress duplicate head metadata when a branch child owns the canonical route.
 - VERIFIED: `src/lib/menu/seo.test.ts` covers locale availability, resolution, reciprocal alternates, missing English data, Saudi local SEO, and missing-menu noindex behavior.
-- VERIFIED: the G4 TypeScript regression in `src/components/lang-toggle.tsx` was fixed and the resulting CI run passed every quality gate.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -56,6 +66,8 @@
 - DONE / VERIFIED: G4 Arabic/English SEO Architecture.
 - DONE / VERIFIED: G5 Specialty Cafe.
 - DONE / VERIFIED: G5 Bakery / Dessert.
+- DONE / VERIFIED: G5 Fast Casual / QSR.
+- DONE / VERIFIED: G5 Fine Dining / Hospitality.
 
 ## Exact Next Task
-- **G5 Fast Casual / QSR:** implement a dedicated family renderer and route it from the existing `fast-casual` family contract, preserving existing data, ordering, locale, analytics, tenant isolation, and fallback behavior. Verify with Typecheck, Tests, Lint, Production build, and Browser Template QA before closing.
+- **G5 Small Menu / Food Truck / Single-Concept:** implement the final dedicated family renderer and route it from the existing `small-menu` family contract, preserving existing data, ordering, locale, analytics, tenant isolation, and fallback behavior. Verify with Typecheck, Tests, Lint, Production build, and Browser Template QA before closing G5.
