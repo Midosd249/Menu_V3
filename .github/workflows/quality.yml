@@ -12,7 +12,7 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,3 +34,12 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Start built preview
+        run: npm run preview
+      - name: Browser template QA
+        run: npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial
+      - name: Stop built preview
+        if: always()
+        run: npm run preview:stop
