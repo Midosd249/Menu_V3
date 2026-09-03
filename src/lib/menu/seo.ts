@@ -40,12 +40,20 @@ function openingHoursSpecification(hours: BranchHour[]) {
     }));
 }
 
+function hasVerifiedSaudiLocation(menu: PublicMenu): boolean {
+  return clean(menu.tenant.country).toUpperCase() === "SA"
+    && Boolean(clean(menu.tenant.city))
+    && Boolean(branchName(menu))
+    && Boolean(clean(menu.branch.addressAr));
+}
+
 export function getPublicMenuSeo(menu: PublicMenu, pathname: string) {
   const name = branchName(menu);
   const city = clean(menu.tenant.city);
   const title = clean(city ? `${name} — القائمة والمنيو في ${city}` : `${name} — القائمة والمنيو`);
   const image = absoluteHttpUrl(menu.tenant.coverUrl) ?? absoluteHttpUrl(menu.tenant.logoUrl);
   const logo = absoluteHttpUrl(menu.tenant.logoUrl);
+  const mapsUrl = absoluteHttpUrl(menu.branch.mapsUrl);
   const canonical = pathname || `/m/${menu.tenant.slug}`;
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -56,13 +64,17 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string) {
     hasMenu: canonical,
     currenciesAccepted: menu.tenant.currency || "SAR",
     telephone: menu.branch.phone || menu.tenant.whatsapp || undefined,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: clean(menu.branch.addressAr),
-      addressLocality: city || undefined,
-      addressCountry: menu.tenant.country || "SA",
-    },
+    ...(hasVerifiedSaudiLocation(menu) ? {
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: clean(menu.branch.addressAr),
+        addressLocality: city,
+        addressCountry: "SA",
+      },
+    } : {}),
     openingHoursSpecification: openingHoursSpecification(menu.hours),
+    ...(mapsUrl ? { hasMap: mapsUrl } : {}),
+    menu: canonical,
   };
   if (image) schema.image = image;
   if (logo) schema.logo = logo;
@@ -73,6 +85,7 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string) {
     canonical,
     image,
     schema,
+    localSeoEligible: hasVerifiedSaudiLocation(menu),
   };
 }
 
