@@ -13,7 +13,8 @@
 - G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
 - **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
 - **G3 — Saudi Local Discovery + Branch SEO is DONE / VERIFIED and CLOSED.**
-- **Current atomic task:** G4 — Arabic/English SEO Architecture. Do not start G5.
+- **G4 — Arabic/English SEO Architecture is DONE / VERIFIED and CLOSED.**
+- **Session stopping point:** G4 is complete. G5 is not started.
 
 ## G2 — Crawl Control and Indexation — CLOSED
 ### Implementation
@@ -57,6 +58,29 @@
 - **VERIFIED:** production branch page remains indexable with `robots=index, follow` and preserves the expected canonical path `/m/nafas/olaya`.
 - **VERIFIED:** no G3 source workaround or unrelated application change was required; the deployment-rate-limit blocker is cleared for this deployment.
 
+## G4 — Arabic/English SEO Architecture — CLOSED
+### Implementation
+- **VERIFIED:** public menu search validation accepts only `ar` or `en` locale values.
+- **VERIFIED:** locale resolution is data-driven and falls back to Arabic when the English variant is not actually available.
+- **VERIFIED:** English public variants use `?lang=en`; Arabic remains the default canonical path.
+- **VERIFIED:** available English variants emit reciprocal absolute `hreflang` links for `ar` and `en`.
+- **VERIFIED:** unavailable English variants emit no fabricated alternate links and are `noindex, follow` while resolving to the Arabic canonical.
+- **VERIFIED:** titles, descriptions, Open Graph locale, canonical URL, and Restaurant schema follow the effective locale.
+- **VERIFIED:** public language switching updates only the locale query parameter and preserves existing search state.
+- **VERIFIED:** parent menu routes suppress duplicate head metadata when a branch child owns the canonical route.
+- **VERIFIED:** `src/lib/menu/seo.test.ts` covers locale availability, resolution, reciprocal alternates, missing English data, Saudi local SEO, and missing-menu noindex behavior.
+- **VERIFIED:** the G4 TypeScript regression in `src/components/lang-toggle.tsx` was fixed and the resulting CI run passed.
+
+### Verification Evidence
+- **VERIFIED:** GitHub Actions run `33801648459` for commit `4cb283ab8037506374f9711788cd0e576207e260` passed route-tree generation, Typecheck, Tests (69/69), Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup.
+- **VERIFIED:** Typecheck completed successfully.
+- **VERIFIED:** all 69 repository tests passed.
+- **VERIFIED:** Lint completed with 10 existing warnings and 0 errors; warnings were not introduced by the G4 locale fix.
+- **VERIFIED:** Production build completed successfully, including Vite/Nitro output and PGlite asset checks.
+- **VERIFIED:** Browser Template QA passed mobile, tablet, and desktop with HTTP 200, RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
+- **VERIFIED:** the G4 code is present on `main` and the CI checkout used the exact commit `4cb283ab8037506374f9711788cd0e576207e260`.
+- **INFERRED:** a fresh Vercel deployment of the G4 commit was not independently available for live SEO-head inspection because the provider status reported a `build-rate-limit` failure; repository CI and browser-preview verification passed completely.
+
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
 - Level 1: DONE / VERIFIED.
@@ -73,11 +97,12 @@
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
 - G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED.
+- G4 Arabic/English SEO Architecture: DONE / VERIFIED.
 
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
-- Existing lint warnings remain but are not errors and were not introduced by G3.
+- Existing lint warnings remain but are not errors and were not introduced by G4.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
@@ -102,6 +127,10 @@
 - 2026-09-03 — Created a fresh documentation commit to retry the Vercel Git trigger; Vercel still reports the build-rate-limit failure.
 - 2026-09-03 — Verified production deployment `dpl_CPvXFBZgh439e94rUHCJf3GFwWBC` built successfully from current `main` commit `e7ac56dcd1730d2cdaf648830199647bf8909f7f`.
 - 2026-09-03 — Verified live `/m/nafas/olaya` HTTP 200 and confirmed Saudi `PostalAddress`, absolute `hasMap`, canonical path, and indexable robots metadata; G3 CLOSED.
+- 2026-09-03 — Completed G4 Arabic/English SEO Architecture with URL-level locale handling, reciprocal hreflang, locale-aware metadata, missing-variant noindex behavior, and language-toggle URL synchronization.
+- 2026-09-03 — Fixed the G4 locale-toggle TypeScript regression in `4cb283ab8037506374f9711788cd0e576207e260`.
+- 2026-09-03 — Verified GitHub Actions run `33801648459`: 69/69 tests passed, Typecheck passed, Lint had 0 errors, Production build passed, and Browser Template QA passed across mobile/tablet/desktop.
+- 2026-09-03 — Closed G4. G5 intentionally not started in this session.
 
 ## Exact Remaining Work
-- **Current atomic task:** G4 — Arabic/English SEO Architecture. Audit the existing locale model and public URL contract, then implement only real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` when both versions actually exist. Do not start G5.
+- **Session stopping point:** G4 — Arabic/English SEO Architecture is DONE / VERIFIED / CLOSED. G5 is the next queued task, but must not be started in this session.
