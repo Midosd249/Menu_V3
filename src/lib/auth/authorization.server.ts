@@ -1,6 +1,6 @@
-import { getSql, type Sql } from "@/lib/db";
-import { hasPermission, type Permission } from "./permissions";
-import type { Role } from "@/lib/menu/types";
+import { getSql, type Sql } from "../db";
+import { hasPermission, type Permission } from "./permissions.ts";
+import type { Role } from "../menu/types.ts";
 
 export type Membership = {
   tenantId: string;
