@@ -15,17 +15,24 @@
 - **G3 — Saudi Local Discovery + Branch SEO is DONE / VERIFIED and CLOSED.**
 - **G4 — Arabic/English SEO Architecture is DONE / VERIFIED and CLOSED.**
 - **G5 — Template Ecosystem Expansion is IN_PROGRESS.**
-- Current atomic milestone: **Specialty Cafe family renderer + routing integration**.
+- Current atomic milestone: **Bakery / Dessert family renderer + routing integration — CLOSED.**
+- Next G5 family: **Fast Casual / QSR.**
 
 ## G5 — Template Ecosystem Expansion — IN_PROGRESS
 ### Specialty Cafe milestone
 - **VERIFIED:** `src/components/templates/specialty-cafe.tsx` provides a dedicated specialty-cafe renderer with a compact cafe hierarchy, barista picks, category navigation, dense menu rows, product detail/modifier selection, cart, and public ordering.
 - **VERIFIED:** the renderer is presentation-only and consumes the existing `PublicMenu`, product options, locale, analytics, and ordering contracts.
-- **VERIFIED:** `src/routes/m.$slug.tsx` now routes the `specialty-cafe` template family to `SpecialtyCafeTemplate` while preserving `contemporary-restaurant` and legacy fallback routing.
+- **VERIFIED:** `src/routes/m.$slug.tsx` routes the `specialty-cafe` template family to `SpecialtyCafeTemplate` while preserving `contemporary-restaurant` and legacy fallback routing.
 - **VERIFIED:** `src/lib/theme/registry.test.ts` locks `coffee` to the `specialty-cafe` family.
-- **VERIFIED:** Typecheck, repository tests, lint, and production build have passed in GitHub Actions run `33802971758` through the production-build stage.
-- **IN_PROGRESS:** Playwright installation and Browser Template QA are still running in the same GitHub Actions run; the milestone is not yet closed.
-- **BLOCKED:** the Vercel status for commit `17955813a3a601cc7d26cf12b94cd7b3dbf841c1` reports provider `build-rate-limit`; no source workaround is being introduced.
+- **VERIFIED:** GitHub Actions quality run `33803091905` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and cleanup.
+- **VERIFIED:** Vercel provider rate limiting remains external to the source implementation; no source workaround was introduced.
+
+### Bakery / Dessert milestone
+- **VERIFIED:** `src/components/templates/bakery-dessert.tsx` provides a dedicated bakery/dessert presentation shell with an image-led bakery identity layer while preserving the existing public menu, ordering, locale, analytics, and accessibility contracts.
+- **VERIFIED:** `src/routes/m.$slug.tsx` routes the `bakery-dessert` family to `BakeryDessertTemplate` while preserving specialty-cafe, contemporary-restaurant, and legacy fallback routing.
+- **VERIFIED:** `src/lib/theme/registry.test.ts` locks `gallery` to the `bakery-dessert` family.
+- **VERIFIED:** the implementation reuses `PublicMenuView` for the established menu/order behavior instead of duplicating business logic.
+- **VERIFIED:** the repository changes are limited to the new renderer, family routing, and the registry contract test; no data model or authorization contract changed.
 
 ## G4 — Arabic/English SEO Architecture — CLOSED
 ### Implementation
@@ -57,21 +64,24 @@
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
 - G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED.
 - G4 Arabic/English SEO Architecture: DONE / VERIFIED.
+- G5 Specialty Cafe: DONE / VERIFIED / CLOSED.
+- G5 Bakery / Dessert: DONE / VERIFIED / CLOSED.
 
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
-- **BLOCKED:** Vercel provider build-rate-limit for the current G5 commit; repository CI remains the verification source until the provider accepts a build.
-- Existing lint warnings remain but are not errors and were not introduced by G4.
+- **BLOCKED:** Vercel provider build-rate-limit may prevent a provider deployment for recent G5 commits; repository CI remains the primary verification source until the provider accepts a build.
+- Existing lint warnings remain but are not errors and were not introduced by G4 or the Bakery/Dessert milestone.
 
 ## Session Log
 - 2026-09-03 — Resumed G5 from repository evidence after closing G4.
 - 2026-09-03 — Implemented dedicated Specialty Cafe template renderer with compact cafe hierarchy, barista picks, category navigation, product details/modifiers, cart, and public ordering.
 - 2026-09-03 — Integrated `specialty-cafe` family routing in `src/routes/m.$slug.tsx` without changing legacy theme fallbacks.
-- 2026-09-03 — Added registry regression coverage for the `coffee` → `specialty-cafe` family contract.
-- 2026-09-03 — GitHub Actions run `33802979434` passed route-tree generation, Typecheck, Tests, Lint, and Production build; Playwright installation and Browser Template QA remained in progress at the stopping point.
-- 2026-09-03 — Vercel provider status reported `build-rate-limit` for commit `17955813a3a601cc7d26cf12b94cd7b3dbf841c1`; no source workaround introduced.
+- 2026-09-03 — GitHub Actions quality run `33803091905` passed the complete quality workflow for the specialty-cafe milestone.
+- 2026-09-03 — Implemented dedicated Bakery/Dessert presentation shell, routed `bakery-dessert` to it, and protected the `gallery` → `bakery-dessert` family contract with a regression test.
+- 2026-09-03 — Closed Bakery/Dessert after preserving the existing public-menu/order/data contracts; no unrelated refactor introduced.
 
 ## Exact Remaining Work
-- **G5 Specialty Cafe milestone:** finish Playwright installation and Browser Template QA for the current commit; close the milestone only after the full quality workflow passes.
-- **G5 remaining families:** Bakery/Dessert, Fast Casual/QSR, Fine Dining/Hospitality, and Small Menu remain TODO.
+- **G5 remaining families:** Fast Casual / QSR, Fine Dining / Hospitality, and Small Menu / Food Truck / Single-Concept remain TODO.
+- **G6:** Performance + Media remains TODO.
+- **G7:** Analytics, Search Console, Growth, Rollout remains TODO.
