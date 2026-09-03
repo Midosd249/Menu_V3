@@ -1,32 +1,29 @@
 # Platform Growth, Template Ecosystem, and Saudi SEO — Active Plan
 
-## Status and Current Task
+## Status and Current Section
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`; `main` is the source of truth.
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
-- **Current atomic task:** G1 — Public Menu SEO Foundation verification.
+- **Current section:** G1 — Public Menu SEO Foundation.
 
-## G1 Progress
+## G1 Status
 
 ### VERIFIED
-- `src/lib/menu/seo.ts` provides page-specific Arabic metadata and truthful Restaurant JSON-LD.
-- `src/routes/m.$slug.tsx` and `src/routes/m.$slug.$branch.tsx` load public menu data on the server and expose dynamic head metadata.
+- `src/lib/menu/seo.ts` provides page-specific Arabic metadata and truthful Restaurant JSON-LD from verified `PublicMenu` fields.
+- `src/routes/m.$slug.tsx` validates the optional `branch` search parameter and consumes it through typed `loaderDeps`.
+- `src/routes/m.$slug.$branch.tsx` provides branch-specific metadata and canonical output.
 - `src/lib/menu/seo.test.ts` covers title, canonical, Restaurant schema, SAR, opening hours and missing-menu noindex behavior.
 - Historical quality run `33743739709` passed all existing quality gates.
-- CI run `33744710145` exposed exact TypeScript errors in the two public menu routes; those errors were fixed in commits `d6fc598e` and `735cfe01`.
-- TanStack Router guidance confirms `loaderDeps` is the correct mechanism for search-param loader dependencies and `head` receives `loaderData`/`params`, not `location`. citeturn0search0turn1search5
-
-### Current targeted fix
-- `/m/$slug` now validates the `branch` search parameter and consumes it through typed `loaderDeps`; the component uses typed `Route.useSearch()`.
-- Both public route heads safely narrow `FnResult<PublicMenu>` with the `"data" in loaderData` check before reading `data`.
-- `/m/$slug` canonical remains the stable pathname canonical for the query-string variant; branch-specific canonical is provided by `/m/$slug/$branch`. This keeps query URLs from creating a second canonical path while avoiding unsupported `head` context access.
+- Historical run `33744076308` passed Typecheck, Tests, Lint, Production build and Playwright installation; it failed only at `Start built preview`.
+- The historical preview failure was traced to recursive invocation of `npm run preview` from the `preview.mjs` helper.
+- Commits `9e4368ac545fc155480d89ccf172d7d70b46746e`, `ebef098356e805d246d54a7c4dd6dc0ac6d63000` and `73d0e13375de54ccf49ae9fdab703c836ce60b28` contain the evidence-backed public-route typing fixes.
+- Commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changes only the CI preview start step to launch `vite preview` directly with readiness polling, removing the recursive helper path.
 
 ### UNKNOWN / BLOCKED
-- UNKNOWN: post-fix GitHub Actions result. The available GitHub connector has not exposed a new push-triggered run for commits after `735cfe01`.
-- BLOCKED: Vercel status for current commits is `Deployment rate limited — retry in 24 hours`; live deployment cannot currently be used for verification.
-- UNKNOWN: live production HTML/head output, custom-domain canonical origin, Search Console/indexation state and production content quality.
-- BLOCKED/OPEN: the existing CI browser gate previously failed at `Start built preview`; no browser visual success may be claimed until that preview-process issue is resolved or a supported deployed preview is available.
+- UNKNOWN: post-fix CI result for the latest commits, including browser template QA.
+- BLOCKED: Vercel deployment status is rate-limited for 24 hours, so live deployment cannot currently be used to inspect generated production HTML/head.
+- UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
 ## Strategic Reassessment
 
@@ -40,7 +37,6 @@
 - Root metadata is generic rather than restaurant-specific.
 - No repository `robots.txt` route or `sitemap.xml` route was found.
 - English is currently a UI language state, not a separate crawlable URL variant; emitting `hreflang` now would be misleading.
-- Public menu content was primarily fetched after client hydration before G1; SSR is a high-value improvement for crawlability and non-JS clients.
 - Current model has no verified cuisine, latitude/longitude, rating/review, price-range or special-holiday-hours fields. These must not be invented.
 
 ### INFERRED
@@ -56,9 +52,9 @@
 
 ### G1 — Public Menu SEO Foundation
 - **Objective:** SSR published public menu content and add accurate title, description, canonical, Open Graph and Restaurant JSON-LD.
-- **Status:** IN_PROGRESS — implementation complete; verification is blocked on post-fix CI evidence and Vercel deployment rate limit.
+- **Status:** IN_PROGRESS — implementation is complete; final CI/browser evidence and live deployment inspection remain unavailable.
 - **Acceptance:** useful menu content during SSR; unique truthful metadata; schema matches visible data; missing menus are `noindex`; existing renderer/order behavior preserved.
-- **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI and generated HTML/head inspection.
+- **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI/browser QA and generated HTML/head inspection.
 
 ### G2 — Crawl Control and Indexation
 - **Status:** TODO. Do not start until G1 is verified/closed.
@@ -94,5 +90,5 @@
 - TanStack Router document head and data-loading guidance.
 - SDAIA PDPL guidance.
 
-## Exact Current Task
-**G1 — obtain post-fix CI quality evidence and, when the Vercel rate limit clears, inspect deployed HTML/head; fix only evidence-backed failures, then document and stop. Do not start G2 automatically.**
+## Exact Current Section Exit Criteria
+**G1 is not marked DONE until post-fix CI passes Typecheck, Tests, Lint, Production build and Browser QA, and a deployed build can be inspected for the generated HTML/head when the Vercel rate limit clears. Do not start G2 before G1 is closed.**
