@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getNotFoundMenuSeo, getPublicMenuSeo } from "./seo.ts";
+import { getNotFoundMenuSeo, getPublicMenuLocaleAlternates, getPublicMenuSeo, isPublicMenuLocaleAvailable, resolvePublicMenuLocale } from "./seo.ts";
 import type { PublicMenu } from "./types.ts";
 
 const menu = {
@@ -28,6 +28,7 @@ test("public menu SEO derives Arabic title, canonical, and restaurant schema fro
   assert.equal(seo.schema.name, "فرع العليا");
   assert.equal(seo.schema.currenciesAccepted, "SAR");
   assert.equal(seo.localSeoEligible, true);
+  assert.equal(seo.locale, "ar");
   assert.deepEqual(seo.schema.address, {
     "@type": "PostalAddress",
     streetAddress: "شارع العليا",
@@ -40,6 +41,37 @@ test("public menu SEO derives Arabic title, canonical, and restaurant schema fro
     opens: "10:00",
     closes: "23:00",
   }]);
+});
+
+test("English public menu SEO is a real URL-level locale variant with reciprocal alternates", () => {
+  assert.equal(isPublicMenuLocaleAvailable(menu, "en"), true);
+  assert.equal(resolvePublicMenuLocale(menu, "en"), "en");
+  const seo = getPublicMenuSeo(menu, "/m/najd-kitchen/olaya", "en", "https://example.com");
+  assert.equal(seo.locale, "en");
+  assert.equal(seo.localeAvailable, true);
+  assert.equal(seo.title, "Olaya Branch — Menu in الرياض");
+  assert.equal(seo.canonical, "/m/najd-kitchen/olaya?lang=en");
+  assert.deepEqual(seo.alternates, [
+    { hreflang: "ar", href: "https://example.com/m/najd-kitchen/olaya" },
+    { hreflang: "en", href: "https://example.com/m/najd-kitchen/olaya?lang=en" },
+  ]);
+  assert.deepEqual(getPublicMenuLocaleAlternates(menu, "/m/najd-kitchen/olaya", "https://example.com"), seo.alternates);
+});
+
+test("missing English locale does not create a fabricated English variant", () => {
+  const withoutEnglish = {
+    ...menu,
+    tenant: { ...menu.tenant, nameEn: "" },
+    branch: { ...menu.branch, nameEn: "" },
+  } satisfies PublicMenu;
+  assert.equal(isPublicMenuLocaleAvailable(withoutEnglish, "en"), false);
+  assert.equal(resolvePublicMenuLocale(withoutEnglish, "en"), "ar");
+  assert.deepEqual(getPublicMenuLocaleAlternates(withoutEnglish, "/m/najd-kitchen/olaya", "https://example.com"), []);
+  const seo = getPublicMenuSeo(withoutEnglish, "/m/najd-kitchen/olaya", "en", "https://example.com");
+  assert.equal(seo.locale, "ar");
+  assert.equal(seo.localeAvailable, false);
+  assert.equal(seo.canonical, "/m/najd-kitchen/olaya");
+  assert.deepEqual(seo.alternates, []);
 });
 
 test("local SEO omits location markup when verified Saudi location data is incomplete", () => {
