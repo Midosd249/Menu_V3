@@ -110,15 +110,11 @@ export function MenuLoader({ slug, branch, locale, initialMenu }: { slug: string
   const cacheKey = `${slug}:${branch ?? "default"}`;
   const cached = readCachedMenu(cacheKey);
   const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" });
+  const { setLang } = __USE_LANG_PLACEHOLDER__;
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("menu-lang");
-    if (stored !== locale) {
-      try { window.localStorage.setItem("menu-lang", locale); } catch { /* ignore */ }
-    }
-    document.documentElement.lang = locale;
-    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
-  }, [locale]);
+    setLang(locale);
+  }, [locale, setLang]);
 
   function load() {
     const instant = readCachedMenu(cacheKey);
