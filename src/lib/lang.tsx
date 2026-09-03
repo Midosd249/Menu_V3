@@ -24,8 +24,8 @@ function readStored(): Lang {
   return "ar";
 }
 
-export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(readStored);
+export function LangProvider({ children, initialLang }: { children: ReactNode; initialLang?: Lang }) {
+  const [lang, setLangState] = useState<Lang>(initialLang ?? readStored);
   const setLang = (next: Lang) => {
     setLangState(next);
     try {
