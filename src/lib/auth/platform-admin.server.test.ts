@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { isPlatformAdminConfigured } from "./platform-admin.server.ts";
+import { isPlatformAdminConfigured } from "./platform-admin-config.ts";
 
 test("platform admin environment fallback matches normalized user IDs and emails", () => {
   const originalIds = process.env.PLATFORM_ADMIN_USER_IDS;
