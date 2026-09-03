@@ -12,15 +12,7 @@
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - SEO/discoverability remains prioritized before broad template expansion.
 - Current section: **G1 — Public Menu SEO Foundation.**
-- Current atomic task: **fix the two public-menu link search typing errors exposed by CI.**
-
-## Verified Product Foundation
-- React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGlite-ready data layer, Supabase integration, Vercel target, Node 24 CI.
-- Public routes: `/m/$slug` and `/m/$slug/$branch`.
-- `PublicMenu` contains tenant/branch data, bilingual content, branding, city/country, currency, hours, categories, products, availability, modifiers, dietary/allergen fields, phone/WhatsApp and maps data.
-- Public data access requires active/published tenant and active selected branch.
-- Existing public analytics record visits, product views, QR scans and WhatsApp interactions.
-- T3 `contemporary-restaurant` remains additive; legacy `PublicMenuView` remains protected.
+- Current atomic task: **verify the targeted Browser QA fix for `scripts/template-qa.mjs`.**
 
 ## G1 Implementation
 - `src/lib/menu/seo.ts` provides page-specific Arabic metadata and truthful `Restaurant` JSON-LD from verified `PublicMenu` fields only.
@@ -33,13 +25,14 @@
 ## Verification Evidence
 - VERIFIED: historical quality run `33743739709` passed all existing quality steps.
 - VERIFIED: run `33744076308` reached Typecheck, Tests, Lint, Production build and Playwright installation successfully; its only failure was `Start built preview`.
-- VERIFIED: root cause of the preview failure was recursive invocation: CI ran `npm run preview`, while `preview` itself ran `node scripts/preview.mjs restart`, which spawned `npm run preview` again and terminated early.
-- VERIFIED: run `33744710145` exposed exact public-route typing errors; those were traced to required typed `branch` search values on existing public-menu links.
-- VERIFIED: commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changed only the CI `Start built preview` step to launch `vite preview` directly with readiness polling, avoiding the recursive helper path.
-- VERIFIED: commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` updates only `src/routes/index.tsx`, supplying `search={{ branch: undefined }}` to the two existing `/m/$slug` links identified by CI.
-- IN_PROGRESS: GitHub Actions run `33748743094` is executing against the fix commit. At the latest observation, Install was still in progress; Typecheck and later gates had not yet run.
-- BLOCKED: Vercel status remains rate-limited for 24 hours; live deployment cannot currently be used for verification.
-- UNKNOWN: final post-fix CI conclusion, Browser QA result, live production HTML/head output, custom-domain canonical origin, Search Console/indexation state and production content quality.
+- VERIFIED: root cause of the preview failure was recursive invocation through `scripts/preview.mjs`.
+- VERIFIED: commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changed only the CI preview start step to launch `vite preview` directly with readiness polling.
+- VERIFIED: commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` fixed the two typed public-menu links identified by CI.
+- VERIFIED: run `33748743094` passed route generation, Typecheck, Tests (58/58), Lint (0 errors), Production build, Playwright installation and preview startup; it failed only at Browser QA because `page.goto` received a `URL` object instead of the required string.
+- VERIFIED: commit `7b3e0812a29c129374d8d99cdf98cf005790a233` converts the Browser QA target to a string before `page.goto`, preserving the existing URL-selection logic.
+- IN_PROGRESS: replacement CI run `33759141927` is queued for commit `7b3e0812a29c129374d8d99cdf98cf005790a233`; final Browser QA result is not yet available.
+- BLOCKED: Vercel deployment remains unavailable for live verification if its rate limit persists.
+- UNKNOWN: final replacement CI conclusion and deployed production HTML/head output.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -56,22 +49,19 @@
 - T3 flagship template: DONE / VERIFIED.
 
 ## Known Issues / Risks
-- IN_PROGRESS: post-fix CI completion, including Browser QA.
-- BLOCKED: Vercel deployment is rate-limited for 24 hours according to the current deployment status.
-- UNKNOWN: live production metadata/head behavior until a deployed G1 build is directly inspected.
-- UNKNOWN: canonical origin when the application is served through a custom domain; G1 intentionally does not invent an origin.
-- VERIFIED: G1 did not introduce database/schema/auth changes or alter existing public menu/order contracts.
+- IN_PROGRESS: replacement CI Browser QA verification.
+- BLOCKED: Vercel deployment rate limit prevents live production HTML/head inspection when active.
+- UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
 - 2026-09-03 — Researched Saudi restaurant/delivery competitors and official Google/TanStack/SDAIA guidance.
 - 2026-09-03 — Archived the superseded template-only plan and created the unified growth/Saudi SEO active plan.
 - 2026-09-03 — Implemented G1 public-menu SSR metadata/schema foundation.
-- 2026-09-03 — CI exposed public-route TypeScript inference errors; fixed only those errors and pushed commits `9e4368ac545fc155480d89ccf172d7d70b46746e`, `ebef098356e805d246d54a7c4dd6dc0ac6d63000` and `73d0e13375de54ccf49ae9fdab703c836ce60b28`.
-- 2026-09-03 — Audited the historical preview failure and fixed the CI recursion in `298ffe21f98cb17a9147c27b3cd222f8f4f7453f`.
-- 2026-09-03 — Vercel deployment remained rate-limited; no production verification was claimed.
-- 2026-09-03 — CI run `33748260638` exposed two remaining `search={{}}` type errors in `src/routes/index.tsx`.
-- 2026-09-03 — Fixed only those two links in commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b`, then confirmed replacement CI run `33748743094` started from that commit.
+- 2026-09-03 — Fixed the two typed public-menu links in `src/routes/index.tsx` and verified their TypeScript failure was removed by CI.
+- 2026-09-03 — Fixed the CI preview recursion in `298ffe21f98cb17a9147c27b3cd222f8f4f7453f`.
+- 2026-09-03 — Browser QA run `33748743094` isolated a single `page.goto` URL-type defect after all earlier gates passed.
+- 2026-09-03 — Fixed only that Browser QA defect in `7b3e0812a29c129374d8d99cdf98cf005790a233`; replacement run `33759141927` queued.
 
 ## Exact Remaining Work
-- **Current atomic task:** obtain the conclusion of CI run `33748743094` and confirm Typecheck, Tests, Lint, Production build and Browser QA pass for commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b`. If CI fails, fix only the failure directly attributable to this atomic task; otherwise stop and record the evidence. Do not start G2 or any other task.
+- **Current atomic task:** verify replacement CI run `33759141927` through Browser QA and the final workflow conclusion. If it fails, fix only the directly attributable Browser QA regression; otherwise record evidence and stop. Do not start G2.
