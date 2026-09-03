@@ -37,7 +37,20 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Start built preview
-        run: npm run preview
+        run: |
+          mkdir -p .grok
+          nohup npx vite preview --host 127.0.0.1 --port 8081 > .grok/preview.log 2>&1 &
+          echo $! > .grok/preview.pid
+          for attempt in $(seq 1 120); do
+            if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
+              echo "[preview] serving http://127.0.0.1:8081/"
+              exit 0
+            fi
+            sleep 0.25
+          done
+          echo "[preview] failed to become ready — see .grok/preview.log"
+          cat .grok/preview.log
+          exit 1
       - name: Browser template QA
         run: npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial
       - name: Stop built preview
