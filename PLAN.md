@@ -14,16 +14,16 @@
 
 ## Current Milestone
 - Status: VERIFIED
-- **LEVEL 4 — Client SaaS & Commercial Platform: Authorization Foundation Integration** is DONE / VERIFIED.
-- Existing foundations include onboarding, team invitations, durable roles, branch scope, subscription plans, and the verified application authorization integration.
-- This session upgraded the repository operating contract only; no application feature was started.
+- **LEVEL 4 — Client SaaS & Commercial Platform: Client Account Lifecycle and Onboarding Hardening** is DONE / VERIFIED for the implemented onboarding idempotency boundary.
+- Existing foundations include onboarding, team invitations, durable roles, branch scope, subscription plans, and verified application authorization integration.
+- This session hardened the client onboarding ownership boundary without rebuilding the existing onboarding flow.
 
 ## Phases
 - Status: VERIFIED / PLANNED
 1. Level 4A — Durable authorization integration — DONE / VERIFIED.
-2. Level 4B — Client account lifecycle and onboarding hardening — TODO / UNBLOCKED.
-3. Level 4C — Subscription entitlement enforcement — TODO.
-4. Level 4D — Service/project workflows and observability — TODO.
+2. Level 4B — Client account lifecycle and onboarding hardening — DONE / VERIFIED for owner uniqueness and concurrent-request reconciliation.
+3. Level 4C — Subscription entitlement enforcement — TODO / UNBLOCKED.
+4. Level 4D — Service/project workflow foundations and observability — TODO.
 5. Level 4 Gate — production/security verification — TODO.
 
 ## Decisions
@@ -33,24 +33,25 @@
 - Branch access must fail closed and derive from trusted membership state.
 - Existing invitation roles remain admin/editor.
 - The root `AGENTS.md` is the concise autonomous repository operating manual and requires evidence-driven discovery, research when consequential, a pre-edit planning gate, task-scoped verification, continuity updates, and a hard stop after one task.
+- Client onboarding ownership is enforced by a database-level unique index on `tenants.owner_user_id`; this closes the check-then-insert race that could otherwise create duplicate client tenants.
+- The existing onboarding UI reconciles a concurrent create conflict by re-reading trusted server-side studio membership and routing to `/studio` when the tenant already exists.
+- Research decision: PostgreSQL unique-index enforcement is the smallest compatible concurrency boundary for the existing PostgreSQL/PGLite schema. PostgreSQL documents that unique indexes enforce duplicate prevention and that concurrent conflicting inserts are serialized by the uniqueness check; `ON CONFLICT` is the native atomic alternative for future server-side create-or-get refinement. citeturn0search0turn0search2
 - Official references for future hardening: https://www.postgresql.org/docs/current/ddl-rowsecurity.html ; https://www.postgresql.org/docs/current/sql-createfunction.html ; https://supabase.com/docs/guides/database/postgres/row-level-security ; https://tanstack.com/start/latest/docs/framework/react/guide/server-functions .
 
 ## Risks
-- Role-model drift can cause privilege escalation or denial of access.
-- Legacy and canonical branch-scope representations can diverge.
-- Vercel status previously reported a build-rate-limit target, so deployment verification is not equivalent to a code failure.
-- GitHub CI for the final authorization commit is VERIFIED successful.
-- Local working-tree state and local command execution are UNKNOWN in the current GitHub-only execution interface.
+- The new unique index will fail migration if an existing live database already contains multiple tenants with the same `owner_user_id`; no direct live duplicate audit was available in this GitHub-only session, so production duplicate state is `UNKNOWN`.
+- The current server create flow still performs tenant/member/branch writes as separate statements; the current task closes duplicate-owner creation but does not claim full multi-statement transactional onboarding.
+- Vercel deployment status is separate from GitHub CI.
+- Local working-tree state and local command execution are `UNKNOWN` in the current GitHub-only execution interface.
 
 ## Release Criteria
-- Server authorization consumes trusted canonical membership state.
-- Legacy compatibility fields remain synchronized where mutations require them.
-- Staff is least-privilege.
-- Focused tests, typecheck, lint, and production build pass for application changes.
-- CI succeeds for the release commit.
+- One authenticated client owner cannot create multiple tenants through concurrent onboarding requests.
+- Existing onboarding behavior remains compatible and redirects existing members to Studio.
+- Concurrent conflict recovery reads trusted server-side membership rather than trusting client tenant identifiers.
+- Clean migration, route generation, typecheck, tests, lint, and production build pass in CI.
 - No Level 0–3 behavior is intentionally regressed.
 
 ## Next Task
 - Status: TODO / UNBLOCKED
-- **Harden client account lifecycle and tenant onboarding idempotency using the existing `src/routes/onboarding.tsx` and server-side tenant creation flow.**
-- Do not start this task automatically; it is the next feature task only after the current documentation/agent-contract task is stopped.
+- **Connect the existing subscription-plan foundation to server-side entitlement checks without changing the existing plan data model.**
+- Do not start this task automatically after the current session.
