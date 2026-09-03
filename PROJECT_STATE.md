@@ -10,50 +10,51 @@
 
 ## Current Position
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
-- G1 — Public Menu SEO Foundation is now DONE / VERIFIED and protected.
-- **G2 — Crawl Control and Indexation is IN_PROGRESS.** The production crawl-control implementation is present in `server/middleware/grok-pwa.ts` and `src/lib/seo/crawl.ts`; regression coverage has now been restored and expanded.
-- A pre-existing G1 typecheck regression in `src/routes/m.$slug.tsx` was found by CI evidence and corrected without reopening the G1 milestone.
-- G2 cannot be marked DONE until the full repository verification suite runs successfully against the new commit.
+- G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
+- **G2 — Crawl Control and Indexation is IN_PROGRESS.** The production crawl-control implementation is present and its regression coverage is restored and expanded.
+- A pre-existing G1 typecheck regression in `src/routes/m.$slug.tsx` was found by CI evidence and corrected without reopening G1.
+- The focused G2 commit has now passed the complete repository quality workflow. G2 remains open only because the current Vercel deployment is rate-limited, preventing live inspection of `/robots.txt` and `/sitemap.xml` for the focused commit.
 
 ## Completed Task — CI Browser template QA
 ### Root Cause
 - **VERIFIED:** the built Vercel server-function preview uses PGlite in the fallback path.
-- **VERIFIED:** `scripts/ensure-pglite-asset.mjs` originally copied PGlite runtime files only to `_libs`, while the runtime resolved them from `.vercel/output/functions/__server.func`.
-- **VERIFIED:** after asset placement was corrected, PGlite migration bootstrap failed because production-only migrations referenced the `menu_v3` PostgreSQL schema, while the PGlite fallback intentionally uses `public`.
-- **VERIFIED:** the migration failure caused the preview server to reset the Browser QA connection; this was the actual remaining Browser QA failure.
+- **VERIFIED:** PGlite runtime assets were required at the Vercel server-function root as well as `_libs`.
+- **VERIFIED:** production-only `menu_v3.*` migrations are isolated from the PGlite fallback, while PostgreSQL behavior remains unchanged.
+- **VERIFIED:** CI preview lifecycle is isolated from runner cleanup and Browser QA is run against the built preview.
 
 ### Fix
-- **VERIFIED:** `scripts/ensure-pglite-asset.mjs` now copies `pglite.data`, `pglite.wasm`, and `initdb.wasm` to both the existing `_libs` location and the Vercel server-function root.
-- **VERIFIED:** `src/lib/db.ts` now detects migrations that explicitly target `menu_v3.*` and records them as skipped in PGlite instead of executing production-only schema operations there. PostgreSQL behavior is unchanged.
-- **VERIFIED:** CI preview is launched directly with Vite, isolated from runner cleanup, kept in the same step as Browser QA, readiness-checked, and cleaned up with a trap.
-- **VERIFIED:** targeted regression tests cover preview isolation, PGlite asset placement, migration portability, and the PGlite migration isolation contract.
+- **VERIFIED:** `scripts/ensure-pglite-asset.mjs` copies the required PGlite runtime assets to both supported runtime locations.
+- **VERIFIED:** `src/lib/db.ts` records production-only `menu_v3.*` migrations as skipped in PGlite instead of executing them there.
+- **VERIFIED:** CI preview is launched directly with Vite, readiness-checked, and cleaned up safely.
+- **VERIFIED:** regression tests cover preview isolation, PGlite asset placement, migration portability, and migration isolation.
 
 ## G2 — Crawl Control and Indexation
 ### Implementation
 - **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic `robots.txt` and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
-- **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` directly through the deployed Nitro middleware.
-- **VERIFIED:** sitemap database selection requires `tenants.is_active = true`, `tenants.is_published = true`, and `branches.is_active = true`, ordered deterministically by tenant slug and branch creation time.
+- **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` through the existing Nitro middleware.
+- **VERIFIED:** sitemap database selection requires `tenants.is_active = true`, `tenants.is_published = true`, and `branches.is_active = true`, ordered deterministically.
 - **VERIFIED:** sitemap output uses absolute URLs and optional `lastmod` values.
 - **VERIFIED:** robots allows public pages, disallows private application surfaces, and declares `/sitemap.xml`.
-- **VERIFIED:** existing public-menu routes enforce `is_active` and `is_published` at the database boundary and emit `noindex, nofollow` for missing/unavailable menu data.
+- **VERIFIED:** public-menu routes enforce active/published tenant state and emit `noindex, nofollow` for missing/unavailable menu data.
 - **VERIFIED:** branch routes own their canonical and Restaurant JSON-LD metadata; the parent route suppresses duplicate branch metadata.
-- **VERIFIED:** regression coverage was restored in `scripts/quality-workflow.test.mjs` for robots, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
-- **VERIFIED:** the typecheck failure from the immediately preceding CI run was isolated to the existing `matches.some(...)` route-id comparison in `src/routes/m.$slug.tsx`; the targeted correction now compares the route id as a string.
+- **VERIFIED:** `scripts/quality-workflow.test.mjs` covers robots behavior, sitemap rendering/deduplication, and the published/active sitemap SQL contract.
+- **VERIFIED:** the route-id typecheck regression in `src/routes/m.$slug.tsx` is corrected by comparing the route id as a string.
 
 ### Research / Design Evidence
 - **VERIFIED:** Google Search Central recommends absolute URLs in sitemaps, root-level sitemap placement, and using sitemaps for canonical/indexable URLs.
-- **VERIFIED:** Google Search Central distinguishes robots.txt crawl control from `noindex`; robots.txt must not be used as the mechanism for preventing indexing.
+- **VERIFIED:** Google Search Central distinguishes robots.txt crawl control from `noindex`.
 - **VERIFIED:** Google documents the `Sitemap` robots.txt field as a fully qualified URL.
 
 ## Verification Evidence
-- **VERIFIED:** commit `141cb949e0d3d0ac8b081aed1c9be97607e6febb` was the prior `main` head and its CI run `33767726530` reached typecheck after successful route-tree generation/build setup, then failed on the G1 route-id comparison.
-- **VERIFIED:** commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` is now `main` and contains only the targeted G2 regression coverage plus the typecheck correction.
-- **VERIFIED:** Vercel has accepted the new commit and currently reports the deployment status as pending.
-- **BLOCKED:** the new commit has no GitHub Actions workflow run yet; the available workflow history shows the previous failure, but the API-authored commit has not produced a new Actions run in the available execution window.
-- **BLOCKED:** local `git clone` is unavailable in this execution environment because outbound DNS/network access to GitHub is unavailable, so the repository-defined local commands cannot be executed here.
-- **UNKNOWN:** final CI test/typecheck/lint/build result for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
-- **UNKNOWN:** final Vercel deployment result for that commit.
-- **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output after the new deployment completes.
+- **VERIFIED:** focused G2 implementation commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is present on `main` and triggered GitHub Actions run `33769708337`.
+- **VERIFIED:** run `33769708337` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
+- **VERIFIED:** the repository test suite reported 66 tests passed and 0 failed.
+- **VERIFIED:** Browser template QA passed for mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
+- **VERIFIED:** the production build completed successfully and generated the Vercel Nitro output; the database migration step safely skipped because no Postgres connection string was configured in CI.
+- **VERIFIED:** a dedicated session log records this verification checkpoint.
+- **BLOCKED:** Vercel reports `Deployment rate limited — retry in 24 hours` for the focused commit, so no new production deployment is available for live crawler-surface inspection.
+- **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output for the focused commit until Vercel permits a deployment.
+- **UNKNOWN:** Search Console/indexation state until separately inspected.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -71,10 +72,10 @@
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
 
 ## Known Issues / Risks
+- **BLOCKED:** Vercel deployment rate limit prevents final live G2 crawler-surface verification.
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
 - Existing lint warnings remain but are not errors and were not introduced by this task.
-- **BLOCKED:** final G2 verification is waiting for executable CI/deployment evidence against commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
@@ -84,15 +85,15 @@
 - 2026-09-03 — Fixed typed public-menu links and Browser QA URL handling.
 - 2026-09-03 — Fixed CI preview recursion and preview process lifetime handling.
 - 2026-09-03 — Isolated and fixed PGlite runtime asset placement and production-only migration isolation; CI run `33763072784` passed all quality gates.
-- 2026-09-03 — Inspected live Vercel production HTML/head and found duplicate branch canonical/JSON-LD emission from nested route heads.
-- 2026-09-03 — Applied targeted parent-head suppression in commit `62df67e5d2597dcc3f4132354cefe750ae2c2188`.
-- 2026-09-03 — Verified Vercel production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is built from descendant commit `30325490ed502344360e86e31ae0d13d3fe5eae2` and includes the fix.
-- 2026-09-03 — Re-inspected production `/m/nafas` and `/m/nafas/olaya`; one canonical and one relevant Restaurant JSON-LD payload are present per page. G1 CLOSED.
+- 2026-09-03 — Inspected live Vercel production HTML/head and fixed duplicate branch canonical/JSON-LD emission.
+- 2026-09-03 — Re-inspected production `/m/nafas` and `/m/nafas/olaya`; G1 CLOSED.
 - 2026-09-03 — Resumed G2 from repository evidence; confirmed crawl-control implementation already existed but its regression coverage had been reverted.
 - 2026-09-03 — Restored and expanded G2 regression coverage and corrected the typecheck regression found in `src/routes/m.$slug.tsx`.
-- 2026-09-03 — Committed the focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` and advanced `main` to that commit.
+- 2026-09-03 — Committed focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
+- 2026-09-03 — Fixed sitemap duplicate-path handling in `e0a007a4a45362494d26ff801a833708b17d4fb7b7`; GitHub Actions run `33769708337` passed every repository quality gate.
+- 2026-09-03 — Confirmed Vercel deployment for the focused commit is rate-limited, so live crawler-surface verification remains blocked.
 
 ## Exact Remaining Work
 - **Current atomic task remains G2 — Crawl Control and Indexation.**
-- **Exact next action:** obtain executable verification for commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109` (GitHub Actions or equivalent repository environment), then inspect the deployed `/robots.txt` and `/sitemap.xml` responses and close G2 only if all acceptance gates pass.
+- **Exact next action:** when Vercel deployment is no longer rate-limited, verify the focused commit's `/robots.txt` and `/sitemap.xml` responses and close G2 only if those live outputs satisfy the existing acceptance criteria.
 - Do not start G3 until G2 is closed and verified.
