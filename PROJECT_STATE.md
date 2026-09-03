@@ -15,7 +15,9 @@
 - **G4 — Arabic/English SEO Architecture is DONE / VERIFIED and CLOSED.**
 - **G5 — Template Ecosystem Expansion is DONE / VERIFIED and CLOSED.**
 - **G6 — Performance + Media is DONE / VERIFIED / CLOSED.**
-- Current atomic milestone: **G7 Analytics, Search Console, Growth, Rollout.**
+- **G7 — Analytics, Search Console, Growth, Rollout is IN_PROGRESS.**
+- **G7 audit task is DONE / VERIFIED:** existing analytics, event collection, SEO/crawl surfaces, Search Console presence, and growth surfaces were audited from repository evidence.
+- **G7.1 is the exact next atomic task:** production analytics integrity hardening.
 
 ## G6 Performance + Media — DONE / VERIFIED / CLOSED
 - **VERIFIED:** `src/components/public-menu.tsx` keeps native lazy loading and now uses asynchronous decoding plus low fetch priority for non-critical product media.
@@ -31,6 +33,19 @@
 - **UNKNOWN:** future intrinsic image-size savings until a supported production media transformation path is established.
 - **BLOCKED:** Vercel provider `build-rate-limit` remains external to the codebase and does not block G6 closure.
 
+## G7 Audit Evidence — DONE / VERIFIED
+- **VERIFIED:** `src/routes/studio/analytics.tsx` exposes authenticated owner analytics for 7/30-day ranges, visits, sessions, product views, QR scans, WhatsApp clicks, language split, daily series, top products, and category rankings.
+- **VERIFIED:** `src/lib/menu/owner.ts` implements `getOwnerAnalytics` behind `authMiddleware` and scopes analytics queries to the authenticated tenant membership.
+- **VERIFIED:** `migrations/0002_menu_v3.sql` defines `menu_events` and tenant/session indexes.
+- **VERIFIED:** `src/lib/menu/public.ts` validates and records `visit`, `product_view`, `qr_scan`, and `whatsapp` events, with publication/activity checks and recent duplicate suppression for visits/QR scans.
+- **VERIFIED:** `src/components/public-menu.tsx` emits public visit/QR/product-view events and excludes owner preview mode from analytics.
+- **VERIFIED:** `src/lib/menu/seo.ts` and `src/lib/seo/crawl.ts` retain the existing SEO/crawl contracts from completed G1–G4 work.
+- **VERIFIED:** no Google Search Console integration or verification-token configuration is present in the repository tree.
+- **VERIFIED:** no separate growth automation surface is present beyond existing leads, analytics, and SEO capabilities.
+- **VERIFIED:** latest audited repository commit before this state update was `a45c18bc6dd4164903d745e71778e599e617a47f`; this audit then produced documentation commits on `main`.
+- **UNKNOWN:** production Search Console ownership/indexation data and final production domain are not evidenced by repository data.
+- **BLOCKED:** Vercel provider `build-rate-limit` remains external to the codebase.
+
 ## Protected Completed Work
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
@@ -40,12 +55,12 @@
 - G6 Performance + Media: DONE / VERIFIED / CLOSED.
 
 ## Session Log
-- 2026-09-04 — Started G6 with repository evidence audit of image, font, JavaScript, and delivery behavior.
-- 2026-09-04 — Added and protected the product-image lazy-loading contract.
-- 2026-09-04 — Added the reproducible browser performance measurement gate and CI artifact retention.
-- 2026-09-04 — Captured the first CI production-preview baseline and identified image transfer as the dominant initial transfer class.
-- 2026-09-04 — Applied asynchronous decoding and low fetch priority to non-critical product media; quality pipeline passed.
-- 2026-09-04 — Closed G6 after successful CI verification and documented remaining provider-specific unknowns.
+- 2026-09-04 — Resumed Menu V3 from `main` and audited repository continuity files, latest history, source tree, analytics, SEO/crawl, migrations, and CI/deployment evidence.
+- 2026-09-04 — Confirmed G6 remains closed/protected and identified G7 as the next milestone without reopening completed work.
+- 2026-09-04 — Audited existing G7 analytics/event collection and confirmed the owner analytics surface is already implemented and tenant-scoped.
+- 2026-09-04 — Confirmed Search Console and growth automation integrations are not present in the repository; recorded production-domain/Search Console state as UNKNOWN rather than guessing.
+- 2026-09-04 — Completed the G7 audit task and selected G7.1 production analytics integrity hardening as the single next atomic task.
+- 2026-09-04 — Updated `PLAN.md` and `TASKS.md` with the G7 audit evidence, guardrails, and exact next task.
 
 ## Exact Remaining Work
-- **G7:** Analytics, Search Console, Growth, Rollout — TODO.
+- **G7.1 — Production analytics integrity hardening:** add focused regression coverage for tenant isolation, invalid product handling, duplicate visit/QR suppression, and the 7/30-day range behavior without changing the existing event model or adding dependencies.
