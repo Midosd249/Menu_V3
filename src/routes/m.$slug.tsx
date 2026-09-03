@@ -14,7 +14,7 @@ export const Route = createFileRoute("/m/$slug")({
   loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
   head: ({ loaderData, params, location }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
-    if (loaderData.ok) {
+    if (loaderData?.ok) {
       const branch = new URLSearchParams(location.searchStr).get("branch");
       const canonical = branch ? `/m/${encodeURIComponent(params.slug)}/${encodeURIComponent(branch)}` : pathname;
       const seo = getPublicMenuSeo(loaderData.data, canonical);
@@ -71,7 +71,7 @@ function PublicMenuPage() {
   const { slug } = Route.useParams();
   const search = Route.useSearch() as { branch?: string };
   const loaderData = Route.useLoaderData();
-  return <MenuLoader slug={slug} branch={search.branch} initialMenu={loaderData.ok ? loaderData.data : undefined} />;
+  return <MenuLoader slug={slug} branch={search.branch} initialMenu={loaderData?.ok ? loaderData.data : undefined} />;
 }
 
 export function MenuLoader({ slug, branch, initialMenu }: { slug: string; branch?: string; initialMenu?: PublicMenu }) {
