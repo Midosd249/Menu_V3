@@ -18,14 +18,7 @@ const ROLE_LABELS: Record<Role, { ar: string; en: string }> = {
 };
 
 type TeamBranch = { id: string; nameAr: string; nameEn: string };
-type TeamMember = {
-  userId: string;
-  name: string;
-  email: string;
-  role: Role;
-  createdAt: string;
-  branchIds: string[];
-};
+type TeamMember = { userId: string; name: string; email: string; role: Role; createdAt: string; branchIds: string[] };
 type Invitation = { id: string; email: string; role: Role; expiresAt: string; createdAt: string };
 
 function TeamPage() {
@@ -45,32 +38,26 @@ function TeamPage() {
     setLoading(true);
     setError("");
     const [team, pending] = await Promise.all([getTeamMembers(), listTeamInvitations()]);
-    if (team.ok) {
-      setMembers(team.data.members);
-      setBranches(team.data.branches);
-    } else setError(team.error);
+    if (team.ok) { setMembers(team.data.members); setBranches(team.data.branches); }
+    else setError(team.error);
     if (pending.ok) setInvitations(pending.data.invitations);
-    else if (!error) setError(pending.error);
+    else if (team.ok) setError(pending.error);
     setLoading(false);
-  }, [error]);
+  }, []);
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
   async function changeRole(userId: string, role: Role) {
     setBusyId(userId); setError(""); setOk(false);
     const result = await updateTeamMemberRole({ data: { userId, role } });
-    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); }
-    else setError(result.error);
+    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); } else setError(result.error);
     setBusyId("");
   }
 
   async function changeBranches(userId: string, branchIds: string[]) {
     setBusyId(userId); setError(""); setOk(false);
     const result = await setTeamMemberBranches({ data: { userId, branchIds } });
-    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); }
-    else setError(result.error);
+    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); } else setError(result.error);
     setBusyId("");
   }
 
@@ -79,8 +66,7 @@ function TeamPage() {
     if (!confirmed) return;
     setBusyId(userId); setError(""); setOk(false);
     const result = await removeTeamMember({ data: { userId } });
-    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); }
-    else setError(result.error);
+    if (result.ok) { setMembers(result.data.members); setBranches(result.data.branches); setOk(true); } else setError(result.error);
     setBusyId("");
   }
 
@@ -90,10 +76,7 @@ function TeamPage() {
     const result = await createTeamInvitation({ data: { email: inviteEmail, role: inviteRole } });
     if (result.ok) {
       const link = `${window.location.origin}/login?invite=${encodeURIComponent(result.data.token)}`;
-      setInviteLink(link);
-      setInviteEmail("");
-      setInvitations((current) => [result.data.invitation, ...current]);
-      setOk(true);
+      setInviteLink(link); setInviteEmail(""); setInvitations((current) => [result.data.invitation, ...current]); setOk(true);
     } else setError(result.error);
     setBusyId("");
   }
@@ -101,8 +84,7 @@ function TeamPage() {
   async function revoke(invitationId: string) {
     setBusyId(invitationId); setError(""); setOk(false);
     const result = await revokeTeamInvitation({ data: { invitationId } });
-    if (result.ok) { setInvitations((current) => current.filter((item) => item.id !== invitationId)); setOk(true); }
-    else setError(result.error);
+    if (result.ok) { setInvitations((current) => current.filter((item) => item.id !== invitationId)); setOk(true); } else setError(result.error);
     setBusyId("");
   }
 
@@ -119,10 +101,7 @@ function TeamPage() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Link to="/studio" className="mb-3 inline-flex items-center gap-2 text-sm text-muted"><ArrowRight className="size-4" />{lang === "ar" ? "العودة إلى الاستوديو" : "Back to Studio"}</Link>
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-ink text-paper"><Users className="size-5" /></span>
-            <div><h1 className="font-display text-3xl font-semibold">{lang === "ar" ? "الفريق والصلاحيات" : "Team & permissions"}</h1><p className="mt-1 text-sm text-muted">{lang === "ar" ? "إدارة الأدوار والدعوات وتحديد فروع المحررين." : "Manage roles, invitations and editor branch scope."}</p></div>
-          </div>
+          <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-ink text-paper"><Users className="size-5" /></span><div><h1 className="font-display text-3xl font-semibold">{lang === "ar" ? "الفريق والصلاحيات" : "Team & permissions"}</h1><p className="mt-1 text-sm text-muted">{lang === "ar" ? "إدارة الأدوار والدعوات وتحديد فروع المحررين." : "Manage roles, invitations and editor branch scope."}</p></div></div>
         </div>
       </header>
 
