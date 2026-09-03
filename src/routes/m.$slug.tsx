@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
@@ -10,15 +9,15 @@ import { getPublicMenuSeo } from "@/lib/menu/seo";
 import { getThemeFamily } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
-const menuSearchSchema = z.object({ branch: z.string().max(63).optional() });
-
 export const Route = createFileRoute("/m/$slug")({
-  validateSearch: menuSearchSchema,
+  validateSearch: (search) => ({
+    branch: typeof search.branch === "string" ? search.branch.slice(0, 63) : undefined,
+  }),
   loaderDeps: ({ search }) => ({ branch: search.branch }),
   loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
   head: ({ loaderData, params }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
-    if (loaderData && "data" in loaderData) {
+    if (loaderData?.ok) {
       const seo = getPublicMenuSeo(loaderData.data, pathname);
       return {
         meta: [
@@ -73,7 +72,7 @@ function PublicMenuPage() {
   const { slug } = Route.useParams();
   const { branch } = Route.useSearch();
   const loaderData = Route.useLoaderData();
-  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData && "data" in loaderData ? loaderData.data : undefined} />;
+  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData?.ok ? loaderData.data : undefined} />;
 }
 
 export function MenuLoader({ slug, branch, initialMenu }: { slug: string; branch?: string; initialMenu?: PublicMenu }) {
