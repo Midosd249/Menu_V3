@@ -4,7 +4,7 @@
 - **G1 — Public Menu SEO Foundation: IN_PROGRESS.** Verify server-rendered public menu content, page metadata, canonical URLs and truthful Restaurant structured data.
 
 ## Unified Queue
-1. **G1 — Public Menu SEO Foundation:** IN_PROGRESS — SSR public menu content plus dynamic Arabic-first metadata, canonical, Open Graph and Restaurant JSON-LD.
+1. **G1 — Public Menu SEO Foundation:** IN_PROGRESS — implementation is in place; post-fix CI verification is still required.
 2. **G2 — Crawl Control and Indexation:** TODO — `robots.txt`, dynamic sitemap, published/unpublished filtering, canonical/redirect policy and tests.
 3. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
 4. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
@@ -38,16 +38,11 @@
 - INFERRED: owned restaurant web presence + Arabic-first local SEO is the strongest current differentiation opportunity against delivery marketplaces and POS incumbents.
 - UNKNOWN: production custom-domain canonical origin, Search Console state, production content quality and holiday-hour data.
 
-## G1 Scope
-- Objective: make published public menus crawlable through server-rendered content and give them accurate page-specific metadata/schema.
-- Added `src/lib/menu/seo.ts`.
-- Added `src/lib/menu/seo.test.ts`.
-- Added route loaders/head metadata to `src/routes/m.$slug.tsx` and `src/routes/m.$slug.$branch.tsx`.
-- Registered the focused SEO test in `package.json` without changing dependency versions.
-- Acceptance: SSR menu content, unique truthful title/description/canonical/OG, truthful Restaurant JSON-LD, `noindex` for missing menus, preserved tenant/branch/order/theme behavior.
-
-## Verification Evidence
-- VERIFIED: historical repository quality run `33743739709` passed all existing quality steps.
-- VERIFIED: browser gate run `33744076308` failed at `Start built preview`; Playwright installation and all earlier steps passed. This remains an open preview-process issue.
-- IN_PROGRESS: G1 CI run `33744481336`.
-- UNKNOWN: final G1 CI result and live deployed head/metadata until directly verified.
+## G1 Verification Evidence
+- VERIFIED: quality run `33743739709` passed all existing gates before the SEO work.
+- VERIFIED: run `33744710145` reached Typecheck and exposed exact public-route typing errors.
+- VERIFIED: fixed those exact errors in `d6fc598eaed372a42c351bd0cd913675e4ae3776` and `735cfe01dcf9a40e70e411c296c0349a6b3c97cc`.
+- VERIFIED: TanStack guidance confirms search params should be validated and supplied through `loaderDeps`; route `head` receives `loaderData`, `params`, not `location`.
+- UNKNOWN: post-fix CI result because the available connector has not exposed a new push-triggered run yet.
+- BLOCKED: Vercel reports deployment rate limit for 24 hours on the current commits, so live deployment cannot currently verify G1.
+- UNKNOWN: live deployed HTML/head metadata.
