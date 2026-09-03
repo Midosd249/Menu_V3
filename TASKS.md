@@ -1,11 +1,11 @@
 # TASKS
 
 ## Current Section
-- **G5 — Template Ecosystem Expansion: IN_PROGRESS.** Current atomic milestone: Small Menu / Food Truck / Single-Concept family renderer + routing integration.
+- **G5 — Template Ecosystem Expansion: VERIFICATION IN_PROGRESS.** Final Small Menu / Food Truck / Single-Concept implementation is complete; final CI evidence is pending.
 
 ## Unified Queue
 1. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED — real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` behavior without fabricated translations.
-2. **G5 — Template Ecosystem Expansion:** IN_PROGRESS — Specialty Cafe, Bakery/Dessert, Fast Casual/QSR, and Fine Dining/Hospitality are closed; Small Menu / Food Truck / Single-Concept is the final remaining G5 family.
+2. **G5 — Template Ecosystem Expansion:** IMPLEMENTED — all six behavioral families now have dedicated presentation paths; final quality verification is the remaining closure gate.
 3. **G6 — Performance + Media:** TODO — evidence-based image/font/JS budgets, media optimization and Core Web Vitals measurement for representative Saudi mobile fixtures.
 4. **G7 — Analytics, Search Console, Growth, Rollout:** TODO — acquisition-to-conversion funnel, Search Console measurement, template/branch comparisons, privacy-reviewed analytics and staged rollout.
 
@@ -33,6 +33,14 @@
 - DONE / VERIFIED / CLOSED: `src/routes/m.$slug.tsx` routes the `fine-dining-hospitality` family to `FineDiningHospitalityTemplate` while preserving existing fallback behavior.
 - DONE / VERIFIED / CLOSED: `src/lib/theme/registry.test.ts` protects both `dark-dining` and `immersive` mappings.
 - VERIFIED: GitHub Actions quality run `33804331728` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and cleanup.
+
+### Small Menu / Food Truck / Single-Concept
+- IMPLEMENTED: `src/components/templates/small-menu.tsx` provides a dedicated focused-menu presentation shell for concise, single-concept and food-truck menus.
+- IMPLEMENTED: `src/routes/m.$slug.tsx` routes the `small-menu` family to `SmallMenuTemplate` while preserving existing template fallbacks.
+- IMPLEMENTED: `src/lib/theme/registry.test.ts` protects the `minimal` → `small-menu` family mapping.
+- IMPLEMENTED: the renderer reuses `PublicMenuView` for established menu browsing, product details, ordering, locale, analytics, and accessibility behavior.
+- IMPLEMENTED: no database, authorization, tenant-isolation, ordering, or public-data contract was changed.
+- PENDING VERIFICATION: final GitHub Actions quality workflow for the final G5 commit chain.
 
 ## G4 Verification Evidence — CLOSED
 - VERIFIED: public menu search validation accepts only `ar` or `en` locale values.
@@ -70,4 +78,4 @@
 - DONE / VERIFIED: G5 Fine Dining / Hospitality.
 
 ## Exact Next Task
-- **G5 Small Menu / Food Truck / Single-Concept:** implement the final dedicated family renderer and route it from the existing `small-menu` family contract, preserving existing data, ordering, locale, analytics, tenant isolation, and fallback behavior. Verify with Typecheck, Tests, Lint, Production build, and Browser Template QA before closing G5.
+- **G5 verification:** wait for the final quality workflow triggered by the Small Menu implementation and close G5 only after Route tree generation, Typecheck, Tests, Lint, Production build, Playwright, and Browser Template QA all pass.
