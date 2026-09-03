@@ -2,16 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getSql } from "@/lib/db";
 import { buildSitemapXml, publicMenuSitemapEntries } from "@/lib/seo/crawl";
 
+type SitemapRow = {
+  slug: string;
+  branch_slug: string | null;
+  updated_at: string | null;
+};
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: async ({ request }) => {
+      GET: async ({ request }): Promise<Response> => {
         const sql = await getSql();
-        const rows = await sql.query<{ slug: string; branch_slug: string | null; updated_at: string | null }>(`
+        const rows = await sql.query<SitemapRow>(`
           select
             t.slug,
             b.slug as branch_slug,
-            greatest(t.updated_at, b.updated_at) as updated_at
+            greatest(t.updated_at, b.updated_at)::text as updated_at
           from tenants t
           join branches b on b.tenant_id = t.id and b.is_active = true
           where t.is_active = true
