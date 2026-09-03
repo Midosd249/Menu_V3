@@ -45,6 +45,13 @@ jobs:
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
               echo "[preview] serving http://127.0.0.1:8081/"
+              if npm run performance:audit -- http://127.0.0.1:8081/themes/preview?theme=editorial; then
+                echo "[performance] browser measurement completed"
+              else
+                echo "[performance] Browser measurement failed — preview log follows"
+                cat .grok/preview.log
+                exit 1
+              fi
               if npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial; then
                 exit 0
               fi
