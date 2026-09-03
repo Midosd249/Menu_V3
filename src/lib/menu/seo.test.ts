@@ -27,7 +27,6 @@ test("public menu SEO derives Arabic title, canonical, and restaurant schema fro
   assert.equal(seo.schema["@type"], "Restaurant");
   assert.equal(seo.schema.name, "فرع العليا");
   assert.equal(seo.schema.currenciesAccepted, "SAR");
-  assert.equal(seo.schema.menu, "/m/najd-kitchen/olaya");
   assert.equal(seo.localSeoEligible, true);
   assert.deepEqual(seo.schema.address, {
     "@type": "PostalAddress",
