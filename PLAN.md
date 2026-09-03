@@ -6,7 +6,7 @@
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
 - **Current section:** G1 — Public Menu SEO Foundation.
-- **Current atomic task:** fix and verify the two public-menu link search typing errors exposed by CI.
+- **Current atomic task:** verify the targeted Browser QA fix for `scripts/template-qa.mjs`.
 
 ## G1 Status
 
@@ -18,13 +18,14 @@
 - Historical quality run `33743739709` passed all existing quality gates.
 - Historical run `33744076308` passed Typecheck, Tests, Lint, Production build and Playwright installation; it failed only at `Start built preview`.
 - The historical preview failure was traced to recursive invocation of `npm run preview` from the `preview.mjs` helper.
-- Commits `9e4368ac545fc155480d89ccf172d7d70b46746e`, `ebef098356e805d246d54a7c4dd6dc0ac6d63000` and `73d0e13375de54ccf49ae9fdab703c836ce60b28` contain the evidence-backed public-route typing fixes.
-- Commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changes only the CI preview start step to launch `vite preview` directly with readiness polling, removing the recursive helper path.
-- Commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` supplies `search={{ branch: undefined }}` to the two existing `/m/$slug` links in `src/routes/index.tsx`, matching the generated route search contract.
+- Commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changes only the CI preview start step to launch `vite preview` directly with readiness polling.
+- Commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` supplies typed `branch` search values to the two existing `/m/$slug` links.
+- Run `33748743094` passed route generation, Typecheck, Tests (58/58), Lint (0 errors), Production build, Playwright installation and preview startup; it failed only in Browser QA because `page.goto` received a `URL` object instead of the required string.
+- Commit `7b3e0812a29c129374d8d99cdf98cf005790a233` converts the Browser QA target to a string before `page.goto`, preserving the existing URL-selection logic.
 
 ### UNKNOWN / BLOCKED
-- UNKNOWN: final CI result after commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` and subsequent documentation commits.
-- BLOCKED: Vercel deployment status remains rate-limited, so live deployment cannot currently be used to inspect generated production HTML/head.
+- UNKNOWN: final replacement CI result for commit `7b3e0812a29c129374d8d99cdf98cf005790a233`.
+- BLOCKED: Vercel deployment may remain rate-limited; live production inspection is not claimed without direct evidence.
 - UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
 ## Strategic Reassessment
@@ -54,7 +55,7 @@
 
 ### G1 — Public Menu SEO Foundation
 - **Objective:** SSR published public menu content and add accurate title, description, canonical, Open Graph and Restaurant JSON-LD.
-- **Status:** IN_PROGRESS — implementation is complete; current atomic verification is the remaining public-route typing fix and its CI evidence.
+- **Status:** IN_PROGRESS — implementation is complete; the current atomic task is verifying the Browser QA fix.
 - **Acceptance:** useful menu content during SSR; unique truthful metadata; schema matches visible data; missing menus are `noindex`; existing renderer/order behavior preserved; generated route search types compile.
 - **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI/browser QA and generated HTML/head inspection.
 
