@@ -5,8 +5,8 @@ import {
   canWriteMenu,
   canWriteSettings,
   hasPermission,
-} from "./permissions";
-import { roleCanAccessAssignedBranch } from "./authorization.server";
+} from "./permissions.ts";
+import { roleCanAccessAssignedBranch } from "./authorization.server.ts";
 
 const roles = ["owner", "admin", "editor"] as const;
 
