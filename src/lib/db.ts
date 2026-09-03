@@ -42,6 +42,15 @@ const OID_INTERVAL = 1186;
 const identity = (v: string) => v;
 type Run = <T>(text: string, params: unknown[]) => Promise<T[]>;
 
+/**
+ * Production-only migrations qualify tables/functions in the menu_v3 schema.
+ * PGlite intentionally keeps its compatible fallback database in public, so
+ * those migrations must be recorded as skipped instead of executed there.
+ */
+export function isPgliteIncompatibleMigration(sql: string): boolean {
+  return /\bmenu_v3\./i.test(sql);
+}
+
 function toSql(run: Run): Sql {
   const sql = (async <T = Record<string, unknown>>(
     strings: TemplateStringsArray,
@@ -114,7 +123,12 @@ async function createPgliteSql(): Promise<Sql> {
     const done = doneRows.rows.map((r) => r.name);
     for (const { name, path } of pendingMigrations(Object.keys(migrations), done)) {
       await pg.transaction(async (tx) => {
-        await tx.exec(migrations[path]);
+        const sql = migrations[path];
+        if (isPgliteIncompatibleMigration(sql)) {
+          await tx.query("insert into _migrations (name) values ($1)", [name]);
+          return;
+        }
+        await tx.exec(sql);
         await tx.query("insert into _migrations (name) values ($1)", [name]);
       });
     }
