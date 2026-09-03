@@ -17,7 +17,7 @@ export const Route = createFileRoute("/m/$slug")({
   loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
   head: ({ loaderData, params, matches }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
-    const hasBranchChild = matches.some((match) => match.routeId === "/m/$slug/$branch");
+    const hasBranchChild = matches.some((match) => String(match.routeId) === "/m/$slug/$branch");
     if (loaderData?.ok) {
       const seo = getPublicMenuSeo(loaderData.data, pathname);
       return {
