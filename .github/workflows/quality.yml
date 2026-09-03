@@ -39,14 +39,18 @@ jobs:
       - name: Browser template QA
         run: |
           mkdir -p .grok
-          setsid env -u RUNNER_TRACKING_ID npx vite preview --host 127.0.0.1 --port 8081 > .grok/preview.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
               echo "[preview] serving http://127.0.0.1:8081/"
-              npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial
-              exit $?
+              if npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial; then
+                exit 0
+              fi
+              echo "[preview] Browser QA failed — preview log follows"
+              cat .grok/preview.log
+              exit 1
             fi
             sleep 0.25
           done
