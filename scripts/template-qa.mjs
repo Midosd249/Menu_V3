@@ -20,8 +20,8 @@ if (!baseUrl) {
 
 const parsed = new URL(baseUrl);
 const target = parsed.searchParams.has("theme")
-  ? parsed
-  : new URL("/themes/preview?theme=editorial", parsed.origin);
+  ? parsed.toString()
+  : new URL("/themes/preview?theme=editorial", parsed.origin).toString();
 
 const viewports = [
   { name: "mobile", width: 390, height: 844 },
