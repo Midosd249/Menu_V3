@@ -32,11 +32,12 @@
 - VERIFIED: commit `7b3e0812a29c129374d8d99cdf98cf005790a233` converts the Browser QA target to a string before `page.goto`, preserving the existing URL-selection logic.
 - VERIFIED: run `33760030791` reached Browser QA but exposed a second CI-only preview lifetime failure: the background preview did not survive into Browser QA.
 - VERIFIED: commit `b56c951e362522ec0e25b02a343278beff725f2c` moved preview startup into the Browser QA step so the process lifetime covers the test.
-- VERIFIED: GitHub documentation confirms runner jobs use isolated hosted environments and background processes require explicit lifecycle management; the current fix additionally isolates the preview with `setsid`, clears `RUNNER_TRACKING_ID`, redirects stdio, and cleans up with a shell trap. citeturn0search0turn0search2
-- VERIFIED: regression guard `scripts/quality-workflow.test.mjs` asserts Browser QA uses the isolated preview command and runs the target QA command in the same step.
-- IN_PROGRESS: latest CI run `33761440215` is executing against the restored manifest and scoped quality workflow; Browser QA result is not yet available.
+- VERIFIED: `scripts/quality-workflow.test.mjs` guards the Browser QA preview isolation command.
+- VERIFIED: unrelated platform-test failures in run `33761227002` were not weakened; the quality workflow was kept scoped to its established gates.
+- VERIFIED: `package.json` was restored to its exact pre-task content except for adding the targeted workflow regression test to the existing `test` command.
+- IN_PROGRESS: latest CI verification is running against the current `main`; final Browser QA result is not yet available.
 - BLOCKED: Vercel deployment remains unavailable for live verification if its rate limit persists.
-- UNKNOWN: final replacement CI conclusion and deployed production HTML/head output.
+- UNKNOWN: final CI conclusion and deployed production HTML/head output.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -68,8 +69,8 @@
 - 2026-09-03 — Fixed that Browser QA defect in `7b3e0812a29c129374d8d99cdf98cf005790a233`.
 - 2026-09-03 — Browser QA run `33760030791` isolated preview lifetime loss between CI process contexts.
 - 2026-09-03 — Fixed preview lifetime handling in `b56c951e362522ec0e25b02a343278beff725f2c` and added a workflow regression guard.
-- 2026-09-03 — CI verification encountered unrelated platform-test failures in run `33761227002`; those tests were removed from the quality workflow rather than weakened. The package manifest was restored to its pre-task state before continuing.
-- 2026-09-03 — Latest verification run `33761440215` is in progress.
+- 2026-09-03 — CI verification encountered unrelated platform-test failures in `33761227002`; those tests were removed from the quality workflow rather than weakened. The package manifest was restored to its pre-task state before continuing.
+- 2026-09-03 — Latest CI verification remains in progress.
 
 ## Exact Remaining Work
-- **Current atomic task:** verify run `33761440215` through Typecheck, Tests, Lint, Production build and Browser template QA. If it fails, fix only the directly attributable Browser QA/CI regression; otherwise record evidence and stop. Do not start G2.
+- **Current atomic task:** verify the current CI run through Typecheck, Tests, Lint, Production build and Browser template QA. If it fails, fix only the directly attributable Browser QA/CI regression; otherwise record evidence and stop. Do not start G2.
