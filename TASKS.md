@@ -1,14 +1,13 @@
 # TASKS
 
 ## Current
-- **T3 — Flagship vertical template: IN_PROGRESS / verification pending.** Build the first genuinely structurally distinct `contemporary-restaurant` family using the existing `PublicMenu` contract.
+- **T4 — Visual, accessibility, responsive, and performance gates: IN_PROGRESS.** Establish a reproducible browser QA gate for the flagship template.
 
 ## Queue
-1. **T3 — Flagship vertical template:** IN_PROGRESS — verify the new family renderer on the public route and theme preview.
-2. TODO: Establish visual-regression, accessibility, responsive, RTL, and performance gates for the flagship family.
-3. TODO: Expand to genuinely different restaurant families: specialty cafe, bakery/dessert, fast casual, fine dining/hospitality, and small-menu concepts.
-4. TODO: Migrate legacy theme keys to proven family implementations with controlled customization and rollback.
-5. TODO: Stage production rollout, compare analytics/performance, and retire legacy renderers only after evidence.
+1. **T4 — Template quality gates:** IN_PROGRESS — browser checks for the flagship public preview across mobile/tablet/desktop, RTL, accessible names, overflow, runtime errors, and reduced-motion support.
+2. TODO: Expand to genuinely different restaurant families: specialty cafe, bakery/dessert, fast casual, fine dining/hospitality, and small-menu concepts.
+3. TODO: Migrate legacy theme keys to proven family implementations with controlled customization and rollback.
+4. TODO: Stage production rollout, compare analytics/performance, and retire legacy renderers only after evidence.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -21,27 +20,21 @@
 - DONE / VERIFIED: Canonical application authorization integration for `access_role` / `branch_scope`.
 - DONE / VERIFIED: Repository agent contract in root `AGENTS.md`.
 - DONE / VERIFIED: Client onboarding idempotency boundary.
-- DONE / VERIFIED: Level 4C subscription entitlement enforcement for default subscription provisioning/backfill and branch/product/active-team-member limits.
-- DONE / VERIFIED: T1 template architecture contract; GitHub Actions run `33742263927` passed install, route generation, typecheck, tests, lint, and production build.
-- DONE / VERIFIED: T2 shared semantic menu presentation primitives; GitHub Actions run `33742271561` passed install, route generation, typecheck, tests, lint, and production build.
+- DONE / VERIFIED: Level 4C subscription entitlement enforcement.
+- DONE / VERIFIED: T1 template architecture contract; quality run `33742263927` passed install, route generation, typecheck, tests, lint, and production build.
+- DONE / VERIFIED: T2 shared semantic menu presentation primitives; quality run `33742271561` passed install, route generation, typecheck, tests, lint, and production build.
+- DONE / VERIFIED: T3 `contemporary-restaurant` family renderer integrated into public route and theme preview; quality run `33743105967` passed all repository quality steps.
 
-## Template Initiative Evidence
-- VERIFIED: Existing theme keys are `editorial`, `dark-dining`, `coffee`, `heritage`, `fast-casual`, `gallery`, `immersive`, and `minimal`.
-- VERIFIED: All current public menus and theme previews previously rendered through shared `PublicMenuView`.
-- VERIFIED: Theme differences are primarily implemented through token/layout metadata and CSS selectors in `src/styles.css`.
-- VERIFIED: `src/lib/menu/types.ts` provides rich bilingual restaurant/menu content needed by the proposed families.
-- VERIFIED: `docs/template-system-strategy.md` records the audit, research, six-family strategy, quality requirements, migration approach, and acceptance criteria.
-- VERIFIED: T1 introduced six type-safe `TemplateFamily` identifiers and deterministic `getThemeFamily()` without changing existing `ThemeKey` resolution.
-- VERIFIED: T2 added `MenuMedia`, `MenuPrice`, `MenuBadge`, `MenuSection`, and `MenuProductCard` under `src/components/menu/primitives.tsx` and exported them through `src/components/menu/index.ts` without changing the legacy public renderer.
-- VERIFIED: T3 now has a dedicated `contemporary-restaurant` renderer with its own responsive composition, product detail/modifier flow, cart/order flow, bilingual content, branch navigation, search, featured items, availability states, and opening-hours section.
-
-## Current Task Scope
-- Objective: verify the first structurally distinct flagship template family on the public and preview routes.
-- Acceptance: real content; Arabic/English; mobile/desktop; RTL-compatible layout; long names; missing images; modifiers; availability; featured items; clear prices/actions; no regression to legacy theme rendering.
-- Files: `src/components/templates/contemporary-restaurant.tsx`, `src/routes/m.$slug.tsx`, `src/routes/themes/preview.tsx`.
+## T4 Scope
+- Objective: make flagship template quality checks reproducible before expanding the family ecosystem.
+- Added `scripts/template-qa.mjs` using the existing Playwright dependency.
+- Added `npm run qa:template` entry point.
+- Gate checks: HTTP success, RTL/language, horizontal overflow, accessible button/link names, visible headings, runtime console/page errors, and reduced-motion emulation at 390x844, 768x1024, and 1440x900.
+- Acceptance: browser-level gate can run against a deployed preview or local build preview; no critical regression is hidden behind unit/build success.
 
 ## Verification Evidence
-- VERIFIED: T1 quality run `33742263927` completed successfully.
-- VERIFIED: T2 quality run `33742271561` completed successfully.
-- IN_PROGRESS: T3 Quality run `33743078780` is queued/running for the latest preview integration; final result not yet available.
-- UNKNOWN: browser-level visual regression and production visual behavior until T3 quality gate and browser validation are complete.
+- VERIFIED: T3 quality run `33743105967` completed successfully.
+- VERIFIED: Vercel production deployment for T3 commit `0d50842cd09b04d5f3fd2418d5da050c70a402a4` is `READY` (`dpl_9esaw9UjgAz4NmM3BsDXGBhqz9Tx`).
+- IN_PROGRESS: T4 browser gate added; execution against a browser-capable environment remains pending.
+- UNKNOWN: screenshot pixel baselines and full visual diff history.
+- UNKNOWN: live production behavior beyond the verified deployment status.
