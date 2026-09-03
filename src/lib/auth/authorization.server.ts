@@ -1,4 +1,4 @@
-import { getSql, type Sql } from "../db";
+import { getSql, type Sql } from "../db.ts";
 import { hasPermission, type Permission } from "./permissions.ts";
 import type { Role } from "../menu/types.ts";
 
