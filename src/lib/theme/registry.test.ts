@@ -29,6 +29,10 @@ test("fine dining themes resolve to the dedicated family", () => {
   assert.equal(getThemeFamily("immersive"), "fine-dining-hospitality");
 });
 
+test("small menu themes resolve to the dedicated family", () => {
+  assert.equal(getThemeFamily("minimal"), "small-menu");
+});
+
 test("theme resolution remains backward compatible", () => {
   assert.equal(isThemeKey("editorial"), true);
   assert.equal(isThemeKey("unknown-theme"), false);
