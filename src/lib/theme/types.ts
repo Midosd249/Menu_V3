@@ -1,5 +1,16 @@
 export const THEME_KEYS = ["editorial", "dark-dining", "coffee", "heritage", "fast-casual", "gallery", "immersive", "minimal"] as const;
 export type ThemeKey = (typeof THEME_KEYS)[number];
+
+export const TEMPLATE_FAMILIES = [
+  "specialty-cafe",
+  "bakery-dessert",
+  "fast-casual",
+  "contemporary-restaurant",
+  "fine-dining-hospitality",
+  "small-menu",
+] as const;
+export type TemplateFamily = (typeof TEMPLATE_FAMILIES)[number];
+
 export type ThemeLocaleText = { readonly ar: string; readonly en: string };
 export type ThemeTokens = {
   readonly colors: { readonly background: string; readonly foreground: string; readonly surface: string; readonly surfaceMuted: string; readonly border: string; readonly primary: string; readonly primaryForeground: string; readonly accent: string; readonly accentForeground: string; readonly muted: string; readonly mutedForeground: string };
@@ -10,4 +21,13 @@ export type ThemeTokens = {
 };
 export type ThemeLayout = { readonly header: "standard" | "immersive" | "hero"; readonly productGrid: "list" | "compact-grid" | "gallery-grid"; readonly productCard: "horizontal" | "vertical" | "editorial"; readonly categoryNav: "scroll" | "sticky" | "pills"; readonly imageRatio: "square" | "portrait" | "landscape" | "auto" };
 export type ThemeCapabilities = { readonly dark: boolean; readonly imageFirst: boolean; readonly compact: boolean; readonly immersive: boolean };
-export type ThemeDefinition = { readonly key: ThemeKey; readonly name: ThemeLocaleText; readonly description: ThemeLocaleText; readonly tokens: ThemeTokens; readonly layout: ThemeLayout; readonly capabilities: ThemeCapabilities; readonly preview: { readonly className: string; readonly image?: string } };
+export type ThemeDefinition = {
+  readonly key: ThemeKey;
+  readonly family: TemplateFamily;
+  readonly name: ThemeLocaleText;
+  readonly description: ThemeLocaleText;
+  readonly tokens: ThemeTokens;
+  readonly layout: ThemeLayout;
+  readonly capabilities: ThemeCapabilities;
+  readonly preview: { readonly className: string; readonly image?: string };
+};
