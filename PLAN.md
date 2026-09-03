@@ -12,14 +12,14 @@
 - No AI, payments, or domain work before Level 4 foundation is stable.
 
 ## Current Milestone
-- Status: IN_PROGRESS
-- **LEVEL 4 — Client SaaS & Commercial Platform: Authorization Foundation Integration**.
-- Existing foundations include onboarding, team invitations, durable roles, branch scope, and subscription plans.
+- Status: VERIFIED
+- **LEVEL 4 — Client SaaS & Commercial Platform: Authorization Foundation Integration** is DONE / VERIFIED.
+- Existing foundations include onboarding, team invitations, durable roles, branch scope, subscription plans, and the verified application authorization integration.
 
 ## Phases
 - Status: VERIFIED / PLANNED
-1. Level 4A — Durable authorization integration — IN_PROGRESS.
-2. Level 4B — Client account lifecycle and onboarding hardening — TODO.
+1. Level 4A — Durable authorization integration — DONE / VERIFIED.
+2. Level 4B — Client account lifecycle and onboarding hardening — TODO / UNBLOCKED.
 3. Level 4C — Subscription entitlement enforcement — TODO.
 4. Level 4D — Service/project workflows and observability — TODO.
 5. Level 4 Gate — production/security verification — TODO.
@@ -35,8 +35,8 @@
 ## Risks
 - Role-model drift can cause privilege escalation or denial of access.
 - Legacy and canonical branch-scope representations can diverge.
-- Current Vercel status reports a build-rate-limit target, so deployment verification is not equivalent to a code failure.
-- Current CI completion is pending.
+- Vercel status previously reported a build-rate-limit target, so deployment verification is not equivalent to a code failure.
+- GitHub CI for the final authorization commit is VERIFIED successful.
 
 ## Release Criteria
 - Server authorization consumes trusted canonical membership state.
@@ -48,4 +48,5 @@
 
 ## Next Task
 - Status: TODO / UNBLOCKED
-- **After CI verification of the current authorization integration, harden client account lifecycle and tenant onboarding idempotency using the existing `src/routes/onboarding.tsx` and server-side tenant creation flow.**
+- **Harden client account lifecycle and tenant onboarding idempotency using the existing `src/routes/onboarding.tsx` and server-side tenant creation flow.**
+- Do not start this task automatically; it is the next task only after the completed authorization milestone is explicitly continued.
