@@ -1,37 +1,66 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { getPublicMenu } from "@/lib/menu/public";
-import { getPublicMenuSeo } from "@/lib/menu/seo";
+import { getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
 import { getThemeFamily } from "@/lib/theme";
-import type { PublicMenu } from "@/lib/menu/types";
+import type { Lang, PublicMenu } from "@/lib/menu/types";
+
+const publicMenuSearchSchema = z.object({
+  branch: z.string().max(63).optional(),
+  lang: z.enum(["ar", "en"]).optional(),
+});
+
+type PublicMenuRouteData = {
+  menu: PublicMenu;
+  locale: Lang;
+  localeAvailable: boolean;
+};
 
 export const Route = createFileRoute("/m/$slug")({
-  validateSearch: (search) => ({
-    branch: typeof search.branch === "string" ? search.branch.slice(0, 63) : undefined,
-  }),
-  loaderDeps: ({ search }) => ({ branch: search.branch }),
-  loader: async ({ params, deps }) => getPublicMenu({ data: { slug: params.slug, branch: deps.branch } }),
+  validateSearch: publicMenuSearchSchema,
+  loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang }),
+  loader: async ({ params, deps }) => {
+    const result = await getPublicMenu({ data: { slug: params.slug, branch: deps.branch } });
+    if (!result.ok) return result;
+    const requestedLocale = deps.lang ?? "ar";
+    const locale = resolvePublicMenuLocale(result.data, requestedLocale);
+    return {
+      ok: true as const,
+      data: {
+        menu: result.data,
+        locale,
+        localeAvailable: locale === requestedLocale,
+      },
+    };
+  },
   head: ({ loaderData, params, matches }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
     const hasBranchChild = matches.some((match) => String(match.routeId) === "/m/$slug/$branch");
     if (loaderData?.ok) {
-      const seo = getPublicMenuSeo(loaderData.data, pathname);
+      const { menu, locale, localeAvailable } = loaderData.data as PublicMenuRouteData;
+      const seo = getPublicMenuSeo(menu, pathname, locale);
       return {
         meta: [
           { title: seo.title },
           { name: "description", content: seo.description },
-          { name: "robots", content: "index, follow" },
+          { name: "robots", content: localeAvailable ? "index, follow" : "noindex, follow" },
           { property: "og:type", content: "website" },
           { property: "og:title", content: seo.title },
           { property: "og:description", content: seo.description },
-          { property: "og:locale", content: "ar_SA" },
+          { property: "og:locale", content: locale === "ar" ? "ar_SA" : "en_US" },
           ...(seo.image ? [{ property: "og:image", content: seo.image }] : []),
         ],
-        links: hasBranchChild ? [] : [{ rel: "canonical", href: seo.canonical }],
+        links: hasBranchChild
+          ? []
+          : [
+              { rel: "canonical", href: seo.canonical },
+              ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href })),
+            ],
         scripts: hasBranchChild ? [] : [{ type: "application/ld+json", children: JSON.stringify(seo.schema) }],
       };
     }
@@ -71,15 +100,25 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 
 function PublicMenuPage() {
   const { slug } = Route.useParams();
-  const { branch } = Route.useSearch();
+  const { branch, lang } = Route.useSearch();
   const loaderData = Route.useLoaderData();
-  return <MenuLoader slug={slug} branch={branch} initialMenu={loaderData?.ok ? loaderData.data : undefined} />;
+  const menuData = loaderData?.ok ? loaderData.data as PublicMenuRouteData : undefined;
+  return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} />;
 }
 
-export function MenuLoader({ slug, branch, initialMenu }: { slug: string; branch?: string; initialMenu?: PublicMenu }) {
+export function MenuLoader({ slug, branch, locale, initialMenu }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu }) {
   const cacheKey = `${slug}:${branch ?? "default"}`;
   const cached = readCachedMenu(cacheKey);
   const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" });
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("menu-lang");
+    if (stored !== locale) {
+      try { window.localStorage.setItem("menu-lang", locale); } catch { /* ignore */ }
+    }
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === "ar" ? "rtl" : "ltr";
+  }, [locale]);
 
   function load() {
     const instant = readCachedMenu(cacheKey);
