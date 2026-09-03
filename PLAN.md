@@ -14,15 +14,15 @@
 
 ## Current Milestone
 - Status: VERIFIED
-- **LEVEL 4 — Client SaaS & Commercial Platform: Client Account Lifecycle and Onboarding Hardening** is DONE / VERIFIED for the implemented onboarding idempotency boundary.
+- **LEVEL 4 — Client SaaS & Commercial Platform: Subscription Entitlement Enforcement** is DONE / VERIFIED for server-side enforcement of the existing subscription-plan limits.
 - Existing foundations include onboarding, team invitations, durable roles, branch scope, subscription plans, and verified application authorization integration.
-- This session hardened the client onboarding ownership boundary without rebuilding the existing onboarding flow.
+- This session connected the existing subscription-plan foundation to the database/server boundary without changing the subscription plan data model.
 
 ## Phases
 - Status: VERIFIED / PLANNED
 1. Level 4A — Durable authorization integration — DONE / VERIFIED.
 2. Level 4B — Client account lifecycle and onboarding hardening — DONE / VERIFIED for owner uniqueness and concurrent-request reconciliation.
-3. Level 4C — Subscription entitlement enforcement — TODO / UNBLOCKED.
+3. Level 4C — Subscription entitlement enforcement — DONE / VERIFIED for default subscription provisioning and branch/product/team-member limits.
 4. Level 4D — Service/project workflow foundations and observability — TODO.
 5. Level 4 Gate — production/security verification — TODO.
 
@@ -35,24 +35,32 @@
 - The root `AGENTS.md` is the concise autonomous repository operating manual and requires evidence-driven discovery, research when consequential, a pre-edit planning gate, task-scoped verification, continuity updates, and a hard stop after one task.
 - Client onboarding ownership is enforced by a database-level unique index on `tenants.owner_user_id`; this closes the check-then-insert race that could otherwise create duplicate client tenants.
 - The existing onboarding UI reconciles a concurrent create conflict by re-reading trusted server-side studio membership and routing to `/studio` when the tenant already exists.
-- Research decision: PostgreSQL unique-index enforcement is the smallest compatible concurrency boundary for the existing PostgreSQL/PGLite schema. PostgreSQL documentation states that unique indexes enforce duplicate prevention and that `ON CONFLICT` provides a native atomic alternative for future server-side create-or-get refinement.
-- Research sources: PostgreSQL `INSERT` documentation (https://www.postgresql.org/docs/current/sql-insert.html) and PostgreSQL unique-index documentation (https://www.postgresql.org/docs/current/indexes-unique.html).
-- Official references for future hardening: https://www.postgresql.org/docs/current/ddl-rowsecurity.html ; https://www.postgresql.org/docs/current/sql-createfunction.html ; https://supabase.com/docs/guides/database/postgres/row-level-security ; https://tanstack.com/start/latest/docs/framework/react/guide/server-functions .
+- Subscription entitlement enforcement uses the existing `subscription_plans` and `tenant_subscriptions` tables without adding or changing columns.
+- New tenants receive the existing `free` plan automatically, and legacy tenants missing subscription state are backfilled to the same `free` trial state before enforcement is enabled.
+- Branch, product, and active team-member creation/reactivation are blocked at the database boundary when the tenant has no active/trialing subscription or has reached the configured plan limit.
+- The entitlement trigger locks the tenant subscription row before counting resources, so concurrent writes for the same tenant are serialized through the subscription row within each database transaction.
+- Research decision: database triggers are the smallest compatible enforcement boundary because they cover every existing server write path, including CSV/import flows, while keeping authorization and entitlement enforcement server-side. PostgreSQL documents row-level `BEFORE` triggers as suitable for checks before writes, and trigger execution is part of the same transaction as the triggering statement.
+- Security decision: entitlement functions are `SECURITY DEFINER` with a restricted `search_path` and revoked public execute access, following PostgreSQL function-security guidance.
+- Research sources: PostgreSQL trigger behavior (https://www.postgresql.org/docs/current/trigger-definition.html), PostgreSQL `CREATE TRIGGER` (https://www.postgresql.org/docs/current/sql-createtrigger.html), PostgreSQL function security (https://www.postgresql.org/docs/current/perm-functions.html), and Supabase Postgres triggers/RLS guidance (https://supabase.com/docs/guides/database/postgres/triggers ; https://supabase.com/docs/guides/database/postgres/row-level-security).
 
 ## Risks
-- The new unique index will fail migration if an existing live database already contains multiple tenants with the same `owner_user_id`; no direct live duplicate audit was available in this GitHub-only session, so production duplicate state is `UNKNOWN`.
-- The current server create flow still performs tenant/member/branch writes as separate statements; the current task closes duplicate-owner creation but does not claim full multi-statement transactional onboarding.
+- Live production subscription state and resource counts are `UNKNOWN`; the migration backfills tenants missing subscription rows but no direct production database audit was available in this GitHub-only session.
+- The current application server still maps generic database exceptions to user-facing `unavailable` responses in several mutation handlers, so a plan-limit trigger failure is enforced server-side but is not yet surfaced as a dedicated upgrade/limit message in every UI path.
+- The trigger enforces active branch/team-member counts and total product count, matching the existing plan data model. Historical over-limit data is not automatically removed or downgraded.
 - Vercel deployment status is separate from GitHub CI.
 - Local working-tree state and local command execution are `UNKNOWN` in the current GitHub-only execution interface.
 
 ## Release Criteria
-- One authenticated client owner cannot create multiple tenants through concurrent onboarding requests.
-- Existing onboarding behavior remains compatible and redirects existing members to Studio.
-- Concurrent conflict recovery reads trusted server-side membership rather than trusting client tenant identifiers.
+- Existing tenants without subscription rows receive the configured default `free` subscription state.
+- New tenants receive a default `free` subscription automatically.
+- `trialing` and `active` subscriptions can create resources within their configured limits.
+- `past_due`, `cancelled`, missing, or inactive-plan subscriptions cannot create/reactivate limited resources.
+- Branch, product, and active team-member limits are enforced server-side at the database boundary, including existing import/invitation flows.
+- Concurrent writes for the same tenant are serialized through the subscription-row lock used by the entitlement trigger.
 - Clean migration, route generation, typecheck, tests, lint, and production build pass in CI.
 - No Level 0–3 behavior is intentionally regressed.
 
 ## Next Task
 - Status: TODO / UNBLOCKED
-- **Connect the existing subscription-plan foundation to server-side entitlement checks without changing the existing plan data model.**
+- **Establish service/project workflow foundations and observability.**
 - Do not start this task automatically after the current session.
