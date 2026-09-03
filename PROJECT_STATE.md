@@ -12,9 +12,8 @@
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
 - **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
-- The G2 implementation and automated regression coverage passed the complete repository quality workflow.
-- Production crawler surfaces are now directly verified on the READY Vercel deployment.
-- **Next atomic task:** G3 — Saudi Local Discovery + Branch SEO.
+- **G3 implementation is complete and repository verification is green; final production deployment verification is BLOCKED because Vercel has not produced a deployment for the current G3 commit chain.**
+- **Current atomic task:** finish G3 by verifying a production deployment built from the current `main` commit, then close G3. Do not start G4.
 
 ## G2 — Crawl Control and Indexation — CLOSED
 ### Implementation
@@ -32,13 +31,29 @@
 ### Verification Evidence
 - **VERIFIED:** GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - **VERIFIED:** Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- **VERIFIED:** Vercel production deployment `dpl_4VUKHziJn8B3nwVTUG6mjiFksihS` is `READY` and is the current production deployment for `main`.
+- **VERIFIED:** Vercel production deployment `dpl_4VUKHziJn8B3nwVTUG6mjiFksihS` is `READY` and was used for live crawler verification.
 - **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
 - **VERIFIED:** live `/robots.txt` returns HTTP 200 with `Allow: /`, private-surface disallows for `/admin`, `/studio`, `/owner`, `/onboarding`, `/login`, `/invite`, and `/api/`, plus a `Sitemap` declaration.
 - **VERIFIED:** live `/sitemap.xml` returns HTTP 200 with `Content-Type: application/xml; charset=utf-8`.
 - **VERIFIED:** live sitemap is valid XML in the expected `<urlset>` form and contains four absolute URLs with no duplicate paths: `/m/mndy-alwtnya`, `/m/mndy-alwtnya/main-branch`, `/m/nafas`, and `/m/nafas/olaya`.
 - **VERIFIED:** the live sitemap URL set is consistent with the repository contract that includes only active/published tenants and active branches; automated regression coverage verifies the eligibility predicate.
 - **VERIFIED:** unavailable public-menu routes emit `noindex, nofollow` and are not represented in the verified live sitemap set.
+
+## G3 — Saudi Local Discovery + Branch SEO
+### Implementation
+- **VERIFIED:** repository schema provides tenant `city`/`country`, branch name/address/Maps URL/phone/activity, and branch hours.
+- **VERIFIED:** current production payload for `/m/nafas/olaya` contains Saudi location data sufficient for branch-level local SEO: `country=SA`, `city=الرياض`, branch name, Arabic/English address, Maps URL, phone, and branch hours.
+- **VERIFIED:** `src/lib/menu/seo.ts` now gates local location markup on `country=SA`, non-empty verified city, branch name, and Arabic address.
+- **VERIFIED:** eligible branch schema emits `PostalAddress` from verified fields only and emits `hasMap` only when the stored Maps URL is absolute HTTP(S).
+- **VERIFIED:** `src/lib/menu/seo.test.ts` covers eligible Saudi branch data and incomplete location data.
+- **VERIFIED:** G3 does not create a new city-directory URL family, preserving existing public menu canonical ownership and avoiding thin/doorway pages.
+- **VERIFIED:** full repository quality workflow run `33782244590` passed route-tree generation, Typecheck, Tests, Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup for commit `6982c586fb0455405f04ea1625c494638bf7b1d6`.
+- **VERIFIED:** the final G3 code diff against the G2 baseline is limited to `src/lib/menu/seo.ts` and `src/lib/menu/seo.test.ts`.
+
+### Verification Blocker
+- **BLOCKED:** Vercel project `menu-v3` currently reports production deployment `dpl_BfbtHk39MdNakPrVEZzdHAhZWoqB`, built from the no-op commit `5dd7549d534f2003e2fc95563fbfd4ebee6c81d5`, rather than the current G3 commit chain.
+- **BLOCKED:** therefore the new incomplete-location guard and `hasMap` behavior have not yet been proven on the production deployment.
+- **UNKNOWN:** why the Vercel Git integration has not created a deployment for the later G3 commits. No source changes should be made for this deployment-only blocker.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -59,7 +74,7 @@
 ## Known Issues / Risks
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
-- Existing lint warnings remain but are not errors and were not introduced by G2.
+- Existing lint warnings remain but are not errors and were not introduced by G3.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
@@ -78,8 +93,9 @@
 - 2026-09-03 — Verified READY Vercel production deployment and live `/robots.txt`.
 - 2026-09-03 — Verified live `/sitemap.xml` over the public `menu-v3-kohl.vercel.app` alias: HTTP 200, XML content type, four absolute unique URLs, and expected public menu/branch paths.
 - 2026-09-03 — Closed G2 after all repository and live crawler-surface acceptance criteria passed.
+- 2026-09-03 — Implemented G3 branch-level Saudi local SEO eligibility and regression tests; GitHub Actions run `33782244590` passed all quality gates.
+- 2026-09-03 — Confirmed Vercel production remains on an older no-op commit and blocked final G3 production verification; no unrelated source changes made.
 
 ## Exact Remaining Work
-- **Current atomic task:** G3 — Saudi Local Discovery + Branch SEO.
-- **Objective:** design and implement a safe Saudi local-discovery SEO layer using verified city/branch data without inventing locations or duplicating public menu content.
+- **Current atomic task:** verify/trigger a Vercel production deployment built from the current G3 `main` commit, fetch the deployed branch page, confirm the Saudi `PostalAddress`/`hasMap` behavior and no regressions, then close G3.
 - **Do not start G4, G5, G6, or G7 in the same task.**
