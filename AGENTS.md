@@ -1,96 +1,99 @@
 # AGENTS.md
 
 ## Mission
-Menu V3 is an Arabic-first, bilingual, mobile-first, multi-tenant digital-menu SaaS. The repository is the source of truth. Preserve existing capabilities and evolve the product incrementally toward a production-ready commercial SaaS.
+Menu V3 is an Arabic-first, bilingual, mobile-first, multi-tenant digital-menu SaaS for restaurants and cafes. `main` is the repository source of truth. Preserve completed capabilities and improve the existing product incrementally toward production readiness; never restart the project or rebuild completed work.
 
-## Repository Structure
+## Source of Truth and Startup
+Before any coding task, read all applicable `AGENTS.md` files, then `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, `README`/relevant documentation, source related to the task, tests, and configuration. Inspect repository status, recent history, relevant diffs, and CI/deployment evidence when available. Do not rely on chat memory.
+
+Repository facts must be labeled `VERIFIED`, `INFERRED`, `UNKNOWN`, or `BLOCKED`. Trust code, tests, documentation, and git evidence over stale continuity notes; reconcile discrepancies in the continuity files.
+
+## Product and Structure
 - `src/` — application source, routes, UI, and domain logic.
-- `src/routes/` — TanStack Start routes, including onboarding and Studio.
-- `src/lib/auth/` — authentication, authorization, and permissions.
-- `src/lib/menu/` — menu, team, invitation, and related domain logic.
+- `src/routes/` — TanStack Start routes, including onboarding and Studio/Owner/Admin surfaces.
+- `src/lib/auth/` — authentication, authorization, permissions, and identity helpers.
+- `src/lib/menu/` — menu, team, invitations, subscriptions, and domain logic.
 - `migrations/` — database migrations.
 - `.github/workflows/quality.yml` — CI quality gates.
 - `package.json` — scripts and dependencies.
-- `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md` — continuity state.
-- Important paths: `src/routes/onboarding.tsx`, `src/lib/auth/authorization.server.ts`, `src/lib/auth/permissions.ts`, `src/lib/menu/team.ts`, `src/lib/menu/team-invitations.ts`, `migrations/20260903008000_roles_permissions_foundation.sql`.
+- `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md` — continuity contract.
+- Key current paths include `src/routes/onboarding.tsx`, `src/lib/auth/authorization.server.ts`, `src/lib/auth/permissions.ts`, `src/lib/menu/team.ts`, `src/lib/menu/team-invitations.ts`, and `migrations/20260903008000_roles_permissions_foundation.sql`.
 
-## Stack
-Verified repository evidence identifies React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase production integration, Vercel, and Node 24 CI. Do not assume additional technologies without repository evidence.
+## Verified Stack
+React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase production integration, Vercel, and Node 24 CI. Use repository evidence before assuming any additional technology.
 
-## Engineering Conventions
-- Read every applicable `AGENTS.md` before coding, then read `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README, and relevant documentation.
-- Follow the existing architecture, naming, types, route patterns, authorization model, and compatibility boundaries.
-- Prefer small, reversible, focused changes. Avoid unrelated refactors, rewrites, scaffolding, or replacement architectures.
+## Operating Cycle
+**DISCOVER → UNDERSTAND → RESEARCH → PLAN → IMPLEMENT → TEST → REVIEW → DOCUMENT → STOP**
+
+1. **Discover** — identify the exact first unblocked TODO.
+2. **Understand** — trace existing behavior, contracts, tests, and dependencies before editing.
+3. **Research** — when a decision is unfamiliar or consequential, consult official documentation first, then relevant dependency source/release notes, maintained open-source implementations, and standards/security guidance as applicable. Compare viable approaches when the choice is consequential; record material sources and tradeoffs in `PLAN.md`.
+4. **Plan** — before code changes, state current verified position, one exact task, why it is next, likely files, acceptance criteria, risks, verification commands, and any research/design decision.
+5. **Implement** — make the smallest complete, reversible change using existing architecture and abstractions.
+6. **Test** — cover success, edge, failure, and regression paths relevant to the task.
+7. **Review** — inspect the final diff, security/privacy, performance, accessibility, maintainability, and hidden regressions as applicable.
+8. **Document** — update required continuity records with evidence.
+9. **Stop** — never begin the next task automatically.
+
+Only one task may be `IN_PROGRESS` in a session. Do not silently expand scope.
+
+## Engineering Rules
+- Preserve existing architecture, routes, schemas, integrations, compatibility layers, naming, typing, and error-handling conventions.
+- Prefer small, focused, reversible changes; no unrelated refactors or rewrites.
+- Preserve backward compatibility unless the task explicitly requires a breaking change.
+- Reuse existing utilities and dependencies. Add/upgrade/remove dependencies only when the atomic task demonstrates a need; verify compatibility, security impact, lockfile changes, and build impact.
+- Do not introduce a new framework or architectural pattern without demonstrated need.
+- For UI work, consider semantic structure, RTL/mobile responsiveness, keyboard access, accessibility, and clear error/loading states.
+- For data/backend work, preserve tenant and branch isolation, validate external/user input, handle failure paths, and keep authorization server-side.
 - Treat canonical durable authorization (`access_role` / `branch_scope`) as authoritative while preserving documented legacy compatibility.
-- Consider architecture, correctness, security, privacy, performance, accessibility, and maintainability for every change.
-- Research official documentation and reputable open-source references when repository evidence is insufficient; record material references in `PLAN.md`.
 
-## Testing, Build, and Deployment
+## Security and Privacy
+- Never commit or expose secrets, credentials, tokens, private data, or sensitive logs.
+- Never trust client-supplied identity, tenant, role, or privilege.
+- Never weaken authentication, authorization, RLS, tenant isolation, branch isolation, validation, or server-side checks to make tests/builds pass.
+- Fail closed when identity, tenant, role, or scope is missing or ambiguous.
+- Avoid telemetry, external data sharing, or third-party integrations unless required by the task and reviewed for security/privacy impact.
+- Review injection, unsafe URLs/HTML/CSS, data exposure, dependency risk, and logging of sensitive information when relevant.
+
+## Verification
 Repository-defined commands include:
 - `npm install --no-audit --no-fund`
 - `npm run typecheck`
 - `npm test`
+- `npm run test:platform`
 - `npm run lint`
 - `npm run build`
 - `npm run check:auth`
-- `npm run test:platform`
 - `npm run db:migrate`
 
-CI covers route-tree generation, typechecking, tests, lint, and production build. Deployment targets Vercel. Never claim deployment success without deployment evidence.
+Run the relevant available gates before `DONE`, including unit/integration/E2E checks, lint, typecheck, build, migration/security checks, and manual acceptance checks when applicable. If a check cannot run, record the exact command, reason, alternative evidence, and remaining risk. Never claim success without evidence.
 
-## Security and Privacy
-- Never expose secrets, credentials, tokens, or private user data.
-- Never weaken authentication, authorization, RLS, tenant isolation, branch isolation, or server-side permission checks for convenience.
-- Validate authorization on the server using trusted membership state; never trust client-supplied identity or privilege.
-- Fail closed when tenant or branch scope is missing or ambiguous.
-- Do not add telemetry, external data sharing, or third-party integrations without a justified task and security/privacy review.
+CI currently covers route-tree generation, typecheck, tests, lint, and production build. Vercel is the deployment target. Deployment success, database health, and live production behavior require direct evidence and must not be inferred from a passing GitHub build.
 
-## Dependency Policy
-- Reuse existing dependencies whenever possible.
-- Add, upgrade, remove, or replace dependencies only when required by the atomic task.
-- Verify compatibility, security implications, lockfile/package changes, and build impact before accepting dependency changes.
-
-## Git and Commits
-- Treat `main` as the canonical branch unless an explicit repository workflow requires otherwise.
-- Keep commits small and task-focused; use concise conventional-style messages consistent with repository history, such as `docs: ...` and `fix(auth): ...`.
+## Git and Change Discipline
+- `main` is canonical unless repository workflow explicitly requires another branch.
+- Keep commits small and task-focused with concise conventional-style messages consistent with repository history.
+- Inspect status, recent history, relevant diffs, and changed files before/after work when tooling permits.
 - Never rewrite history, force-push, or discard other work without explicit authorization.
-- Inspect status, recent history, relevant diffs, and changed files before and after work when tooling permits.
+- Every changed line must belong to the current atomic task.
 
-## One Atomic Task Rule
-1. **Discover** the exact first unblocked TODO.
-2. **Understand** the existing implementation and acceptance criteria.
-3. **Plan** the smallest complete solution, risks, and verification.
-4. **Implement** only that task.
-5. **Test** the relevant gates.
-6. **Review** the diff and behavior.
-7. **Document** the result in all required state files.
-8. **Stop**; do not begin the next task.
+## Continuity Contract
+At the end of every session, update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update `SESSION_PROTOCOL.md` whenever workflow rules change. Append a dated session log to `PROJECT_STATE.md`. Record the current commit/state, files changed, commands and results, known issues/blockers, uncertainty, and exactly one next task. Keep all four files consistent. Do not mark `DONE` without direct evidence.
 
-Only one task may be `IN_PROGRESS`. Never silently expand scope.
-
-## Definition of Done
-A task is `DONE` only when the requested behavior is implemented, the final diff is task-scoped, applicable tests/typecheck/lint/build and other gates pass (or an evidence-backed exception is documented), security/privacy/accessibility/performance/maintainability implications are reviewed as applicable, and repository state is accurately documented. Required evidence includes exact commands, CI run/commit identifiers, or manual verification. No unresolved blocker may be hidden behind `DONE`.
-
-## Debugging and Incident Handling
-- Reproduce before changing code when possible.
-- Isolate the smallest failing surface; inspect logs, tests, configuration, and recent changes.
-- Fix the root cause with the smallest reversible change.
-- Re-run the failing verification, then broader applicable quality gates.
-- Distinguish code/build failures from platform, quota, rate-limit, environment, and infrastructure failures.
-- Never mask errors, weaken security, or add speculative changes to make checks appear green.
+## Debugging and Incidents
+Reproduce when possible → isolate the smallest failing surface → inspect code/tests/config/logs/history → identify root cause → apply the smallest reversible fix → rerun the failing check → run broader applicable gates → review the diff. Distinguish code defects from platform, quota, rate-limit, environment, database, and infrastructure failures. Never mask errors or add speculative changes merely to obtain green checks.
 
 ## Preserve Completed Work
-- Treat completed functionality as protected unless the current task directly requires a change.
-- Do not rebuild, replace, or remove completed features merely for convenience.
-- Preserve existing routes, migrations, integrations, compatibility layers, and documented platform files unless evidence shows they are broken and the atomic task requires correction.
+Completed functionality is protected. Do not rebuild, replace, remove, or regress completed features for convenience. Do not restart the project. Existing `/admin`, `server/`, `public/__grok/`, platform integrations, routes, migrations, and compatibility paths remain protected unless the current task provides evidence that a targeted correction is required.
 
-## Continuity State
-Before coding, read `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, and `SESSION_PROTOCOL.md`. After the one task, update all four so they agree on the current state/commit, completed and in-progress work, exact next unblocked task, verification evidence, known issues/blockers/uncertainty, and session log requirements. Never mark `DONE` without evidence.
+## Definition of Done
+A task is `DONE` only when the requested behavior is implemented, the diff is task-scoped, relevant verification passes or an evidence-backed exception is documented, applicable security/privacy/performance/accessibility/maintainability review is complete, and continuity state is updated. No unresolved blocker or unknown may be hidden behind `DONE`.
 
-## Uncertainty and Blockers
-Use `VERIFIED`, `INFERRED`, `UNKNOWN`, and `BLOCKED` explicitly. Missing information is `UNKNOWN`, never guessed. If verification is prevented by a dependency, environment, permission, or external service, mark the work `BLOCKED` or keep it `IN_PROGRESS` and record the exact reason. Distinguish repository facts from assumptions and recommendations. Stop rather than inventing requirements, commands, APIs, credentials, or repository state.
+## Blockers and Ambiguity
+Do not guess. If blocked by missing information, permissions, dependencies, environment, or external services, mark `BLOCKED` and preserve the working state. If requirements conflict, surface the conflict and prefer explicit user requirements over assumptions. Missing facts are `UNKNOWN`; derived conclusions are `INFERRED`.
 
-## Operating Cycle
-**Discover → Understand → Plan → Implement → Test → Review → Document → Stop**
+## Expert Review Lens
+Use only the perspectives relevant to the task: product value/acceptance, architecture, senior implementation, research, QA, security, performance, UX/accessibility, DevOps, code review, and technical writing. Do not role-play or expose internal reasoning; report concise conclusions and evidence.
 
-Operate as a senior Codex-style software engineer: inspect first, preserve previous work, make the smallest complete change, verify with evidence, document state, and stop after one atomic task.
+## Session Triggers
+`[BOOT]` read state and inspect git → `[PROVE]` find evidence → `[SCOPE]` one atomic task → `[RESEARCH]` reliable sources → `[DESIGN]` smallest compatible solution → `[BUILD]` focused implementation → `[TEST]` verify → `[SECURE]` review security → `[DIFF]` inspect every change → `[STATE]` update continuity → `[STOP]` stop after one task.
