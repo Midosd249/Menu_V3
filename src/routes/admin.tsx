@@ -1,267 +1,37 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Mail, MessageCircle, Phone, RefreshCw, Search, ShieldCheck } from "lucide-react";
+import { Building2, ExternalLink, LayoutDashboard, RefreshCw, Search, ShieldCheck, Store, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input, Textarea } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getAdminDashboard, LEAD_STATUSES, updateLead, type AdminDashboard, type AdminLead, type LeadStatus } from "@/lib/menu/admin";
+import { getAdminDashboard, LEAD_STATUSES, type AdminDashboard, type LeadStatus } from "@/lib/menu/admin";
+import { getPlatformDashboard, updatePlatformTenantStatus, type PlatformDashboard, type PlatformTenant } from "@/lib/menu/platform";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/admin")({ component: AdminPage });
+export const Route = createFileRoute("/admin")({ component: PlatformAdminPage });
+type Tab = "overview" | "tenants" | "leads";
+const LABELS: Record<LeadStatus,string> = { new:"جديد", contacted:"تم التواصل", qualified:"مؤهل", converted:"تم التحويل", lost:"مغلق" };
+const emptyPlatform = (): PlatformDashboard => ({ tenants:[], tenantCount:0, activeTenantCount:0, publishedTenantCount:0, branchCount:0, productCount:0, orderCount:0, openOrderCount:0, leadCount:0, newLeadCount:0, menuEventCount:0, activeSubscriptionCount:0, trialSubscriptionCount:0 });
+const emptyLeads = (): AdminDashboard => ({ total:0,newCount:0,contactedCount:0,qualifiedCount:0,convertedCount:0,lostCount:0,leads:[] });
+function fmt(v:string){try{return new Intl.DateTimeFormat("ar-SA",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v))}catch{return v}}
 
-const STATUS_LABELS: Record<LeadStatus, string> = {
-  new: "جديد",
-  contacted: "تم التواصل",
-  qualified: "مؤهل",
-  converted: "تم التحويل",
-  lost: "مغلق / غير مهتم",
-};
-
-const STATUS_TONES: Record<LeadStatus, string> = {
-  new: "bg-ink text-paper",
-  contacted: "bg-sand text-ink",
-  qualified: "bg-accent/15 text-ink",
-  converted: "bg-ink text-paper",
-  lost: "bg-line text-muted",
-};
-
-function formatDate(value: string) {
-  try {
-    return new Intl.DateTimeFormat("ar-SA", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
-  } catch {
-    return value;
-  }
+function PlatformAdminPage(){
+ const navigate=useNavigate(); const {user,isPending}=useCurrentUserState(); const [tab,setTab]=useState<Tab>("overview");
+ const [platform,setPlatform]=useState<PlatformDashboard>(emptyPlatform); const [leads,setLeads]=useState<AdminDashboard>(emptyLeads); const [leadStatus,setLeadStatus]=useState<LeadStatus|"all">("all"); const [leadQuery,setLeadQuery]=useState(""); const [tenantQuery,setTenantQuery]=useState(""); const [loading,setLoading]=useState(true); const [error,setError]=useState(""); const [saving,setSaving]=useState<string|null>(null);
+ const tenants=useMemo(()=>{const q=tenantQuery.trim().toLowerCase();return q?platform.tenants.filter(t=>[t.nameAr,t.nameEn,t.slug,t.city,t.ownerUserId].some(v=>v.toLowerCase().includes(q))):platform.tenants},[platform.tenants,tenantQuery]);
+ async function load(){setLoading(true);setError("");try{const [p,l]=await Promise.all([getPlatformDashboard(),getAdminDashboard({data:{status:leadStatus==="all"?undefined:leadStatus,q:leadQuery.trim()||undefined}})]);if(!p.ok)setError(p.error);else setPlatform(p.data);if(!l.ok)setError(c=>c||l.error);else setLeads(l.data)}catch(e){setError(e instanceof Error?e.message:"تعذر تحميل مركز المنصة")}finally{setLoading(false)}}
+ useEffect(()=>{if(isPending)return;if(!user){void navigate({to:"/login",search:{redirect:"/admin"} as never,replace:true});return}void load()},[isPending,user]);
+ useEffect(()=>{if(isPending||!user)return;const t=window.setTimeout(()=>void load(),220);return()=>window.clearTimeout(t)},[leadStatus,leadQuery]);
+ async function toggle(t:PlatformTenant){setSaving(t.id);const r=await updatePlatformTenantStatus({data:{tenantId:t.id,isActive:!t.isActive}});if(!r.ok)setError(r.error);else setPlatform(c=>({...c,activeTenantCount:c.activeTenantCount+(r.data.isActive?1:-1),tenants:c.tenants.map(x=>x.id===t.id?{...x,isActive:r.data.isActive}:x)}));setSaving(null)}
+ if(isPending||!user)return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات مالك المنصة...</div>;
+ return <main className="mx-auto grid max-w-7xl gap-6 py-4 lg:py-8"><header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"><div><div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5"/> Platform Owner</div><h1 className="font-display text-3xl font-semibold sm:text-4xl">مركز تحكم Menu V3</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-ink-soft">هذه لوحة مالك المنصة: المطاعم والعملاء والحسابات والمؤشرات. تشغيل طلبات الطعام يبقى داخل مساحة المطعم.</p></div><Button variant="outline" onClick={()=>void load()} disabled={loading}><RefreshCw className={cn("size-4",loading&&"animate-spin")}/> تحديث</Button></header>
+ <nav className="grid grid-cols-3 gap-2 rounded-2xl border border-line bg-paper p-2"><Nav active={tab==="overview"} onClick={()=>setTab("overview")} icon={<LayoutDashboard className="size-4"/>}>نظرة عامة</Nav><Nav active={tab==="tenants"} onClick={()=>setTab("tenants")} icon={<Building2 className="size-4"/>}>المطاعم والعملاء</Nav><Nav active={tab==="leads"} onClick={()=>setTab("leads")} icon={<Users className="size-4"/>}>العملاء المحتملون</Nav></nav>
+ {error?<div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm">{error}</div>:null}<section className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8"><K l="المطاعم" v={platform.tenantCount}/><K l="نشطة" v={platform.activeTenantCount}/><K l="منشورة" v={platform.publishedTenantCount}/><K l="الفروع" v={platform.branchCount}/><K l="الأصناف" v={platform.productCount}/><K l="الطلبات" v={platform.orderCount}/><K l="طلبات مفتوحة" v={platform.openOrderCount}/><K l="أحداث المنيو" v={platform.menuEventCount}/></section>
+ {tab==="overview"?<section className="grid gap-4 md:grid-cols-3"><Card icon={<Store className="size-5"/>} title="المطاعم" text={`${platform.tenantCount} مطعم، ${platform.activeTenantCount} نشطة.`} onClick={()=>setTab("tenants")}/><Card icon={<Users className="size-5"/>} title="العملاء المحتملون" text={`${platform.newLeadCount} جديد من ${platform.leadCount}.`} onClick={()=>setTab("leads")}/><Card icon={<ShieldCheck className="size-5"/>} title="الاشتراكات" text={`${platform.activeSubscriptionCount} نشطة و${platform.trialSubscriptionCount} تجارب.`} onClick={()=>setTab("tenants")}/></section>:null}
+ {tab==="tenants"?<section className="grid gap-4"><div className="rounded-2xl border border-line bg-paper p-3"><label className="relative block"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted"/><Input className="ps-9" value={tenantQuery} onChange={e=>setTenantQuery(e.target.value)} placeholder="ابحث باسم المطعم أو المدينة أو المعرّف"/></label></div><div className="overflow-x-auto rounded-2xl border border-line bg-paper"><table className="w-full min-w-[850px] text-sm"><thead className="bg-sand/40 text-xs text-muted"><tr>{["المطعم","الموقع","الفروع","الأصناف","الطلبات","الخطة","الحالة","إجراء"].map(x=><th key={x} className="p-4 text-start">{x}</th>)}</tr></thead><tbody>{tenants.map(t=><tr key={t.id} className="border-t border-line"><td className="p-4"><b>{t.nameAr||t.nameEn}</b><div className="text-xs text-muted">/{t.slug}</div></td><td className="p-4">{t.city||"—"} · {t.country}</td><td className="p-4">{t.branchCount}</td><td className="p-4">{t.productCount}</td><td className="p-4">{t.orderCount}</td><td className="p-4 uppercase">{t.planCode}</td><td className="p-4">{t.isActive?"نشط":"موقوف"}</td><td className="p-4"><div className="flex gap-2"><button type="button" disabled={saving===t.id} onClick={()=>void toggle(t)} className="rounded-md border border-line px-3 py-2 text-xs">{saving===t.id?"جارٍ...":t.isActive?"إيقاف":"تفعيل"}</button>{t.isPublished?<a href={`/m/${t.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border border-line px-3 py-2 text-xs"><ExternalLink className="size-3"/>المنيو</a>:null}</div></td></tr>)}{!tenants.length?<tr><td colSpan={8} className="p-10 text-center text-muted">لا توجد مطاعم.</td></tr>:null}</tbody></table></div></section>:null}
+ {tab==="leads"?<section className="grid gap-4"><div className="grid gap-3 rounded-2xl border border-line bg-paper p-3 md:grid-cols-[1fr_220px]"><label className="relative"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted"/><Input className="ps-9" value={leadQuery} onChange={e=>setLeadQuery(e.target.value)} placeholder="ابحث باسم المطعم أو المسؤول أو المدينة"/></label><select value={leadStatus} onChange={e=>setLeadStatus(e.target.value as LeadStatus|"all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{LEAD_STATUSES.map(s=><option key={s} value={s}>{LABELS[s]}</option>)}</select></div><div className="grid gap-2">{leads.leads.map(l=><article key={l.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"><div><b>{l.businessName}</b><p className="text-sm text-muted">{l.contactName} · {l.city||"—"} · {l.contactPhone}</p></div><span className="rounded-full bg-sand px-2.5 py-1 text-xs">{LABELS[l.status]}</span></div><div className="mt-2 text-xs text-muted">{fmt(l.createdAt)}{l.details?` · ${l.details}`:""}</div></article>)}{!leads.leads.length?<div className="rounded-2xl border border-dashed border-line p-10 text-center text-muted">لا توجد نتائج.</div>:null}</div></section>:null}
+ </main>
 }
-
-function cleanPhone(value: string) {
-  return value.replace(/[^\d+]/g, "");
-}
-
-function whatsappHref(phone: string) {
-  const digits = cleanPhone(phone).replace(/^\+/, "");
-  return digits ? `https://wa.me/${digits}` : "#";
-}
-
-function emptyDashboard(): AdminDashboard {
-  return { total: 0, newCount: 0, contactedCount: 0, qualifiedCount: 0, convertedCount: 0, lostCount: 0, leads: [] };
-}
-
-function AdminPage() {
-  const navigate = useNavigate();
-  const { user, isPending: authPending } = useCurrentUserState();
-  const [dashboard, setDashboard] = useState<AdminDashboard>(emptyDashboard);
-  const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [savingId, setSavingId] = useState<string | null>(null);
-  const selected = useMemo(() => dashboard.leads.find((lead) => lead.id === selectedId) ?? null, [dashboard.leads, selectedId]);
-
-  async function load() {
-    setLoading(true);
-    setError("");
-    try {
-      const result = await getAdminDashboard({
-        data: {
-          status: statusFilter === "all" ? undefined : statusFilter,
-          q: query.trim() || undefined,
-        },
-      });
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-      setDashboard(result.data);
-      setSelectedId((current) => current && result.data.leads.some((lead) => lead.id === current) ? current : result.data.leads[0]?.id ?? null);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "تعذر الاتصال بلوحة الإدارة");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (authPending) return;
-    if (!user) {
-      void navigate({ to: "/login", search: { redirect: "/admin" } as never, replace: true });
-      return;
-    }
-    void load();
-  }, [authPending, user]);
-
-  useEffect(() => {
-    if (authPending || !user) return;
-    const timer = window.setTimeout(() => void load(), 220);
-    return () => window.clearTimeout(timer);
-  }, [statusFilter, query]);
-
-  async function saveLead(lead: AdminLead, nextStatus: LeadStatus, notes: string) {
-    setSavingId(lead.id);
-    setError("");
-    try {
-      const result = await updateLead({ data: { id: lead.id, status: nextStatus, notes } });
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-      setDashboard((current) => ({
-        ...current,
-        leads: current.leads.map((item) => item.id === lead.id ? result.data : item),
-      }));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "تعذر حفظ الطلب");
-    } finally {
-      setSavingId(null);
-    }
-  }
-
-  if (authPending || (!user && loading)) {
-    return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات الإدارة...</div>;
-  }
-
-  if (error && dashboard.total === 0 && !loading) {
-    return (
-      <main className="mx-auto grid max-w-6xl gap-6 py-8">
-        <div className="rounded-2xl border border-line bg-paper p-8 text-center">
-          <ShieldCheck className="mx-auto mb-4 size-8 text-muted" />
-          <h1 className="text-xl font-semibold">لا يمكن فتح لوحة الإدارة</h1>
-          <p className="mt-2 text-sm text-muted">{error}</p>
-          <Button className="mt-5" onClick={() => void load()}><RefreshCw className="size-4" />إعادة المحاولة</Button>
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="mx-auto grid max-w-7xl gap-6 py-2 lg:py-8">
-      <header className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
-        <div>
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted">
-            <ShieldCheck className="size-3.5" /> إدارة المنصة
-          </div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">مركز الطلبات والعملاء المحتملين</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-soft">كل طلب يرسله صاحب مطعم من الموقع يظهر هنا. تابع الحالة، تواصل مباشرة، وسجل ملاحظاتك حتى يتحول الطلب من استفسار إلى عميل فعلي.</p>
-        </div>
-        <Button variant="outline" onClick={() => void load()} disabled={loading}>
-          <RefreshCw className={cn("size-4", loading && "animate-spin")} /> تحديث
-        </Button>
-      </header>
-
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-        <Metric label="كل الطلبات" value={dashboard.total} />
-        <Metric label="جديد" value={dashboard.newCount} active={statusFilter === "new"} onClick={() => setStatusFilter(statusFilter === "new" ? "all" : "new")} />
-        <Metric label="تم التواصل" value={dashboard.contactedCount} active={statusFilter === "contacted"} onClick={() => setStatusFilter(statusFilter === "contacted" ? "all" : "contacted")} />
-        <Metric label="مؤهل" value={dashboard.qualifiedCount} active={statusFilter === "qualified"} onClick={() => setStatusFilter(statusFilter === "qualified" ? "all" : "qualified")} />
-        <Metric label="تم التحويل" value={dashboard.convertedCount} active={statusFilter === "converted"} onClick={() => setStatusFilter(statusFilter === "converted" ? "all" : "converted")} />
-        <Metric label="مغلق" value={dashboard.lostCount} active={statusFilter === "lost"} onClick={() => setStatusFilter(statusFilter === "lost" ? "all" : "lost")} />
-      </section>
-
-      <section className="grid gap-3 rounded-2xl border border-line bg-paper p-3 md:grid-cols-[1fr_220px]">
-        <label className="relative block">
-          <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
-          <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="ابحث باسم المطعم، المسؤول، المدينة، الجوال أو البريد" className="ps-9" />
-        </label>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as LeadStatus | "all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm outline-none">
-          <option value="all">كل الحالات</option>
-          {LEAD_STATUSES.map((status) => <option key={status} value={status}>{STATUS_LABELS[status]}</option>)}
-        </select>
-      </section>
-
-      {error ? <div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm text-ink">{error}</div> : null}
-
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,.85fr)]">
-        <div className="grid gap-2">
-          {loading && dashboard.leads.length === 0 ? (
-            <div className="rounded-2xl border border-line p-10 text-center text-sm text-muted">جار تحميل الطلبات...</div>
-          ) : dashboard.leads.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-muted">لا توجد طلبات تطابق البحث الحالي.</div>
-          ) : dashboard.leads.map((lead) => (
-            <button key={lead.id} type="button" onClick={() => setSelectedId(lead.id)} className={cn("grid w-full gap-3 rounded-2xl border p-4 text-start transition", selectedId === lead.id ? "border-ink bg-sand/40" : "border-line bg-paper hover:bg-sand/30")}>
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="truncate font-semibold">{lead.businessName}</p>
-                  <p className="mt-1 text-sm text-muted">{lead.contactName}{lead.city ? ` · ${lead.city}` : ""}</p>
-                </div>
-                <span className={cn("shrink-0 rounded-full px-2.5 py-1 text-[11px]", STATUS_TONES[lead.status])}>{STATUS_LABELS[lead.status]}</span>
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
-                <span>{lead.contactPhone}</span>
-                <span>{formatDate(lead.createdAt)}</span>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <LeadDetail lead={selected} saving={selected ? savingId === selected.id : false} onSave={saveLead} />
-      </section>
-    </main>
-  );
-}
-
-function Metric({ label, value, active, onClick }: { label: string; value: number; active?: boolean; onClick?: () => void }) {
-  const className = cn("grid gap-1 rounded-2xl border p-4 text-start", active ? "border-ink bg-ink text-paper" : "border-line bg-paper", onClick && "cursor-pointer hover:bg-sand/50");
-  if (!onClick) return <div className={className}><span className="text-xs opacity-70">{label}</span><strong className="text-2xl">{value}</strong></div>;
-  return <button type="button" onClick={onClick} className={className}><span className="text-xs opacity-70">{label}</span><strong className="text-2xl">{value}</strong></button>;
-}
-
-function LeadDetail({ lead, saving, onSave }: { lead: AdminLead | null; saving: boolean; onSave: (lead: AdminLead, status: LeadStatus, notes: string) => Promise<void> }) {
-  const [status, setStatus] = useState<LeadStatus>(lead?.status ?? "new");
-  const [notes, setNotes] = useState(lead?.notes ?? "");
-
-  useEffect(() => {
-    setStatus(lead?.status ?? "new");
-    setNotes(lead?.notes ?? "");
-  }, [lead?.id, lead?.status, lead?.notes]);
-
-  if (!lead) return <aside className="rounded-2xl border border-dashed border-line p-8 text-center text-sm text-muted">اختر طلباً لعرض التفاصيل وإدارته.</aside>;
-
-  return (
-    <aside className="grid content-start gap-5 rounded-2xl border border-line bg-paper p-5 lg:sticky lg:top-5 lg:h-fit">
-      <div>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs text-muted">طلب رقم {lead.id.slice(0, 8)}</p>
-            <h2 className="mt-1 text-2xl font-semibold">{lead.businessName}</h2>
-          </div>
-          <span className={cn("rounded-full px-2.5 py-1 text-[11px]", STATUS_TONES[status])}>{STATUS_LABELS[status]}</span>
-        </div>
-        <p className="mt-2 text-sm text-muted">أُرسل {formatDate(lead.createdAt)}</p>
-      </div>
-
-      <div className="grid gap-2 text-sm">
-        <Info label="المسؤول" value={lead.contactName} />
-        <Info label="المدينة" value={lead.city || "—"} />
-        <Info label="الجوال" value={lead.contactPhone} />
-        <Info label="البريد" value={lead.contactEmail || "—"} />
-      </div>
-
-      <div className="grid grid-cols-3 gap-2">
-        <a href={`tel:${cleanPhone(lead.contactPhone)}`} className="inline-flex h-10 items-center justify-center gap-1 rounded-md border border-line text-xs"><Phone className="size-4" />اتصال</a>
-        <a href={whatsappHref(lead.contactPhone)} target="_blank" rel="noreferrer" className="inline-flex h-10 items-center justify-center gap-1 rounded-md border border-line text-xs"><MessageCircle className="size-4" />واتساب</a>
-        {lead.contactEmail ? <a href={`mailto:${lead.contactEmail}`} className="inline-flex h-10 items-center justify-center gap-1 rounded-md border border-line text-xs"><Mail className="size-4" />إيميل</a> : <span className="inline-flex h-10 items-center justify-center rounded-md border border-line text-xs text-muted">لا يوجد إيميل</span>}
-      </div>
-
-      {lead.details ? <div className="rounded-xl bg-sand/50 p-4 text-sm leading-6"><p className="mb-1 text-xs text-muted">تفاصيل العميل</p>{lead.details}</div> : null}
-
-      <div className="grid gap-2">
-        <label className="text-xs font-medium">الحالة</label>
-        <select value={status} onChange={(e) => setStatus(e.target.value as LeadStatus)} className="h-10 rounded-md border border-line bg-paper px-3 text-sm outline-none">
-          {LEAD_STATUSES.map((item) => <option key={item} value={item}>{STATUS_LABELS[item]}</option>)}
-        </select>
-      </div>
-
-      <div className="grid gap-2">
-        <label className="text-xs font-medium">ملاحظات داخلية</label>
-        <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} placeholder="مثال: تم التواصل عبر واتساب، يريد 3 فروع، أرسل التسعيرة..." />
-      </div>
-
-      <Button onClick={() => void onSave(lead, status, notes)} disabled={saving}>{saving ? "جار الحفظ..." : "حفظ التحديث"}</Button>
-      <p className="text-center text-[11px] text-muted">آخر تحديث: {formatDate(lead.updatedAt)}</p>
-    </aside>
-  );
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-  return <div className="flex items-start justify-between gap-4 border-b border-line/70 py-2 last:border-0"><span className="text-muted">{label}</span><span className="text-end font-medium">{value}</span></div>;
-}
+function Nav({active,onClick,icon,children}:{active:boolean;onClick:()=>void;icon:React.ReactNode;children:React.ReactNode}){return <button type="button" onClick={onClick} className={cn("inline-flex h-10 items-center justify-center gap-2 rounded-xl text-sm",active?"bg-ink text-paper":"text-muted hover:bg-sand/50")}>{icon}{children}</button>}
+function K({l,v}:{l:string;v:number}){return <div className="grid gap-1 rounded-2xl border border-line bg-paper p-4"><span className="text-xs text-muted">{l}</span><strong className="text-2xl">{v.toLocaleString("ar-SA")}</strong></div>}
+function Card({icon,title,text,onClick}:{icon:React.ReactNode;title:string;text:string;onClick:()=>void}){return <article className="grid gap-4 rounded-2xl border border-line bg-paper p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-sand/60">{icon}</span><h2 className="font-semibold">{title}</h2></div><p className="text-sm leading-6 text-muted">{text}</p><Button variant="outline" onClick={onClick}>فتح</Button></article>}
