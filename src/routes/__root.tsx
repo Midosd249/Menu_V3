@@ -1,4 +1,4 @@
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { MenuThemeController } from "@/components/menu-theme-controller";
@@ -33,8 +33,10 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
+  const search = useRouterState({ select: (state) => state.location.searchStr });
+  const locale = new URLSearchParams(search).get("lang") === "en" ? "en" : "ar";
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
