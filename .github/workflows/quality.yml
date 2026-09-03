@@ -64,6 +64,14 @@ jobs:
           echo "[preview] failed to become ready — see .grok/preview.log"
           cat .grok/preview.log
           exit 1
+      - name: Upload browser performance baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g6-performance-baseline
+          path: .grok/performance-audit.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Stop built preview
         if: always()
         run: npm run preview:stop
