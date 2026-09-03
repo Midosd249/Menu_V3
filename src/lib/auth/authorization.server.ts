@@ -35,21 +35,13 @@ export async function getMembership(
   tenantId?: string,
 ): Promise<Membership | null> {
   const rows = tenantId
-    ? await sql<{
-        tenant_id: string;
-        user_id: string;
-        role: Role;
-      }>`
+    ? await sql<{ tenant_id: string; user_id: string; role: Role }>`
         select tenant_id, user_id, role
         from tenant_members
         where tenant_id = ${tenantId} and user_id = ${userId}
         limit 1
       `
-    : await sql<{
-        tenant_id: string;
-        user_id: string;
-        role: Role;
-      }>`
+    : await sql<{ tenant_id: string; user_id: string; role: Role }>`
         select tenant_id, user_id, role
         from tenant_members
         where user_id = ${userId}
@@ -69,25 +61,24 @@ export async function requireMembership(
 ): Promise<Membership> {
   const sql = await getSql();
   const membership = await getMembership(sql, userId, tenantId);
-  if (!membership) {
-    throw new AuthorizationError("forbidden");
-  }
+  if (!membership) throw new AuthorizationError("forbidden");
   return membership;
 }
 
-export function requirePermissionForRole(
-  role: Role,
-  permission: Permission,
-): void {
+export function requirePermissionForRole(role: Role, permission: Permission): void {
   if (!hasPermission(role, permission)) {
     throw new AuthorizationError("forbidden", `Forbidden: ${permission}`);
   }
 }
 
+/** Pure policy used by both tests and the DB-backed branch check. */
+export function roleCanAccessAssignedBranch(role: Role, isExplicitlyAssigned: boolean): boolean {
+  return role === "owner" || role === "admin" || isExplicitlyAssigned;
+}
+
 /**
- * Branch scope is intentionally derived from the database membership record.
- * Owner/admin have tenant-wide branch access; editors need an explicit
- * member_branch_access row for the requested branch.
+ * Branch scope is derived from database membership. Owner/admin are tenant-wide;
+ * editors require an explicit member_branch_access row.
  */
 export async function canAccessBranch(
   sql: Sql,
@@ -119,18 +110,13 @@ export async function requireBranchAccess(
   branchId: string,
 ): Promise<AuthorizationContext> {
   const sql = await getSql();
-  const allowed = await canAccessBranch(sql, membership, branchId);
-  if (!allowed) {
+  if (!(await canAccessBranch(sql, membership, branchId))) {
     throw new AuthorizationError("forbidden");
   }
   return { ...membership, branchId };
 }
 
-/**
- * Verify that a resource belongs to the caller's tenant before a mutation.
- * This is deliberately separate from branch authorization because some Menu
- * V3 resources are tenant-scoped rather than branch-scoped.
- */
+/** Verify that a resource belongs to the caller's tenant before a mutation. */
 export async function requireTenantResource(
   sql: Sql,
   table: "tenants" | "branches" | "categories" | "products" | "orders",
