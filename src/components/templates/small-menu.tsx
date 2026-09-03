@@ -26,7 +26,7 @@ export function SmallMenuTemplate({ menu, preview = false }: { menu: PublicMenu;
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted">{branch.city || tenant.city}</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted">{tenant.city}</p>
               <h1 className="truncate font-display text-xl font-black">{title}</h1>
             </div>
           </div>
