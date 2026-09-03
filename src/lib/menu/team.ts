@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql, type Sql } from "@/lib/db";
+import { requireMembership, requirePermissionForRole } from "@/lib/auth/authorization.server";
 import type { FnResult, Role } from "./types";
 
 const roleSchema = z.enum(["owner", "admin", "editor"]);
@@ -23,16 +24,10 @@ type TeamMember = {
 
 async function ownerContext(userId: string) {
   const sql = await getSql();
-  const rows = await sql<{ tenant_id: string; role: Role }>`
-    select tenant_id, role
-    from tenant_members
-    where user_id = ${userId}
-    order by created_at
-    limit 1
-  `;
-  const member = rows[0];
-  if (!member || member.role !== "owner") return { sql, tenantId: null as string | null };
-  return { sql, tenantId: member.tenant_id };
+  const member = await requireMembership(userId);
+  requirePermissionForRole(member.role, "team.write");
+  if (member.role !== "owner") return { sql, tenantId: null as string | null };
+  return { sql, tenantId: member.tenantId };
 }
 
 async function listBranches(sql: Sql, tenantId: string): Promise<TeamBranch[]> {
