@@ -5,6 +5,7 @@ import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { ErrorState, LoadingState } from "@/components/state-panel";
+import { useLang } from "@/lib/lang";
 import { getPublicMenu } from "@/lib/menu/public";
 import { getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
 import { getThemeFamily } from "@/lib/theme";
@@ -110,7 +111,7 @@ export function MenuLoader({ slug, branch, locale, initialMenu }: { slug: string
   const cacheKey = `${slug}:${branch ?? "default"}`;
   const cached = readCachedMenu(cacheKey);
   const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" });
-  const { setLang } = __USE_LANG_PLACEHOLDER__;
+  const { setLang } = useLang();
 
   useEffect(() => {
     setLang(locale);
