@@ -21,7 +21,7 @@
 Establish deterministic crawler controls so only intentionally published public menu pages can be discovered/indexed, while unavailable/unpublished content is excluded without harming valid public pages.
 
 ### Implementation Evidence
-- **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic `robots.txt` and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
+- **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic robots.txt and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
 - **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` through the existing Nitro middleware.
 - **VERIFIED:** sitemap SQL selects only active/published tenants and active branches.
 - **VERIFIED:** robots allows public pages, disallows private application surfaces, and declares `/sitemap.xml`.
@@ -51,14 +51,33 @@ Establish deterministic crawler controls so only intentionally published public 
 - **Status:** IN_PROGRESS.
 - **Objective:** build a safe, evidence-driven Saudi local-discovery SEO layer around verified city and branch data, increasing local search relevance without creating thin, duplicate, or fabricated location pages.
 
-### Scope
-1. Audit the existing branch/tenant schema and verified location fields.
-2. Identify which Saudi city/region/location data is complete enough to support indexable landing pages.
-3. Define URL and canonical strategy for local discovery without conflicting with public menu URLs.
-4. Implement only location pages backed by verified database entities and useful content.
-5. Add branch-level local SEO metadata and structured data where supported by verified fields.
-6. Add regression tests for location eligibility, canonical URLs, unavailable locations, and duplicate content boundaries.
-7. Verify mobile/RTL accessibility and production-safe behavior.
+### Repository Data Audit
+- **VERIFIED:** `tenants` has `city`, `country`, publication/activity flags, business names, and descriptive/tagline fields.
+- **VERIFIED:** `branches` has branch names, Arabic/English addresses, Google Maps URL, phone, and activity state.
+- **VERIFIED:** `branch_hours` has weekday/open/close/closed state.
+- **VERIFIED:** the current public-menu loader exposes only active branches under active + published tenants.
+- **VERIFIED:** the live production `/m/nafas/olaya` payload contains `country=SA`, `city=الرياض`, a branch name, Arabic/English address, Maps URL, phone, and seven branch-hour rows.
+- **INFERRED:** the existing schema does not provide verified latitude/longitude, postal code, explicit region, cuisine taxonomy, price range, or review aggregates. These fields must not be fabricated or derived loosely for G3 structured data.
+
+### G3 Design Decision
+- **VERIFIED:** the safest current G3 slice is **branch-level local SEO on the existing canonical public menu routes**, not a new city-directory URL family.
+- **PROPOSED:** city landing pages should remain deferred until the repository has enough verified location entities and genuinely distinct directory content to avoid thin/doorway pages.
+- **VERIFIED:** this preserves public-menu URL ownership and avoids creating a second canonical URL for the same menu content.
+- **VERIFIED:** `src/lib/menu/seo.ts` now treats a branch as locally eligible only when country is `SA` and verified city, branch name, and Arabic address are present.
+- **VERIFIED:** eligible branch schema retains `Restaurant` and emits only verified `PostalAddress` fields; an absolute Maps URL is emitted as `hasMap` when supplied.
+- **VERIFIED:** incomplete location data does not emit the location `address` block, preventing unsupported local claims.
+
+### G3 Implementation Evidence
+- **VERIFIED:** `src/lib/menu/seo.ts` adds deterministic Saudi-location eligibility and guards LocalBusiness address markup on verified fields.
+- **VERIFIED:** `src/lib/menu/seo.ts` adds `hasMap` only for an absolute HTTP(S) Maps URL already stored on the branch.
+- **VERIFIED:** `src/lib/menu/seo.test.ts` covers eligible Saudi branch metadata and incomplete location data.
+- **VERIFIED:** final diff against the G2 state is limited to `src/lib/menu/seo.ts` and `src/lib/menu/seo.test.ts`.
+
+### Research / Design Sources
+- **VERIFIED:** Google Search Central LocalBusiness guidance requires `name` and a physical `address` for LocalBusiness rich-result eligibility, recommends the most specific subtype, and supports `geo`, `menu`, `openingHoursSpecification`, `telephone`, and `url` when the underlying data is available. citeturn1search1
+- **VERIFIED:** Google Search Central general structured-data guidance says markup must represent the visible page content and should not be misleading; pages must remain accessible to Googlebot. citeturn1search6
+- **VERIFIED:** Google canonicalization guidance treats canonical as a representative URL and recommends making clustered pages sufficiently different to avoid duplicate-content clustering. citeturn0search0turn0search1
+- **VERIFIED:** Google Search Central spam guidance warns against doorway pages targeting cities/regions that funnel users to the same usable content. citeturn0search6
 
 ### Non-goals
 - Do not invent cities, branches, addresses, coordinates, opening hours, ratings, or business claims.
@@ -74,9 +93,6 @@ Establish deterministic crawler controls so only intentionally published public 
 - Tests cover eligibility, duplicate prevention, missing data, and canonical behavior.
 - `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, and applicable Browser QA remain successful.
 
-### Research / Design Requirement
-Before implementation, inspect official Google Search Central guidance for local business structured data and duplicate/canonical handling, plus the repository schema and current branch data. Record material decisions here before coding.
-
 ## Unified milestones
 - G1 — Public Menu SEO Foundation: **DONE / VERIFIED**.
 - G2 — Crawl Control and Indexation: **DONE / VERIFIED**.
@@ -87,4 +103,4 @@ Before implementation, inspect official Google Search Central guidance for local
 - G7 — Analytics, Search Console, Growth, Rollout: TODO.
 
 ## Exact Current Task
-**G3 — Audit verified Saudi location data and implement the smallest production-safe local-discovery/branch-SEO slice backed entirely by existing verified entities. Stop after G3 verification; do not begin G4.**
+**G3 — Verify the branch-level local SEO slice on the full repository quality workflow and production deployment, then close G3. Do not begin G4.**
