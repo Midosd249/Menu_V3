@@ -12,7 +12,7 @@ const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup", () => {
-  const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Stop built preview)/)?.[1] ?? "";
+  const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
 
   assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
   assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
@@ -74,6 +74,8 @@ test("sitemap middleware exposes only published active tenants and active branch
   assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
 });
 
-test("public menu keeps below-the-fold product media lazy-loaded", () => {
+test("public menu keeps below-the-fold product media lazy-loaded and low-priority", () => {
   assert.match(PUBLIC_MENU, /loading="lazy"/);
+  assert.match(PUBLIC_MENU, /decoding="async"/);
+  assert.match(PUBLIC_MENU, /fetchPriority="low"/);
 });
