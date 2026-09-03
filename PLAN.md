@@ -23,7 +23,7 @@
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
 
 ## G2 — Crawl Control and Indexation
-- **Status:** IN_PROGRESS — implementation and regression coverage are complete; final live verification is blocked by the current Vercel deployment rate limit.
+- **Status:** IN_PROGRESS — implementation and automated verification are complete; final live sitemap inspection is blocked by Vercel SSO on the available authenticated deployment fetch surface.
 - **Objective:** establish deterministic crawler controls so only intentionally published public menu pages can be discovered/indexed, while unavailable/unpublished content is excluded without harming valid public pages.
 
 ### Scope
@@ -68,10 +68,14 @@
 - `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, and CI/browser QA remain successful.
 
 ## Verification Checkpoint
-- **VERIFIED:** GitHub Actions run `33769708337` for focused commit `e0a007a4a45362494d26ff801a833708b17d4fb7` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
+- **VERIFIED:** focused G2 source commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is represented by Vercel production deployment `dpl_F2NGuDydH1b8RfPaghVToGvoV7Tg`, which is `READY` and built from source commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
+- **VERIFIED:** deployment aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
+- **VERIFIED:** deployment `/robots.txt` returns HTTP 200 with `Allow: /`, private-surface disallows for `/admin`, `/studio`, `/owner`, `/onboarding`, `/login`, `/invite`, and `/api/`, plus a `Sitemap` declaration.
+- **VERIFIED:** GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - **VERIFIED:** Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- **BLOCKED:** Vercel reports `Deployment rate limited — retry in 24 hours` for the focused commit, so live `/robots.txt` and `/sitemap.xml` inspection cannot yet be performed against that deployment.
-- **UNKNOWN:** live `/robots.txt` and `/sitemap.xml` output for the focused commit until a deployment is available.
+- **BLOCKED:** direct live retrieval of `/sitemap.xml` through the available Vercel authenticated fetch surface is redirected to Vercel SSO even after generating a deployment share URL; the sitemap response body therefore cannot be inspected from this execution environment.
+- **UNKNOWN:** live `/sitemap.xml` body and actual production URL set until a public/non-SSO production surface can be inspected.
+- **UNKNOWN:** Search Console/indexation state until separately inspected.
 
 ## Unified milestones
 
@@ -79,7 +83,7 @@
 - **Status:** DONE / VERIFIED.
 
 ### G2 — Crawl Control and Indexation
-- **Status:** IN_PROGRESS — implementation complete; live deployment verification blocked.
+- **Status:** IN_PROGRESS — implementation and automated verification complete; live sitemap inspection remains blocked.
 
 ### G3 — Saudi Local Discovery + Branch SEO
 - **Status:** TODO.
@@ -97,4 +101,4 @@
 - **Status:** TODO.
 
 ## Exact Current Task Exit Criteria
-**Close G2 only after the focused commit passes the repository verification suite and the deployed `/robots.txt` and `/sitemap.xml` outputs are inspected successfully. Do not start G3 before G2 is closed.**
+**Close G2 only after the live `/sitemap.xml` response can be inspected successfully and satisfies the existing acceptance criteria. Do not start G3 before G2 is closed.**
