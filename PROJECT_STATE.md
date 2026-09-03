@@ -12,6 +12,7 @@
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - SEO/discoverability remains prioritized before broad template expansion.
 - Current section: **G1 — Public Menu SEO Foundation.**
+- Current atomic task: **fix the two public-menu link search typing errors exposed by CI.**
 
 ## Verified Product Foundation
 - React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGlite-ready data layer, Supabase integration, Vercel target, Node 24 CI.
@@ -33,14 +34,12 @@
 - VERIFIED: historical quality run `33743739709` passed all existing quality steps.
 - VERIFIED: run `33744076308` reached Typecheck, Tests, Lint, Production build and Playwright installation successfully; its only failure was `Start built preview`.
 - VERIFIED: root cause of the preview failure was recursive invocation: CI ran `npm run preview`, while `preview` itself ran `node scripts/preview.mjs restart`, which spawned `npm run preview` again and terminated early.
-- VERIFIED: run `33744710145` reached Typecheck and exposed exact public-route typing errors; those were fixed before the current preview fix.
-- VERIFIED: commits `9e4368ac545fc155480d89ccf172d7d70b46746e` and `ebef098356e805d246d54a7c4dd6dc0ac6d63000` narrowed the public-menu loader results and corrected typed search handling.
-- VERIFIED: commit `73d0e13375de54ccf49ae9fdab703c836ce60b28` supplied explicit empty search objects to existing public-menu links after generated route typing required the parameter.
-- VERIFIED: commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changed only the CI `Start built preview` step to launch `vite preview` directly with readiness polling, avoiding the recursive helper path. The diff is limited to `.github/workflows/quality.yml`.
-- UNKNOWN: post-fix GitHub Actions result for the latest commits; the available connector exposes historical runs and commit data but not the new push-triggered run reliably.
-- BLOCKED: Vercel status for current commits is still rate-limited for 24 hours; live deployment cannot currently be used for verification.
-- UNKNOWN: live production HTML/head output, custom-domain canonical origin, Search Console/indexation state and production content quality.
-- UNKNOWN: browser QA after the CI preview-process fix until a post-fix run completes.
+- VERIFIED: run `33744710145` exposed exact public-route typing errors; those were traced to required typed `branch` search values on existing public-menu links.
+- VERIFIED: commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changed only the CI `Start built preview` step to launch `vite preview` directly with readiness polling, avoiding the recursive helper path.
+- VERIFIED: commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` updates only `src/routes/index.tsx`, supplying `search={{ branch: undefined }}` to the two existing `/m/$slug` links identified by CI.
+- IN_PROGRESS: GitHub Actions run `33748743094` is executing against the fix commit. At the latest observation, Install was still in progress; Typecheck and later gates had not yet run.
+- BLOCKED: Vercel status remains rate-limited for 24 hours; live deployment cannot currently be used for verification.
+- UNKNOWN: final post-fix CI conclusion, Browser QA result, live production HTML/head output, custom-domain canonical origin, Search Console/indexation state and production content quality.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -57,7 +56,7 @@
 - T3 flagship template: DONE / VERIFIED.
 
 ## Known Issues / Risks
-- UNKNOWN: post-fix CI completion, including browser template QA.
+- IN_PROGRESS: post-fix CI completion, including Browser QA.
 - BLOCKED: Vercel deployment is rate-limited for 24 hours according to the current deployment status.
 - UNKNOWN: live production metadata/head behavior until a deployed G1 build is directly inspected.
 - UNKNOWN: canonical origin when the application is served through a custom domain; G1 intentionally does not invent an origin.
@@ -71,6 +70,8 @@
 - 2026-09-03 — CI exposed public-route TypeScript inference errors; fixed only those errors and pushed commits `9e4368ac545fc155480d89ccf172d7d70b46746e`, `ebef098356e805d246d54a7c4dd6dc0ac6d63000` and `73d0e13375de54ccf49ae9fdab703c836ce60b28`.
 - 2026-09-03 — Audited the historical preview failure and fixed the CI recursion in `298ffe21f98cb17a9147c27b3cd222f8f4f7453f`.
 - 2026-09-03 — Vercel deployment remained rate-limited; no production verification was claimed.
+- 2026-09-03 — CI run `33748260638` exposed two remaining `search={{}}` type errors in `src/routes/index.tsx`.
+- 2026-09-03 — Fixed only those two links in commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b`, then confirmed replacement CI run `33748743094` started from that commit.
 
 ## Exact Remaining Work
-- **G1 — obtain post-fix CI evidence for Typecheck, Tests, Lint, Production build and Browser QA. When the Vercel rate limit clears, inspect deployed HTML/head. Only after those checks pass may G1 be marked DONE / VERIFIED. Do not start G2 automatically.**
+- **Current atomic task:** obtain the conclusion of CI run `33748743094` and confirm Typecheck, Tests, Lint, Production build and Browser QA pass for commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b`. If CI fails, fix only the failure directly attributable to this atomic task; otherwise stop and record the evidence. Do not start G2 or any other task.
