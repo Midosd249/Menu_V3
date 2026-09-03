@@ -5,47 +5,58 @@
 - Repository: `Midosd249/Menu_V3`; `main` is the source of truth.
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
-- **Current section:** G1 — Public Menu SEO Foundation.
-- **Current atomic task:** complete Vercel production verification after the live inspection found and the repository fixed a nested branch-head duplication.
+- **Current section:** G2 — Crawl Control and Indexation.
+- G1 — Public Menu SEO Foundation is **DONE / VERIFIED**.
 
-## G1 Status
+## G1 Status — CLOSED
 
 ### VERIFIED
 - Public-menu SSR metadata/schema implementation is complete and protected.
-- `7b3e0812a29c129374d8d99cdf98cf005790a233` fixed the Browser QA URL-type defect.
-- `b56c951e362522ec0e25b02a343278beff725f2c` fixed CI preview process lifetime handling.
-- PGlite runtime files are copied to both `_libs` and the Vercel server-function root.
-- PGlite skips production-only `menu_v3.*` migrations while preserving those migrations for PostgreSQL.
-- Regression coverage exists for Browser QA preview isolation, PGlite assets, migration portability and migration isolation.
-- **CI run `33763072784` passed all quality gates, including Browser template QA and cleanup.**
+- `33763072784` passed all quality gates, including Browser template QA and cleanup.
 - Production `/m/nafas` and `/m/nafas/olaya` return SSR menu content with route-specific SEO metadata.
 - Production missing-menu output is `noindex, nofollow`.
-- No production error/fatal runtime events were observed in the last hour at verification time.
-- TanStack Router documents nested route head composition and exposes `matches` to route `head`; this supports suppressing parent canonical/JSON-LD entries when the branch child is active. citeturn0search0turn0search3
+- The original nested branch duplicate canonical/JSON-LD defect was fixed in `62df67e5d2597dcc3f4132354cefe750ae2c2188`.
+- Production deployment `dpl_y7wz8vKhNzXWjjDYthLCGYfwv9Bm` is built from descendant commit `30325490ed502344360e86e31ae0d13d3fe5eae2`, which directly includes the fix.
+- Live production inspection confirms one canonical and one relevant Restaurant JSON-LD payload per inspected public page.
 
-### FINDING
-- **VERIFIED:** live `/m/nafas/olaya` initially emitted two canonical links and two Restaurant JSON-LD scripts because both `/m/$slug` and `/m/$slug/$branch` supplied head entries.
-- **VERIFIED:** this is a metadata correctness defect, not a runtime rendering failure.
-
-### FIX
-- **VERIFIED:** commit `62df67e5d2597dcc3f4132354cefe750ae2c2188` changes only `src/routes/m.$slug.tsx` so the parent route omits canonical and JSON-LD when the branch child is present. The branch route remains the sole owner of branch canonical/schema metadata.
-- **VERIFIED:** continuity documentation was updated in commit `30325490ed502344360e86e31ae0d13d3fe5eae2` to preserve the finding and blocker evidence.
-
-### BLOCKED / UNKNOWN
-- **BLOCKED:** Vercel has not created a new deployment for the fixed `main` commit during the current verification window, so the fix cannot yet be rechecked in production.
-- **UNKNOWN:** whether the Git integration webhook is delayed, paused, or requires manual re-triggering.
-- **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified canonical public origin has been configured in the application.
+### Remaining G1 Notes
+- **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
+
+## G2 — Crawl Control and Indexation
+- **Status:** TODO — this is the exact next atomic milestone.
+- **Objective:** establish deterministic crawler controls so only intentionally published public menu pages can be discovered/indexed, while unavailable/unpublished content is excluded without harming valid public pages.
+
+### Scope
+1. Audit existing `robots.txt`, sitemap behavior, route handling, and any noindex/redirect logic.
+2. Implement a production-safe `robots.txt` surface.
+3. Implement a dynamic sitemap containing only eligible published public menu/branch URLs backed by verified data.
+4. Define and enforce published/unpublished/not-found canonical and redirect policy.
+5. Add regression tests for robots, sitemap eligibility, route status/metadata behavior, and duplicate URL exclusion.
+6. Verify generated outputs in CI and, when available, on the deployed production host.
+
+### Non-goals
+- Do not start Saudi local landing pages yet.
+- Do not implement locale URL variants yet.
+- Do not expand the template family set yet.
+- Do not change ordering, authentication, billing, or unrelated dashboard behavior.
+
+### Acceptance Criteria
+- `robots.txt` is deterministic and does not accidentally block valid public menu routes.
+- Sitemap output is deterministic, valid, and contains only published/indexable public URLs.
+- Unpublished/inactive/not-found menu routes are excluded from sitemap and emit appropriate non-indexing behavior.
+- Canonical policy is consistent between normal and branch routes.
+- Tests cover eligible and ineligible sitemap entries plus crawler-control behavior.
+- Existing G1 behavior remains intact.
+- `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, and CI/browser QA remain successful.
 
 ## Unified milestones
 
 ### G1 — Public Menu SEO Foundation
-- **Status:** IN_PROGRESS — implementation and CI are verified; production verification found a nested-head defect, the repository fix is committed, and deployment of that fix remains pending.
-- **Acceptance:** useful SSR menu content; truthful metadata/schema; missing menus noindex; renderer/order behavior preserved; generated route search types compile; CI/browser QA passes; deployed HTML/head inspected with no duplicate canonical/schema output.
-- **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI/browser QA and deployed HTML/head inspection.
+- **Status:** DONE / VERIFIED.
 
 ### G2 — Crawl Control and Indexation
-- **Status:** TODO. Do not start until G1 is closed.
+- **Status:** TODO — exact next task.
 
 ### G3 — Saudi Local Discovery + Branch SEO
 - **Status:** TODO.
@@ -63,4 +74,4 @@
 - **Status:** TODO.
 
 ## Exact Current Task Exit Criteria
-**Close G1 only after the fixed `main` commit is deployed to Vercel production and the generated HTML/head for `/m/nafas` and `/m/nafas/olaya` confirms one canonical per page, one relevant Restaurant JSON-LD payload per page, correct indexation directives, SSR menu content, and no production runtime errors attributable to this task. Do not start G2 before G1 is closed.**
+**Complete G2 only after robots.txt and sitemap behavior are implemented and tested, published/indexable filtering is proven, canonical/redirect/noindex policy is consistent, existing G1 tests still pass, and the full CI verification suite is green. Do not start G3 before G2 is closed.**
