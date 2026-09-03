@@ -1,10 +1,10 @@
 # TASKS
 
 ## Current Section
-- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and repository verification are complete; final live crawler-surface verification is blocked by the current Vercel deployment rate limit.
+- **G2 — Crawl Control and Indexation: IN_PROGRESS.** Implementation and repository verification are complete; live `/robots.txt` is verified on the READY production deployment, while live `/sitemap.xml` inspection is blocked by Vercel SSO on the available fetch surface.
 
 ## Unified Queue
-1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — final live verification of deployed `/robots.txt` and `/sitemap.xml`; close only when those outputs are inspected successfully.
+1. **G2 — Crawl Control and Indexation:** IN_PROGRESS — final live verification of deployed `/sitemap.xml`; close only when the output is inspected successfully.
 2. **G3 — Saudi Local Discovery + Branch SEO:** TODO — safe city/branch landing-page strategy using complete verified branch data.
 3. **G4 — Arabic/English SEO Architecture:** TODO — real URL-level locale variants, native metadata, reciprocal hreflang and correct `lang`/`dir` only when both versions actually exist.
 4. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
@@ -34,7 +34,10 @@
 - VERIFIED: focused commit `e0a007a4a45362494d26ff801a833708b17d4fb7` is the tested G2 implementation head.
 - VERIFIED: GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - VERIFIED: Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- BLOCKED: Vercel deployment for the focused commit is rate-limited (`retry in 24 hours`), so live `/robots.txt` and `/sitemap.xml` output cannot yet be inspected for that deployment.
+- VERIFIED: Vercel production deployment `dpl_F2NGuDydH1b8RfPaghVToGvoV7Tg` is READY from the focused G2 source commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
+- VERIFIED: deployed `/robots.txt` returns HTTP 200 with the expected allow/disallow rules and `Sitemap` declaration.
+- BLOCKED: deployed `/sitemap.xml` retrieval through the available Vercel fetch surface redirects to Vercel SSO even after generating a deployment share URL.
+- UNKNOWN: live sitemap body and actual production URL set until a public/non-SSO production surface can be inspected.
 
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
@@ -54,4 +57,4 @@
 - DONE / VERIFIED: G1 Public Menu SEO Foundation.
 
 ## Exact Next Task
-- **G2 — Final live crawler-surface verification:** when Vercel permits a deployment for the focused commit, inspect `/robots.txt` and `/sitemap.xml`, verify the existing G2 acceptance criteria, then close G2. Do not start G3 before G2 is closed and verified.
+- **G2 — Final live sitemap verification:** obtain a publicly inspectable production response for `/sitemap.xml`, verify the existing G2 acceptance criteria, then close G2. Do not start G3 before G2 is closed and verified.
