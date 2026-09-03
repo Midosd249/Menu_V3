@@ -1,13 +1,12 @@
 # TASKS
 
 ## Current
-- **No feature task IN_PROGRESS.** The prior authorization integration is DONE / VERIFIED.
-- Current repository HEAD is documentation-only agent/continuity work; application implementation remains verified at `46b5b42a56ba93f9715a511a6062f39a0f739ace`.
-- This session's atomic task: upgrade the root `AGENTS.md` operating contract. DONE / VERIFIED; no application code changed.
+- **No feature task IN_PROGRESS.** The onboarding hardening task is DONE / VERIFIED for its defined atomic scope.
+- Current repository HEAD is the onboarding hardening implementation plus continuity documentation.
+- This session's atomic task: harden client account lifecycle and tenant onboarding idempotency. DONE / VERIFIED.
 
 ## Queue
-- TODO / UNBLOCKED: **Harden client account lifecycle and tenant onboarding idempotency using the existing `src/routes/onboarding.tsx` and server-side tenant creation flow.**
-- TODO: Connect existing subscription-plan foundation to server-side entitlement checks.
+- TODO / UNBLOCKED: **Connect the existing subscription-plan foundation to server-side entitlement checks without changing the existing plan data model.**
 - TODO: Establish service/project workflow foundations and observability.
 - TODO: Execute Level 4 production/security gate.
 - TODO: Re-verify historical authenticated/cache/editor E2E caveats.
@@ -22,4 +21,5 @@
 - DONE / VERIFIED: Durable tenant-role/platform-authorization database foundation.
 - DONE / VERIFIED: Subscription-plan database foundation present on `main`.
 - DONE / VERIFIED: Canonical application authorization integration for `access_role` / `branch_scope`, including focused regression coverage and the final staff-role UI compatibility fix at `46b5b42a56ba93f9715a511a6062f39a0f739ace`.
-- DONE / VERIFIED: Repository agent contract upgraded in root `AGENTS.md`; commit `c3a6e612f98a6f64b997ccd20318bca53aee218b` contains the documentation-only change.
+- DONE / VERIFIED: Repository agent contract upgraded in root `AGENTS.md`.
+- DONE / VERIFIED: Client onboarding idempotency boundary: unique tenant ownership per `owner_user_id` plus concurrent onboarding conflict reconciliation through trusted server-side membership lookup.
