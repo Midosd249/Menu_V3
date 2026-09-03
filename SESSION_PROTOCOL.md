@@ -16,6 +16,8 @@
 6. Keep authentication, authorization, tenant/branch isolation, validation, secrets, and privacy boundaries server-side.
 7. Run relevant tests, typecheck, lint, build, migration/security checks, and manual acceptance checks available for the task. If an unrelated pre-existing blocker prevents verification, classify it explicitly and stop rather than expanding scope.
 8. Inspect the final diff and confirm every changed line belongs to the single task.
+9. For template work, keep presentation separate from menu data and business rules; preserve existing `ThemeKey` compatibility until a replacement family passes its acceptance gates.
+10. For template work, validate real Arabic/English content, long text, missing images, availability, modifiers, responsive behavior, RTL, accessibility, and performance as applicable.
 
 ## Plan Reset Protocol
 1. When the current plan is declared obsolete, archive it as `PLAN_ARCHIVE_<YYYY-MM-DD>.md` before replacing it.
@@ -25,7 +27,7 @@
 
 ## Stop
 1. Stop after the single current task is completed or blocked; never start the next task automatically.
-2. Update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update this file whenever workflow/reset rules change.
+2. Update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update this file whenever workflow rules change.
 3. Append a dated session log to `PROJECT_STATE.md`.
 4. Record files changed, commands/results, commit evidence, known issues, blockers, uncertainty, and exactly one next task.
 5. Leave all other queued tasks untouched.
