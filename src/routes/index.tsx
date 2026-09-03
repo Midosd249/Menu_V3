@@ -67,7 +67,7 @@ function Home() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="rounded-xl bg-paper/70 px-5">
-                  <Link to="/m/$slug" params={{ slug: "nafas" }}>{t(copy.marketing.ctaSecondary, lang)}</Link>
+                  <Link to="/m/$slug" params={{ slug: "nafas" }} search={{}}>{t(copy.marketing.ctaSecondary, lang)}</Link>
                 </Button>
               </div>
               <div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-3">
@@ -120,7 +120,7 @@ function Home() {
 function LiveCard() {
   const { lang } = useLang();
   return (
-    <Link to="/m/$slug" params={{ slug: "nafas" }} className="group relative block min-h-[480px] overflow-hidden rounded-[2rem] bg-ink text-paper shadow-2xl shadow-ink/15">
+    <Link to="/m/$slug" params={{ slug: "nafas" }} search={{}} className="group relative block min-h-[480px] overflow-hidden rounded-[2rem] bg-ink text-paper shadow-2xl shadow-ink/15">
       <img src={HERO_IMAGE} alt="" className="absolute inset-0 size-full object-cover opacity-75 transition duration-700 group-hover:scale-105" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
       <div className="relative flex min-h-[480px] flex-col justify-between p-6 sm:p-8">
