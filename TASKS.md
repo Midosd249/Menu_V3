@@ -1,10 +1,10 @@
 # TASKS
 
 ## Current Section
-- **G4 — Arabic/English SEO Architecture: IN_PROGRESS.** G3 is closed after production verification on the current `main` deployment.
+- **G4 — Arabic/English SEO Architecture: DONE / VERIFIED / CLOSED.** G5 is now the next queued task, but is not started.
 
 ## Unified Queue
-1. **G4 — Arabic/English SEO Architecture:** IN_PROGRESS — audit the existing locale model and public URL contract, then implement only real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` when both versions actually exist. Do not start G5.
+1. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED — real URL-level locale variants with native metadata, reciprocal hreflang, and correct `lang`/`dir` behavior without fabricated translations.
 2. **G5 — Template Ecosystem Expansion:** TODO — specialty cafe, bakery/dessert, fast casual/QSR, fine dining/hospitality and small-menu families under the shared SEO/accessibility/performance contract.
 3. **G6 — Performance + Media:** TODO — evidence-based image/font/JS budgets, media optimization and Core Web Vitals measurement for representative Saudi mobile fixtures.
 4. **G7 — Analytics, Search Console, Growth, Rollout:** TODO — acquisition-to-conversion funnel, Search Console measurement, template/branch comparisons, privacy-reviewed analytics and staged rollout.
@@ -42,6 +42,21 @@
 - VERIFIED: production `/m/nafas/olaya` returns HTTP 200 with `lang="ar"`, `dir="rtl"`, Saudi `PostalAddress`, absolute Google Maps `hasMap`, canonical path `/m/nafas/olaya`, and `robots=index, follow`.
 - VERIFIED: the prior provider build-rate-limit blocker no longer prevents the verified deployment.
 
+## G4 Verification Evidence — CLOSED
+- VERIFIED: public menu search validation accepts only `ar` or `en` locale values.
+- VERIFIED: locale resolution is data-driven and falls back to Arabic when the English variant is not actually available.
+- VERIFIED: English public variants use `?lang=en`; Arabic remains the default canonical path.
+- VERIFIED: available English variants emit reciprocal absolute `hreflang` links for `ar` and `en`.
+- VERIFIED: unavailable English variants emit no fabricated alternate links and are `noindex, follow` while resolving to the Arabic canonical.
+- VERIFIED: titles, descriptions, Open Graph locale, canonical URL, and Restaurant schema follow the effective locale.
+- VERIFIED: public language switching updates only the locale query parameter and preserves existing search state.
+- VERIFIED: parent menu routes suppress duplicate head metadata when a branch child owns the canonical route.
+- VERIFIED: `src/lib/menu/seo.test.ts` covers locale availability, resolution, reciprocal alternates, missing English data, Saudi local SEO, and missing-menu noindex behavior.
+- VERIFIED: GitHub Actions run `33801648459` for commit `4cb283ab8037506374f9711788cd0e576207e260` passed every quality gate: route-tree generation, Typecheck, Tests (69/69), Lint, Production build, Playwright installation, Browser Template QA, and preview cleanup.
+- VERIFIED: Browser Template QA passed mobile, tablet, and desktop with HTTP 200, RTL, Arabic document language, no horizontal overflow, accessibility-name checks, zero runtime console errors, and reduced-motion support.
+- VERIFIED: the G4 TypeScript regression in `src/components/lang-toggle.tsx` was fixed and the resulting CI run passed.
+- INFERRED: a fresh Vercel deployment of the G4 commit was not independently available for live SEO-head inspection because the provider reported a `build-rate-limit` failure; repository build and browser-preview verification passed completely.
+
 ## Completed / Protected
 - DONE / VERIFIED: Level 0 Foundation & Audit.
 - DONE / VERIFIED: Level 1 Theme Engine Hardening.
@@ -60,6 +75,7 @@
 - DONE / VERIFIED: G1 Public Menu SEO Foundation.
 - DONE / VERIFIED: G2 Crawl Control and Indexation.
 - DONE / VERIFIED: G3 Saudi Local Discovery + Branch SEO.
+- DONE / VERIFIED: G4 Arabic/English SEO Architecture.
 
 ## Exact Next Task
-- **Current atomic task:** G4 — Arabic/English SEO Architecture. Audit the existing locale model and public URL contract, research current multilingual SEO/hreflang guidance, then implement the smallest complete locale architecture change that meets the acceptance criteria. Do not begin G5.
+- **G5 — Template Ecosystem Expansion:** TODO. Do not start it in this session.
