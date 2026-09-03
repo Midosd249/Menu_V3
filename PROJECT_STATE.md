@@ -3,53 +3,52 @@
 ## Identity
 - Status: VERIFIED
 - Repository: `Midosd249/Menu_V3`
-- Default/source-of-truth branch: `main` (VERIFIED)
-- Current `main` commit: `03fd269cf2a6a3117c8961992b1d5e2b0f6cdfcf` (VERIFIED)
-- Product identity: Menu V3; Arabic-first, bilingual, mobile-first multi-tenant digital-menu SaaS (VERIFIED from repository documentation).
+- Source of truth: `main`
+- Current audited implementation commit: `19a6c3721244cdde0ff9e8ad514704ce9bcec555`.
+- Product: Menu V3, an Arabic-first bilingual multi-tenant digital-menu SaaS.
 
 ## Current Position
-- Status: VERIFIED
-- Level 0 Foundation & Audit: CLOSED.
-- Level 1 Theme Engine Hardening: CLOSED.
-- Level 2 Menu Experience & Product System: IMPLEMENTED; historical verification caveats remain.
-- Level 3 Restaurant Operations / Ordering: CLOSED in repository documentation.
-- Level 4 Client SaaS & Commercial Platform: IN PROGRESS.
-- Important finding: the Level 4 durable authorization migration introduces canonical `access_role` and `branch_scope`, while application authorization still reads legacy `role` / `member_branch_access`. This is a verified integration gap.
+- Status: VERIFIED / IN_PROGRESS
+- Level 0: CLOSED.
+- Level 1: CLOSED.
+- Level 2: IMPLEMENTED; historical verification caveats remain.
+- Level 3: CLOSED in repository documentation.
+- Level 4: IN_PROGRESS.
+- Current task: canonical durable authorization integration.
 
 ## Stack
 - Status: VERIFIED
-- React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase production integration, Vercel deployment, Node 24 CI.
-- Package scripts include `typecheck`, `test`, `test:platform`, `lint`, `build`, and `check:auth`.
+- React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase production integration, Vercel, Node 24 CI.
+- Commands in `package.json`: `dev`, `build`, `typecheck`, `test`, `test:platform`, `lint`, `check:auth`, `db:migrate`.
 
 ## Completed
 - Status: VERIFIED
-- Public menu and ordering flow, Studio routes, onboarding, QR, analytics, authentication foundation, team invitations, durable role/authorization database foundation, subscription-plan database foundation, and Level 3 ordering hardening are present in `main`.
-- Team invitation lifecycle was merged through PR #5 at merge commit `161d955be4311a457d5b3573212fd8a1baa21489`.
-- Recent `main` commits include `8da53358103a2672aac2362423cc95e29ee1814f` (durable tenant roles/platform authorization foundation) and `03fd269cf2a6a3117c8961992b1d5e2b0f6cdfcf` (order item rendering type fix).
+- Public menu/order flow, Studio, onboarding, QR, analytics, auth foundation, team invitations, durable role database foundation, and subscription-plan foundation exist on `main`.
+- Team invitation lifecycle merged by PR #5 at `161d955be4311a457d5b3573212fd8a1baa21489`.
+- Durable roles foundation: `migrations/20260903008000_roles_permissions_foundation.sql`.
+- Recent source commits: `8da53358103a2672aac2362423cc95e29ee1814f` (role/platform foundation) and `03fd269cf2a6a3117c8961992b1d5e2b0f6cdfcf` (order-item type fix).
 
 ## In Progress
 - Status: IN_PROGRESS
-- Level 4 authorization integration: make server-side application authorization consume canonical durable roles and branch scopes without removing legacy compatibility.
+- Align application authorization with canonical `access_role` / `branch_scope` while preserving legacy compatibility.
 
 ## Do Not Redo
 - Status: VERIFIED
-- Do not rebuild the application from scratch.
-- Do not replace completed public menu, Studio, ordering, authentication, invitation, or subscription foundations.
-- Do not remove `/admin`, `server/`, `public/__grok/`, or Grok platform integration files.
-- Do not treat documentation claims as runtime proof when current repository evidence disagrees.
-- Do not add AI, payments, or domain work before the Level 4 foundation is properly established.
+- Do not rebuild or replace completed work.
+- Do not remove `/admin`, `server/`, `public/__grok/`, or existing platform integrations.
+- Do not add AI, payments, or domain work before Level 4 foundation work is stable.
+- Do not mark work DONE without direct verification.
 
 ## Important Paths
-- `src/lib/auth/authorization.server.ts` — server authorization boundary.
-- `src/lib/auth/permissions.ts` — permission matrix.
-- `src/lib/menu/types.ts` — shared role/types contract.
-- `src/lib/menu/team.ts` — team management mutations/queries.
-- `src/lib/menu/team-invitations.ts` — invitation lifecycle.
-- `migrations/20260903008000_roles_permissions_foundation.sql` — canonical durable role foundation.
-- `migrations/20260903005000_team_invitations.sql` — invitation schema.
-- `src/routes/onboarding.tsx` — client onboarding.
-- `.github/workflows/quality.yml` — CI quality gate.
-- `package.json` — commands/dependencies.
+- `src/lib/auth/authorization.server.ts`
+- `src/lib/auth/permissions.ts`
+- `src/lib/menu/types.ts`
+- `src/lib/menu/team.ts`
+- `src/lib/menu/team-invitations.ts`
+- `src/routes/onboarding.tsx`
+- `migrations/20260903008000_roles_permissions_foundation.sql`
+- `.github/workflows/quality.yml`
+- `package.json`
 
 ## Commands
 - `npm install --no-audit --no-fund`
@@ -61,29 +60,30 @@
 - `npm run test:platform`
 
 ## Verification
-- Status: VERIFIED / PARTIAL
-- Repository tree is available and non-truncated; current tree SHA is `03fd269cf2a6a3117c8961992b1d5e2b0f6cdfcf`.
-- Current `main` has no reported open GitHub issues.
-- CI workflow is configured for route-tree generation, typecheck, tests, lint, and production build.
-- Historical quality run `33685195512` is documented as SUCCESS, but it predates the current `03fd269...` commit; current-commit workflow lookup returned no run at audit time.
-- Vercel/Supabase production verification is documented for the Level 3 checkpoint; no new live deployment was claimed during this audit.
-- Local working-tree `git status`, uncommitted local diffs, and local command execution are UNKNOWN because the available GitHub interface exposes repository state, not a local checkout.
+- Status: PARTIAL / IN_PROGRESS
+- Repository tree is non-truncated; `main` is the canonical branch.
+- CI quality workflow covers route-tree generation, typecheck, tests, lint, and production build.
+- Quality run `33733157069` for commit `19a6c3721244cdde0ff9e8ad514704ce9bcec555` was queued/in progress at the final audit check; no completion result is claimed.
+- Earlier run `33685195512` was documented as SUCCESS but predates the current implementation.
+- Vercel status for current implementation reported `failure` with target indicating a Vercel build-rate-limit page; this is not interpreted as a code/build failure.
+- Local working-tree `git status`, local uncommitted diffs, and direct local command execution are UNKNOWN because the available interface exposes GitHub repository state rather than a local checkout.
 
 ## Known Issues
 - Status: VERIFIED
-- Canonical `access_role` / `branch_scope` database foundation is not yet consumed consistently by `authorization.server.ts` and `team.ts`.
-- `Role` currently contains only `owner | admin | editor`, while the canonical database role set also contains `staff`.
-- Historical Supabase security-advisor notices remain documented and are not marked resolved.
+- Durable DB roles (`tenant_owner`, `branch_manager`, `staff`, `editor`) previously were not consumed consistently by application authorization; this session implemented the integration layer.
+- Historical Supabase security-advisor notices remain.
 - Historical authenticated/cache/editor E2E caveats remain.
-- True Supabase realtime and tenant/branch-scoped customer order numbering are deferred.
-- Current deployment status for commit `03fd269...`: UNKNOWN.
+- Realtime and tenant/branch-scoped order numbering remain deferred.
+- Full current CI completion is UNKNOWN until run `33733157069` finishes.
 
 ## Decisions
 - Status: VERIFIED
-- `main` is the repository source of truth.
-- Preserve existing architecture and use additive, compatibility-safe changes.
-- Canonical durable roles are `tenant_owner`, `branch_manager`, `staff`, and `editor`; the application may expose a compatibility role contract while migrating server authorization.
+- `main` is the source of truth.
+- Preserve legacy `role` semantics for UI compatibility while resolving server authority from canonical durable roles.
+- `staff` is least privilege: `menu.read` only.
+- Branch scope is derived from trusted membership state and fails closed.
 - Only one task may be IN_PROGRESS.
 
 ## Session Log
-- 2026-09-03 — VERIFIED audit completed against repository tree, documentation, source, migrations, package manifest, CI workflow, recent history, branches, and PR state. Continuity files initialized. First task identified: integrate application authorization with canonical durable roles/branch scope without rebuilding completed work.
+- 2026-09-03 — VERIFIED repository audit completed; continuity system initialized.
+- 2026-09-03 — Executed exactly one task: integrated canonical durable role/branch-scope authorization across shared role types, server authorization, team writes, invitation acceptance, and focused regression tests. CI quality run `33733157069` was triggered by the final test commit and was still in progress at the last check. No second feature task started.
