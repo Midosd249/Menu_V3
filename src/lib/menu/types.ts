@@ -1,7 +1,27 @@
 import type { ThemeKey } from "@/lib/theme";
 
 export type Lang = "ar" | "en";
-export type Role = "owner" | "admin" | "editor";
+export type Role = "owner" | "admin" | "editor" | "staff";
+export type AccessRole = "tenant_owner" | "branch_manager" | "staff" | "editor";
+
+export function accessRoleToRole(accessRole: AccessRole): Role {
+  switch (accessRole) {
+    case "tenant_owner": return "owner";
+    case "branch_manager": return "admin";
+    case "editor": return "editor";
+    case "staff": return "staff";
+  }
+}
+
+export function roleToAccessRole(role: Role): AccessRole {
+  switch (role) {
+    case "owner": return "tenant_owner";
+    case "admin": return "branch_manager";
+    case "editor": return "editor";
+    case "staff": return "staff";
+  }
+}
+
 export type EventType = "visit" | "product_view" | "qr_scan" | "whatsapp";
 export type FnOk<T> = { ok: true; data: T };
 export type FnErr = { ok: false; error: string; code: "not_found" | "unauthorized" | "forbidden" | "unavailable" | "invalid" };
