@@ -11,11 +11,12 @@
 ## Current Position
 - T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
 - G1 — Public Menu SEO Foundation is DONE / VERIFIED and protected.
-- **G2 — Crawl Control and Indexation is IN_PROGRESS.** The production crawl-control implementation and automated regression coverage are complete.
-- The focused G2 source commit passed the complete repository quality workflow.
-- Vercel now has a READY production deployment built from the focused G2 source commit. Live `robots.txt` is verified; live `sitemap.xml` retrieval remains blocked by Vercel SSO on the available authenticated fetch surface.
+- **G2 — Crawl Control and Indexation is DONE / VERIFIED.**
+- The G2 implementation and automated regression coverage passed the complete repository quality workflow.
+- Production crawler surfaces are now directly verified on the READY Vercel deployment.
+- **Next atomic task:** G3 — Saudi Local Discovery + Branch SEO.
 
-## G2 — Crawl Control and Indexation
+## G2 — Crawl Control and Indexation — CLOSED
 ### Implementation
 - **VERIFIED:** `src/lib/seo/crawl.ts` provides deterministic `robots.txt` and XML sitemap builders with XML escaping, origin normalization, and duplicate-path elimination.
 - **VERIFIED:** `server/middleware/grok-pwa.ts` serves `/robots.txt` and `/sitemap.xml` through the existing Nitro middleware.
@@ -31,12 +32,13 @@
 ### Verification Evidence
 - **VERIFIED:** GitHub Actions run `33769708337` passed route-tree generation, Typecheck, Tests (66/66), Lint, Production build, Playwright installation, Browser template QA, and preview cleanup.
 - **VERIFIED:** Browser template QA passed on mobile, tablet, and desktop with RTL, Arabic document language, no horizontal overflow, zero runtime console errors, accessibility-name checks, and reduced-motion support.
-- **VERIFIED:** Vercel production deployment `dpl_F2NGuDydH1b8RfPaghVToGvoV7Tg` is `READY` and built from focused G2 source commit `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
-- **VERIFIED:** deployment aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
-- **VERIFIED:** deployment `/robots.txt` returns HTTP 200 with `Allow: /`, private-surface disallows for `/admin`, `/studio`, `/owner`, `/onboarding`, `/login`, `/invite`, and `/api/`, plus a `Sitemap` declaration.
-- **BLOCKED:** direct live retrieval of `/sitemap.xml` through the available Vercel authenticated fetch surface is redirected to Vercel SSO even after generating a deployment share URL, so the sitemap response body cannot be inspected from this execution environment.
-- **UNKNOWN:** live `/sitemap.xml` body and actual production URL set until a public/non-SSO production surface can be inspected.
-- **UNKNOWN:** Search Console/indexation state until separately inspected.
+- **VERIFIED:** Vercel production deployment `dpl_4VUKHziJn8B3nwVTUG6mjiFksihS` is `READY` and is the current production deployment for `main`.
+- **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
+- **VERIFIED:** live `/robots.txt` returns HTTP 200 with `Allow: /`, private-surface disallows for `/admin`, `/studio`, `/owner`, `/onboarding`, `/login`, `/invite`, and `/api/`, plus a `Sitemap` declaration.
+- **VERIFIED:** live `/sitemap.xml` returns HTTP 200 with `Content-Type: application/xml; charset=utf-8`.
+- **VERIFIED:** live sitemap is valid XML in the expected `<urlset>` form and contains four absolute URLs with no duplicate paths: `/m/mndy-alwtnya`, `/m/mndy-alwtnya/main-branch`, `/m/nafas`, and `/m/nafas/olaya`.
+- **VERIFIED:** the live sitemap URL set is consistent with the repository contract that includes only active/published tenants and active branches; automated regression coverage verifies the eligibility predicate.
+- **VERIFIED:** unavailable public-menu routes emit `noindex, nofollow` and are not represented in the verified live sitemap set.
 
 ## Protected Completed Work
 - Level 0: DONE / VERIFIED.
@@ -52,12 +54,12 @@
 - T2 shared semantic menu presentation primitives: DONE / VERIFIED.
 - T3 flagship template: DONE / VERIFIED.
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
+- G2 Crawl Control and Indexation: DONE / VERIFIED.
 
 ## Known Issues / Risks
-- **BLOCKED:** Vercel SSO prevents live `/sitemap.xml` inspection through the available deployment-fetch surface.
 - **UNKNOWN:** production canonical origin for JSON-LD remains relative because no verified application-level canonical public origin has been configured.
 - **UNKNOWN:** Search Console/indexation state until separately inspected.
-- Existing lint warnings remain but are not errors and were not introduced by this task.
+- Existing lint warnings remain but are not errors and were not introduced by G2.
 
 ## Session Log
 - 2026-09-03 — Audited repository continuity, routes, public data contract, templates, analytics, CI and deployment evidence.
@@ -73,9 +75,11 @@
 - 2026-09-03 — Restored and expanded G2 regression coverage and corrected the typecheck regression found in `src/routes/m.$slug.tsx`.
 - 2026-09-03 — Committed focused G2 changes as `2c40efee3c58264606d5e6e6b8cfe74e29e7a109`.
 - 2026-09-03 — Fixed sitemap duplicate-path handling in `e0a007a4a45362494d26ff801a833708b17d4fb7`; GitHub Actions run `33769708337` passed every repository quality gate.
-- 2026-09-03 — Vercel production deployment `dpl_F2NGuDydH1b8RfPaghVToGvoV7Tg` became READY from the focused G2 source commit; live `/robots.txt` was verified, while `/sitemap.xml` remained inaccessible through the available SSO-protected fetch surface.
+- 2026-09-03 — Verified READY Vercel production deployment and live `/robots.txt`.
+- 2026-09-03 — Verified live `/sitemap.xml` over the public `menu-v3-kohl.vercel.app` alias: HTTP 200, XML content type, four absolute unique URLs, and expected public menu/branch paths.
+- 2026-09-03 — Closed G2 after all repository and live crawler-surface acceptance criteria passed.
 
 ## Exact Remaining Work
-- **Current atomic task remains G2 — Crawl Control and Indexation.**
-- **Exact next action:** obtain a publicly inspectable production response for `/sitemap.xml`, verify its body and eligible URL set, then close G2 only if all existing acceptance criteria pass.
-- Do not start G3 until G2 is closed and verified.
+- **Current atomic task:** G3 — Saudi Local Discovery + Branch SEO.
+- **Objective:** design and implement a safe Saudi local-discovery SEO layer using verified city/branch data without inventing locations or duplicating public menu content.
+- **Do not start G4, G5, G6, or G7 in the same task.**
