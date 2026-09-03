@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { requirePlatformAdmin } from "@/lib/auth/platform-admin.server";
 import { getSql } from "@/lib/db";
 import type { FnResult } from "./types";
 
@@ -33,26 +34,6 @@ export type AdminDashboard = {
 };
 
 const searchSchema = z.string().trim().max(120).optional();
-
-function csvEnv(key: string): string[] {
-  return (process.env[key] ?? "")
-    .split(",")
-    .map((value) => value.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-async function requirePlatformAdmin(userId: string) {
-  const allowedIds = csvEnv("PLATFORM_ADMIN_USER_IDS");
-  if (allowedIds.includes(userId.toLowerCase())) return;
-
-  const sql = await getSql();
-  const users = await sql<{ email: string }>`select "email" as email from "user" where "id" = ${userId} limit 1`;
-  const email = String(users[0]?.email ?? "").trim().toLowerCase();
-  const allowedEmails = csvEnv("PLATFORM_ADMIN_EMAILS");
-  if (!email || !allowedEmails.includes(email)) {
-    throw new Error("PLATFORM_ADMIN_REQUIRED");
-  }
-}
 
 async function assertAdmin(userId: string): Promise<FnResult<true>> {
   try {
