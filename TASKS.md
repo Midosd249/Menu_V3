@@ -32,5 +32,11 @@
 - UNKNOWN: production Search Console ownership/indexation state and final production domain are not evidenced by repository data.
 - BLOCKED: Vercel provider `build-rate-limit` remains an external deployment blocker.
 
+## G7.1 — Production analytics integrity hardening
+- DONE / VERIFIED: added `src/lib/menu/analytics-integrity.test.ts` for tenant scoping, supported 7/30-day ranges, invalid product handling, duplicate visit/QR suppression, and active/published tenant resolution.
+- DONE / VERIFIED: registered the suite in the existing `npm test` command.
+- DONE / VERIFIED: no runtime analytics/event model or dependency was changed.
+- UNKNOWN: the new test suite was not executed in-session because no repository shell/CI dispatch capability was available through the connected GitHub surface.
+
 ## Exact Next Task
-- **G7.1 — Production analytics integrity hardening:** add focused regression coverage for the existing public event/owner analytics contract, especially tenant isolation, invalid product handling, duplicate visit/QR suppression, and the 7/30-day range behavior, without changing the event model or adding dependencies.
+- **G7.2 — Search Console production readiness:** verify the intended production domain from repository/deployment evidence, then prepare only the minimal first-party verification/submission surface required by official Google Search Central guidance. Do not add credentials or claim ownership/indexation until production-domain evidence exists.
