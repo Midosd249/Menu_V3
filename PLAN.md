@@ -6,6 +6,7 @@
 - Superseded plan archived as `PLAN_ARCHIVE_2026-09-03-template-ecosystem.md`.
 - Completed T1/T2/T3 template work is preserved; SEO/discoverability remains the priority before broad template expansion.
 - **Current section:** G1 — Public Menu SEO Foundation.
+- **Current atomic task:** fix and verify the two public-menu link search typing errors exposed by CI.
 
 ## G1 Status
 
@@ -19,16 +20,17 @@
 - The historical preview failure was traced to recursive invocation of `npm run preview` from the `preview.mjs` helper.
 - Commits `9e4368ac545fc155480d89ccf172d7d70b46746e`, `ebef098356e805d246d54a7c4dd6dc0ac6d63000` and `73d0e13375de54ccf49ae9fdab703c836ce60b28` contain the evidence-backed public-route typing fixes.
 - Commit `298ffe21f98cb17a9147c27b3cd222f8f4f7453f` changes only the CI preview start step to launch `vite preview` directly with readiness polling, removing the recursive helper path.
+- Commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` supplies `search={{ branch: undefined }}` to the two existing `/m/$slug` links in `src/routes/index.tsx`, matching the generated route search contract.
 
 ### UNKNOWN / BLOCKED
-- UNKNOWN: post-fix CI result for the latest commits, including browser template QA.
-- BLOCKED: Vercel deployment status is rate-limited for 24 hours, so live deployment cannot currently be used to inspect generated production HTML/head.
+- UNKNOWN: final CI result after commit `295e6cbcf19ce65f2da4ea780e0768ac370fdd9b` and subsequent documentation commits.
+- BLOCKED: Vercel deployment status remains rate-limited, so live deployment cannot currently be used to inspect generated production HTML/head.
 - UNKNOWN: live production canonical origin, Search Console/indexation state and production content quality.
 
 ## Strategic Reassessment
 
 ### VERIFIED — repository
-- Stack: React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGlite-ready data layer, Supabase, Vercel, Node 24 CI.
+- Stack: React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase, Vercel, Node 24 CI.
 - `PublicMenu` exposes tenant/branch identity, Arabic/English names and descriptions, branding, city/country, currency, hours, categories, products, availability, variants/modifiers, dietary labels, allergens, phone, WhatsApp and maps data.
 - Public routes are `/m/$slug` and `/m/$slug/$branch`.
 - `getPublicMenu` selects only active/published tenants and active branches.
@@ -52,8 +54,8 @@
 
 ### G1 — Public Menu SEO Foundation
 - **Objective:** SSR published public menu content and add accurate title, description, canonical, Open Graph and Restaurant JSON-LD.
-- **Status:** IN_PROGRESS — implementation is complete; final CI/browser evidence and live deployment inspection remain unavailable.
-- **Acceptance:** useful menu content during SSR; unique truthful metadata; schema matches visible data; missing menus are `noindex`; existing renderer/order behavior preserved.
+- **Status:** IN_PROGRESS — implementation is complete; current atomic verification is the remaining public-route typing fix and its CI evidence.
+- **Acceptance:** useful menu content during SSR; unique truthful metadata; schema matches visible data; missing menus are `noindex`; existing renderer/order behavior preserved; generated route search types compile.
 - **Verification:** `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, CI/browser QA and generated HTML/head inspection.
 
 ### G2 — Crawl Control and Indexation
