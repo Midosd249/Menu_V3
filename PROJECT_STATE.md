@@ -44,7 +44,7 @@
 
 ## G7.1 — Production Analytics Integrity Hardening — DONE / VERIFIED
 - **VERIFIED:** `src/lib/menu/analytics-integrity.test.ts` covers supported 7/30-day ranges, tenant scoping, invalid/cross-tenant product handling, duplicate visit/QR suppression, and active/published tenant resolution.
-- **VERIFIED:** `package.json` includes the new suite in the existing `npm test` command.
+- **VERIFIED:** `package.json` includes the new suite in the existing test command.
 - **VERIFIED:** no analytics runtime code, event schema, or dependency was changed.
 - **INFERRED:** the suite follows the repository's existing Node test conventions and uses only Node built-ins.
 - **UNKNOWN:** actual execution of the new test suite in the earlier connected GitHub-only session was unavailable.
@@ -57,7 +57,7 @@
 - **VERIFIED:** the repository contains no committed Google Search Console credentials or verification token.
 - **VERIFIED:** the smallest first-party integration is present: `src/routes/__root.tsx` emits an optional `google-site-verification` meta tag when `VITE_GOOGLE_SITE_VERIFICATION` is configured; it emits nothing when unset, preserving existing behavior.
 - **VERIFIED:** Vercel build failure on the latest deployment was caused by `vite.config.ts` importing `@vitejs/plugin-react` while `package.json` did not declare that package.
-- **VERIFIED:** `package.json` now declares `@vitejs/plugin-react` as a dev dependency at `^6.1.1`; the maintained plugin supports Vite 8. citeturn0search0turn0search1
+- **VERIFIED:** `package.json` now declares `@vitejs/plugin-react` as a dev dependency at `^6.1.1`; the maintained plugin supports Vite 8.
 - **VERIFIED:** fix commit is `b5f90b0e9b893c6059a56592e8748aef14c6c8a3` on `main`.
 - **BLOCKED:** after the fix commit, Vercel has not yet created a new deployment for `b5f90b0e9b893c6059a56592e8748aef14c6c8a3`; the available direct-deploy action rejected the invocation because its runtime requires additional deployment arguments not exposed by the current connector schema.
 - **UNKNOWN:** local `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` execution because repository shell execution is unavailable in the current connected surface.
