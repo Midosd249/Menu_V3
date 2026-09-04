@@ -3,7 +3,8 @@ import { DEFAULT_THEME_KEY, getTheme, isThemeKey, type ThemeKey } from "@/lib/th
 
 function setThemeTokens(theme: ThemeKey) {
   const root = document.documentElement;
-  const { tokens } = getTheme(theme);
+  const definition = getTheme(theme);
+  const { tokens, layout, motion } = definition;
   root.style.setProperty("--menu-background", tokens.colors.background);
   root.style.setProperty("--menu-foreground", tokens.colors.foreground);
   root.style.setProperty("--menu-surface", tokens.colors.surface);
@@ -15,6 +16,12 @@ function setThemeTokens(theme: ThemeKey) {
   root.style.setProperty("--menu-accent-foreground", tokens.colors.accentForeground);
   root.style.setProperty("--menu-muted", tokens.colors.muted);
   root.style.setProperty("--menu-muted-foreground", tokens.colors.mutedForeground);
+  root.style.setProperty("--menu-display-font", tokens.typography.displayFont);
+  root.style.setProperty("--menu-body-font", tokens.typography.bodyFont);
+  root.style.setProperty("--menu-heading-weight", String(tokens.typography.headingWeight));
+  root.style.setProperty("--menu-body-weight", String(tokens.typography.bodyWeight));
+  root.style.setProperty("--menu-line-height", tokens.typography.lineHeight);
+  root.style.setProperty("--menu-letter-spacing", tokens.typography.letterSpacing);
   root.style.setProperty("--menu-radius-sm", tokens.shape.radiusSm);
   root.style.setProperty("--menu-radius-md", tokens.shape.radiusMd);
   root.style.setProperty("--menu-radius-lg", tokens.shape.radiusLg);
@@ -26,6 +33,11 @@ function setThemeTokens(theme: ThemeKey) {
   root.style.setProperty("--menu-section-space", tokens.spacing.section);
   root.style.setProperty("--menu-card-space", tokens.spacing.card);
   root.style.setProperty("--menu-gap", tokens.spacing.gap);
+  root.dataset.menuLayoutHeader = layout.header;
+  root.dataset.menuLayoutGrid = layout.productGrid;
+  root.dataset.menuLayoutCard = layout.productCard;
+  root.dataset.menuLayoutNav = layout.categoryNav;
+  root.dataset.menuMotion = motion;
 }
 
 export function MenuThemeController({
@@ -37,19 +49,26 @@ export function MenuThemeController({
 }) {
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const key = isThemeKey(theme) ? theme : DEFAULT_THEME_KEY;
-    document.documentElement.dataset.menuTheme = key;
-    document.documentElement.dataset.menuThemeMode = preview ? "preview" : "published";
+    const root = document.documentElement;
+    const key = isThemeKey(theme) ? (getTheme(theme).key) : DEFAULT_THEME_KEY;
+    root.dataset.menuTheme = key;
+    root.dataset.menuThemeMode = preview ? "preview" : "published";
     setThemeTokens(key);
     return () => {
-      delete document.documentElement.dataset.menuTheme;
-      delete document.documentElement.dataset.menuThemeMode;
+      delete root.dataset.menuTheme;
+      delete root.dataset.menuThemeMode;
+      delete root.dataset.menuLayoutHeader;
+      delete root.dataset.menuLayoutGrid;
+      delete root.dataset.menuLayoutCard;
+      delete root.dataset.menuLayoutNav;
+      delete root.dataset.menuMotion;
       for (const name of [
         "--menu-background", "--menu-foreground", "--menu-surface", "--menu-surface-muted", "--menu-border",
         "--menu-primary", "--menu-primary-foreground", "--menu-accent", "--menu-accent-foreground",
-        "--menu-muted", "--menu-muted-foreground", "--menu-radius-sm", "--menu-radius-md", "--menu-radius-lg",
-        "--menu-radius-xl", "--menu-shadow", "--menu-shadow-hover", "--menu-overlay", "--menu-page-space",
-        "--menu-section-space", "--menu-card-space", "--menu-gap",
+        "--menu-muted", "--menu-muted-foreground", "--menu-display-font", "--menu-body-font",
+        "--menu-heading-weight", "--menu-body-weight", "--menu-line-height", "--menu-letter-spacing",
+        "--menu-radius-sm", "--menu-radius-md", "--menu-radius-lg", "--menu-radius-xl", "--menu-shadow",
+        "--menu-shadow-hover", "--menu-overlay", "--menu-page-space", "--menu-section-space", "--menu-card-space", "--menu-gap",
       ]) root.style.removeProperty(name);
     };
   }, [theme, preview]);
