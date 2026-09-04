@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey, type ThemeKey } from "@/lib/theme";
 
 function setThemeTokens(theme: ThemeKey) {
@@ -40,6 +41,25 @@ function setThemeTokens(theme: ThemeKey) {
   root.dataset.menuMotion = motion;
 }
 
+function clearThemeTokens() {
+  const root = document.documentElement;
+  delete root.dataset.menuTheme;
+  delete root.dataset.menuThemeMode;
+  delete root.dataset.menuLayoutHeader;
+  delete root.dataset.menuLayoutGrid;
+  delete root.dataset.menuLayoutCard;
+  delete root.dataset.menuLayoutNav;
+  delete root.dataset.menuMotion;
+  for (const name of [
+    "--menu-background", "--menu-foreground", "--menu-surface", "--menu-surface-muted", "--menu-border",
+    "--menu-primary", "--menu-primary-foreground", "--menu-accent", "--menu-accent-foreground",
+    "--menu-muted", "--menu-muted-foreground", "--menu-display-font", "--menu-body-font",
+    "--menu-heading-weight", "--menu-body-weight", "--menu-line-height", "--menu-letter-spacing",
+    "--menu-radius-sm", "--menu-radius-md", "--menu-radius-lg", "--menu-radius-xl", "--menu-shadow",
+    "--menu-shadow-hover", "--menu-overlay", "--menu-page-space", "--menu-section-space", "--menu-card-space", "--menu-gap",
+  ]) root.style.removeProperty(name);
+}
+
 export function MenuThemeController({
   theme,
   preview = false,
@@ -47,31 +67,24 @@ export function MenuThemeController({
   theme?: ThemeKey | null;
   preview?: boolean;
 }) {
+  const location = useRouterState({ select: (state) => `${state.location.pathname}${state.location.searchStr}` });
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
+    const pathname = new URL(location, window.location.origin).pathname;
+    const isThemePreviewRoute = pathname === "/themes/preview" || pathname === "/studio/preview";
+
+    // Preview routes own their theme controller. The root controller must not
+    // briefly paint Essential before the requested preview theme is applied.
+    if (isThemePreviewRoute) return;
+
     const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
     root.dataset.menuTheme = key;
     root.dataset.menuThemeMode = preview ? "preview" : "published";
     setThemeTokens(key);
-    return () => {
-      delete root.dataset.menuTheme;
-      delete root.dataset.menuThemeMode;
-      delete root.dataset.menuLayoutHeader;
-      delete root.dataset.menuLayoutGrid;
-      delete root.dataset.menuLayoutCard;
-      delete root.dataset.menuLayoutNav;
-      delete root.dataset.menuMotion;
-      for (const name of [
-        "--menu-background", "--menu-foreground", "--menu-surface", "--menu-surface-muted", "--menu-border",
-        "--menu-primary", "--menu-primary-foreground", "--menu-accent", "--menu-accent-foreground",
-        "--menu-muted", "--menu-muted-foreground", "--menu-display-font", "--menu-body-font",
-        "--menu-heading-weight", "--menu-body-weight", "--menu-line-height", "--menu-letter-spacing",
-        "--menu-radius-sm", "--menu-radius-md", "--menu-radius-lg", "--menu-radius-xl", "--menu-shadow",
-        "--menu-shadow-hover", "--menu-overlay", "--menu-page-space", "--menu-section-space", "--menu-card-space", "--menu-gap",
-      ]) root.style.removeProperty(name);
-    };
-  }, [theme, preview]);
+    return clearThemeTokens;
+  }, [theme, preview, location]);
 
   return null;
 }
