@@ -33,6 +33,9 @@
 
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
-- **BLOCKED:** Vercel deployment is externally rate limited; user will deploy manually.
-- **UNKNOWN:** post-merge production deployment status after manual Vercel action.
+- **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
+- **VERIFIED:** latest Vercel deployment is READY, but it is the Theme 2 feature-branch preview rather than current `main`.
+- **VERIFIED:** current `main` is `968149b11fad05e429443c47efe53bf4e16913d9` and contains Theme 1 + Theme 2 plus state documentation.
+- **BLOCKED:** Vercel direct deployment action is currently unavailable through the connected deployment tool because its exposed invocation schema rejects the required deployment parameters; do not claim current-main production deployment until a READY deployment is tied to `main`.
+- **UNKNOWN:** current production deployment after the latest `main` commit.
 - **UNKNOWN:** local working-tree status outside the GitHub connector.
