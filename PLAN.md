@@ -5,56 +5,56 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Theme 2 Editorial and Theme 3 Noir remain completed and protected.
-- Theme 1 Essential remains the single active refinement task; Theme 4 Heritage must not begin yet.
-- Authentication reconciliation and live authentication verification remain completed.
-- Permanent visual/functional/research quality workflow is DONE / VERIFIED and remains mandatory.
+- Essential and Editorial remain protected; Noir is the single active refinement task.
+- Heritage and Gallery remain queued and untouched.
+- Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
+- External theme preview QR mode is DONE / VERIFIED.
 
 ## Current Atomic Task
-### External preview access for all five themes — DONE / VERIFIED
+### Theme 3 — Noir premium refinement — IN_PROGRESS
 
-**Objective:** allow external QR/device inspection of all five existing themes against real branch data without requiring a Premium plan or changing the saved/public theme entitlement.
+**Objective:** refine the existing dark `noir` public-menu theme within the `fine-dining-hospitality` family using evidence-backed visual, functional, accessibility, performance, SEO, and Saudi-market principles.
 
-**Files changed:**
-- `src/routes/m.$slug.tsx`
-- `src/routes/m.$slug.$branch.tsx`
-- `src/routes/studio/qr.tsx`
-- `PROJECT_STATE.md`
-- `PLAN.md`
-- `TASKS.md`
+**Files expected to change:**
+- `src/theme-noir.css`
+- `src/components/templates/fine-dining-hospitality.tsx` only if a verified presentation defect requires it
+- `docs/template-audits/noir-premium-refinement.md`
+- continuity/design documentation required by the quality gate
 
-**Design/security decision:** preview access is presentation-only. A valid `theme` query temporarily selects one of the five existing theme keys for rendering. It never persists a tenant theme change and does not bypass the existing Premium authorization in `saveTenantTheme`. Preview URLs are `noindex, nofollow` and canonicalize to the real public menu URL so temporary QA variants do not become SEO pages.
+**Change boundary:** do not modify the other themes, database, migrations, dependencies, CI/CD, Vercel configuration, authentication, authorization, subscriptions, or shared business behavior. Shared changes are allowed only when a verified backward-compatible defect directly blocks Noir.
+
+## Audit findings and decisions
+- **VERIFIED:** `noir` is Premium and maps to `fine-dining-hospitality`.
+- **VERIFIED:** current Noir uses a cinematic dark hero, sticky category navigation, and structured horizontal product cards.
+- **VERIFIED:** shared public-menu owns supported cart/order, product detail/modifiers, search/category navigation, language, and configured customer actions.
+- **UNKNOWN:** screenshot-reported circular product cards are not present in the current source reviewed; do not change them speculatively.
+- **UNKNOWN:** Opera white-background behavior cannot be reproduced without a browser session.
+- **UNKNOWN:** initial old-theme flash cannot be root-caused without first-paint/browser evidence. Do not mask it with timeouts.
+- **Design decision:** retain the structured card system and refine hierarchy, spacing, typography, media stability, and action prominence instead of introducing a new composition without evidence.
+
+## Research
+- W3C WCAG 2.2 — target size and focus guidance.
+- Google Search Central — LocalBusiness structured data and canonical public-page principles.
+- web.dev — responsive images, aspect ratio, and layout-shift guidance.
+- Saudi/MENA public examples — Al Qaima, Nasj Menu, TableGreet for QR/mobile/bilingual/menu principles.
+- Detailed findings recorded in `docs/design-research-log.md`.
 
 ## Acceptance criteria
-1. All five existing themes are selectable through external preview URLs for a configured branch.
-2. Preview URLs render the branch's real menu data, not a separate fake dataset.
-3. Preview selection never writes `tenant.theme_key` or changes subscription entitlements.
-4. Existing branch QR behavior remains unchanged.
-5. Preview variants do not become indexable SEO pages.
-6. Invalid theme values do not select an arbitrary theme.
-7. No database, migration, dependency, CI/CD, Vercel, authentication, authorization, or subscription logic is weakened.
+1. Noir remains recognizably cinematic, dark, and premium.
+2. Restaurant/branch identity and configured tagline have clear hierarchy without invented business copy.
+3. Product names and SAR prices are readable and stable with long Arabic/English/mixed text.
+4. Images and missing-image fallbacks do not destabilize layout.
+5. Sticky/category, search, product detail, cart/order, language, and configured customer actions remain usable and correctly prioritized.
+6. No unsupported customer action is introduced.
+7. Focus and reduced-motion behavior remain accessible.
+8. No visual layer obscures content or traps input.
+9. SEO/canonical behavior and business truth remain unchanged.
+10. All relevant quality gates are run when the repository runtime is available; unavailable browser/device evidence is explicitly recorded as UNKNOWN/BLOCKED.
 
-## Implementation verification
-- **VERIFIED:** `src/lib/theme/registry.ts` contains exactly five theme keys: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
-- **VERIFIED:** `src/lib/theme/server.ts` still enforces Premium eligibility for persistent theme changes.
-- **VERIFIED:** `/m/$slug` and `/m/$slug/$branch` now accept a validated `theme` query and pass it as a presentation-only preview override.
-- **VERIFIED:** preview requests use the real `getPublicMenu` data for the requested tenant/branch.
-- **VERIFIED:** preview requests are marked `noindex, nofollow` while retaining the canonical public menu URL.
-- **VERIFIED:** Studio QR now exposes one preview QR per existing theme for every configured branch while retaining the normal published-menu QR.
-- **VERIFIED:** no theme definition, database schema, subscription rule, or saved-theme entitlement was changed.
-- **UNKNOWN:** real phone QR scanning, browser screenshots, pixel comparison, and post-hydration visual verification require an executable browser/device environment.
-- **UNKNOWN:** final CI/Vercel result for the latest commit until GitHub reports it.
-
-## Research note
-Current Saudi-market examples emphasize QR-first mobile menus, bilingual Arabic/English presentation, branch-aware destinations, current prices/availability, and fast access. Google Search guidance recommends mobile-friendly responsive pages and keeping preview-only variants out of indexable search surfaces when they are not canonical content. These principles support a presentation-only external preview mode rather than weakening subscription authorization.
-
-## Theme Sequence
-- Theme 1 — Essential — refinement IN_PROGRESS; do not reopen other themes.
-- Theme 2 — Editorial — DONE / VERIFIED / MERGED.
-- Theme 3 — Noir — DONE / VERIFIED / MERGED.
-- Theme 4 — Heritage — TODO after Essential and required preview QA.
-- Theme 5 — Gallery — TODO.
-- G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
+## Release policy
+- Do not push incomplete refinement work as a release batch.
+- Keep implementation state separate from deployment state.
+- Do not claim DEPLOYED without real deployment evidence.
 
 ## Exact next task
-Scan the five generated theme-preview QR codes on a real phone for one configured branch, then verify each theme at small/standard/large mobile and desktop widths, including post-hydration visibility, background, clipping, icons, sticky navigation, RTL/LTR, and supported customer actions. Do not begin a new theme refinement until this verification is complete.
+Implement the scoped Noir refinement, then run typecheck/tests/lint/build/template QA/performance audit where the runtime is available and review the final diff before updating milestone status.
