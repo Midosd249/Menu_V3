@@ -31,11 +31,15 @@
 - **VERIFIED:** quality run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
 - **VERIFIED:** merged as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
 
+### Theme 3 — Noir — IN_PROGRESS
+- **VERIFIED:** isolated `src/theme-noir.css` added and wired from `src/routes/__root.tsx`.
+- **VERIFIED:** implementation is presentation-only and preserves existing route/template/data contracts.
+- **VERIFIED:** cinematic hero, layered charcoal surfaces, warm bronze lighting, refined category rail, immersive image treatment, premium product cards and fine-dining signature styling are included.
+- **VERIFIED:** responsive, focus-visible and reduced-motion safeguards are included in the stylesheet.
+- **UNKNOWN:** full local/CI/browser verification until the GitHub Actions run for the branch is available.
+
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **VERIFIED:** latest Vercel deployment is READY, but it is the Theme 2 feature-branch preview rather than current `main`.
-- **VERIFIED:** current `main` is `968149b11fad05e429443c47efe53bf4e16913d9` and contains Theme 1 + Theme 2 plus state documentation.
-- **BLOCKED:** Vercel direct deployment action is currently unavailable through the connected deployment tool because its exposed invocation schema rejects the required deployment parameters; do not claim current-main production deployment until a READY deployment is tied to `main`.
-- **UNKNOWN:** current production deployment after the latest `main` commit.
-- **UNKNOWN:** local working-tree status outside the GitHub connector.
+- **BLOCKED:** Vercel deployment remains constrained by the Hobby build-rate limit.
+- **UNKNOWN:** current production deployment after Theme 3 merge.

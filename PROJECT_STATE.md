@@ -4,7 +4,7 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Current main HEAD: `6f0ca50acbf0bb67037c663106171910885ec614`.
+- Current working branch: `feat/theme-3-noir-refinement`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
@@ -12,38 +12,27 @@
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
 - **Theme 1 — Essential — DONE / VERIFIED / MERGED.**
 - **Theme 2 — Editorial — DONE / VERIFIED / MERGED.**
+- **Theme 3 — Noir — IN_PROGRESS.**
 - Theme refinement sequence remains active: Theme 1 → Theme 2 → Theme 3 → Theme 4 → Theme 5.
-- Current task is **Theme 3 — Noir Visual Refinement**.
 
-## Completed Theme Refinement Work
-- **VERIFIED:** Theme 1 Essential was refined as a dedicated Free visual system and merged to `main` as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
-- **VERIFIED:** Theme 2 Editorial was refined as a dedicated Premium visual system and merged to `main` as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
-- **VERIFIED:** Theme 2 CI quality run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
-- **VERIFIED:** exactly five public theme keys remain: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
-- **VERIFIED:** exactly one Free theme and four Premium themes.
-- **VERIFIED:** Premium publishing remains server-authorized against the existing subscription model; Premium preview remains available.
-- **VERIFIED:** legacy keys normalize safely to the five-key catalog.
+## Theme 3 Objective
+Refine only the Premium `noir` theme into a distinctive cinematic fine-dining visual system with layered surfaces, controlled warm-metal glow, dramatic typography, immersive media, quiet cards, luxurious spacing and polished interaction details. No menu data, ordering, analytics, SEO, tenant isolation, route or entitlement behavior may change.
 
-## Theme 2 Result
-- **VERIFIED:** Editorial now has an isolated art direction with a cover-like opening, serif-led Latin display hierarchy with Arabic-safe fallback, chapter markers, long rules, controlled asymmetry, irregular card geometry, editorial paper surfaces, media treatment and restrained progressive motion.
-- **VERIFIED:** implementation remains presentation-only; no menu data, domain/business rules, routes or entitlement logic were changed.
-- **VERIFIED:** narrow-screen asymmetry is neutralized where needed to protect usability.
-- **VERIFIED:** visible focus states and reduced-motion behavior are included.
+## Theme 3 Implementation
+- **VERIFIED:** `src/theme-noir.css` added as an isolated Noir art-direction stylesheet.
+- **VERIFIED:** `src/routes/__root.tsx` loads the Noir stylesheet alongside the existing shared, Essential and Editorial theme layers.
+- **VERIFIED:** Noir styling targets existing menu DOM contracts; no product/menu business logic was modified.
+- **VERIFIED:** visual language includes cinematic hero treatment, dark material surfaces, warm bronze accent lighting, editorial-style section rules, glassy category rail, image-led product cards, refined forms and fine-dining signature content.
+- **VERIFIED:** responsive safeguards cover mobile, tablet and desktop widths; narrow product layouts are constrained to avoid horizontal overflow.
+- **VERIFIED:** keyboard focus states and `prefers-reduced-motion` behavior are explicitly styled.
 
 ## Deployment State
-- **VERIFIED:** Vercel project `menu-v3` is linked to GitHub repository `Midosd249/Menu_V3`.
-- **VERIFIED:** latest Vercel deployment remains the Theme 2 feature-branch preview and is READY.
-- **VERIFIED:** the current production deployment is older than the current `main` HEAD.
-- **BLOCKED:** Vercel build/deployment is rate limited by the Hobby account; the GitHub commit status explicitly points to Vercel with `upgradeToPro=build-rate-limit`.
-- **UNKNOWN:** current `main` production deployment until the Vercel rate limit is cleared.
+- **BLOCKED:** Vercel deployment remains rate limited by the Hobby account; current GitHub status points to Vercel's `build-rate-limit` state.
+- **UNKNOWN:** production deployment of the current Theme 3 branch/main after merge.
 
 ## Session Log
-- 2026-09-04 — Theme 1 Essential completed, verified and merged to `main` as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
-- 2026-09-04 — Theme 2 Editorial completed, verified and merged to `main` as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
-- 2026-09-04 — Main state documentation closed Theme 2 and queued Theme 3.
-- 2026-09-04 — Audited GitHub/Vercel synchronization: Theme 1 and Theme 2 are present in `main`; Vercel currently has READY previews but no READY deployment for the current `main` HEAD.
-- 2026-09-04 — Recorded the Vercel Hobby build-rate-limit blocker in continuity state.
+- 2026-09-04 — Started Theme 3 Noir refinement from the verified Theme 2 state.
+- 2026-09-04 — Added isolated cinematic Noir visual system and wired it into the root stylesheet layer.
 
 ## Exact Next Task
-### Theme 3 — Noir Visual Refinement
-Refine only the Premium `noir` theme into a distinctive cinematic fine-dining visual system, then run full verification, review the diff, merge, update continuity evidence, and stop. Do not start Theme 4 in the same task.
+Complete Theme 3 verification, review the final diff, merge the verified branch to `main`, update continuity evidence, and stop. Do not begin Theme 4 in the same task.
