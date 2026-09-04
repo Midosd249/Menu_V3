@@ -1,0 +1,39 @@
+/* Runtime theme polish kept separate so the core Tailwind stylesheet remains stable. */
+.menu-public-shell {
+  overflow-x: clip;
+}
+.menu-public-shell main,
+.menu-public-shell main > section,
+.menu-public-shell main ul,
+.menu-public-shell main ul > li,
+.menu-public-shell main ul > li > button {
+  min-width: 0;
+  max-width: 100%;
+}
+.menu-public-shell h1,
+.menu-public-shell h2,
+.menu-public-shell h3,
+.menu-public-shell h4 {
+  font-family: var(--menu-display-font, var(--font-display));
+  font-weight: var(--menu-heading-weight, 650);
+  line-height: var(--menu-line-height, 1.55);
+  letter-spacing: var(--menu-letter-spacing, 0);
+}
+.menu-public-shell,
+.menu-public-shell button,
+.menu-public-shell input,
+.menu-public-shell textarea,
+.menu-public-shell select {
+  font-family: var(--menu-body-font, var(--font-sans));
+  font-weight: var(--menu-body-weight, 400);
+}
+html[data-menu-theme="noir"] .menu-public-shell button,
+html[data-menu-theme="noir"] .menu-public-shell a {
+  color-scheme: dark;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main > section,
+html[data-menu-theme="heritage"] .menu-public-shell main > section,
+html[data-menu-theme="gallery"] .menu-public-shell main > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}

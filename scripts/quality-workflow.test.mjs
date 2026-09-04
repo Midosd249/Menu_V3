@@ -11,12 +11,12 @@ const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
-test("Browser template QA isolates the preview from runner process cleanup", () => {
-  const qaStep = WORKFLOW.match(/- name: Browser template QA\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
+test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
+  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
 
   assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
   assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
-  assert.match(qaStep, /npm run qa:template http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
+  assert.match(qaStep, /npm run qa:template http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial -- --all-themes/);
   assert.match(qaStep, /Browser QA failed — preview log follows/);
 });
 
