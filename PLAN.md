@@ -12,20 +12,31 @@
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Deployment verification — awaiting refreshed Vercel deployment
+### Deployment verification — blocked by Vercel build-rate limit
 
-**Objective:** expose the current `main` build in Vercel and verify existing customer/owner email-password access against the reconciled Better Auth credentials.
+**Objective:** expose the corrected `main` build in Vercel and verify existing customer/owner email-password access against the reconciled Better Auth credentials.
 
-### Evidence
-1. The connected Supabase project contains two Better Auth users and two Supabase Auth users with matching emails but distinct user IDs.
-2. Real tenant membership remains keyed to the Better Auth identity.
-3. Better Auth now verifies both native scrypt hashes and migrated Supabase bcrypt hashes through PostgreSQL `pgcrypto`.
-4. Exactly two existing Better Auth credential accounts were synchronized from their matching Supabase Auth bcrypt hashes.
-5. The login form normalizes email input before authentication.
-6. CI run #480 passed the authentication implementation and run #481 passed the resulting state documentation.
+### Root-cause evidence
+1. The deployed authentication bridge returned HTTP 401 during sign-in.
+2. Vercel runtime logs for the latest production deployment recorded `function crypt(unknown, unknown) does not exist`.
+3. The connected Supabase production database has `pgcrypto` installed as `extensions.crypt(text,text)` rather than an unqualified `public.crypt` function.
+4. The application database connection intentionally sets a restricted search path, so the unqualified function lookup fails in Vercel.
+5. The smallest compatible correction is to qualify the existing function as `extensions.crypt(...)`.
+
+### Implementation
+- **VERIFIED:** `src/lib/auth/server.ts` now calls `extensions.crypt($1, $2)` for migrated bcrypt credentials.
+- **VERIFIED:** native Better Auth scrypt verification remains unchanged.
+- **VERIFIED:** no new dependency, auth architecture, user identity, tenant membership, or database data migration was introduced.
+- **VERIFIED:** a direct production SQL check confirms `extensions.crypt`/`extensions.gen_salt` are executable.
+- **VERIFIED:** corrected commit: `48d9f0dd4edb538b28af5a15653a42b9b18136a5`.
+
+### Deployment evidence
+- **VERIFIED:** the previous production deployment `dpl_398MghMyWmts2a6VDeVf9TgS8uVH` was built from the pre-correction main commit and contains the failing unqualified call.
+- **BLOCKED:** the corrected commit currently has a Vercel status failure pointing to the Hobby `build-rate-limit` restriction.
+- **UNKNOWN:** live authentication result from the corrected commit until Vercel creates a fresh deployment.
 
 ### Acceptance criteria
-1. Fresh Vercel deployment uses the current `main` commit.
+1. Fresh Vercel deployment uses the corrected `main` commit.
 2. Existing legitimate customer/owner credentials can sign in through Better Auth.
 3. Better Auth remains the authoritative application session system.
 4. No plaintext passwords, password hashes, service credentials, or Supabase auth internals are exposed to the browser.
@@ -40,22 +51,10 @@
 - Theme 5 — Gallery — TODO.
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
-## Theme 3 Verification
-- **VERIFIED:** isolated `src/theme-noir.css` provides the complete Noir art direction.
-- **VERIFIED:** responsive, accessibility and reduced-motion safeguards are included.
-- **VERIFIED:** GitHub Actions run #473 passed the full Theme 3 quality workflow.
-- **VERIFIED:** later main quality runs passed typecheck, tests, lint, production build, browser QA and performance baseline.
-
-## Authentication Verification
-- **VERIFIED:** PostgreSQL `pgcrypto` is enabled.
-- **VERIFIED:** exactly two credential accounts were migrated to the matching Supabase bcrypt hashes.
-- **VERIFIED:** Better Auth supports both migrated bcrypt and native scrypt verification.
-- **VERIFIED:** no plaintext password or credential secret was logged or committed.
-
 ## Deployment
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **BLOCKED:** Vercel production deployment may still be constrained by the Hobby build-rate limit.
-- **UNKNOWN:** production deployment of the latest `main` until the rate limit is cleared.
+- **BLOCKED:** current Vercel GitHub deployment status is blocked by the Hobby build-rate limit.
+- **UNKNOWN:** production deployment of corrected `main` until the rate limit clears.
 
 ## Stop condition
-Do not begin Theme 4 until the refreshed deployment is available and authentication access has been verified. After that, resume the sequence with Theme 4 — Heritage.
+Do not begin Theme 4 until the corrected deployment is available and authentication access has been verified. After that, resume the sequence with Theme 4 — Heritage.
