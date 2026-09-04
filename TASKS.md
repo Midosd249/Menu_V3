@@ -9,6 +9,15 @@
 3. **G6 — Performance + Media:** DONE / VERIFIED / CLOSED.
 4. **G7 — Analytics, Search Console, Growth, Rollout:** IN_PROGRESS.
 
+## Repository Organization Maintenance — 2026-09-04
+- DONE / VERIFIED: applied the dedicated `chore/repository-organization` documentation organization to `main`.
+- DONE / VERIFIED: moved historical root records into `docs/archive/` without changing their contents.
+- DONE / VERIFIED: grouped maintained deployment, development, and product documentation under `docs/`.
+- DONE / VERIFIED: added `README.md`, `docs/repository-organization-audit.md`, and `DELETE_CANDIDATES.md`.
+- DONE / VERIFIED: no application source, migration, dependency, CI, or Vercel configuration was changed.
+- DONE / VERIFIED: no deletion candidate was deleted.
+- UNKNOWN: local working-tree and shell verification remain unavailable through the connected GitHub surface.
+
 ## G7.1 — Production analytics integrity hardening
 - DONE / VERIFIED: added `src/lib/menu/analytics-integrity.test.ts` covering supported ranges, tenant scoping, invalid product handling, duplicate visit/QR suppression, and active/published tenant resolution.
 - DONE / VERIFIED: registered the suite in the existing test command.
