@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
@@ -45,23 +46,11 @@ function QrPage() {
                 <p className="break-all text-xs text-muted">{url || "…"}</p>
                 {url ? <QrImage url={url} /> : <div className="aspect-square rounded-md bg-sand" />}
                 <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={async () => {
-                      await navigator.clipboard.writeText(url);
-                      setCopied(b.id);
-                    }}
-                  >
+                  <Button type="button" size="sm" variant="outline" onClick={async () => { await navigator.clipboard.writeText(url); setCopied(b.id); }}>
                     {copied === b.id ? t(copy.qr.copied, lang) : t(copy.qr.copy, lang)}
                   </Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => downloadQr(url, `${snapshot.tenant.slug}-${b.slug}`)}>
-                    {t(copy.qr.download, lang)}
-                  </Button>
-                  <Button type="button" size="sm" onClick={() => printQr(url, lang === "ar" ? snapshot.tenant.nameAr : snapshot.tenant.nameEn || snapshot.tenant.nameAr, lang === "ar" ? b.nameAr : b.nameEn || b.nameAr)}>
-                    {t(copy.qr.print, lang)}
-                  </Button>
+                  <Button type="button" size="sm" variant="outline" onClick={() => downloadQr(url, `${snapshot.tenant.slug}-${b.slug}`)}>{t(copy.qr.download, lang)}</Button>
+                  <Button type="button" size="sm" onClick={() => printQr(url, lang === "ar" ? snapshot.tenant.nameAr : snapshot.tenant.nameEn || snapshot.tenant.nameAr, lang === "ar" ? b.nameAr : b.nameEn || b.nameAr)}>{t(copy.qr.print, lang)}</Button>
                 </div>
 
                 <div className="grid gap-3 border-t border-line pt-4">
@@ -83,9 +72,7 @@ function QrPage() {
                             <Button type="button" size="sm" variant="outline" onClick={async () => { await navigator.clipboard.writeText(previewUrl); setCopied(`${b.id}:${theme.key}`); }}>
                               {copied === `${b.id}:${theme.key}` ? t(copy.qr.copied, lang) : (lang === "ar" ? "نسخ" : "Copy")}
                             </Button>
-                            <Button type="button" size="sm" onClick={() => downloadQr(previewUrl, `${snapshot.tenant.slug}-${b.slug}-${theme.key}`)}>
-                              {lang === "ar" ? "تنزيل" : "Download"}
-                            </Button>
+                            <Button type="button" size="sm" onClick={() => downloadQr(previewUrl, `${snapshot.tenant.slug}-${b.slug}-${theme.key}`)}>{lang === "ar" ? "تنزيل" : "Download"}</Button>
                           </div>
                         </div>
                       );
@@ -105,18 +92,8 @@ function QrImage({ url }: { url: string }) {
   const [src, setSrc] = useState("");
   useEffect(() => {
     let cancelled = false;
-    void import("qrcode").then((QR) =>
-      QR.toDataURL(url, {
-        width: 480,
-        margin: 2,
-        color: { dark: "#171411", light: "#f3eee6" },
-      }).then((data) => {
-        if (!cancelled) setSrc(data);
-      }),
-    );
-    return () => {
-      cancelled = true;
-    };
+    void import("qrcode").then((QR) => QR.toDataURL(url, { width: 480, margin: 2, color: { dark: "#171411", light: "#f3eee6" } }).then((data) => { if (!cancelled) setSrc(data); }));
+    return () => { cancelled = true; };
   }, [url]);
   if (!src) return <div className="aspect-square rounded-md bg-sand" />;
   return <img src={src} alt="" className="aspect-square w-full rounded-md bg-paper" />;
@@ -136,10 +113,7 @@ async function printQr(url: string, restaurant: string, branch: string) {
   const data = await QR.toDataURL(url, { width: 720, margin: 2, color: { dark: "#171411", light: "#ffffff" } });
   const w = window.open("", "_blank", "noopener,noreferrer");
   if (!w) return;
-  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>${restaurant}</title>
-    <style>body{font-family:system-ui,sans-serif;text-align:center;padding:32px;color:#171411} img{width:280px;height:280px} p{margin:8px 0}</style>
-    </head><body><p style="font-size:22px;font-weight:600">${restaurant}</p><p>${branch}</p>
-    <img src="${data}" alt="QR"><p style="font-size:12px;color:#7a7268">امسح لفتح المنيو</p></body></html>`);
+  w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>${restaurant}</title><style>body{font-family:system-ui,sans-serif;text-align:center;padding:32px;color:#171411} img{width:280px;height:280px} p{margin:8px 0}</style></head><body><p style="font-size:22px;font-weight:600">${restaurant}</p><p>${branch}</p><img src="${data}" alt="QR"><p style="font-size:12px;color:#7a7268">امسح لفتح المنيو</p></body></html>`);
   w.document.close();
   w.focus();
   w.print();
