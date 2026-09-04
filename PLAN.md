@@ -46,7 +46,7 @@
 - **UNKNOWN:** final CI/Vercel result for the latest commit until GitHub reports it.
 
 ## Research note
-Current Saudi-market examples emphasize QR-first mobile menus, bilingual Arabic/English presentation, branch-aware destinations, current prices/availability, and fast access. Google Search guidance recommends mobile-friendly responsive pages and keeping preview-only variants out of indexable search surfaces when they are not canonical content. These principles support a presentation-only external preview mode rather than weakening subscription authorization. citeturn0search0turn0search3turn0search4turn1search1
+Current Saudi-market examples emphasize QR-first mobile menus, bilingual Arabic/English presentation, branch-aware destinations, current prices/availability, and fast access. Google Search guidance recommends mobile-friendly responsive pages and keeping preview-only variants out of indexable search surfaces when they are not canonical content. These principles support a presentation-only external preview mode rather than weakening subscription authorization.
 
 ## Theme Sequence
 - Theme 1 — Essential — refinement IN_PROGRESS; do not reopen other themes.
