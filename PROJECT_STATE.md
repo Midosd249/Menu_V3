@@ -4,7 +4,7 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Current main HEAD: `c9bb54276267bfb99675a4c5be2f34d955a3844b`.
+- Current main HEAD: `589820e5dc0a7df7cd536c673f623a8fecc1176c`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
@@ -13,7 +13,7 @@
 - **Theme 1 — Essential — DONE / VERIFIED / MERGED.**
 - **Theme 2 — Editorial — DONE / VERIFIED / MERGED.**
 - **Theme 3 — Noir — DONE / VERIFIED / MERGED.**
-- Authentication reconciliation is now implemented and database-migrated.
+- Authentication reconciliation is implemented and database-migrated.
 - Theme refinement sequence remains active: Theme 1 → Theme 2 → Theme 3 → Theme 4 → Theme 5.
 
 ## Theme 3 Result
@@ -32,12 +32,13 @@
 - **VERIFIED:** `src/routes/login.tsx` normalizes email input with `trim().toLowerCase()`.
 - **VERIFIED:** Better Auth now accepts native scrypt credentials and migrated Supabase bcrypt credentials through a dedicated verification path using PostgreSQL `pgcrypto`.
 - **VERIFIED:** the two existing credential accounts in `menu_v3.account` were synchronized from their matching Supabase Auth bcrypt hashes without exposing plaintext passwords.
-- **VERIFIED:** the database now reports two credential accounts with bcrypt-format migrated hashes.
+- **VERIFIED:** the database reports two credential accounts with bcrypt-format migrated hashes.
 - **VERIFIED:** no plaintext password, password value, or secret was written to the repository or session log.
 - **INFERRED:** users who enter the same passwords previously stored in Supabase Auth can now authenticate through the Better Auth session layer while retaining the existing Better Auth user IDs and tenant memberships.
 
 ## Verification State
-- **VERIFIED:** GitHub Actions run #480 for commit `c9bb54276267bfb99675a4c5be2f34d955a3844b` completed successfully: route-tree generation, typecheck, tests, lint, production build, Chromium installation, all-theme browser QA, performance baseline and cleanup.
+- **VERIFIED:** GitHub Actions run #480 passed the complete quality workflow for the authentication verifier implementation.
+- **VERIFIED:** GitHub Actions run #481 passed the complete quality workflow for the recorded state update.
 - **VERIFIED:** Supabase migration affected exactly the two existing Better Auth credential accounts and copied only bcrypt hashes matched by normalized email.
 
 ## Deployment State
@@ -55,4 +56,4 @@
 - 2026-09-04 — Synchronized the two existing credential account hashes from Supabase Auth into the matching Better Auth accounts; plaintext credentials were never accessed or logged.
 
 ## Exact Next Task
-Proceed to Theme 4 — Heritage only after the user confirms access to the refreshed deployment. If Vercel remains rate-limited, the user can trigger the deployment manually from Vercel using the current `main` commit.
+User should deploy the current `main` commit to Vercel and verify email/password sign-in with the existing credentials. After access is confirmed, proceed to Theme 4 — Heritage.
