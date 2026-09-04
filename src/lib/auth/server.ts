@@ -123,7 +123,7 @@ async function verifyLegacyOrNativePassword({
     if (!(database instanceof Pool)) return false;
     try {
       const result = await database.query<{ valid: boolean }>(
-        "select crypt($1, $2) = $2 as valid",
+        "select extensions.crypt($1, $2) = $2 as valid",
         [password, hash],
       );
       return result.rows[0]?.valid === true;
