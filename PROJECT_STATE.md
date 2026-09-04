@@ -20,6 +20,14 @@
 - **G7.1 production analytics integrity hardening is DONE / VERIFIED.**
 - **G7.2 deployment readiness is DONE / VERIFIED; Search Console ownership is BLOCKED on external account verification.**
 
+## Repository Organization — 2026-09-04
+- **VERIFIED:** the documentation organization work from `chore/repository-organization` is now applied to `main`.
+- **VERIFIED:** historical reports are under `docs/archive/`; maintained deployment, development, and product documentation is under `docs/`.
+- **VERIFIED:** `README.md`, `docs/repository-organization-audit.md`, and `DELETE_CANDIDATES.md` are present on `main`.
+- **VERIFIED:** application source, database migrations, dependencies, CI, and Vercel configuration were not changed by this organization commit.
+- **VERIFIED:** no deletion candidate was removed.
+- **UNKNOWN:** local working-tree status and local shell execution remain unavailable through the connected GitHub surface.
+
 ## G7.1 — Production Analytics Integrity Hardening — DONE / VERIFIED
 - **VERIFIED:** `src/lib/menu/analytics-integrity.test.ts` covers supported 7/30-day ranges, tenant scoping across analytics aggregations, invalid/cross-tenant product handling, duplicate visit/QR suppression, and active/published tenant resolution.
 - **VERIFIED:** GitHub Actions quality run `33821751476` (run 430) passed typecheck, all 81 tests, lint, production build, Playwright installation, Browser Template QA, performance artifact step, and cleanup.
@@ -53,6 +61,7 @@
 - 2026-09-04 — Confirmed the latest production Vercel deployment is READY on commit `2e5d7c2d19ab184c51a99a0c84ec198c4a3861fa`.
 - 2026-09-04 — Verified production root, robots.txt, and sitemap.xml over the live Vercel deployment.
 - 2026-09-04 — Closed the deployment-confirmation portion of G7.2; retained only external Search Console ownership verification as blocked.
+- 2026-09-04 — Applied the evidence-based documentation organization from `chore/repository-organization` to `main`; preserved application, migration, dependency, CI, and deployment contracts.
 
 ## Exact Remaining Work
 - **G7.2 Search Console ownership verification:** configure the Google-provided public verification value in Vercel Production, verify ownership in Google Search Console, submit the existing `/sitemap.xml`, and record the resulting Google status. Do not commit the token or add unrelated refactors.
