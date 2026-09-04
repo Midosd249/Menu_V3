@@ -1,19 +1,17 @@
 # TASKS
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + responsive visual hardening — IN_PROGRESS
-- **Objective:** deepen the first three completed themes into clearly distinct art directions while treating mobile as the primary layout constraint and preserving all business/data contracts.
+### Public menu production incident + responsive/theme integration audit — IN_PROGRESS
+- **Objective:** restore the published public menu URL and verify that the first three theme refinement layers remain present and loaded without changing business/data contracts.
 - **Protected:** G1–G7.2, the five-theme catalog, demo resilience, authentication correction, tenant isolation, ordering and analytics.
-- **Completed:** `src/theme-refinements.css` established the first refinement layer.
-- **Completed:** `src/theme-refinements-v2.css` adds a stronger presentation-only layer with distinct interaction and motion languages.
-- **Essential:** tactile atelier / material paper, asymmetric image treatment, restrained rules, progressive scroll reveal.
-- **Editorial:** kinetic food magazine / issue markers, framed imagery, typographic rhythm, progressive image reveal.
-- **Noir:** cinematic dining / atmospheric grain, spotlight pools, bronze framing, progressive cinematic reveal.
-- **Mobile:** explicit compact image sizing, removal of desktop transforms/offsets, stable single-column behavior where appropriate, touch-safe hover behavior.
-- **Accessibility:** reduced-motion disables enhancement animation; focus-visible remains usable through the existing interactive controls.
-- **Performance:** no new dependency; advanced WebGL libraries were researched but deliberately not introduced before mobile performance evidence.
-- **Research recorded:** MDN scroll-driven animation, GSAP/ScrollTrigger, Lenis, Three.js post-processing, pmndrs/postprocessing, and Codrops creative WebGL/parallax references are recorded in `PLAN.md`.
-- **Verification:** implementation is committed to `main`; CI/live visual QA still must be checked after the user deploys the new `main` to Vercel.
+- **Verified:** current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
+- **Verified:** `src/theme-refinements.css` and `src/theme-refinements-v2.css` are present, and the root route loads the second layer after the existing theme layers.
+- **Verified:** `mndy-alwtnya` existed in production `menu_v3.tenants` with `is_published = true` but `is_active = false`.
+- **Completed:** reactivated only the published `mndy-alwtnya` tenant. No tenant content or schema was changed.
+- **Verified:** `mndy-alwtnya` now has `is_published = true`, `is_active = true`, theme `essential`, one active branch, 7 categories, and 26 products.
+- **Verified:** Theme Preview continues to use the stable local `nafas` demo fixture.
+- **UNKNOWN:** physical-device pixel-level visual QA until the deployed pages can be directly inspected.
+- **UNKNOWN:** local shell test execution in this session.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
@@ -49,5 +47,5 @@
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** corrected authentication is live.
-- **IN_PROGRESS:** responsive creative refinement for Themes 1–3.
-- **UNKNOWN:** live visual/manual QA of the new refinement layer until the user deploys the current `main`.
+- **IN_PROGRESS:** public menu incident resolution and responsive creative refinement QA for Themes 1–3.
+- **UNKNOWN:** final visual/manual QA of the deployed refinement layer until the live pages can be directly inspected.
