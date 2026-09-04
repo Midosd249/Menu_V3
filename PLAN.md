@@ -1,60 +1,42 @@
 # Menu V3 — Active Plan
 
 ## Status
-- Status: IN_PROGRESS.
+- Status: BLOCKED.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential and Editorial remain protected; Noir is the single active refinement task.
+- Essential and Editorial remain protected.
+- Theme 3 Noir implementation refinement is complete; final visual/device closure is blocked by unavailable browser execution.
 - Heritage and Gallery remain queued and untouched.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - External theme preview QR mode is DONE / VERIFIED.
 
 ## Current Atomic Task
-### Theme 3 — Noir premium refinement — IN_PROGRESS
+### Theme 3 — Noir premium refinement — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
 
-**Objective:** refine the existing dark `noir` public-menu theme within the `fine-dining-hospitality` family using evidence-backed visual, functional, accessibility, performance, SEO, and Saudi-market principles.
+**Completed:**
+- Refined the existing `fine-dining-hospitality` masthead to use verified restaurant/branch data and configured tagline with neutral fallback wording.
+- Strengthened Noir featured/product-card hierarchy, long-text handling, SAR price stability, image treatment, focus states, sticky navigation, and mobile safe-area behavior.
+- Added Noir-specific document background and dark color-scheme rules to reduce light-canvas transitions once the theme is active.
+- Preserved shared cart/order, search/category, product detail/modifier, language, WhatsApp, phone, map, and social behavior.
+- No unsupported customer-facing action was added.
 
-**Files expected to change:**
-- `src/theme-noir.css`
-- `src/components/templates/fine-dining-hospitality.tsx` only if a verified presentation defect requires it
-- `docs/template-audits/noir-premium-refinement.md`
-- continuity/design documentation required by the quality gate
+## Evidence and design decisions
+- **VERIFIED:** `noir` maps to `fine-dining-hospitality`.
+- **VERIFIED:** current source uses structured horizontal product cards and a featured grid; no circular product-card implementation was found in the reviewed Noir source.
+- **PROPOSED:** structured cards are retained because readability and scanability are more important than novelty.
+- **UNKNOWN:** screenshot-reported circular runtime composition until a browser screenshot confirms it exists in the deployed rendering.
+- **UNKNOWN:** Opera white-background behavior and initial old-theme flash until reproduced with actual browser/first-paint evidence.
 
-**Change boundary:** do not modify the other themes, database, migrations, dependencies, CI/CD, Vercel configuration, authentication, authorization, subscriptions, or shared business behavior. Shared changes are allowed only when a verified backward-compatible defect directly blocks Noir.
-
-## Audit findings and decisions
-- **VERIFIED:** `noir` is Premium and maps to `fine-dining-hospitality`.
-- **VERIFIED:** current Noir uses a cinematic dark hero, sticky category navigation, and structured horizontal product cards.
-- **VERIFIED:** shared public-menu owns supported cart/order, product detail/modifiers, search/category navigation, language, and configured customer actions.
-- **UNKNOWN:** screenshot-reported circular product cards are not present in the current source reviewed; do not change them speculatively.
-- **UNKNOWN:** Opera white-background behavior cannot be reproduced without a browser session.
-- **UNKNOWN:** initial old-theme flash cannot be root-caused without first-paint/browser evidence. Do not mask it with timeouts.
-- **Design decision:** retain the structured card system and refine hierarchy, spacing, typography, media stability, and action prominence instead of introducing a new composition without evidence.
-
-## Research
-- W3C WCAG 2.2 — target size and focus guidance.
-- Google Search Central — LocalBusiness structured data and canonical public-page principles.
-- web.dev — responsive images, aspect ratio, and layout-shift guidance.
-- Saudi/MENA public examples — Al Qaima, Nasj Menu, TableGreet for QR/mobile/bilingual/menu principles.
-- Detailed findings recorded in `docs/design-research-log.md`.
-
-## Acceptance criteria
-1. Noir remains recognizably cinematic, dark, and premium.
-2. Restaurant/branch identity and configured tagline have clear hierarchy without invented business copy.
-3. Product names and SAR prices are readable and stable with long Arabic/English/mixed text.
-4. Images and missing-image fallbacks do not destabilize layout.
-5. Sticky/category, search, product detail, cart/order, language, and configured customer actions remain usable and correctly prioritized.
-6. No unsupported customer action is introduced.
-7. Focus and reduced-motion behavior remain accessible.
-8. No visual layer obscures content or traps input.
-9. SEO/canonical behavior and business truth remain unchanged.
-10. All relevant quality gates are run when the repository runtime is available; unavailable browser/device evidence is explicitly recorded as UNKNOWN/BLOCKED.
+## Acceptance state
+- **VERIFIED:** scoped implementation complete.
+- **BLOCKED:** browser/device visual sign-off, Opera comparison, QR scan, post-hydration inspection, console-error check, and pixel comparison cannot be executed in the current GitHub-only environment.
+- **BLOCKED:** local typecheck/test/lint/build/template-QA/performance commands cannot run without an executable repository checkout/runtime.
 
 ## Release policy
-- Do not push incomplete refinement work as a release batch.
-- Keep implementation state separate from deployment state.
-- Do not claim DEPLOYED without real deployment evidence.
+- Do not claim `DEPLOYED` without real Vercel evidence.
+- Do not declare Noir `DONE` until browser/device evidence is captured or an explicit evidence-backed exception is accepted.
+- Do not begin Heritage while this verification gate remains unresolved.
 
 ## Exact next task
-Implement the scoped Noir refinement, then run typecheck/tests/lint/build/template QA/performance audit where the runtime is available and review the final diff before updating milestone status.
+Run the Noir external preview QR on a real phone/browser and capture small/standard/large mobile plus supported desktop/tablet RTL/LTR evidence, specifically checking Opera background behavior, first-paint flash, clipping, sticky/cart overlap, icons, and core customer actions. Then run repository quality gates in an executable environment.
