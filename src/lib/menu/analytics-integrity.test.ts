@@ -18,15 +18,18 @@ test("owner analytics accepts only the supported 7/30 day ranges", () => {
 
 test("owner analytics keeps every aggregation tenant-scoped", () => {
   const analytics = ownerSource.slice(ownerSource.indexOf("export const getOwnerAnalytics"));
-  const queries = analytics.split("from menu_events").slice(0, -1);
-  assert.equal(queries.length, 5, "expected all menu_events aggregations");
+  assert.equal((analytics.match(/from menu_events/g) ?? []).length, 5, "expected all menu_events aggregations");
   assert.equal(
-    queries.filter((query) => query.includes("tenant_id = ${member.tenant_id}")).length,
-    5,
-    "expected every menu_events aggregation to constrain the member tenant",
+    (analytics.match(/where tenant_id = \$\{member\.tenant_id\}/g) ?? []).length,
+    2,
+    "expected totals and series tenant constraints",
+  );
+  assert.equal(
+    (analytics.match(/where e\.tenant_id = \$\{member\.tenant_id\}/g) ?? []).length,
+    3,
+    "expected product, category, and branch tenant constraints",
   );
   assert.match(analytics, /where tenant_id = \$\{member\.tenant_id\} and created_at >= \$\{since\}/);
-  assert.match(analytics, /where e\.tenant_id = \$\{member\.tenant_id\}/g);
 });
 
 test("public product views reject missing or cross-tenant products", () => {
