@@ -2,58 +2,71 @@
 
 ## Source of truth
 
-- Canva visual direction: `DAHUCP6JFgY` — Menu V3: UI & Brand Direction
-- Canva web prototype: `DAHUCU94nVc` — Menu V3 — Premium Hospitality Web Prototype
 - Product direction: Arabic-first, RTL-native, mobile-first, premium Saudi hospitality.
+- Visual research: Menu Author, MENU TIGER, Popmenu, contemporary restaurant/cafe web showcases, and maintained open-source UI/motion references.
+- Repository implementation: `src/lib/theme`, `src/components/menu-theme-controller.tsx`, `src/styles.css`.
 
-## Visual language
+## Theme catalog
 
-Menu V3 should feel like a high-end printed menu translated into a fast digital product: warm paper, deep ink, restrained terracotta, generous whitespace, strong Arabic hierarchy, tactile cards, and photography that sells the food without becoming visual noise.
+Menu V3 intentionally has **five** visual systems: one Free baseline and four Premium experiences. A theme is a complete visual system, not a color skin.
 
-### Tokens
+| Key | Tier | Personality | Core visual idea |
+| --- | --- | --- | --- |
+| `essential` | Free | Essential | Quiet, fast, highly legible baseline |
+| `editorial` | Premium | Editorial | Magazine rhythm, asymmetric emphasis, strong typography |
+| `noir` | Premium | Noir | Cinematic dark dining, warm glow, immersive entry |
+| `heritage` | Premium | Heritage | Contemporary Arabic/Saudi hospitality, material and geometric cues |
+| `gallery` | Premium | Gallery | Image-first catalogue, large media, art-directed crops |
 
-- Paper: `#f3eee6`
-- Sand: `#e8dfd2`
-- Ink: `#171411`
-- Ink soft: `#3d372f`
-- Muted: `#7a7268`
-- Line: `#d9cfc0`
-- Accent terracotta: `#8f4e32`
-- Good: `#2f6b4f`
-- Warning: `#9a6b2f`
-- Bad: `#9a3b32`
+Legacy keys are migrated by `migrations/20260904001000_five_theme_system.sql` and normalized in `src/lib/theme/registry.ts`. This prevents old tenant records from becoming invalid while keeping the public catalog at five themes.
 
-## Typography
+## What a theme controls
 
-Primary Arabic/Latin family: IBM Plex Sans Arabic. Use strong weight and size hierarchy rather than decorative fonts. Product names and prices are the visual anchors; descriptions stay quiet.
+Each theme coordinates:
 
-## Public menu rules
+- Header and opening composition
+- Hero/image treatment
+- Category navigation rhythm
+- Product grid and card presentation
+- Image ratios and cropping behavior
+- Typography hierarchy and density
+- Price prominence
+- Featured-product composition
+- Surfaces, borders, radius and shadows
+- Background texture/pattern treatment
+- CTA and interaction styling
+- Motion personality
+- Mobile-specific composition
+- RTL/LTR visual rhythm
 
-1. Hero imagery is atmospheric and restrained; never cover important text.
-2. Product imagery uses consistent aspect ratios and rounded corners.
-3. Category navigation remains horizontally scrollable on small screens.
-4. Search is sticky and visually quiet.
-5. Product cards must feel tappable and have a clear price hierarchy.
-6. WhatsApp, location, phone and Instagram are secondary actions, not competing with the menu.
-7. Arabic is the primary information architecture; English is a complete secondary language.
-8. Motion is subtle and respects `prefers-reduced-motion`.
+The theme registry exposes these as tokens and capabilities; the runtime writes the tokens to `data-menu-theme` CSS custom properties through `MenuThemeController`.
 
-## Owner studio rules
+## Motion principles
 
-The owner dashboard is operational, not marketing-led. Prioritize status, actions, editing, publishing, QR and analytics. Use the same palette but reduce decorative imagery.
+Premium themes use restrained CSS motion, including staged entry, image scale, hover depth, and progressive scroll-linked enhancement where supported. The static visual state is always usable without the enhancement. `prefers-reduced-motion: reduce` disables the motion layer.
 
-## Platform admin rules
+Scroll-driven declarations are guarded with `@supports` so unsupported browsers retain the final usable layout. This follows the progressive-enhancement model documented by Chrome/WebKit and the WAI reduced-motion guidance.
 
-Platform admin is a private operations console. Keep it dense, fast and legible. Never expose platform leads to tenant owners/admins/editors.
+## Product principles
 
-## Demo restaurant
+1. The menu must feel designed, not skinned.
+2. Food photography should sell the dish without obscuring essential information.
+3. Product name and price are the primary anchors; descriptions stay quieter.
+4. Navigation remains thumb-friendly and predictable on small screens.
+5. Arabic is a first-class composition, not a translated afterthought.
+6. Premium effects must not delay content or create interaction ambiguity.
+7. Accessibility and performance are part of the visual quality bar.
+8. The same menu data must be able to produce visibly different brand experiences.
 
-The fictional demo restaurant is **نَفَس / Nafas**, Al Olaya, Riyadh. It is demo content only. Generated food imagery is stored as external CDN URLs in migration `0004_demo_visuals.sql` and has also been imported into Canva as reusable assets.
+## Premium entitlement
+
+Premium themes can be previewed without payment, but publishing a Premium theme is server-authorized. The current entitlement model treats `free` as the baseline and any active/trialing non-free subscription as eligible. Payment-provider integration remains outside this design task.
 
 ## Do not
 
-- Reintroduce bright generic SaaS gradients.
+- Reintroduce generic SaaS gradients.
 - Use glassmorphism as the primary visual language.
-- Turn the dashboard into a marketing page.
-- Use tiny low-contrast Arabic text.
-- Add decorative animation that delays content or harms mobile performance.
+- Treat theme changes as color-only variations.
+- Hide important Arabic content behind decorative effects.
+- Add animation that blocks or delays menu interaction.
+- Copy competitor layouts or proprietary assets verbatim.
