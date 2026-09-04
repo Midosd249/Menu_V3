@@ -18,7 +18,7 @@
 1. `src/routes/studio/preview.tsx` resolves the requested `ThemeKey` during initial client render and now renders the selected theme through `getThemeFamily`.
 2. `src/routes/themes/preview.tsx` resolves the requested `ThemeKey` during initial client render and uses the same family-aware rendering path.
 3. Preview shells expose `data-menu-preview` and `data-menu-preview-theme` markers.
-4. `src/menu-preview-layer.css` provides an explicit stacking/isolation boundary so shell decoration cannot cover the actual preview content or capture pointer input.
+4. `src/menu-preview-layer.css` no longer creates an isolated or z-indexed stacking context; this removes the preview-specific stacking trap that could present a full-surface content veil while preserving theme-owned decoration.
 5. `MenuThemeController` uses `useLayoutEffect` so preview tokens are applied before the browser paints the selected preview state.
 6. Premium preview remains separate from publishing authorization; `saveTenantTheme` plan enforcement is unchanged.
 
@@ -26,18 +26,21 @@
 - Essential: original completed free theme; no refinement overlay.
 - Editorial: Premium kinetic food-magazine refinement with its intended contemporary restaurant family.
 - Noir: Premium cinematic refinement with its intended fine-dining family.
+- Heritage: Premium contemporary-restaurant theme from the central registry.
+- Gallery: Premium bakery-dessert/image-led theme from the central registry.
 - Mobile-first: touch-safe hover behavior, compact media sizing and reduced-motion safeguards remain.
 
 ### Acceptance criteria
 1. `/studio/preview?theme=essential` renders Essential without a covering preview layer.
 2. `/studio/preview?theme=editorial` renders Editorial through its intended template family.
 3. `/studio/preview?theme=noir` renders Noir through its intended template family.
-4. `/themes/preview?theme=editorial` and `/themes/preview?theme=noir` render the requested themes.
-5. No preview route flashes the default theme before the selected theme.
-6. Preview decoration cannot cover or intercept the rendered menu content.
-7. Premium preview access does not weaken Premium publish/save authorization.
-8. Mobile and desktop layouts remain stable, RTL/LTR remain valid, and reduced-motion remains usable.
-9. CI/Vercel quality gates pass before the task is marked DONE.
+4. `/studio/preview?theme=heritage` renders Heritage and `/studio/preview?theme=gallery` renders Gallery using the central theme registry.
+5. `/themes/preview?theme=editorial` and `/themes/preview?theme=noir` render the requested themes.
+6. No preview route flashes the default theme before the selected theme.
+7. Preview decoration cannot cover or intercept the rendered menu content.
+8. Premium preview access does not weaken Premium publish/save authorization.
+9. Mobile and desktop layouts remain stable, RTL/LTR remain valid, and reduced-motion remains usable.
+10. CI/Vercel quality gates pass before the task is marked DONE.
 
 ## Theme Sequence
 - Theme 1 — Essential — DONE / VERIFIED / MERGED; baseline preserved.
@@ -48,7 +51,7 @@
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Stop condition
-Stop after preview layer isolation and responsive verification. Do not begin Theme 4 until the three completed themes have been manually verified on the latest deployment.
+Stop after preview layer isolation and responsive verification. Do not begin Theme 4 until the completed themes have been manually verified on the latest deployment.
 
 ## Research decisions
 - Progressive CSS enhancement remains preferred for this task; no new animation dependency is added.
