@@ -43,12 +43,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 /* Shared menu canvas. Theme-specific systems below intentionally override these primitives. */
 .menu-public-shell {
   min-height: 100dvh;
-  color: var(--menu-foreground, var(--color-ink));
+  color: var(--menu-foreground, var(--menu-ink, var(--color-ink)));
   background: var(--menu-background, var(--color-paper));
   --menu-card-bg: var(--menu-surface, var(--color-paper));
   --menu-card-border: var(--menu-border, var(--color-line));
 }
-.menu-public-shell > div { min-height: 100dvh; }
 .menu-public-shell header { position: relative; isolation: isolate; }
 .menu-public-shell main { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
 .menu-public-shell main > section > h2 { letter-spacing: -0.02em; }
