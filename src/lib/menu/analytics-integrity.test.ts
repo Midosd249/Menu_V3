@@ -19,9 +19,13 @@ test("owner analytics accepts only the supported 7/30 day ranges", () => {
 test("owner analytics keeps every aggregation tenant-scoped", () => {
   const analytics = ownerSource.slice(ownerSource.indexOf("export const getOwnerAnalytics"));
   const queries = analytics.split("from menu_events").slice(0, -1);
-  assert.equal(queries.length, 2, "expected totals and series menu_events queries");
+  assert.equal(queries.length, 5, "expected all menu_events aggregations");
+  assert.equal(
+    queries.filter((query) => query.includes("tenant_id = ${member.tenant_id}")).length,
+    5,
+    "expected every menu_events aggregation to constrain the member tenant",
+  );
   assert.match(analytics, /where tenant_id = \$\{member\.tenant_id\} and created_at >= \$\{since\}/);
-  assert.match(analytics, /where e\.tenant_id = \$\{member\.tenant_id\}/);
   assert.match(analytics, /where e\.tenant_id = \$\{member\.tenant_id\}/g);
 });
 
