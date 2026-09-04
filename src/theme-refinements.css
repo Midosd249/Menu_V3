@@ -1,126 +1,9 @@
 /*
  * Menu V3 visual refinement layer
  *
- * This layer is intentionally presentation-only. It pushes the first three
- * themes into distinct art directions while preserving the shared menu DOM,
- * data contracts, accessibility and reduced-motion behavior.
+ * Presentation-only premium refinements. Essential keeps its original theme
+ * system; Editorial and Noir receive their art-direction enhancements.
  */
-
-/* 01 — ESSENTIAL / Modern Atelier
-   Material: warm paper + ink + terracotta. Composition: asymmetrical print. */
-html[data-menu-theme="essential"] .menu-public-shell {
-  --atelier-accent: #a64f32;
-  --atelier-ink: #17130f;
-  --atelier-paper: #f5efe5;
-  background:
-    radial-gradient(circle at 8% 4%, rgb(166 79 50 / .10), transparent 20rem),
-    repeating-linear-gradient(0deg, rgb(23 19 15 / .018) 0 1px, transparent 1px 5px),
-    var(--atelier-paper);
-}
-html[data-menu-theme="essential"] .menu-public-shell header {
-  border-bottom: 0;
-  box-shadow: none;
-  background: transparent;
-}
-html[data-menu-theme="essential"] .menu-public-shell header > div {
-  position: relative;
-  max-width: 58rem;
-}
-html[data-menu-theme="essential"] .menu-public-shell header > div::after {
-  content: "ATELIER / EVERYDAY";
-  position: absolute;
-  inset-inline-end: 0;
-  top: 50%;
-  transform: rotate(90deg) translateX(50%);
-  transform-origin: right center;
-  font-size: .55rem;
-  font-weight: 700;
-  letter-spacing: .24em;
-  color: var(--atelier-accent);
-  opacity: .65;
-}
-html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child {
-  border: 0;
-  border-radius: 0;
-  margin-inline: auto;
-  box-shadow: none;
-  background: transparent;
-  min-height: 17rem;
-}
-html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
-  width: 5rem;
-  height: 5rem;
-  inset: auto 0 0 auto;
-  background: var(--atelier-accent);
-  clip-path: polygon(0 0, 100% 100%, 0 100%);
-}
-html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
-  inset: auto auto 0 0;
-  transform: scaleX(-1);
-}
-html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::after {
-  width: 22rem;
-  height: 22rem;
-  inset: -10rem auto auto -8rem;
-  border: 1px solid rgb(166 79 50 / .18);
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section {
-  border-inline-start: 1px solid rgb(23 19 15 / .13);
-  padding-inline-start: clamp(1rem, 4vw, 2.5rem);
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section > h2 {
-  font-size: clamp(1.7rem, 6vw, 3rem);
-  text-transform: none;
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section > h2::before {
-  content: "";
-  display: inline-block;
-  width: .55rem;
-  height: .55rem;
-  margin-inline-end: .65rem;
-  border-radius: 50%;
-  background: var(--atelier-accent);
-  vertical-align: .18em;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
-  grid-template-columns: minmax(8.5rem, 32%) minmax(0, 1fr);
-  border: 0;
-  border-radius: 0;
-  border-block-end: 1px solid rgb(23 19 15 / .14);
-  background: transparent;
-  box-shadow: none;
-  min-height: 8rem;
-  padding: .8rem 0;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
-  grid-template-columns: minmax(0, 1fr) minmax(8.5rem, 32%);
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button > :first-child { order: 2; }
-html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button > :last-child { order: 1; }
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover {
-  transform: translateX(-.3rem);
-  background: rgb(255 255 255 / .28);
-}
-html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover { transform: translateX(.3rem); }
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
-  min-height: 7.1rem;
-  border-radius: .25rem 1.4rem .25rem 1.4rem;
-  filter: saturate(.9) contrast(1.04);
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button img {
-  border-radius: 1.4rem .25rem 1.4rem .25rem;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button::after {
-  content: "↗";
-  position: absolute;
-  inset-inline-end: .5rem;
-  bottom: .7rem;
-  font-size: .8rem;
-  color: var(--atelier-accent);
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover::after { opacity: 1; }
 
 /* 02 — EDITORIAL / Food Magazine
    Material: ink, cream and vermilion. Composition: cover → columns → pull quotes. */
@@ -345,13 +228,11 @@ html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
 }
 
 /* Shared premium polish — no content blocking and reduced-motion safe. */
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button,
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button,
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
   contain: layout paint;
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme="essential"] .menu-public-shell *,
   html[data-menu-theme="editorial"] .menu-public-shell *,
   html[data-menu-theme="noir"] .menu-public-shell * {
     transition-duration: .01ms !important;
