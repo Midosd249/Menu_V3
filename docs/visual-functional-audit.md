@@ -5,7 +5,7 @@ Permanent audit record for public-menu templates, visual refinements, SEO/public
 
 ## Audit status
 - Date: 2026-09-05
-- Scope: repository-level baseline and future audit contract
+- Scope: repository-level baseline and Essential refinement audit
 - Current product template catalog: `essential`, `editorial`, `noir`, `heritage`, `gallery`
 - Visual browser/device execution: **UNKNOWN** in the current agent environment
 - Repository evidence: **VERIFIED**
@@ -14,6 +14,7 @@ Permanent audit record for public-menu templates, visual refinements, SEO/public
 - `src/components/public-menu.tsx` is the shared public-menu renderer and currently imports Search, ShoppingBag, MapPin, Phone, Instagram, and related menu/order behavior.
 - The public renderer contains product details, modifiers, cart/order behavior, language handling, and public actions; exact runtime behavior must be tested rather than inferred from icon presence.
 - `src/lib/theme/registry.ts` defines five current themes, their families, tokens, layouts, capabilities, and preview classes.
+- `src/theme-essential.css` is the theme-specific presentation layer for Essential.
 - `package.json` includes Playwright as a development dependency and a `qa:template` script, but this agent session does not have an executable browser/device session or mounted repository checkout. Therefore screenshot execution is not claimed.
 - The preview-layer incident is documented in `docs/INCIDENT_PREVIEW_COVERING_LAYER.md`; its diagnostic lesson is to inspect DOM structure, sizing, stacking contexts, pseudo-elements, animation, and responsive constraints before reaching for `z-index`.
 
@@ -45,6 +46,14 @@ Every relevant template change must inspect:
 - **VERIFIED / HIGH:** public-menu presentation is shared; future audits must distinguish theme-level styling from shared interaction behavior.
 - **VERIFIED / HIGH:** preview has a documented history of covering-layer/stacking failures; structural paint-chain inspection is mandatory for future visual regressions.
 - **UNKNOWN / HIGH:** final post-hydration rendering at real mobile/desktop viewports, including overlay and sticky-control interaction, because browser/device screenshots were not available.
+
+### Essential refinement — 2026-09-05
+- **VERIFIED / HIGH:** Essential retains its original `essential` key, Free tier, `small-menu` family, horizontal product-card model, sticky category model, and quiet visual direction.
+- **VERIFIED / MEDIUM:** Essential presentation now explicitly protects narrow layouts and long bilingual/mixed-direction content from avoidable overflow, keeps SAR prices from wrapping, and raises key control minimum heights to a practical mobile target.
+- **VERIFIED / HIGH:** Essential preview sections are explicitly forced to `opacity: 1` and `transform: none` with animation disabled when `data-menu-preview="true"`; this directly addresses the known scroll-linked preview visibility failure mode without changing the shared preview stacking architecture.
+- **VERIFIED / MEDIUM:** Essential catalog copy was refined to communicate quiet everyday hospitality and a utility-first menu promise rather than generic baseline wording.
+- **VERIFIED / MEDIUM:** Saudi-market research informed bilingual/mobile clarity, current availability, SAR presentation, branch awareness, food imagery, and fast category/search discovery; no proprietary layout or asset was copied.
+- **UNKNOWN / HIGH:** actual screenshots, post-hydration visibility, sticky-layer coverage, touch behavior, and complete interaction journeys remain unobserved until browser/device QA is available.
 
 ## Interaction audit
 For every interactive control, record: purpose, placement, reachability, touch target, accessible name, focus state, RTL/LTR behavior, success feedback, loading/disabled/error behavior, duplicate-action protection, privacy-safe analytics, and conversion value.
@@ -122,4 +131,4 @@ For each finding use:
 - **VERIFIED:** Playwright is declared in repository devDependencies and `qa:template` exists.
 - **UNKNOWN:** whether a complete stable browser harness, authenticated session, device emulation, screenshot capture, and pixel-diff workflow can be executed from the current environment.
 - **UNKNOWN:** current physical-device rendering and post-hydration screenshots.
-- Required later evidence: screenshots of relevant routes at small/standard/large mobile and desktop, both RTL and LTR, with realistic fixtures; plus interaction traces for core controls.
+- Required later evidence: screenshots of Essential at small/standard/large mobile and desktop, both RTL and LTR, with realistic fixtures; plus interaction traces for core controls.
