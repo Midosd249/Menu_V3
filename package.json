@@ -50,6 +50,7 @@
     "jose": "6.2.9",
     "lucide-react": "^0.510.0",
     "pg": "^8.16.0",
+    "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.54.0",
