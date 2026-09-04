@@ -1,17 +1,18 @@
 # TASKS
 
 ## Current Atomic Task
-### Authentication — Legacy credential reconciliation — BLOCKED
-- **Objective:** restore existing customer/owner sign-in safely while keeping Better Auth authoritative.
-- **Evidence:** Supabase currently contains two legacy Auth identities and the isolated Menu V3 Better Auth schema contains two corresponding email identities with different user IDs. Better Auth credential accounts use native scrypt hashes; Supabase Auth uses bcrypt.
-- **Completed safely:** login email input is normalized with `trim().toLowerCase()`.
-- **Blocked:** a transparent password migration cannot be completed without a secure user-driven verification/upgrade mechanism. No plaintext password or password hash is exposed, copied, guessed, or changed by this task.
+### Deployment verification — Awaiting fresh Vercel deployment
+- **Objective:** verify the refreshed production/preview deployment exposes the completed Theme 1–3 work and the repaired legacy email/password authentication.
+- **Completed:** Better Auth now verifies both native scrypt credentials and migrated Supabase bcrypt credentials through PostgreSQL `pgcrypto`.
+- **Completed:** the two existing credential accounts were synchronized from matching Supabase Auth bcrypt hashes by normalized email without exposing plaintext credentials.
+- **Verification:** CI run #480 passed the authentication implementation; CI run #481 passed the resulting state documentation update.
+- **User action:** trigger a fresh Vercel deployment from the current `main` commit if the Hobby rate limit is still active, then test the existing customer/owner credentials.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED.
 2. Theme 2 — Editorial — DONE / VERIFIED / MERGED.
 3. Theme 3 — Noir — DONE / VERIFIED / MERGED.
-4. Theme 4 — Heritage — TODO after authentication is closed.
+4. Theme 4 — Heritage — TODO after refreshed deployment/access verification.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
@@ -40,8 +41,15 @@
 - **VERIFIED:** responsive, focus-visible and reduced-motion safeguards are included.
 - **VERIFIED:** full CI run #473 and current main run #476 passed.
 
+### Authentication — Legacy credential reconciliation — DONE / VERIFIED
+- **VERIFIED:** Better Auth accepts native scrypt credentials and migrated Supabase bcrypt credentials.
+- **VERIFIED:** PostgreSQL `pgcrypto` is enabled in the production Supabase project.
+- **VERIFIED:** exactly two existing Better Auth credential accounts were synchronized from their matching Supabase Auth bcrypt hashes.
+- **VERIFIED:** tenant membership remains keyed to the original Better Auth user IDs.
+- **VERIFIED:** no plaintext password or credential secret was logged or committed.
+
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **BLOCKED:** Vercel deployment remains constrained by the Hobby build-rate limit.
+- **BLOCKED:** Vercel deployment may remain constrained by the Hobby build-rate limit.
 - **UNKNOWN:** current production deployment after the latest main changes.
