@@ -1,0 +1,361 @@
+/*
+ * Menu V3 visual refinement layer
+ *
+ * This layer is intentionally presentation-only. It pushes the first three
+ * themes into distinct art directions while preserving the shared menu DOM,
+ * data contracts, accessibility and reduced-motion behavior.
+ */
+
+/* 01 — ESSENTIAL / Modern Atelier
+   Material: warm paper + ink + terracotta. Composition: asymmetrical print. */
+html[data-menu-theme="essential"] .menu-public-shell {
+  --atelier-accent: #a64f32;
+  --atelier-ink: #17130f;
+  --atelier-paper: #f5efe5;
+  background:
+    radial-gradient(circle at 8% 4%, rgb(166 79 50 / .10), transparent 20rem),
+    repeating-linear-gradient(0deg, rgb(23 19 15 / .018) 0 1px, transparent 1px 5px),
+    var(--atelier-paper);
+}
+html[data-menu-theme="essential"] .menu-public-shell header {
+  border-bottom: 0;
+  box-shadow: none;
+  background: transparent;
+}
+html[data-menu-theme="essential"] .menu-public-shell header > div {
+  position: relative;
+  max-width: 58rem;
+}
+html[data-menu-theme="essential"] .menu-public-shell header > div::after {
+  content: "ATELIER / EVERYDAY";
+  position: absolute;
+  inset-inline-end: 0;
+  top: 50%;
+  transform: rotate(90deg) translateX(50%);
+  transform-origin: right center;
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .24em;
+  color: var(--atelier-accent);
+  opacity: .65;
+}
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child {
+  border: 0;
+  border-radius: 0;
+  margin-inline: auto;
+  box-shadow: none;
+  background: transparent;
+  min-height: 17rem;
+}
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
+  width: 5rem;
+  height: 5rem;
+  inset: auto 0 0 auto;
+  background: var(--atelier-accent);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
+  inset: auto auto 0 0;
+  transform: scaleX(-1);
+}
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::after {
+  width: 22rem;
+  height: 22rem;
+  inset: -10rem auto auto -8rem;
+  border: 1px solid rgb(166 79 50 / .18);
+}
+html[data-menu-theme="essential"] .menu-public-shell main > section {
+  border-inline-start: 1px solid rgb(23 19 15 / .13);
+  padding-inline-start: clamp(1rem, 4vw, 2.5rem);
+}
+html[data-menu-theme="essential"] .menu-public-shell main > section > h2 {
+  font-size: clamp(1.7rem, 6vw, 3rem);
+  text-transform: none;
+}
+html[data-menu-theme="essential"] .menu-public-shell main > section > h2::before {
+  content: "";
+  display: inline-block;
+  width: .55rem;
+  height: .55rem;
+  margin-inline-end: .65rem;
+  border-radius: 50%;
+  background: var(--atelier-accent);
+  vertical-align: .18em;
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
+  grid-template-columns: minmax(8.5rem, 32%) minmax(0, 1fr);
+  border: 0;
+  border-radius: 0;
+  border-block-end: 1px solid rgb(23 19 15 / .14);
+  background: transparent;
+  box-shadow: none;
+  min-height: 8rem;
+  padding: .8rem 0;
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
+  grid-template-columns: minmax(0, 1fr) minmax(8.5rem, 32%);
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button > :first-child { order: 2; }
+html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button > :last-child { order: 1; }
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover {
+  transform: translateX(-.3rem);
+  background: rgb(255 255 255 / .28);
+}
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover { transform: translateX(.3rem); }
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
+  min-height: 7.1rem;
+  border-radius: .25rem 1.4rem .25rem 1.4rem;
+  filter: saturate(.9) contrast(1.04);
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button img {
+  border-radius: 1.4rem .25rem 1.4rem .25rem;
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button::after {
+  content: "↗";
+  position: absolute;
+  inset-inline-end: .5rem;
+  bottom: .7rem;
+  font-size: .8rem;
+  color: var(--atelier-accent);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover::after { opacity: 1; }
+
+/* 02 — EDITORIAL / Food Magazine
+   Material: ink, cream and vermilion. Composition: cover → columns → pull quotes. */
+html[data-menu-theme="editorial"] .menu-public-shell {
+  --mag-ink: #11100e;
+  --mag-paper: #f1eadf;
+  --mag-red: #b33b25;
+  background:
+    linear-gradient(90deg, transparent 0 49.7%, rgb(17 16 14 / .08) 49.7% 49.8%, transparent 49.8%),
+    var(--mag-paper);
+}
+html[data-menu-theme="editorial"] .menu-public-shell header {
+  min-height: 88dvh;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+html[data-menu-theme="editorial"] .menu-public-shell header::after {
+  content: "VOL. 03 — THE TABLE";
+  inset-inline-start: 1rem;
+  inset-inline-end: auto;
+  top: 1.25rem;
+  letter-spacing: .28em;
+}
+html[data-menu-theme="editorial"] .menu-public-shell header > div {
+  border: 0;
+  border-radius: 0;
+  padding: clamp(1.25rem, 5vw, 3.5rem);
+  background: linear-gradient(180deg, transparent, rgb(10 9 8 / .82));
+  box-shadow: none;
+}
+html[data-menu-theme="editorial"] .menu-public-shell header h1 {
+  max-width: 8ch;
+  font-size: clamp(3.3rem, 17vw, 8rem);
+  line-height: .83;
+  letter-spacing: -.08em;
+}
+html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell header h1 {
+  max-width: 9ch;
+  line-height: .96;
+  letter-spacing: -.055em;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main {
+  max-width: 76rem;
+  padding-inline: clamp(1rem, 5vw, 4rem);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main > section {
+  padding-block: clamp(3rem, 9vw, 7rem);
+  border-top: 2px solid var(--mag-ink);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main > section > h2 {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: end;
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  line-height: .9;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main > section > h2::before {
+  content: counter(section);
+  counter-increment: section;
+  font-family: Georgia, serif;
+  font-size: .7rem;
+  letter-spacing: .12em;
+  color: var(--mag-red);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main { counter-reset: section; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid rgb(17 16 14 / .18);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button {
+  grid-template-columns: 1fr;
+  min-height: 21rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid rgb(17 16 14 / .18);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button { min-height: 28rem; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
+  grid-row: 1;
+  height: 13rem;
+  border-radius: 0;
+  overflow: hidden;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button > :first-child { height: 20rem; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img {
+  min-height: 0;
+  height: 100%;
+  filter: saturate(.86) contrast(1.08);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child {
+  padding: 1rem 0 1.25rem;
+  align-self: end;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h4 {
+  max-width: 14ch;
+  font-size: clamp(1.2rem, 3.8vw, 1.75rem);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover {
+  transform: none;
+  background: rgb(179 59 37 / .055);
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover img { transform: scale(1.055); }
+@media (max-width: 640px) {
+  html[data-menu-theme="editorial"] .menu-public-shell main ul { grid-template-columns: 1fr; }
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button { min-height: 25rem; }
+}
+
+/* 03 — NOIR / Cinematic Atelier
+   Material: charcoal, bronze and spotlight. Composition: film stills + light pools. */
+html[data-menu-theme="noir"] .menu-public-shell {
+  --noir-hot: #d8a76f;
+  --noir-black: #070706;
+  background:
+    radial-gradient(circle at 50% 12%, rgb(216 167 111 / .09), transparent 25rem),
+    radial-gradient(circle at 15% 65%, rgb(216 167 111 / .045), transparent 18rem),
+    var(--noir-black);
+}
+html[data-menu-theme="noir"] .menu-public-shell header {
+  min-height: 92dvh;
+  border: 0;
+  box-shadow: 0 50px 120px rgb(0 0 0 / .72);
+}
+html[data-menu-theme="noir"] .menu-public-shell header::after {
+  content: "N / 03";
+  color: var(--noir-hot);
+  letter-spacing: .35em;
+}
+html[data-menu-theme="noir"] .menu-public-shell header > div {
+  border: 0;
+  border-top: 1px solid rgb(216 167 111 / .42);
+  border-radius: 0;
+  background: linear-gradient(180deg, transparent, rgb(7 7 6 / .8));
+  backdrop-filter: none;
+}
+html[data-menu-theme="noir"] .menu-public-shell header > div::after {
+  content: "PRIVATE DINING / 2026";
+  position: absolute;
+  inset-inline-end: clamp(1rem, 5vw, 2.5rem);
+  top: -2rem;
+  color: rgb(216 167 111 / .7);
+  font-size: .55rem;
+  letter-spacing: .24em;
+}
+html[data-menu-theme="noir"] .menu-public-shell header h1 {
+  font-size: clamp(3rem, 15vw, 7.2rem);
+  text-shadow: 0 8px 45px rgb(0 0 0 / .8);
+}
+html[data-menu-theme="noir"] .menu-public-shell main {
+  max-width: 78rem;
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-top-color: rgb(216 167 111 / .14);
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2 {
+  font-size: clamp(1.8rem, 7vw, 3.6rem);
+  letter-spacing: -.055em;
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2::before {
+  width: 3rem;
+  background: var(--noir-hot);
+  box-shadow: 0 0 28px rgb(216 167 111 / .7);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+  grid-template-columns: 1fr;
+  min-height: 23rem;
+  padding: 0;
+  border-radius: .25rem;
+  border-color: rgb(216 167 111 / .14);
+  background: linear-gradient(155deg, #171411, #0d0c0a);
+  box-shadow: 0 22px 60px rgb(0 0 0 / .42), inset 0 1px 0 rgb(255 255 255 / .03);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button { transform: translateY(1rem); }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child {
+  height: 14rem;
+  border-radius: 0;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button > :first-child { height: 18rem; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
+  min-height: 0;
+  height: 100%;
+  filter: saturate(.68) contrast(1.14) brightness(.68);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :last-child {
+  padding: 1.1rem 1.15rem 1.35rem;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h4 { font-size: 1.2rem; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgb(216 167 111 / .5);
+  box-shadow: 0 30px 80px rgb(0 0 0 / .62), 0 0 35px rgb(216 167 111 / .07);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover img {
+  filter: saturate(.86) contrast(1.12) brightness(.82);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button [class*="text-accent"] {
+  color: var(--noir-hot);
+  text-shadow: 0 0 18px rgb(216 167 111 / .18);
+}
+html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
+  border-radius: 0;
+  border-color: rgb(216 167 111 / .16);
+  background: rgb(7 7 6 / .9);
+  box-shadow: 0 20px 50px rgb(0 0 0 / .5);
+}
+@media (max-width: 640px) {
+  html[data-menu-theme="noir"] .menu-public-shell main ul { grid-template-columns: 1fr; }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button { transform: none; }
+}
+
+/* Shared premium polish — no content blocking and reduced-motion safe. */
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button,
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button,
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+  contain: layout paint;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="essential"] .menu-public-shell *,
+  html[data-menu-theme="editorial"] .menu-public-shell *,
+  html[data-menu-theme="noir"] .menu-public-shell * {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
