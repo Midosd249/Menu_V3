@@ -1,8 +1,8 @@
 # TASKS
 
 ## Current Atomic Task
-### Preview layer isolation + responsive theme rendering — DONE / SOURCE-VERIFIED
-- **Objective:** remove the actual nested preview presentation boundary that was obscuring the rendered menu, preserve theme-family routing, and add regression protection.
+### Preview layer isolation + responsive theme rendering — IN_PROGRESS / DEPLOYMENT-VERIFIED
+- **Objective:** remove the actual nested preview presentation boundary that was obscuring the rendered menu, preserve theme-family routing, add regression protection, and complete release-level responsive visual QA.
 - **Root cause:** `/studio/preview` and `/themes/preview` each wrapped a menu template that already rendered its own `.menu-public-shell`, creating nested theme shells and ambiguous stacking/decoration behavior.
 - **Completed:** `src/routes/studio/preview.tsx` no longer creates an outer `.menu-public-shell`.
 - **Completed:** `src/routes/themes/preview.tsx` no longer creates an outer `.menu-public-shell`.
@@ -10,8 +10,11 @@
 - **Completed:** `tests/preview-shell.test.mjs` prevents either preview route from reintroducing a nested menu shell.
 - **Completed:** the regression test is registered in `package.json` without changing dependency versions.
 - **Verified:** Premium preview access does not bypass `saveTenantTheme` plan enforcement.
-- **PENDING:** CI execution of the new regression test and normal quality gates.
-- **UNKNOWN:** physical-device visual QA on the resulting deployment.
+- **Verified:** current Vercel production deployment is `READY` and is linked to `Midosd249/Menu_V3`.
+- **Verified:** `/studio/preview` returns HTTP 200 for `essential`, `editorial`, `noir`, `heritage`, and `gallery` on the current deployment.
+- **Verified:** no error-level runtime logs were found for the current deployment in the checked 24-hour window.
+- **PENDING:** local CI execution of the new regression test and normal quality gates; repository checkout is not mounted in the current execution environment.
+- **UNKNOWN:** authenticated browser/device visual QA, including post-hydration menu visibility and pixel-level mobile/desktop rendering.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED; original baseline preserved.
@@ -48,4 +51,5 @@
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** corrected authentication is live.
 - **DONE / SOURCE-VERIFIED:** nested preview shell was removed from both preview routes.
-- **PENDING:** deploy latest `main` and perform live mobile-first QA of all five theme previews.
+- **VERIFIED:** current deployment serves all five theme preview variants with HTTP 200.
+- **PENDING:** complete authenticated mobile/desktop browser QA and local quality gates before closing the current task.
