@@ -6,6 +6,7 @@ import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
 import themeCss from "../theme-premium.css?url";
 import essentialThemeCss from "../theme-essential.css?url";
+import editorialThemeCss from "../theme-editorial.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -28,6 +29,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: themeCss },
       { rel: "stylesheet", href: essentialThemeCss },
+      { rel: "stylesheet", href: editorialThemeCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
