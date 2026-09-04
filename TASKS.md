@@ -1,58 +1,52 @@
 # TASKS
 
 ## Current Atomic Task
-### Visual, functional, research, and template-refinement workflow upgrade — DONE / VERIFIED
-- **Objective:** establish a permanent evidence-based quality gate for future template creation, template refinement, public-menu UI, SEO, accessibility, responsive, and conversion-flow work without modifying application behavior or existing templates.
-- **Completed:** `docs/visual-functional-audit.md` added with full visual/functional audit scope, interaction checks, severity, evidence, and tooling limitations.
-- **Completed:** `docs/design-research-log.md` added with permanent source-recording rules and authoritative baseline research.
-- **Completed:** `docs/template-review-checklist.md` added with mandatory visual, functional, cart/order, contact/location, search/category, RTL/LTR, real-data, safe-area, accessibility, SEO, performance, and screenshot/regression checks.
-- **Completed:** `docs/template-brief-template.md` added with action hierarchy, visibility rules, interaction hierarchy, safe-area behavior, sample content, and acceptance criteria.
-- **Completed:** `AGENTS.md` now contains the permanent `Visual, Interaction, and Conversion Quality Gate`.
-- **Completed:** `PROJECT_STATE.md`, `PLAN.md`, and `SESSION_PROTOCOL.md` require the new workflow for future relevant work.
-- **Verified:** current source defines five themes only: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
-- **Verified:** public-menu source contains search, cart/order, product details/modifiers, phone, map/location, Instagram, and WhatsApp-related UI.
-- **Verified:** Playwright is present as a dev dependency and `qa:template` exists.
-- **Verified:** no application code, templates, database, migrations, dependencies, CI/CD, Vercel settings, auth, authorization, subscriptions, or product features were changed.
-- **Verified:** authoritative research was logged for WCAG 2.2, Google Search Central LocalBusiness, web.dev image performance, Toast menu search/category navigation, and Square QR/mobile ordering.
-- **UNKNOWN:** authenticated browser/device rendering, screenshot capture, pixel comparison, and post-hydration inspection are unavailable in the current environment.
+### Theme 1 — Essential refinement — IN_PROGRESS
+- **Objective:** refine the existing Essential template only, using the permanent visual/functional/research/premium-template workflow.
+- **VERIFIED:** `docs/template-brief-essential.md` created before implementation with customer journey, hierarchy, interactions, real-data resilience, acceptance criteria, and verification plan.
+- **VERIFIED:** `src/theme-essential.css` refined for touch targets, long Arabic/English/mixed-direction content, price wrapping, sticky navigation/focus safety, and preview-mode visibility.
+- **VERIFIED:** `src/lib/theme/registry.ts` Essential description/promise/tags sharpened to match quiet everyday hospitality.
+- **VERIFIED:** Saudi-market and accessibility research recorded in `docs/design-research-log.md`.
+- **VERIFIED:** no new theme was created and no other theme was intentionally changed.
+- **VERIFIED:** no database, auth, authorization, subscriptions, dependencies, CI/CD, or deployment behavior was intentionally changed.
+- **UNKNOWN:** browser/device screenshots, post-hydration visual inspection, real-device interactions, and pixel comparison are unavailable in the current environment.
+- **BLOCKED:** cannot mark the Essential milestone DONE until required browser/device and repository quality verification evidence exists.
+
+## Required Verification Before Closure
+1. Essential preview at small/standard/large mobile and desktop breakpoints.
+2. Post-hydration check for full menu visibility and absence of covering/stacking layers.
+3. Arabic RTL, English LTR, and mixed-direction content.
+4. Long restaurant/category/item names, missing descriptions/images, low-quality/mixed-ratio images, sold-out items, modifiers, SAR prices, sparse/dense categories, and multiple branches where supported.
+5. Search, category navigation, product details, cart/order, language, icons, WhatsApp, phone, map/location, and failure/disabled/loading states where capability/data exists.
+6. Keyboard focus and sticky/fixed safe-area behavior.
+7. `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build` when an executable repository runtime is available.
+8. Update `docs/visual-functional-audit.md`, `PROJECT_STATE.md`, `PLAN.md`, and this file with evidence before closure.
 
 ## Planned Theme Sequence
-1. Theme 1 — Essential — DONE / VERIFIED / MERGED; original baseline preserved.
-2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; preview rendering stabilized.
-3. Theme 3 — Noir — DONE / VERIFIED / MERGED; preview rendering stabilized.
-4. Theme 4 — Heritage — TODO after final Theme 1–3 live QA.
+1. Theme 1 — Essential — refinement IN_PROGRESS.
+2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; protected.
+3. Theme 3 — Noir — DONE / VERIFIED / MERGED; protected.
+4. Theme 4 — Heritage — TODO after Essential closure and preview QA gate.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
-## Required Gate for Future UI/Template Work
-1. Repository evidence and current architecture inspection.
-2. Material source research recorded in `docs/design-research-log.md`.
-3. Complete design brief using `docs/template-brief-template.md` when material.
-4. Full visual scan using `docs/visual-functional-audit.md` and `docs/template-review-checklist.md`.
-5. Functional interaction scan, including supported cart/order, WhatsApp, phone, map/location, search, categories, and icons.
-6. Real-data resilience testing.
-7. Arabic RTL, English LTR, mixed-direction, and responsive verification.
-8. Accessibility, performance, SEO/public-page review.
-9. Screenshot/browser visual review when tooling is available.
-10. Final functional verification and evidence-backed documentation.
-
-## Completed
+## Completed Milestones
 ### Premium Theme System — 8 → 5 — DONE / VERIFIED / MERGED
 - **Catalog:** `essential` (Free), `editorial` (Premium), `noir` (Premium), `heritage` (Premium), `gallery` (Premium).
 - **VERIFIED:** five themes only; exactly one Free and four Premium.
 - **VERIFIED:** themes are complete visual systems rather than color-only skins.
 
-### Theme 1 — Essential — DONE / VERIFIED / MERGED
+### Theme 1 — Essential baseline — DONE / VERIFIED / MERGED
 - Dedicated Free-theme art direction implemented and isolated from domain/business logic.
-- Original visual baseline is preserved.
+- Original visual baseline remains protected; the current task is a refinement, not a rebuild.
 
 ### Theme 2 — Editorial — DONE / VERIFIED / MERGED
 - Dedicated Premium art direction implemented and isolated from domain/business logic.
-- Preview integration now uses its intended template family and refinement layers.
+- Preview integration stabilized.
 
 ### Theme 3 — Noir — DONE / VERIFIED / MERGED
 - Dedicated cinematic Premium art direction implemented and isolated from domain/business logic.
-- Preview integration now uses its intended template family and refinement layers.
+- Preview integration stabilized.
 
 ### Authentication — Legacy credential reconciliation — DONE / VERIFIED
 - Better Auth accepts native scrypt credentials and migrated Supabase bcrypt credentials.
@@ -64,5 +58,5 @@
 - **VERIFIED:** corrected authentication is live.
 - **DONE / SOURCE-VERIFIED:** nested preview shell was removed from both preview routes.
 - **VERIFIED:** current deployment serves all five theme preview variants with HTTP 200.
-- **PENDING:** complete authenticated mobile/desktop browser QA and local quality gates before closing the current product preview task.
-- **WORKFLOW:** future template/public-menu UI work is blocked from completion until the permanent visual/functional quality gate is satisfied or an evidence-backed exception is documented.
+- **PENDING:** Essential browser/device QA and local quality gates.
+- **WORKFLOW:** future template/public-menu UI work remains blocked from completion until the permanent visual/functional quality gate is satisfied or an evidence-backed exception is documented.
