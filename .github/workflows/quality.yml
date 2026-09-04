@@ -36,7 +36,7 @@ jobs:
         run: npm run build
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Browser template QA
+      - name: Browser template QA — all themes
         run: |
           mkdir -p .grok
           setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
@@ -52,7 +52,7 @@ jobs:
                 cat .grok/preview.log
                 exit 1
               fi
-              if npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial; then
+              if npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial -- --all-themes; then
                 exit 0
               fi
               echo "[preview] Browser QA failed — preview log follows"
