@@ -5,64 +5,52 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
+- Theme 1 Essential is DONE / VERIFIED / MERGED.
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Theme 1 — Essential Visual Refinement — IN_PROGRESS
+### Theme 2 — Editorial Visual Refinement — IN_PROGRESS
 
-**Objective:** turn `essential` into the strongest possible Free theme: a deliberately art-directed hospitality experience with a recognizable identity, premium-level polish, excellent Arabic/English RTL behavior, and disciplined performance — without changing menu data, business rules, routes, or entitlement behavior.
+**Objective:** turn `editorial` into a premium, art-directed hospitality experience that feels like a contemporary food magazine: strong cover composition, display typography, asymmetric rhythm, image-conscious product presentation, tactile controls and polished detail surfaces — without changing menu data, business rules, routes, or entitlement behavior.
+
+### Design decision
+Editorial is intentionally different from Essential. It uses paper/editorial tones, serif-led Latin display typography with the existing Arabic font fallback, chapter markers, long rules, controlled asymmetry, irregular card geometry, cover-like hero treatment and restrained progressive motion. The implementation is isolated in `src/theme-editorial.css` and loaded after shared theme layers. No new dependency or content schema is introduced.
 
 ### Acceptance criteria
-1. Essential has a coherent visual identity beyond color changes: composition, hierarchy, surfaces, geometry, media treatment, spacing and interaction language.
-2. Header, hero, category navigation, product cards, product details, cart, forms and utility states belong to one visual system.
+1. Editorial has a recognizable identity beyond color changes: cover composition, typography, rhythm, asymmetry, surfaces, geometry, media treatment and interaction language.
+2. Header, hero/brand treatment, category navigation, product cards, product details, cart, forms and utility states belong to one editorial system.
 3. Arabic RTL and English LTR remain correct at narrow mobile, tablet and desktop widths with no horizontal overflow.
-4. Existing menu data, ordering, availability, analytics, SEO, tenant isolation and entitlement behavior remain unchanged.
+4. Existing menu data, ordering, availability, analytics, SEO, tenant isolation and Premium entitlement behavior remain unchanged.
 5. Keyboard focus, touch targets, contrast and reduced-motion behavior remain accessible.
-6. Motion is restrained, progressive and does not become a performance dependency.
+6. Motion is progressive and never required for comprehension or layout.
 7. Repository quality gates and all-theme browser QA pass.
-8. Final diff is limited to Theme 1 presentation and required continuity documentation.
+8. Final diff is limited to Editorial presentation and required continuity documentation.
 
-## Completed — Premium Theme System 8 → 5
-- `essential` — Free.
-- `editorial` — Premium.
-- `noir` — Premium.
-- `heritage` — Premium.
-- `gallery` — Premium.
+## Completed Theme Refinement Work
+- `essential` — Free — DONE / VERIFIED / MERGED as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
+- `editorial` — Premium — IN_PROGRESS.
+- `noir` — Premium — TODO.
+- `heritage` — Premium — TODO.
+- `gallery` — Premium — TODO.
 
 **VERIFIED:** exactly five public themes; one Free and four Premium.
-
-**VERIFIED:** Premium themes are coordinated visual systems, not color variations: layout rhythm, typography, image treatment, surfaces, geometry, hero composition, product presentation, hover depth and motion personality all differ.
-
-**VERIFIED:** legacy theme keys migrate safely and normalize to the five-key catalog.
-
-**VERIFIED:** Premium publishing is server-authorized using the existing subscription model.
-
-**VERIFIED:** browser QA covers all five themes across mobile/tablet/desktop with zero horizontal overflow, zero unnamed buttons/links and zero runtime console errors.
-
-**VERIFIED:** GitHub Actions quality run #455 passed typecheck, 78 tests, lint, production build, performance audit and all-theme browser QA.
-
-**VERIFIED:** PR #8 was squash-merged into `main` as `39bae026425a4a1c9fe32e9b06934deb777b5407`.
+**VERIFIED:** Premium publishing remains server-authorized using the existing subscription model.
+**VERIFIED:** legacy keys normalize safely to the five-key catalog.
 
 ## Research basis
-- Competitor research established that a theme should behave as a complete visual system rather than a color skin.
-- Menu Author, MENU TIGER and Popmenu were reviewed for restaurant theme/layout patterns.
-- Maintained open-source UI/motion references were reviewed; proprietary layouts/assets were not copied.
-- MDN guidance supports progressive use of modern CSS effects and container-aware responsive design where appropriate.
-- W3C guidance supports explicit, visible keyboard focus indicators.
-- `prefers-reduced-motion` remains mandatory for motion enhancements.
+- Competitor research established that premium restaurant themes work best as complete visual systems rather than color skins.
+- Menu Author, MENU TIGER, Popmenu and FineDine were reviewed for menu composition, branding and image-led hospitality patterns.
+- Maintained UI/motion references informed progressive CSS effects, responsive composition and accessible focus treatment.
+- No proprietary competitor assets or copied layouts are introduced.
+
+## Verification
+- Planned commands: `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run check:auth`.
+- CI must additionally cover route-tree generation, browser QA across all five themes, responsive/RTL checks, console errors, overflow and performance.
+- Vercel is intentionally excluded from code verification because the platform is currently rate limited and the user will deploy manually.
 
 ## Deployment
-- **VERIFIED:** feature branch had successful Vercel Preview deployments for the previous five-theme system.
-- **UNKNOWN:** Vercel preview for the current Theme 1 branch is currently blocked by the platform deployment rate limit; GitHub status reports retry in 24 hours.
-- **UNKNOWN:** post-merge production deployment for `39bae026425a4a1c9fe32e9b06934deb777b5407` remains unverified.
-
-## Commercial sequence after Theme 1
-1. Theme 1 — Essential.
-2. Theme 2 — Editorial.
-3. Theme 3 — Noir.
-4. Theme 4 — Heritage.
-5. Theme 5 — Gallery.
-6. Premium commercialization and billing UX after the five theme experiences are individually refined.
+- **BLOCKED:** Vercel deployment is externally rate limited; this is not treated as a code failure.
+- **UNKNOWN:** production deployment state after the user's manual Vercel action.
 
 ## Stop condition
-Do not begin Theme 2 until Theme 1 is verified, reviewed and merged. Do not begin G7.3 until the five-theme visual refinement sequence is complete unless an explicit product decision changes this order.
+Do not begin Theme 3 until Theme 2 is fully verified, reviewed and merged. Do not begin G7.3 until the five-theme refinement sequence is complete unless the user explicitly changes the order.
