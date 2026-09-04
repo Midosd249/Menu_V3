@@ -8,19 +8,19 @@
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### G7.3 — Premium Theme Commercialization & Billing UX — NEXT
+### Theme 1 — Essential Visual Refinement — IN_PROGRESS
 
-**Objective:** connect the new Premium theme value to the existing subscription/upgrade surface without inventing a payment provider.
+**Objective:** turn `essential` into the strongest possible Free theme: a deliberately art-directed hospitality experience with a recognizable identity, premium-level polish, excellent Arabic/English RTL behavior, and disciplined performance — without changing menu data, business rules, routes, or entitlement behavior.
 
 ### Acceptance criteria
-1. Design Studio is plan-aware and clearly distinguishes Free from Premium.
-2. Premium themes remain previewable before payment.
-3. Free-plan users receive a clear upgrade CTA when attempting to publish Premium.
-4. Active/trialing non-free users can publish Premium themes.
-5. Expired/inactive users are fail-closed server-side and receive an actionable upgrade/renewal path.
-6. Client messaging and server entitlement use the same subscription source of truth.
-7. Existing billing contract is audited before any provider-specific implementation.
-8. End-to-end verification covers Free, Starter and Pro behavior.
+1. Essential has a coherent visual identity beyond color changes: composition, hierarchy, surfaces, geometry, media treatment, spacing and interaction language.
+2. Header, hero, category navigation, product cards, product details, cart, forms and utility states belong to one visual system.
+3. Arabic RTL and English LTR remain correct at narrow mobile, tablet and desktop widths with no horizontal overflow.
+4. Existing menu data, ordering, availability, analytics, SEO, tenant isolation and entitlement behavior remain unchanged.
+5. Keyboard focus, touch targets, contrast and reduced-motion behavior remain accessible.
+6. Motion is restrained, progressive and does not become a performance dependency.
+7. Repository quality gates and all-theme browser QA pass.
+8. Final diff is limited to Theme 1 presentation and required continuity documentation.
 
 ## Completed — Premium Theme System 8 → 5
 - `essential` — Free.
@@ -44,16 +44,25 @@
 **VERIFIED:** PR #8 was squash-merged into `main` as `39bae026425a4a1c9fe32e9b06934deb777b5407`.
 
 ## Research basis
-- Menu Author themes: https://menuauthor.com/themes
-- MENU TIGER templates: https://www.menutiger.com/features/website-and-menu-templates
-- Popmenu website design: https://get.popmenu.com/solutions/website-design
-- Maintained open-source UI/motion references were reviewed for reusable patterns; proprietary layouts/assets were not copied.
-- CSS scroll-linked motion is progressive enhancement and is guarded by feature support.
-- `prefers-reduced-motion` is supported.
+- Competitor research established that a theme should behave as a complete visual system rather than a color skin.
+- Menu Author, MENU TIGER and Popmenu were reviewed for restaurant theme/layout patterns.
+- Maintained open-source UI/motion references were reviewed; proprietary layouts/assets were not copied.
+- MDN guidance supports progressive use of modern CSS effects and container-aware responsive design where appropriate.
+- W3C guidance supports explicit, visible keyboard focus indicators.
+- `prefers-reduced-motion` remains mandatory for motion enhancements.
 
 ## Deployment
-- **VERIFIED:** feature branch had successful Vercel Preview deployments.
-- **UNKNOWN:** post-merge production deployment for `39bae026425a4a1c9fe32e9b06934deb777b5407` was not yet visible in the Vercel deployment listing at the time this state was updated.
+- **VERIFIED:** feature branch had successful Vercel Preview deployments for the previous five-theme system.
+- **UNKNOWN:** Vercel preview for the current Theme 1 branch is currently blocked by the platform deployment rate limit; GitHub status reports retry in 24 hours.
+- **UNKNOWN:** post-merge production deployment for `39bae026425a4a1c9fe32e9b06934deb777b5407` remains unverified.
+
+## Commercial sequence after Theme 1
+1. Theme 1 — Essential.
+2. Theme 2 — Editorial.
+3. Theme 3 — Noir.
+4. Theme 4 — Heritage.
+5. Theme 5 — Gallery.
+6. Premium commercialization and billing UX after the five theme experiences are individually refined.
 
 ## Stop condition
-Do not start G7.3 until the current merged Premium Theme System is fully recorded and production deployment status is verified. Do not claim production updated without a deployment tied to the merged commit.
+Do not begin Theme 2 until Theme 1 is verified, reviewed and merged. Do not begin G7.3 until the five-theme visual refinement sequence is complete unless an explicit product decision changes this order.
