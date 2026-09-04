@@ -14,42 +14,41 @@
 - **Theme 3 — Noir — DONE / VERIFIED / MERGED; preview rendering stabilized.**
 - Authentication reconciliation and the qualified `extensions.crypt(...)` fix are implemented and live authentication was verified by the user after deployment.
 - The reserved `nafas` demo fixture remains the source for the marketing/theme-preview demo when no branch is requested.
+- **Visual/Functional Quality System — DONE / VERIFIED / MERGED.** Permanent audit, research-log, checklist, and template-brief rules are now part of the repository workflow.
 
 ## Current Atomic Task
-### Preview layer isolation + responsive theme rendering — IN_PROGRESS / DEPLOYMENT-VERIFIED
+### Visual, functional, research, and template-refinement workflow upgrade — DONE / VERIFIED
 
-**Root cause:** both preview routes wrapped an already self-contained menu template in a second `.menu-public-shell`. That nested shell created a second theme presentation boundary; combined with shell pseudo-elements and preview-specific CSS, it could produce the reported transparent/visual veil and made preview stacking behavior ambiguous.
+**Objective:** establish a permanent evidence-based quality gate for future template creation, template refinement, public-menu UI, SEO, accessibility, responsive, and conversion-flow work without modifying existing application behavior or templates.
 
-**Fixed:** `src/routes/studio/preview.tsx` and `src/routes/themes/preview.tsx` no longer create an outer `.menu-public-shell`. They now render the selected theme controller and the self-contained menu template directly.
-
-**Fixed:** added `tests/preview-shell.test.mjs` and registered it in the repository test command so a nested preview shell cannot silently return.
-
-**Deployment:** the current Vercel production deployment is already connected to `main` and was built from commit `2258642a97560a94df109a73bc1f83708979531d` (`chore: keep preview fix scoped`). The deployment is `READY` and the Vercel status check is successful.
-
-**Live HTTP verification:** the five theme values `essential`, `editorial`, `noir`, `heritage`, and `gallery` were requested through the deployed `/studio/preview` route and each returned HTTP 200 with the expected preview route assets. The public `/themes/preview?theme=essential` endpoint also returned HTTP 200.
-
-**Limitation:** the available execution environment cannot perform authenticated browser/device rendering or provide pixel-level mobile screenshots. Therefore physical-device visual QA remains `UNKNOWN` rather than being inferred from HTTP 200 responses.
+**Completed:**
+- Added `docs/visual-functional-audit.md` with visual and interaction audit scope, severity model, evidence format, and explicit UNKNOWN visual-tooling limits.
+- Added `docs/design-research-log.md` with permanent source/research recording rules and current authoritative baseline research.
+- Added `docs/template-review-checklist.md` with mandatory visual, functional, cart/order, contact/location, search/category, RTL/LTR, real-data, accessibility, SEO, performance, and screenshot/regression gates.
+- Added `docs/template-brief-template.md` with action hierarchy, visibility rules, interaction rules, safe-area behavior, sample content, and acceptance criteria.
+- Added the permanent `Visual, Interaction, and Conversion Quality Gate` section to `AGENTS.md`.
+- Updated `PLAN.md`, `TASKS.md`, and `SESSION_PROTOCOL.md` to make research, visual scan, functional scan, real-data testing, visual review, final verification, and evidence documentation mandatory for future relevant work.
+- Preserved the existing theme sequence and all completed milestones.
 
 ## Verification State
-- **VERIFIED:** both preview routes contain no outer `.menu-public-shell` wrapper.
-- **VERIFIED:** both routes still render `MenuThemeController`, `PublicMenuView`, and `ContemporaryRestaurantTemplate` as applicable.
-- **VERIFIED:** the menu templates remain the owners of the actual `.menu-public-shell`, eliminating the nested shell boundary.
-- **VERIFIED:** the regression test asserts that both preview routes cannot reintroduce a nested menu shell.
-- **VERIFIED:** no dependency was added and package dependency versions were preserved.
-- **VERIFIED:** no database schema/business contract was changed.
-- **VERIFIED:** Vercel production deployment is `READY` for commit `2258642a97560a94df109a73bc1f83708979531d`.
-- **VERIFIED:** the five theme preview URLs return HTTP 200 from the current production deployment.
-- **VERIFIED:** no error-level runtime logs were found for the current deployment in the checked 24-hour window.
-- **PENDING:** local CI execution for the regression test and normal repository quality gates; the local repository checkout is not mounted in this execution environment.
-- **UNKNOWN:** final physical-device pixel-level rendering and post-hydration visual state.
-- **UNKNOWN:** whether the user-facing authenticated `/studio/preview` session reaches the final menu state on a real mobile device, because no browser/device session is available here.
+- **VERIFIED:** repository source and current theme registry were inspected before documentation changes.
+- **VERIFIED:** current theme catalog in `src/lib/theme/registry.ts` is five themes: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
+- **VERIFIED:** `src/components/public-menu.tsx` contains public search, cart/order, product details/modifiers, phone, map/location, Instagram, and WhatsApp-related UI code; future behavior must still be browser-verified rather than inferred from icon presence.
+- **VERIFIED:** Playwright is declared in `package.json` and `qa:template` exists.
+- **VERIFIED:** no application source, templates, database schema/migrations, dependencies, CI/CD, Vercel settings, authentication, authorization, subscriptions, or product features were changed by this task.
+- **VERIFIED:** current `main` commit history contains the previously captured preview covering-layer incident and its engineering lessons; those lessons are now incorporated into the permanent audit workflow.
+- **VERIFIED:** authoritative baseline research was recorded for WCAG 2.2 target sizes, Google LocalBusiness structured data, web.dev responsive/lazy images, Toast menu search/category navigation, and Square QR/mobile ordering principles.
+- **UNKNOWN:** authenticated browser/device visual execution, screenshot capture, pixel comparison, and post-hydration inspection from this agent environment.
+- **UNKNOWN:** whether the existing `qa:template` script is sufficient for complete screenshot/pixel regression coverage; this must be verified before relying on it as a complete visual harness.
 
 ## Session Log
-- 2026-09-05 — Re-read the repository operating contract and continuity files; confirmed `main` and `Midosd249/Menu_V3` as source of truth.
-- 2026-09-05 — Verified that Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and its latest production deployment is commit `2258642a97560a94df109a73bc1f83708979531d`.
-- 2026-09-05 — Confirmed the deployed preview routes return HTTP 200 for all five theme keys: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
-- 2026-09-05 — Confirmed no error-level runtime logs for the current deployment in the checked 24-hour window; historical auth errors belong to older deployments and were not treated as current blockers.
-- 2026-09-05 — Did not infer visual/mobile success from HTTP responses; pixel-level browser/device QA remains UNKNOWN.
+- 2026-09-05 — Read repository operating contract, continuity files, README, current theme registry, public-menu renderer, package scripts/dependencies, and recent Git history before editing.
+- 2026-09-05 — Confirmed current repository is `Midosd249/Menu_V3`, source of truth `main`.
+- 2026-09-05 — Confirmed current product template catalog from source is five themes; did not propagate stale eight-theme documentation into the new quality system.
+- 2026-09-05 — Added the permanent visual/functional audit, research log, template checklist, and template brief documents.
+- 2026-09-05 — Added the permanent `Visual, Interaction, and Conversion Quality Gate` to `AGENTS.md` and aligned the continuity workflow without changing milestone order.
+- 2026-09-05 — Recorded authoritative public research and explicitly marked browser/device visual execution as UNKNOWN because no executable authenticated browser/device session is available here.
+- 2026-09-05 — Did not modify application code or existing templates.
 
 ## Exact Next Task
-Perform authenticated browser/device QA of all five theme previews at mobile and desktop breakpoints, specifically verifying that the full menu remains visible after hydration and that no transparent/covering layer returns. Only after that verification should Theme 4 — Heritage be treated as ready to begin.
+Perform authenticated browser/device QA of all five theme previews at mobile and desktop breakpoints, specifically verifying the full menu remains visible after hydration and that no transparent/covering layer returns. Only after that verification should Theme 4 — Heritage be treated as ready to begin.
