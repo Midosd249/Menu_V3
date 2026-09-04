@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { useStudio } from "@/lib/menu/studio";
+import { MENU_THEMES } from "@/lib/theme";
 
 export const Route = createFileRoute("/studio/qr")({ component: QrPage });
 
 function menuUrl(origin: string, slug: string, branchSlug: string) {
   return `${origin}/m/${slug}/${branchSlug}?src=qr`;
+}
+
+function themePreviewUrl(origin: string, slug: string, branchSlug: string, theme: string) {
+  return `${origin}/m/${slug}/${branchSlug}?theme=${encodeURIComponent(theme)}`;
 }
 
 function QrPage() {
@@ -58,6 +62,35 @@ function QrPage() {
                   <Button type="button" size="sm" onClick={() => printQr(url, lang === "ar" ? snapshot.tenant.nameAr : snapshot.tenant.nameEn || snapshot.tenant.nameAr, lang === "ar" ? b.nameAr : b.nameEn || b.nameAr)}>
                     {t(copy.qr.print, lang)}
                   </Button>
+                </div>
+
+                <div className="grid gap-3 border-t border-line pt-4">
+                  <div>
+                    <p className="text-sm font-semibold">{lang === "ar" ? "معاينة الثيمات خارجياً" : "External theme previews"}</p>
+                    <p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "كل رمز يفتح نفس بيانات الفرع بهذا التصميم فقط، بدون تغيير الثيم المنشور وبدون اشتراط Premium." : "Each code opens the same branch data in that theme only, without changing the published theme or requiring Premium."}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {MENU_THEMES.map((theme) => {
+                      const previewUrl = origin ? themePreviewUrl(origin, snapshot.tenant.slug, b.slug, theme.key) : "";
+                      return (
+                        <div key={theme.key} className="grid gap-2 rounded-lg border border-line bg-paper p-2">
+                          <div className="flex items-center justify-between gap-2 text-xs font-medium">
+                            <span>{lang === "ar" ? theme.name.ar : theme.name.en}</span>
+                            <span className="text-muted">{theme.key}</span>
+                          </div>
+                          {previewUrl ? <QrImage url={previewUrl} /> : <div className="aspect-square rounded-md bg-sand" />}
+                          <div className="flex flex-wrap gap-1.5">
+                            <Button type="button" size="sm" variant="outline" onClick={async () => { await navigator.clipboard.writeText(previewUrl); setCopied(`${b.id}:${theme.key}`); }}>
+                              {copied === `${b.id}:${theme.key}` ? t(copy.qr.copied, lang) : (lang === "ar" ? "نسخ" : "Copy")}
+                            </Button>
+                            <Button type="button" size="sm" onClick={() => downloadQr(previewUrl, `${snapshot.tenant.slug}-${b.slug}-${theme.key}`)}>
+                              {lang === "ar" ? "تنزيل" : "Download"}
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </li>
             );
