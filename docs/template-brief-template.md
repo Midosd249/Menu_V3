@@ -2,18 +2,31 @@
 
 Use this document before implementing or materially redesigning a template or public-menu presentation. Keep the brief presentation-focused and compatible with the existing menu data/business contract.
 
-## Identity
+## Discovery and evidence
 - Template / family:
 - Supported `ThemeKey`:
-- Target restaurant concept:
-- Primary visual promise:
-- Evidence/research references:
+- Current route(s):
+- Repository evidence reviewed:
+- Relevant connected sources actually available:
+- Material public/market sources:
+- Evidence labels used: `VERIFIED` / `INFERRED` / `PROPOSED` / `UNKNOWN` / `BLOCKED`:
 
-## Customer and conversion intent
+## Segment and business intent
+- Target restaurant segment:
+- Saudi-market relevance:
+- Target customer:
+- Business goal:
 - Primary action:
 - Secondary action:
 - Conversion goal:
 - Critical information that must be visible without decoration:
+
+## Visual personality
+- Visual promise:
+- Art direction:
+- Content/copy tone:
+- Brand identity treatment:
+- Rules against generic/copied design:
 
 ## Content and language
 - Default language:
@@ -22,26 +35,30 @@ Use this document before implementing or materially redesigning a template or pu
 - Mixed-direction text handling:
 - Sample content style and language:
 - Long-text behavior:
+- SAR formatting behavior:
 
 ## Layout and hierarchy
 - First-screen composition:
 - Header/identity treatment:
 - Category navigation pattern:
 - Section rhythm:
-- Product-card pattern:
+- Product-card structure:
 - Image prominence and ratio rules:
 - Price emphasis:
 - Featured-item treatment:
 - Density target:
+- Decorative-layer constraints:
 
 ## Interaction hierarchy
 - Primary interactive controls:
 - Secondary interactive controls:
-- Icon usage rules:
+- Icon placement rules:
 - Visible-label requirements:
 - Accessible-name requirements:
+- Touch-target strategy:
 - Focus and keyboard behavior:
 - Feedback/loading/error behavior:
+- Analytics/conversion measurement only when supported:
 
 ## Cart and ordering
 - Cart visibility rule: show only when ordering is enabled and the repository exposes the required behavior.
@@ -70,6 +87,12 @@ Use this document before implementing or materially redesigning a template or pu
 - Visibility rule: only with a verified destination.
 - Branch labeling:
 - External-link behavior:
+
+### Social
+- Visibility rule: only with verified configured links.
+- Placement:
+- Accessibility:
+- Conversion priority:
 
 ## Mobile safe-area behavior
 - Bottom fixed/sticky controls:
@@ -100,13 +123,14 @@ Use this document before implementing or materially redesigning a template or pu
 - Sticky/fixed/modal layers never cover important content or controls.
 - Theme personality is coherent with the target concept and sample content.
 - Real-data stress cases remain visually stable.
+- Screenshot/visual-regression evidence is captured when tooling is available.
 
 ## Functional audit acceptance criteria
 - Every interactive control has an obvious purpose and meaningful accessible name.
 - Important mobile controls meet the touch-target baseline.
 - Core actions work in normal, empty, loading, error, disabled, and unavailable states where relevant.
 - Cart/order behavior is preserved and not implied beyond verified repository capability.
-- WhatsApp/phone/map actions appear only when their verified data exists.
+- WhatsApp/phone/map/social actions appear only when their verified data exists.
 - Search/category navigation remains reachable and predictable.
 - RTL/LTR behavior is correct.
 - Analytics reuse existing privacy-safe event semantics only.
@@ -128,7 +152,13 @@ Use this document before implementing or materially redesigning a template or pu
 - Real-data fixtures:
 - Performance evidence:
 - SEO evidence:
+- Console-error checks:
 - Known UNKNOWN/BLOCKED items:
+
+## Rollback / migration notes
+- Reversible files:
+- Rollback trigger:
+- Data/schema impact: none unless explicitly approved and documented.
 
 ## Change boundary
 - Do not change menu data semantics, authorization, tenant/branch isolation, ordering validation, pricing truth, availability truth, or security boundaries to achieve a visual result.
