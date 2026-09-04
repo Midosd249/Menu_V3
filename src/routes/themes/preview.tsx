@@ -31,5 +31,14 @@ function ThemePreviewPage() {
   if (state.status === "error") return <ErrorState message={state.message} />;
   const effectiveTheme = theme ?? state.menu.tenant.themeKey;
   const previewMenu = effectiveTheme === state.menu.tenant.themeKey ? state.menu : { ...state.menu, tenant: { ...state.menu.tenant, themeKey: effectiveTheme } };
-  return <div className="menu-public-shell" data-menu-preview="true" data-menu-preview-theme={effectiveTheme}><MenuThemeController theme={effectiveTheme} preview />{getThemeFamily(effectiveTheme) === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={previewMenu} preview /> : <PublicMenuView menu={previewMenu} preview />}</div>;
+  return (
+    <>
+      <MenuThemeController theme={effectiveTheme} preview />
+      {getThemeFamily(effectiveTheme) === "contemporary-restaurant" ? (
+        <ContemporaryRestaurantTemplate menu={previewMenu} preview />
+      ) : (
+        <PublicMenuView menu={previewMenu} preview />
+      )}
+    </>
+  );
 }
