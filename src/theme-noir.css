@@ -166,7 +166,6 @@ html[data-menu-theme="noir"] .menu-public-shell header button:hover {
   background: rgb(199 154 103 / 0.12);
 }
 
-/* The content column is a sequence of intimate rooms, not a flat grid. */
 html[data-menu-theme="noir"] .menu-public-shell main {
   width: min(100%, 70rem);
   margin-inline: auto;
@@ -210,7 +209,6 @@ html[data-menu-theme="noir"] .menu-public-shell main > section > h2::before {
   box-shadow: 0 0 12px rgb(199 154 103 / 0.35);
 }
 
-/* A restrained category rail creates the feel of a reservation book. */
 html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
   position: sticky;
   z-index: 20;
@@ -240,7 +238,6 @@ html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button:hover {
   background: rgb(243 238 231 / 0.07);
 }
 
-/* Product cards become dark objects with one deliberate light source. */
 html[data-menu-theme="noir"] .menu-public-shell main ul {
   display: grid;
   gap: clamp(0.8rem, 2vw, 1.1rem);
@@ -314,6 +311,8 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h4 {
   font-size: clamp(1.02rem, 3.8vw, 1.34rem);
   line-height: 1.08;
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell main ul > li > button h3,
@@ -339,6 +338,41 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li > button [class*="t
   font-size: 0.94rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Featured cards use the same visual grammar as the main catalog, not a separate novelty pattern. */
+html[data-menu-theme="noir"] .menu-public-shell main section > div > button {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--noir-line);
+  border-radius: 1.25rem;
+  background: linear-gradient(160deg, var(--noir-surface-2), var(--noir-surface));
+  color: var(--noir-ink);
+  box-shadow: 0 16px 42px rgb(0 0 0 / 0.26);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main section > div > button img {
+  display: block;
+  width: 100%;
+  min-height: 8.5rem;
+  object-fit: cover;
+  filter: saturate(0.80) contrast(1.08) brightness(0.76);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main section > div > button > :last-child {
+  min-width: 0;
+  padding: 0.85rem;
+  text-align: start;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main section > div > button span {
+  overflow-wrap: anywhere;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main section > div > button:hover {
+  transform: translateY(-3px);
+  border-color: rgb(199 154 103 / 0.38);
 }
 
 /* Media and empty states share the same material language. */
@@ -357,6 +391,7 @@ html[data-menu-theme="noir"] .menu-public-shell select {
   border-color: var(--noir-line-strong);
   background: var(--noir-surface);
   color: var(--noir-ink);
+  color-scheme: dark;
 }
 
 html[data-menu-theme="noir"] .menu-public-shell input::placeholder,
@@ -370,6 +405,30 @@ html[data-menu-theme="noir"] .menu-public-shell select:focus-visible {
   outline: 2px solid var(--noir-bronze-soft);
   outline-offset: 2px;
   border-color: var(--noir-bronze);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell > button.fixed {
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  min-height: 3.5rem;
+  border: 1px solid rgb(224 189 141 / 0.28);
+  background: linear-gradient(135deg, #211a15, #120f0d);
+  box-shadow: 0 20px 48px rgb(0 0 0 / 0.42), 0 0 0 1px rgb(199 154 103 / 0.05);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell > button.fixed:focus-visible {
+  outline: 2px solid var(--noir-bronze-soft);
+  outline-offset: 4px;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell > div[role="presentation"] section[role="dialog"] {
+  color-scheme: dark;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell > div[role="presentation"] section[role="dialog"] input,
+html[data-menu-theme="noir"] .menu-public-shell > div[role="presentation"] section[role="dialog"] textarea,
+html[data-menu-theme="noir"] .menu-public-shell > div[role="presentation"] section[role="dialog"] select {
+  background: var(--noir-surface);
+  color: var(--noir-ink);
 }
 
 /* Fine dining template: quiet signature plates with a gallery-like rhythm. */
@@ -398,7 +457,12 @@ html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-ch
   font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
 }
 
-/* Wide screens get more breathing room and a deliberate reading measure. */
+html[data-menu-theme="noir"] body,
+html[data-menu-theme="noir"] {
+  background: var(--noir-void);
+  color-scheme: dark;
+}
+
 @media (min-width: 768px) {
   html[data-menu-theme="noir"] .menu-public-shell header > div,
   html[data-menu-theme="noir"] .menu-public-shell main {
@@ -427,6 +491,17 @@ html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-ch
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
     min-height: 7.1rem;
   }
+
+  html[data-menu-theme="noir"] .menu-public-shell main section > div > button img {
+    min-height: 7.75rem;
+  }
+
+  html[data-menu-theme="noir"] .menu-public-shell > button.fixed {
+    inset-inline: 1rem;
+    width: auto;
+    transform: none;
+    justify-content: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -438,7 +513,8 @@ html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-ch
 
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button,
   html[data-menu-theme="noir"] .menu-public-shell header button,
-  html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button {
+  html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button,
+  html[data-menu-theme="noir"] .menu-public-shell main section > div > button {
     transition: none;
   }
 }
