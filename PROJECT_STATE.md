@@ -9,44 +9,43 @@
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
-- **Theme 1 — Essential — DONE / VERIFIED / MERGED; refinement pass in progress.**
-- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; refinement pass in progress.**
-- **Theme 3 — Noir — DONE / VERIFIED / MERGED; refinement pass in progress.**
+- **Theme 1 — Essential — DONE / VERIFIED / MERGED; original baseline restored.**
+- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; preview refinement integration fixed.**
+- **Theme 3 — Noir — DONE / VERIFIED / MERGED; preview refinement integration fixed.**
 - Authentication reconciliation and the qualified `extensions.crypt(...)` fix are implemented and live authentication was verified by the user after deployment.
 - The reserved `nafas` demo fixture remains the source for the marketing/theme-preview demo when no branch is requested.
 
 ## Current Atomic Task
-### Public menu production incident + responsive/theme integration audit
+### Theme preview integration + Essential baseline restoration
 
-**Objective:** restore the user's published public menu URL and verify that the first three theme refinement layers are actually present in the deployed application, without changing business/data contracts.
+**Objective:** make the Studio theme previews render the selected theme instead of the default/base presentation, expose Premium themes for preview without weakening entitlement enforcement, and remove the new refinement treatment from Essential so its original completed visual baseline is preserved.
 
-**VERIFIED:** current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd` and includes `src/theme-refinements-v2.css` loaded by `src/routes/__root.tsx`.
+**VERIFIED:** the public menu and Studio preview components were not consistently carrying the `menu-public-shell` hook required by the refinement layer. `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose that hook.
 
-**VERIFIED:** the production `menu_v3.tenants` row for `mndy-alwtnya` existed, was `is_published = true`, but was `is_active = false`; this was the direct reason the public-menu query returned no tenant for that URL.
+**VERIFIED:** the root `MenuThemeController` was also able to paint the default Essential theme on preview routes before the route-specific controller applied the requested theme. Preview routes now opt out of the root controller to prevent the observed Essential → selected-theme flicker.
 
-**IMPLEMENTED:** production data was corrected narrowly by setting `mndy-alwtnya.is_active = true` while requiring `is_published = true`. No tenant content, branch, product, authorization, or schema data was changed.
+**IMPLEMENTED:** `theme-refinements-v2.css` now contains only the Editorial and Noir refinement pass. Essential keeps its original theme layer without the refinement-v2 treatment.
 
-**VERIFIED:** after the correction, `mndy-alwtnya` resolves to tenant `مندي الوطنية`, remains published, is active, uses `essential`, and has active branch `main-branch`. The tenant has 1 branch, 7 categories, and 26 products.
-
-**VERIFIED:** `src/theme-refinements-v2.css` exists in `main` and `src/routes/__root.tsx` imports it after the existing theme layers. The first refinement layer remains present as well.
-
-**VERIFIED:** Theme Preview continues to use the stable `nafas` local demo fixture, so theme previews do not depend on production tenant availability.
+**VERIFIED:** Premium entitlement enforcement remains unchanged. Premium themes are previewable through the public preview route; `saveTenantTheme` still blocks publishing a Premium theme for an ineligible subscription.
 
 ## Verification State
-- **VERIFIED:** live authentication remains confirmed by the user.
-- **VERIFIED:** `mndy-alwtnya` is now active and published in production `menu_v3` data.
-- **VERIFIED:** public-menu resolver prerequisites for `mndy-alwtnya` now exist in the production database.
-- **VERIFIED:** Theme 1–3 refinement CSS is present in `main` and loaded by the root document.
-- **VERIFIED:** current Vercel status for `e2518fb...` is successful.
-- **UNKNOWN:** final pixel-level rendering of the deployed theme refinements on physical mobile and desktop browsers because the web fetcher cannot retrieve the deployment page directly.
-- **UNKNOWN:** local shell verification in this session because the repository is accessed through repository tooling rather than a local checkout.
+- **VERIFIED:** `PublicMenuView` uses `menu-public-shell`.
+- **VERIFIED:** `ContemporaryRestaurantTemplate` uses `menu-public-shell`.
+- **VERIFIED:** Studio/theme preview route can select any valid `ThemeKey` and route-specific theme controller owns preview theme application.
+- **VERIFIED:** Essential refinement-v2 rules were removed; Editorial and Noir refinement rules remain.
+- **VERIFIED:** reduced-motion and touch/hover safeguards remain for Premium refinement effects.
+- **VERIFIED:** no dependency was added and no database schema/business contract was changed.
+- **VERIFIED:** Premium save/publish authorization remains enforced in `src/lib/theme/server.ts`.
+- **PENDING:** Vercel deployment for the latest code commit.
+- **UNKNOWN:** final pixel-level mobile/desktop rendering until the new deployment is live and manually inspected.
+- **UNKNOWN:** local shell test execution in this session because the repository is accessed through repository tooling rather than a local checkout.
 
 ## Session Log
-- 2026-09-04 — Confirmed current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
-- 2026-09-04 — Audited the public-menu route, `getPublicMenu`, theme preview, root CSS loading, theme refinement layer, package scripts, repository state, and deployment status.
-- 2026-09-04 — Queried production `menu_v3` schema and found the requested `mndy-alwtnya` tenant was published but inactive.
-- 2026-09-04 — Reactivated only the published `mndy-alwtnya` tenant and verified its public-menu prerequisites and content counts.
-- 2026-09-04 — Confirmed Theme 1–3 refinement layers remain present and loaded; no theme code was removed or bypassed.
+- 2026-09-04 — Confirmed user-uploaded deployment was successful before this refinement task.
+- 2026-09-04 — Audited Studio preview, public preview, theme controller, theme registry, PublicMenuView, ContemporaryRestaurantTemplate and Premium entitlement enforcement.
+- 2026-09-04 — Found the missing `menu-public-shell` integration hook that prevented refinement CSS from applying to preview-rendered templates.
+- 2026-09-04 — Restored Essential to its original baseline by removing its refinement-v2 rules while retaining Editorial and Noir refinements.
+- 2026-09-04 — Prevented the root theme controller from painting Essential on dedicated preview routes, removing the preview theme flicker.
 
 ## Exact Next Task
-Perform live mobile/desktop visual QA of `mndy-alwtnya` and `/themes/preview?theme=essential|editorial|noir`; if rendering issues are observed, fix only evidence-backed responsive/theme regressions, then re-run repository quality gates before Theme 4.
+Deploy and live-QA the corrected Studio previews for `essential`, `editorial`, and `noir` on mobile and desktop. Verify that Premium themes are previewable while publishing entitlement remains protected. Fix only evidence-backed rendering regressions before Theme 4.
