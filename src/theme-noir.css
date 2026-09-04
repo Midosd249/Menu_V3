@@ -50,7 +50,6 @@ html[data-menu-theme="noir"] .menu-public-shell::before {
   background-size: 17px 17px, 23px 23px;
 }
 
-/* Cinematic opening: the restaurant identity becomes the first scene. */
 html[data-menu-theme="noir"] .menu-public-shell header {
   position: relative;
   min-height: min(82dvh, 820px);
@@ -341,7 +340,6 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li > button [class*="t
   white-space: nowrap;
 }
 
-/* Featured cards use the same visual grammar as the main catalog, not a separate novelty pattern. */
 html[data-menu-theme="noir"] .menu-public-shell main section > div > button {
   min-width: 0;
   overflow: hidden;
@@ -375,7 +373,6 @@ html[data-menu-theme="noir"] .menu-public-shell main section > div > button:hove
   border-color: rgb(199 154 103 / 0.38);
 }
 
-/* Media and empty states share the same material language. */
 html[data-menu-theme="noir"] .menu-public-shell img {
   border-color: var(--noir-line);
 }
@@ -431,7 +428,6 @@ html[data-menu-theme="noir"] .menu-public-shell > div[role="presentation"] secti
   color: var(--noir-ink);
 }
 
-/* Fine dining template: quiet signature plates with a gallery-like rhythm. */
 html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-child > div:first-child p {
   color: var(--noir-bronze-soft);
   font-size: 0.64rem;
@@ -457,9 +453,10 @@ html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-ch
   font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
 }
 
-html[data-menu-theme="noir"] body,
-html[data-menu-theme="noir"] {
-  background: var(--noir-void);
+html[data-menu-theme="noir"],
+html[data-menu-theme="noir"] body {
+  background: #0b0a09;
+  color: var(--noir-ink, #f3eee7);
   color-scheme: dark;
 }
 
