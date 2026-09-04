@@ -1,81 +1,73 @@
-# Platform Growth, Template Ecosystem, and Saudi SEO — Active Plan
+# Menu V3 — Active Plan
 
-## Status and Current Section
+## Status
 - Status: IN_PROGRESS.
-- Repository: `Midosd249/Menu_V3`; `main` is the source of truth.
-- G1 — Public Menu SEO Foundation: **DONE / VERIFIED**.
-- G2 — Crawl Control and Indexation: **DONE / VERIFIED**.
-- G3 — Saudi Local Discovery + Branch SEO: **DONE / VERIFIED / CLOSED**.
-- G4 — Arabic/English SEO Architecture: **DONE / VERIFIED / CLOSED**.
-- G5 — Template Ecosystem Expansion: **DONE / VERIFIED / CLOSED**.
-- G6 — Performance + Media: **DONE / VERIFIED / CLOSED**.
-- **Current section:** G7 — Analytics, Search Console, Growth, Rollout.
-- **Current atomic task:** G7 dependency manifest reconciliation is **DONE / VERIFIED**.
+- Repository: `Midosd249/Menu_V3`.
+- Source of truth: `main`; active implementation branch: `feat/premium-theme-redesign`.
+- Existing G1–G7.2 completed work remains protected.
 
-## Repository Maintenance — 2026-09-04
-- **VERIFIED:** documentation organization from the dedicated `chore/repository-organization` branch was applied to `main` without changing application source, migrations, dependencies, CI, or Vercel configuration.
-- **VERIFIED:** historical root documentation was moved under `docs/archive/`; maintained deployment, development, and product documentation was grouped under `docs/`.
-- **VERIFIED:** `README.md`, `docs/repository-organization-audit.md`, and `DELETE_CANDIDATES.md` are present on `main`.
-- **VERIFIED:** no deletion candidate was deleted by this maintenance commit.
-- **VERIFIED:** dependency manifest drift was reconciled by regenerating `package-lock.json` from the current `package.json` using the repository package manager.
-- **VERIFIED:** `npm ci`, route-tree generation, typecheck, tests, lint, and production build all passed during the reconciliation workflow.
-- **VERIFIED:** the one-off reconciliation workflow removed itself after successful completion.
-- **UNKNOWN:** local working-tree status remains unavailable through the GitHub connector.
+## Current Atomic Task
+### Premium Theme System — 8 → 5
 
-## G7 — Analytics, Search Console, Growth, Rollout — IN_PROGRESS
+**Objective:** turn Menu V3 themes into complete, commercially meaningful visual systems rather than color variations. Reduce the catalog to five focused experiences: one Free baseline and four Premium designs.
 
-### G7.1 — Production analytics integrity hardening — DONE / VERIFIED
-- **VERIFIED:** `src/lib/menu/analytics-integrity.test.ts` protects supported ranges, tenant scoping, product validation, duplicate suppression, and active/published tenant resolution.
-- **VERIFIED:** GitHub Actions quality run `33821751476` / run 430 passed typecheck, all 81 tests, lint, production build, Playwright installation, Browser Template QA, performance artifact step, and cleanup.
-- **VERIFIED:** no analytics runtime code or event schema was changed.
+### Catalog
+- `essential` — Free — quiet, fast, highly legible baseline.
+- `editorial` — Premium — magazine rhythm, asymmetric emphasis, typography-led composition.
+- `noir` — Premium — cinematic fine dining, dark surfaces, warm glow, immersive opening.
+- `heritage` — Premium — contemporary Arabic/Saudi hospitality with material and geometric cues.
+- `gallery` — Premium — image-first catalogue with art-directed media blocks and crops.
 
-### G7.2 — Search Console production readiness — DONE / VERIFIED / CLOSED
-- **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and exposes `menu-v3-kohl.vercel.app`.
-- **VERIFIED:** `package.json` declares `@vitejs/plugin-react` at `^6.1.1`, fixing the observed Vercel missing-dependency build defect.
-- **VERIFIED:** latest tested GitHub quality workflow passed on the relevant `main` history.
-- **VERIFIED:** Vercel production deployment `dpl_BSfCxSgyDetjHQssuz6pQRgm7DNf` was READY on the verified deployment commit.
-- **VERIFIED:** production `robots.txt` returns HTTP 200 and declares `/sitemap.xml` while protecting administrative routes.
-- **VERIFIED:** production `sitemap.xml` returns HTTP 200 and exposes the current published menu/branch URLs.
-- **VERIFIED:** production `/` returns HTTP 200 with the existing Arabic RTL public experience.
-- **VERIFIED:** `src/routes/__root.tsx` supports optional `VITE_GOOGLE_SITE_VERIFICATION`; no verification token is committed.
-- **VERIFIED:** Search Console ownership was completed for the main Google account.
-- **VERIFIED:** the existing `/sitemap.xml` was submitted in Google Search Console.
-- **VERIFIED:** the production home URL was inspected and the indexing request was completed successfully.
-- **UNKNOWN:** Search Console crawl timing and eventual indexing state for individual URLs.
+### Files changed in this task
+- `src/lib/theme/types.ts`
+- `src/lib/theme/registry.ts`
+- `src/lib/theme/index.ts`
+- `src/lib/theme/server.ts`
+- `src/components/menu-theme-controller.tsx`
+- `src/routes/studio/design.tsx`
+- `src/routes/themes/index.tsx`
+- `src/styles.css`
+- `scripts/template-qa.mjs`
+- `.github/workflows/quality.yml`
+- `migrations/20260904001000_five_theme_system.sql`
+- `src/lib/theme/registry.test.ts`
+- `docs/product/DESIGN_SYSTEM.md`
+- `PROJECT_STATE.md`
+- `TASKS.md`
 
-### G7 Dependency Manifest Reconciliation — DONE / VERIFIED
-- **VERIFIED:** `package.json` and `package-lock.json` were reconciled by the repository package manager; no hand-edit was used.
-- **VERIFIED:** `npm ci` succeeded against the regenerated lockfile.
-- **VERIFIED:** route-tree generation succeeded.
-- **VERIFIED:** `npm run typecheck` succeeded.
-- **VERIFIED:** `npm test` succeeded.
-- **VERIFIED:** `npm run lint` succeeded.
-- **VERIFIED:** `npm run build` succeeded.
-- **VERIFIED:** the reconciled `package-lock.json` is committed on `main` in `7cb9bd2eb41802ea5d18ee1903ef341f41ded83e`.
+### Acceptance criteria
+1. Exactly five public theme keys exist.
+2. Exactly one theme is Free and four are Premium.
+3. Premium themes differ in composition, typography, surfaces, image treatment, navigation rhythm, product presentation and motion—not only color.
+4. Premium preview remains available before payment; publishing requires an eligible non-free subscription server-side.
+5. Legacy keys normalize and database records migrate safely.
+6. Public URLs, menu data, tenant/branch isolation, SEO, auth, ordering and analytics contracts remain intact.
+7. RTL and LTR remain supported; Arabic is a first-class layout.
+8. Mobile, tablet and desktop layouts have no horizontal overflow.
+9. Premium motion progressively enhances and respects `prefers-reduced-motion`.
+10. Browser QA covers all five themes.
+11. Typecheck, tests, lint and production build pass.
 
-## G7 guardrails
-- Preserve G1–G6 contracts.
-- Do not add Google credentials, external analytics dependencies, or speculative provider configuration.
-- Treat existing first-party `menu_events` analytics as the source of truth.
-- Never commit the Search Console verification token; configure it only as a Vercel Production environment value.
-- Do not infer Google indexing state from repository code or Vercel status.
-- Do not hand-edit generated dependency lockfiles when the package manager can regenerate them.
+## Research / design decisions
+- **VERIFIED:** Menu Author treats a theme as a coordinated system controlling fonts, layout, dish presentation, colors and background. urlMenu Author themeshttps://menuauthor.com/themes
+- **VERIFIED:** MENU TIGER uses professionally designed restaurant templates, mobile-responsive layouts and editable brand presentation. urlMENU TIGER templateshttps://www.menutiger.com/features/website-and-menu-templates
+- **VERIFIED:** Popmenu positions restaurant websites around mobile-first design, visual menu presentation and conversion-oriented guest experience. urlPopmenu website designhttps://get.popmenu.com/solutions/website-design
+- **VERIFIED:** CSS scroll-driven animation is available as progressive enhancement but is not universal; implementation is therefore guarded by `@supports`. citeturn2search11turn2search12
+- **VERIFIED:** WAI recommends `prefers-reduced-motion` to allow users to suppress interaction-triggered motion. citeturn2search13turn2search14
+- **INFERRED:** Five focused visual systems provide a stronger commercial story than eight shallow variations and reduce maintenance surface.
 
-## Exact Next Task
-- **UNKNOWN:** the current repository state does not define a concrete G7.3 atomic task with acceptance criteria. Do not invent requirements. The next task must come from an existing documented requirement or explicit product direction.
+## Entitlement decision
+- Current plans in repository: `free`, `starter`, `pro`. fileciteturn63file0L2-L2
+- Premium themes are previewable by everyone.
+- Publishing a Premium theme is allowed only for a non-free plan with `trialing` or `active` status.
+- Payment-provider integration is not invented in this task; the existing subscription model remains the source of entitlement state.
 
-## Research / Design Sources
-- **VERIFIED:** Google Search Console ownership verification guidance: `https://support.google.com/webmasters/answer/9008080`.
-- **VERIFIED:** Google Search Console property guidance: `https://support.google.com/webmasters/answer/34592`.
-- **VERIFIED:** Google Search Console sitemap guidance: `https://support.google.com/webmasters/answer/7451001`.
-- **VERIFIED:** Vite environment guidance: `https://vite.dev/guide/env-and-mode` — `VITE_` variables are client-exposed and therefore unsuitable for secrets.
-- **VERIFIED:** `@vitejs/plugin-react` maintained releases support the repository's Vite 8 line.
+## Verification
+- **VERIFIED:** dedicated implementation branch created from main commit `040e625889f203e07e7fc87dd275c5be949d9566`.
+- **VERIFIED:** theme registry, controller, studio catalog, public gallery, migration, server entitlement check, tests and browser QA were updated.
+- **UNKNOWN:** GitHub Actions result for the final branch commit until CI completes.
+- **UNKNOWN:** final visual judgment from a real browser screenshot review until the branch deployment is available.
+- **UNKNOWN:** local working-tree status outside GitHub connector.
 
-## Unified milestones
-- G1 — Public Menu SEO Foundation: **DONE / VERIFIED**.
-- G2 — Crawl Control and Indexation: **DONE / VERIFIED**.
-- G3 — Saudi Local Discovery + Branch SEO: **DONE / VERIFIED / CLOSED**.
-- G4 — Arabic/English SEO Architecture: **DONE / VERIFIED / CLOSED**.
-- G5 — Template Ecosystem Expansion: **DONE / VERIFIED / CLOSED**.
-- G6 — Performance + Media: **DONE / VERIFIED / CLOSED**.
-- G7 — Analytics, Search Console, Growth, Rollout: **IN_PROGRESS**.
+## Stop condition
+Do not mark this task DONE until CI/browser verification provides evidence for the acceptance criteria. Do not start an unrelated task in the same session.
