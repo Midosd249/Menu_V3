@@ -1,0 +1,444 @@
+/*
+ * Theme 3 — Noir
+ *
+ * Art direction: cinematic fine dining after dark. Noir is intentionally
+ * tactile rather than merely dark: layered charcoal surfaces, warm metal
+ * accents, soft light pools, quiet borders, immersive media and generous
+ * breathing room. The existing menu DOM remains the contract.
+ */
+
+html[data-menu-theme="noir"] .menu-public-shell {
+  --noir-void: #0b0a09;
+  --noir-ink: #f3eee7;
+  --noir-soft: #c9c0b7;
+  --noir-muted: #8f877f;
+  --noir-line: rgb(243 238 231 / 0.12);
+  --noir-line-strong: rgb(243 238 231 / 0.22);
+  --noir-bronze: #c79a67;
+  --noir-bronze-soft: #e0bd8d;
+  --noir-bronze-deep: #8d6540;
+  --noir-surface: #151311;
+  --noir-surface-2: #1b1815;
+  --noir-surface-3: #24201c;
+  --noir-shadow: 0 28px 80px rgb(0 0 0 / 0.38);
+  background:
+    radial-gradient(circle at 50% -5%, rgb(199 154 103 / 0.10), transparent 28rem),
+    linear-gradient(180deg, var(--noir-void) 0%, #0e0c0b 28rem, var(--noir-void) 100%);
+  color: var(--noir-ink);
+  --menu-body-font: "IBM Plex Sans Arabic", "Segoe UI", system-ui, sans-serif;
+  --menu-display-font: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+  --menu-heading-weight: 600;
+  --menu-body-weight: 400;
+  --menu-line-height: 1.6;
+  --menu-letter-spacing: -0.015em;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell > div {
+  background: transparent;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgb(255 255 255 / 0.025) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 80% 70%, rgb(255 255 255 / 0.018) 0 1px, transparent 1.5px);
+  background-size: 17px 17px, 23px 23px;
+}
+
+/* Cinematic opening: the restaurant identity becomes the first scene. */
+html[data-menu-theme="noir"] .menu-public-shell header {
+  position: relative;
+  min-height: min(82dvh, 820px);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 1px solid var(--noir-line);
+  background: var(--noir-void);
+  color: var(--noir-ink);
+  box-shadow: 0 34px 100px rgb(0 0 0 / 0.42);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgb(7 6 5 / 0.05) 15%, rgb(7 6 5 / 0.30) 44%, rgb(7 6 5 / 0.96) 91%),
+    radial-gradient(circle at 72% 24%, rgb(199 154 103 / 0.22), transparent 24rem);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header::after {
+  content: "NOIR / 03";
+  position: absolute;
+  inset-inline-end: 1.25rem;
+  top: 1.2rem;
+  color: rgb(243 238 231 / 0.62);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.64rem;
+  letter-spacing: 0.20em;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  filter: saturate(0.72) contrast(1.12) brightness(0.56);
+  transform: scale(1.025);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header > div {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: auto;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 5vw, 2.5rem);
+  border-top: 1px solid rgb(243 238 231 / 0.22);
+  background: linear-gradient(180deg, rgb(11 10 9 / 0.08), rgb(11 10 9 / 0.62));
+  backdrop-filter: blur(10px);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header > div::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: clamp(1.25rem, 5vw, 2.5rem);
+  top: -1px;
+  width: 4rem;
+  height: 2px;
+  background: var(--noir-bronze);
+  box-shadow: 0 0 24px rgb(199 154 103 / 0.48);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fbf7f1;
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+  font-size: clamp(2.45rem, 12vw, 5.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell header h1 {
+  font-family: "IBM Plex Sans Arabic", Georgia, serif;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header p {
+  color: var(--noir-soft);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header p:first-of-type {
+  margin-bottom: 0.55rem;
+  color: var(--noir-bronze-soft);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header button {
+  min-height: 2.7rem;
+  border: 1px solid var(--noir-line-strong);
+  border-radius: 999px;
+  background: rgb(243 238 231 / 0.055);
+  color: var(--noir-ink);
+  backdrop-filter: blur(14px);
+  transition: transform 220ms var(--ease-out), border-color 220ms ease, background-color 220ms ease;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header button:hover {
+  transform: translateY(-2px);
+  border-color: rgb(199 154 103 / 0.55);
+  background: rgb(199 154 103 / 0.12);
+}
+
+/* The content column is a sequence of intimate rooms, not a flat grid. */
+html[data-menu-theme="noir"] .menu-public-shell main {
+  width: min(100%, 70rem);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  padding-bottom: max(4rem, env(safe-area-inset-bottom));
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main > section {
+  position: relative;
+  padding-block: clamp(2.8rem, 8vw, 5.75rem);
+  scroll-margin-top: 5.5rem;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main > section + section {
+  border-top: 1px solid var(--noir-line);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin: 0 0 1.6rem;
+  color: var(--noir-ink);
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+  font-size: clamp(1.55rem, 5.8vw, 2.65rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell main > section > h2 {
+  font-family: "IBM Plex Sans Arabic", Georgia, serif;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2::before {
+  content: "";
+  flex: 0 0 1.75rem;
+  height: 1px;
+  background: var(--noir-bronze);
+  box-shadow: 0 0 12px rgb(199 154 103 / 0.35);
+}
+
+/* A restrained category rail creates the feel of a reservation book. */
+html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
+  position: sticky;
+  z-index: 20;
+  margin-inline: -0.25rem;
+  border: 1px solid var(--noir-line);
+  border-radius: 1rem;
+  background: rgb(15 13 12 / 0.82);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.28);
+  backdrop-filter: blur(20px) saturate(120%);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button {
+  position: relative;
+  min-height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--noir-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  transition: color 180ms ease, background-color 180ms ease, transform 180ms var(--ease-out);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button:hover {
+  transform: translateY(-1px);
+  color: var(--noir-ink);
+  background: rgb(243 238 231 / 0.07);
+}
+
+/* Product cards become dark objects with one deliberate light source. */
+html[data-menu-theme="noir"] .menu-public-shell main ul {
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(7.25rem, 38%) minmax(0, 1fr);
+  gap: clamp(0.9rem, 3vw, 1.4rem);
+  width: 100%;
+  min-height: 9rem;
+  padding: 0.55rem;
+  overflow: hidden;
+  border: 1px solid var(--noir-line);
+  border-radius: 1.15rem;
+  background: linear-gradient(145deg, var(--noir-surface-2), var(--noir-surface));
+  color: var(--noir-ink);
+  box-shadow: 0 14px 38px rgb(0 0 0 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.025);
+  text-align: start;
+  transition: transform 280ms var(--ease-out), border-color 220ms ease, box-shadow 280ms var(--ease-out), background-color 220ms ease;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 2) > button {
+  background: linear-gradient(155deg, #191613, #12100e);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover {
+  transform: translateY(-4px);
+  border-color: rgb(199 154 103 / 0.38);
+  box-shadow: 0 22px 55px rgb(0 0 0 / 0.38), 0 0 0 1px rgb(199 154 103 / 0.05);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible {
+  outline: 2px solid var(--noir-bronze-soft);
+  outline-offset: 4px;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 0.8rem;
+  background: var(--noir-surface-3);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
+  width: 100%;
+  height: 100%;
+  min-height: 7.85rem;
+  object-fit: cover;
+  filter: saturate(0.76) contrast(1.10) brightness(0.76);
+  transition: transform 800ms var(--ease-out), filter 500ms ease;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover img {
+  transform: scale(1.06);
+  filter: saturate(0.92) contrast(1.08) brightness(0.84);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :last-child {
+  min-width: 0;
+  align-self: center;
+  padding: 0.35rem 0.35rem 0.35rem 0.2rem;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h4 {
+  max-width: 18ch;
+  color: var(--noir-ink);
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+  font-size: clamp(1.02rem, 3.8vw, 1.34rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell main ul > li > button h3,
+html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell main ul > li > button h4 {
+  font-family: "IBM Plex Sans Arabic", Georgia, serif;
+  line-height: 1.28;
+  letter-spacing: -0.025em;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button p {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--noir-muted);
+  font-size: 0.78rem;
+  line-height: 1.62;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button [class*="text-accent"] {
+  color: var(--noir-bronze-soft);
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+  font-size: 0.94rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Media and empty states share the same material language. */
+html[data-menu-theme="noir"] .menu-public-shell img {
+  border-color: var(--noir-line);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell [class*="rounded"] {
+  border-color: var(--noir-line);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell input,
+html[data-menu-theme="noir"] .menu-public-shell textarea,
+html[data-menu-theme="noir"] .menu-public-shell select {
+  min-height: 2.75rem;
+  border-color: var(--noir-line-strong);
+  background: var(--noir-surface);
+  color: var(--noir-ink);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell input::placeholder,
+html[data-menu-theme="noir"] .menu-public-shell textarea::placeholder {
+  color: var(--noir-muted);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell input:focus-visible,
+html[data-menu-theme="noir"] .menu-public-shell textarea:focus-visible,
+html[data-menu-theme="noir"] .menu-public-shell select:focus-visible {
+  outline: 2px solid var(--noir-bronze-soft);
+  outline-offset: 2px;
+  border-color: var(--noir-bronze);
+}
+
+/* Fine dining template: quiet signature plates with a gallery-like rhythm. */
+html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-child > div:first-child p {
+  color: var(--noir-bronze-soft);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-child article {
+  overflow: hidden;
+  border: 1px solid var(--noir-line);
+  border-radius: 1.25rem;
+  background: linear-gradient(160deg, var(--noir-surface-2), var(--noir-surface));
+  box-shadow: 0 18px 48px rgb(0 0 0 / 0.28);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-child article img {
+  filter: saturate(0.76) contrast(1.08) brightness(0.78);
+}
+
+html[data-menu-theme="noir"] .menu-public-shell header + main > section:first-child article h3 {
+  color: var(--noir-ink);
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+}
+
+/* Wide screens get more breathing room and a deliberate reading measure. */
+@media (min-width: 768px) {
+  html[data-menu-theme="noir"] .menu-public-shell header > div,
+  html[data-menu-theme="noir"] .menu-public-shell main {
+    width: min(100%, 72rem);
+  }
+
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
+    transform: translateX(2.5%);
+  }
+
+  html[dir="rtl"][data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
+    transform: translateX(-2.5%);
+  }
+}
+
+@media (max-width: 520px) {
+  html[data-menu-theme="noir"] .menu-public-shell header {
+    min-height: 72dvh;
+  }
+
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(6.2rem, 35%) minmax(0, 1fr);
+    min-height: 8.25rem;
+  }
+
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
+    min-height: 7.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="noir"] .menu-public-shell header img,
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
+    transform: none;
+    transition: none;
+  }
+
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button,
+  html[data-menu-theme="noir"] .menu-public-shell header button,
+  html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] button {
+    transition: none;
+  }
+}
