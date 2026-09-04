@@ -1,22 +1,21 @@
 # TASKS
 
 ## Current Atomic Task
-### Public menu production incident + responsive/theme integration audit — IN_PROGRESS
-- **Objective:** restore the published public menu URL and verify that the first three theme refinement layers remain present and loaded without changing business/data contracts.
+### Theme preview integration + Essential baseline restoration — IN_PROGRESS
+- **Objective:** make Studio/public theme previews render the selected theme, expose Premium themes for preview without weakening publish entitlement enforcement, and restore Essential to its original completed visual baseline.
 - **Protected:** G1–G7.2, the five-theme catalog, demo resilience, authentication correction, tenant isolation, ordering and analytics.
-- **Verified:** current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
-- **Verified:** `src/theme-refinements.css` and `src/theme-refinements-v2.css` are present, and the root route loads the second layer after the existing theme layers.
-- **Verified:** `mndy-alwtnya` existed in production `menu_v3.tenants` with `is_published = true` but `is_active = false`.
-- **Completed:** reactivated only the published `mndy-alwtnya` tenant. No tenant content or schema was changed.
-- **Verified:** `mndy-alwtnya` now has `is_published = true`, `is_active = true`, theme `essential`, one active branch, 7 categories, and 26 products.
-- **Verified:** Theme Preview continues to use the stable local `nafas` demo fixture.
-- **UNKNOWN:** physical-device pixel-level visual QA until the deployed pages can be directly inspected.
-- **UNKNOWN:** local shell test execution in this session.
+- **Verified:** `src/routes/studio/preview.tsx` and `src/routes/themes/preview.tsx` select valid `ThemeKey` values for previews.
+- **Completed:** `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose the `menu-public-shell` hook required by the refinement layer.
+- **Completed:** preview routes no longer receive a transient default Essential paint from the root `MenuThemeController`.
+- **Completed:** Essential refinement-v2 treatment was removed; Editorial and Noir refinement-v2 treatment remains.
+- **Verified:** Premium preview access does not bypass `saveTenantTheme` plan enforcement.
+- **PENDING:** Vercel deployment for the latest code state.
+- **UNKNOWN:** physical-device pixel-level visual QA until the latest deployment is live.
 
 ## Planned Theme Sequence
-1. Theme 1 — Essential — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
-2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
-3. Theme 3 — Noir — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
+1. Theme 1 — Essential — DONE / VERIFIED / MERGED; original baseline restored in current task.
+2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; preview refinement integration fixed in current task.
+3. Theme 3 — Noir — DONE / VERIFIED / MERGED; preview refinement integration fixed in current task.
 4. Theme 4 — Heritage — TODO after final Theme 1–3 live QA.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
@@ -29,15 +28,15 @@
 
 ### Theme 1 — Essential — DONE / VERIFIED / MERGED
 - Dedicated Free-theme art direction implemented and isolated from domain/business logic.
-- Quality workflow and browser/performance gates previously passed.
+- Original visual baseline is preserved; the refinement-v2 overlay was removed from Essential.
 
 ### Theme 2 — Editorial — DONE / VERIFIED / MERGED
 - Dedicated Premium art direction implemented and isolated from domain/business logic.
-- Quality workflow and all-theme browser/performance baseline previously passed.
+- Preview integration now activates its refinement layer.
 
 ### Theme 3 — Noir — DONE / VERIFIED / MERGED
 - Dedicated cinematic Premium art direction implemented and isolated from domain/business logic.
-- Responsive, focus-visible and reduced-motion safeguards previously passed.
+- Preview integration now activates its refinement layer.
 
 ### Authentication — Legacy credential reconciliation — DONE / VERIFIED
 - Better Auth accepts native scrypt credentials and migrated Supabase bcrypt credentials.
@@ -47,5 +46,5 @@
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** corrected authentication is live.
-- **IN_PROGRESS:** public menu incident resolution and responsive creative refinement QA for Themes 1–3.
-- **UNKNOWN:** final visual/manual QA of the deployed refinement layer until the live pages can be directly inspected.
+- **IN_PROGRESS:** theme preview integration and live responsive QA for Themes 1–3.
+- **UNKNOWN:** final visual/manual QA of the latest preview integration until the new Vercel deployment is live.
