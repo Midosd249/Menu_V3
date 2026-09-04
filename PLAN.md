@@ -10,37 +10,28 @@
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Preview layer isolation + responsive theme rendering
+### Preview layer isolation + responsive theme rendering — DONE / SOURCE-VERIFIED
 
-**Objective:** remove the preview presentation layer race/stacking ambiguity, make each selected theme render through its intended visual family, and keep preview behavior safe on mobile and desktop without changing production business logic.
+**Root cause:** the two preview routes (`/studio/preview` and `/themes/preview`) wrapped the menu template in an additional `.menu-public-shell`, even though `PublicMenuView` and `ContemporaryRestaurantTemplate` already own and render their own menu shell. This created nested theme presentation boundaries and ambiguous stacking/decoration behavior, matching the reported transparent layer that obscured the menu.
 
-### Evidence and implementation
-1. `src/routes/studio/preview.tsx` resolves the requested `ThemeKey` during initial client render and now renders the selected theme through `getThemeFamily`.
-2. `src/routes/themes/preview.tsx` resolves the requested `ThemeKey` during initial client render and uses the same family-aware rendering path.
-3. Preview shells expose `data-menu-preview` and `data-menu-preview-theme` markers.
-4. `src/menu-preview-layer.css` no longer creates an isolated or z-indexed stacking context; this removes the preview-specific stacking trap that could present a full-surface content veil while preserving theme-owned decoration.
-5. `MenuThemeController` uses `useLayoutEffect` so preview tokens are applied before the browser paints the selected preview state.
-6. Premium preview remains separate from publishing authorization; `saveTenantTheme` plan enforcement is unchanged.
-
-### Design baseline
-- Essential: original completed free theme; no refinement overlay.
-- Editorial: Premium kinetic food-magazine refinement with its intended contemporary restaurant family.
-- Noir: Premium cinematic refinement with its intended fine-dining family.
-- Heritage: Premium contemporary-restaurant theme from the central registry.
-- Gallery: Premium bakery-dessert/image-led theme from the central registry.
-- Mobile-first: touch-safe hover behavior, compact media sizing and reduced-motion safeguards remain.
+### Fix
+1. Removed the outer `.menu-public-shell` from `src/routes/studio/preview.tsx`.
+2. Removed the outer `.menu-public-shell` from `src/routes/themes/preview.tsx`.
+3. Kept the selected `ThemeKey` resolution and `getThemeFamily` routing unchanged.
+4. Added `tests/preview-shell.test.mjs` to prevent either preview route from reintroducing a nested shell.
+5. Registered the regression test in `package.json` without changing dependency versions.
 
 ### Acceptance criteria
-1. `/studio/preview?theme=essential` renders Essential without a covering preview layer.
+1. `/studio/preview?theme=essential` renders the self-contained Essential menu without a second shell.
 2. `/studio/preview?theme=editorial` renders Editorial through its intended template family.
 3. `/studio/preview?theme=noir` renders Noir through its intended template family.
-4. `/studio/preview?theme=heritage` renders Heritage and `/studio/preview?theme=gallery` renders Gallery using the central theme registry.
-5. `/themes/preview?theme=editorial` and `/themes/preview?theme=noir` render the requested themes.
-6. No preview route flashes the default theme before the selected theme.
-7. Preview decoration cannot cover or intercept the rendered menu content.
+4. `/studio/preview?theme=heritage` and `/studio/preview?theme=gallery` remain selectable and render through their registered families.
+5. `/themes/preview?theme=editorial` and `/themes/preview?theme=noir` remain functional.
+6. No preview route introduces a second `.menu-public-shell`.
+7. Preview decoration cannot create the reported covering layer through a nested shell.
 8. Premium preview access does not weaken Premium publish/save authorization.
-9. Mobile and desktop layouts remain stable, RTL/LTR remain valid, and reduced-motion remains usable.
-10. CI/Vercel quality gates pass before the task is marked DONE.
+9. Mobile and desktop layouts remain unchanged outside the preview-shell ownership correction.
+10. CI/quality gates pass before the task is considered fully release-verified.
 
 ## Theme Sequence
 - Theme 1 — Essential — DONE / VERIFIED / MERGED; baseline preserved.
@@ -51,9 +42,11 @@
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Stop condition
-Stop after preview layer isolation and responsive verification. Do not begin Theme 4 until the completed themes have been manually verified on the latest deployment.
+Stop after the nested preview shell fix and regression verification. Do not begin Theme 4 until the five preview routes have been manually checked on the latest deployment.
 
 ## Research decisions
-- Progressive CSS enhancement remains preferred for this task; no new animation dependency is added.
+- No new dependency is required for this fix.
+- Keep the existing theme-family architecture and template ownership model.
+- Avoid adding another z-index or overlay workaround; remove the duplicated presentation boundary instead.
 - `prefers-reduced-motion` remains the accessibility baseline.
 - GPU/WebGL remains a future option only if live QA demonstrates a concrete need.
