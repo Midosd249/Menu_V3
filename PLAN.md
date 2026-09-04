@@ -5,56 +5,55 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Theme 1 Essential is DONE / VERIFIED / MERGED.
-- Theme 2 Editorial is DONE / VERIFIED / MERGED.
-- Theme 3 Noir is DONE / VERIFIED / MERGED.
-- Authentication legacy credential reconciliation is DONE / VERIFIED.
+- Theme 1 Essential, Theme 2 Editorial and Theme 3 Noir remain completed milestones; the current task is a refinement pass, not a rebuild.
+- Authentication legacy credential reconciliation is DONE / VERIFIED and live sign-in was confirmed by the user after deployment.
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Deployment verification — blocked by Vercel build-rate limit
+### Theme 1–3 creative refinement + public demo resilience
 
-**Objective:** expose the corrected `main` build in Vercel and verify existing customer/owner email-password access against the reconciled Better Auth credentials.
+**Objective:** repair the homepage/theme-preview public menu path and make the first three themes visibly different at a professional art-direction level while preserving the shared product architecture.
 
 ### Root-cause evidence
-1. The deployed authentication bridge returned HTTP 401 during sign-in.
-2. Vercel runtime logs for the latest production deployment recorded `function crypt(unknown, unknown) does not exist`.
-3. The connected Supabase production database has `pgcrypto` installed as `extensions.crypt(text,text)` rather than an unqualified `public.crypt` function.
-4. The application database connection intentionally sets a restricted search path, so the unqualified function lookup fails in Vercel.
-5. The smallest compatible correction is to qualify the existing function as `extensions.crypt(...)`.
+1. `src/routes/index.tsx` links the marketing demo to `/m/nafas`.
+2. `src/routes/themes/preview.tsx` also loads `/m/nafas` for all theme previews.
+3. `src/lib/menu/public.ts` previously returned `not_found` when `nafas` was not an active published tenant.
+4. This made the marketing demo and theme previews depend on production seed data.
 
 ### Implementation
-- **VERIFIED:** `src/lib/auth/server.ts` now calls `extensions.crypt($1, $2)` for migrated bcrypt credentials.
-- **VERIFIED:** native Better Auth scrypt verification remains unchanged.
-- **VERIFIED:** no new dependency, auth architecture, user identity, tenant membership, or database data migration was introduced.
-- **VERIFIED:** a direct production SQL check confirms `extensions.crypt`/`extensions.gen_salt` are executable.
-- **VERIFIED:** corrected commit: `48d9f0dd4edb538b28af5a15653a42b9b18136a5`.
+- **VERIFIED:** added `src/lib/menu/demo.ts` containing a stable bilingual `PublicMenu` fixture with representative coffee, pastry and cold-drink content.
+- **VERIFIED:** `getPublicMenu` now returns the local fixture only for the reserved `nafas` demo slug without a branch, leaving real tenant lookup behavior unchanged.
+- **VERIFIED:** added `src/theme-refinements.css` and loaded it after the existing theme layers.
+- **VERIFIED:** Essential now uses an asymmetric modern-atelier/print direction.
+- **VERIFIED:** Editorial now uses a food-magazine cover/column direction with oversized type and image-led grid rhythm.
+- **VERIFIED:** Noir now uses cinematic dark-dining composition, bronze light pools and image-first cards.
+- **VERIFIED:** no new package dependency was introduced; reduced-motion safeguards remain in place.
 
-### Deployment evidence
-- **VERIFIED:** the previous production deployment `dpl_398MghMyWmts2a6VDeVf9TgS8uVH` was built from the pre-correction main commit and contains the failing unqualified call.
-- **BLOCKED:** the corrected commit currently has a Vercel status failure pointing to the Hobby `build-rate-limit` restriction.
-- **UNKNOWN:** live authentication result from the corrected commit until Vercel creates a fresh deployment.
+### Research and design decisions
+- Adobe Express's current restaurant-menu guidance emphasizes personality, hierarchy, imagery, typography and spacing as core design levers. citeturn0search0turn0search2
+- MDN's current scroll-driven animation guidance supports scroll-linked motion as progressive enhancement and warns that browser support is not universal; therefore the refinement avoids making interaction depend on these effects. citeturn0search1turn0search4
+- The repository design system explicitly requires themes to be complete visual systems rather than color skins and requires accessibility/performance/reduced-motion safeguards. This task follows that contract.
 
 ### Acceptance criteria
-1. Fresh Vercel deployment uses the corrected `main` commit.
-2. Existing legitimate customer/owner credentials can sign in through Better Auth.
-3. Better Auth remains the authoritative application session system.
-4. No plaintext passwords, password hashes, service credentials, or Supabase auth internals are exposed to the browser.
-5. Tenant ownership and membership IDs remain stable.
-6. Existing Theme 1–3 behavior remains unchanged.
+1. `/m/nafas` no longer depends on seeded production tenant data for the marketing demo.
+2. Theme previews for Essential, Editorial and Noir load the same demo content and visibly use different compositions.
+3. Existing real tenant/public-menu lookup behavior is unchanged outside the reserved demo slug.
+4. Arabic/English, RTL, mobile layout, focus states and reduced motion remain usable.
+5. Typecheck, tests, lint and production build pass in CI.
+6. No credentials, secrets or tenant data are exposed by the demo fixture.
+
+### Verification
+- GitHub Actions `Menu V3 Quality` was triggered for the implementation commits.
+- **IN_PROGRESS:** final quality run must finish successfully.
+- **UNKNOWN:** live visual/manual checks until a fresh deployment is available.
 
 ## Theme Sequence
-- Theme 1 — Essential — DONE / VERIFIED / MERGED.
-- Theme 2 — Editorial — DONE / VERIFIED / MERGED.
-- Theme 3 — Noir — DONE / VERIFIED / MERGED.
-- Theme 4 — Heritage — TODO after deployment/access verification.
+- Theme 1 — Essential — refinement in current task.
+- Theme 2 — Editorial — refinement in current task.
+- Theme 3 — Noir — refinement in current task.
+- Theme 4 — Heritage — TODO only after final Theme 1–3 QA passes.
 - Theme 5 — Gallery — TODO.
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
-## Deployment
-- **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **BLOCKED:** current Vercel GitHub deployment status is blocked by the Hobby build-rate limit.
-- **UNKNOWN:** production deployment of corrected `main` until the rate limit clears.
-
 ## Stop condition
-Do not begin Theme 4 until the corrected deployment is available and authentication access has been verified. After that, resume the sequence with Theme 4 — Heritage.
+Do not begin Theme 4 until the final CI run is successful and the three refined previews plus `/m/nafas` have passed live mobile/desktop manual QA.
