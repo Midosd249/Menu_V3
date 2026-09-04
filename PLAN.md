@@ -10,41 +10,40 @@
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + responsive visual hardening
+### Public menu production incident + responsive/theme integration audit
 
-**Objective:** continue the first-three-theme refinement with a stronger art-direction layer that materially separates Essential, Editorial and Noir while prioritizing mobile-first stability and preserving the shared product architecture.
+**Objective:** restore the user's published public menu URL and verify that the first three theme refinement layers are actually present in the deployed application, without changing business/data contracts.
 
-### Verified repository evidence
-1. The five-theme catalog remains `essential`, `editorial`, `noir`, `heritage`, `gallery`.
-2. Theme selection is controlled by `MenuThemeController` through `data-menu-theme` and existing CSS tokens.
-3. Theme previews use the same `/m/nafas` demo fixture, so visual refinement can remain presentation-only.
-4. The previous demo resilience change and authentication correction are protected and must not be reopened.
+### Verified repository and production evidence
+1. Current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
+2. `src/routes/m.$slug.tsx` resolves public menus through `getPublicMenu` and renders the selected theme family.
+3. `src/routes/themes/preview.tsx` uses the reserved `nafas` demo fixture for theme previews.
+4. `src/routes/__root.tsx` imports `theme-refinements-v2.css` after the existing theme layers.
+5. Production `menu_v3.tenants` contains `mndy-alwtnya` with `is_published = true` and, before correction, `is_active = false`.
+6. The tenant has 1 branch, 7 categories, and 26 products.
 
 ### Implementation
-- **IMPLEMENTED:** added `src/theme-refinements-v2.css` as a second presentation-only layer loaded after the existing theme layers.
-- **IMPLEMENTED:** Essential now has a tactile atelier direction with material rings, asymmetric image treatment, restrained interaction lines and scroll-linked reveal where supported.
-- **IMPLEMENTED:** Editorial now has a kinetic magazine direction with issue markers, framed imagery, stronger typographic hierarchy, alternating rules and scroll-linked image reveal where supported.
-- **IMPLEMENTED:** Noir now has a cinematic light direction with atmospheric grain, spotlight pools, bronze edge lighting, framed cards and scroll-linked cinematic reveal where supported.
-- **IMPLEMENTED:** all three themes receive explicit mobile rules that remove desktop offsets, cap image heights, collapse to stable single-column compositions where appropriate, and neutralize hover transforms on touch devices.
-- **IMPLEMENTED:** reduced-motion rules disable the enhancement animations while preserving layout and interaction.
-- **IMPLEMENTED:** no new package dependency was introduced.
+- **COMPLETED:** reactivated only the published `mndy-alwtnya` production tenant (`is_active = true`). No tenant content, branch, product, authorization, or schema changes were made.
+- **VERIFIED:** `mndy-alwtnya` now satisfies the public resolver conditions and resolves to `مندي الوطنية`, theme `essential`, active branch `main-branch`.
+- **VERIFIED:** `src/theme-refinements.css` and `src/theme-refinements-v2.css` are both present in `main` and loaded by the root document.
+- **VERIFIED:** the Theme Preview route still resolves its demo fixture independently of production tenant availability.
 
-### Research and design decisions
-- MDN documents scroll-driven animations as a CSS-based mechanism that can avoid main-thread scroll listeners, while noting that support is not universal. The implementation therefore uses `@supports` as progressive enhancement and retains static fallbacks. citeturn0search0turn0search1turn0search2
-- GSAP and Lenis were reviewed as maintained references for advanced scroll and smooth-motion patterns, but no dependency was added in this atomic pass because the existing menu can gain meaningful motion using CSS-only progressive enhancement. citeturn0search8turn1search0turn1search6
-- Three.js post-processing and pmndrs/postprocessing were reviewed for future image/effect work such as vignette, bloom, noise and chromatic effects. Those heavier WebGL capabilities remain research inputs rather than dependencies until a concrete theme requires them. citeturn0search9turn1search1
-- Codrops current creative tutorials were reviewed for contemporary image distortion, relighting, interactive 3D and parallax patterns. The current pass deliberately stays lighter until live performance is verified on mobile. citeturn1search4turn1search5
+### Theme refinement baseline preserved
+- Essential: tactile atelier / material paper, asymmetric image treatment, restrained rules, progressive scroll reveal.
+- Editorial: kinetic food magazine / issue markers, framed imagery, typographic rhythm, progressive image reveal.
+- Noir: cinematic dining / atmospheric grain, spotlight pools, bronze framing, progressive cinematic reveal.
+- Mobile: compact media sizing, removal of desktop offsets/transforms, stable single-column behavior where appropriate, touch-safe hover behavior.
+- Accessibility: reduced-motion disables enhancement animation; existing focus-visible behavior remains intact.
+- Performance: no new dependency was introduced.
 
 ### Acceptance criteria
-1. Essential, Editorial and Noir remain visibly distinct in composition, imagery, typography and interaction language.
-2. Mobile is the primary constraint: no horizontal overflow, destructive fixed heights, or desktop-only offsets.
-3. Desktop retains the intended art direction without introducing layout instability.
-4. Arabic RTL and English LTR remain structurally valid.
-5. Hover effects do not become the only way to discover or operate interactive menu items.
-6. Reduced-motion users retain a stable, usable layout.
-7. Existing demo lookup, tenant lookup, authentication, ordering and analytics contracts are unchanged.
-8. No dependency or secret changes are introduced.
-9. CI quality gates pass for the final implementation state before the task is marked DONE.
+1. The published `mndy-alwtnya` tenant resolves through the public-menu server function.
+2. Theme 1–3 refinement CSS remains loaded and does not alter business/data contracts.
+3. No tenant isolation, authorization, publishing, branch, product, or analytics boundaries are weakened.
+4. Mobile and desktop layouts remain stable; pixel-level visual verification is still required.
+5. Arabic RTL and English LTR remain structurally valid.
+6. Reduced-motion remains usable.
+7. CI quality gates pass for the final code state before the task is marked DONE.
 
 ## Theme Sequence
 - Theme 1 — Essential — refinement pass in progress.
@@ -55,4 +54,4 @@
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Stop condition
-Stop after this atomic refinement implementation. Do not begin Theme 4. The next task is live mobile/desktop QA after the user deploys the resulting `main` to Vercel.
+Stop after the current public-menu incident and integration audit. Do not begin Theme 4. The next task is live mobile/desktop QA of the public menu and refined first three themes, followed only by evidence-backed fixes if needed.
