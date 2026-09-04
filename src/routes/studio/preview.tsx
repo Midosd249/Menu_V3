@@ -44,13 +44,13 @@ function PreviewPage() {
   const family = getThemeFamily(activeTheme);
 
   return (
-    <div className="menu-public-shell" data-menu-preview="true" data-menu-preview-theme={activeTheme}>
+    <>
       <MenuThemeController theme={activeTheme} preview />
       {family === "contemporary-restaurant" ? (
         <ContemporaryRestaurantTemplate menu={previewMenu} preview />
       ) : (
         <PublicMenuView menu={previewMenu} preview />
       )}
-    </div>
+    </>
   );
 }
