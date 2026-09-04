@@ -9,6 +9,14 @@
 3. **G6 — Performance + Media:** DONE / VERIFIED / CLOSED.
 4. **G7 — Analytics, Search Console, Growth, Rollout:** IN_PROGRESS.
 
+## Repository Organization Maintenance — 2026-09-04
+- **DONE / VERIFIED:** completed an evidence-based repository organization audit against `main`.
+- **DONE / VERIFIED:** created dedicated branch `chore/repository-organization`.
+- **DONE / VERIFIED:** created `docs/repository-organization-audit.md` and `DELETE_CANDIDATES.md`.
+- **PROPOSED:** archive historical root reports and group maintained deployment/product/development documentation under `docs/`.
+- **UNKNOWN:** local working-tree and shell verification are unavailable through the connected GitHub surface.
+- **BLOCKED:** local test/lint/typecheck/build execution cannot be performed from this GitHub-only interface.
+
 ## G6 Closure Evidence
 - DONE / VERIFIED: audited public-menu media and preserved native `loading="lazy"`.
 - DONE / VERIFIED: added `decoding="async"` and `fetchPriority="low"` to non-critical product media.

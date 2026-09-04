@@ -12,6 +12,13 @@
 - **Current section:** G7 — Analytics, Search Console, Growth, Rollout.
 - **Current atomic task:** G7.2 — Search Console production readiness.
 
+## Repository Maintenance Note — 2026-09-04
+- **VERIFIED:** A separate repository-organization audit was performed on `main` without reopening or changing G1–G7 product milestones.
+- **VERIFIED:** `chore/repository-organization` is the dedicated maintenance branch.
+- **VERIFIED:** The audit is recorded in `docs/repository-organization-audit.md` and deletion candidates are isolated in `DELETE_CANDIDATES.md`.
+- **PROPOSED:** Apply only documentation-focused moves/archive operations that preserve file contents and application paths.
+- **UNKNOWN:** Local working-tree status and local command execution are unavailable through the GitHub connector.
+
 ## G7 — Analytics, Search Console, Growth, Rollout — IN_PROGRESS
 
 ### G7.1 — Production analytics integrity hardening — DONE / VERIFIED

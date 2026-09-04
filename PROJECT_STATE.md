@@ -53,6 +53,16 @@
 - **INFERRED:** the suite follows the repository's existing Node test conventions and uses only Node built-ins.
 - **UNKNOWN:** actual execution of the new test suite in this session; the connected GitHub environment did not expose a repository shell or workflow-dispatch capability.
 
+## Repository Organization Audit — 2026-09-04
+- **VERIFIED:** repository architecture is already sensibly separated into `src/`, `migrations/`, `scripts/`, `server/`, `public/`, `tests/`, `.github/`, and `.grok/`.
+- **VERIFIED:** the main organization issue is root-level historical documentation mixed with active continuity files.
+- **VERIFIED:** a dedicated branch `chore/repository-organization` was created from `main` for maintenance work.
+- **VERIFIED:** `docs/repository-organization-audit.md` records the evidence-based inventory, target structure, move plan, deletion candidates, security/configuration findings, and verification plan.
+- **VERIFIED:** `DELETE_CANDIDATES.md` records deletion candidates without deleting any medium/high-risk item.
+- **VERIFIED:** no application source, route, migration, dependency, CI, or Vercel configuration was changed by the organization initiative.
+- **PROPOSED:** archive historical root reports under `docs/archive/` and group maintained deployment/product/development documentation under `docs/`.
+- **UNKNOWN:** local working-tree status and local command execution are unavailable through the connected GitHub surface.
+
 ## Protected Completed Work
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
 - G2 Crawl Control and Indexation: DONE / VERIFIED.
@@ -69,6 +79,7 @@
 - 2026-09-04 — Completed the G7 audit task and selected G7.1 production analytics integrity hardening as the single next atomic task.
 - 2026-09-04 — Added focused analytics integrity regression coverage and registered it in the existing test command without adding dependencies or changing runtime analytics behavior.
 - 2026-09-04 — Reviewed the G7.1 diff against the prior state; changed files are limited to the new regression suite, `package.json`, and G7 state documentation.
+- 2026-09-04 — Started the repository organization maintenance initiative on `chore/repository-organization`; completed the evidence-based audit and identified documentation-focused, low-risk organization changes while preserving application, migration, deployment, and dependency contracts.
 
 ## Exact Remaining Work
 - **G7.2 — Search Console production readiness:** verify the intended production domain from repository/deployment evidence, then prepare only the minimal first-party verification/submission surface required by official Google Search Central guidance. Do not add credentials or claim ownership/indexation until production-domain evidence exists.
