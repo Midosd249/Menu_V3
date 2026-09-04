@@ -20,13 +20,13 @@
 
 **Objective:** remove the preview presentation layer race/stacking ambiguity, make each selected theme render through its intended visual family, and keep preview behavior safe on mobile and desktop without changing production business logic.
 
-**VERIFIED:** `src/routes/studio/preview.tsx` and `src/routes/themes/preview.tsx` now resolve the requested theme before the first client render when available.
+**VERIFIED:** `src/routes/studio/preview.tsx` and `src/routes/themes/preview.tsx` resolve the requested theme before the first client render when available.
 
 **VERIFIED:** Studio preview now uses `getThemeFamily(activeTheme)` so Editorial and Noir use their intended template family instead of forcing every preview through `PublicMenuView`.
 
 **VERIFIED:** dedicated preview shells carry `data-menu-preview` and `data-menu-preview-theme` markers.
 
-**IMPLEMENTED:** a dedicated `src/menu-preview-layer.css` isolates preview presentation layers, keeps decorative pseudo-elements non-interactive, and raises the actual preview content above shell decoration.
+**IMPLEMENTED:** `src/menu-preview-layer.css` no longer creates an isolated/z-indexed stacking context. Preview shell decoration remains non-interactive and cannot create a preview-only content veil through this layer.
 
 **VERIFIED:** the root `MenuThemeController` applies preview theme tokens with `useLayoutEffect`, removing the client paint race that could briefly expose the default theme.
 
@@ -37,7 +37,7 @@
 - **VERIFIED:** Essential remains the original completed visual baseline.
 - **VERIFIED:** Editorial and Noir refinement layers remain available.
 - **VERIFIED:** Studio preview routes now respect theme template families.
-- **VERIFIED:** preview shell layering is isolated and decorative layers cannot capture pointer input.
+- **VERIFIED:** preview shell layering no longer creates a dedicated stacking context or raises shell children into a separate z-index layer.
 - **VERIFIED:** mobile overflow safeguards remain in place.
 - **VERIFIED:** no dependency was added and no database schema/business contract was changed.
 - **VERIFIED:** Premium save/publish authorization remains enforced in `src/lib/theme/server.ts`.
@@ -49,7 +49,7 @@
 - 2026-09-04 — Investigated the reported hidden preview layer and traced the preview rendering path through the Studio route, public theme preview route, theme registry and controller.
 - 2026-09-04 — Found that Studio preview forced `PublicMenuView` for every theme family, while the dedicated theme preview route already respected template family.
 - 2026-09-04 — Stabilized preview theme selection during initial client render and changed the theme controller to `useLayoutEffect`.
-- 2026-09-04 — Added a dedicated preview layer isolation stylesheet so shell decoration cannot visually or interactively cover the rendered theme.
+- 2026-09-04 — Reworked `src/menu-preview-layer.css` to remove its isolated/z-indexed stacking context after the reported content veil persisted.
 
 ## Exact Next Task
-Deploy the latest `main` and perform live mobile-first QA of `/studio/preview?theme=essential`, `/studio/preview?theme=editorial`, `/studio/preview?theme=noir`, `/themes/preview?theme=editorial`, `/themes/preview?theme=noir`, and the public menu. Verify the three completed themes visually before starting Theme 4.
+Deploy the latest `main` and perform live mobile-first QA of all five theme previews: `essential`, `editorial`, `noir`, `heritage`, and `gallery`. Verify that each selected theme is visibly rendered and the full menu content remains readable. Do not start Theme 4 as a development milestone until this QA is complete.
