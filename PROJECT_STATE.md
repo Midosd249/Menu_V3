@@ -16,7 +16,7 @@
 - The reserved `nafas` demo fixture remains the source for the marketing/theme-preview demo when no branch is requested.
 
 ## Current Atomic Task
-### Preview layer isolation + responsive theme rendering — DONE / SOURCE-VERIFIED
+### Preview layer isolation + responsive theme rendering — IN_PROGRESS / DEPLOYMENT-VERIFIED
 
 **Root cause:** both preview routes wrapped an already self-contained menu template in a second `.menu-public-shell`. That nested shell created a second theme presentation boundary; combined with shell pseudo-elements and preview-specific CSS, it could produce the reported transparent/visual veil and made preview stacking behavior ambiguous.
 
@@ -24,7 +24,11 @@
 
 **Fixed:** added `tests/preview-shell.test.mjs` and registered it in the repository test command so a nested preview shell cannot silently return.
 
-**Preserved:** template-family resolution, theme selection before client paint, Premium preview behavior, public menu business logic, tenant isolation, authentication, ordering, analytics, and all completed theme art direction.
+**Deployment:** the current Vercel production deployment is already connected to `main` and was built from commit `2258642a97560a94df109a73bc1f83708979531d` (`chore: keep preview fix scoped`). The deployment is `READY` and the Vercel status check is successful.
+
+**Live HTTP verification:** the five theme values `essential`, `editorial`, `noir`, `heritage`, and `gallery` were requested through the deployed `/studio/preview` route and each returned HTTP 200 with the expected preview route assets. The public `/themes/preview?theme=essential` endpoint also returned HTTP 200.
+
+**Limitation:** the available execution environment cannot perform authenticated browser/device rendering or provide pixel-level mobile screenshots. Therefore physical-device visual QA remains `UNKNOWN` rather than being inferred from HTTP 200 responses.
 
 ## Verification State
 - **VERIFIED:** both preview routes contain no outer `.menu-public-shell` wrapper.
@@ -33,15 +37,19 @@
 - **VERIFIED:** the regression test asserts that both preview routes cannot reintroduce a nested menu shell.
 - **VERIFIED:** no dependency was added and package dependency versions were preserved.
 - **VERIFIED:** no database schema/business contract was changed.
-- **PENDING:** CI execution for the new regression test and the normal repository quality gates.
-- **UNKNOWN:** final physical-device pixel-level rendering until the resulting deployment is manually inspected.
+- **VERIFIED:** Vercel production deployment is `READY` for commit `2258642a97560a94df109a73bc1f83708979531d`.
+- **VERIFIED:** the five theme preview URLs return HTTP 200 from the current production deployment.
+- **VERIFIED:** no error-level runtime logs were found for the current deployment in the checked 24-hour window.
+- **PENDING:** local CI execution for the regression test and normal repository quality gates; the local repository checkout is not mounted in this execution environment.
+- **UNKNOWN:** final physical-device pixel-level rendering and post-hydration visual state.
+- **UNKNOWN:** whether the user-facing authenticated `/studio/preview` session reaches the final menu state on a real mobile device, because no browser/device session is available here.
 
 ## Session Log
-- 2026-09-04 — Investigated the repeated hidden-menu report from the preview routes and traced the actual rendered DOM ownership.
-- 2026-09-04 — Confirmed the root cause: both preview routes added a second `.menu-public-shell` around menu templates that already render their own shell.
-- 2026-09-04 — Removed both redundant preview wrappers and kept the existing theme-family routing intact.
-- 2026-09-04 — Added a source-level regression test preventing nested preview shells from returning.
-- 2026-09-04 — Preserved all existing package dependency versions after the test-script update.
+- 2026-09-05 — Re-read the repository operating contract and continuity files; confirmed `main` and `Midosd249/Menu_V3` as source of truth.
+- 2026-09-05 — Verified that Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and its latest production deployment is commit `2258642a97560a94df109a73bc1f83708979531d`.
+- 2026-09-05 — Confirmed the deployed preview routes return HTTP 200 for all five theme keys: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- 2026-09-05 — Confirmed no error-level runtime logs for the current deployment in the checked 24-hour window; historical auth errors belong to older deployments and were not treated as current blockers.
+- 2026-09-05 — Did not infer visual/mobile success from HTTP responses; pixel-level browser/device QA remains UNKNOWN.
 
 ## Exact Next Task
-Deploy the fixed `main` and perform live mobile-first QA of all five theme previews. Verify that each selected theme displays the full menu content without any covering layer before beginning Theme 4.
+Perform authenticated browser/device QA of all five theme previews at mobile and desktop breakpoints, specifically verifying that the full menu remains visible after hydration and that no transparent/covering layer returns. Only after that verification should Theme 4 — Heritage be treated as ready to begin.
