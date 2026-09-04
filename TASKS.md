@@ -8,7 +8,8 @@
 - **Completed:** `src/routes/themes/preview.tsx` now resolves the requested theme during initial client render.
 - **Completed:** preview shells now expose explicit preview markers for CSS isolation.
 - **Completed:** `src/components/menu-theme-controller.tsx` uses `useLayoutEffect` to prevent the default-theme paint race on preview routes.
-- **Completed:** `src/menu-preview-layer.css` isolates preview decoration and keeps the rendered content above shell-level visual layers.
+- **Completed:** `src/menu-preview-layer.css` no longer creates an isolated/z-indexed stacking context; preview shell decoration cannot become a content veil through that layer.
+- **Completed:** preview shell pseudo-elements remain non-interactive and the preview returns to normal document paint order.
 - **Verified:** Essential refinement treatment remains removed; Editorial and Noir refinements remain.
 - **Verified:** Premium preview access does not bypass `saveTenantTheme` plan enforcement.
 - **PENDING:** Vercel deployment for the latest code state.
