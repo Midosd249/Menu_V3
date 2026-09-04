@@ -1,7 +1,7 @@
 # TASKS
 
 ## Current Section
-- **G7 — Analytics, Search Console, Growth, Rollout: IN_PROGRESS / BLOCKED only on external Search Console ownership verification.**
+- **G7 — Analytics, Search Console, Growth, Rollout: IN_PROGRESS.**
 
 ## Unified Queue
 1. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED.
@@ -33,8 +33,10 @@
 - DONE / VERIFIED: live production `robots.txt` returns HTTP 200 and declares the sitemap.
 - DONE / VERIFIED: live production `sitemap.xml` returns HTTP 200 and exposes the current published menu/branch URLs.
 - DONE / VERIFIED: optional `VITE_GOOGLE_SITE_VERIFICATION` support exists without committing a verification token.
-- BLOCKED: Search Console ownership requires the Google-provided verification value and account confirmation.
-- UNKNOWN: Search Console submission/indexation/canonical state.
+- DONE / VERIFIED: Google Search Console ownership was completed for the main Google account.
+- DONE / VERIFIED: the existing `/sitemap.xml` was submitted in Google Search Console.
+- DONE / VERIFIED: the production home URL was inspected and the indexing request was completed successfully.
+- UNKNOWN: Google crawl timing and eventual indexing state for individual URLs.
 
 ## Exact Next Task
-- **G7.2 Search Console ownership verification:** configure the Google-provided public verification value in Vercel Production, verify ownership in Google Search Console, submit the existing `/sitemap.xml`, and record the resulting Google status. Do not commit the token or start unrelated work.
+- **Dependency manifest reconciliation:** use the repository package manager to reconcile `package.json` and `package-lock.json`; regenerate only if required, then run `npm ci`, typecheck, tests, lint, build, and inspect the resulting diff. Do not change dependency versions unless package-manager evidence requires it. Do not hand-edit the lockfile.
