@@ -4,7 +4,7 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Current main HEAD: `589820e5dc0a7df7cd536c673f623a8fecc1176c`.
+- Current main HEAD: `27f7ffb67ea2b265102e39b9319c0c5b76bdd28a`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
@@ -14,15 +14,8 @@
 - **Theme 2 — Editorial — DONE / VERIFIED / MERGED.**
 - **Theme 3 — Noir — DONE / VERIFIED / MERGED.**
 - Authentication reconciliation is implemented and database-migrated.
+- The first deployed auth bridge had a runtime schema-resolution defect; it has now been corrected.
 - Theme refinement sequence remains active: Theme 1 → Theme 2 → Theme 3 → Theme 4 → Theme 5.
-
-## Theme 3 Result
-- **VERIFIED:** `src/theme-noir.css` is an isolated cinematic fine-dining art direction.
-- **VERIFIED:** `src/routes/__root.tsx` loads the Noir stylesheet without changing route behavior.
-- **VERIFIED:** the implementation is presentation-only and preserves existing menu, ordering, analytics, SEO, tenant isolation and entitlement contracts.
-- **VERIFIED:** cinematic hero, layered charcoal surfaces, warm bronze lighting, refined category rail, immersive media treatment, premium product cards, forms, focus states and reduced-motion safeguards are included.
-- **VERIFIED:** Theme 3 PR #11 merged to `main` as `1dffaf79a64f4a3bd75cc04e96574901ec791796`.
-- **VERIFIED:** CI run #473 passed the full Theme 3 quality workflow.
 
 ## Authentication Reconciliation
 - **VERIFIED:** production Supabase project contains two Better Auth users and two Supabase Auth users.
@@ -30,30 +23,33 @@
 - **VERIFIED:** application tenant membership is keyed to Better Auth identity.
 - **VERIFIED:** Better Auth native credentials use scrypt; the legacy Supabase Auth credentials use bcrypt.
 - **VERIFIED:** `src/routes/login.tsx` normalizes email input with `trim().toLowerCase()`.
-- **VERIFIED:** Better Auth now accepts native scrypt credentials and migrated Supabase bcrypt credentials through a dedicated verification path using PostgreSQL `pgcrypto`.
 - **VERIFIED:** the two existing credential accounts in `menu_v3.account` were synchronized from their matching Supabase Auth bcrypt hashes without exposing plaintext passwords.
-- **VERIFIED:** the database reports two credential accounts with bcrypt-format migrated hashes.
-- **VERIFIED:** no plaintext password, password value, or secret was written to the repository or session log.
-- **INFERRED:** users who enter the same passwords previously stored in Supabase Auth can now authenticate through the Better Auth session layer while retaining the existing Better Auth user IDs and tenant memberships.
+- **VERIFIED:** PostgreSQL `pgcrypto` is installed in the production Supabase project under schema `extensions`.
+- **VERIFIED:** the deployed authentication failure was caused by the unqualified `crypt(...)` call not resolving because the Vercel database connection uses a restricted search path.
+- **VERIFIED:** `src/lib/auth/server.ts` now calls `extensions.crypt($1, $2)` for migrated bcrypt credentials while native scrypt verification remains unchanged.
+- **VERIFIED:** direct production SQL confirms `extensions.crypt` and `extensions.gen_salt` are available.
+- **VERIFIED:** corrected implementation commit: `48d9f0dd4edb538b28af5a15653a42b9b18136a5`.
+- **UNKNOWN:** successful live sign-in with the corrected deployment until Vercel produces a deployment from the corrected commit.
 
 ## Verification State
-- **VERIFIED:** GitHub Actions run #480 passed the complete quality workflow for the authentication verifier implementation.
-- **VERIFIED:** GitHub Actions run #481 passed the complete quality workflow for the recorded state update.
-- **VERIFIED:** Supabase migration affected exactly the two existing Better Auth credential accounts and copied only bcrypt hashes matched by normalized email.
+- **VERIFIED:** previous auth implementation CI passed.
+- **VERIFIED:** Vercel runtime logs directly identified the `crypt(unknown, unknown)` error on the deployed auth request.
+- **VERIFIED:** production database function lookup confirms the required bcrypt function exists in `extensions`.
+- **VERIFIED:** current source contains the schema-qualified correction.
 
 ## Deployment State
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **VERIFIED:** Theme 1, Theme 2, and Theme 3 are present in the GitHub `main` source used by Vercel.
-- **BLOCKED:** Vercel production deployment may still be constrained by the Hobby build-rate limit.
-- **UNKNOWN:** production deployment of the latest authentication reconciliation commit until Vercel accepts a fresh build.
+- **VERIFIED:** the last successful production deployment was `dpl_398MghMyWmts2a6VDeVf9TgS8uVH`, built from commit `8a2afba2ca7511317cf9815942a9eac024528c01` before the latest correction.
+- **BLOCKED:** Vercel's current GitHub deployment status for the corrected commit reports the Hobby `build-rate-limit` restriction.
+- **UNKNOWN:** production deployment of the corrected authentication code until Vercel accepts a fresh build.
 
 ## Session Log
-- 2026-09-04 — Theme 3 Noir refinement completed and merged.
-- 2026-09-04 — CI verified Theme 3 and the current `main` quality workflow.
-- 2026-09-04 — Investigated reported login failure and identified a dual identity store with distinct user IDs and password-hash systems.
-- 2026-09-04 — Applied safe email normalization in the login form.
-- 2026-09-04 — Added a secure Better Auth password verifier that supports migrated Supabase bcrypt hashes through PostgreSQL `pgcrypto` while retaining native scrypt verification for new accounts.
-- 2026-09-04 — Synchronized the two existing credential account hashes from Supabase Auth into the matching Better Auth accounts; plaintext credentials were never accessed or logged.
+- 2026-09-04 — Investigated the user's failed production login rather than assuming the earlier migration fix was sufficient.
+- 2026-09-04 — **VERIFIED:** Vercel runtime log showed HTTP 401 because `crypt(unknown, unknown)` could not be resolved.
+- 2026-09-04 — **VERIFIED:** production Supabase exposes `crypt(text,text)` in the `extensions` schema.
+- 2026-09-04 — Fixed the verifier to call `extensions.crypt(...)` with the smallest possible code change.
+- 2026-09-04 — **VERIFIED:** production SQL can execute the qualified bcrypt functions; no credentials or plaintext passwords were accessed.
+- 2026-09-04 — Updated continuity records to preserve the verified root cause and current deployment blocker.
 
 ## Exact Next Task
-User should deploy the current `main` commit to Vercel and verify email/password sign-in with the existing credentials. After access is confirmed, proceed to Theme 4 — Heritage.
+After the Vercel Hobby build-rate limit clears, deploy the current `main` commit and verify existing customer/owner email-password sign-in. Do not begin Theme 4 until live authentication is confirmed.
