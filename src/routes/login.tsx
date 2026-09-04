@@ -35,10 +35,11 @@ function Login() {
     e.preventDefault();
     if (busy) return;
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "").trim();
+    const email = String(form.get("email") || "").trim().toLowerCase();
     const password = String(form.get("password") || "");
     const name = String(form.get("name") || "").trim();
-    setBusy(true); setError("");
+    setBusy(true);
+    setError("");
     try {
       if (mode === "up") {
         const result = await authClient.signUp.email({ email, password, name: name || email.split("@")[0] });
@@ -52,7 +53,9 @@ function Login() {
       else await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   }
 
   return <main className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
