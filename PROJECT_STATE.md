@@ -4,52 +4,49 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Current main HEAD: `27f7ffb67ea2b265102e39b9319c0c5b76bdd28a`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
-- **Theme 1 — Essential — DONE / VERIFIED / MERGED.**
-- **Theme 2 — Editorial — DONE / VERIFIED / MERGED.**
-- **Theme 3 — Noir — DONE / VERIFIED / MERGED.**
-- Authentication reconciliation is implemented and database-migrated.
-- The first deployed auth bridge had a runtime schema-resolution defect; it has now been corrected.
-- Theme refinement sequence remains active: Theme 1 → Theme 2 → Theme 3 → Theme 4 → Theme 5.
+- **Theme 1 — Essential — DONE / VERIFIED / MERGED; refined again in current task.**
+- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; refined again in current task.**
+- **Theme 3 — Noir — DONE / VERIFIED / MERGED; refined again in current task.**
+- Authentication reconciliation and the qualified `extensions.crypt(...)` fix are implemented and live authentication was verified by the user after deployment.
+- The previous hardcoded `nafas` marketing/demo route depended on a seeded production tenant; this task makes the `nafas` demo resilient with a local fixture.
 
-## Authentication Reconciliation
-- **VERIFIED:** production Supabase project contains two Better Auth users and two Supabase Auth users.
-- **VERIFIED:** the stores contain matching email addresses while their user IDs are distinct.
-- **VERIFIED:** application tenant membership is keyed to Better Auth identity.
-- **VERIFIED:** Better Auth native credentials use scrypt; the legacy Supabase Auth credentials use bcrypt.
-- **VERIFIED:** `src/routes/login.tsx` normalizes email input with `trim().toLowerCase()`.
-- **VERIFIED:** the two existing credential accounts in `menu_v3.account` were synchronized from their matching Supabase Auth bcrypt hashes without exposing plaintext passwords.
-- **VERIFIED:** PostgreSQL `pgcrypto` is installed in the production Supabase project under schema `extensions`.
-- **VERIFIED:** the deployed authentication failure was caused by the unqualified `crypt(...)` call not resolving because the Vercel database connection uses a restricted search path.
-- **VERIFIED:** `src/lib/auth/server.ts` now calls `extensions.crypt($1, $2)` for migrated bcrypt credentials while native scrypt verification remains unchanged.
-- **VERIFIED:** direct production SQL confirms `extensions.crypt` and `extensions.gen_salt` are available.
-- **VERIFIED:** corrected implementation commit: `48d9f0dd4edb538b28af5a15653a42b9b18136a5`.
-- **UNKNOWN:** successful live sign-in with the corrected deployment until Vercel produces a deployment from the corrected commit.
+## Current Atomic Task
+### Theme 1–3 creative refinement + public demo resilience
+
+**Objective:** fix the broken homepage/theme preview menu and materially differentiate the first three completed themes without changing business/data contracts.
+
+**VERIFIED:** `src/routes/index.tsx` and `src/routes/themes/preview.tsx` both referenced the `nafas` public menu.
+
+**VERIFIED:** `getPublicMenu` previously returned `not_found` when that tenant was not seeded/published.
+
+**IMPLEMENTED:** added `src/lib/menu/demo.ts` with stable bilingual demo content and safe remote imagery, then made only the reserved `nafas` demo slug use that fixture when no branch is requested.
+
+**IMPLEMENTED:** added `src/theme-refinements.css`, loaded after the existing theme layers. It gives:
+- Essential: modern atelier / asymmetric print composition.
+- Editorial: food-magazine / cover-and-column composition.
+- Noir: cinematic dark-dining / spotlight composition.
+
+**VERIFIED:** refinement layer is presentation-only, preserves the existing menu DOM and `ThemeKey` contracts, and includes reduced-motion safeguards.
+
+**RESEARCH:** Adobe Express menu guidance emphasizes brand personality, hierarchy, imagery, typography and spacing; MDN documents scroll-driven animation as progressive enhancement with browser support caveats. These informed the visual direction without copying proprietary layouts/assets. See `PLAN.md`.
 
 ## Verification State
-- **VERIFIED:** previous auth implementation CI passed.
-- **VERIFIED:** Vercel runtime logs directly identified the `crypt(unknown, unknown)` error on the deployed auth request.
-- **VERIFIED:** production database function lookup confirms the required bcrypt function exists in `extensions`.
-- **VERIFIED:** current source contains the schema-qualified correction.
-
-## Deployment State
-- **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **VERIFIED:** the last successful production deployment was `dpl_398MghMyWmts2a6VDeVf9TgS8uVH`, built from commit `8a2afba2ca7511317cf9815942a9eac024528c01` before the latest correction.
-- **BLOCKED:** Vercel's current GitHub deployment status for the corrected commit reports the Hobby `build-rate-limit` restriction.
-- **UNKNOWN:** production deployment of the corrected authentication code until Vercel accepts a fresh build.
+- **VERIFIED:** production authentication works after the user's deployment of corrected `main`.
+- **VERIFIED:** GitHub Actions quality workflow was triggered for the refinement commits.
+- **IN_PROGRESS:** quality run for the final refinement commit must finish before this task can be marked fully verified.
+- **UNKNOWN:** local `git status`, local `git diff`, and local shell test execution are unavailable in this session; GitHub is the repository evidence source.
 
 ## Session Log
-- 2026-09-04 — Investigated the user's failed production login rather than assuming the earlier migration fix was sufficient.
-- 2026-09-04 — **VERIFIED:** Vercel runtime log showed HTTP 401 because `crypt(unknown, unknown)` could not be resolved.
-- 2026-09-04 — **VERIFIED:** production Supabase exposes `crypt(text,text)` in the `extensions` schema.
-- 2026-09-04 — Fixed the verifier to call `extensions.crypt(...)` with the smallest possible code change.
-- 2026-09-04 — **VERIFIED:** production SQL can execute the qualified bcrypt functions; no credentials or plaintext passwords were accessed.
-- 2026-09-04 — Updated continuity records to preserve the verified root cause and current deployment blocker.
+- 2026-09-04 — Confirmed the corrected authentication deployment is usable from the user's live sign-in test.
+- 2026-09-04 — Audited homepage and theme-preview routing and identified the shared hardcoded `nafas` dependency as the direct cause of the demo failure when the tenant is absent.
+- 2026-09-04 — Added a dependency-free bilingual demo fixture and reserved fallback for the marketing demo slug.
+- 2026-09-04 — Added a distinct visual refinement layer for Essential, Editorial and Noir, preserving existing data/business contracts.
+- 2026-09-04 — GitHub quality workflow triggered for the final refinement commit.
 
 ## Exact Next Task
-After the Vercel Hobby build-rate limit clears, deploy the current `main` commit and verify existing customer/owner email-password sign-in. Do not begin Theme 4 until live authentication is confirmed.
+After the final GitHub quality run is `success`, perform live visual/manual QA of `/m/nafas` and `/themes/preview?theme=essential|editorial|noir` on mobile and desktop, then only if those checks pass proceed to Theme 4 — Heritage.
