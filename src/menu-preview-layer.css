@@ -1,25 +1,31 @@
-/* Preview safety layer: decorative pseudo-elements must never cover the actual menu surface. */
+/* Preview isolation: keep theme decoration behind the actual menu without creating a stacking trap. */
 .menu-public-shell[data-menu-preview="true"] {
   position: relative;
-  isolation: isolate;
+  isolation: auto;
+  overflow-x: clip;
 }
 
-.menu-public-shell[data-menu-preview="true"] > * {
-  position: relative;
-  z-index: 1;
-}
-
+/* Theme shells may use ::before/::after for atmosphere. They are decorative only. */
 .menu-public-shell[data-menu-preview="true"]::before,
 .menu-public-shell[data-menu-preview="true"]::after {
   pointer-events: none !important;
 }
 
+/* Preview content must remain in the normal paint order. */
+.menu-public-shell[data-menu-preview="true"] > * {
+  position: relative;
+  z-index: auto;
+}
+
 @media (max-width: 700px) {
   .menu-public-shell[data-menu-preview="true"] {
+    max-width: 100%;
     overflow-x: clip;
   }
 
-  .menu-public-shell[data-menu-preview="true"] > * {
+  .menu-public-shell[data-menu-preview="true"] main,
+  .menu-public-shell[data-menu-preview="true"] header,
+  .menu-public-shell[data-menu-preview="true"] footer {
     max-width: 100%;
   }
 }
