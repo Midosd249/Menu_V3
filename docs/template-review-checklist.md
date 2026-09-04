@@ -2,6 +2,20 @@
 
 Use this checklist for every new template, template redesign, public-menu UI refinement, SEO/public-page change, or conversion-flow change. Do not mark the work complete until every applicable section has evidence.
 
+## Workflow gate
+- [ ] DISCOVER: repository source, architecture, routes, capabilities, current theme, Git state, and relevant history inspected.
+- [ ] AUDIT: complete relevant customer journey inspected before implementation.
+- [ ] SEGMENT: restaurant concept, target customer, business goal, and supported capabilities identified.
+- [ ] RESEARCH: material sources reviewed and logged.
+- [ ] DESIGN BRIEF: current brief completed before material presentation changes.
+- [ ] PLAN: exact scope, acceptance criteria, risks, rollback, and verification commands recorded.
+- [ ] IMPLEMENT: smallest compatible solution only.
+- [ ] REAL-DATA TEST: realistic menu states exercised.
+- [ ] VISUAL REVIEW: required responsive and language states reviewed.
+- [ ] FUNCTIONAL REVIEW: every relevant interaction audited.
+- [ ] VERIFY: automated/manual evidence collected.
+- [ ] DOCUMENT: continuity and audit records updated.
+
 ## 1. Brief and evidence
 - [ ] Exact template/family and supported `ThemeKey` are identified.
 - [ ] Repository evidence and existing architecture were inspected first.
