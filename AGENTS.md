@@ -4,7 +4,7 @@
 Menu V3 is an Arabic-first, bilingual, mobile-first, multi-tenant digital-menu SaaS for restaurants and cafes. `main` is the repository source of truth. Preserve completed capabilities and improve the existing product incrementally toward production readiness; never restart the project or rebuild completed work.
 
 ## Source of Truth and Startup
-Before any coding task, read all applicable `AGENTS.md` files, then `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, `README`/relevant documentation, source related to the task, tests, and configuration. Inspect repository status, recent history, relevant diffs, and CI/deployment evidence when available. Do not rely on chat memory.
+Before any coding task, read all applicable `AGENTS.md` files, then `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README/relevant documentation, source related to the task, tests, and configuration. Inspect repository status, recent history, relevant diffs, and CI/deployment evidence when available. Do not rely on chat memory.
 
 Repository facts must be labeled `VERIFIED`, `INFERRED`, `UNKNOWN`, or `BLOCKED`. Trust code, tests, documentation, and git evidence over stale continuity notes; reconcile discrepancies in the continuity files.
 
@@ -85,6 +85,17 @@ Reproduce when possible → isolate the smallest failing surface → inspect cod
 
 ## Preserve Completed Work
 Completed functionality is protected. Do not rebuild, replace, remove, or regress completed features for convenience. Do not restart the project. Existing `/admin`, `server/`, `public/__grok/`, platform integrations, routes, migrations, and compatibility paths remain protected unless the current task provides evidence that a targeted correction is required.
+
+## Visual, Interaction, and Conversion Quality Gate
+Before any new template, template redesign, public-menu UI refinement, SEO/public-page change, or conversion-flow change:
+- complete the visual and functional audit defined in `docs/visual-functional-audit.md` and `docs/template-review-checklist.md`;
+- inspect the complete relevant customer journey, not isolated components;
+- validate interactive controls visually and functionally, including purpose, placement, reachability, touch target, accessible name, focus/state behavior, failure states, and conversion relevance;
+- test Arabic RTL, English LTR, mixed-direction text, realistic data, responsive states, and supported loading/empty/error/unavailable states;
+- use relevant connected sources only when actually available and use public sources responsibly; record material research in `docs/design-research-log.md`;
+- prepare or update `docs/template-brief-template.md` before implementation when a template/presentation change is material;
+- never mark a template or public-menu change complete without the visual-functional checklist and evidence-backed verification;
+- preserve existing product behavior and never add or imply unsupported actions such as payment, checkout, contact, or location capabilities that the repository does not actually provide.
 
 ## Definition of Done
 A task is `DONE` only when the requested behavior is implemented, the diff is task-scoped, relevant verification passes or an evidence-backed exception is documented, applicable security/privacy/performance/accessibility/maintainability review is complete, and continuity state is updated. No unresolved blocker or unknown may be hidden behind `DONE`.
