@@ -10,14 +10,18 @@ import type { PublicMenu } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/themes/preview")({ component: ThemePreviewPage });
 
+function readPreviewTheme(): ThemeKey | undefined {
+  if (typeof window === "undefined") return undefined;
+  const value = new URLSearchParams(window.location.search).get("theme")?.toLowerCase();
+  return isThemeKey(value) ? value : undefined;
+}
+
 function ThemePreviewPage() {
-  const [theme, setTheme] = useState<ThemeKey | undefined>();
+  const [theme, setTheme] = useState<ThemeKey | undefined>(() => readPreviewTheme());
   const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string } | { status: "ok"; menu: PublicMenu }>({ status: "loading" });
 
   useEffect(() => {
-    const value = new URLSearchParams(window.location.search).get("theme")?.toLowerCase();
-    const selectedTheme = isThemeKey(value) ? value : undefined;
-    setTheme(selectedTheme);
+    setTheme(readPreviewTheme());
     getPublicMenu({ data: { slug: "nafas" } }).then((result) => {
       if (!result.ok) setState({ status: "error", message: result.error }); else setState({ status: "ok", menu: result.data });
     }).catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المعاينة" }));
@@ -27,5 +31,5 @@ function ThemePreviewPage() {
   if (state.status === "error") return <ErrorState message={state.message} />;
   const effectiveTheme = theme ?? state.menu.tenant.themeKey;
   const previewMenu = effectiveTheme === state.menu.tenant.themeKey ? state.menu : { ...state.menu, tenant: { ...state.menu.tenant, themeKey: effectiveTheme } };
-  return <div className="menu-public-shell"><MenuThemeController theme={effectiveTheme} preview />{getThemeFamily(effectiveTheme) === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={previewMenu} preview /> : <PublicMenuView menu={previewMenu} preview />}</div>;
+  return <div className="menu-public-shell" data-menu-preview="true" data-menu-preview-theme={effectiveTheme}><MenuThemeController theme={effectiveTheme} preview />{getThemeFamily(effectiveTheme) === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={previewMenu} preview /> : <PublicMenuView menu={previewMenu} preview />}</div>;
 }
