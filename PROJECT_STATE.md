@@ -18,33 +18,33 @@
 ## Current Atomic Task
 ### Theme preview integration + Essential baseline restoration
 
-**Objective:** make the Studio theme previews render the selected theme instead of the default/base presentation, expose Premium themes for preview without weakening entitlement enforcement, and remove the new refinement treatment from Essential so its original completed visual baseline is preserved.
+**Objective:** make the Studio/public theme previews render the selected theme instead of the default/base presentation, expose Premium themes for preview without weakening entitlement enforcement, and remove the new refinement treatment from Essential so its original completed visual baseline is preserved.
 
-**VERIFIED:** the public menu and Studio preview components were not consistently carrying the `menu-public-shell` hook required by the refinement layer. `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose that hook.
+**VERIFIED:** `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose the `menu-public-shell` hook required by the refinement layer.
 
-**VERIFIED:** the root `MenuThemeController` was also able to paint the default Essential theme on preview routes before the route-specific controller applied the requested theme. Preview routes now opt out of the root controller to prevent the observed Essential → selected-theme flicker.
+**VERIFIED:** dedicated preview routes no longer receive a transient default Essential paint from the root `MenuThemeController`.
 
-**IMPLEMENTED:** `theme-refinements-v2.css` now contains only the Editorial and Noir refinement pass. Essential keeps its original theme layer without the refinement-v2 treatment.
+**IMPLEMENTED:** `theme-refinements.css` and `theme-refinements-v2.css` no longer apply refinement treatments to Essential. Editorial and Noir refinements remain available.
 
-**VERIFIED:** Premium entitlement enforcement remains unchanged. Premium themes are previewable through the public preview route; `saveTenantTheme` still blocks publishing a Premium theme for an ineligible subscription.
+**VERIFIED:** Premium preview access does not weaken `saveTenantTheme` entitlement enforcement.
 
 ## Verification State
 - **VERIFIED:** `PublicMenuView` uses `menu-public-shell`.
 - **VERIFIED:** `ContemporaryRestaurantTemplate` uses `menu-public-shell`.
-- **VERIFIED:** Studio/theme preview route can select any valid `ThemeKey` and route-specific theme controller owns preview theme application.
-- **VERIFIED:** Essential refinement-v2 rules were removed; Editorial and Noir refinement rules remain.
+- **VERIFIED:** preview routes own their selected theme application.
+- **VERIFIED:** Essential baseline refinements were removed from both refinement layers.
+- **VERIFIED:** Editorial and Noir refinement rules remain.
 - **VERIFIED:** reduced-motion and touch/hover safeguards remain for Premium refinement effects.
 - **VERIFIED:** no dependency was added and no database schema/business contract was changed.
 - **VERIFIED:** Premium save/publish authorization remains enforced in `src/lib/theme/server.ts`.
-- **PENDING:** Vercel deployment for the latest code commit.
-- **UNKNOWN:** final pixel-level mobile/desktop rendering until the new deployment is live and manually inspected.
+- **PENDING:** Vercel deployment for the latest code state.
+- **UNKNOWN:** final pixel-level mobile/desktop rendering until the latest deployment is live and manually inspected.
 - **UNKNOWN:** local shell test execution in this session because the repository is accessed through repository tooling rather than a local checkout.
 
 ## Session Log
-- 2026-09-04 — Confirmed user-uploaded deployment was successful before this refinement task.
 - 2026-09-04 — Audited Studio preview, public preview, theme controller, theme registry, PublicMenuView, ContemporaryRestaurantTemplate and Premium entitlement enforcement.
 - 2026-09-04 — Found the missing `menu-public-shell` integration hook that prevented refinement CSS from applying to preview-rendered templates.
-- 2026-09-04 — Restored Essential to its original baseline by removing its refinement-v2 rules while retaining Editorial and Noir refinements.
+- 2026-09-04 — Restored Essential to its original baseline by removing its refinement treatment from both refinement layers.
 - 2026-09-04 — Prevented the root theme controller from painting Essential on dedicated preview routes, removing the preview theme flicker.
 
 ## Exact Next Task
