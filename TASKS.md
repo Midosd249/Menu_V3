@@ -1,12 +1,14 @@
 # TASKS
 
 ## Current Atomic Task
-### Deployment verification — Awaiting fresh Vercel deployment
+### Deployment verification — blocked by Vercel build-rate limit
 - **Objective:** verify the refreshed production/preview deployment exposes the completed Theme 1–3 work and the repaired legacy email/password authentication.
-- **Completed:** Better Auth now verifies both native scrypt credentials and migrated Supabase bcrypt credentials through PostgreSQL `pgcrypto`.
-- **Completed:** the two existing credential accounts were synchronized from matching Supabase Auth bcrypt hashes by normalized email without exposing plaintext credentials.
-- **Verification:** CI run #480 passed the authentication implementation; CI run #481 passed the resulting state documentation update.
-- **User action:** trigger a fresh Vercel deployment from the current `main` commit if the Hobby rate limit is still active, then test the existing customer/owner credentials.
+- **Root cause found:** the deployed authentication bridge called unqualified `crypt(...)`, but production uses Supabase's `pgcrypto` extension in the `extensions` schema while the application connection search path is limited to the application schema/public. Vercel logs showed `function crypt(unknown, unknown) does not exist` and the sign-in returned HTTP 401.
+- **Completed:** the verifier now calls `extensions.crypt($1, $2)`, matching the actual production extension schema, with no dependency or architecture change.
+- **Database verification:** `extensions.crypt` and `extensions.gen_salt` execute successfully in the connected production Supabase project.
+- **Verification:** the failing Vercel runtime log was directly reproduced from deployment `dpl_398MghMyWmts2a6VDeVf9TgS8uVH`; the corrected commit is `48d9f0dd4edb538b28af5a15653a42b9b18136a5`.
+- **Current blocker:** Vercel's GitHub deployment status for the corrected commit is `failure` with the `build-rate-limit` upgrade target, so no fresh deployment has yet been produced from the corrected commit.
+- **User action:** once the Vercel Hobby build-rate limit clears, trigger/allow a fresh deployment from `main`, then test the existing customer/owner credentials.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED.
@@ -43,13 +45,14 @@
 
 ### Authentication — Legacy credential reconciliation — DONE / VERIFIED
 - **VERIFIED:** Better Auth accepts native scrypt credentials and migrated Supabase bcrypt credentials.
-- **VERIFIED:** PostgreSQL `pgcrypto` is enabled in the production Supabase project.
+- **VERIFIED:** PostgreSQL `pgcrypto` is enabled in the production Supabase project under schema `extensions`.
 - **VERIFIED:** exactly two existing Better Auth credential accounts were synchronized from their matching Supabase Auth bcrypt hashes.
 - **VERIFIED:** tenant membership remains keyed to the original Better Auth user IDs.
 - **VERIFIED:** no plaintext password or credential secret was logged or committed.
+- **VERIFIED:** the deployed failure was isolated to the unqualified `crypt()` function lookup, not the credential migration itself.
 
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
-- **BLOCKED:** Vercel deployment may remain constrained by the Hobby build-rate limit.
-- **UNKNOWN:** current production deployment after the latest main changes.
+- **BLOCKED:** Vercel deployment of the corrected commit is currently blocked by the Hobby build-rate limit.
+- **UNKNOWN:** live sign-in behavior of the corrected commit until Vercel produces a fresh deployment.
