@@ -1,7 +1,7 @@
 export * from "./types";
 export * from "./registry";
 
-import { DEFAULT_THEME_KEY, getTheme, isThemeKey } from "./registry";
+import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey } from "./registry";
 import type { ThemeKey } from "./types";
 
 export type ThemeResolution = {
@@ -14,8 +14,10 @@ export function resolveTheme(options: {
   savedTheme?: unknown;
   allowPreview?: boolean;
 }): ThemeResolution {
-  if (options.allowPreview && isThemeKey(options.previewTheme)) return { key: options.previewTheme, source: "preview" };
-  if (isThemeKey(options.savedTheme)) return { key: options.savedTheme, source: "saved" };
+  const preview = normalizeThemeKey(options.previewTheme);
+  const saved = normalizeThemeKey(options.savedTheme);
+  if (options.allowPreview && preview) return { key: preview, source: "preview" };
+  if (saved) return { key: saved, source: "saved" };
   return { key: DEFAULT_THEME_KEY, source: "default" };
 }
 
