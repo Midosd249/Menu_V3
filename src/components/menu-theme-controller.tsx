@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey, type ThemeKey } from "@/lib/theme";
 
@@ -69,15 +69,19 @@ export function MenuThemeController({
 }) {
   const location = useRouterState({ select: (state) => `${state.location.pathname}${state.location.searchStr}` });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
     const pathname = new URL(location, window.location.origin).pathname;
     const isThemePreviewRoute = pathname === "/themes/preview" || pathname === "/studio/preview";
 
-    // Preview routes own their theme controller. The root controller must not
-    // briefly paint Essential before the requested preview theme is applied.
-    if (isThemePreviewRoute) return;
+    if (isThemePreviewRoute) {
+      const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
+      root.dataset.menuTheme = key;
+      root.dataset.menuThemeMode = "preview";
+      setThemeTokens(key);
+      return;
+    }
 
     const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
     root.dataset.menuTheme = key;
