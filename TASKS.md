@@ -1,15 +1,17 @@
 # TASKS
 
 ## Current Atomic Task
-### Theme 3 — Noir Visual Refinement — IN_PROGRESS
-- **Objective:** make `noir` a premium cinematic fine-dining experience without changing business behavior.
-- **Acceptance:** distinctive layered dark surfaces; dramatic typography; immersive media; refined category rail/cards/dialogs/forms; Arabic RTL + English LTR; responsive behavior; accessibility; reduced motion; no regressions; full quality/browser verification.
+### Authentication — Legacy credential reconciliation — BLOCKED
+- **Objective:** restore existing customer/owner sign-in safely while keeping Better Auth authoritative.
+- **Evidence:** Supabase currently contains two legacy Auth identities and the isolated Menu V3 Better Auth schema contains two corresponding email identities with different user IDs. Better Auth credential accounts use native scrypt hashes; Supabase Auth uses bcrypt.
+- **Completed safely:** login email input is normalized with `trim().toLowerCase()`.
+- **Blocked:** a transparent password migration cannot be completed without a secure user-driven verification/upgrade mechanism. No plaintext password or password hash is exposed, copied, guessed, or changed by this task.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED.
 2. Theme 2 — Editorial — DONE / VERIFIED / MERGED.
-3. Theme 3 — Noir — IN_PROGRESS.
-4. Theme 4 — Heritage — TODO.
+3. Theme 3 — Noir — DONE / VERIFIED / MERGED.
+4. Theme 4 — Heritage — TODO after authentication is closed.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
@@ -31,15 +33,15 @@
 - **VERIFIED:** quality run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
 - **VERIFIED:** merged as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
 
-### Theme 3 — Noir — IN_PROGRESS
+### Theme 3 — Noir — DONE / VERIFIED / MERGED
 - **VERIFIED:** isolated `src/theme-noir.css` added and wired from `src/routes/__root.tsx`.
 - **VERIFIED:** implementation is presentation-only and preserves existing route/template/data contracts.
 - **VERIFIED:** cinematic hero, layered charcoal surfaces, warm bronze lighting, refined category rail, immersive image treatment, premium product cards and fine-dining signature styling are included.
-- **VERIFIED:** responsive, focus-visible and reduced-motion safeguards are included in the stylesheet.
-- **UNKNOWN:** full local/CI/browser verification until the GitHub Actions run for the branch is available.
+- **VERIFIED:** responsive, focus-visible and reduced-motion safeguards are included.
+- **VERIFIED:** full CI run #473 and current main run #476 passed.
 
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **BLOCKED:** Vercel deployment remains constrained by the Hobby build-rate limit.
-- **UNKNOWN:** current production deployment after Theme 3 merge.
+- **UNKNOWN:** current production deployment after the latest main changes.
