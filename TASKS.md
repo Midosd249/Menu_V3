@@ -1,36 +1,34 @@
 # TASKS
 
-## Current Section
-- **Premium Theme System — IN_PROGRESS.** Explicit product direction: reduce the catalog from eight themes to five complete visual systems, with one Free theme and four Premium themes.
-
 ## Current Atomic Task
-### Premium Theme System — 8 → 5
-- **Objective:** replace the existing color/skin-oriented theme catalog with five clearly differentiated visual experiences while preserving Menu V3 business behavior, tenant isolation, URLs, SEO, and menu data.
+### G7.3 — Premium Theme Commercialization & Billing UX — NEXT
+- **Objective:** connect the new Premium theme value to the existing subscription/upgrade surface without inventing a payment provider.
+- **Acceptance:** plan-aware Premium UI; preview-before-pay; clear upgrade CTA from Design Studio; server/client entitlement consistency; active/trialing handling; downgrade/expired handling; end-to-end billing-contract verification.
+
+## Completed
+### Premium Theme System — 8 → 5 — DONE / VERIFIED / MERGED
 - **Catalog:** `essential` (Free), `editorial` (Premium), `noir` (Premium), `heritage` (Premium), `gallery` (Premium).
-- **Acceptance:** five themes only; four Premium; server-side entitlement enforcement; legacy keys migrate safely; distinct layout/typography/surface/image/motion treatment; RTL/LTR; mobile/tablet/desktop; reduced-motion support; no horizontal overflow; accessible names; no runtime console errors; typecheck/tests/lint/build pass; browser QA exercises all five themes.
-- **Research basis:** Menu Author complete-theme model; MENU TIGER restaurant templates; Popmenu mobile-first/custom website approach; maintained open-source UI/motion patterns; WAI reduced-motion guidance.
-- **Rollback:** branch/commit-based rollback; legacy theme aliases remain resolvable until migration has completed.
+- **VERIFIED:** five themes only; exactly one Free and four Premium.
+- **VERIFIED:** coordinated visual systems include layout rhythm, typography, image treatment, surfaces, geometry, hero composition, hover depth and motion personality.
+- **VERIFIED:** Premium preview is available; publishing is server-authorized against the existing subscription model.
+- **VERIFIED:** legacy keys normalize and database migration maps existing records before enforcing the five-key catalog.
+- **VERIFIED:** browser QA covers all five themes across mobile/tablet/desktop with no horizontal overflow, missing accessible names or runtime console errors.
+- **VERIFIED:** GitHub Actions quality run #455 passed typecheck, tests (78), lint, production build, performance audit and all-theme browser QA.
+- **VERIFIED:** PR #8 merged to `main` as `39bae026425a4a1c9fe32e9b06934deb777b5407`.
 
-## Unified Queue
-1. **Premium Theme System — IN_PROGRESS.**
-2. **G7 — Analytics, Search Console, Growth, Rollout:** IN_PROGRESS (existing milestone; no separate G7.3 task is being invented).
-3. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED.
-4. **G5 — Template Ecosystem Expansion:** DONE / VERIFIED / CLOSED.
-5. **G6 — Performance + Media:** DONE / VERIFIED / CLOSED.
-
-## Completed Work Preserved
-- G4 — Arabic/English SEO Architecture: DONE / VERIFIED / CLOSED.
-- G5 — Template Ecosystem Expansion: DONE / VERIFIED / CLOSED.
-- G6 — Performance + Media: DONE / VERIFIED / CLOSED.
-- G7.1 — Production analytics integrity hardening: DONE / VERIFIED.
-- G7.2 — Search Console production readiness: DONE / VERIFIED / CLOSED.
+## Protected Completed Work
+- G1 Public Menu SEO Foundation: DONE / VERIFIED.
+- G2 Crawl Control and Indexation: DONE / VERIFIED.
+- G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED / CLOSED.
+- G4 Arabic/English SEO Architecture: DONE / VERIFIED / CLOSED.
+- G5 Template Ecosystem: DONE / VERIFIED / CLOSED.
+- G6 Performance + Media: DONE / VERIFIED / CLOSED.
+- G7.1 Analytics Integrity: DONE / VERIFIED.
+- G7.2 Search Console Production Readiness: DONE / VERIFIED / CLOSED.
 - Repository Organization Maintenance: DONE / VERIFIED.
 - Dependency Manifest Reconciliation: DONE / VERIFIED.
 
-## Verification Notes
-- **VERIFIED:** current repository has a real theme registry, theme controller, public theme gallery, studio design page, theme persistence, template QA, and subscription-plan tables.
-- **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`; Premium theme publishing is now designed to require a non-free plan.
-- **VERIFIED:** a dedicated branch `feat/premium-theme-redesign` was created from the known `main` commit `040e625889f203e07e7fc87dd275c5be949d9566`.
-- **VERIFIED:** migration maps legacy keys before constraining the tenant theme column to the new five keys.
-- **UNKNOWN:** final CI/browser verification until the branch's quality workflow completes.
-- **UNKNOWN:** local working-tree status outside GitHub remains unavailable.
+## Notes
+- **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
+- **UNKNOWN:** post-merge Vercel production deployment for merge commit `39bae026425a4a1c9fe32e9b06934deb777b5407` is not yet visible in the deployment listing.
+- **UNKNOWN:** local working-tree status outside the GitHub connector.
