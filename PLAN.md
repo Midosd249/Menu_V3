@@ -10,50 +10,49 @@
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + public demo resilience
+### Theme 1–3 creative refinement + responsive visual hardening
 
-**Objective:** repair the homepage/theme-preview public menu path and make the first three themes visibly different at a professional art-direction level while preserving the shared product architecture.
+**Objective:** continue the first-three-theme refinement with a stronger art-direction layer that materially separates Essential, Editorial and Noir while prioritizing mobile-first stability and preserving the shared product architecture.
 
-### Root-cause evidence
-1. `src/routes/index.tsx` links the marketing demo to `/m/nafas`.
-2. `src/routes/themes/preview.tsx` also loads `/m/nafas` for all theme previews.
-3. `src/lib/menu/public.ts` previously returned `not_found` when `nafas` was not an active published tenant.
-4. This made the marketing demo and theme previews depend on production seed data.
+### Verified repository evidence
+1. The five-theme catalog remains `essential`, `editorial`, `noir`, `heritage`, `gallery`.
+2. Theme selection is controlled by `MenuThemeController` through `data-menu-theme` and existing CSS tokens.
+3. Theme previews use the same `/m/nafas` demo fixture, so visual refinement can remain presentation-only.
+4. The previous demo resilience change and authentication correction are protected and must not be reopened.
 
 ### Implementation
-- **VERIFIED:** added `src/lib/menu/demo.ts` containing a stable bilingual `PublicMenu` fixture with representative coffee, pastry and cold-drink content.
-- **VERIFIED:** `getPublicMenu` now returns the local fixture only for the reserved `nafas` demo slug without a branch, leaving real tenant lookup behavior unchanged.
-- **VERIFIED:** added `src/theme-refinements.css` and loaded it after the existing theme layers.
-- **VERIFIED:** Essential now uses an asymmetric modern-atelier/print direction.
-- **VERIFIED:** Editorial now uses a food-magazine cover/column direction with oversized type and image-led grid rhythm.
-- **VERIFIED:** Noir now uses cinematic dark-dining composition, bronze light pools and image-first cards.
-- **VERIFIED:** no new package dependency was introduced; reduced-motion safeguards remain in place.
+- **IMPLEMENTED:** added `src/theme-refinements-v2.css` as a second presentation-only layer loaded after the existing theme layers.
+- **IMPLEMENTED:** Essential now has a tactile atelier direction with material rings, asymmetric image treatment, restrained interaction lines and scroll-linked reveal where supported.
+- **IMPLEMENTED:** Editorial now has a kinetic magazine direction with issue markers, framed imagery, stronger typographic hierarchy, alternating rules and scroll-linked image reveal where supported.
+- **IMPLEMENTED:** Noir now has a cinematic light direction with atmospheric grain, spotlight pools, bronze edge lighting, framed cards and scroll-linked cinematic reveal where supported.
+- **IMPLEMENTED:** all three themes receive explicit mobile rules that remove desktop offsets, cap image heights, collapse to stable single-column compositions where appropriate, and neutralize hover transforms on touch devices.
+- **IMPLEMENTED:** reduced-motion rules disable the enhancement animations while preserving layout and interaction.
+- **IMPLEMENTED:** no new package dependency was introduced.
 
 ### Research and design decisions
-- Adobe Express's current restaurant-menu guidance emphasizes personality, hierarchy, imagery, typography and spacing as core design levers. citeturn0search0turn0search2
-- MDN's current scroll-driven animation guidance supports scroll-linked motion as progressive enhancement and warns that browser support is not universal; therefore the refinement avoids making interaction depend on these effects. citeturn0search1turn0search4
-- The repository design system explicitly requires themes to be complete visual systems rather than color skins and requires accessibility/performance/reduced-motion safeguards. This task follows that contract.
+- MDN documents scroll-driven animations as a CSS-based mechanism that can avoid main-thread scroll listeners, while noting that support is not universal. The implementation therefore uses `@supports` as progressive enhancement and retains static fallbacks. citeturn0search0turn0search1turn0search2
+- GSAP and Lenis were reviewed as maintained references for advanced scroll and smooth-motion patterns, but no dependency was added in this atomic pass because the existing menu can gain meaningful motion using CSS-only progressive enhancement. citeturn0search8turn1search0turn1search6
+- Three.js post-processing and pmndrs/postprocessing were reviewed for future image/effect work such as vignette, bloom, noise and chromatic effects. Those heavier WebGL capabilities remain research inputs rather than dependencies until a concrete theme requires them. citeturn0search9turn1search1
+- Codrops current creative tutorials were reviewed for contemporary image distortion, relighting, interactive 3D and parallax patterns. The current pass deliberately stays lighter until live performance is verified on mobile. citeturn1search4turn1search5
 
 ### Acceptance criteria
-1. `/m/nafas` no longer depends on seeded production tenant data for the marketing demo.
-2. Theme previews for Essential, Editorial and Noir load the same demo content and visibly use different compositions.
-3. Existing real tenant/public-menu lookup behavior is unchanged outside the reserved demo slug.
-4. Arabic/English, RTL, mobile layout, focus states and reduced motion remain usable.
-5. Typecheck, tests, lint and production build pass in CI.
-6. No credentials, secrets or tenant data are exposed by the demo fixture.
-
-### Verification
-- GitHub Actions `Menu V3 Quality` was triggered for the implementation commits.
-- **IN_PROGRESS:** final quality run must finish successfully.
-- **UNKNOWN:** live visual/manual checks until a fresh deployment is available.
+1. Essential, Editorial and Noir remain visibly distinct in composition, imagery, typography and interaction language.
+2. Mobile is the primary constraint: no horizontal overflow, destructive fixed heights, or desktop-only offsets.
+3. Desktop retains the intended art direction without introducing layout instability.
+4. Arabic RTL and English LTR remain structurally valid.
+5. Hover effects do not become the only way to discover or operate interactive menu items.
+6. Reduced-motion users retain a stable, usable layout.
+7. Existing demo lookup, tenant lookup, authentication, ordering and analytics contracts are unchanged.
+8. No dependency or secret changes are introduced.
+9. CI quality gates pass for the final implementation state before the task is marked DONE.
 
 ## Theme Sequence
-- Theme 1 — Essential — refinement in current task.
-- Theme 2 — Editorial — refinement in current task.
-- Theme 3 — Noir — refinement in current task.
-- Theme 4 — Heritage — TODO only after final Theme 1–3 QA passes.
+- Theme 1 — Essential — refinement pass in progress.
+- Theme 2 — Editorial — refinement pass in progress.
+- Theme 3 — Noir — refinement pass in progress.
+- Theme 4 — Heritage — TODO only after final Theme 1–3 live QA.
 - Theme 5 — Gallery — TODO.
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Stop condition
-Do not begin Theme 4 until the final CI run is successful and the three refined previews plus `/m/nafas` have passed live mobile/desktop manual QA.
+Stop after this atomic refinement implementation. Do not begin Theme 4. The next task is live mobile/desktop QA after the user deploys the resulting `main` to Vercel.
