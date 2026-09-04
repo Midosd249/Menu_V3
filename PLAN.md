@@ -24,25 +24,22 @@
 7. Repository quality gates and all-theme browser QA pass.
 8. Final diff is limited to Noir presentation and required continuity documentation.
 
-## Completed Theme Refinement Work
-- `essential` — Free — DONE / VERIFIED / MERGED as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
-- `editorial` — Premium — DONE / VERIFIED / MERGED as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
-- `noir` — Premium — IN_PROGRESS.
-- `heritage` — Premium — TODO.
-- `gallery` — Premium — TODO.
+## Implementation
+- **VERIFIED:** isolated `src/theme-noir.css` provides the complete Noir art direction.
+- **VERIFIED:** `src/routes/__root.tsx` loads the stylesheet without changing route behavior.
+- **INFERRED:** existing menu DOM contracts provide the intended targets for the presentation layer; no template component was changed.
 
 ## Verification
-- Theme 2 CI run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
-- Planned commands for Theme 3: `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run check:auth`.
+- Planned repository gates: `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run check:auth`.
 - CI must additionally cover route-tree generation, browser QA across all five themes, responsive/RTL checks, console errors, overflow and performance.
-- **VERIFIED:** repository synchronization audit confirmed current `main` contains Theme 1 and Theme 2 and their continuity documentation.
+- **VERIFIED:** GitHub source inspection confirms the implementation is presentation-only at the source level.
+- **UNKNOWN:** local command execution and browser QA are not available through the current GitHub connector.
 
 ## Deployment
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** Vercel has READY Theme 1/Theme 2 preview deployments.
-- **VERIFIED:** production deployment is older than current `main`.
-- **BLOCKED:** Vercel deployment is currently rejected by the account's Hobby build-rate limit; GitHub status points to Vercel's `upgradeToPro=build-rate-limit` target.
-- **UNKNOWN:** production deployment for the current `main` HEAD until the rate limit is cleared.
+- **BLOCKED:** Vercel deployment is rejected by the account Hobby build-rate limit; GitHub status points to Vercel's `upgradeToPro=build-rate-limit` target.
+- **UNKNOWN:** production deployment for the current Theme 3 branch/main until deployment is unblocked.
 
 ## Stop condition
 Do not begin Theme 4 until Theme 3 is fully verified, reviewed and merged. Do not begin G7.3 until the five-theme refinement sequence is complete unless the user explicitly changes the order.
