@@ -35,11 +35,14 @@
 - Theme 2 CI run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
 - Planned commands for Theme 3: `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run check:auth`.
 - CI must additionally cover route-tree generation, browser QA across all five themes, responsive/RTL checks, console errors, overflow and performance.
-- Vercel is excluded from code verification because the platform is currently rate limited and the user will deploy manually.
+- **VERIFIED:** repository synchronization audit confirmed current `main` contains Theme 1 and Theme 2 and their continuity documentation.
 
 ## Deployment
-- **BLOCKED:** Vercel deployment is externally rate limited; this is not treated as a code failure.
-- **UNKNOWN:** production deployment state after the user's manual Vercel action.
+- **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
+- **VERIFIED:** Vercel has READY Theme 1/Theme 2 preview deployments.
+- **VERIFIED:** production deployment is older than current `main`.
+- **BLOCKED:** Vercel deployment is currently rejected by the account's Hobby build-rate limit; GitHub status points to Vercel's `upgradeToPro=build-rate-limit` target.
+- **UNKNOWN:** production deployment for the current `main` HEAD until the rate limit is cleared.
 
 ## Stop condition
 Do not begin Theme 4 until Theme 3 is fully verified, reviewed and merged. Do not begin G7.3 until the five-theme refinement sequence is complete unless the user explicitly changes the order.
