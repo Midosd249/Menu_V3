@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import { mapBranch, mapCategory, mapHour, mapProduct, mapTenant } from "./map";
+import { DEMO_MENU } from "./demo";
 import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOptions, ProductVariant, PublicMenu } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -81,6 +82,11 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
   const cacheKey = `${tenantSlug}:${branchSlug ?? "default"}`;
   const cached = menuCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
+
+  if (tenantSlug === DEMO_MENU.tenant.slug && !branchSlug) {
+    menuCache.set(cacheKey, { menu: DEMO_MENU, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
+    return { ok: true, data: DEMO_MENU };
+  }
 
   try {
     const sql = await getSql();
