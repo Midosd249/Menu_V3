@@ -200,24 +200,11 @@ html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-chi
 html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(n + 4),
 html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(n + 4) { animation-delay: 210ms; }
 
-@supports (animation-timeline: view()) {
-  html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li,
-  html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li,
-  html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li,
-  html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li {
-    animation: menu-fade-up linear both;
-    animation-timeline: view(block);
-    animation-range: entry 8% entry 42%;
-  }
-}
-
-@supports (animation-timeline: scroll()) {
-  html[data-menu-theme="editorial"] .menu-public-shell header img,
-  html[data-menu-theme="noir"] .menu-public-shell header img {
-    animation: menu-hero-drift linear both;
-    animation-timeline: scroll(root block);
-    animation-range: cover 0% cover 100%;
-  }
+/* Preview must expose the complete menu immediately; entrance motion is a published-menu enhancement only. */
+html[data-menu-theme-mode="preview"] .menu-public-shell main > section > ul > li {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 @media (max-width: 639px) {

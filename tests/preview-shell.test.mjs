@@ -16,3 +16,10 @@ test("preview routes do not create a second menu shell", async () => {
     assert.match(source, /<ContemporaryRestaurantTemplate\s/);
   }
 });
+
+test("preview menu cards keep a time-based visible final state", async () => {
+  const styles = await readFile("src/styles.css", "utf8");
+  assert.doesNotMatch(styles, /animation-timeline:\s*(view|scroll)\(/, "preview content must not depend on scroll-driven animation progress");
+  assert.match(styles, /animation:\s*menu-fade-up\s+\.65s[^;]*both;/);
+  assert.match(styles, /data-menu-theme-mode="preview"[\s\S]*?animation:\s*none\s*!important;[\s\S]*?opacity:\s*1\s*!important;/);
+});
