@@ -1,0 +1,365 @@
+/*
+ * Theme 1 — Essential
+ *
+ * Art direction: quiet luxury for everyday hospitality.
+ * The free theme intentionally stays fast and legible, but it is not a
+ * default browser layout. Its identity comes from warm paper, ink rules,
+ * asymmetric spacing, tactile surfaces and a restrained atelier accent.
+ */
+
+html[data-menu-theme="essential"] .menu-public-shell {
+  --essential-paper: #f7f3eb;
+  --essential-paper-deep: #eee7db;
+  --essential-ink: #171411;
+  --essential-soft-ink: #514a42;
+  --essential-rule: rgb(23 20 17 / 0.13);
+  --essential-accent: #9a4f35;
+  --essential-accent-soft: rgb(154 79 53 / 0.09);
+  background:
+    radial-gradient(circle at 100% 0%, rgb(154 79 53 / 0.055), transparent 22rem),
+    var(--essential-paper);
+  color: var(--essential-ink);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div {
+  background: transparent;
+}
+
+/* Header: compact, editorial and unmistakably branded. */
+html[data-menu-theme="essential"] .menu-public-shell header {
+  background: color-mix(in oklab, var(--essential-paper) 94%, transparent);
+  border-bottom: 1px solid var(--essential-rule);
+  box-shadow: 0 12px 34px rgb(23 20 17 / 0.045);
+  backdrop-filter: blur(14px);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header > div {
+  min-height: 4.75rem;
+  padding-block: 0.7rem;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header img {
+  border: 1px solid var(--essential-rule);
+  box-shadow: 0 6px 18px rgb(23 20 17 / 0.08);
+  object-fit: cover;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header h1 {
+  letter-spacing: -0.025em;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header p {
+  color: var(--essential-accent);
+  letter-spacing: 0.13em;
+}
+
+/* Language control becomes a quiet pill rather than a generic button. */
+html[data-menu-theme="essential"] .menu-public-shell header button {
+  min-height: 2.5rem;
+  border: 1px solid var(--essential-rule);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.58);
+  color: var(--essential-ink);
+  box-shadow: 0 4px 14px rgb(23 20 17 / 0.045);
+  transition: transform 180ms var(--ease-out), background-color 180ms ease, border-color 180ms ease;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header button:hover {
+  transform: translateY(-1px);
+  background: #fffdf9;
+  border-color: color-mix(in oklab, var(--essential-accent) 38%, var(--essential-rule));
+}
+
+/* Hero: a signature paper panel with an ink slab and fine rule. */
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-top: clamp(1.25rem, 4vw, 2.25rem);
+  border: 1px solid var(--essential-rule);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.72), transparent 56%),
+    var(--essential-paper-deep);
+  box-shadow: 0 18px 44px rgb(23 20 17 / 0.075);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.3rem;
+  background: var(--essential-accent);
+  opacity: 0.9;
+}
+
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::before {
+  inset-inline: auto 0;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::after {
+  content: "";
+  position: absolute;
+  width: 14rem;
+  height: 14rem;
+  inset: -7rem -5rem auto auto;
+  border: 1px solid rgb(154 79 53 / 0.16);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child::after {
+  inset-inline: -5rem auto;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child p:first-child {
+  color: var(--essential-accent);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child h2 {
+  max-width: 25ch;
+  font-size: clamp(1.7rem, 6vw, 2.65rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child span {
+  border-color: rgb(23 20 17 / 0.16);
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* Menu content gets an atelier-like rhythm instead of a stack of identical boxes. */
+html[data-menu-theme="essential"] .menu-public-shell > div > main > section:nth-child(2) {
+  margin-top: clamp(1.5rem, 5vw, 3rem);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main section h2 {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  color: var(--essential-ink);
+  letter-spacing: -0.035em;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main section h2::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-top: 0.55rem;
+  border-radius: 999px;
+  background: var(--essential-accent);
+}
+
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main section h2::after {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+/* Category navigation: tactile, compact and sticky without looking like an app toolbar. */
+html[data-menu-theme="essential"] .menu-public-shell [class*="sticky"] {
+  background: color-mix(in oklab, var(--essential-paper) 91%, transparent);
+  border-color: var(--essential-rule);
+  box-shadow: 0 10px 28px rgb(23 20 17 / 0.055);
+  backdrop-filter: blur(16px) saturate(120%);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell [class*="sticky"] button {
+  border-radius: 999px;
+  transition: transform 180ms var(--ease-out), background-color 180ms ease, color 180ms ease;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell [class*="sticky"] button:hover {
+  transform: translateY(-1px);
+}
+
+/* Product cards: horizontal by design, with a stronger media-to-copy hierarchy. */
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.9rem;
+  min-height: 7rem;
+  padding: 0.65rem;
+  border: 1px solid var(--essential-rule);
+  border-radius: 1.1rem;
+  background: color-mix(in oklab, #fffdf9 90%, var(--essential-paper));
+  box-shadow: 0 8px 24px rgb(23 20 17 / 0.045);
+  transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), border-color 220ms ease;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--essential-accent) 35%, var(--essential-rule));
+  box-shadow: 0 16px 34px rgb(23 20 17 / 0.09);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible {
+  outline: 2px solid var(--essential-accent);
+  outline-offset: 3px;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 0.8rem;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
+  width: 100%;
+  height: 100%;
+  min-height: 5.7rem;
+  object-fit: cover;
+  transition: transform 650ms var(--ease-out), filter 450ms ease;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.035) contrast(1.015);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button > :last-child {
+  min-width: 0;
+  align-self: center;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button h4 {
+  letter-spacing: -0.025em;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button p {
+  color: var(--essential-soft-ink);
+}
+
+/* A small accent marker creates rhythm without turning the free theme into a luxury skin. */
+html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(4n + 1) > button::before {
+  content: "";
+  position: absolute;
+  inset: 0.65rem auto 0.65rem 0.65rem;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--essential-accent);
+  opacity: 0.55;
+}
+
+html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(4n + 1) > button::before {
+  inset-inline: auto 0.65rem;
+}
+
+/* Price treatment: hierarchy first, decoration second. */
+html[data-menu-theme="essential"] .menu-public-shell main ul > li > button [class*="text-accent"] {
+  color: var(--essential-accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* Search / filter controls inherit the theme instead of reverting to browser-like fields. */
+html[data-menu-theme="essential"] .menu-public-shell input,
+html[data-menu-theme="essential"] .menu-public-shell textarea,
+html[data-menu-theme="essential"] .menu-public-shell select {
+  border-color: var(--essential-rule);
+  border-radius: 0.85rem;
+  background: rgb(255 253 249 / 0.78);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell input:focus,
+html[data-menu-theme="essential"] .menu-public-shell textarea:focus,
+html[data-menu-theme="essential"] .menu-public-shell select:focus {
+  border-color: var(--essential-accent);
+  box-shadow: 0 0 0 3px var(--essential-accent-soft);
+  outline: none;
+}
+
+/* Empty / utility states should still belong to the visual system. */
+html[data-menu-theme="essential"] .menu-public-shell main section > div > button {
+  border-radius: 999px;
+  border-color: var(--essential-rule);
+  background: transparent;
+  color: var(--essential-ink);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main section > div > button:hover {
+  background: var(--essential-accent-soft);
+  color: var(--essential-accent);
+}
+
+/* Product details and cart surfaces: crisp paper, not generic rounded dialogs. */
+html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] {
+  border: 1px solid var(--essential-rule);
+  background: var(--essential-paper);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] button:not([aria-label]) {
+  transition: transform 180ms var(--ease-out), box-shadow 180ms ease, background-color 180ms ease;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] button:not([aria-label]):hover {
+  transform: translateY(-1px);
+}
+
+/* Desktop: give Essential breathing room without turning it into a wide web page. */
+@media (min-width: 768px) {
+  html[data-menu-theme="essential"] .menu-public-shell > div > main {
+    max-width: 46rem;
+  }
+
+  html[data-menu-theme="essential"] .menu-public-shell > div > main > section:first-child {
+    padding: 2rem 2.25rem;
+  }
+
+  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    min-height: 7.75rem;
+  }
+
+  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
+    min-height: 6.45rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  html[data-menu-theme="essential"] .menu-public-shell > div > main {
+    max-width: 50rem;
+  }
+}
+
+/* Very narrow phones: protect the horizontal card composition from overflow. */
+@media (max-width: 360px) {
+  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+}
+
+/* Motion is progressive and always yields to the user's reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="essential"] .menu-public-shell *,
+  html[data-menu-theme="essential"] .menu-public-shell *::before,
+  html[data-menu-theme="essential"] .menu-public-shell *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  html[data-menu-theme="essential"] .menu-public-shell main > section {
+    animation: essential-section-enter linear both;
+    animation-timeline: view(block 92% 8%);
+    animation-range: entry 0% cover 24%;
+  }
+
+  @keyframes essential-section-enter {
+    from {
+      opacity: 0.72;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

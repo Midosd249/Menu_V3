@@ -1,9 +1,17 @@
 # TASKS
 
 ## Current Atomic Task
-### G7.3 — Premium Theme Commercialization & Billing UX — NEXT
-- **Objective:** connect the new Premium theme value to the existing subscription/upgrade surface without inventing a payment provider.
-- **Acceptance:** plan-aware Premium UI; preview-before-pay; clear upgrade CTA from Design Studio; server/client entitlement consistency; active/trialing handling; downgrade/expired handling; end-to-end billing-contract verification.
+### Theme 1 — Essential Visual Refinement — IN_PROGRESS
+- **Objective:** make `essential` the strongest possible Free theme through deliberate art direction and production-grade polish without changing business behavior.
+- **Acceptance:** coherent visual identity; refined header/hero/navigation/cards/dialogs/forms; Arabic RTL + English LTR; responsive behavior; accessibility; reduced motion; no regressions; full quality/browser verification.
+
+## Planned Theme Sequence
+1. Theme 1 — Essential — IN_PROGRESS.
+2. Theme 2 — Editorial — TODO.
+3. Theme 3 — Noir — TODO.
+4. Theme 4 — Heritage — TODO.
+5. Theme 5 — Gallery — TODO.
+6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Completed
 ### Premium Theme System — 8 → 5 — DONE / VERIFIED / MERGED
@@ -30,5 +38,6 @@
 
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
-- **UNKNOWN:** post-merge Vercel production deployment for merge commit `39bae026425a4a1c9fe32e9b06934deb777b5407` is not yet visible in the deployment listing.
+- **BLOCKED:** current Theme 1 Vercel Preview deployment is rate limited by Vercel; GitHub reports retry in 24 hours.
+- **UNKNOWN:** post-merge Vercel production deployment for merge commit `39bae026425a4a1c9fe32e9b06934deb777b5407` is not yet verified.
 - **UNKNOWN:** local working-tree status outside the GitHub connector.

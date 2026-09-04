@@ -5,6 +5,7 @@ import { MenuThemeController } from "@/components/menu-theme-controller";
 import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
 import themeCss from "../theme-premium.css?url";
+import essentialThemeCss from "../theme-essential.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -26,6 +27,7 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: themeCss },
+      { rel: "stylesheet", href: essentialThemeCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
