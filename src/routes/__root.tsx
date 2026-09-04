@@ -8,6 +8,7 @@ import themeCss from "../theme-premium.css?url";
 import essentialThemeCss from "../theme-essential.css?url";
 import editorialThemeCss from "../theme-editorial.css?url";
 import noirThemeCss from "../theme-noir.css?url";
+import themeRefinementsCss from "../theme-refinements.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -32,6 +33,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: essentialThemeCss },
       { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: noirThemeCss },
+      { rel: "stylesheet", href: themeRefinementsCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
