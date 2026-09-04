@@ -81,6 +81,10 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 - `PLAN.md` — active product roadmap and exact next task.
 - `TASKS.md` — task queue and closure evidence.
 - `SESSION_PROTOCOL.md` — session execution protocol.
+- `docs/visual-functional-audit.md` — permanent visual and functional audit evidence contract.
+- `docs/design-research-log.md` — permanent research evidence log.
+- `docs/template-review-checklist.md` — mandatory template/public-menu quality gate.
+- `docs/template-brief-template.md` — reusable template/presentation brief.
 - `docs/repository-organization-audit.md` — repository organization audit and target structure.
 - `docs/archive/` — historical plans, status reports, and completion records.
 - `docs/development/MASTER_CONTEXT_MENU_V3.md` — historical/current architectural context retained for continuity.
@@ -89,4 +93,4 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 
 ## Current product state
 
-The repository continuity files record G1–G7.2 as completed. The five-theme visual system is complete, Theme 1 Essential and Theme 2 Editorial have been individually refined and verified, and Theme 3 Noir is the current visual refinement task. Repository organization is a separate maintenance initiative and does not reopen completed product milestones.
+The repository continuity files record G1–G7.2 as completed. The five-theme visual system is complete, Theme 1 Essential, Theme 2 Editorial, and Theme 3 Noir remain completed milestones, and the current product verification task is authenticated browser/device QA of the five preview variants before Theme 4 Heritage begins. Repository organization and the permanent visual/functional quality system are separate maintenance initiatives and do not reopen completed product milestones.
