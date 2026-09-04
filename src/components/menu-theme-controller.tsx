@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { DEFAULT_THEME_KEY, getTheme, isThemeKey, type ThemeKey } from "@/lib/theme";
+import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey, type ThemeKey } from "@/lib/theme";
 
 function setThemeTokens(theme: ThemeKey) {
   const root = document.documentElement;
@@ -50,7 +50,7 @@ export function MenuThemeController({
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
-    const key = isThemeKey(theme) ? (getTheme(theme).key) : DEFAULT_THEME_KEY;
+    const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
     root.dataset.menuTheme = key;
     root.dataset.menuThemeMode = preview ? "preview" : "published";
     setThemeTokens(key);
