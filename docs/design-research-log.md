@@ -18,6 +18,17 @@ For every material research activity record: source, access date, source categor
 - Confidence: HIGH
 - Must not copy: no proprietary visual treatment exists to copy; apply the accessibility principle only.
 
+### W3C — Focus visibility and focus obstruction
+- Source: https://www.w3.org/WAI/WCAG22/Understanding/focus-visible and https://www.w3.org/WAI/WCAG22/
+- Access date: 2026-09-05
+- Category: authoritative accessibility standard
+- VERIFIED finding: keyboard focus needs a visible indicator, and WCAG 2.2 includes Focus Not Obscured requirements relevant to sticky/fixed content.
+- Transferable principle: Essential's sticky category/navigation treatment must preserve visible focus and must not hide focused controls behind author-created layers.
+- Relevance: category navigation, search, language, item cards, dialogs, and fixed/sticky actions.
+- Limitation: runtime focus visibility still needs browser/device evidence.
+- Confidence: HIGH
+- Must not copy: no proprietary visual treatment; apply the standard only.
+
 ### Google Search Central — LocalBusiness structured data
 - Source: https://developers.google.com/search/docs/appearance/structured-data/local-business
 - Access date: 2026-09-05
@@ -72,6 +83,63 @@ For every material research activity record: source, access date, source categor
 - Limitation: connected GitHub access does not provide an authenticated browser/device session in this agent environment.
 - Confidence: HIGH
 - Must not copy: no external code or proprietary assets.
+
+## 2026-09-05 — Essential refinement research
+
+### Jaicome — Saudi digital menu positioning
+- Source: https://www.jaicome.sa/en/blog/create-restaurant-digital-menu-online-ordering/
+- Access date: 2026-09-05
+- Category: Saudi-market product example
+- VERIFIED finding: the public positioning emphasizes Arabic/English menus, mobile ordering, photos, live item availability, and direct sharing through Instagram, Google Maps, WhatsApp, and QR.
+- Transferable principle: Essential should prioritize fast bilingual browsing, current menu truth, and obvious next actions over decorative complexity.
+- Relevance: Saudi-market baseline for the Free theme's utility-first direction.
+- Limitation: vendor marketing claims are not independent customer-behavior research.
+- Confidence: MEDIUM
+- Must not copy: no layout, copy, assets, or proprietary product behavior.
+
+### Nasj Studio — Saudi restaurant digital-menu examples
+- Source: https://nasjstudio.sa/en/services/restaurant-digital-menu
+- Access date: 2026-09-05
+- Category: Saudi-market design/service example
+- VERIFIED finding: the public example emphasizes native Arabic/English switching, food photography, clear categories, prices, ingredients/allergen alerts, and a fast mobile presentation.
+- Transferable principle: Essential can stay restrained while still giving food, category, price, and dietary information a strong visual hierarchy.
+- Relevance: supports the refinement of typography, category discovery, food media, and information density.
+- Limitation: a studio portfolio/service page is not representative market telemetry.
+- Confidence: MEDIUM
+- Must not copy: no screenshots, branding, assets, or proprietary layout.
+
+### Darlik / Digital Code — Riyadh hospitality visual direction
+- Source: https://digitalcode.sa/en/portfolio/darlik-restaurant
+- Access date: 2026-09-05
+- Category: Saudi hospitality design case study
+- VERIFIED finding: the case study emphasizes bilingual presentation, rich menu imagery, deliberate interaction, and a visual identity that communicates cultural warmth without relying on generic web patterns.
+- Transferable principle: even the Free theme benefits from a coherent hospitality identity; restraint should come from hierarchy and material cues rather than from removing character.
+- Relevance: informed the Essential warm-paper, ink-rule, and restrained-accent direction.
+- Limitation: premium restaurant branding is intentionally different from Essential's Free-tier positioning.
+- Confidence: MEDIUM
+- Must not copy: no proprietary visual system, imagery, wording, or composition.
+
+### TableQR — Saudi-specific operational/menu concerns
+- Source: https://tableqr.co/digital-menu/saudi-arabia/
+- Access date: 2026-09-05
+- Category: Saudi-market digital-menu example
+- VERIFIED finding: the service highlights native RTL, bilingual content, SAR presentation, branch-aware menus, availability, and operationally current menu data.
+- Transferable principle: Essential must remain robust when Arabic is the primary reading mode, prices are in SAR, items change availability, and branch context exists.
+- Relevance: real-data resilience and Saudi-market fit.
+- Limitation: vendor claims and compliance statements require independent validation before being treated as regulatory facts.
+- Confidence: MEDIUM
+- Must not copy: no proprietary UI, copy, assets, or implementation.
+
+### Al Qaima — mobile-first digital-menu baseline
+- Source: https://www.alqaima.com/en
+- Access date: 2026-09-05
+- Category: digital-menu product example
+- VERIFIED finding: the public product emphasizes fast loading, progressive enhancement, image optimization, Arabic RTL, and bilingual menus.
+- Transferable principle: Essential's visual restraint should support performance rather than merely look minimal; stable image boxes and lightweight effects are preferable.
+- Relevance: performance and responsive refinement.
+- Limitation: not Saudi-specific evidence.
+- Confidence: MEDIUM
+- Must not copy: no proprietary layout, assets, or product implementation.
 
 ## Market-source policy
 Saudi/MENA examples may be added when a material design decision requires regional evidence. Use primary sources, credible research, or directly observable public product behavior. Do not treat a single restaurant site or social post as representative customer behavior.
