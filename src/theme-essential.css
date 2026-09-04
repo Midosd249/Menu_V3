@@ -165,6 +165,8 @@ html[data-menu-theme="essential"] .menu-public-shell [class*="sticky"] {
 }
 
 html[data-menu-theme="essential"] .menu-public-shell [class*="sticky"] button {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
   border-radius: 999px;
   transition: transform 180ms var(--ease-out), background-color 180ms ease, color 180ms ease;
 }
@@ -180,6 +182,7 @@ html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
   grid-template-columns: 6.5rem minmax(0, 1fr);
   gap: 0.9rem;
   min-height: 7rem;
+  min-width: 0;
   padding: 0.65rem;
   border: 1px solid var(--essential-rule);
   border-radius: 1.1rem;
@@ -226,10 +229,12 @@ html[data-menu-theme="essential"] .menu-public-shell main ul > li > button > :la
 html[data-menu-theme="essential"] .menu-public-shell main ul > li > button h3,
 html[data-menu-theme="essential"] .menu-public-shell main ul > li > button h4 {
   letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
 }
 
 html[data-menu-theme="essential"] .menu-public-shell main ul > li > button p {
   color: var(--essential-soft-ink);
+  overflow-wrap: anywhere;
 }
 
 /* A small accent marker creates rhythm without turning the free theme into a luxury skin. */
@@ -241,6 +246,7 @@ html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(4n +
   border-radius: 999px;
   background: var(--essential-accent);
   opacity: 0.55;
+  pointer-events: none;
 }
 
 html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(4n + 1) > button::before {
@@ -252,12 +258,14 @@ html[data-menu-theme="essential"] .menu-public-shell main ul > li > button [clas
   color: var(--essential-accent);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 /* Search / filter controls inherit the theme instead of reverting to browser-like fields. */
 html[data-menu-theme="essential"] .menu-public-shell input,
 html[data-menu-theme="essential"] .menu-public-shell textarea,
 html[data-menu-theme="essential"] .menu-public-shell select {
+  min-height: 2.75rem;
   border-color: var(--essential-rule);
   border-radius: 0.85rem;
   background: rgb(255 253 249 / 0.78);
@@ -274,6 +282,7 @@ html[data-menu-theme="essential"] .menu-public-shell select:focus {
 
 /* Empty / utility states should still belong to the visual system. */
 html[data-menu-theme="essential"] .menu-public-shell main section > div > button {
+  min-height: 2.75rem;
   border-radius: 999px;
   border-color: var(--essential-rule);
   background: transparent;
@@ -292,11 +301,33 @@ html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] {
 }
 
 html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] button:not([aria-label]) {
+  min-height: 2.75rem;
   transition: transform 180ms var(--ease-out), box-shadow 180ms ease, background-color 180ms ease;
 }
 
 html[data-menu-theme="essential"] .menu-public-shell [role="dialog"] button:not([aria-label]):hover {
   transform: translateY(-1px);
+}
+
+/* Long content and bidi text should reflow rather than force horizontal scrolling. */
+html[data-menu-theme="essential"] .menu-public-shell {
+  overflow-wrap: anywhere;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell [dir="ltr"],
+html[data-menu-theme="essential"] .menu-public-shell [dir="rtl"] {
+  unicode-bidi: plaintext;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell main {
+  scroll-padding-block-start: 5rem;
+}
+
+/* Preview is a static rendering mode: never let scroll-linked entry motion hide content. */
+html[data-menu-theme="essential"] .menu-public-shell[data-menu-preview="true"] main > section {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* Desktop: give Essential breathing room without turning it into a wide web page. */
