@@ -1,5 +1,6 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
+import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
 import { bearer, genericOAuth } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
@@ -108,6 +109,37 @@ const grokOAuthPlugin = authConfigured
     })
   : null;
 
+async function verifyLegacyOrNativePassword({
+  hash,
+  password,
+}: {
+  hash: string;
+  password: string;
+}): Promise<boolean> {
+  // Existing Supabase Auth accounts use bcrypt hashes. Better Auth's native
+  // format is scrypt salt:key. Verify legacy bcrypt rows through PostgreSQL's
+  // pgcrypto extension without introducing another runtime dependency.
+  if (/^\$2[aby]?\$\d{2}\$/.test(hash)) {
+    if (!(database instanceof Pool)) return false;
+    try {
+      const result = await database.query<{ valid: boolean }>(
+        "select crypt($1, $2) = $2 as valid",
+        [password, hash],
+      );
+      return result.rows[0]?.valid === true;
+    } catch (error) {
+      console.error("[auth] legacy bcrypt verification failed", error);
+      return false;
+    }
+  }
+
+  try {
+    return await verifyScryptPassword({ hash, password });
+  } catch {
+    return false;
+  }
+}
+
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
 export const auth = betterAuth({
   baseURL,
@@ -123,7 +155,20 @@ export const auth = betterAuth({
     },
   },
   session: { cookieCache: { enabled: true, maxAge: 300 } },
-  ...(emailAndPasswordEnabled ? { emailAndPassword: { enabled: true } } : {}),
+  ...(emailAndPasswordEnabled
+    ? {
+        emailAndPassword: {
+          enabled: true,
+          password: {
+            hash: async (password: string) => {
+              const { hashPassword } = await import("better-auth/crypto");
+              return hashPassword(password);
+            },
+            verify: verifyLegacyOrNativePassword,
+          },
+        },
+      }
+    : {}),
   advanced: {
     useSecureCookies: false,
     defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
