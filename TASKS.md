@@ -1,19 +1,17 @@
 # TASKS
 
 ## Current Atomic Task
-### Preview layer isolation + responsive theme rendering — IN_PROGRESS
-- **Objective:** remove preview layer race/stacking ambiguity, render each selected theme through its intended visual family, and preserve mobile/desktop safety.
-- **Protected:** G1–G7.2, the five-theme catalog, demo resilience, authentication correction, tenant isolation, ordering and analytics.
-- **Completed:** `src/routes/studio/preview.tsx` now uses the selected theme's `getThemeFamily` instead of forcing every Studio preview through `PublicMenuView`.
-- **Completed:** `src/routes/themes/preview.tsx` now resolves the requested theme during initial client render.
-- **Completed:** preview shells now expose explicit preview markers for CSS isolation.
-- **Completed:** `src/components/menu-theme-controller.tsx` uses `useLayoutEffect` to prevent the default-theme paint race on preview routes.
-- **Completed:** `src/menu-preview-layer.css` no longer creates an isolated/z-indexed stacking context; preview shell decoration cannot become a content veil through that layer.
-- **Completed:** preview shell pseudo-elements remain non-interactive and the preview returns to normal document paint order.
-- **Verified:** Essential refinement treatment remains removed; Editorial and Noir refinements remain.
+### Preview layer isolation + responsive theme rendering — DONE / SOURCE-VERIFIED
+- **Objective:** remove the actual nested preview presentation boundary that was obscuring the rendered menu, preserve theme-family routing, and add regression protection.
+- **Root cause:** `/studio/preview` and `/themes/preview` each wrapped a menu template that already rendered its own `.menu-public-shell`, creating nested theme shells and ambiguous stacking/decoration behavior.
+- **Completed:** `src/routes/studio/preview.tsx` no longer creates an outer `.menu-public-shell`.
+- **Completed:** `src/routes/themes/preview.tsx` no longer creates an outer `.menu-public-shell`.
+- **Completed:** selected theme resolution and `getThemeFamily` routing remain intact.
+- **Completed:** `tests/preview-shell.test.mjs` prevents either preview route from reintroducing a nested menu shell.
+- **Completed:** the regression test is registered in `package.json` without changing dependency versions.
 - **Verified:** Premium preview access does not bypass `saveTenantTheme` plan enforcement.
-- **PENDING:** Vercel deployment for the latest code state.
-- **UNKNOWN:** physical-device pixel-level QA until the latest deployment is live.
+- **PENDING:** CI execution of the new regression test and normal quality gates.
+- **UNKNOWN:** physical-device visual QA on the resulting deployment.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED; original baseline preserved.
@@ -49,5 +47,5 @@
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** corrected authentication is live.
-- **IN_PROGRESS:** preview layer isolation and responsive QA for Themes 1–3.
-- **UNKNOWN:** final visual/manual QA of the latest preview fixes until the new Vercel deployment is live.
+- **DONE / SOURCE-VERIFIED:** nested preview shell was removed from both preview routes.
+- **PENDING:** deploy latest `main` and perform live mobile-first QA of all five theme previews.
