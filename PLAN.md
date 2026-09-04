@@ -49,15 +49,15 @@
 11. Typecheck, tests, lint and production build pass.
 
 ## Research / design decisions
-- **VERIFIED:** Menu Author treats a theme as a coordinated system controlling fonts, layout, dish presentation, colors and background. urlMenu Author themeshttps://menuauthor.com/themes
-- **VERIFIED:** MENU TIGER uses professionally designed restaurant templates, mobile-responsive layouts and editable brand presentation. urlMENU TIGER templateshttps://www.menutiger.com/features/website-and-menu-templates
-- **VERIFIED:** Popmenu positions restaurant websites around mobile-first design, visual menu presentation and conversion-oriented guest experience. urlPopmenu website designhttps://get.popmenu.com/solutions/website-design
-- **VERIFIED:** CSS scroll-driven animation is available as progressive enhancement but is not universal; implementation is therefore guarded by `@supports`. citeturn2search11turn2search12
-- **VERIFIED:** WAI recommends `prefers-reduced-motion` to allow users to suppress interaction-triggered motion. citeturn2search13turn2search14
+- **VERIFIED:** Menu Author treats a theme as a coordinated system controlling fonts, layout, dish presentation, colors and background. https://menuauthor.com/themes
+- **VERIFIED:** MENU TIGER uses professionally designed restaurant templates, mobile-responsive layouts and editable brand presentation. https://www.menutiger.com/features/website-and-menu-templates
+- **VERIFIED:** Popmenu positions restaurant websites around mobile-first design, visual menu presentation and conversion-oriented guest experience. https://get.popmenu.com/solutions/website-design
+- **VERIFIED:** CSS scroll-driven animation is available as progressive enhancement but is not universal; implementation is therefore guarded by `@supports`.
+- **VERIFIED:** WAI recommends `prefers-reduced-motion` to allow users to suppress interaction-triggered motion.
 - **INFERRED:** Five focused visual systems provide a stronger commercial story than eight shallow variations and reduce maintenance surface.
 
 ## Entitlement decision
-- Current plans in repository: `free`, `starter`, `pro`. fileciteturn63file0L2-L2
+- Current plans in repository: `free`, `starter`, `pro`.
 - Premium themes are previewable by everyone.
 - Publishing a Premium theme is allowed only for a non-free plan with `trialing` or `active` status.
 - Payment-provider integration is not invented in this task; the existing subscription model remains the source of entitlement state.
