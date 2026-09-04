@@ -5,53 +5,51 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Theme 1 Essential, Theme 2 Editorial and Theme 3 Noir remain completed milestones; the current task is a refinement pass, not a rebuild.
+- Theme 1 Essential, Theme 2 Editorial and Theme 3 Noir remain completed milestones; the current work is preview integration and refinement, not a rebuild.
 - Authentication legacy credential reconciliation is DONE / VERIFIED and live sign-in was confirmed by the user after deployment.
 - Existing G1–G7.2 completed work remains protected.
 
 ## Current Atomic Task
-### Public menu production incident + responsive/theme integration audit
+### Theme preview integration + Essential baseline restoration
 
-**Objective:** restore the user's published public menu URL and verify that the first three theme refinement layers are actually present in the deployed application, without changing business/data contracts.
+**Objective:** make the Studio theme previews render the selected theme instead of the default/base presentation, expose Premium themes for preview without weakening entitlement enforcement, and remove the new refinement treatment from Essential so its original completed visual baseline is preserved.
 
-### Verified repository and production evidence
-1. Current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
-2. `src/routes/m.$slug.tsx` resolves public menus through `getPublicMenu` and renders the selected theme family.
-3. `src/routes/themes/preview.tsx` uses the reserved `nafas` demo fixture for theme previews.
-4. `src/routes/__root.tsx` imports `theme-refinements-v2.css` after the existing theme layers.
-5. Production `menu_v3.tenants` contains `mndy-alwtnya` with `is_published = true` and, before correction, `is_active = false`.
-6. The tenant has 1 branch, 7 categories, and 26 products.
+### Evidence and implementation
+1. `src/routes/studio/preview.tsx` selects a valid `ThemeKey` from the preview query and renders the selected preview.
+2. `src/routes/themes/preview.tsx` selects a valid `ThemeKey` from the public preview query and renders the selected preview.
+3. The refinement CSS required a `menu-public-shell` integration hook. `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose that hook.
+4. The root `MenuThemeController` now leaves dedicated preview routes to their route-specific controller, preventing a transient Essential paint before the requested theme.
+5. `theme-refinements-v2.css` no longer contains Essential refinement rules. Editorial and Noir retain their refinement pass.
+6. `saveTenantTheme` entitlement enforcement is unchanged: Premium themes may be previewed, but publishing remains plan-gated.
 
-### Implementation
-- **COMPLETED:** reactivated only the published `mndy-alwtnya` production tenant (`is_active = true`). No tenant content, branch, product, authorization, or schema changes were made.
-- **VERIFIED:** `mndy-alwtnya` now satisfies the public resolver conditions and resolves to `مندي الوطنية`, theme `essential`, active branch `main-branch`.
-- **VERIFIED:** `src/theme-refinements.css` and `src/theme-refinements-v2.css` are both present in `main` and loaded by the root document.
-- **VERIFIED:** the Theme Preview route still resolves its demo fixture independently of production tenant availability.
-
-### Theme refinement baseline preserved
-- Essential: tactile atelier / material paper, asymmetric image treatment, restrained rules, progressive scroll reveal.
-- Editorial: kinetic food magazine / issue markers, framed imagery, typographic rhythm, progressive image reveal.
-- Noir: cinematic dining / atmospheric grain, spotlight pools, bronze framing, progressive cinematic reveal.
-- Mobile: compact media sizing, removal of desktop offsets/transforms, stable single-column behavior where appropriate, touch-safe hover behavior.
-- Accessibility: reduced-motion disables enhancement animation; existing focus-visible behavior remains intact.
-- Performance: no new dependency was introduced.
+### Design baseline
+- Essential: original completed free theme; no refinement-v2 treatment.
+- Editorial: Premium kinetic food-magazine refinement with editorial framing, typography rhythm and progressive image reveal.
+- Noir: Premium cinematic refinement with atmospheric light, bronze framing and progressive reveal.
+- Mobile-first: touch-safe hover behavior, compact media sizing and reduced-motion safeguards remain.
 
 ### Acceptance criteria
-1. The published `mndy-alwtnya` tenant resolves through the public-menu server function.
-2. Theme 1–3 refinement CSS remains loaded and does not alter business/data contracts.
-3. No tenant isolation, authorization, publishing, branch, product, or analytics boundaries are weakened.
-4. Mobile and desktop layouts remain stable; pixel-level visual verification is still required.
-5. Arabic RTL and English LTR remain structurally valid.
-6. Reduced-motion remains usable.
-7. CI quality gates pass for the final code state before the task is marked DONE.
+1. `/themes/preview?theme=essential` renders the original Essential presentation without refinement-v2 styling.
+2. `/themes/preview?theme=editorial` visibly renders Editorial rather than the default presentation.
+3. `/themes/preview?theme=noir` visibly renders Noir rather than the default presentation.
+4. `/studio/preview?theme=editorial` and `/studio/preview?theme=noir` render the requested Premium themes.
+5. No preview route flashes the default Essential theme before the selected theme.
+6. Premium preview access does not weaken Premium publish/save authorization.
+7. Mobile and desktop layouts remain stable, RTL/LTR remain valid, and reduced-motion remains usable.
+8. CI/Vercel quality gates pass before the task is marked DONE.
 
 ## Theme Sequence
-- Theme 1 — Essential — refinement pass in progress.
-- Theme 2 — Editorial — refinement pass in progress.
-- Theme 3 — Noir — refinement pass in progress.
+- Theme 1 — Essential — DONE / VERIFIED / MERGED; baseline restoration complete in this task.
+- Theme 2 — Editorial — DONE / VERIFIED / MERGED; preview integration complete in this task.
+- Theme 3 — Noir — DONE / VERIFIED / MERGED; preview integration complete in this task.
 - Theme 4 — Heritage — TODO only after final Theme 1–3 live QA.
 - Theme 5 — Gallery — TODO.
 - G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
 ## Stop condition
-Stop after the current public-menu incident and integration audit. Do not begin Theme 4. The next task is live mobile/desktop QA of the public menu and refined first three themes, followed only by evidence-backed fixes if needed.
+Stop after the current preview integration and Essential restoration. Do not begin Theme 4. The next task is live mobile/desktop QA of the three preview routes and the public menu, followed only by evidence-backed fixes if needed.
+
+## Research decisions
+- MDN `prefers-reduced-motion` remains the accessibility baseline for motion-heavy refinement.
+- GSAP/ScrollTrigger was reviewed as a reference for future scroll-driven work, but no dependency is added in this task.
+- Progressive CSS enhancement is preferred until live QA demonstrates that GPU/WebGL is necessary.
