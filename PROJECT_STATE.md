@@ -16,37 +16,37 @@
 - The reserved `nafas` demo fixture remains the source for the marketing/theme-preview demo when no branch is requested.
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + responsive visual hardening
+### Public menu production incident + responsive/theme integration audit
 
-**Objective:** deepen the first three completed themes into materially different art directions, with mobile-first layout stability and progressive motion enhancements, without changing business/data contracts.
+**Objective:** restore the user's published public menu URL and verify that the first three theme refinement layers are actually present in the deployed application, without changing business/data contracts.
 
-**VERIFIED:** `MenuThemeController` exposes `data-menu-theme`, allowing presentation-only theme layers to target each theme.
+**VERIFIED:** current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd` and includes `src/theme-refinements-v2.css` loaded by `src/routes/__root.tsx`.
 
-**IMPLEMENTED:** added `src/theme-refinements-v2.css` and loaded it after the existing refinement layer.
+**VERIFIED:** the production `menu_v3.tenants` row for `mndy-alwtnya` existed, was `is_published = true`, but was `is_active = false`; this was the direct reason the public-menu query returned no tenant for that URL.
 
-**IMPLEMENTED:** Essential receives a tactile atelier treatment with material rings, asymmetric image treatment, restrained rules and progressive scroll reveal.
+**IMPLEMENTED:** production data was corrected narrowly by setting `mndy-alwtnya.is_active = true` while requiring `is_published = true`. No tenant content, branch, product, authorization, or schema data was changed.
 
-**IMPLEMENTED:** Editorial receives a kinetic food-magazine treatment with issue markers, framed imagery, stronger typographic rhythm, alternating rules and progressive image reveal.
+**VERIFIED:** after the correction, `mndy-alwtnya` resolves to tenant `مندي الوطنية`, remains published, is active, uses `essential`, and has active branch `main-branch`. The tenant has 1 branch, 7 categories, and 26 products.
 
-**IMPLEMENTED:** Noir receives a cinematic treatment with atmospheric grain, spotlight pools, bronze framing, image-depth treatment and progressive cinematic reveal.
+**VERIFIED:** `src/theme-refinements-v2.css` exists in `main` and `src/routes/__root.tsx` imports it after the existing theme layers. The first refinement layer remains present as well.
 
-**IMPLEMENTED:** mobile rules remove desktop-only offsets/transforms, constrain media sizing, stabilize single-column layouts and neutralize hover-only motion on touch devices.
-
-**VERIFIED:** no new package dependency or business/data contract was introduced.
+**VERIFIED:** Theme Preview continues to use the stable `nafas` local demo fixture, so theme previews do not depend on production tenant availability.
 
 ## Verification State
-- **VERIFIED:** production authentication works after the user's deployment of the corrected authentication commit.
-- **VERIFIED:** implementation is committed to `main`.
-- **IN_PROGRESS:** GitHub quality verification for the new refinement state.
-- **UNKNOWN:** live visual/manual QA of the new refinement layer until the user deploys the current `main` to Vercel.
-- **UNKNOWN:** final mobile/desktop browser rendering until live QA is performed.
+- **VERIFIED:** live authentication remains confirmed by the user.
+- **VERIFIED:** `mndy-alwtnya` is now active and published in production `menu_v3` data.
+- **VERIFIED:** public-menu resolver prerequisites for `mndy-alwtnya` now exist in the production database.
+- **VERIFIED:** Theme 1–3 refinement CSS is present in `main` and loaded by the root document.
+- **VERIFIED:** current Vercel status for `e2518fb...` is successful.
+- **UNKNOWN:** final pixel-level rendering of the deployed theme refinements on physical mobile and desktop browsers because the web fetcher cannot retrieve the deployment page directly.
+- **UNKNOWN:** local shell verification in this session because the repository is accessed through repository tooling rather than a local checkout.
 
 ## Session Log
-- 2026-09-04 — Confirmed current `main` is `32ac95639e42b5808061c0b07887838a8cf5ab1f` before this refinement pass.
-- 2026-09-04 — Reviewed theme registry, controller, public-menu DOM and existing refinement layer before editing.
-- 2026-09-04 — Researched current maintained references for scroll-driven motion, smooth scroll, WebGL/post-processing and creative image effects; selected CSS progressive enhancement for this pass to avoid adding a dependency before mobile performance evidence.
-- 2026-09-04 — Added second visual refinement layer for Essential, Editorial and Noir with explicit mobile-first safeguards.
-- 2026-09-04 — Updated active plan/task continuity to keep Theme 4 blocked until live QA of the refined first three themes.
+- 2026-09-04 — Confirmed current `main` is `e2518fb71bf09492333a0f6fd8f6d3974e1f3abd`.
+- 2026-09-04 — Audited the public-menu route, `getPublicMenu`, theme preview, root CSS loading, theme refinement layer, package scripts, repository state, and deployment status.
+- 2026-09-04 — Queried production `menu_v3` schema and found the requested `mndy-alwtnya` tenant was published but inactive.
+- 2026-09-04 — Reactivated only the published `mndy-alwtnya` tenant and verified its public-menu prerequisites and content counts.
+- 2026-09-04 — Confirmed Theme 1–3 refinement layers remain present and loaded; no theme code was removed or bypassed.
 
 ## Exact Next Task
-After the user deploys the current `main` to Vercel, perform live mobile/desktop QA of `/m/nafas` and `/themes/preview?theme=essential|editorial|noir`, then fix only evidence-backed visual or responsive regressions before Theme 4.
+Perform live mobile/desktop visual QA of `mndy-alwtnya` and `/themes/preview?theme=essential|editorial|noir`; if rendering issues are observed, fix only evidence-backed responsive/theme regressions, then re-run repository quality gates before Theme 4.
