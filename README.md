@@ -89,4 +89,4 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 
 ## Current product state
 
-The repository continuity files record G1–G6 as completed and G7 as in progress, with G7.2 Search Console production readiness as the exact next product task. Repository organization is a separate maintenance initiative and does not reopen completed product milestones.
+The repository continuity files record G1–G7.2 as completed. The five-theme visual system is complete, Theme 1 Essential and Theme 2 Editorial have been individually refined and verified, and Theme 3 Noir is the current visual refinement task. Repository organization is a separate maintenance initiative and does not reopen completed product milestones.

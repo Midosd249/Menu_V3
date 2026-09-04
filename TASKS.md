@@ -1,14 +1,14 @@
 # TASKS
 
 ## Current Atomic Task
-### Theme 2 — Editorial Visual Refinement — IN_PROGRESS
-- **Objective:** make `editorial` a premium, art-directed food-magazine experience without changing business behavior.
-- **Acceptance:** distinctive cover/header; typographic hierarchy; controlled asymmetry; refined category rail/cards/dialogs/forms; Arabic RTL + English LTR; responsive behavior; accessibility; reduced motion; no regressions; full quality/browser verification.
+### Theme 3 — Noir Visual Refinement — IN_PROGRESS
+- **Objective:** make `noir` a premium cinematic fine-dining experience without changing business behavior.
+- **Acceptance:** distinctive layered dark surfaces; dramatic typography; immersive media; refined category rail/cards/dialogs/forms; Arabic RTL + English LTR; responsive behavior; accessibility; reduced motion; no regressions; full quality/browser verification.
 
 ## Planned Theme Sequence
 1. Theme 1 — Essential — DONE / VERIFIED / MERGED.
-2. Theme 2 — Editorial — IN_PROGRESS.
-3. Theme 3 — Noir — TODO.
+2. Theme 2 — Editorial — DONE / VERIFIED / MERGED.
+3. Theme 3 — Noir — IN_PROGRESS.
 4. Theme 4 — Heritage — TODO.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
@@ -23,8 +23,13 @@
 
 ### Theme 1 — Essential — DONE / VERIFIED / MERGED
 - **VERIFIED:** dedicated Free-theme art direction was implemented and isolated from domain/business logic.
-- **VERIFIED:** GitHub quality workflow passed typecheck, tests, lint, production build, browser QA and performance gates.
-- **VERIFIED:** merged to `main` as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
+- **VERIFIED:** quality workflow passed typecheck, tests, lint, production build, browser QA and performance gates.
+- **VERIFIED:** merged as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
+
+### Theme 2 — Editorial — DONE / VERIFIED / MERGED
+- **VERIFIED:** dedicated Premium art direction was implemented and isolated from domain/business logic.
+- **VERIFIED:** quality run #465 passed typecheck, tests, lint, production build, all-theme browser QA and performance baseline.
+- **VERIFIED:** merged as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
 
 ## Notes
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
