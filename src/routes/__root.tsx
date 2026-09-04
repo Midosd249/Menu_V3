@@ -6,6 +6,8 @@ import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "منيو";
+const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
+const searchConsoleVerification = env?.VITE_GOOGLE_SITE_VERIFICATION?.trim();
 
 export const Route = createRootRoute({
   head: () => ({
@@ -15,6 +17,9 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       { name: "theme-color", content: "#171411" },
       { name: "description", content: "منصة المنيو الرقمية للمطاعم السعودية" },
+      ...(searchConsoleVerification
+        ? [{ name: "google-site-verification", content: searchConsoleVerification }]
+        : []),
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
