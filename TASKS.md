@@ -33,23 +33,26 @@
 - BLOCKED: Vercel provider `build-rate-limit` remains an external deployment blocker.
 
 ## G7.1 — Production analytics integrity hardening
-- DONE / VERIFIED: added `src/lib/menu/analytics-integrity.test.ts` for tenant scoping, supported 7/30-day ranges, invalid product handling, duplicate visit/QR suppression, and active/published tenant resolution.
+- DONE / VERIFIED: added `src/lib/menu/analytics-integrity.test.ts` for tenant scoping across all owner analytics aggregations, supported 7/30-day ranges, invalid product handling, duplicate visit/QR suppression, and active/published tenant resolution.
 - DONE / VERIFIED: registered the suite in the existing `npm test` command.
 - DONE / VERIFIED: no runtime analytics/event model or dependency was changed.
-- UNKNOWN: the new test suite was not executed in the earlier session because no repository shell/CI dispatch capability was available through the connected GitHub surface.
+- DONE / VERIFIED: GitHub Actions quality run `33821751476` / run 430 passed typecheck, all 81 tests, lint, production build, Playwright installation, Browser Template QA, performance artifact step, and cleanup.
+- DONE / VERIFIED: brittle assertions exposed by runs 427 and 429 were corrected from concrete CI evidence; the final query-specific assertions pass.
 
 ## G7.2 — Search Console production readiness
 - DONE / VERIFIED: identified `menu-v3-kohl.vercel.app` as the configured Vercel project domain for `menu-v3`, linked to `Midosd249/Menu_V3`.
-- DONE / VERIFIED: confirmed a prior `main` production deployment reached READY.
+- DONE / VERIFIED: confirmed prior `main` production deployments reached READY.
 - DONE / VERIFIED: confirmed existing sitemap/robots SEO infrastructure can support Search Console submission without a new sitemap implementation.
 - DONE / VERIFIED: added optional `VITE_GOOGLE_SITE_VERIFICATION` support in `src/routes/__root.tsx`; unset means no behavior change.
 - DONE / VERIFIED: recorded the verification approach and security boundary in `PLAN.md`; no token or credential was committed.
-- DONE / VERIFIED: diagnosed the latest Vercel build failure as a missing direct dependency declaration for `@vitejs/plugin-react`.
+- DONE / VERIFIED: diagnosed the Vercel build failure as a missing direct dependency declaration for `@vitejs/plugin-react`.
 - DONE / VERIFIED: added `@vitejs/plugin-react` at `^6.1.1` to `package.json` and pushed the fix to `main`.
 - INFERRED: the dependency declaration addresses the observed `ERR_MODULE_NOT_FOUND` failure because the failing import is now declared.
-- BLOCKED: Vercel has not yet created a new deployment from the fixed `main` history through the connected deployment surface.
-- UNKNOWN: local typecheck/test/lint/build results because repository shell execution is unavailable here.
+- VERIFIED: GitHub Actions run `33821751476` passes the full quality workflow on the latest tested code before the final state-documentation commits.
+- BLOCKED: Vercel has not created a deployment from the latest tested `main` history; newest observed Vercel production deployment remains an older `ERROR` deployment for commit `1a7dbcdaa246e7103e69a43322425be8806c9c46`.
+- BLOCKED: the available direct-deploy connector cannot be invoked with the required deployment arguments in the current connected surface.
+- UNKNOWN: local typecheck/test/lint/build results outside GitHub Actions.
 - BLOCKED: Search Console verification remains pending the account-specific token and Google ownership confirmation.
 
 ## Exact Next Task
-- **G7.2 deployment confirmation:** obtain a Vercel deployment from the fixed `main` history, confirm it reaches READY, then continue the existing Search Console verification flow. Do not start another feature or refactor.
+- **G7.2 deployment confirmation:** obtain a Vercel deployment from the latest verified `main` history, confirm it reaches READY, then continue the existing Search Console verification flow. Do not start another feature or refactor.
