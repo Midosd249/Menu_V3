@@ -7,7 +7,7 @@
 - **Verified:** `src/routes/studio/preview.tsx` and `src/routes/themes/preview.tsx` select valid `ThemeKey` values for previews.
 - **Completed:** `PublicMenuView` and `ContemporaryRestaurantTemplate` now expose the `menu-public-shell` hook required by the refinement layer.
 - **Completed:** preview routes no longer receive a transient default Essential paint from the root `MenuThemeController`.
-- **Completed:** Essential refinement-v2 treatment was removed; Editorial and Noir refinement-v2 treatment remains.
+- **Completed:** Essential refinement treatment was removed from both `theme-refinements.css` and `theme-refinements-v2.css`; Editorial and Noir refinement treatment remains.
 - **Verified:** Premium preview access does not bypass `saveTenantTheme` plan enforcement.
 - **PENDING:** Vercel deployment for the latest code state.
 - **UNKNOWN:** physical-device pixel-level visual QA until the latest deployment is live.
@@ -28,15 +28,15 @@
 
 ### Theme 1 — Essential — DONE / VERIFIED / MERGED
 - Dedicated Free-theme art direction implemented and isolated from domain/business logic.
-- Original visual baseline is preserved; the refinement-v2 overlay was removed from Essential.
+- Original visual baseline is preserved; refinement overlays were removed in the current task.
 
 ### Theme 2 — Editorial — DONE / VERIFIED / MERGED
 - Dedicated Premium art direction implemented and isolated from domain/business logic.
-- Preview integration now activates its refinement layer.
+- Preview integration now activates its refinement layers.
 
 ### Theme 3 — Noir — DONE / VERIFIED / MERGED
 - Dedicated cinematic Premium art direction implemented and isolated from domain/business logic.
-- Preview integration now activates its refinement layer.
+- Preview integration now activates its refinement layers.
 
 ### Authentication — Legacy credential reconciliation — DONE / VERIFIED
 - Better Auth accepts native scrypt credentials and migrated Supabase bcrypt credentials.
