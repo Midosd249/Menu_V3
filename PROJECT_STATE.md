@@ -4,64 +4,45 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Active implementation branch: `feat/premium-theme-redesign`.
+- Last merged change: `39bae026425a4a1c9fe32e9b06934deb777b5407` — five-theme Premium visual system.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
-- T1, T2, and T3 template milestones are DONE / VERIFIED and protected.
-- G1 — Public Menu SEO Foundation: DONE / VERIFIED.
-- G2 — Crawl Control and Indexation: DONE / VERIFIED.
-- G3 — Saudi Local Discovery + Branch SEO: DONE / VERIFIED / CLOSED.
-- G4 — Arabic/English SEO Architecture: DONE / VERIFIED / CLOSED.
-- G5 — Template Ecosystem Expansion: DONE / VERIFIED / CLOSED.
-- G6 — Performance + Media: DONE / VERIFIED / CLOSED.
-- G7.1 — Production analytics integrity hardening: DONE / VERIFIED.
-- G7.2 — Search Console production readiness: DONE / VERIFIED / CLOSED.
-- Repository organization maintenance: DONE / VERIFIED.
-- Dependency manifest reconciliation: DONE / VERIFIED.
-- **Premium Theme System — IN_PROGRESS.** Explicit product direction supersedes the previous UNKNOWN G7.3 queue: consolidate eight shallow themes into five complete visual systems.
+- G1–G7.2 completed work remains protected.
+- **Premium Theme System — DONE / VERIFIED / MERGED.**
+- The eight-theme catalog is now five complete visual systems: `essential` (Free), `editorial` (Premium), `noir` (Premium), `heritage` (Premium), `gallery` (Premium).
+- Pull request #8 was merged to `main` after successful CI.
 
-## Premium Theme System — IN_PROGRESS
-- **VERIFIED:** catalog is now five themes: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
-- **VERIFIED:** exactly one theme is Free (`essential`) and four are Premium.
-- **VERIFIED:** theme definitions now carry coordinated tokens, layout intent, capabilities, motion personality, bilingual positioning, and commercial tier metadata.
-- **VERIFIED:** the runtime theme controller exposes design tokens as CSS custom properties while retaining the existing `data-menu-theme` contract.
-- **VERIFIED:** studio and public theme galleries now communicate five distinct design personalities and Premium status.
-- **VERIFIED:** Premium publishing is server-authorized against the existing `free` / non-free subscription model; preview remains available.
-- **VERIFIED:** legacy theme keys normalize to the new catalog and a database migration maps existing tenant records before enforcing the five-key constraint.
-- **VERIFIED:** Premium visual layer adds differentiated typography, layout rhythm, image treatment, surfaces, geometry, hero composition, hover depth, staged entry, and progressive scroll-linked enhancement.
-- **VERIFIED:** reduced-motion behavior is explicitly handled.
-- **VERIFIED:** Browser QA was expanded to exercise all five themes across mobile, tablet, and desktop.
-- **UNKNOWN:** final CI result for the active branch until GitHub Actions completes.
-- **UNKNOWN:** final pixel-level browser review until a deployable preview is available.
-- **UNKNOWN:** local working-tree status outside the GitHub connector.
+## Completed Premium Theme Work
+- **VERIFIED:** exactly five public theme keys remain.
+- **VERIFIED:** exactly one Free theme and four Premium themes.
+- **VERIFIED:** theme definitions contain coordinated design tokens, layout intent, capabilities, motion personality, bilingual positioning and commercial tier metadata.
+- **VERIFIED:** runtime theme controller exposes design tokens and layout personality through CSS variables/data attributes.
+- **VERIFIED:** studio and public theme galleries communicate the five distinct design personalities and Premium status.
+- **VERIFIED:** Premium publishing is server-authorized against existing subscription plans; Premium preview remains available.
+- **VERIFIED:** legacy keys normalize and the database migration maps old tenant records before enforcing the five-key catalog.
+- **VERIFIED:** Premium visual systems add differentiated typography, composition, surfaces, geometry, image treatment, hero treatment, hover depth and progressive motion.
+- **VERIFIED:** reduced-motion behavior is supported.
+- **VERIFIED:** browser QA covers all five themes across mobile, tablet and desktop, with no horizontal overflow, missing accessible names or runtime console errors.
+- **VERIFIED:** typecheck, tests, lint and production build passed in GitHub Actions run #455.
+- **VERIFIED:** browser performance audit completed in the same quality run; FCP measured at 172ms on the CI preview and CLS was 0 for the audited Editorial preview.
 
 ## Research Findings
-- **VERIFIED:** Menu Author treats a theme as a complete coordinated system rather than a skin, including typography, layout, dish presentation, colors and backgrounds.
-- **VERIFIED:** MENU TIGER emphasizes professionally designed restaurant templates, responsive behavior, image-friendly sections and brand customization.
-- **VERIFIED:** Popmenu emphasizes mobile-first restaurant websites, individual dish presentation, conversion and visual brand systems.
-- **VERIFIED:** maintained open-source UI/motion references were reviewed for reusable patterns; implementation avoids copying proprietary layouts/assets.
-- **VERIFIED:** scroll-driven CSS animation is treated as progressive enhancement because browser support is not universal.
-- **VERIFIED:** WAI reduced-motion guidance is applied to the motion layer.
+- **VERIFIED:** competitor research supports treating a theme as a complete coordinated system rather than a color skin.
+- **VERIFIED:** Menu Author, MENU TIGER and Popmenu were reviewed for theme/layout/restaurant-web patterns.
+- **VERIFIED:** open-source UI and motion references were reviewed; no proprietary competitor assets were copied.
+- **VERIFIED:** scroll-driven motion is progressive enhancement and reduced-motion is explicitly handled.
 
-## Protected Completed Work
-- G1 Public Menu SEO Foundation: DONE / VERIFIED.
-- G2 Crawl Control and Indexation: DONE / VERIFIED.
-- G3 Saudi Local Discovery + Branch SEO: DONE / VERIFIED / CLOSED.
-- G4 Arabic/English SEO Architecture: DONE / VERIFIED / CLOSED.
-- G5 Template Ecosystem: DONE / VERIFIED / CLOSED.
-- G6 Performance + Media: DONE / VERIFIED / CLOSED.
-- G7.1 Analytics Integrity: DONE / VERIFIED.
-- G7.2 Search Console Production Readiness: DONE / VERIFIED / CLOSED.
-- Repository Organization Maintenance: DONE / VERIFIED.
-- Dependency Manifest Reconciliation: DONE / VERIFIED.
+## Deployment State
+- **VERIFIED:** Vercel has successful Preview deployments for the feature branch, including the five-theme registry and Premium entitlement changes.
+- **UNKNOWN:** the post-merge Vercel production deployment for merge commit `39bae026425a4a1c9fe32e9b06934deb777b5407` has not appeared in the deployment listing yet; production must not be claimed updated until a deployment with this commit is confirmed.
 
 ## Session Log
-- 2026-09-04 — Started the Premium Theme System initiative from explicit product direction after completing the previously documented G7.2 work.
-- 2026-09-04 — Created `feat/premium-theme-redesign` from main commit `040e625889f203e07e7fc87dd275c5be949d9566`.
-- 2026-09-04 — Researched competitor theme systems and current restaurant web patterns; selected five focused visual personalities.
-- 2026-09-04 — Implemented the five-theme registry, runtime token bridge, Premium entitlement check, migration/legacy normalization, studio catalog, public gallery, differentiated visual CSS and all-theme browser QA.
-- 2026-09-04 — Updated design-system documentation and active task/plan continuity records.
+- 2026-09-04 — Researched competitor and open-source visual patterns and selected five focused visual systems.
+- 2026-09-04 — Implemented five-theme registry, coordinated tokens, visual CSS, runtime token bridge, Premium entitlement, legacy migration, studio/public galleries and all-theme browser QA.
+- 2026-09-04 — Fixed the first browser QA workflow guard failure and reran the complete quality suite successfully.
+- 2026-09-04 — Merged PR #8 into `main` with squash commit `39bae026425a4a1c9fe32e9b06934deb777b5407`.
 
-## Exact Remaining Work
-- **IN_PROGRESS:** finish verification of `feat/premium-theme-redesign`: inspect CI, review the final diff, and perform deployment/browser visual acceptance. Do not mark DONE without evidence.
+## Exact Next Task
+### G7.3 — Premium Theme Commercialization & Billing UX
+Audit the existing subscription/upgrade surface and connect Premium theme discovery to a clear upgrade path without inventing a payment provider. Acceptance must include plan-aware UI, preview-before-pay, server/client entitlement consistency, upgrade CTA, and end-to-end verification of the existing billing contract.
