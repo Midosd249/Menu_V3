@@ -51,17 +51,19 @@
 
 ## G7.2 — Search Console Production Readiness — IN_PROGRESS / BLOCKED
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3` and exposes `menu-v3-kohl.vercel.app` as a configured project domain.
-- **VERIFIED:** Vercel has a prior READY production deployment from `main` at commit `ca3d7e39b4eb6954e2c6012f251e384a2d38a3df`, and the current `main` commit `b553184488e082544fc03e441b42c8e7d25da381` has an associated production deployment currently reported as BUILDING.
+- **VERIFIED:** Vercel has a prior READY production deployment from `main` at commit `ca3d7e39b4eb6954e2c6012f251e384a2d38a3df`.
 - **VERIFIED:** `src/lib/menu/seo.ts` already uses `https://menu-v3-kohl.vercel.app` as the default public origin, while allowing `VITE_VERCEL_PROJECT_PRODUCTION_URL` to override it.
 - **VERIFIED:** the repository has dynamic sitemap generation and robots sitemap declaration through the existing SEO/crawl surface.
 - **VERIFIED:** the repository contains no committed Google Search Console credentials or verification token.
-- **VERIFIED:** the smallest first-party integration is now present: `src/routes/__root.tsx` emits an optional `google-site-verification` meta tag when `VITE_GOOGLE_SITE_VERIFICATION` is configured; it emits nothing when unset, preserving existing behavior.
-- **VERIFIED:** no dependency was added and no existing SEO route/schema contract was changed.
-- **INFERRED:** because `menu-v3-kohl.vercel.app` is a shared Vercel-hosted subdomain, the practical Search Console path is a URL-prefix property (`https://menu-v3-kohl.vercel.app/`) with HTML-tag verification; a Domain property would require DNS control of the parent domain.
-- **VERIFIED:** Google Search Console documentation states that Domain properties require DNS verification, while URL-prefix properties support HTML-tag verification; sitemap submission requires an owner permission and an accessible sitemap.
-- **BLOCKED:** the actual Search Console verification token is user/account-specific and must be copied exactly from Google's verification wizard. It must not be invented or committed to the repository.
-- **UNKNOWN:** Search Console property ownership, indexing status, sitemap submission status, and Google-selected canonicals are not directly accessible from the repository/Vercel integration.
-- **UNKNOWN:** verification of the current `b553184488e082544fc03e441b42c8e7d25da381` deployment is pending because Vercel currently reports it as BUILDING.
+- **VERIFIED:** the smallest first-party integration is present: `src/routes/__root.tsx` emits an optional `google-site-verification` meta tag when `VITE_GOOGLE_SITE_VERIFICATION` is configured; it emits nothing when unset, preserving existing behavior.
+- **VERIFIED:** Vercel build failure on the latest deployment was caused by `vite.config.ts` importing `@vitejs/plugin-react` while `package.json` did not declare that package.
+- **VERIFIED:** `package.json` now declares `@vitejs/plugin-react` as a dev dependency at `^6.1.1`; the maintained plugin supports Vite 8. citeturn0search0turn0search1
+- **VERIFIED:** fix commit is `b5f90b0e9b893c6059a56592e8748aef14c6c8a3` on `main`.
+- **BLOCKED:** after the fix commit, Vercel has not yet created a new deployment for `b5f90b0e9b893c6059a56592e8748aef14c6c8a3`; the available direct-deploy action rejected the invocation because its runtime requires additional deployment arguments not exposed by the current connector schema.
+- **UNKNOWN:** local `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` execution because repository shell execution is unavailable in the current connected surface.
+- **INFERRED:** once Vercel builds the fixed commit, the previous `ERR_MODULE_NOT_FOUND` build failure should be resolved because the missing direct import is now declared.
+- **BLOCKED:** the actual Search Console verification token remains user/account-specific and must not be invented or committed.
+- **UNKNOWN:** Search Console property ownership, indexing status, sitemap submission status, and Google-selected canonicals.
 
 ## Protected Completed Work
 - G1 Public Menu SEO Foundation: DONE / VERIFIED.
@@ -82,7 +84,9 @@
 - 2026-09-04 — Verified the intended production domain from Vercel project/deployment evidence and confirmed `menu-v3-kohl.vercel.app` is configured for `menu-v3`.
 - 2026-09-04 — Researched current Google Search Console verification guidance and selected URL-prefix + HTML-tag verification as the compatible path for the shared Vercel subdomain.
 - 2026-09-04 — Added an optional `VITE_GOOGLE_SITE_VERIFICATION` integration to the existing root document head; no token or credential was committed.
-- 2026-09-04 — Current deployment for the new commit is BUILDING; repository shell/CI dispatch is unavailable through the connected surface, so local test/typecheck/build execution remains UNKNOWN.
+- 2026-09-04 — Audited the latest Vercel production failure and identified the concrete missing dependency `@vitejs/plugin-react`.
+- 2026-09-04 — Added the missing Vite React plugin declaration to `package.json` and pushed it to `main` as `b5f90b0e9b893c6059a56592e8748aef14c6c8a3`.
+- 2026-09-04 — Attempted a Vercel deployment; the available direct-deploy connector rejected the invocation because required deployment parameters are not exposed in its callable schema. No false deployment-success claim was made.
 
 ## Exact Remaining Work
-- **G7.2 completion:** configure `VITE_GOOGLE_SITE_VERIFICATION` in the Vercel Production environment using the exact token from the Search Console URL-prefix verification wizard, allow a successful production deployment, verify ownership in Search Console, then submit `/sitemap.xml` and inspect the homepage/public menu URLs. Do not commit the token or claim verification before Google confirms it.
+- **G7.2 completion:** obtain the Search Console verification token from the user's URL-prefix verification wizard, configure it only in Vercel Production, obtain a successful deployment from the fixed `main` commit, verify ownership in Search Console, then submit `/sitemap.xml` and inspect the homepage/public menu URLs.
