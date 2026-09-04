@@ -12,6 +12,13 @@
 - **Current section:** G7 — Analytics, Search Console, Growth, Rollout.
 - **Current atomic task:** G7.2 Search Console ownership verification.
 
+## Repository Maintenance — 2026-09-04
+- **VERIFIED:** documentation organization from the dedicated `chore/repository-organization` branch was applied to `main` without changing application source, migrations, dependencies, CI, or Vercel configuration.
+- **VERIFIED:** historical root documentation was moved under `docs/archive/`; maintained deployment, development, and product documentation was grouped under `docs/`.
+- **VERIFIED:** `README.md`, `docs/repository-organization-audit.md`, and `DELETE_CANDIDATES.md` are now present on `main`.
+- **VERIFIED:** no deletion candidate was deleted by this maintenance commit.
+- **UNKNOWN:** local working-tree status remains unavailable through the GitHub connector.
+
 ## G7 — Analytics, Search Console, Growth, Rollout — IN_PROGRESS
 
 ### G7.1 — Production analytics integrity hardening — DONE / VERIFIED
