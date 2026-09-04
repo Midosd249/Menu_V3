@@ -4,7 +4,7 @@
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
-- Last merged change: `fe8b791ec891e1163005d5b2bf23e10b38d90928` — Theme 2 Editorial visual refinement.
+- Current main HEAD: `6f0ca50acbf0bb67037c663106171910885ec614`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
@@ -31,15 +31,18 @@
 - **VERIFIED:** visible focus states and reduced-motion behavior are included.
 
 ## Deployment State
-- **BLOCKED:** Vercel deployment is externally rate limited; user will handle Vercel deployment manually.
-- **UNKNOWN:** post-merge production deployment status after the user's manual Vercel action.
+- **VERIFIED:** Vercel project `menu-v3` is linked to GitHub repository `Midosd249/Menu_V3`.
+- **VERIFIED:** latest Vercel deployment remains the Theme 2 feature-branch preview and is READY.
+- **VERIFIED:** the current production deployment is older than the current `main` HEAD.
+- **BLOCKED:** Vercel build/deployment is rate limited by the Hobby account; the GitHub commit status explicitly points to Vercel with `upgradeToPro=build-rate-limit`.
+- **UNKNOWN:** current `main` production deployment until the Vercel rate limit is cleared.
 
 ## Session Log
 - 2026-09-04 — Theme 1 Essential completed, verified and merged to `main` as `cdc591bec58eea0f3b0d2985ed7581b4effc9dcb`.
-- 2026-09-04 — Started Theme 2 Editorial refinement from the verified Theme 1 merge point.
-- 2026-09-04 — Implemented isolated Editorial art direction with magazine-style cover composition, typographic hierarchy, asymmetry, paper surfaces, responsive safeguards, accessibility and reduced-motion support.
-- 2026-09-04 — Theme 2 CI run #465 passed all quality/browser/performance gates.
-- 2026-09-04 — Merged Theme 2 Editorial to `main` as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
+- 2026-09-04 — Theme 2 Editorial completed, verified and merged to `main` as `fe8b791ec891e1163005d5b2bf23e10b38d90928`.
+- 2026-09-04 — Main state documentation closed Theme 2 and queued Theme 3.
+- 2026-09-04 — Audited GitHub/Vercel synchronization: Theme 1 and Theme 2 are present in `main`; Vercel currently has READY previews but no READY deployment for the current `main` HEAD.
+- 2026-09-04 — Recorded the Vercel Hobby build-rate-limit blocker in continuity state.
 
 ## Exact Next Task
 ### Theme 3 — Noir Visual Refinement
