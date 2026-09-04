@@ -1,7 +1,7 @@
 # TASKS
 
 ## Current Section
-- **G7 — Analytics, Search Console, Growth, Rollout: IN_PROGRESS / BLOCKED on external Search Console ownership verification.**
+- **G7 — Analytics, Search Console, Growth, Rollout: IN_PROGRESS / BLOCKED on Vercel deployment confirmation and external Search Console ownership verification.**
 
 ## Unified Queue
 1. **G4 — Arabic/English SEO Architecture:** DONE / VERIFIED / CLOSED.
@@ -40,13 +40,16 @@
 
 ## G7.2 — Search Console production readiness
 - DONE / VERIFIED: identified `menu-v3-kohl.vercel.app` as the configured Vercel project domain for `menu-v3`, linked to `Midosd249/Menu_V3`.
-- DONE / VERIFIED: confirmed a prior `main` production deployment reached READY and the current commit has a Vercel production deployment.
+- DONE / VERIFIED: confirmed a prior `main` production deployment reached READY.
 - DONE / VERIFIED: confirmed existing sitemap/robots SEO infrastructure can support Search Console submission without a new sitemap implementation.
 - DONE / VERIFIED: added optional `VITE_GOOGLE_SITE_VERIFICATION` support in `src/routes/__root.tsx`; unset means no behavior change.
 - DONE / VERIFIED: recorded the verification approach and security boundary in `PLAN.md`; no token or credential was committed.
-- INFERRED: use a URL-prefix Search Console property for `https://menu-v3-kohl.vercel.app/` with Google's HTML-tag method unless the production domain changes to a domain the user controls via DNS.
-- BLOCKED: the Search Console verification token is account-specific and must be supplied by the user from Google's verification wizard before ownership can be verified.
-- UNKNOWN: current deployment readiness, Search Console ownership, index coverage, sitemap submission, and Google-selected canonicals.
+- DONE / VERIFIED: diagnosed the latest Vercel build failure as a missing direct dependency declaration for `@vitejs/plugin-react`.
+- DONE / VERIFIED: added `@vitejs/plugin-react` at `^6.1.1` to `package.json` and pushed the fix to `main`.
+- INFERRED: the dependency declaration addresses the observed `ERR_MODULE_NOT_FOUND` failure because the failing import is now declared.
+- BLOCKED: Vercel has not yet created a new deployment from the fixed `main` history through the connected deployment surface.
+- UNKNOWN: local typecheck/test/lint/build results because repository shell execution is unavailable here.
+- BLOCKED: Search Console verification remains pending the account-specific token and Google ownership confirmation.
 
 ## Exact Next Task
-- **G7.2 completion:** configure `VITE_GOOGLE_SITE_VERIFICATION` in the Vercel Production environment using the exact token from the Search Console URL-prefix verification wizard, wait for a successful production deployment, verify ownership in Search Console, then submit `/sitemap.xml` and inspect the homepage/public menu URLs. Do not commit the token or claim verification before Google confirms it.
+- **G7.2 deployment confirmation:** obtain a Vercel deployment from the fixed `main` history, confirm it reaches READY, then continue the existing Search Console verification flow. Do not start another feature or refactor.
