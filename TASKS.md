@@ -1,22 +1,25 @@
 # TASKS
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + public demo resilience — IN_PROGRESS
-- **Objective:** fix the broken homepage/theme-preview demo and materially differentiate Essential, Editorial and Noir without changing business/data contracts.
-- **Root cause found:** homepage and theme preview both depend on `/m/nafas`, while `getPublicMenu` returns `not_found` when that tenant is not seeded/published.
-- **Completed:** added a stable bilingual demo fixture in `src/lib/menu/demo.ts` and a reserved `nafas` fallback in `src/lib/menu/public.ts`.
-- **Completed:** added `src/theme-refinements.css` with distinct art directions for the first three themes and loaded it after the existing theme layers.
-- **Design:** Essential = modern atelier/print; Editorial = food magazine; Noir = cinematic dark dining.
-- **Safety:** no new dependency; no credential/tenant data exposure; reduced-motion safeguards retained.
-- **Research recorded:** Adobe Express menu design guidance and MDN scroll-driven animation documentation are captured in `PLAN.md`.
-- **Verification:** GitHub Actions quality workflows were triggered for the implementation commits; final run is still pending.
-- **Blocker:** none for implementation. Live visual/manual QA remains pending until a fresh deployment is available.
+### Theme 1–3 creative refinement + responsive visual hardening — IN_PROGRESS
+- **Objective:** deepen the first three completed themes into clearly distinct art directions while treating mobile as the primary layout constraint and preserving all business/data contracts.
+- **Protected:** G1–G7.2, the five-theme catalog, demo resilience, authentication correction, tenant isolation, ordering and analytics.
+- **Completed:** `src/theme-refinements.css` established the first refinement layer.
+- **Completed:** `src/theme-refinements-v2.css` adds a stronger presentation-only layer with distinct interaction and motion languages.
+- **Essential:** tactile atelier / material paper, asymmetric image treatment, restrained rules, progressive scroll reveal.
+- **Editorial:** kinetic food magazine / issue markers, framed imagery, typographic rhythm, progressive image reveal.
+- **Noir:** cinematic dining / atmospheric grain, spotlight pools, bronze framing, progressive cinematic reveal.
+- **Mobile:** explicit compact image sizing, removal of desktop transforms/offsets, stable single-column behavior where appropriate, touch-safe hover behavior.
+- **Accessibility:** reduced-motion disables enhancement animation; focus-visible remains usable through the existing interactive controls.
+- **Performance:** no new dependency; advanced WebGL libraries were researched but deliberately not introduced before mobile performance evidence.
+- **Research recorded:** MDN scroll-driven animation, GSAP/ScrollTrigger, Lenis, Three.js post-processing, pmndrs/postprocessing, and Codrops creative WebGL/parallax references are recorded in `PLAN.md`.
+- **Verification:** implementation is committed to `main`; CI/live visual QA still must be checked after the user deploys the new `main` to Vercel.
 
 ## Planned Theme Sequence
-1. Theme 1 — Essential — DONE / VERIFIED / MERGED; current refinement pass.
-2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; current refinement pass.
-3. Theme 3 — Noir — DONE / VERIFIED / MERGED; current refinement pass.
-4. Theme 4 — Heritage — TODO after final Theme 1–3 QA.
+1. Theme 1 — Essential — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
+2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
+3. Theme 3 — Noir — DONE / VERIFIED / MERGED; refinement pass IN_PROGRESS.
+4. Theme 4 — Heritage — TODO after final Theme 1–3 live QA.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
@@ -46,5 +49,5 @@
 - **VERIFIED:** current subscription plans are `free`, `starter`, and `pro`.
 - **VERIFIED:** Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
 - **VERIFIED:** corrected authentication is live.
-- **IN_PROGRESS:** final quality CI for the visual refinement task.
-- **UNKNOWN:** live visual/manual QA until a fresh deployment is available.
+- **IN_PROGRESS:** responsive creative refinement for Themes 1–3.
+- **UNKNOWN:** live visual/manual QA of the new refinement layer until the user deploys the current `main`.
