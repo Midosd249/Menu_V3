@@ -1,254 +1,59 @@
 /*
- * Menu V3 — second visual direction pass for Themes 1–3.
- *
- * Presentation-only enhancement layer. No data, route, template or business
- * logic is changed here. Effects are progressive enhancements and collapse to
- * stable layouts on small screens or reduced-motion preferences.
+ * Menu V3 — second visual direction pass for Premium Themes 2–3.
+ * Essential intentionally keeps its original visual system.
  */
 
 /* -------------------------------------------------------------------------- */
-/* 01 — ESSENTIAL / tactile atelier                                           */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="essential"] .menu-public-shell {
-  --e-ink: #17130f;
-  --e-paper: #f5efe5;
-  --e-accent: #a64f32;
-  --e-line: rgb(23 19 15 / .14);
-  background:
-    radial-gradient(circle at 88% 18%, rgb(166 79 50 / .10), transparent 19rem),
-    linear-gradient(115deg, transparent 0 72%, rgb(23 19 15 / .025) 72% 72.2%, transparent 72.2%),
-    var(--e-paper);
-}
-
-html[data-menu-theme="essential"] .menu-public-shell header {
-  position: relative;
-  overflow: clip;
-  isolation: isolate;
-}
-html[data-menu-theme="essential"] .menu-public-shell header::before {
-  content: "";
-  position: absolute;
-  width: min(48vw, 32rem);
-  aspect-ratio: 1;
-  inset-inline-end: -12rem;
-  top: -14rem;
-  border: 1px solid rgb(166 79 50 / .18);
-  border-radius: 50%;
-  box-shadow: -4rem 4rem 0 -3.9rem rgb(166 79 50 / .11);
-  pointer-events: none;
-}
-html[data-menu-theme="essential"] .menu-public-shell header > div {
-  position: relative;
-  z-index: 1;
-}
-html[data-menu-theme="essential"] .menu-public-shell header h1 {
-  text-wrap: balance;
-  max-width: 11ch;
-  letter-spacing: -.055em;
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section {
-  position: relative;
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section::after {
-  content: "";
-  position: absolute;
-  inset-inline-end: 0;
-  top: 0;
-  width: clamp(2.5rem, 7vw, 5rem);
-  height: 1px;
-  background: var(--e-accent);
-  transform-origin: inline-end;
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section > h2 {
-  position: relative;
-  text-wrap: balance;
-  letter-spacing: -.035em;
-}
-html[data-menu-theme="essential"] .menu-public-shell main > section > h2::after {
-  content: "";
-  display: block;
-  width: clamp(3rem, 12vw, 7rem);
-  height: 2px;
-  margin-top: .75rem;
-  background: linear-gradient(90deg, var(--e-accent), transparent);
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li {
-  position: relative;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  transition: transform 280ms cubic-bezier(.22,.8,.24,1), background-color 280ms ease, padding-inline 280ms ease;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button::before {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--e-accent), transparent);
-  transform: scaleX(.15);
-  transform-origin: center;
-  opacity: .45;
-  transition: transform 320ms ease, opacity 320ms ease;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button > :first-child {
-  overflow: hidden;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
-  transform: scale(1.015);
-  transition: transform 700ms cubic-bezier(.16,1,.3,1), filter 450ms ease;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover,
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible {
-  transform: translateX(-.45rem);
-  padding-inline: .35rem;
-  background: rgb(255 255 255 / .42);
-}
-html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover,
-html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible {
-  transform: translateX(.45rem);
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover::before,
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible::before {
-  transform: scaleX(1);
-  opacity: .9;
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover img,
-html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible img {
-  transform: scale(1.075) rotate(.35deg);
-  filter: saturate(1.02) contrast(1.05);
-}
-html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 3) > button img {
-  clip-path: polygon(0 0, 96% 0, 100% 8%, 100% 100%, 4% 100%, 0 92%);
-}
-
-/* Scroll-linked reveal where supported; fallback remains the static layout. */
-@supports (animation-timeline: view()) {
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li {
-    animation: essential-item-reveal linear both;
-    animation-timeline: view(block 12% 8%);
-  }
-}
-@keyframes essential-item-reveal {
-  0% { opacity: .25; transform: translateY(1.25rem); }
-  35% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* -------------------------------------------------------------------------- */
-/* 02 — EDITORIAL / kinetic food magazine                                    */
+/* 01 — EDITORIAL / kinetic food magazine                                    */
 /* -------------------------------------------------------------------------- */
 html[data-menu-theme="editorial"] .menu-public-shell {
   --m-ink: #11100e;
   --m-paper: #f1eadf;
   --m-red: #b33b25;
   --m-rule: rgb(17 16 14 / .18);
-  background:
-    linear-gradient(90deg, transparent calc(50% - .5px), var(--m-rule) calc(50% - .5px), var(--m-rule) calc(50% + .5px), transparent calc(50% + .5px)),
-    var(--m-paper);
+  background: linear-gradient(90deg, transparent calc(50% - .5px), var(--m-rule) calc(50% - .5px), var(--m-rule) calc(50% + .5px), transparent calc(50% + .5px)), var(--m-paper);
 }
-html[data-menu-theme="editorial"] .menu-public-shell header {
-  position: relative;
-  isolation: isolate;
-}
+html[data-menu-theme="editorial"] .menu-public-shell header { position: relative; isolation: isolate; }
 html[data-menu-theme="editorial"] .menu-public-shell header::before {
   content: "ISSUE / 03";
-  position: absolute;
-  z-index: 3;
-  inset-inline-end: 1.25rem;
-  top: 1.25rem;
-  writing-mode: vertical-rl;
-  color: rgb(255 255 255 / .76);
-  font: 700 .58rem/1 var(--font-sans);
-  letter-spacing: .22em;
-  pointer-events: none;
+  position: absolute; z-index: 3; inset-inline-end: 1.25rem; top: 1.25rem;
+  writing-mode: vertical-rl; color: rgb(255 255 255 / .76);
+  font: 700 .58rem/1 var(--font-sans); letter-spacing: .22em; pointer-events: none;
 }
 html[data-menu-theme="editorial"] .menu-public-shell header > div {
-  position: relative;
-  min-height: inherit;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  position: relative; min-height: inherit; display: flex; flex-direction: column; justify-content: flex-end;
 }
-html[data-menu-theme="editorial"] .menu-public-shell header h1 {
-  text-wrap: balance;
-  max-width: 7ch;
-  font-variation-settings: "wght" 760;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section {
-  position: relative;
-  overflow: clip;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section > h2 {
-  text-wrap: balance;
-  max-width: 10ch;
-  font-variation-settings: "wght" 760;
-}
+html[data-menu-theme="editorial"] .menu-public-shell header h1 { text-wrap: balance; max-width: 7ch; font-variation-settings: "wght" 760; }
+html[data-menu-theme="editorial"] .menu-public-shell main > section { position: relative; overflow: clip; }
+html[data-menu-theme="editorial"] .menu-public-shell main > section > h2 { text-wrap: balance; max-width: 10ch; font-variation-settings: "wght" 760; }
 html[data-menu-theme="editorial"] .menu-public-shell main > section > h2::after {
-  content: "";
-  display: inline-block;
-  width: 3.25rem;
-  height: .12em;
-  margin-inline-start: .75rem;
-  background: var(--m-red);
-  vertical-align: .18em;
+  content: ""; display: inline-block; width: 3.25rem; height: .12em; margin-inline-start: .75rem;
+  background: var(--m-red); vertical-align: .18em;
 }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li {
-  position: relative;
-  min-width: 0;
-}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li { position: relative; min-width: 0; }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  transition: background-color 260ms ease;
+  position: relative; isolation: isolate; overflow: clip; transition: background-color 260ms ease;
 }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button::before {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: .65rem;
-  border: 1px solid rgb(255 255 255 / .35);
-  mix-blend-mode: screen;
-  opacity: 0;
-  transform: scale(.985);
-  transition: opacity 280ms ease, transform 450ms cubic-bezier(.16,1,.3,1);
-  pointer-events: none;
+  content: ""; position: absolute; z-index: 2; inset: .65rem;
+  border: 1px solid rgb(255 255 255 / .35); mix-blend-mode: screen; opacity: 0; transform: scale(.985);
+  transition: opacity 280ms ease, transform 450ms cubic-bezier(.16,1,.3,1); pointer-events: none;
 }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
-  position: relative;
-  overflow: hidden;
-}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child { position: relative; overflow: hidden; }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img {
-  transform: scale(1.025);
-  transition: transform 900ms cubic-bezier(.16,1,.3,1), filter 500ms ease;
+  transform: scale(1.025); transition: transform 900ms cubic-bezier(.16,1,.3,1), filter 500ms ease;
 }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible {
-  background: rgb(179 59 37 / .075);
-}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible { background: rgb(179 59 37 / .075); }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover::before,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible::before {
-  opacity: 1;
-  transform: scale(1);
-}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible::before { opacity: 1; transform: scale(1); }
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover img,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible img {
-  transform: scale(1.075) translateY(-1.5%);
-  filter: saturate(.94) contrast(1.08);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 2) > button {
-  border-inline-start: 2px solid var(--m-ink);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 4) > button {
-  border-inline-end: 2px solid var(--m-red);
-}
-
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible img { transform: scale(1.075) translateY(-1.5%); filter: saturate(.94) contrast(1.08); }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 2) > button { border-inline-start: 2px solid var(--m-ink); }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 4) > button { border-inline-end: 2px solid var(--m-red); }
 @supports (animation-timeline: view()) {
   html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
-    animation: editorial-image-reveal linear both;
-    animation-timeline: view(block 18% 8%);
+    animation: editorial-image-reveal linear both; animation-timeline: view(block 18% 8%);
   }
 }
 @keyframes editorial-image-reveal {
@@ -258,152 +63,67 @@ html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n +
 }
 
 /* -------------------------------------------------------------------------- */
-/* 03 — NOIR / cinematic light + glass                                      */
+/* 02 — NOIR / cinematic light + glass                                      */
 /* -------------------------------------------------------------------------- */
 html[data-menu-theme="noir"] .menu-public-shell {
-  --n-black: #070706;
-  --n-bronze: #d8a76f;
-  --n-line: rgb(216 167 111 / .18);
+  --n-black: #070706; --n-bronze: #d8a76f; --n-line: rgb(216 167 111 / .18);
   position: relative;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgb(216 167 111 / .13), transparent 28rem),
-    radial-gradient(circle at 80% 62%, rgb(216 167 111 / .055), transparent 18rem),
-    #070706;
+  background: radial-gradient(ellipse at 50% 0%, rgb(216 167 111 / .13), transparent 28rem), radial-gradient(circle at 80% 62%, rgb(216 167 111 / .055), transparent 18rem), #070706;
 }
 html[data-menu-theme="noir"] .menu-public-shell::before {
-  content: "";
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 50% 35%, transparent 0 18%, rgb(0 0 0 / .34) 58%, rgb(0 0 0 / .78) 100%),
-    repeating-linear-gradient(0deg, rgb(255 255 255 / .018) 0 1px, transparent 1px 4px);
-  mix-blend-mode: screen;
-  opacity: .55;
+  content: ""; position: fixed; z-index: 0; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, transparent 0 18%, rgb(0 0 0 / .34) 58%, rgb(0 0 0 / .78) 100%), repeating-linear-gradient(0deg, rgb(255 255 255 / .018) 0 1px, transparent 1px 4px);
+  mix-blend-mode: screen; opacity: .55;
 }
-html[data-menu-theme="noir"] .menu-public-shell > * {
-  position: relative;
-  z-index: 1;
-}
-html[data-menu-theme="noir"] .menu-public-shell header {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-}
+html[data-menu-theme="noir"] .menu-public-shell > * { position: relative; z-index: 1; }
+html[data-menu-theme="noir"] .menu-public-shell header { position: relative; isolation: isolate; overflow: clip; }
 html[data-menu-theme="noir"] .menu-public-shell header::before {
-  content: "";
-  position: absolute;
-  width: min(72vw, 38rem);
-  aspect-ratio: 1;
-  inset-inline-start: 50%;
-  top: 4rem;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgb(216 167 111 / .18), rgb(216 167 111 / .05) 27%, transparent 68%);
-  filter: blur(1px);
-  pointer-events: none;
+  content: ""; position: absolute; width: min(72vw, 38rem); aspect-ratio: 1; inset-inline-start: 50%; top: 4rem; transform: translateX(-50%);
+  background: radial-gradient(circle, rgb(216 167 111 / .18), rgb(216 167 111 / .05) 27%, transparent 68%); filter: blur(1px); pointer-events: none;
 }
-html[data-menu-theme="noir"] .menu-public-shell header::after {
-  z-index: 2;
-}
-html[data-menu-theme="noir"] .menu-public-shell header h1 {
-  text-wrap: balance;
-  max-width: 8ch;
-  letter-spacing: -.045em;
-}
-html[data-menu-theme="noir"] .menu-public-shell main > section {
-  position: relative;
-}
-html[data-menu-theme="noir"] .menu-public-shell main > section > h2 {
-  position: relative;
-  display: inline-block;
-  padding-inline-end: 2.5rem;
-  text-wrap: balance;
-}
+html[data-menu-theme="noir"] .menu-public-shell header::after { z-index: 2; }
+html[data-menu-theme="noir"] .menu-public-shell header h1 { text-wrap: balance; max-width: 8ch; letter-spacing: -.045em; }
+html[data-menu-theme="noir"] .menu-public-shell main > section { position: relative; }
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2 { position: relative; display: inline-block; padding-inline-end: 2.5rem; text-wrap: balance; }
 html[data-menu-theme="noir"] .menu-public-shell main > section > h2::after {
-  content: "";
-  position: absolute;
-  inset-inline-end: 0;
-  bottom: .3em;
-  width: 1.75rem;
-  height: 1px;
-  background: var(--n-bronze);
-  box-shadow: 0 0 18px rgb(216 167 111 / .65);
+  content: ""; position: absolute; inset-inline-end: 0; bottom: .3em; width: 1.75rem; height: 1px;
+  background: var(--n-bronze); box-shadow: 0 0 18px rgb(216 167 111 / .65);
 }
-html[data-menu-theme="noir"] .menu-public-shell main ul > li {
-  position: relative;
-  min-width: 0;
-}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li { position: relative; min-width: 0; }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  border-color: var(--n-line);
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / .035), transparent 32%),
-    linear-gradient(155deg, #171411, #0b0a09);
+  position: relative; isolation: isolate; overflow: clip; border-color: var(--n-line);
+  background: linear-gradient(145deg, rgb(255 255 255 / .035), transparent 32%), linear-gradient(155deg, #171411, #0b0a09);
   transition: transform 450ms cubic-bezier(.16,1,.3,1), border-color 350ms ease, box-shadow 450ms ease;
 }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button::before {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 0;
+  content: ""; position: absolute; z-index: 2; inset: 0;
   background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 15%), rgb(255 219 170 / .18), transparent 30%);
-  opacity: 0;
-  transition: opacity 350ms ease;
-  pointer-events: none;
+  opacity: 0; transition: opacity 350ms ease; pointer-events: none;
 }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  inset: .65rem;
-  border: 1px solid rgb(216 167 111 / .22);
-  opacity: 0;
-  transform: scale(.985);
-  transition: opacity 350ms ease, transform 450ms cubic-bezier(.16,1,.3,1);
-  pointer-events: none;
+  content: ""; position: absolute; z-index: 3; inset: .65rem; border: 1px solid rgb(216 167 111 / .22);
+  opacity: 0; transform: scale(.985); transition: opacity 350ms ease, transform 450ms cubic-bezier(.16,1,.3,1); pointer-events: none;
 }
-html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child {
-  position: relative;
-  overflow: hidden;
-}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child { position: relative; overflow: hidden; }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
-  transform: scale(1.045);
-  filter: saturate(.72) contrast(1.13) brightness(.68);
+  transform: scale(1.045); filter: saturate(.72) contrast(1.13) brightness(.68);
   transition: transform 1s cubic-bezier(.16,1,.3,1), filter 600ms ease;
 }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover,
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible {
-  transform: translateY(-.45rem) scale(1.008);
-  border-color: rgb(216 167 111 / .52);
+  transform: translateY(-.45rem) scale(1.008); border-color: rgb(216 167 111 / .52);
   box-shadow: 0 28px 80px rgb(0 0 0 / .58), 0 0 34px rgb(216 167 111 / .075);
 }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover::before,
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible::before,
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover::after,
-html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible::after {
-  opacity: 1;
-  transform: scale(1);
-}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible::after { opacity: 1; transform: scale(1); }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover img,
-html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible img {
-  transform: scale(1.105);
-  filter: saturate(.84) contrast(1.12) brightness(.79);
-}
-html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
-  border-radius: 1rem .25rem 1rem .25rem;
-}
-html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) > button {
-  border-radius: .25rem 1rem .25rem 1rem;
-}
-
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible img { transform: scale(1.105); filter: saturate(.84) contrast(1.12) brightness(.79); }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 2) > button { border-radius: 1rem .25rem 1rem .25rem; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) > button { border-radius: .25rem 1rem .25rem 1rem; }
 @supports (animation-timeline: view()) {
-  html[data-menu-theme="noir"] .menu-public-shell main ul > li {
-    animation: noir-cinema-reveal linear both;
-    animation-timeline: view(block 12% 8%);
-  }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li { animation: noir-cinema-reveal linear both; animation-timeline: view(block 12% 8%); }
 }
 @keyframes noir-cinema-reveal {
   0% { opacity: .2; transform: translateY(1.2rem) scale(.985); filter: blur(2px); }
@@ -415,85 +135,26 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
 /* Mobile-first safety + interaction quality                                 */
 /* -------------------------------------------------------------------------- */
 @media (max-width: 700px) {
-  html[data-menu-theme="essential"] .menu-public-shell header > div::after,
-  html[data-menu-theme="editorial"] .menu-public-shell header::before,
-  html[data-menu-theme="noir"] .menu-public-shell header > div::after {
-    display: none;
-  }
-
-  html[data-menu-theme="essential"] .menu-public-shell header h1 {
-    max-width: 10ch;
-  }
-  html[data-menu-theme="essential"] .menu-public-shell main > section {
-    padding-inline-start: .9rem;
-  }
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button {
-    grid-template-columns: minmax(6.75rem, 31%) minmax(0, 1fr);
-    min-height: 7.25rem;
-    gap: .8rem;
-  }
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li:nth-child(3n + 2) > button {
-    grid-template-columns: minmax(0, 1fr) minmax(6.75rem, 31%);
-  }
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img {
-    min-height: 6.35rem;
-  }
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover,
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible,
-  html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover,
-  html[dir="rtl"][data-menu-theme="essential"] .menu-public-shell main ul > li > button:focus-visible {
-    transform: none;
-    padding-inline: 0;
-  }
-
-  html[data-menu-theme="editorial"] .menu-public-shell main {
-    padding-inline: .85rem;
-  }
-  html[data-menu-theme="editorial"] .menu-public-shell main > section {
-    padding-block: clamp(2.5rem, 11vw, 4rem);
-  }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button {
-    min-height: 0;
-  }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
-    height: clamp(11rem, 54vw, 17rem) !important;
-  }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child {
-    padding-block: .85rem 1.15rem;
-  }
-
-  html[data-menu-theme="noir"] .menu-public-shell main {
-    padding-inline: .85rem;
-  }
-  html[data-menu-theme="noir"] .menu-public-shell main > section {
-    padding-block: clamp(2.75rem, 10vw, 4.5rem);
-  }
-  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
-    min-height: 0;
-  }
-  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child {
-    height: clamp(12rem, 58vw, 17rem) !important;
-  }
+  html[data-menu-theme="editorial"] .menu-public-shell header::before { display: none; }
+  html[data-menu-theme="noir"] .menu-public-shell header > div::after { display: none; }
+  html[data-menu-theme="editorial"] .menu-public-shell main { padding-inline: .85rem; }
+  html[data-menu-theme="editorial"] .menu-public-shell main > section { padding-block: clamp(2.5rem, 11vw, 4rem); }
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button { min-height: 0; }
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child { height: clamp(11rem, 54vw, 17rem) !important; }
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child { padding-block: .85rem 1.15rem; }
+  html[data-menu-theme="noir"] .menu-public-shell main { padding-inline: .85rem; }
+  html[data-menu-theme="noir"] .menu-public-shell main > section { padding-block: clamp(2.75rem, 10vw, 4.5rem); }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button { min-height: 0; }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child { height: clamp(12rem, 58vw, 17rem) !important; }
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover,
-  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible {
-    transform: none;
-  }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible { transform: none; }
 }
-
 @media (hover: none) {
-  html[data-menu-theme="essential"] .menu-public-shell main ul > li > button:hover,
   html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover,
-  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover {
-    transform: none;
-  }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { transform: none; }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme="essential"] .menu-public-shell *,
-  html[data-menu-theme="editorial"] .menu-public-shell *,
-  html[data-menu-theme="noir"] .menu-public-shell * {
-    animation: none !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
+  html[data-menu-theme="editorial"] .menu-public-shell *, html[data-menu-theme="noir"] .menu-public-shell * {
+    animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }
