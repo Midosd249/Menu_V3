@@ -9,44 +9,44 @@
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
-- **Theme 1 — Essential — DONE / VERIFIED / MERGED; refined again in current task.**
-- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; refined again in current task.**
-- **Theme 3 — Noir — DONE / VERIFIED / MERGED; refined again in current task.**
+- **Theme 1 — Essential — DONE / VERIFIED / MERGED; refinement pass in progress.**
+- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; refinement pass in progress.**
+- **Theme 3 — Noir — DONE / VERIFIED / MERGED; refinement pass in progress.**
 - Authentication reconciliation and the qualified `extensions.crypt(...)` fix are implemented and live authentication was verified by the user after deployment.
-- The previous hardcoded `nafas` marketing/demo route depended on a seeded production tenant; this task makes the `nafas` demo resilient with a local fixture.
+- The reserved `nafas` demo fixture remains the source for the marketing/theme-preview demo when no branch is requested.
 
 ## Current Atomic Task
-### Theme 1–3 creative refinement + public demo resilience
+### Theme 1–3 creative refinement + responsive visual hardening
 
-**Objective:** fix the broken homepage/theme preview menu and materially differentiate the first three completed themes without changing business/data contracts.
+**Objective:** deepen the first three completed themes into materially different art directions, with mobile-first layout stability and progressive motion enhancements, without changing business/data contracts.
 
-**VERIFIED:** `src/routes/index.tsx` and `src/routes/themes/preview.tsx` both referenced the `nafas` public menu.
+**VERIFIED:** `MenuThemeController` exposes `data-menu-theme`, allowing presentation-only theme layers to target each theme.
 
-**VERIFIED:** `getPublicMenu` previously returned `not_found` when that tenant was not seeded/published.
+**IMPLEMENTED:** added `src/theme-refinements-v2.css` and loaded it after the existing refinement layer.
 
-**IMPLEMENTED:** added `src/lib/menu/demo.ts` with stable bilingual demo content and safe remote imagery, then made only the reserved `nafas` demo slug use that fixture when no branch is requested.
+**IMPLEMENTED:** Essential receives a tactile atelier treatment with material rings, asymmetric image treatment, restrained rules and progressive scroll reveal.
 
-**IMPLEMENTED:** added `src/theme-refinements.css`, loaded after the existing theme layers. It gives:
-- Essential: modern atelier / asymmetric print composition.
-- Editorial: food-magazine / cover-and-column composition.
-- Noir: cinematic dark-dining / spotlight composition.
+**IMPLEMENTED:** Editorial receives a kinetic food-magazine treatment with issue markers, framed imagery, stronger typographic rhythm, alternating rules and progressive image reveal.
 
-**VERIFIED:** refinement layer is presentation-only, preserves the existing menu DOM and `ThemeKey` contracts, and includes reduced-motion safeguards.
+**IMPLEMENTED:** Noir receives a cinematic treatment with atmospheric grain, spotlight pools, bronze framing, image-depth treatment and progressive cinematic reveal.
 
-**RESEARCH:** Adobe Express menu guidance emphasizes brand personality, hierarchy, imagery, typography and spacing; MDN documents scroll-driven animation as progressive enhancement with browser support caveats. These informed the visual direction without copying proprietary layouts/assets. See `PLAN.md`.
+**IMPLEMENTED:** mobile rules remove desktop-only offsets/transforms, constrain media sizing, stabilize single-column layouts and neutralize hover-only motion on touch devices.
+
+**VERIFIED:** no new package dependency or business/data contract was introduced.
 
 ## Verification State
-- **VERIFIED:** production authentication works after the user's deployment of corrected `main`.
-- **VERIFIED:** GitHub Actions quality workflow was triggered for the refinement commits.
-- **IN_PROGRESS:** quality run for the final refinement commit must finish before this task can be marked fully verified.
-- **UNKNOWN:** local `git status`, local `git diff`, and local shell test execution are unavailable in this session; GitHub is the repository evidence source.
+- **VERIFIED:** production authentication works after the user's deployment of the corrected authentication commit.
+- **VERIFIED:** implementation is committed to `main`.
+- **IN_PROGRESS:** GitHub quality verification for the new refinement state.
+- **UNKNOWN:** live visual/manual QA of the new refinement layer until the user deploys the current `main` to Vercel.
+- **UNKNOWN:** final mobile/desktop browser rendering until live QA is performed.
 
 ## Session Log
-- 2026-09-04 — Confirmed the corrected authentication deployment is usable from the user's live sign-in test.
-- 2026-09-04 — Audited homepage and theme-preview routing and identified the shared hardcoded `nafas` dependency as the direct cause of the demo failure when the tenant is absent.
-- 2026-09-04 — Added a dependency-free bilingual demo fixture and reserved fallback for the marketing demo slug.
-- 2026-09-04 — Added a distinct visual refinement layer for Essential, Editorial and Noir, preserving existing data/business contracts.
-- 2026-09-04 — GitHub quality workflow triggered for the final refinement commit.
+- 2026-09-04 — Confirmed current `main` is `32ac95639e42b5808061c0b07887838a8cf5ab1f` before this refinement pass.
+- 2026-09-04 — Reviewed theme registry, controller, public-menu DOM and existing refinement layer before editing.
+- 2026-09-04 — Researched current maintained references for scroll-driven motion, smooth scroll, WebGL/post-processing and creative image effects; selected CSS progressive enhancement for this pass to avoid adding a dependency before mobile performance evidence.
+- 2026-09-04 — Added second visual refinement layer for Essential, Editorial and Noir with explicit mobile-first safeguards.
+- 2026-09-04 — Updated active plan/task continuity to keep Theme 4 blocked until live QA of the refined first three themes.
 
 ## Exact Next Task
-After the final GitHub quality run is `success`, perform live visual/manual QA of `/m/nafas` and `/themes/preview?theme=essential|editorial|noir` on mobile and desktop, then only if those checks pass proceed to Theme 4 — Heritage.
+After the user deploys the current `main` to Vercel, perform live mobile/desktop QA of `/m/nafas` and `/themes/preview?theme=essential|editorial|noir`, then fix only evidence-backed visual or responsive regressions before Theme 4.
