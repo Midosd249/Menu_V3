@@ -4,7 +4,8 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { getSubscription } from "@/lib/menu/subscriptions";
 import { invalidatePublicMenuCache } from "@/lib/menu/public";
-import { canUseTheme, normalizeThemeKey } from "./registry";
+import { normalizeThemeKey } from "./registry";
+import { canUseThemeWithTestingOverride, isThemeTestingOverrideEnabled } from "./testing-access";
 import type { ThemeKey } from "./types";
 import type { FnResult } from "@/lib/menu/types";
 
@@ -27,8 +28,17 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
       if (!member) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية تغيير التصميم" };
 
       const subscription = await getSubscription(sql, member.tenant_id);
-      if (!canUseTheme(themeKey, subscription?.code)) {
+      const testingOverride = isThemeTestingOverrideEnabled();
+      if (!canUseThemeWithTestingOverride(themeKey, subscription?.code)) {
         return { ok: false, code: "forbidden", error: "هذا التصميم متاح ضمن الخطط المدفوعة. يمكنك معاينته ثم الترقية لاستخدامه." };
+      }
+      if (testingOverride && themeKey !== "essential") {
+        console.warn("MENU_THEME_TESTING_OVERRIDE is active for premium theme selection", {
+          tenantId: member.tenant_id,
+          themeKey,
+          expiresAt: process.env.MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT,
+          vercelEnv: process.env.VERCEL_ENV,
+        });
       }
       if (subscription && !["trialing", "active"].includes(subscription.status)) {
         return { ok: false, code: "forbidden", error: "اشتراكك غير نشط حالياً. لا يمكن نشر تصميم Premium." };

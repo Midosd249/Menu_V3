@@ -142,5 +142,62 @@ For every material research activity record: source, access date, source categor
 - Confidence: HIGH
 - Must not copy: no external implementation.
 
+## 2026-09-05 — Editorial premium refinement research
+
+### Repository evidence — Editorial implementation
+- Source: `src/lib/theme/registry.ts`, `src/components/templates/contemporary-restaurant.tsx`, `src/theme-editorial.css`, `src/theme-refinements.css`, `src/theme-refinements-v2.css`
+- Access date: 2026-09-05
+- Category: repository evidence
+- VERIFIED finding: `editorial` maps to `contemporary-restaurant`; the template already supports featured products, search/category filtering, product details/modifiers, cart/order, branches, opening hours, WhatsApp, map, phone, and Instagram. The older presentation layers used broad descendant selectors that could style the logo as hero media and force mobile image geometry.
+- Transferable principle: isolate Editorial regions with dedicated class/data selectors and let the final Editorial stylesheet own only its presentation.
+- Relevance: direct source-level explanation for the screenshot defects and safe refinement boundary.
+- Limitation: source inspection does not replace browser evidence.
+- Confidence: HIGH
+- Must not copy: no proprietary external UI.
+
+### TanStack Router — search parameters
+- Source: https://tanstack.com/router/latest/docs/how-to/navigate-with-search-params and https://tanstack.com/router/latest/docs/how-to/setup-basic-search-params
+- Access date: 2026-09-05
+- Category: official framework documentation
+- VERIFIED finding: validated search parameters can be read by route loaders/components and updated with functional navigation while preserving existing search state.
+- Transferable principle: public language selection should update the validated `lang` search parameter rather than maintain an unrelated route state.
+- Relevance: Arabic/English public menu switching.
+- Limitation: documentation does not prove this application's specific content availability.
+- Confidence: HIGH
+- Must not copy: no proprietary examples.
+
+### MDN — `rel="noopener noreferrer"`
+- Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/noopener and https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel/noreferrer
+- Access date: 2026-09-05
+- Category: authoritative web platform documentation
+- VERIFIED finding: `noopener` prevents a newly opened browsing context from accessing `window.opener`; `noreferrer` additionally omits the referrer and has the `noopener` behavior.
+- Transferable principle: configured external restaurant actions opened in a new tab should use `rel="noopener noreferrer"`.
+- Relevance: WhatsApp, map, and Instagram links.
+- Limitation: link validation remains application-specific.
+- Confidence: HIGH
+- Must not copy: no proprietary implementation.
+
+### W3C — Focus Not Obscured
+- Source: https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/
+- Access date: 2026-09-05
+- Category: authoritative accessibility standard
+- VERIFIED finding: WCAG 2.2 Focus Not Obscured requires focused components not to be entirely hidden by author-created content; sticky footers are a direct example.
+- Transferable principle: fixed cart controls and owner preview chrome need explicit content clearance and a documented layer hierarchy.
+- Relevance: Editorial cart, dialogs, sticky search, and Studio mobile navigation.
+- Limitation: final conformance still requires browser/device inspection.
+- Confidence: HIGH
+- Must not copy: no external visual treatment.
+
+### User-provided Editorial screenshots — visual evidence
+- Source: four screenshots supplied for Editorial
+- Access date: 2026-09-05
+- Category: supplied visual evidence
+- VERIFIED finding: the screenshots show a large logo dominating the hero, excessive hero vertical occupation, a very large rounded/circular-looking product presentation, sparse/blocked content regions, and Studio bottom navigation visible beneath the preview. The visual system reads more like an unstable preview composition than a controlled restaurant menu.
+- Transferable principle: separate cover media from the logo, reduce hero height, use stable rectangular media geometry, and preserve normal content flow above owner chrome.
+- Relevance: direct acceptance evidence for Editorial refinement.
+- Limitation: screenshots alone cannot prove whether each symptom is caused by CSS, the host preview frame, or browser rendering.
+- Confidence: HIGH for observed appearance; MEDIUM for source-level causal attribution because the repository confirms a broad header image rule.
+- Must not copy: no screenshot-specific branding, assets, or composition.
+
 ## Research decision rule
 Research is mandatory when the design choice is material, unfamiliar, consequential, or likely to affect accessibility, performance, SEO, conversion, or Saudi-market fit. Skip broad browsing when repository evidence already answers the question.

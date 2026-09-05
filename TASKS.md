@@ -1,26 +1,17 @@
 # TASKS
 
 ## Current Atomic Task
-### Essential Premium Refinement — IMPLEMENTED / DEPLOYED / QUALITY CLOSURE PENDING
-- **Objective:** turn Essential into a production-premium Arabic-first restaurant menu experience without rebuilding the Public Menu or changing other themes.
-- **VERIFIED:** removed duplicate `small-menu` template chrome so Essential has one public renderer.
-- **VERIFIED:** replaced Essential presentation with a coherent scoped design system covering hero hierarchy, typography, spacing, search/categories, featured composition, product cards, contrast rhythm, hours, customer actions, safe areas, layering, focus, bidi, and reduced motion.
-- **VERIFIED:** preserved existing cart/order, product details/modifiers, search/category, language, WhatsApp, map, phone, social, analytics, tenant/branch routing, authorization, and subscription semantics.
-- **VERIFIED:** added Essential regression assertions to `tests/preview-shell.test.mjs`.
-- **VERIFIED:** added `docs/essential-design-brief.md` and `docs/essential-layering-and-ui-audit.md`.
-- **VERIFIED:** added Essential research evidence to `docs/design-research-log.md`.
-- **VERIFIED:** deployed commit `48430b67a5d6cd9154db237b4cb801e6ee58109e` to Vercel production; deployment is `READY`.
-- **VERIFIED:** deployed public route `/m/mndy-alwtnya` returns HTTP 200 with Essential first-paint theme bootstrap and one public renderer.
-- **BLOCKED:** GitHub Actions quality job stops at project-wide TypeScript React declaration errors before tests/lint/browser QA.
-- **UNKNOWN:** Opera-specific behavior, real-device screenshots, exact first-paint timing, QR scan, post-hydration console output, and pixel comparison.
+### Editorial Premium Refinement + Contact/Location Action System + Language-Switch Verification + Temporary Public Theme Testing Access — IN PROGRESS
+- **Objective:** make `editorial` / `contemporary-restaurant` a premium, distinct, Arabic-first restaurant menu and complete its action/language/testing-access quality system without redesigning unrelated themes.
+- **VERIFIED:** repository continuity was reconciled before implementation. Essential is deployed and its post-type-fix quality workflow is green.
+- **VERIFIED:** supplied Editorial screenshots and current source were audited before implementation.
+- **IMPLEMENTED:** Editorial hero, typography, editorial grid rhythm, stable product media, search/category rail, hours, responsive rules, and explicit semantic regions.
+- **IMPLEMENTED:** reusable data-driven WhatsApp/map/phone/Instagram action helper using existing tenant/branch fields.
+- **IMPLEMENTED:** language switcher preserves validated route search state and disables English when the current menu identity lacks English availability.
+- **IMPLEMENTED:** server-only, expiry-bound temporary premium theme testing override; existing auth, owner/admin role, tenant scope, and subscription-status checks remain in place.
+- **IMPLEMENTED:** layering audit, design brief, research log, and regression coverage.
 
-## Quality-Gate Finding
-- Existing project-wide gap: React 19 runtime packages are present, but `@types/react` / `@types/react-dom` are absent from `devDependencies`.
-- CI errors are in existing routes such as `src/routes/themes/index.tsx` and `src/routes/themes/preview.tsx` and are not caused by the Essential changes.
-- Do not weaken or bypass typecheck to manufacture a green pipeline.
-- Handle the type declaration gap as a separate project-wide maintenance task, then rerun all gates.
-
-## Required Verification Before Essential Closure
+## Quality Gates Pending
 1. `npm run typecheck`
 2. `npm test`
 3. `npm run test:platform`
@@ -28,25 +19,29 @@
 5. `npm run build`
 6. `npm run qa:template`
 7. `npm run performance:audit`
-8. Chromium browser QA for Essential public/preview routes.
-9. Opera + real-device verification for first-paint, layering, safe areas, and responsive behavior.
-10. Final diff review and Vercel deployment evidence.
+8. Browser visual/functional QA for Editorial public and owner preview.
+9. Language switch verification with bilingual and Arabic-only real data.
+10. Action visibility verification with configured, missing, and invalid data.
+11. Cart/order, modifier, sold-out, branch, search, and category interaction checks.
+12. Mobile safe-area and layering checks across scroll/modal states.
+13. Essential + other-theme regression review.
+14. Final diff and deployment evidence review.
 
 ## Protected Scope
-- Editorial, Noir, Heritage, and Gallery are not redesigned by this task.
-- No new theme is created.
-- No database schema, migrations, subscriptions, authentication, authorization, tenant/branch isolation, dependency, CI/CD, or Vercel configuration changes are permitted for Essential unless a verified blocker directly requires a minimal change.
+- Essential is not being redesigned or reopened.
+- Noir, Heritage, and Gallery are not redesigned by this milestone.
+- No database schema/migration changes.
+- No weakening of authentication, authorization, tenant/branch isolation, subscription status, SEO, routing, CI/CD, or deployment controls.
+- No client-controlled entitlement bypass.
 
-## Planned Theme Sequence
-1. Theme 1 — Essential — current refinement closure gate.
-2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; protected.
-3. Theme 3 — Noir — implementation refinement complete; verification remains separately blocked; protected.
-4. Theme 4 — Heritage — TODO after Essential closure.
-5. Theme 5 — Gallery — TODO.
-6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
+## Temporary Testing Access
+- `MENU_THEME_TESTING_OVERRIDE=true`
+- `MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT=<future ISO-8601 timestamp>`
+- Both are required; expired/missing override is OFF.
+- Override applies only to premium theme entitlement checks for authenticated owner/admin users; subscription status remains enforced.
 
 ## Permanent Quality Gate
-Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, and the evidence records in `docs/visual-functional-audit.md` and `docs/design-research-log.md`.
+Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, and `docs/design-research-log.md`.
 
 ## Exact Next Task
-Resolve the existing React type-declaration quality-gate failure as a separate project-wide maintenance task, rerun the full quality pipeline, then capture Opera/real-device evidence and close Essential only when the required gates are green or explicitly verified/blocked with no hidden failures.
+Run the complete Editorial quality gates and inspect the Vercel branch preview. Fix only verified failures, then record final evidence and stop without beginning another theme.
