@@ -1,5 +1,6 @@
 import { Instagram, MapPin, Phone } from "lucide-react";
 import { recordPublicEvent } from "@/lib/menu/public";
+import { getGuestSessionId } from "@/lib/menu/session";
 import type { Branch, Lang, Tenant } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
 
@@ -107,6 +108,7 @@ export function PublicActionLinks({ tenant, branch, lang, preview = false, class
                     branchSlug: branch.slug,
                     eventType: "whatsapp",
                     lang,
+                    sessionId: getGuestSessionId(),
                   },
                 });
               }
