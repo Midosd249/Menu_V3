@@ -1,31 +1,21 @@
 # TASKS
 
-## Current Atomic Task
-### Editorial Premium Refinement + Contact/Location Action System + Language-Switch Verification + Temporary Public Theme Testing Access — IN PROGRESS
-- **Objective:** make `editorial` / `contemporary-restaurant` a premium, distinct, Arabic-first restaurant menu and complete its action/language/testing-access quality system without redesigning unrelated themes.
-- **VERIFIED:** repository continuity was reconciled before implementation. Essential is deployed and its post-type-fix quality workflow is green.
+## Current Task
+### Editorial Premium Refinement + Contact/Location Action System + Language-Switch Verification + Temporary Public Theme Testing Access — IMPLEMENTED / VERIFIED / MERGED
+- **VERIFIED:** repository continuity was reconciled before Editorial work; Essential is deployed and its post-type-fix quality workflow is green.
 - **VERIFIED:** supplied Editorial screenshots and current source were audited before implementation.
-- **IMPLEMENTED:** Editorial hero, typography, editorial grid rhythm, stable product media, search/category rail, hours, responsive rules, and explicit semantic regions.
-- **IMPLEMENTED:** reusable data-driven WhatsApp/map/phone/Instagram action helper using existing tenant/branch fields.
-- **IMPLEMENTED:** language switcher preserves validated route search state and disables English when the current menu identity lacks English availability.
-- **IMPLEMENTED:** server-only, expiry-bound temporary premium theme testing override; existing auth, owner/admin role, tenant scope, and subscription-status checks remain in place.
-- **IMPLEMENTED:** layering audit, design brief, research log, and regression coverage.
+- **VERIFIED:** Editorial hero, typography, editorial grid rhythm, stable product media, search/category rail, hours, responsive rules, and semantic regions were refined without creating a sixth theme.
+- **VERIFIED:** reusable data-driven WhatsApp/map/phone/Instagram action logic uses existing tenant/branch fields and hides invalid/missing destinations.
+- **VERIFIED:** language switching preserves route search state and does not fabricate English content when English identity data is unavailable.
+- **VERIFIED:** temporary premium-theme testing override is server-only, expiry-bound, owner/admin-gated, tenant-scoped, and subscription-status-safe.
+- **VERIFIED:** layering audit, design brief, research log, and regression coverage were added.
+- **VERIFIED:** final verification workflow `33941534592` passed typecheck, tests, lint, production build, browser template QA for all themes, performance baseline upload, and cleanup.
+- **VERIFIED:** PR #13 was squash-merged into `main` as `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`.
 
-## Quality Gates Pending
-1. `npm run typecheck`
-2. `npm test`
-3. `npm run test:platform`
-4. `npm run lint`
-5. `npm run build`
-6. `npm run qa:template`
-7. `npm run performance:audit`
-8. Browser visual/functional QA for Editorial public and owner preview.
-9. Language switch verification with bilingual and Arabic-only real data.
-10. Action visibility verification with configured, missing, and invalid data.
-11. Cart/order, modifier, sold-out, branch, search, and category interaction checks.
-12. Mobile safe-area and layering checks across scroll/modal states.
-13. Essential + other-theme regression review.
-14. Final diff and deployment evidence review.
+## Deployment Gate
+- **UNKNOWN:** Vercel deployment corresponding to merged commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` is not yet visible in the available deployment list.
+- **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection.
+- **BLOCKED:** do not mark Editorial `DEPLOYED` until Vercel evidence points to the merged main release.
 
 ## Protected Scope
 - Essential is not being redesigned or reopened.
@@ -39,9 +29,10 @@
 - `MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT=<future ISO-8601 timestamp>`
 - Both are required; expired/missing override is OFF.
 - Override applies only to premium theme entitlement checks for authenticated owner/admin users; subscription status remains enforced.
+- Review and disable before commercial production launch.
 
 ## Permanent Quality Gate
 Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, and `docs/design-research-log.md`.
 
 ## Exact Next Task
-Run the complete Editorial quality gates and inspect the Vercel branch preview. Fix only verified failures, then record final evidence and stop without beginning another theme.
+Verify Vercel deployment for merged commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`, inspect available runtime evidence, update deployment status, and stop. Do not begin another theme.
