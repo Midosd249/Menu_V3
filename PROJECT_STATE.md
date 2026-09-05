@@ -19,21 +19,26 @@
 
 ## Editorial Reconciliation — Deployment Evidence
 - **VERIFIED:** Editorial implementation was squash-merged into `main` as commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after quality workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
-- **VERIFIED:** current `main` HEAD is `fad45b3957a46365d0d383c4d721e8b4db2d1fe7`.
+- **VERIFIED:** current `main` HEAD is `621f94d534e5064225512ea448ea617913dc585f`.
 - **VERIFIED:** Vercel production deployment `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` is `READY` and deploys GitHub commit `7177cf0e081eed401b09805ad8eaf47804f68629` from `main`.
 - **VERIFIED:** GitHub comparison shows `7177cf0e081eed401b09805ad8eaf47804f68629` is 15 commits ahead of `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` with that Editorial commit as the merge base and zero commits behind; therefore the current production deployment contains the merged Editorial implementation.
 - **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the `main` branch alias.
 - **VERIFIED:** production root request returned HTTP 200 with SSR HTML, `lang="ar"`, `dir="rtl"`, and the expected Menu V3 runtime/theme assets.
-- **VERIFIED:** Vercel reports no runtime error clusters in the selected last-24-hour window for the project; deployment runtime log grouping returned 18 HTTP 200 responses in the sampled window.
+- **VERIFIED:** Vercel reports no runtime error clusters in the selected last-24-hour window for the project; deployment runtime log grouping returned 18 HTTP 200 responses.
 - **UNKNOWN:** the current connector cannot expose the local working-tree `git status` or local uncommitted diff.
 - **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection remain outside the available repository/Vercel evidence.
 - **UNKNOWN:** a Vercel deployment whose exact Git SHA is `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` is not the current production deployment; production is instead serving a verified descendant commit containing it.
 
 ## Runtime / Browser State
-- **VERIFIED:** automated Playwright browser template QA passed for all five themes on the final Editorial verification workflow.
-- **VERIFIED:** production is currently served by Vercel deployment `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` on descendant commit `7177cf0e081eed401b09805ad8eaf47804f68629`.
-- **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection for Editorial and the other preview variants.
-- **BLOCKED:** browser/device closure cannot be marked complete until direct browser/device evidence is captured and reviewed.
+- **VERIFIED:** automated Playwright browser template QA passed for all five themes on the final Editorial verification workflow. The latest successful quality run was `33999726885` on `621f94d534e5064225512ea448ea617913dc585f`; its browser-template-QA step completed successfully.
+- **VERIFIED:** direct Vercel SSR preview fetches for `/m/nafas` succeeded with HTTP 200 for all five theme query variants: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- **VERIFIED:** the preview route resolves `previewTheme` from the `theme` query parameter and bootstraps theme tokens server-side before hydration.
+- **VERIFIED:** Arabic preview fetches return `lang="ar"`, `dir="rtl"`, `robots=noindex,nofollow`, and `preview` theme mode for the requested variant.
+- **VERIFIED:** English Editorial preview fetch returns `lang="en"`, `dir="ltr"`, English navigation/content labels, and the requested `editorial` preview theme.
+- **VERIFIED:** populated preview state is present in the direct SSR evidence, including categories, products, SAR prices, search, language control, and the fixed cart action on Essential/Editorial/Noir/Gallery preview renderings.
+- **UNKNOWN:** mixed-direction rendering under an actual browser/device viewport was not directly observed.
+- **UNKNOWN:** responsive layout, fixed-control overlap/safe-area behavior, interactive language switching, item dialogs/actions, empty-cart interaction, and post-hydration console behavior were not directly observed through the available connector surface.
+- **BLOCKED:** the authenticated browser/device closure gate cannot be marked complete because this session has no direct interactive browser/device automation or real-device screenshot/console surface. HTTP/SSR evidence and repository inspection are insufficient to claim visual success.
 
 ## Permanent Release-Only Vercel Workflow
 - **VERIFIED:** Vercel is a release platform, not the normal development or design-iteration environment.
@@ -64,12 +69,13 @@
 - `docs/project-memory/problems-learned.md` is the permanent learned-problems record.
 
 ## Session Log — 2026-09-06
-- **Current task:** verify the Vercel production evidence for the merged Editorial milestone and reconcile continuity state.
-- **VERIFIED:** current `main` is `fad45b3957a46365d0d383c4d721e8b4db2d1fe7`; Vercel production is `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` on descendant `7177cf0e081eed401b09805ad8eaf47804f68629`.
-- **VERIFIED:** the descendant contains Editorial because the comparison against `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` has that commit as merge base, is 15 commits ahead, and is not behind.
-- **VERIFIED:** production root returned HTTP 200; Vercel reported no runtime error clusters in the selected last-24-hour window.
-- **UNKNOWN:** local working-tree status/diff and manual Opera/real-device/post-hydration console evidence are unavailable through the current connector surface.
-- **Result:** the Editorial deployment evidence gate is closed for production inclusion; browser/device QA remains a separate open verification task.
+- **Current task:** authenticated browser/device QA of the five preview variants.
+- **VERIFIED:** latest `main` is `621f94d534e5064225512ea448ea617913dc585f` and the latest quality workflow `33999726885` completed successfully, including the automated browser-template-QA step for all themes.
+- **VERIFIED:** direct Vercel SSR preview requests for all five theme variants succeeded with HTTP 200; the route resolved each requested preview theme server-side.
+- **VERIFIED:** Arabic RTL and English LTR SSR states were observed directly; populated menu data and fixed customer-action markup are present in the returned HTML.
+- **UNKNOWN:** real browser/device visual behavior, mixed-direction layout, responsive/fixed-control geometry, interaction behavior, and post-hydration console output.
+- **BLOCKED:** this connector session cannot provide the direct interactive browser/device evidence required by the acceptance criteria. No application code was changed and no workaround was invented.
+- **Result:** the verification gate remains open; no theme redesign or Theme 4 work was started.
 
 ## Exact Next Task
-Execute authenticated browser/device QA for the five preview variants, including Arabic RTL, English LTR, mixed-direction content, responsive states, fixed controls, empty/populated states, and post-hydration console inspection where supported. Record direct browser/device evidence and stop; do not begin Theme 4 Heritage work before this gate is closed.
+Provide direct authenticated browser/device evidence for the five preview variants using an interactive browser/real-device surface, then inspect screenshots and post-hydration console output. Close the gate only if all acceptance criteria pass; otherwise isolate the first failing behavior and make one targeted fix only. Do not begin Theme 4 Heritage work before closure.
