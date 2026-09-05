@@ -4,8 +4,8 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { getSubscription } from "@/lib/menu/subscriptions";
 import { invalidatePublicMenuCache } from "@/lib/menu/public";
-import { canUseTheme, normalizeThemeKey } from "./registry";
-import { isThemeTestingOverrideEnabled } from "./testing-access";
+import { normalizeThemeKey } from "./registry";
+import { canUseThemeWithTestingOverride, isThemeTestingOverrideEnabled } from "./testing-access";
 import type { ThemeKey } from "./types";
 import type { FnResult } from "@/lib/menu/types";
 
@@ -29,7 +29,7 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
 
       const subscription = await getSubscription(sql, member.tenant_id);
       const testingOverride = isThemeTestingOverrideEnabled();
-      if (!canUseTheme(themeKey, subscription?.code) && !testingOverride) {
+      if (!canUseThemeWithTestingOverride(themeKey, subscription?.code)) {
         return { ok: false, code: "forbidden", error: "هذا التصميم متاح ضمن الخطط المدفوعة. يمكنك معاينته ثم الترقية لاستخدامه." };
       }
       if (testingOverride && themeKey !== "essential") {
