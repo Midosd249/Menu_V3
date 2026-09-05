@@ -36,13 +36,16 @@ Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-int
 - **TODO:** update the memory after future major incidents, expensive milestones, or newly discovered hard problems.
 
 ## Current Task
-### Authenticated Browser/Device QA of the Five Preview Variants — IN_PROGRESS
-- Verify direct browser/device behavior before Theme 4 Heritage work begins.
-- Check Arabic RTL, English LTR, and mixed-direction content.
-- Check responsive states and fixed controls for overlap, clipping, reachability, and safe-area behavior.
-- Check empty/populated customer-action states and visible action hierarchy.
-- Inspect post-hydration console behavior where supported.
-- Record direct evidence; do not infer visual success from HTTP 200, source inspection, or unit tests.
+### Authenticated Browser/Device QA of the Five Preview Variants — IN_PROGRESS / BLOCKED
+- **VERIFIED:** latest `main` is `621f94d534e5064225512ea448ea617913dc585f` before this documentation-only evidence update sequence; the current branch now advances through the continuity commits for this QA record.
+- **VERIFIED:** latest successful quality run `33999726885` completed typecheck, tests, lint, production build, Playwright Chromium installation, and Browser template QA for all five themes.
+- **VERIFIED:** direct Vercel SSR preview requests for `/m/nafas` succeeded with HTTP 200 for `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- **VERIFIED:** Arabic SSR preview state resolves `lang="ar"`, `dir="rtl"`, preview theme mode, and the requested theme.
+- **VERIFIED:** English Editorial SSR preview resolves `lang="en"`, `dir="ltr"`, English labels, and the requested theme.
+- **VERIFIED:** populated preview markup contains menu categories/products/SAR prices and fixed customer-action markup where rendered.
+- **UNKNOWN:** mixed-direction rendering, actual responsive viewport geometry, fixed-control overlap/safe-area behavior, interactive language switching, item dialog/action behavior, empty-cart interaction, and post-hydration console output.
+- **BLOCKED:** the available connector surface has no interactive browser/device or real-device screenshot/console capability. The acceptance criteria requiring direct browser/device evidence therefore cannot be closed honestly in this session.
+- **STOP RULE:** do not redesign themes, start Theme 4 Heritage, or make unrelated fixes while this evidence gate is blocked.
 
 ## Acceptance Criteria
 - Direct browser/device evidence exists for the supported preview variants.
@@ -53,5 +56,5 @@ Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-int
 - Any failure is isolated and documented before a targeted fix.
 - Continuity records are updated with evidence, remaining risks, and exactly one next task.
 
-## Exact Next Task After Closure
-If the browser/device QA gate passes, reconcile the evidence in `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`, then identify the next repository TODO. Do not begin Theme 4 Heritage automatically.
+## Exact Next Task
+Provide direct authenticated browser/device evidence for the five preview variants using an interactive browser/real-device surface, then inspect screenshots and post-hydration console output. Close the gate only if all acceptance criteria pass; otherwise isolate the first failing behavior and make one targeted fix only. Do not begin Theme 4 Heritage work before closure.
