@@ -104,6 +104,15 @@ If a check cannot run, record the exact command, reason, alternative evidence, a
 ## Continuity Contract
 At the end of every session, update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update `SESSION_PROTOCOL.md` whenever workflow rules change. Append a dated session log to `PROJECT_STATE.md`. Record current commit/state, files changed, commands/results, known issues/blockers, uncertainty, and exactly one next task. Keep continuity files consistent. Do not mark `DONE` without direct evidence.
 
+## Project Memory and Learning System
+- `docs/project-memory/problems-learned.md` is the permanent repository memory of hard problems, root causes, failed or wasteful approaches, working solutions, lessons, anti-patterns, and detection checklists.
+- Read this file at the start of complex tasks and whenever current symptoms resemble a recorded problem pattern.
+- Before entering a long debugging or design-iteration loop, check `docs/project-memory/problems-learned.md` for similar patterns.
+- If current symptoms match a recorded problem, apply the recorded lessons and detection checklist before trying new approaches.
+- Avoid all recorded anti-patterns unless repository evidence proves that a narrowly scoped exception is necessary.
+- After any major incident or expensive milestone, propose an update to `docs/project-memory/problems-learned.md`; after resolving a new hard problem, add it with its root cause, lessons, and anti-patterns.
+- Keep memory evidence-based. Mark uncertain details `INFERRED` or `UNKNOWN`; do not turn guesses or chat recollection into repository facts.
+
 ## Debugging and Incidents
 Reproduce when possible → isolate the smallest failing surface → inspect code/tests/config/logs/history → identify root cause → apply the smallest reversible fix → rerun the failing check → run broader applicable gates → review the diff. Treat visual covering layers as rendering/stacking problems first and inspect DOM structure, positioning/sizing, stacking contexts, pseudo-elements, animation/paint timing, responsive constraints, then targeted z-index changes.
 
