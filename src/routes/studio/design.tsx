@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check, Crown, Eye, Save, Sparkles } from "lucide-react";
+import { Check, Eye, Save, Sparkles } from "lucide-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/lang";
 import { useStudio } from "@/lib/menu/studio";
@@ -83,7 +83,6 @@ function DesignPage() {
         {MENU_THEMES.map((theme, index) => {
           const isSelected = selected === theme.key;
           const isSaved = saved === theme.key;
-          const premium = theme.tier === "premium";
           return (
             <article key={theme.key} className={cn("group overflow-hidden rounded-[1.4rem] border bg-paper transition duration-300", isSelected ? "border-ink ring-2 ring-ink/10" : "border-line hover:-translate-y-1 hover:border-ink/30")}>
               <button type="button" onClick={() => setSelected(theme.key)} aria-pressed={isSelected} className="block w-full text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset">
@@ -91,7 +90,7 @@ function DesignPage() {
                   <div className="preview-orb" />
                   <div className="flex items-center justify-between gap-3">
                     <span>{String(index + 1).padStart(2, "0")}</span>
-                    {premium ? <span className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-black/15 px-2 py-1 text-[10px] tracking-normal text-white backdrop-blur-sm"><Crown className="size-3" />{lang === "ar" ? "Premium" : "Premium"}</span> : <span className="rounded-full bg-white/75 px-2 py-1 text-[10px] font-semibold tracking-normal text-ink">{lang === "ar" ? "مجاني" : "Free"}</span>}
+                    <span className="rounded-full bg-white/75 px-2 py-1 text-[10px] font-semibold tracking-normal text-ink">{lang === "ar" ? "مجاني" : "Free"}</span>
                   </div>
                   <strong>{lang === "ar" ? theme.name.ar : theme.name.en}</strong>
                 </div>
@@ -114,7 +113,6 @@ function DesignPage() {
                   <Eye className="size-4" />
                   {lang === "ar" ? "معاينة كاملة" : "Full preview"}
                 </Link>
-                {premium ? <span className="inline-flex h-10 items-center rounded-xl bg-ink px-3 text-[11px] font-semibold text-paper"><Crown className="me-1 size-3" />Premium</span> : null}
               </div>
             </article>
           );
@@ -124,11 +122,11 @@ function DesignPage() {
       <aside className="grid gap-3 rounded-2xl border border-line bg-sand/30 p-5 sm:grid-cols-[auto_1fr] sm:items-center">
         <div className="grid size-11 place-items-center rounded-full bg-ink text-paper"><Sparkles className="size-5" /></div>
         <div>
-          <h2 className="font-semibold">{lang === "ar" ? "لماذا Premium؟" : "Why Premium?"}</h2>
+          <h2 className="font-semibold">{lang === "ar" ? "كل التصاميم متاحة مجاناً" : "Every design is free"}</h2>
           <p className="mt-1 text-sm leading-6 text-muted">
             {lang === "ar"
-              ? "التصاميم المدفوعة ليست ألواناً إضافية: هي أنظمة بصرية كاملة تشمل تخطيطاً مختلفاً، معالجة للصور، تكوينات مميزة وحركة محسوبة. يمكنك معاينتها قبل الترقية."
-              : "Paid designs are not extra color palettes: they are complete visual systems with different layouts, image treatment, featured compositions and considered motion. Preview them before upgrading."}
+              ? "يمكن لكل عميل تجربة أي من التصاميم الخمسة واختيار الأنسب لهوية المطعم، مع بقاء بيانات الأصناف والهوية نفسها."
+              : "Every client can try all five designs and choose the best fit for the restaurant identity while keeping the same menu data."}
           </p>
         </div>
       </aside>

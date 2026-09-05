@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
-import { createRestaurant, getMyStudio, seedStarterItems, updateTenant } from "@/lib/menu/owner";
+import { createRestaurant, getMyStudio, saveBranch, seedStarterItems, updateTenant } from "@/lib/menu/owner";
 import { slugify } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({ component: Onboarding });
@@ -33,6 +33,9 @@ function Onboarding() {
     branchNameAr: "الفرع الرئيسي",
     branchNameEn: "Main branch",
     addressAr: "",
+    addressEn: "",
+    mapsUrl: "",
+    branchPhone: "",
   });
   const [items, setItems] = useState([
     { categoryAr: "القهوة", categoryEn: "Coffee", nameAr: "", nameEn: "", price: "" },
@@ -105,6 +108,26 @@ function Onboarding() {
         }
         setError(created.error);
         return;
+      }
+
+      const branch = created.data.branches[0];
+      if (branch) {
+        const savedBranch = await saveBranch({
+          data: {
+            id: branch.id,
+            nameAr: form.branchNameAr.trim(),
+            nameEn: form.branchNameEn.trim(),
+            addressAr: form.addressAr.trim(),
+            addressEn: form.addressEn.trim(),
+            mapsUrl: form.mapsUrl.trim(),
+            phone: form.branchPhone.trim(),
+            isActive: true,
+          },
+        });
+        if (!savedBranch.ok) {
+          setError(savedBranch.error);
+          return;
+        }
       }
 
       const starter = items
@@ -190,6 +213,18 @@ function Onboarding() {
           <Field label={t(copy.studio.address, lang)}>
             <Input value={form.addressAr} onChange={(e) => set("addressAr", e.target.value)} />
           </Field>
+          <Field label={lang === "ar" ? "العنوان بالإنجليزية" : "Address in English"}>
+            <Input value={form.addressEn} onChange={(e) => set("addressEn", e.target.value)} />
+          </Field>
+          <Field label={t(copy.studio.maps, lang)}>
+            <Input value={form.mapsUrl} onChange={(e) => set("mapsUrl", e.target.value)} type="url" placeholder="https://maps.google.com/..." />
+          </Field>
+          <Field label={t(copy.studio.phone, lang)}>
+            <Input value={form.branchPhone} onChange={(e) => set("branchPhone", e.target.value)} inputMode="tel" />
+          </Field>
+          <p className="text-xs leading-5 text-muted">
+            {lang === "ar" ? "أدخل رابط Google Maps للفرع ليظهر زر الموقع في المنيو. العنوان ورابط الخريطة والمدينة هي بيانات الموقع الأساسية." : "Add the branch Google Maps URL so the location action can appear on the menu. Address, map URL and city form the core location data."}
+          </p>
         </div>
       ) : null}
 

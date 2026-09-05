@@ -45,11 +45,11 @@ const definitions: readonly ThemeDefinition[] = [
   {
     key: "editorial",
     family: "contemporary-restaurant",
-    tier: "premium",
+    tier: "free",
     name: { ar: "إديتوريال", en: "Editorial" },
     description: { ar: "تجربة تشبه مجلة ضيافة فاخرة: جريئة في العناوين ودقيقة في التفاصيل.", en: "A hospitality editorial experience with bold hierarchy and refined detail." },
     promise: { ar: "حوّل المنيو إلى قصة بصرية متكاملة.", en: "Turn the menu into a complete visual story." },
-    tags: [{ ar: "فاخر", en: "Premium" }, { ar: "تحريري", en: "Editorial" }, { ar: "هوية", en: "Brand-led" }],
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "تحريري", en: "Editorial" }, { ar: "هوية", en: "Brand-led" }],
     tokens: {
       ...baseTokens,
       colors: { ...baseTokens.colors, background: "#f4efe7", surface: "#fffdf9", surfaceMuted: "#e9dfd2", border: "#d7c8b7", accent: "#9b5134" },
@@ -66,11 +66,11 @@ const definitions: readonly ThemeDefinition[] = [
   {
     key: "noir",
     family: "fine-dining-hospitality",
-    tier: "premium",
+    tier: "free",
     name: { ar: "نوار", en: "Noir" },
     description: { ar: "مزاج ليلي سينمائي مستوحى من قوائم المطاعم الراقية والضوء الدافئ.", en: "A cinematic night-time experience inspired by fine dining and candlelight." },
     promise: { ar: "اجعل فتح المنيو لحظة دخول إلى المطعم.", en: "Make opening the menu feel like entering the restaurant." },
-    tags: [{ ar: "فاخر", en: "Premium" }, { ar: "سينمائي", en: "Cinematic" }, { ar: "ليلي", en: "Night" }],
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "سينمائي", en: "Cinematic" }, { ar: "ليلي", en: "Night" }],
     tokens: {
       ...baseTokens,
       colors: { background: "#0d0b0a", foreground: "#f6efe6", surface: "#171311", surfaceMuted: "#211a16", border: "#3a2e27", primary: "#f6efe6", primaryForeground: "#0d0b0a", accent: "#d29a5f", accentForeground: "#17110d", muted: "#aa9b90", mutedForeground: "#aa9b90" },
@@ -87,11 +87,11 @@ const definitions: readonly ThemeDefinition[] = [
   {
     key: "heritage",
     family: "contemporary-restaurant",
-    tier: "premium",
+    tier: "free",
     name: { ar: "أصالة", en: "Heritage" },
     description: { ar: "ضيافة عربية معاصرة تستلهم الخامات والنقوش بدون ازدحام بصري.", en: "Contemporary Arabic hospitality inspired by material, pattern and craft." },
     promise: { ar: "هوية عربية فاخرة تبدو أصلية لا مزخرفة.", en: "A distinctly Arabic luxury identity without ornament overload." },
-    tags: [{ ar: "فاخر", en: "Premium" }, { ar: "عربي", en: "Arabic" }, { ar: "سعودي", en: "Saudi" }],
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "عربي", en: "Arabic" }, { ar: "سعودي", en: "Saudi" }],
     tokens: {
       ...baseTokens,
       colors: { background: "#eee3d1", foreground: "#2b2118", surface: "#fbf6ec", surfaceMuted: "#e5d4bb", border: "#cbb391", primary: "#2b2118", primaryForeground: "#fffaf1", accent: "#986532", accentForeground: "#fffaf1", muted: "#75624f", mutedForeground: "#75624f" },
@@ -108,11 +108,11 @@ const definitions: readonly ThemeDefinition[] = [
   {
     key: "gallery",
     family: "bakery-dessert",
-    tier: "premium",
+    tier: "free",
     name: { ar: "غاليري", en: "Gallery" },
     description: { ar: "منيو بصري تكون فيه الصور والمنتجات هي أبطال الصفحة.", en: "An image-led menu where dishes become the visual heroes." },
     promise: { ar: "اعرض أطباقك ككتالوج بصري فاخر.", en: "Present your dishes like a premium visual catalogue." },
-    tags: [{ ar: "فاخر", en: "Premium" }, { ar: "صور أولاً", en: "Image-first" }, { ar: "كتالوج", en: "Catalogue" }],
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "صور أولاً", en: "Image-first" }, { ar: "كتالوج", en: "Catalogue" }],
     tokens: {
       ...baseTokens,
       colors: { ...baseTokens.colors, background: "#eee9e1", surface: "#fffdf9", surfaceMuted: "#e4ddd3", border: "#d1c7ba", accent: "#7b4d36" },
@@ -158,10 +158,10 @@ export function getThemeFamily(key: ThemeKey): TemplateFamily {
   return getTheme(key).family;
 }
 
-export function isPremiumTheme(key: ThemeKey): boolean {
-  return getTheme(key).tier === "premium";
+export function isPremiumTheme(_key: ThemeKey): boolean {
+  return false;
 }
 
-export function canUseTheme(key: ThemeKey, planCode: string | null | undefined): boolean {
-  return !isPremiumTheme(key) || (planCode !== null && planCode !== undefined && planCode !== "free");
+export function canUseTheme(_key: ThemeKey, _planCode: string | null | undefined): boolean {
+  return true;
 }
