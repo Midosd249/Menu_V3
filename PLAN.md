@@ -59,10 +59,18 @@ Vercel is a release platform, not the normal development or design-iteration env
 - Temporary theme testing override must be reviewed and disabled before commercial production launch.
 - Implementation status and deployment status must remain separate.
 
+## Homepage Demo Source-of-Truth Reconciliation — IN_PROGRESS
+- **VERIFIED:** homepage live CTA/card use slug `nafas`.
+- **VERIFIED:** production `menu_v3.tenants` contains `demo-nafas` with slug `nafas`, published state, and Editorial theme.
+- **VERIFIED:** `demo-nafas.owner_user_id` resolves to `midosd2.mm@gmail.com`; the same user is an `owner` in `menu_v3.tenant_members`.
+- **VERIFIED:** the tenant had one active branch and was previously inactive; it was activated so the real published public loader can serve it.
+- **VERIFIED:** the public loader previously bypassed the database for slug `nafas` and returned static `DEMO_MENU`, preventing Studio edits from appearing in the homepage-linked public menu.
+- **IMPLEMENTED:** removed that hard-coded `nafas` short-circuit so the published database tenant is the source of truth.
+- **UNKNOWN:** deployed/browser confirmation of the changed data flow.
+
 ## Documentation Milestone
-- **IN_PROGRESS:** this task updates only the explicitly authorized governance/documentation files and creates only `docs/release-only-vercel-workflow.md`.
-- **VERIFIED:** no application code, template, database schema/migration, authentication/authorization, subscription, tenant/branch isolation, product feature, dependency, CI/CD workflow, Vercel setting, `vercel.json`, environment variable, or deployment configuration is being changed.
-- **VERIFIED:** no intentional Vercel deployment is part of this documentation milestone.
+- **VERIFIED:** release-only Vercel workflow is recorded in the governance documentation.
+- **VERIFIED:** no schema/migration change is part of this reconciliation.
 
 ## Exact Next Action
-After the release-only documentation is fully verified, return to the existing evidence gate: check Vercel for a deployment corresponding to merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`. If READY, inspect runtime evidence, record deployment status, and stop. Do not begin another theme.
+Run CI for the homepage source-of-truth branch, review the final diff, then merge only after quality gates pass. After deployment, perform one real dashboard edit → homepage/public-menu reflection check. Do not begin another theme.

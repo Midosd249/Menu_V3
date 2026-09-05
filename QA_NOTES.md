@@ -31,3 +31,13 @@ The production preview initially failed because PGLite runtime files were not co
 ## Production public menu — 2026-09-02
 
 The production preview served `/m/nafas` successfully at 1280×800 and 390×844. Its PGLite fallback loaded the menu migrations, the demo image backfill, and the packaged food assets. Both automated and visual checks found visible RTL content, complete product imagery, no console or page errors, and no horizontal overflow.
+
+## Homepage `nafas` source-of-truth reconciliation — 2026-09-05
+
+- **VERIFIED:** the homepage live-menu CTA/card uses slug `nafas`.
+- **VERIFIED:** the production `menu_v3` database contains `demo-nafas` with the same slug, published state, Editorial theme, and one active branch.
+- **VERIFIED:** ownership resolves to `midosd2.mm@gmail.com`, with `owner` membership.
+- **VERIFIED:** the tenant was inactive and was activated for the published route.
+- **VERIFIED:** the public loader previously bypassed the database and returned static `DEMO_MENU` for `nafas`.
+- **IMPLEMENTED:** the static `nafas` bypass was removed so the public route reads the live published tenant.
+- **UNKNOWN:** final production browser proof that a dashboard edit is reflected publicly; this must be performed after release.

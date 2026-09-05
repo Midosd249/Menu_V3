@@ -36,7 +36,7 @@
 - **VERIFIED:** public language switching preserves route search state; English is explicitly disabled when the menu lacks the required English identity data instead of fabricating English content; root `lang`/`dir` follows the selected locale.
 - **VERIFIED:** temporary theme testing override is server-only, owner/admin-gated, tenant-scoped, subscription-status-safe, and requires a future expiry timestamp.
 - **VERIFIED:** layering is documented and uses the Editorial scale: navigation 20, cart 40, dialogs 60, success 70.
-- **VERIFIED:** no database schema/migration change was introduced.
+- **VERIFIED:** no database schema/migration change was introduced for Editorial.
 - **VERIFIED:** final Editorial branch quality workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
 - **VERIFIED:** PR #13 was squash-merged into `main` as commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after the final quality workflow passed.
 
@@ -60,18 +60,29 @@
 - **VERIFIED:** exact rule: visual CSS/theme iteration must not require Vercel deployment.
 
 ## Continuity Documents
-- `AGENTS.md` now contains the permanent Release-Only Vercel Policy.
-- `PROJECT_STATE.md` records the permanent release policy and this documentation-only milestone.
-- `PLAN.md` records the release workflow as the governing deployment strategy.
-- `TASKS.md` records the release workflow as a permanent quality/release gate.
+- `AGENTS.md` contains the permanent Release-Only Vercel Policy and startup/quality contract.
+- `PROJECT_STATE.md` records verified project state and session continuity.
+- `PLAN.md` records the release workflow and exact next task.
+- `TASKS.md` records the task queue and closure evidence.
 - `SESSION_PROTOCOL.md` contains the permanent release-only execution protocol.
 - `docs/release-only-vercel-workflow.md` is the detailed operating procedure.
-- Dated session log: `docs/sessions/2026-09-05-editorial-premium-refinement.md` remains historical; no new session-log file is created in this documentation-only task because the authorized file scope is exact.
+- `docs/design-research-log.md`, `docs/visual-functional-audit.md`, and `docs/template-review-checklist.md` remain the permanent quality evidence set.
 
-## Documentation Milestone — Release-Only Vercel Workflow
-- **IN_PROGRESS:** updating only the six explicitly authorized governance/documentation paths.
-- **VERIFIED:** no application/template/database/auth/subscription/tenant/product/dependency/CI/CD/Vercel-setting/environment/deployment-configuration change is in scope.
-- **VERIFIED:** no intentional Vercel deployment is part of this task.
+## Homepage Demo Source-of-Truth Reconciliation — IN_PROGRESS
+- **VERIFIED:** the marketing homepage CTA/live card uses slug `nafas`.
+- **VERIFIED:** production database project `ublxptcqefujkbeepylc` contains `menu_v3.tenants.id=demo-nafas`, `slug=nafas`, `name_ar=نَفَس`, `name_en=Nafas`, `is_published=true`, `theme_key=editorial`.
+- **VERIFIED:** `demo-nafas.owner_user_id=lyFgwXjJpkPirr0inS1TxvJbM09yXKXp` resolves in `menu_v3."user"` to `midosd2.mm@gmail.com`; `menu_v3.tenant_members` gives that user role `owner`.
+- **VERIFIED:** the tenant has one active branch.
+- **VERIFIED:** `demo-nafas` was inactive and has been activated so the published public loader can serve the real tenant.
+- **VERIFIED:** before this task, `getPublicMenu` returned static `DEMO_MENU` whenever the slug was `nafas`, so dashboard changes could not flow to the homepage-linked public menu.
+- **IMPLEMENTED:** the `nafas` hard-coded public-loader short-circuit was removed on branch `fix/homepage-demo-source-of-truth`; published tenant data is now the source of truth.
+- **VERIFIED:** the repository homepage and database point to the same tenant slug and tenant ID mapping; the ownership is the requested `midosd2.mm@gmail.com` account.
+- **UNKNOWN:** production deployment/browser confirmation of the new dynamic flow until CI and release deployment complete.
+
+## Latest Release Evidence
+- **VERIFIED:** `main` currently points to commit `3c3bd3716be6477d9b8a82a79771fe6aeec5f519`, whose parent is `f2695c7316b32ba423616f22434b142e9dd61a6c`.
+- **IN_PROGRESS:** branch `fix/homepage-demo-source-of-truth` contains the public-loader correction plus continuity updates.
+- **UNKNOWN:** final CI status for the new branch.
 
 ## Exact Next Action
-After this documentation-only milestone is verified, the next product task remains the existing deployment evidence gate: verify Vercel deployment for merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`, inspect available runtime evidence, update deployment status, and stop. Do not begin another theme.
+Run the branch quality gates, review the final diff, merge the coherent source-of-truth correction into `main` only after CI passes, then verify one real dashboard edit is reflected in the homepage-linked `/m/nafas` public menu. Do not begin another theme.
