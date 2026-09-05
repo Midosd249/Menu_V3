@@ -26,7 +26,7 @@
 - **VERIFIED:** implementation status and deployment status are separate. Use `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED`, `DONE`.
 - **VERIFIED:** `DEPLOYED` requires direct Vercel evidence.
 - **VERIFIED:** quota/rate/paused/unavailable Vercel conditions require `DEPLOYMENT_BLOCKED`, no random retry, no claim that Production equals `main`, and preservation of verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified.
-- **VERIFIED:** urgent production outage, critical security/privacy issue, or data-loss fix is the only release-process exception and must be narrowly documented.
+- **VERIFIED:** urgent production outage, critical security/privacy, or data-loss fix is the only release-process exception and must be narrowly documented.
 - **VERIFIED:** post-release breakage may use Instant Rollback only when an eligible previous production deployment exists; record target/reason and then fix through the normal verified release batch.
 - **VERIFIED:** before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to identify the limited resource.
 - **VERIFIED:** exact rule: visual CSS/theme iteration must not require Vercel deployment.
@@ -48,8 +48,14 @@
 ## Permanent Quality Gate
 Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, and `docs/design-research-log.md`.
 
+## Project Memory and Learning System
+- **VERIFIED:** permanent learned-problem memory is maintained at `docs/project-memory/problems-learned.md`.
+- **VERIFIED:** complex tasks and long debugging/design loops must consult this memory before trying new approaches when a similar pattern may exist.
+- **VERIFIED:** current memory covers Vercel/release strategy, theme visual QA, UI layering/overlays, RTL/language switching, continuity drift, branching/release batching, build/dependency tooling, and authentication runtime behavior.
+- **TODO:** update the memory after future major incidents, expensive milestones, or newly discovered hard problems.
+
 ## Documentation Milestone
-- **IN_PROGRESS:** release-only Vercel workflow is being recorded only in the six explicitly authorized governance/documentation paths.
+- **IN_PROGRESS:** project-memory learning system is being established using only authorized governance/documentation paths.
 - **VERIFIED:** no application code, template, schema, migration, authentication, authorization, subscription, tenant/branch isolation, product feature, dependency, CI/CD, Vercel setting, `vercel.json`, environment variable, or deployment configuration is being changed.
 - **VERIFIED:** no intentional Vercel deployment is part of this milestone.
 
