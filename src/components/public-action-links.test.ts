@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "./public-action-links.ts";
+import { buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "@/lib/menu/public-actions";
 import type { Branch, Tenant } from "@/lib/menu/types";
 
 const tenant: Tenant = {
