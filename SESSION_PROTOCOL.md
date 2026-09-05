@@ -7,20 +7,41 @@
 4. Identify the highest-value unblocked atomic task from repository evidence and explicit user scope.
 5. For template/public-menu work, complete the permanent quality gate before implementation.
 
-## Premium Template Workflow
-For every future public-menu, template, theme, SEO, accessibility, performance, or conversion-flow task:
+## Permanent Release-Only Vercel Workflow
+Vercel is a release platform, not the normal development or design-iteration environment. The normal path is:
 
-**DISCOVER → AUDIT → SEGMENT → RESEARCH → DESIGN BRIEF → PLAN → IMPLEMENT → REAL-DATA TEST → VISUAL REVIEW → FUNCTIONAL REVIEW → VERIFY → DOCUMENT → STOP**
+**LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT**
 
-- Repository evidence is first priority.
-- Connected tools are used only when actually connected.
-- Public sources must be authoritative/reputable and material to the decision.
-- Saudi/MENA examples are used for transferable principles, not copying.
-- The complete customer journey is audited, not only the hero or one screenshot.
-- Review supported mobile/tablet/desktop sizes, Arabic RTL, English LTR, mixed-direction text, real-data stress states, and supported loading/empty/error/unavailable states.
-- Audit cart/order, WhatsApp, phone, map/location, social, search, category navigation, and icons only when those capabilities exist.
-- Do not add or imply unsupported actions.
-- Browser/device visual claims require browser/device evidence; otherwise mark them `UNKNOWN` and record exact follow-up evidence.
+### Local-first rules
+- `main` must remain stable and deployable.
+- When a local workflow is available, use a milestone/release branch for the atomic task and local commits as safe checkpoints.
+- Do not push each small implementation change merely to obtain visual feedback.
+- Visual CSS/theme iteration must not require Vercel deployment.
+- Typography, spacing, card layout, theme styling, RTL, responsive behavior, and ordinary animation refinement are verified locally first.
+
+### GitHub quality and release-batch gate
+Before merging to `main`, complete the applicable unit/integration/E2E, lint, typecheck, build, browser/visual, accessibility, mobile/responsive, Arabic RTL, English LTR, mixed-direction, security/authz/tenant/branch/input-validation, public-menu/critical-flow, SEO, database-safety, final-diff, continuity, and rollback checks. Then form one coherent release batch and merge only after the batch is verified.
+
+### Preview Deployment exception policy
+Vercel Preview Deployments are exceptions, not ordinary development environments. Use one only when local verification cannot prove deployment-specific behavior, such as production-like environment variables, third-party integrations, domain/routing/edge behavior, deployment-specific runtime behavior, stable candidate sharing, or significant release risk that cannot be locally verified. Before creating a preview, record why local verification is insufficient, the exact behavior being tested, branch/commit, and success criteria. Do not use previews for ordinary CSS, typography, spacing, theme, RTL, responsive, or small visual changes.
+
+### Production deployment policy
+Production deployment occurs only after a complete verified release batch is merged to `main`. Prefer one Vercel production deployment for the batch. Do not intentionally trigger repeated deployments, Redeploy, or failed-build retries without a documented reason. CI success is not deployment evidence. `DEPLOYED` requires direct Vercel evidence showing the deployed production commit/state.
+
+### Quota, rate, pause, and build-block handling
+Before any future deployment-related decision, inspect the actual Vercel Usage/Billing page and determine which resource is limited. If Vercel is quota-limited, rate-limited, paused, or unavailable:
+- do not retry randomly;
+- record `DEPLOYMENT_BLOCKED`;
+- do not claim Production equals `main`;
+- preserve verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified;
+- record the exact blocker and evidence;
+- continue local work only when it does not depend on the blocked deployment.
+
+### Urgent exception
+Urgent production outages, critical security/privacy issues, and data-loss fixes are the only release-process exception. Scope the exception narrowly, document why the normal path could not be followed, verify the fix, and return to the normal release workflow immediately afterward.
+
+### Rollback
+If production is broken after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists. Record the rollback target and reason. Do not delete or invalidate the rollback target. Then fix forward through the normal local verification → quality gates → coherent release batch → main → production workflow. Not every preview deployment is an eligible rollback target.
 
 ## Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
@@ -58,7 +79,7 @@ For every future public-menu, template, theme, SEO, accessibility, performance, 
 
 ## Stop
 1. Stop after the single current task is completed or blocked.
-2. Update continuity files and append a dated session log.
+2. Update continuity files and append a dated session log. If the task has an explicitly restricted file allowlist, record the session entry in an already-authorized continuity file rather than creating an unapproved path.
 3. Record files changed, commands/results, commit evidence, uncertainty, blockers, and exactly one next task.
 4. Do not begin another template automatically.
 
@@ -72,3 +93,10 @@ For every future public-menu, template, theme, SEO, accessibility, performance, 
 - `IN_PROGRESS` — the single current execution task.
 - `DONE` — completed with explicit evidence.
 - `CLOSED` — milestone completed and verified to release criteria.
+- `IMPLEMENTATION_IN_PROGRESS` — implementation work is active and not yet locally verified.
+- `VERIFIED_LOCALLY` — implementation has passed applicable local verification but is not yet pushed/released.
+- `READY_TO_PUSH` — local release batch is verified and ready for the controlled push/merge step.
+- `PUSHED` — the release batch has been pushed to its intended remote branch; this is not deployment evidence.
+- `DEPLOYED` — direct Vercel evidence confirms the intended production deployment.
+- `DEPLOYMENT_BLOCKED` — implementation/release is blocked specifically by Vercel availability, quota, rate, pause, build, or platform conditions.
+- `IMPLEMENTATION_BLOCKED` — implementation cannot proceed because of a hard technical, permission, dependency, or environment blocker.
