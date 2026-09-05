@@ -93,13 +93,14 @@ test("Editorial refinement prevents hero logo hijacking, unstable card transform
   assert.match(styles, /\.editorial-product-image[\s\S]*animation:\s*none\s*!important/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
   assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
-  assert.match(styles, /editorial-dialog[\s\S]*z-index:\s*60/);
+  assert.match(styles, /editorial-dialog\s*,[\s\S]*editorial-cart[\s\S]*border:/);
+  assert.match(styles, /fixed inset-0 z-\[60\]/);
   assert.match(styles, /safe-area-inset-bottom/);
 });
 
 test("language switching preserves route search state and makes missing English content explicit", async () => {
   const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
-  assert.match(toggle, /search:\s*\(previous\)\s*=>\s*\(\{\s*\.\.\.previous,\s*lang:/);
+  assert.match(toggle, /currentSearch[\s\S]*lang:\s*next\s*===\s*"en"/);
   assert.match(toggle, /englishAvailable\s*=\s*true/);
   assert.match(toggle, /disabled=\{!englishAvailable\}/);
   const route = await readFile("src/routes/m.$slug.tsx", "utf8");
@@ -115,5 +116,5 @@ test("temporary theme override is server-controlled and expiry-bound", async () 
   assert.doesNotMatch(server, /data\.testingOverride/);
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE/);
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT/);
-  assert.match(access, /expiry\)\s*>\s*now/);
+  assert.match(access, /expiry\s*>\s*now/);
 });
