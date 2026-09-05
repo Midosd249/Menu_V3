@@ -1,5 +1,5 @@
-import { canUseTheme } from "./registry";
-import type { ThemeKey } from "./types";
+import { canUseTheme } from "./registry.ts";
+import type { ThemeKey } from "./types.ts";
 
 export const THEME_TESTING_OVERRIDE_ENV = "MENU_THEME_TESTING_OVERRIDE";
 export const THEME_TESTING_OVERRIDE_EXPIRES_ENV = "MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT";
