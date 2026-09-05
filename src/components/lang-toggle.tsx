@@ -6,13 +6,15 @@ export function LangToggle({ className, englishAvailable = true }: { className?:
   const { lang, setLang } = useLang();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const search = useRouterState({ select: (state) => state.location.search });
   const isPublicMenu = pathname === "/m" || pathname.startsWith("/m/");
 
   const changeLang = (next: "ar" | "en") => {
     if (next === "en" && !englishAvailable) return;
     if (isPublicMenu) {
+      const currentSearch = search as Record<string, unknown>;
       void navigate({
-        search: (previous) => ({ ...previous, lang: next === "en" ? "en" : undefined }),
+        search: { ...currentSearch, lang: next === "en" ? "en" : undefined } as never,
       });
       return;
     }
