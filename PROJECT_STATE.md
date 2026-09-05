@@ -59,17 +59,24 @@
 - **VERIFIED:** before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to identify the limited resource.
 - **VERIFIED:** exact rule: visual CSS/theme iteration must not require Vercel deployment.
 
+## Project Memory and Learning System
+- **VERIFIED:** permanent problem-learning memory is now stored at `docs/project-memory/problems-learned.md`.
+- **VERIFIED:** the memory records hard incidents and expensive rework across Vercel/release strategy, theme QA, UI layering, RTL/language switching, continuity drift, branching/release batching, build/dependency tooling, and authentication runtime behavior.
+- **VERIFIED:** `AGENTS.md` now requires agents to read the memory before complex work or long debugging/design loops, apply matching detection checklists, avoid recorded anti-patterns, and update the memory after major incidents or expensive milestones.
+- **VERIFIED:** this memory is documentation-only and does not change application behavior, templates, schema, auth, subscriptions, dependencies, CI/CD, or deployment configuration.
+
 ## Continuity Documents
-- `AGENTS.md` now contains the permanent Release-Only Vercel Policy.
-- `PROJECT_STATE.md` records the permanent release policy and this documentation-only milestone.
-- `PLAN.md` records the release workflow as the governing deployment strategy.
-- `TASKS.md` records the release workflow as a permanent quality/release gate.
-- `SESSION_PROTOCOL.md` contains the permanent release-only execution protocol.
+- `AGENTS.md` contains the permanent Release-Only Vercel Policy and Project Memory rules.
+- `PROJECT_STATE.md` records the permanent release policy, project-memory system, and this documentation-only milestone.
+- `PLAN.md` records the release workflow and project-memory maintenance as governing workflow.
+- `TASKS.md` records the release workflow and project-memory maintenance as permanent gates.
+- `SESSION_PROTOCOL.md` contains the permanent release-only execution protocol and project-memory startup/incident-learning rule.
 - `docs/release-only-vercel-workflow.md` is the detailed operating procedure.
+- `docs/project-memory/problems-learned.md` is the permanent learned-problems record.
 - Dated session log: `docs/sessions/2026-09-05-editorial-premium-refinement.md` remains historical; no new session-log file is created in this documentation-only task because the authorized file scope is exact.
 
-## Documentation Milestone — Release-Only Vercel Workflow
-- **IN_PROGRESS:** updating only the six explicitly authorized governance/documentation paths.
+## Documentation Milestone — Project Memory
+- **IN_PROGRESS:** creating and wiring the permanent project-memory learning system using only authorized documentation paths.
 - **VERIFIED:** no application/template/database/auth/subscription/tenant/product/dependency/CI/CD/Vercel-setting/environment/deployment-configuration change is in scope.
 - **VERIFIED:** no intentional Vercel deployment is part of this task.
 
