@@ -46,12 +46,32 @@
 - **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection for Editorial.
 - **BLOCKED:** do not claim Editorial `DEPLOYED` until Vercel evidence points to the merged main release.
 
+## Permanent Release-Only Vercel Workflow
+- **VERIFIED:** Vercel is a release platform, not the normal development or design-iteration environment.
+- **VERIFIED:** normal release path is `LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT`.
+- **VERIFIED:** `main` remains stable/deployable; milestone/release branches and local checkpoint commits are preferred when a local workflow is available; small visual changes must not be pushed merely to iterate in Vercel.
+- **VERIFIED:** Preview Deployments are exceptions only for deployment-specific behavior that local verification cannot prove, stable candidate sharing, or material release risk that requires production-like infrastructure. They are not ordinary CSS/theme/typography/spacing/RTL/responsive iteration tools.
+- **VERIFIED:** production deployment occurs only after a complete verified release batch; random redeploy/retry behavior is prohibited.
+- **VERIFIED:** implementation status is separate from deployment status and uses `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED`, `DONE`.
+- **VERIFIED:** `DEPLOYED` requires direct Vercel evidence. Quota/rate/build/platform blocks require `DEPLOYMENT_BLOCKED`, no random retry, no claim that Production equals `main`, and preservation of verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified.
+- **VERIFIED:** urgent production outage, critical security/privacy issue, or data-loss fix is the only release-process exception and must be narrowly documented.
+- **VERIFIED:** post-release breakage may use Vercel Instant Rollback only when an eligible previous production deployment exists; record target/reason, do not delete the rollback target, then fix through the normal verified release batch.
+- **VERIFIED:** before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to identify the limited resource.
+- **VERIFIED:** exact rule: visual CSS/theme iteration must not require Vercel deployment.
+
 ## Continuity Documents
-- `PROJECT_STATE.md` reconciled with current repository, Git history, CI, and Vercel evidence.
-- `PLAN.md` moved from Essential to Editorial and now records the completed implementation plus deployment evidence gate.
-- `TASKS.md` records Editorial implementation and all remaining evidence requirements.
-- `SESSION_PROTOCOL.md` workflow is unchanged.
-- Dated session log: `docs/sessions/2026-09-05-editorial-premium-refinement.md`.
+- `AGENTS.md` now contains the permanent Release-Only Vercel Policy.
+- `PROJECT_STATE.md` records the permanent release policy and this documentation-only milestone.
+- `PLAN.md` records the release workflow as the governing deployment strategy.
+- `TASKS.md` records the release workflow as a permanent quality/release gate.
+- `SESSION_PROTOCOL.md` contains the permanent release-only execution protocol.
+- `docs/release-only-vercel-workflow.md` is the detailed operating procedure.
+- Dated session log: `docs/sessions/2026-09-05-editorial-premium-refinement.md` remains historical; no new session-log file is created in this documentation-only task because the authorized file scope is exact.
+
+## Documentation Milestone — Release-Only Vercel Workflow
+- **IN_PROGRESS:** updating only the six explicitly authorized governance/documentation paths.
+- **VERIFIED:** no application/template/database/auth/subscription/tenant/product/dependency/CI/CD/Vercel-setting/environment/deployment-configuration change is in scope.
+- **VERIFIED:** no intentional Vercel deployment is part of this task.
 
 ## Exact Next Action
-Verify Vercel deployment for merged commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`. If READY, inspect available deployment/runtime evidence, update deployment status in continuity files, and stop. Do not begin another theme.
+After this documentation-only milestone is verified, the next product task remains the existing deployment evidence gate: verify Vercel deployment for merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`, inspect available runtime evidence, update deployment status, and stop. Do not begin another theme.
