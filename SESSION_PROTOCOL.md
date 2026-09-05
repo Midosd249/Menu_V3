@@ -6,6 +6,7 @@
 3. Use `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, and `PROPOSED` explicitly; reconcile continuity state against code and git evidence.
 4. Identify the highest-value unblocked atomic task from repository evidence and explicit user scope.
 5. For template/public-menu work, complete the permanent quality gate before implementation.
+6. For complex tasks or when symptoms resemble a known incident, read `docs/project-memory/problems-learned.md` before beginning a long debugging or design-iteration loop.
 
 ## Permanent Release-Only Vercel Workflow
 Vercel is a release platform, not the normal development or design-iteration environment. The normal path is:
@@ -41,7 +42,7 @@ Before any future deployment-related decision, inspect the actual Vercel Usage/B
 Urgent production outages, critical security/privacy issues, and data-loss fixes are the only release-process exception. Scope the exception narrowly, document why the normal path could not be followed, verify the fix, and return to the normal release workflow immediately afterward.
 
 ### Rollback
-If production is broken after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists. Record the rollback target and reason. Do not delete or invalidate the rollback target. Then fix forward through the normal local verification → quality gates → coherent release batch → main → production workflow. Not every preview deployment is an eligible rollback target.
+If production is broken after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists. Record the rollback target and reason. Do not delete or invalidate the rollback target. Then fix forward through the normal local verification → quality gates → coherent release batch → `main` → production workflow. Not every preview deployment is an eligible rollback target.
 
 ## Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
@@ -76,6 +77,13 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 5. Shared customer actions that are supported and verified must not depend solely on a deep nested template section for discoverability; use one consistent shared action surface.
 6. Keep fixed action surfaces outside owner preview mode and reserve document space so they cannot obscure content.
 7. Test empty and populated Cart states explicitly; absence of a populated state must not remove the entry point.
+
+## Project Memory and Learning System
+- `docs/project-memory/problems-learned.md` is the permanent evidence-based record of hard problems, root causes, failed/wasteful approaches, working solutions, lessons, anti-patterns, and detection checklists.
+- Before entering a long debugging or design-iteration loop, check the memory for similar symptoms and apply its detection checklist first.
+- If symptoms match a recorded problem, do not repeat the recorded anti-pattern merely because it is familiar; first test the recorded causal explanation.
+- After any major incident or expensive milestone, propose an update to the memory. After resolving a new hard problem, add the root cause, lessons, anti-patterns, and detection checklist.
+- Keep uncertain details marked `INFERRED` or `UNKNOWN`; memory must not become a second source of truth that overrides code, tests, Git, or direct platform evidence.
 
 ## Stop
 1. Stop after the single current task is completed or blocked.
