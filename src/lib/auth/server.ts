@@ -24,10 +24,6 @@ const globalAuthRef = globalThis as typeof globalThis & { __grokAuthPreviewSecre
 function previewAuthSecret(): string {
   const explicit = process.env.BETTER_AUTH_SECRET?.trim();
   if (explicit) return explicit;
-  // A random secret per serverless instance invalidates Better Auth's cookie
-  // cache whenever a request lands on a different instance. Derive a stable
-  // fallback from the production database credential when no explicit secret
-  // has been configured, so warm/cold instances agree on the same secret.
   if (!globalAuthRef.__grokAuthPreviewSecret__) {
     const stableSource =
       process.env.SUPABASE_DB_URL?.trim() ??
@@ -96,6 +92,16 @@ const databaseUrl =
   env("POSTGRES_PRISMA_URL") ??
   env("SUPABASE_DB_URL") ??
   env("POSTGRES_URL_NON_POOLING");
+const database = databaseUrl
+  ? new Pool({
+      connectionString: databaseUrl,
+      options: `-c search_path=${POSTGRES_SCHEMA},public`,
+      max: 2,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 5000,
+      keepAlive: true,
+    })
+  : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 const issuerBase = grokIssuer.replace(/\/+$/, "");
 const grokOAuthPlugin = authConfigured
   ? genericOAuth({
