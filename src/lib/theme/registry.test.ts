@@ -15,14 +15,10 @@ test("the catalog contains exactly five themes", () => {
   }
 });
 
-test("one theme is free and four themes are premium", () => {
-  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "free").length, 1);
-  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "premium").length, 4);
-  assert.equal(isPremiumTheme("essential"), false);
-  assert.equal(isPremiumTheme("editorial"), true);
-  assert.equal(isPremiumTheme("noir"), true);
-  assert.equal(isPremiumTheme("heritage"), true);
-  assert.equal(isPremiumTheme("gallery"), true);
+test("all five themes are free", () => {
+  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "free").length, 5);
+  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "premium").length, 0);
+  for (const theme of MENU_THEMES) assert.equal(isPremiumTheme(theme.key), false);
 });
 
 test("legacy theme keys normalize to the new five-theme catalog", () => {
@@ -36,10 +32,9 @@ test("legacy theme keys normalize to the new five-theme catalog", () => {
   assert.equal(getTheme("editorial").key, "editorial");
 });
 
-test("premium themes require a non-free plan while Essential remains available", () => {
-  assert.equal(canUseTheme("essential", "free"), true);
-  assert.equal(canUseTheme("editorial", "free"), false);
-  assert.equal(canUseTheme("noir", "starter"), true);
-  assert.equal(canUseTheme("heritage", "pro"), true);
-  assert.equal(canUseTheme("gallery", null), false);
+test("all themes are selectable on the free plan", () => {
+  for (const theme of MENU_THEMES) {
+    assert.equal(canUseTheme(theme.key, "free"), true);
+    assert.equal(canUseTheme(theme.key, null), true);
+  }
 });
