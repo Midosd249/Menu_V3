@@ -3,61 +3,68 @@
 ## Identity
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
-- Source of truth: `main`.
+- Source of truth: `main`; current Editorial work is isolated on `editorial-premium-refinement`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
-- **Theme 1 — Essential — Premium Refinement IMPLEMENTED and DEPLOYED; quality-gate closure pending.**
-- **Theme 2 — Editorial — DONE / VERIFIED / MERGED; protected.**
-- **Theme 3 — Noir — implementation refinement COMPLETE; final browser/device closure remains blocked pending browser/device evidence.**
+- **Theme 1 — Essential — DEPLOYED / VERIFIED; visual refinement is protected.**
+- **Theme 2 — Editorial — PREMIUM REFINEMENT IN PROGRESS on `editorial-premium-refinement`; not merged or production-deployed.**
+- **Theme 3 — Noir — implementation refinement COMPLETE; final browser/device closure remains separately blocked.**
 - Heritage and Gallery remain untouched.
 - **Visual/Functional Quality System — DONE / VERIFIED / MERGED.**
 - **External Theme Preview QR Mode — DONE / VERIFIED.**
 - **Shared Public Menu Rendering Stabilization — VERIFIED in repository.**
 
-## Essential Premium Refinement — Current Evidence
-- **VERIFIED:** Essential `SmallMenuTemplate` now delegates directly to `PublicMenuView`; the duplicate template header/concept wrapper is removed.
-- **VERIFIED:** Essential CSS defines the scoped design system for canvas, typography, hero, search/categories, featured composition, product hierarchy, hours, fixed action dock, safe areas, focus, bidi handling, fallbacks, responsive behavior, and reduced motion.
-- **VERIFIED:** no other theme stylesheet or theme registry definition was changed.
-- **VERIFIED:** no database schema, migration, dependency, authentication, authorization, subscription, tenant/branch isolation, CI/CD, or Vercel configuration was changed.
-- **VERIFIED:** Vercel production deployment `dpl_CjQeR1v9JqDXMzkUatXwcT9kLXRU` is `READY` and points to commit `48430b67a5d6cd9154db237b4cb801e6ee58109e`.
-- **VERIFIED:** deployed public route `/m/mndy-alwtnya` returns HTTP 200 and server-renders `data-menu-theme="essential"`, `data-menu-theme-mode="published"`, `colorScheme="light"`, the deterministic light canvas tokens, one public header, search/categories, featured items, menu sections, hours, and the fixed action dock.
-- **VERIFIED:** the deployed HTML uses `viewport-fit=cover` and includes the head theme bootstrap before the streamed application markup.
-- **VERIFIED:** source-level Essential regression assertions were added to `tests/preview-shell.test.mjs`.
+## Essential Reconciliation — Current Evidence
+- **VERIFIED:** Essential `SmallMenuTemplate` delegates directly to `PublicMenuView`; duplicate template chrome is removed.
+- **VERIFIED:** Essential scoped presentation covers canvas, typography, hero, search/categories, featured composition, product hierarchy, hours, fixed action dock, safe areas, focus, bidi handling, fallbacks, responsive behavior, and reduced motion.
+- **VERIFIED:** commit `ed030657bd95f31a180f21118611f9665c5e0836` restored the missing React type declarations needed by the quality workflow.
+- **VERIFIED:** GitHub Actions quality run `33938789743` completed successfully for `ed030657bd95f31a180f21118611f9665c5e0836`: typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup all passed.
+- **VERIFIED:** Vercel production deployment `dpl_APYCcu1PbR2cgvd9ALjtZBBSTKJf` is `READY` and points to `ed030657bd95f31a180f21118611f9665c5e0836`.
+- **UNKNOWN:** manual real-device/Opera screenshots and post-hydration console inspection remain outside repository/CI evidence.
 
-## Quality-Gate Result
-- **FAILED / BLOCKED:** GitHub Actions quality job for commit `48430b67a5d6cd9154db237b4cb801e6ee58109e` stopped at `Typecheck`.
-- Root cause shown by CI: the repository's existing `package.json` contains React 19 runtime dependencies but no `@types/react` / `@types/react-dom` development dependencies; TypeScript therefore reports missing React/JSX declarations in existing routes. This failure is not caused by the Essential changes.
-- **VERIFIED:** the CI job's pre-typecheck development build completed successfully and emitted the new Essential CSS asset.
-- **SKIPPED by CI after typecheck failure:** repository tests, lint, production build, Playwright Chromium installation, browser template QA, and later quality steps.
-- We do **not** change dependencies in this Essential milestone solely to repair this pre-existing project-wide typecheck defect; doing so would expand scope without first proving the required downstream type surface.
+## Editorial Milestone — Active
+- **VERIFIED:** `editorial` maps to `contemporary-restaurant` in the canonical theme registry.
+- **VERIFIED:** existing Editorial supports featured products, search/category filtering, product details/modifiers, cart/order, branches, opening hours, and configured WhatsApp/map/phone/Instagram actions.
+- **VERIFIED:** supplied Editorial screenshots expose oversized logo treatment, excessive hero occupation, unstable/large product media presentation, and owner-preview chrome beneath the public menu.
+- **VERIFIED:** source audit found broad Editorial selectors in the previous stylesheet (`header img`, `header > div`, generic sticky/button descendants) plus additional Editorial rules in shared refinement layers.
+- **INFERRED:** the oversized logo symptom is explained by the previous generic `header img` rule; exact browser paint causality remains unproven until runtime inspection.
+- **IMPLEMENTED on branch:** dedicated Editorial semantic regions, stable media geometry, controlled editorial asymmetry, Arabic/LTR typography treatment, compact action rail, explicit English availability, Escape-close dialogs, safe-area-aware cart, and documented layer ordering.
+- **IMPLEMENTED on branch:** reusable validated public action logic for WhatsApp, map, phone, and Instagram using existing tenant/branch fields.
+- **IMPLEMENTED on branch:** server-side, expiry-bound temporary premium-theme testing override with existing auth/role/tenant/subscription-status checks preserved.
+- **IMPLEMENTED on branch:** Editorial design brief, layering audit, research evidence, and regression tests.
 
 ## Runtime / Browser State
-- **VERIFIED:** Vercel server-rendered HTML is correct enough to inspect first-paint theme identity and public-menu structure.
-- **UNKNOWN:** actual browser paint timing, computed styles after hydration, console errors, Opera rendering, and real-device behavior.
-- **BLOCKED:** Chromium browser QA could not execute because the repository quality workflow stops at the existing typecheck failure.
-- **BLOCKED:** real-device/Opera testing is not available in this session.
+- **VERIFIED:** current `main` production deployment is READY.
+- **VERIFIED:** CI's Playwright browser template QA passes for all themes on the Essential/type-fix commit.
+- **UNKNOWN:** browser rendering of the new Editorial branch until a deployment containing the Editorial changes is available and inspected.
+- **UNKNOWN:** Opera/real-device behavior for Editorial.
+- **BLOCKED for milestone closure:** no production claim can be made for Editorial before branch quality gates and deployment evidence pass.
 
-## Files changed in the Essential implementation batch
-- `src/components/templates/small-menu.tsx`
-- `src/theme-essential.css`
+## Repository Changes in Active Editorial Batch
+- `src/components/templates/contemporary-restaurant.tsx`
+- `src/components/public-action-links.tsx`
+- `src/lib/menu/public-actions.ts`
+- `src/components/lang-toggle.tsx`
+- `src/lib/theme/testing-access.ts`
+- `src/lib/theme/server.ts`
+- `src/theme-editorial.css`
+- `src/routes/__root.tsx`
 - `tests/preview-shell.test.mjs`
-- `docs/essential-design-brief.md`
-- `docs/essential-layering-and-ui-audit.md`
+- `src/components/public-action-links.test.ts`
+- `src/lib/theme/testing-access.test.ts`
+- `docs/template-briefs/editorial-premium-refinement.md`
+- `docs/editorial-layering-and-ui-audit.md`
+- `docs/temporary-theme-testing-access.md`
 - `docs/design-research-log.md`
-- `PROJECT_STATE.md`
-- `PLAN.md`
-- `TASKS.md`
+- `package.json` (test command only; dependency manifest reconciled to `main`)
 
 ## Session Log
-- 2026-09-05 — Reviewed repository state, Essential source, shared public renderer, theme registry, existing regression tests, and five supplied screenshots.
-- 2026-09-05 — Researched WCAG target/focus guidance, MDN safe-area and color-scheme behavior, and responsive media principles.
-- 2026-09-05 — Implemented Essential Premium Refinement as one scoped code/documentation batch.
-- 2026-09-05 — Pushed commit `48430b67a5d6cd9154db237b4cb801e6ee58109e` to `main`; Vercel production deployment became READY.
-- 2026-09-05 — Inspected CI result: quality job failed at the pre-existing project-wide React type declarations gap; later automated gates were skipped.
-- 2026-09-05 — Inspected the deployed public route through authenticated Vercel fetch: HTTP 200, correct Essential first-paint theme bootstrap, and correct single public renderer structure.
+- 2026-09-05 — Reconciled Essential against `main`, recent commits, CI, and Vercel evidence. Confirmed Essential deployment and full quality workflow success after the React type declaration repair.
+- 2026-09-05 — Audited supplied Editorial screenshots and actual `contemporary-restaurant` implementation; identified generic header/image and shared refinement selector conflicts.
+- 2026-09-05 — Implemented Editorial premium refinement, validated public contact-action helper, language availability behavior, expiry-bound theme testing access, layering documentation, and regression coverage on `editorial-premium-refinement`.
 
 ## Exact Next Task
-Resolve or separately baseline the existing React type-declaration quality-gate failure (`@types/react` / `@types/react-dom`) in a dedicated project-wide maintenance task, then rerun the full quality workflow. For Essential itself, capture Chromium/real-device/Opera evidence and close only after no Essential-scoped visual, layering, first-render, accessibility, or regression issue remains.
+Run the full quality gates against the completed Editorial branch, inspect the resulting Vercel preview deployment, perform available browser/visual/functional checks for Editorial, fix only verified Editorial regressions, then update this state to reflect the final implementation/deployment status. Do not begin another theme.
