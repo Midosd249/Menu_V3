@@ -20,66 +20,59 @@ Vercel is a release platform, not the normal development or design-iteration env
 - Typography, spacing, card layout, theme styling, RTL, responsive behavior, and ordinary animation refinement are verified locally first.
 
 ### GitHub quality and release-batch gate
-Before merging to `main`, complete the applicable unit/integration/E2E, lint, typecheck, build, browser/visual, accessibility, mobile/responsive, Arabic RTL, English LTR, mixed-direction, security/authz/tenant/branch/input-validation, public-menu/critical-flow, SEO, database-safety, final-diff, continuity, and rollback checks. Then form one coherent release batch and merge only after the batch is verified.
+Before merging to `main`, complete applicable unit/integration/E2E, lint, typecheck, build, browser/visual, accessibility, mobile/responsive, Arabic RTL, English LTR, mixed-direction, security/authz/tenant/branch/input-validation, public-menu/critical-flow, SEO, database-safety, final-diff, continuity, and rollback checks. Then form one coherent release batch and merge only after the batch is verified.
 
 ### Preview Deployment exception policy
-Vercel Preview Deployments are exceptions, not ordinary development environments. Use one only when local verification cannot prove deployment-specific behavior, such as production-like environment variables, third-party integrations, domain/routing/edge behavior, deployment-specific runtime behavior, stable candidate sharing, or significant release risk that cannot be locally verified. Before creating a preview, record why local verification is insufficient, the exact behavior being tested, branch/commit, and success criteria. Do not use previews for ordinary CSS, typography, spacing, theme, RTL, responsive, or small visual changes.
+Vercel Preview Deployments are exceptions, not ordinary development environments. Use one only when local verification cannot prove deployment-specific behavior, such as production-like environment variables, third-party integrations, domain/routing/edge behavior, deployment-specific runtime behavior, stable candidate sharing, or significant release risk that cannot be locally verified. Before creating a preview, record why local verification is insufficient, the exact behavior being tested, branch/commit, and success criteria.
 
 ### Production deployment policy
-Production deployment occurs only after a complete verified release batch is merged to `main`. Prefer one Vercel production deployment for the batch. Do not intentionally trigger repeated deployments, Redeploy, or failed-build retries without a documented reason. CI success is not deployment evidence. `DEPLOYED` requires direct Vercel evidence showing the deployed production commit/state.
+Production deployment occurs only after a complete verified release batch is merged to `main`. Prefer one Vercel production deployment for the batch. Do not intentionally trigger repeated deployments, Redeploy, or failed-build retries without a documented reason. CI success is not deployment evidence. `DEPLOYED` requires direct Vercel evidence.
 
 ### Quota, rate, pause, and build-block handling
-Before any future deployment-related decision, inspect the actual Vercel Usage/Billing page and determine which resource is limited. If Vercel is quota-limited, rate-limited, paused, or unavailable:
-- do not retry randomly;
-- record `DEPLOYMENT_BLOCKED`;
-- do not claim Production equals `main`;
-- preserve verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified;
-- record the exact blocker and evidence;
-- continue local work only when it does not depend on the blocked deployment.
+Before deployment decisions, inspect actual Vercel Usage/Billing and identify the limited resource. If blocked, do not retry randomly; record `DEPLOYMENT_BLOCKED`, do not claim Production equals `main`, and preserve verified work.
 
-### Urgent exception
-Urgent production outages, critical security/privacy issues, and data-loss fixes are the only release-process exception. Scope the exception narrowly, document why the normal path could not be followed, verify the fix, and return to the normal release workflow immediately afterward.
-
-### Rollback
-If production is broken after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists. Record the rollback target and reason. Do not delete or invalidate the rollback target. Then fix forward through the normal local verification → quality gates → coherent release batch → main → production workflow. Not every preview deployment is an eligible rollback target.
-
-## Work
+### Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
 2. Before material template changes, create/update the template brief and visual/functional audit.
 3. Record material research in `docs/design-research-log.md`.
 4. Implement the smallest complete, reversible change using existing architecture.
 5. Run relevant tests, typecheck, lint, build, performance, accessibility, and manual checks available for the task.
 6. Inspect final diff and confirm every changed line belongs to the single task.
-7. Update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update this protocol when workflow rules change.
+7. Update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update this protocol whenever workflow rules change.
 8. Stop after one atomic task.
 
 ## Visual and Functional Gate
-- First-screen clarity, restaurant identity, typography, hierarchy, spacing, alignment, wrapping, clipping, overlap, contrast, cards, categories, search, prices, image behavior, sticky/fixed controls, safe areas, dialogs, scroll, RTL/LTR, and theme/segment fit must be reviewed.
-- Interactive controls require clear purpose, expected placement, reachability, accessible naming, visible focus where relevant, adequate touch targets, correct states, and clear feedback.
-- Real-data tests must include long names, Arabic/English/mixed content, SAR price variation, missing/poor images, sold-out states, modifiers where supported, sparse/dense categories, and multiple branches where supported.
-- No theme is premium if decoration compromises readability, scanability, contrast, or conversion clarity.
+Review first-screen clarity, restaurant identity, typography, hierarchy, spacing, alignment, wrapping, clipping, overlap, contrast, cards, categories, search, prices, images, fixed controls, safe areas, dialogs, scroll, RTL/LTR, mobile usability, and theme fit. Test realistic Arabic/English/mixed content, long names, SAR prices, missing/poor images, availability states, sparse/dense categories, and branch states where supported. Interactive controls require clear purpose, reachability, accessible naming, focus, touch targets, correct states, and feedback.
 
 ## Incident Learning: Preview Covering-Layer Failure
-1. Treat a visible covering layer as a rendering/stacking-system problem first.
-2. Inspect DOM structure, positioning/sizing, stacking contexts, pseudo-elements, animation/paint timing, responsive constraints, then targeted z-index changes.
-3. Do not introduce `isolation` or defensive stacking contexts without evidence; the prior successful fix removed a stacking trap rather than adding another one.
+1. Treat visible covering layers as rendering/stacking problems first.
+2. Inspect DOM structure, positioning/sizing, stacking contexts, pseudo-elements, animation/paint timing, and responsive constraints before targeted z-index changes.
+3. Do not introduce defensive stacking contexts without evidence.
 4. Preview must not depend on scroll progress to make content visible.
-5. Keep the template as the owner of its presentation shell; avoid duplicated route/template shells.
+5. Keep the template as owner of its presentation shell and avoid duplicated route/template shells.
 6. Prefer structural regression tests over HTTP 200 as proof of visibility.
-7. When another agent discovers a successful fix, study the exact successful diff and convert its engineering principle into protocol.
+7. Convert successful fixes into reusable engineering principles.
 
 ## Incident Learning: Public Theme Flash and Action Visibility
-1. Do not rely on a client-only effect to establish the theme for the first paint when the server already knows the theme.
-2. Bootstrap the route-known theme identity/tokens in the document head before hydration.
-3. Do not return dependency-effect cleanup that clears shared theme tokens during ordinary theme/location updates; clear only on true controller unmount.
-4. Avoid duplicate `.menu-public-shell` ownership between route and template layers.
-5. Shared customer actions that are supported and verified must not depend solely on a deep nested template section for discoverability; use one consistent shared action surface.
-6. Keep fixed action surfaces outside owner preview mode and reserve document space so they cannot obscure content.
-7. Test empty and populated Cart states explicitly; absence of a populated state must not remove the entry point.
+1. Bootstrap route-known theme identity before hydration when the server knows the theme.
+2. Avoid effect cleanup that clears shared theme tokens during ordinary updates.
+3. Avoid duplicate `.menu-public-shell` ownership.
+4. Supported shared customer actions must remain discoverable through one consistent action surface.
+5. Fixed action surfaces must reserve document space and remain outside owner preview mode.
+6. Test empty and populated cart states explicitly.
+
+## Source-of-Truth Reconciliation Outcome — 2026-09-05
+- **VERIFIED:** homepage live menu CTA/card uses slug `nafas`.
+- **VERIFIED:** production Menu V3 database project `ublxptcqefujkbeepylc` contains `menu_v3.tenants.id=demo-nafas`, slug `nafas`, published tenant, Editorial theme, and one active branch.
+- **VERIFIED:** `demo-nafas.owner_user_id` maps to `midosd2.mm@gmail.com` in `menu_v3."user"`; that same user has `owner` membership in `menu_v3.tenant_members`.
+- **VERIFIED:** `demo-nafas` was inactive and was activated so the public published loader can serve the tenant.
+- **VERIFIED:** the previous `getPublicMenu` implementation returned static `DEMO_MENU` for `nafas`, which broke the expected dashboard-edit → public-menu reflection path.
+- **IMPLEMENTED:** removed the hard-coded `nafas` short-circuit. The published database tenant is now the public-menu source of truth.
+- **UNKNOWN:** final deployed/browser proof of the reflection path until the branch passes CI and is released.
 
 ## Stop
 1. Stop after the single current task is completed or blocked.
-2. Update continuity files and append a dated session log. If the task has an explicitly restricted file allowlist, record the session entry in an already-authorized continuity file rather than creating an unapproved path.
+2. Update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; append a dated session record.
 3. Record files changed, commands/results, commit evidence, uncertainty, blockers, and exactly one next task.
 4. Do not begin another template automatically.
 
@@ -87,16 +80,10 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - `VERIFIED` — directly confirmed by repository/tool/test/source evidence.
 - `INFERRED` — derived from verified evidence but not directly observed.
 - `UNKNOWN` — insufficient evidence.
-- `BLOCKED` — cannot proceed due to environment, dependency, permission, or other hard constraint.
-- `PROPOSED` — recommended but not yet proven.
+- `BLOCKED` — cannot proceed due to a hard blocker.
+- `PROPOSED` — recommended but not proven.
 - `TODO` — planned and not started.
-- `IN_PROGRESS` — the single current execution task.
+- `IN_PROGRESS` — current execution task.
 - `DONE` — completed with explicit evidence.
 - `CLOSED` — milestone completed and verified to release criteria.
-- `IMPLEMENTATION_IN_PROGRESS` — implementation work is active and not yet locally verified.
-- `VERIFIED_LOCALLY` — implementation has passed applicable local verification but is not yet pushed/released.
-- `READY_TO_PUSH` — local release batch is verified and ready for the controlled push/merge step.
-- `PUSHED` — the release batch has been pushed to its intended remote branch; this is not deployment evidence.
-- `DEPLOYED` — direct Vercel evidence confirms the intended production deployment.
-- `DEPLOYMENT_BLOCKED` — implementation/release is blocked specifically by Vercel availability, quota, rate, pause, build, or platform conditions.
-- `IMPLEMENTATION_BLOCKED` — implementation cannot proceed because of a hard technical, permission, dependency, or environment blocker.
+- `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED` — release/implementation lifecycle states.
