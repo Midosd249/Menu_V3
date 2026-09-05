@@ -5,38 +5,42 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential and Editorial remain protected.
-- Theme 3 Noir implementation refinement is complete; final visual/device closure is blocked by unavailable browser execution.
-- Heritage and Gallery remain queued and untouched.
+- Essential is the current refinement milestone; implementation is complete and final visual/device closure is blocked by unavailable browser execution.
+- Editorial remains protected.
+- Noir implementation refinement is complete but its final browser/device closure remains separately blocked; do not reopen it during this Essential task.
+- Heritage and Gallery remain untouched.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - External theme preview QR mode is DONE / VERIFIED.
 
 ## Current Atomic Task
-### Theme 3 — Noir premium refinement — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
+### Theme 1 — Essential premium refinement — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
 
-**Completed:**
-- Refined the existing `fine-dining-hospitality` masthead to use verified restaurant/branch data and configured tagline with neutral fallback wording.
-- Strengthened Noir featured/product-card hierarchy, long-text handling, SAR price stability, image treatment, focus states, sticky navigation, and mobile safe-area behavior.
-- Added Noir-specific document background and dark color-scheme rules to reduce light-canvas transitions once the theme is active.
-- Preserved shared cart/order, search/category, product detail/modifier, language, WhatsApp, phone, map, and social behavior.
-- No unsupported customer-facing action was added.
+**Completed implementation evidence:**
+- `essential` remains the Free `small-menu` theme with its existing horizontal product-card model and sticky category navigation.
+- Existing Essential presentation provides warm-paper/ink identity, compact branded header, stronger hierarchy, stable image containers, long-text resilience, SAR price stability, focus treatment, narrow-phone handling, and preview visibility protection.
+- Shared cart/order, search/category, product details/modifiers, language, WhatsApp, phone, map, and social behavior remain owned by the shared public-menu renderer.
+- No unsupported customer action was introduced.
 
-## Evidence and design decisions
-- **VERIFIED:** `noir` maps to `fine-dining-hospitality`.
-- **VERIFIED:** current source uses structured horizontal product cards and a featured grid; no circular product-card implementation was found in the reviewed Noir source.
-- **PROPOSED:** structured cards are retained because readability and scanability are more important than novelty.
-- **UNKNOWN:** screenshot-reported circular runtime composition until a browser screenshot confirms it exists in the deployed rendering.
-- **UNKNOWN:** Opera white-background behavior and initial old-theme flash until reproduced with actual browser/first-paint evidence.
+## Design decision
+- **VERIFIED / PROPOSED:** retain Essential's horizontal card system. Essential is the Free everyday-hospitality theme, so the refinement should maximize clarity, speed, scanability, and resilience without turning it into a Premium image-heavy composition.
+
+## Evidence and research
+- **VERIFIED:** permanent design/functional guidance is active in `AGENTS.md` and the supporting documentation.
+- **VERIFIED:** Essential-specific refinement audit exists at `docs/template-audits/essential-premium-refinement.md`.
+- **VERIFIED:** repository evidence confirms the shared public-menu owns cart/order, search/category navigation, product details/modifiers, language, and configured customer actions.
+- **VERIFIED:** W3C WCAG 2.2 target-size guidance, Google Search Central LocalBusiness guidance, web.dev responsive-image guidance, and relevant Saudi/MENA digital-menu examples were used as material references.
+- **UNKNOWN:** rendered browser/device behavior until QR/browser evidence is captured.
 
 ## Acceptance state
-- **VERIFIED:** scoped implementation complete.
-- **BLOCKED:** browser/device visual sign-off, Opera comparison, QR scan, post-hydration inspection, console-error check, and pixel comparison cannot be executed in the current GitHub-only environment.
-- **BLOCKED:** local typecheck/test/lint/build/template-QA/performance commands cannot run without an executable repository checkout/runtime.
+- **VERIFIED:** implementation scope is complete for Essential.
+- **VERIFIED:** no other theme definition was changed by the current Essential closure documentation.
+- **VERIFIED:** no database schema, migrations, dependencies, CI/CD, Vercel settings, authentication, authorization, subscription rules, or routing contracts were changed by this task.
+- **BLOCKED:** browser/device visual sign-off, QR scan, post-hydration inspection, console-error check, pixel comparison, and runtime performance checks cannot run in the current GitHub-only environment.
 
 ## Release policy
 - Do not claim `DEPLOYED` without real Vercel evidence.
-- Do not declare Noir `DONE` until browser/device evidence is captured or an explicit evidence-backed exception is accepted.
-- Do not begin Heritage while this verification gate remains unresolved.
+- Do not declare Essential `DONE` until browser/device evidence is captured or an explicit evidence-backed exception is accepted.
+- Do not begin Heritage while Essential remains at this verification gate.
 
 ## Exact next task
-Run the Noir external preview QR on a real phone/browser and capture small/standard/large mobile plus supported desktop/tablet RTL/LTR evidence, specifically checking Opera background behavior, first-paint flash, clipping, sticky/cart overlap, icons, and core customer actions. Then run repository quality gates in an executable environment.
+Run the Essential external preview QR on a real phone/browser and capture small/standard/large mobile plus supported desktop/tablet evidence in Arabic RTL and English LTR; test long names, mixed-direction text, SAR prices, missing images, sold-out items, modifiers, category density, search, product details, cart/order, contact actions, sticky controls, safe areas, first paint, console errors, and visual overflow. Then run the repository quality gates in an executable environment.
