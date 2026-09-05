@@ -6,10 +6,10 @@ import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
 import themeCss from "../theme-premium.css?url";
 import essentialThemeCss from "../theme-essential.css?url";
-import editorialThemeCss from "../theme-editorial.css?url";
 import noirThemeCss from "../theme-noir.css?url";
 import themeRefinementsCss from "../theme-refinements.css?url";
 import themeRefinementsV2Css from "../theme-refinements-v2.css?url";
+import editorialThemeCss from "../theme-editorial.css?url";
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
 
 const APP_NAME = "منيو";
@@ -33,10 +33,10 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: themeCss },
       { rel: "stylesheet", href: essentialThemeCss },
-      { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: noirThemeCss },
       { rel: "stylesheet", href: themeRefinementsCss },
       { rel: "stylesheet", href: themeRefinementsV2Css },
+      { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: menuPreviewLayerCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
