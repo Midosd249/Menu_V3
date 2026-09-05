@@ -41,7 +41,8 @@ export function buildWhatsAppUrl(tenant: Tenant, lang: Lang): string | null {
   const digits = normalizePhoneDigits(tenant.whatsapp, tenant.country);
   if (!digits) return null;
   const restaurant = lang === "ar" ? tenant.nameAr || tenant.nameEn : tenant.nameEn || tenant.nameAr;
-  const message = (tenant.whatsappTemplate || "السلام عليكم، أريد الاستفسار عن {restaurant}.")
+  const fallback = lang === "ar" ? "السلام عليكم، أريد الاستفسار عن {restaurant}." : "Hello, I would like to ask about {restaurant}.";
+  const message = (tenant.whatsappTemplate || fallback)
     .replaceAll("{restaurant}", restaurant)
     .replaceAll("{product}", lang === "ar" ? "المنيو" : "the menu")
     .trim();
@@ -54,10 +55,11 @@ export function getPublicActions(tenant: Tenant, branch: Branch, lang: Lang): Pu
   const instagram = sanitizeExternalUrl(tenant.instagramUrl, SOCIAL_HOSTS);
   const phone = normalizePhoneDigits(branch.phone, tenant.country);
   const label = (ar: string, en: string) => lang === "ar" ? ar : en;
-  return [
-    whatsapp ? { key: "whatsapp" as const, href: whatsapp, label: label("واتساب", "WhatsApp"), external: true } : null,
-    maps ? { key: "location" as const, href: maps, label: label("الموقع", "Location"), external: true } : null,
-    phone ? { key: "phone" as const, href: `tel:+${phone}`, label: label("اتصال", "Call") } : null,
-    instagram ? { key: "instagram" as const, href: instagram, label: "Instagram", external: true } : null,
-  ].filter((action): action is PublicAction => Boolean(action));
+  const actions: Array<PublicAction | null> = [
+    whatsapp ? { key: "whatsapp", href: whatsapp, label: label("واتساب", "WhatsApp"), external: true } : null,
+    maps ? { key: "location", href: maps, label: label("الموقع", "Location"), external: true } : null,
+    phone ? { key: "phone", href: `tel:+${phone}`, label: label("اتصال", "Call") } : null,
+    instagram ? { key: "instagram", href: instagram, label: "Instagram", external: true } : null,
+  ];
+  return actions.filter((action): action is PublicAction => action !== null);
 }
