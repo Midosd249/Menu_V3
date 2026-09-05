@@ -6,34 +6,22 @@
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
 - **Essential Premium Refinement — DEPLOYED / VERIFIED.** Manual real-device/Opera evidence remains UNKNOWN.
-- **Editorial Premium Refinement + Contact/Location Action System + Language-Switch Verification + Temporary Public Theme Testing Access — IMPLEMENTED / VERIFIED / MERGED.** Final Vercel deployment evidence is pending.
+- **Editorial Premium Refinement + Contact/Location Action System + Language-Switch Verification + Temporary Public Theme Testing Access — IMPLEMENTED / VERIFIED / MERGED / INCLUDED IN CURRENT PRODUCTION.**
 - Noir implementation refinement is complete; final browser/device closure remains separately blocked and Noir is not being reopened.
 - Heritage and Gallery remain untouched.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - External theme preview QR mode is DONE / VERIFIED.
 
-## Essential Reconciliation
-- **VERIFIED:** Essential delegates to `PublicMenuView` and no longer owns duplicate public renderer chrome.
-- **VERIFIED:** Essential scoped presentation covers hero, typography, spacing, search/categories, featured cards, product hierarchy, hours, action dock, safe areas, focus, bidi, fallbacks, responsive behavior, and reduced motion.
-- **VERIFIED:** GitHub Actions quality run `33938789743` for commit `ed030657bd95f31a180f21118611f9665c5e0836` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
-- **VERIFIED:** Vercel production deployment `dpl_APYCcu1PbR2cgvd9ALjtZBBSTKJf` is `READY` for commit `ed030657bd95f31a180f21118611f9665c5e0836`.
-
-## Editorial Milestone — Completed Implementation
-- **VERIFIED:** `editorial` maps to `contemporary-restaurant`.
-- **VERIFIED:** supplied screenshots and source audit identified generic header/image styling, excessive hero occupation, unstable product geometry, and owner-preview layering risk.
-- **VERIFIED:** Editorial now uses dedicated hero media, bounded logo, editorial typography, controlled featured composition, stable product cards, compact search/category navigation, opening hours, responsive behavior, and reduced-motion behavior.
-- **VERIFIED:** public contact actions are data-driven from existing tenant/branch fields and disappear when absent/invalid.
-- **VERIFIED:** external action validation is HTTPS/host allowlisted; phone/WhatsApp are normalized; external links use `noopener noreferrer`.
-- **VERIFIED:** public language navigation preserves validated route search state; English is explicit/disabled when required English identity data is missing; root `lang`/`dir` follows locale.
-- **VERIFIED:** temporary theme testing override is server-only, expiry-bound, owner/admin-gated, tenant-scoped, and subscription-status-safe.
-- **VERIFIED:** Editorial layering is documented and uses 20/40/60/70 priorities without arbitrary large z-index values.
-- **VERIFIED:** final Editorial verification workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
-- **VERIFIED:** PR #13 was squash-merged into `main` as `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after the final quality workflow passed.
-
-## Remaining Evidence Gate
-- **UNKNOWN:** final Vercel deployment for merged commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`.
-- **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection.
-- **BLOCKED:** do not claim Editorial `DEPLOYED` until Vercel evidence points to the merged main release.
+## Editorial Deployment Evidence — CLOSED
+- **VERIFIED:** Editorial was squash-merged into `main` as `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after quality workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
+- **VERIFIED:** Vercel production deployment `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` is `READY` and deploys `7177cf0e081eed401b09805ad8eaf47804f68629` from `main`.
+- **VERIFIED:** `7177cf0e081eed401b09805ad8eaf47804f68629` is 15 commits ahead of Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`, with the Editorial commit as merge base and zero commits behind; the production deployment therefore contains Editorial.
+- **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the `main` branch alias.
+- **VERIFIED:** production root returned HTTP 200 with SSR HTML, `lang="ar"`, `dir="rtl"`, and Menu V3 runtime/theme assets.
+- **VERIFIED:** Vercel reports no runtime error clusters for the selected last-24-hour window; sampled deployment runtime logs returned 18 HTTP 200 responses.
+- **UNKNOWN:** the connector cannot expose local working-tree `git status` or local uncommitted diff.
+- **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection remain outside available repository/Vercel evidence.
+- **UNKNOWN:** there is no direct production deployment with the exact Editorial SHA; production is serving a verified descendant containing it.
 
 ## Permanent Release-Only Vercel Strategy
 Vercel is a release platform, not the normal development or design-iteration environment.
@@ -43,19 +31,19 @@ Vercel is a release platform, not the normal development or design-iteration env
 - `main` must remain stable and deployable.
 - Use milestone/release branches when a local workflow is available; local commits are allowed as safe checkpoints.
 - Do not push each small implementation change merely for visual iteration.
-- Preview Deployments are exceptions only when local verification cannot prove production-like deployment behavior, stable candidate sharing is required, or significant deployment-specific release risk exists. They are not for ordinary CSS, typography, spacing, theme, RTL, responsive, or small visual changes.
+- Preview Deployments are exceptions only when local verification cannot prove deployment-specific behavior, stable candidate sharing, or significant deployment-specific release risk. They are not for ordinary CSS, typography, spacing, theme, RTL, responsive, or small visual changes.
 - Production deployment happens only after a complete verified release batch.
 - Do not randomly retry Redeploy or failed builds.
 - Keep implementation status separate from deployment status. Valid statuses are `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED`, `DONE`.
-- Never claim `DEPLOYED` without direct Vercel evidence.
+- Never claim `DEPLOYED` without direct Vercel evidence. A descendant production deployment proves inclusion of an earlier merged commit but must not be reported as the exact SHA deployment.
 - If Vercel is quota-limited, rate-limited, paused, or unavailable: do not retry randomly; record `DEPLOYMENT_BLOCKED`; do not claim Production equals `main`; preserve verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified.
-- Urgent production outages, critical security, privacy, or data-loss fixes are the only release-process exception and must be narrowly scoped and documented.
-- If production breaks after a release, use Vercel Instant Rollback only when an eligible previous production deployment exists; record target/reason, preserve the rollback target, then fix forward through the normal verified release batch.
+- Urgent production outages, critical security, privacy, or data-loss fixes are the only release-process exception.
+- If production breaks after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists; record target/reason and then fix through the normal verified release batch.
 - Before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to determine which resource is limited.
 - **Exact rule:** visual CSS/theme iteration must not require Vercel deployment.
 
 ## Existing Release Policy Constraints
-- Do not begin another theme until the merged Editorial deployment evidence is recorded.
+- Do not begin another theme until the authenticated browser/device verification gate is closed.
 - Temporary theme testing override must be reviewed and disabled before commercial production launch.
 - Implementation status and deployment status must remain separate.
 
@@ -65,10 +53,18 @@ Vercel is a release platform, not the normal development or design-iteration env
 - **VERIFIED:** the memory records root causes, failed/wasteful approaches, working solutions, lessons, anti-patterns, and detection checklists; uncertain details remain labeled `INFERRED` or `UNKNOWN`.
 - **TODO:** maintain the memory after future major incidents, expensive milestones, or newly discovered hard problems.
 
-## Documentation Milestone
-- **IN_PROGRESS:** this task establishes and wires the permanent project-memory learning system using only authorized governance/documentation paths.
-- **VERIFIED:** no application code, template, database schema/migration, authentication/authorization, subscription, tenant/branch isolation, product feature, dependency, CI/CD workflow, Vercel setting, `vercel.json`, environment variable, or deployment configuration is being changed.
-- **VERIFIED:** no intentional Vercel deployment is part of this documentation milestone.
+## Exact Current Task
+**Authenticated browser/device QA of the five preview variants** — verify direct browser/device behavior, Arabic RTL, English LTR, mixed-direction content, responsive states, fixed controls, empty/populated states, and post-hydration console behavior where supported. This is a verification-only gate; do not redesign themes or begin Theme 4 Heritage work.
 
-## Exact Next Action
-After the project-memory documentation is fully verified, return to the existing evidence gate: check Vercel for a deployment corresponding to merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`. If READY, inspect runtime evidence, record deployment status, and stop. Do not begin another theme.
+## Acceptance Criteria
+- Direct browser/device evidence is captured for the supported preview variants.
+- Arabic RTL, English LTR, and mixed-direction behavior are checked.
+- Responsive and fixed-control behavior is checked without covering content.
+- Empty and populated customer-action states are checked.
+- Post-hydration console is inspected where the browser tooling supports it.
+- Any failure is isolated and documented before a targeted fix; no unrelated refactor.
+- Final continuity records state the evidence, unresolved risks, and exactly one next task.
+
+## Verification Commands
+- Repository-defined automated gates remain `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, and `npm run check:auth` when code changes are introduced.
+- For the current verification-only task, use direct browser/device checks and console inspection; do not trigger a Vercel deployment merely for visual iteration.
