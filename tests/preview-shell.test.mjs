@@ -59,7 +59,7 @@ test("Essential refinement has deterministic light canvas, safe-area clearance, 
   assert.match(styles, /html\[data-menu-theme="essential"\]\s*\{[\s\S]*color-scheme:\s*light;/);
   assert.match(styles, /html\[data-menu-theme="essential"\]\s+body\s*\{[\s\S]*background:\s*#f7f3eb;/);
   assert.match(styles, /padding-bottom:\s*calc\(8\.25rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
-  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)/);
+  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)\)/);
   assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*z-index:\s*40/);
   assert.doesNotMatch(styles, /z-index:\s*9999/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
