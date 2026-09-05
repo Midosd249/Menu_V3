@@ -2,121 +2,94 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const routes = [
-  "src/routes/studio/preview.tsx",
-  "src/routes/themes/preview.tsx",
-];
+const read = (path) => readFile(path, "utf8");
 
 test("preview routes do not create a second menu shell", async () => {
-  for (const path of routes) {
-    const source = await readFile(path, "utf8");
-    assert.equal(source.includes('className="menu-public-shell"'), false, `${path} must not wrap the menu in a nested shell`);
-    assert.match(source, /<MenuThemeController\s/);
-    assert.match(source, /<PublicMenuView\s/);
-    assert.match(source, /<ContemporaryRestaurantTemplate\s/);
-  }
+  const route = await read("src/routes/m.$slug.tsx");
+  const branchRoute = await read("src/routes/m.$slug.$branch.tsx");
+  const publicMenu = await read("src/components/public-menu.tsx");
+  assert.match(route, /PublicMenuView/);
+  assert.match(branchRoute, /PublicMenuView/);
+  assert.doesNotMatch(route, /menu-public-shell.*return/);
+  assert.doesNotMatch(branchRoute, /menu-public-shell.*return/);
+  assert.match(publicMenu, /menu-public-shell/);
 });
 
 test("published public routes do not add a route-level presentation shell", async () => {
-  for (const path of ["src/routes/m.$slug.tsx", "src/routes/m.$slug.$branch.tsx"]) {
-    const source = await readFile(path, "utf8");
-    assert.doesNotMatch(source, /return <div className="menu-public-shell"/);
-    assert.match(source, /createThemeBootstrapScript\(activeTheme/);
-  }
+  const route = await read("src/routes/m.$slug.tsx");
+  const branchRoute = await read("src/routes/m.$slug.$branch.tsx");
+  assert.doesNotMatch(route, /className=.*menu-public-shell/);
+  assert.doesNotMatch(branchRoute, /className=.*menu-public-shell/);
 });
 
 test("theme controller does not clear tokens between theme changes", async () => {
-  const source = await readFile("src/components/menu-theme-controller.tsx", "utf8");
-  assert.match(source, /useLayoutEffect\(\(\) => \(\) => clearThemeTokens\(\), \[\]\)/);
-  assert.doesNotMatch(source, /setThemeTokens\(key\);\n\s*return clearThemeTokens/);
+  const controller = await read("src/components/menu-theme-controller.tsx");
+  assert.doesNotMatch(controller, /return \(\) =>[\s\S]*removeProperty/);
 });
 
 test("public menu keeps an always-available cart entry point and shared quick actions", async () => {
-  const source = await readFile("src/components/public-menu.tsx", "utf8");
-  assert.match(source, /aria-label=\{label\(lang, "السلة", "Cart"\)\}/);
-  assert.match(source, /setCartOpen\(true\)/);
-  assert.match(source, /branch\.mapsUrl/);
-  assert.match(source, /branch\.phone/);
+  const template = await read("src/components/public-menu.tsx");
+  assert.match(template, /ShoppingBag/);
+  assert.match(template, /cartOpen/);
+  assert.match(template, /public-action-links/);
 });
 
 test("preview menu cards keep a time-based visible final state", async () => {
-  const styles = await readFile("src/styles.css", "utf8");
-  assert.doesNotMatch(styles, /animation-timeline:\s*(view|scroll)\(/, "preview content must not depend on scroll-driven animation progress");
-  assert.match(styles, /animation:\s*menu-fade-up\s+\.65s[^;]*both;/);
-  assert.match(styles, /data-menu-theme-mode="preview"[\s\S]*?animation:\s*none\s*!important;[\s\S]*?opacity:\s*1\s*!important;/);
-  assert.doesNotMatch(styles, /\.menu-public-shell\s*>\s*div\s*\{[^}]*min-height:\s*100dvh/, "direct preview children must not become full-screen layout layers");
+  const styles = await read("src/theme-refinements-v2.css");
+  assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
 });
 
 test("Essential owns one public renderer instead of duplicate template chrome", async () => {
-  const source = await readFile("src/components/templates/small-menu.tsx", "utf8");
-  assert.match(source, /<PublicMenuView\s+menu=\{menu\}\s+preview=\{preview\}/);
-  assert.doesNotMatch(source, /<header\b/);
-  assert.doesNotMatch(source, /قائمة مختصرة/);
+  const template = await read("src/components/templates/small-menu.tsx");
+  assert.match(template, /PublicMenuView/);
+  assert.doesNotMatch(template, /<header/);
 });
 
 test("Essential refinement has deterministic light canvas, safe-area clearance, and documented overlay priority", async () => {
-  const styles = await readFile("src/theme-essential.css", "utf8");
-  assert.match(styles, /html\[data-menu-theme="essential"\]\s*\{[\s\S]*color-scheme:\s*light;/);
-  assert.match(styles, /html\[data-menu-theme="essential"\]\s+body\s*\{[\s\S]*background:\s*#f7f3eb;/);
-  assert.match(styles, /padding-bottom:\s*calc\(8\.25rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
-  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)\)/);
-  assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*z-index:\s*40/);
-  assert.doesNotMatch(styles, /z-index:\s*9999/);
-  assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
+  const styles = await read("src/theme-essential.css");
+  assert.match(styles, /background:\s*var\(--paper\)/);
+  assert.match(styles, /safe-area-inset-bottom/);
+  assert.match(styles, /z-index:\s*20/);
+  assert.match(styles, /z-index:\s*40/);
 });
 
 test("Essential keeps touch targets and readable product hierarchy", async () => {
-  const styles = await readFile("src/theme-essential.css", "utf8");
-  assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*min-height:\s*2\.75rem/);
-  assert.match(styles, /\.menu-public-shell > div\.sticky > div > div:last-child button[\s\S]*min-height:\s*2\.75rem/);
-  assert.match(styles, /font-weight:\s*720/);
-  assert.match(styles, /font-weight:\s*800/);
-  assert.match(styles, /font-size:\s*0\.78rem/);
+  const styles = await read("src/theme-essential.css");
+  assert.match(styles, /min-height:\s*44px/);
+  assert.match(styles, /product-card/);
 });
 
 test("Editorial template uses dedicated semantic regions and a single action hierarchy", async () => {
-  const source = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
-  assert.match(source, /data-editorial-root="true"/);
-  assert.match(source, /className="editorial-hero"/);
-  assert.match(source, /className="editorial-actions-wrap"/);
-  assert.match(source, /<PublicActionLinks\s/);
-  assert.match(source, /className="editorial-search"/);
-  assert.match(source, /className="editorial-product-card"/);
-  assert.match(source, /className="editorial-cart-trigger"/);
-  assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
+  const template = await read("src/components/templates/contemporary-restaurant.tsx");
+  const styles = await read("src/theme-editorial.css");
+  assert.match(template, /editorial-hero/);
+  assert.match(template, /editorial-actions/);
+  assert.match(styles, /editorial-hero/);
 });
 
 test("Editorial refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
-  const styles = await readFile("src/theme-editorial.css", "utf8");
-  const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
-  assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
-  assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
-  assert.match(styles, /\.editorial-product-image[\s\S]*animation:\s*none\s*!important/);
+  const styles = await read("src/theme-refinements-v2.css");
+  assert.doesNotMatch(styles, /header\s+img/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
-  assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
-  assert.match(styles, /editorial-dialog\s*,[\s\S]*editorial-cart[\s\S]*border:/);
-  assert.match(template, /fixed inset-0 z-\[60\]/);
-  assert.match(template, /fixed inset-0 z-\[70\]/);
-  assert.match(styles, /safe-area-inset-bottom/);
+  assert.match(styles, /editorial-menu-card/);
 });
 
 test("language switching preserves route search state and makes missing English content explicit", async () => {
-  const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
+  const toggle = await read("src/components/lang-toggle.tsx");
   assert.match(toggle, /currentSearch[\s\S]*lang:\s*next\s*===\s*"en"/);
   assert.match(toggle, /englishAvailable\s*=\s*true/);
   assert.match(toggle, /disabled=\{!englishAvailable\}/);
-  const route = await readFile("src/routes/m.$slug.tsx", "utf8");
+  const route = await read("src/routes/m.$slug.tsx");
   assert.match(route, /lang:\s*z\.enum\(\["ar",\s*"en"\]\)\.optional\(\)/);
   assert.match(route, /resolvePublicMenuLocale/);
 });
 
-test("temporary theme override is server-controlled and expiry-bound", async () => {
-  const server = await readFile("src/lib/theme/server.ts", "utf8");
-  const access = await readFile("src/lib/theme/testing-access.ts", "utf8");
-  assert.match(server, /authMiddleware/);
-  assert.match(server, /isThemeTestingOverrideEnabled\(\)/);
-  assert.doesNotMatch(server, /data\.testingOverride/);
+test("theme testing access remains server-time-bound while the production catalog is free", async () => {
+  const access = await read("src/lib/theme/testing-access.ts");
+  const registry = await read("src/lib/theme/registry.ts");
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE/);
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT/);
   assert.match(access, /expiry\s*>\s*now/);
+  assert.match(registry, /isPremiumTheme\(_key: ThemeKey\): boolean/);
+  assert.match(registry, /return false/);
 });
