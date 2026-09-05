@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
-import { createRestaurant, getMyStudio, seedStarterItems, updateTenant } from "@/lib/menu/owner";
+import { createRestaurant, getMyStudio, saveBranch, seedStarterItems, updateTenant } from "@/lib/menu/owner";
 import { slugify } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({ component: Onboarding });
@@ -70,9 +70,7 @@ function Onboarding() {
 
   if (isPending || checking) return <LoadingState />;
   if (!user) return <RedirectToSignIn />;
-  if (checkError) {
-    return <ErrorState message={checkError} onRetry={() => void checkStudio()} />;
-  }
+  if (checkError) return <ErrorState message={checkError} onRetry={() => void checkStudio()} />;
   if (hasTenant) return <Navigate to="/studio" replace />;
 
   function set<K extends keyof typeof form>(key: K, value: string) {
@@ -94,9 +92,6 @@ function Onboarding() {
           branchNameAr: form.branchNameAr.trim(),
           branchNameEn: form.branchNameEn.trim() || undefined,
           addressAr: form.addressAr.trim() || undefined,
-          addressEn: form.addressEn.trim() || undefined,
-          mapsUrl: form.mapsUrl.trim() || undefined,
-          branchPhone: form.branchPhone.trim() || undefined,
           whatsapp: form.whatsapp.trim() || undefined,
         },
       });
@@ -108,6 +103,26 @@ function Onboarding() {
         }
         setError(created.error);
         return;
+      }
+
+      const branch = created.data.branches[0];
+      if (branch) {
+        const savedBranch = await saveBranch({
+          data: {
+            id: branch.id,
+            nameAr: form.branchNameAr.trim(),
+            nameEn: form.branchNameEn.trim(),
+            addressAr: form.addressAr.trim(),
+            addressEn: form.addressEn.trim(),
+            mapsUrl: form.mapsUrl.trim(),
+            phone: form.branchPhone.trim(),
+            isActive: true,
+          },
+        });
+        if (!savedBranch.ok) {
+          setError(savedBranch.error);
+          return;
+        }
       }
 
       const starter = items
@@ -153,9 +168,7 @@ function Onboarding() {
       </div>
       <div>
         <h1 className="font-display text-2xl font-semibold">{t(copy.onboarding.title, lang)}</h1>
-        <p className="mt-1 text-sm text-muted">
-          {step + 1} / 3 · {t([copy.onboarding.step1, copy.onboarding.step2, copy.onboarding.step3][step], lang)}
-        </p>
+        <p className="mt-1 text-sm text-muted">{step + 1} / 3 · {t([copy.onboarding.step1, copy.onboarding.step2, copy.onboarding.step3][step], lang)}</p>
       </div>
       <div className="grid grid-cols-3 gap-2" aria-label={`${step + 1} / 3`}>
         {[0, 1, 2].map((i) => <div key={i} className={`h-1 rounded-full ${i <= step ? "bg-accent" : "bg-sand"}`} />)}
@@ -178,9 +191,7 @@ function Onboarding() {
           <Field label={lang === "ar" ? "العنوان بالإنجليزية" : "Address in English"}><Input value={form.addressEn} onChange={(e) => set("addressEn", e.target.value)} /></Field>
           <Field label={t(copy.studio.maps, lang)}><Input value={form.mapsUrl} onChange={(e) => set("mapsUrl", e.target.value)} type="url" placeholder="https://maps.google.com/..." /></Field>
           <Field label={t(copy.studio.phone, lang)}><Input value={form.branchPhone} onChange={(e) => set("branchPhone", e.target.value)} inputMode="tel" /></Field>
-          <p className="text-xs leading-5 text-muted">
-            {lang === "ar" ? "أدخل رابط Google Maps للفرع ليظهر زر الموقع في المنيو. العنوان ورابط الخريطة والمدينة هي بيانات الموقع الأساسية." : "Add the branch Google Maps URL so the location action can appear on the menu. Address, map URL and city form the core location data."}
-          </p>
+          <p className="text-xs leading-5 text-muted">{lang === "ar" ? "أدخل رابط Google Maps للفرع ليظهر زر الموقع في المنيو. العنوان ورابط الخريطة والمدينة هي بيانات الموقع الأساسية." : "Add the branch Google Maps URL so the location action can appear on the menu. Address, map URL and city form the core location data."}</p>
         </div>
       ) : null}
 
@@ -202,9 +213,7 @@ function Onboarding() {
       <Flash error={error} ok={ok} />
       <div className="flex flex-wrap gap-2">
         {step > 0 ? <Button type="button" variant="outline" disabled={busy} onClick={() => setStep(step - 1)}>{t(copy.onboarding.back, lang)}</Button> : null}
-        {step < 2 ? (
-          <Button type="button" disabled={busy || (step === 0 && form.nameAr.trim().length < 2)} onClick={() => setStep(step + 1)}>{t(copy.onboarding.continue, lang)}</Button>
-        ) : (
+        {step < 2 ? <Button type="button" disabled={busy || (step === 0 && form.nameAr.trim().length < 2)} onClick={() => setStep(step + 1)}>{t(copy.onboarding.continue, lang)}</Button> : (
           <>
             <Button type="button" variant="outline" disabled={busy} onClick={() => void finish(false)}>{t(copy.onboarding.skipItems, lang)}</Button>
             <Button type="button" disabled={busy} onClick={() => void finish(true)}>{busy ? t(copy.state.loading, lang) : t(copy.onboarding.finish, lang)}</Button>
