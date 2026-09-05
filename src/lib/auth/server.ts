@@ -24,10 +24,6 @@ const globalAuthRef = globalThis as typeof globalThis & { __grokAuthPreviewSecre
 function previewAuthSecret(): string {
   const explicit = process.env.BETTER_AUTH_SECRET?.trim();
   if (explicit) return explicit;
-  // A random secret per serverless instance invalidates Better Auth's cookie
-  // cache whenever a request lands on a different instance. Derive a stable
-  // fallback from the production database credential when no explicit secret
-  // has been configured, so warm/cold instances agree on the same secret.
   if (!globalAuthRef.__grokAuthPreviewSecret__) {
     const stableSource =
       process.env.SUPABASE_DB_URL?.trim() ??
@@ -46,10 +42,21 @@ const env = (key: string): string | undefined => {
 };
 
 const authDisabled = env("VITE_AUTH_ENABLED") === "false";
+const runningOnVercel = Boolean(env("VERCEL"));
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
-const grokClientId = env("GROK_AUTH_CLIENT_ID") ?? PREVIEW_CLIENT_ID;
-const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
-export const authConfigured = !authDisabled && Boolean(grokClientId && grokClientSecret);
+const explicitGrokClientId = env("GROK_AUTH_CLIENT_ID");
+const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
+const googleClientId = env("GOOGLE_CLIENT_ID");
+const googleClientSecret = env("GOOGLE_CLIENT_SECRET");
+
+const grokClientId = runningOnVercel ? undefined : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
+const grokClientSecret = runningOnVercel ? undefined : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
+const authConfigured = !authDisabled &&
+  (runningOnVercel ? Boolean(googleClientId && googleClientSecret) : Boolean(grokClientId && grokClientSecret));
+export const authConfigurationError =
+  !authDisabled && runningOnVercel && !authConfigured
+    ? "Google sign-in is not configured for this Vercel deployment."
+    : null;
 
 const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
@@ -80,13 +87,10 @@ const databaseUrl =
   env("POSTGRES_PRISMA_URL") ??
   env("SUPABASE_DB_URL") ??
   env("POSTGRES_URL_NON_POOLING");
-const issuerBase = grokIssuer.replace(/\/+$/, "");
 const database = databaseUrl
   ? new Pool({
       connectionString: databaseUrl,
       options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      // Better Auth and application queries share the same Supavisor-backed
-      // database. Keep this pool small to avoid connection spikes on Vercel.
       max: 2,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 5000,
@@ -94,18 +98,31 @@ const database = databaseUrl
     })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
+const issuerBase = grokIssuer.replace(/\/+$/, "");
 const grokOAuthPlugin = authConfigured
   ? genericOAuth({
-      config: GROK_PROVIDERS.map(({ providerId, idp }) => ({
-        providerId,
-        clientId: grokClientId as string,
-        clientSecret: grokClientSecret as string,
-        authorizationUrl: `${issuerBase}/api/auth/oauth2/authorize`,
-        tokenUrl: `${issuerBase}/api/auth/oauth2/token`,
-        userInfoUrl: `${issuerBase}/api/auth/oauth2/userinfo`,
-        scopes: ["openid", "profile", "email"],
-        authorizationUrlParams: { idp, prompt: "login" },
-      })),
+      config: GROK_PROVIDERS.map(({ providerId, idp }) =>
+        runningOnVercel
+          ? {
+              providerId,
+              clientId: googleClientId as string,
+              clientSecret: googleClientSecret as string,
+              authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+              tokenUrl: "https://oauth2.googleapis.com/token",
+              userInfoUrl: "https://openidconnect.googleapis.com/v1/userinfo",
+              scopes: ["openid", "profile", "email"],
+            }
+          : {
+              providerId,
+              clientId: grokClientId as string,
+              clientSecret: grokClientSecret as string,
+              authorizationUrl: `${issuerBase}/api/auth/oauth2/authorize`,
+              tokenUrl: `${issuerBase}/api/auth/oauth2/token`,
+              userInfoUrl: `${issuerBase}/api/auth/oauth2/userinfo`,
+              scopes: ["openid", "profile", "email"],
+              authorizationUrlParams: { idp, prompt: "login" },
+            },
+      ),
     })
   : null;
 
@@ -116,9 +133,6 @@ async function verifyLegacyOrNativePassword({
   hash: string;
   password: string;
 }): Promise<boolean> {
-  // Existing Supabase Auth accounts use bcrypt hashes. Better Auth's native
-  // format is scrypt salt:key. Verify legacy bcrypt rows through PostgreSQL's
-  // pgcrypto extension without introducing another runtime dependency.
   if (/^\$2[aby]?\$\d{2}\$/.test(hash)) {
     if (!(database instanceof Pool)) return false;
     try {
@@ -141,6 +155,7 @@ async function verifyLegacyOrNativePassword({
 }
 
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
+export { authConfigured };
 export const auth = betterAuth({
   baseURL,
   secret: previewAuthSecret(),
@@ -171,6 +186,7 @@ export const auth = betterAuth({
     : {}),
   advanced: {
     useSecureCookies: false,
+    trustedProxyHeaders: true,
     defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
     cookies: {
       session_token: { name: SESSION_TOKEN_COOKIE },
