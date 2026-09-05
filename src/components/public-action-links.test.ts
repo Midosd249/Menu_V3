@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "@/lib/menu/public-actions";
-import type { Branch, Tenant } from "@/lib/menu/types";
+import { buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "../lib/menu/public-actions.ts";
+import type { Branch, Tenant } from "../lib/menu/types.ts";
 
 const tenant: Tenant = {
   id: "t1", ownerUserId: "u1", slug: "restaurant", nameAr: "مطعم", nameEn: "Restaurant",
