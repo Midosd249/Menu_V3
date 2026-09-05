@@ -1,46 +1,62 @@
 # Menu V3 — Active Plan
 
 ## Status
-- Status: BLOCKED.
+- Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential is the current refinement milestone; implementation is complete and final visual/device closure is blocked by unavailable browser execution.
+- Essential refinement implementation is complete; final browser/device closure remains blocked.
 - Editorial remains protected.
-- Noir implementation refinement is complete but its final browser/device closure remains separately blocked; do not reopen it during this Essential task.
+- Noir implementation refinement is complete; final browser/device closure remains separately blocked and Noir is not being reopened.
 - Heritage and Gallery remain untouched.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - External theme preview QR mode is DONE / VERIFIED.
+- **Current stabilization task:** repository-wide public-menu rendering and shared action visibility.
 
 ## Current Atomic Task
-### Theme 1 — Essential premium refinement — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
+### Public-menu rendering and shared-action stabilization
 
-**Completed implementation evidence:**
-- `essential` remains the Free `small-menu` theme with its existing horizontal product-card model and sticky category navigation.
-- Existing Essential presentation provides warm-paper/ink identity, compact branded header, stronger hierarchy, stable image containers, long-text resilience, SAR price stability, focus treatment, narrow-phone handling, and preview visibility protection.
-- Shared cart/order, search/category, product details/modifiers, language, WhatsApp, phone, map, and social behavior remain owned by the shared public-menu renderer.
-- No unsupported customer action was introduced.
+**Objective:** remove redundant presentation layers and eliminate theme-token timing gaps that can cause an old/default visual layer to appear before the intended theme across public routes.
 
-## Design decision
-- **VERIFIED / PROPOSED:** retain Essential's horizontal card system. Essential is the Free everyday-hospitality theme, so the refinement should maximize clarity, speed, scanability, and resilience without turning it into a Premium image-heavy composition.
+## Implementation
+- **VERIFIED:** `src/routes/m.$slug.tsx` no longer wraps selected templates in a second `.menu-public-shell`.
+- **VERIFIED:** `src/routes/m.$slug.$branch.tsx` uses the same pre-hydration theme bootstrap as the primary public route.
+- **VERIFIED:** `createThemeBootstrapScript()` serializes the server-known theme token colors and sets `data-menu-theme` / `data-menu-theme-mode` before hydration.
+- **VERIFIED:** `MenuThemeController` preserves current tokens across dependency updates and clears them only when the controller unmounts.
+- **VERIFIED:** `PublicMenuView` now provides an always-available Cart control and persistent configured WhatsApp, map, and phone quick actions.
+- **VERIFIED:** the action dock has adequate bottom content clearance.
+- **VERIFIED:** regression assertions cover the new invariants.
 
-## Evidence and research
-- **VERIFIED:** permanent design/functional guidance is active in `AGENTS.md` and the supporting documentation.
-- **VERIFIED:** Essential-specific refinement audit exists at `docs/template-audits/essential-premium-refinement.md`.
-- **VERIFIED:** repository evidence confirms the shared public-menu owns cart/order, search/category navigation, product details/modifiers, language, and configured customer actions.
-- **VERIFIED:** W3C WCAG 2.2 target-size guidance, Google Search Central LocalBusiness guidance, web.dev responsive-image guidance, and relevant Saudi/MENA digital-menu examples were used as material references.
-- **UNKNOWN:** rendered browser/device behavior until QR/browser evidence is captured.
+## Design/Engineering Rationale
+The defect is treated as a rendering-system problem rather than a z-index problem. The repository already documented the correct diagnostic order: DOM structure → positioning/sizing → stacking contexts → pseudo-elements → animation/paint timing → responsive constraints → targeted z-index. The selected fix therefore removes duplicated presentation ownership and moves theme identity into the SSR document head rather than adding more stacking rules.
 
-## Acceptance state
-- **VERIFIED:** implementation scope is complete for Essential.
-- **VERIFIED:** no other theme definition was changed by the current Essential closure documentation.
-- **VERIFIED:** no database schema, migrations, dependencies, CI/CD, Vercel settings, authentication, authorization, subscription rules, or routing contracts were changed by this task.
-- **BLOCKED:** browser/device visual sign-off, QR scan, post-hydration inspection, console-error check, pixel comparison, and runtime performance checks cannot run in the current GitHub-only environment.
+This is consistent with TanStack Start guidance that route head output can provide inline scripts and that scripts intended to prevent theme flicker should execute before hydration. React documents that effects do not run during server rendering, so client-only theme effects cannot be the only source of first-paint theme state. WCAG 2.2 requires at least 24×24 CSS-pixel pointer targets at Level AA, with larger targets preferable for primary mobile actions.
 
-## Release policy
+## Acceptance Criteria
+- **VERIFIED:** no route-level duplicate `.menu-public-shell` remains on published public-menu routes.
+- **VERIFIED:** the server-rendered public-menu has a deterministic theme attribute/token bootstrap before hydration.
+- **VERIFIED:** normal theme/controller updates do not clear the document theme between renders.
+- **VERIFIED:** every published theme exposes a Cart entry point even when empty.
+- **VERIFIED:** configured WhatsApp, map, and phone actions have a persistent shared quick-action surface.
+- **VERIFIED:** the dock is excluded from owner preview mode.
+- **UNKNOWN:** actual browser paint timing and device screenshots.
+
+## Verification
+Required in an executable repository runtime:
+1. `npm run typecheck`
+2. `npm test`
+3. `npm run test:platform`
+4. `npm run lint`
+5. `npm run build`
+6. `npm run qa:template`
+7. `npm run performance:audit`
+8. Real browser checks for all five themes, Arabic RTL and English LTR, small/standard/large mobile, and supported desktop/tablet.
+
+## Release Policy
 - Do not claim `DEPLOYED` without real Vercel evidence.
-- Do not declare Essential `DONE` until browser/device evidence is captured or an explicit evidence-backed exception is accepted.
-- Do not begin Heritage while Essential remains at this verification gate.
+- Keep this stabilization as one coherent release batch.
+- Do not make unrelated template or subscription changes while verifying this defect.
+- Vercel Git integration deploys pushes automatically by default, so avoid fragmented production commits while the batch is incomplete.
 
-## Exact next task
-Run the Essential external preview QR on a real phone/browser and capture small/standard/large mobile plus supported desktop/tablet evidence in Arabic RTL and English LTR; test long names, mixed-direction text, SAR prices, missing images, sold-out items, modifiers, category density, search, product details, cart/order, contact actions, sticky controls, safe areas, first paint, console errors, and visual overflow. Then run the repository quality gates in an executable environment.
+## Exact Next Task
+Verify commit `dd155ee7cf9fdf0d893f0a9289f32371d8a823b8` in an executable browser/device environment, then run the full repository quality gates and prepare one Vercel release batch only after evidence is clean.

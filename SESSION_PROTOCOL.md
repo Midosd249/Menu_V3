@@ -47,6 +47,15 @@ For every future public-menu, template, theme, SEO, accessibility, performance, 
 6. Prefer structural regression tests over HTTP 200 as proof of visibility.
 7. When another agent discovers a successful fix, study the exact successful diff and convert its engineering principle into protocol.
 
+## Incident Learning: Public Theme Flash and Action Visibility
+1. Do not rely on a client-only effect to establish the theme for the first paint when the server already knows the theme.
+2. Bootstrap the route-known theme identity/tokens in the document head before hydration.
+3. Do not return dependency-effect cleanup that clears shared theme tokens during ordinary theme/location updates; clear only on true controller unmount.
+4. Avoid duplicate `.menu-public-shell` ownership between route and template layers.
+5. Shared customer actions that are supported and verified must not depend solely on a deep nested template section for discoverability; use one consistent shared action surface.
+6. Keep fixed action surfaces outside owner preview mode and reserve document space so they cannot obscure content.
+7. Test empty and populated Cart states explicitly; absence of a populated state must not remove the entry point.
+
 ## Stop
 1. Stop after the single current task is completed or blocked.
 2. Update continuity files and append a dated session log.

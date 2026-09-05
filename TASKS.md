@@ -1,30 +1,33 @@
 # TASKS
 
 ## Current Atomic Task
-### Theme 1 — Essential premium refinement — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
-- **Objective:** complete the evidence-based refinement of the existing `essential` theme in the `small-menu` family.
-- **VERIFIED:** permanent premium design/functional/research guidance and required documentation are active.
-- **VERIFIED:** Essential retains its Free tier, `small-menu` family, horizontal product-card model, sticky category navigation, and shared public-menu interaction architecture.
-- **VERIFIED:** Essential presentation includes warm-paper/ink identity, stronger hierarchy, stable image containers, long-text wrapping, SAR price stability, focus states, narrow-phone handling, and preview visibility protection.
-- **VERIFIED:** shared cart/order, product details/modifiers, search/category navigation, language, WhatsApp, phone, map, and social behavior remain owned by the shared public-menu.
-- **VERIFIED:** no unsupported customer action was added and no other theme definition was changed by the current Essential documentation closure.
-- **UNKNOWN:** live browser/device screenshots, QR scanning, first-paint evidence, console output, and pixel comparison.
+### Repository-wide public-menu rendering and action visibility stabilization — IMPLEMENTED / VERIFICATION BLOCKED
+- **Objective:** eliminate theme/layer flash and restore discoverable shared customer actions across all five themes without changing theme entitlements or security contracts.
+- **VERIFIED:** removed redundant route-level `.menu-public-shell` ownership from published public routes.
+- **VERIFIED:** added SSR/head theme bootstrap from loader-known theme data before hydration.
+- **VERIFIED:** stopped `MenuThemeController` from clearing tokens during ordinary dependency changes.
+- **VERIFIED:** added persistent Cart, WhatsApp, map, and phone quick actions to the shared public-menu when configured; Cart remains available when empty.
+- **VERIFIED:** added bottom clearance for the persistent action surface.
+- **VERIFIED:** added structural regression assertions.
+- **UNKNOWN:** real browser/device screenshots, Opera behavior, exact first-paint timing, and console output.
 - **BLOCKED:** local quality gates cannot run in the current GitHub-only environment.
 
 ## Required Verification Before Closure
-1. Run the Essential external preview QR on a real phone/browser for one configured branch.
-2. Capture small/standard/large mobile and supported desktop/tablet screenshots in Arabic RTL and English LTR.
-3. Verify long Arabic/English names, mixed-direction text, varied SAR prices, missing images, sold-out items, modifiers, sparse/dense categories, and multiple branches where supported.
-4. Verify search, category navigation, product details, cart/order, language, icons, WhatsApp, phone, map/location, and loading/error/empty/unavailable states where supported.
-5. Inspect first paint, hydration, sticky/fixed controls, safe areas, overflow, and console errors.
-6. Run `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run qa:template`, and `npm run performance:audit` in an executable repository runtime.
-7. Update this file, `PROJECT_STATE.md`, `PLAN.md`, and the Essential audit with evidence before declaring `DONE`.
+1. Verify all five themes on `/m/<slug>` and `/m/<slug>/<branch>` using real branch data.
+2. Verify theme preview URLs remain presentation-only and no entitlement is changed.
+3. Capture small/standard/large mobile and supported desktop/tablet screenshots in Arabic RTL and English LTR.
+4. Confirm no old/default theme layer appears before the intended theme and no content/control is obscured.
+5. Confirm Cart is visible and opens when empty and after adding an item.
+6. Confirm configured WhatsApp, map, and phone quick actions are visible, correctly linked, accessible, and non-overlapping.
+7. Verify long Arabic/English names, mixed-direction text, SAR prices, missing images, sold-out items, modifiers, sparse/dense categories, and multiple branches where supported.
+8. Run `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, `npm run qa:template`, and `npm run performance:audit`.
+9. Review the final diff and Vercel deployment evidence before closure.
 
 ## Planned Theme Sequence
-1. Theme 1 — Essential — implementation complete; verification blocked; current atomic task.
+1. Theme 1 — Essential — implementation refinement complete; final verification blocked.
 2. Theme 2 — Editorial — DONE / VERIFIED / MERGED; protected.
-3. Theme 3 — Noir — implementation complete; verification remains blocked; protected and not reopened by this task.
-4. Theme 4 — Heritage — TODO after the current verification gates close.
+3. Theme 3 — Noir — implementation refinement complete; verification remains blocked; protected.
+4. Theme 4 — Heritage — TODO after current stabilization verification closes.
 5. Theme 5 — Gallery — TODO.
 6. G7.3 — Premium Theme Commercialization & Billing UX — TODO after the visual sequence.
 
@@ -45,4 +48,4 @@ Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-int
 - **VERIFIED:** current subscription plans remain `free`, `starter`, and `pro`.
 - **VERIFIED:** persistent Premium theme authorization remains enforced.
 - **VERIFIED:** no theme is deleted or replaced by the current task.
-- **BLOCKED:** final Essential visual/device validation until an executable browser/device environment is available.
+- **VERIFIED:** stabilization is implemented on `main`; browser/runtime verification remains blocked.
