@@ -53,5 +53,14 @@ Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-int
 - **VERIFIED:** no application code, template, schema, migration, authentication, authorization, subscription, tenant/branch isolation, product feature, dependency, CI/CD, Vercel setting, `vercel.json`, environment variable, or deployment configuration is being changed.
 - **VERIFIED:** no intentional Vercel deployment is part of this milestone.
 
+## Homepage Demo Source-of-Truth Reconciliation — IN_PROGRESS
+- **VERIFIED:** the marketing homepage CTA and live card use slug `nafas`.
+- **VERIFIED:** the production `menu_v3.tenants` table contains `id=demo-nafas`, `slug=nafas`, `name_ar=نَفَس`, `name_en=Nafas`, `theme_key=editorial`, `is_published=true`.
+- **VERIFIED:** `demo-nafas.owner_user_id` resolves to `midosd2.mm@gmail.com` in the Menu V3 Better Auth `menu_v3.user` table, and `menu_v3.tenant_members` gives that user role `owner`.
+- **VERIFIED:** `demo-nafas` had one active branch and was previously `is_active=false`; it was activated so the published public loader can serve the real tenant.
+- **VERIFIED:** before this task, `getPublicMenu('nafas')` short-circuited to static `DEMO_MENU`, so dashboard edits could not reach the homepage-linked public menu.
+- **IMPLEMENTED:** the public menu loader now queries the real published tenant instead of hard-coding the `nafas` demo response, allowing dashboard changes to flow through the same tenant/slug.
+- **UNKNOWN:** final Vercel deployment and browser confirmation of the live data flow until the release branch passes CI and is deployed.
+
 ## Exact Next Task
-Verify Vercel deployment for merged commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`, inspect available runtime evidence, update deployment status, and stop. Do not begin another theme.
+Verify the homepage-linked `nafas` menu against the live `demo-nafas` tenant after CI/deployment, including a real dashboard edit → public-menu reflection test. Do not begin another theme.
