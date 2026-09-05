@@ -49,10 +49,6 @@ const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
 const googleClientId = env("GOOGLE_CLIENT_ID");
 const googleClientSecret = env("GOOGLE_CLIENT_SECRET");
 
-// Live previews use the shared Grok broker client because the broker explicitly
-// accepts dynamic *.grok-sandbox.com callbacks. Standalone Vercel deployments
-// use Google's OAuth endpoints directly so they do not depend on a private
-// per-deployment broker client that is unavailable to ordinary Vercel projects.
 const grokClientId = runningOnVercel ? undefined : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
 const grokClientSecret = runningOnVercel ? undefined : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
 const authConfigured = !authDisabled &&
@@ -159,6 +155,7 @@ async function verifyLegacyOrNativePassword({
 }
 
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
+export { authConfigured };
 export const auth = betterAuth({
   baseURL,
   secret: previewAuthSecret(),
