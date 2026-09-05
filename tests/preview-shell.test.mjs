@@ -88,13 +88,15 @@ test("Editorial template uses dedicated semantic regions and a single action hie
 
 test("Editorial refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
   const styles = await readFile("src/theme-editorial.css", "utf8");
+  const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
   assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
   assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
   assert.match(styles, /\.editorial-product-image[\s\S]*animation:\s*none\s*!important/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
   assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
   assert.match(styles, /editorial-dialog\s*,[\s\S]*editorial-cart[\s\S]*border:/);
-  assert.match(styles, /fixed inset-0 z-\[60\]/);
+  assert.match(template, /fixed inset-0 z-\[60\]/);
+  assert.match(template, /fixed inset-0 z-\[70\]/);
   assert.match(styles, /safe-area-inset-bottom/);
 });
 
