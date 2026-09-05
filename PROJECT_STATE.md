@@ -19,7 +19,7 @@
 
 ## Editorial Reconciliation — Deployment Evidence
 - **VERIFIED:** Editorial implementation was squash-merged into `main` as commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after quality workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
-- **VERIFIED:** current `main` HEAD is `2ae373561ac0160d68557abe63a7a64fce6f3d4c`.
+- **VERIFIED:** current `main` HEAD is `fad45b3957a46365d0d383c4d721e8b4db2d1fe7`.
 - **VERIFIED:** Vercel production deployment `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` is `READY` and deploys GitHub commit `7177cf0e081eed401b09805ad8eaf47804f68629` from `main`.
 - **VERIFIED:** GitHub comparison shows `7177cf0e081eed401b09805ad8eaf47804f68629` is 15 commits ahead of `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` with that Editorial commit as the merge base and zero commits behind; therefore the current production deployment contains the merged Editorial implementation.
 - **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the `main` branch alias.
@@ -65,7 +65,7 @@
 
 ## Session Log — 2026-09-06
 - **Current task:** verify the Vercel production evidence for the merged Editorial milestone and reconcile continuity state.
-- **VERIFIED:** current `main` is `2ae373561ac0160d68557abe63a7a64fce6f3d4c`; Vercel production is `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` on descendant `7177cf0e081eed401b09805ad8eaf47804f68629`.
+- **VERIFIED:** current `main` is `fad45b3957a46365d0d383c4d721e8b4db2d1fe7`; Vercel production is `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` on descendant `7177cf0e081eed401b09805ad8eaf47804f68629`.
 - **VERIFIED:** the descendant contains Editorial because the comparison against `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` has that commit as merge base, is 15 commits ahead, and is not behind.
 - **VERIFIED:** production root returned HTTP 200; Vercel reported no runtime error clusters in the selected last-24-hour window.
 - **UNKNOWN:** local working-tree status/diff and manual Opera/real-device/post-hydration console evidence are unavailable through the current connector surface.
