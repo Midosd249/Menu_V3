@@ -1,11 +1,11 @@
-import { Instagram, MapPin, Phone } from "lucide-react";
+import { Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { getGuestSessionId } from "@/lib/menu/session";
 import { getPublicActions } from "@/lib/menu/public-actions";
 import type { Branch, Lang, Tenant } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
 
-const ICONS = { whatsapp: Phone, location: MapPin, phone: Phone, instagram: Instagram };
+const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagram: Instagram };
 
 type PublicActionLinksProps = {
   tenant: Tenant;
@@ -26,6 +26,7 @@ export function PublicActionLinks({ tenant, branch, lang, preview = false, class
         return (
           <a
             key={action.key}
+            data-action-key={action.key}
             href={action.href}
             target={action.external ? "_blank" : undefined}
             rel={action.external ? "noopener noreferrer" : undefined}
