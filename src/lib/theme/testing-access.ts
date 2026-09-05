@@ -1,3 +1,4 @@
+import { canUseTheme } from "./registry";
 import type { ThemeKey } from "./types";
 
 export const THEME_TESTING_OVERRIDE_ENV = "MENU_THEME_TESTING_OVERRIDE";
@@ -18,6 +19,5 @@ export function canUseThemeWithTestingOverride(
   env: Record<string, string | undefined> = process.env,
   now = Date.now(),
 ): boolean {
-  if (isThemeTestingOverrideEnabled(env, now)) return true;
-  return themeKey === "essential" || (planCode !== null && planCode !== undefined && planCode !== "free");
+  return isThemeTestingOverrideEnabled(env, now) || canUseTheme(themeKey, planCode);
 }
