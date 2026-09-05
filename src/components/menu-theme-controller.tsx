@@ -87,8 +87,9 @@ export function MenuThemeController({
     root.dataset.menuTheme = key;
     root.dataset.menuThemeMode = preview ? "preview" : "published";
     setThemeTokens(key);
-    return clearThemeTokens;
   }, [theme, preview, location]);
+
+  useLayoutEffect(() => () => clearThemeTokens(), []);
 
   return null;
 }
