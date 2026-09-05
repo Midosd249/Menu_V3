@@ -54,7 +54,17 @@ Vercel is a release platform, not the normal development or design-iteration env
 - **TODO:** maintain the memory after future major incidents, expensive milestones, or newly discovered hard problems.
 
 ## Exact Current Task
-**Authenticated browser/device QA of the five preview variants** — verify direct browser/device behavior, Arabic RTL, English LTR, mixed-direction content, responsive states, fixed controls, empty/populated states, and post-hydration console behavior where supported. This is a verification-only gate; do not redesign themes or begin Theme 4 Heritage work.
+**Authenticated browser/device QA of the five preview variants** — verification-only gate; no theme redesign and no Theme 4 Heritage work.
+
+### Verification performed in this session
+- **VERIFIED:** latest `main` is `621f94d534e5064225512ea448ea617913dc585f`.
+- **VERIFIED:** quality workflow `33999726885` completed successfully, including Playwright browser-template QA for all five themes.
+- **VERIFIED:** direct Vercel SSR preview requests for `/m/nafas` succeeded with HTTP 200 for `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- **VERIFIED:** Arabic SSR preview state returns `lang="ar"`, `dir="rtl"`, `robots=noindex,nofollow`, and the requested preview theme.
+- **VERIFIED:** English Editorial SSR preview returns `lang="en"`, `dir="ltr"`, English labels, and the requested preview theme.
+- **VERIFIED:** populated customer-menu markup and fixed cart markup are present in the returned preview HTML.
+- **UNKNOWN:** actual browser/device viewport geometry, mixed-direction rendering, interaction behavior, safe-area/fixed-control overlap, empty-cart interaction, and post-hydration console output.
+- **BLOCKED:** the current session does not expose an interactive browser/device or real-device evidence surface, so the acceptance criteria requiring direct browser/device evidence cannot be closed honestly.
 
 ## Acceptance Criteria
 - Direct browser/device evidence is captured for the supported preview variants.
@@ -67,4 +77,8 @@ Vercel is a release platform, not the normal development or design-iteration env
 
 ## Verification Commands
 - Repository-defined automated gates remain `npm run typecheck`, `npm test`, `npm run test:platform`, `npm run lint`, `npm run build`, and `npm run check:auth` when code changes are introduced.
-- For the current verification-only task, use direct browser/device checks and console inspection; do not trigger a Vercel deployment merely for visual iteration.
+- The latest successful GitHub quality run verified typecheck, tests, lint, production build, Playwright Chromium installation, and browser template QA for all themes.
+- For the current verification-only task, no deployment was triggered merely for visual iteration.
+
+## Exact Next Task
+Provide direct authenticated browser/device evidence for the five preview variants using an interactive browser/real-device surface, then inspect screenshots and post-hydration console output. Close the gate only if all acceptance criteria pass; otherwise isolate the first failing behavior and make one targeted fix only. Do not begin Theme 4 Heritage work before closure.
