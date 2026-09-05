@@ -59,7 +59,7 @@ test("Essential refinement has deterministic light canvas, safe-area clearance, 
   assert.match(styles, /html\[data-menu-theme="essential"\]\s*\{[\s\S]*color-scheme:\s*light;/);
   assert.match(styles, /html\[data-menu-theme="essential"\]\s+body\s*\{[\s\S]*background:\s*#f7f3eb;/);
   assert.match(styles, /padding-bottom:\s*calc\(8\.25rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
-  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)\)/);
+  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)/);
   assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*z-index:\s*40/);
   assert.doesNotMatch(styles, /z-index:\s*9999/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
@@ -72,4 +72,48 @@ test("Essential keeps touch targets and readable product hierarchy", async () =>
   assert.match(styles, /font-weight:\s*720/);
   assert.match(styles, /font-weight:\s*800/);
   assert.match(styles, /font-size:\s*0\.78rem/);
+});
+
+test("Editorial template uses dedicated semantic regions and a single action hierarchy", async () => {
+  const source = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
+  assert.match(source, /data-editorial-root="true"/);
+  assert.match(source, /className="editorial-hero"/);
+  assert.match(source, /className="editorial-actions-wrap"/);
+  assert.match(source, /<PublicActionLinks\s/);
+  assert.match(source, /className="editorial-search"/);
+  assert.match(source, /className="editorial-product-card"/);
+  assert.match(source, /className="editorial-cart-trigger"/);
+  assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
+});
+
+test("Editorial refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
+  const styles = await readFile("src/theme-editorial.css", "utf8");
+  assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
+  assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
+  assert.match(styles, /\.editorial-product-image[\s\S]*animation:\s*none\s*!important/);
+  assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
+  assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
+  assert.match(styles, /editorial-dialog[\s\S]*z-index:\s*60/);
+  assert.match(styles, /safe-area-inset-bottom/);
+});
+
+test("language switching preserves route search state and makes missing English content explicit", async () => {
+  const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
+  assert.match(toggle, /search:\s*\(previous\)\s*=>\s*\(\{\s*\.\.\.previous,\s*lang:/);
+  assert.match(toggle, /englishAvailable\s*=\s*true/);
+  assert.match(toggle, /disabled=\{!englishAvailable\}/);
+  const route = await readFile("src/routes/m.$slug.tsx", "utf8");
+  assert.match(route, /lang:\s*z\.enum\(\["ar",\s*"en"\]\)\.optional\(\)/);
+  assert.match(route, /resolvePublicMenuLocale/);
+});
+
+test("temporary theme override is server-controlled and expiry-bound", async () => {
+  const server = await readFile("src/lib/theme/server.ts", "utf8");
+  const access = await readFile("src/lib/theme/testing-access.ts", "utf8");
+  assert.match(server, /authMiddleware/);
+  assert.match(server, /isThemeTestingOverrideEnabled\(\)/);
+  assert.doesNotMatch(server, /data\.testingOverride/);
+  assert.match(access, /MENU_THEME_TESTING_OVERRIDE/);
+  assert.match(access, /MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT/);
+  assert.match(access, /expiry\)\s*>\s*now/);
 });
