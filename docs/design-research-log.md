@@ -62,6 +62,41 @@ For every material research activity record: source, access date, source categor
 - Confidence: MEDIUM
 - Must not copy: no layouts, branding, copy, assets, screenshots, or code.
 
+## 2026-09-05 — Business information and opening-hours research
+
+### Google Business Profile / Google Search — restaurant local intent
+- Source: https://support.google.com/business/answer/3038177 and https://developers.google.com/search/docs/appearance/structured-data/local-business
+- Access date: 2026-09-05
+- Category: authoritative local-business guidance
+- VERIFIED finding: business profiles and LocalBusiness markup center practical local facts such as address, phone, opening hours, and location context; those facts should remain accurate and reflect the real business.
+- Transferable principle: business information should be presented as a compact, trustworthy utility block rather than buried in decorative content.
+- Relevance: public menu branch identity, hours, address, phone, and map actions.
+- Limitation: search documentation is not a UI specification.
+- Confidence: HIGH
+- Must not copy: no Google interface styling.
+
+### Digital menu platform patterns — Toast, Square, and Saudi/MENA menu services
+- Sources: https://pos.toasttab.com/ ; https://squareup.com/us/en/online-ordering ; https://www.alqaima.com/en ; https://nasjmenu.sa/ ; https://tablegreet.com/en-sa
+- Access date: 2026-09-05
+- Category: competitor/product-pattern research
+- VERIFIED finding: restaurant ordering/menu products consistently prioritize menu discovery, branch/contact details, hours or availability context, category navigation, prices, imagery, and direct order/contact actions. Saudi/MENA offerings additionally emphasize Arabic/English support and QR-first access.
+- Transferable principle: put the highest-intent utility facts—open/closed state, hours, branch, location, contact, and menu discovery—within the customer's natural scan path, while keeping the visual treatment subordinate to the menu itself.
+- Relevance: business-information hierarchy and public-menu conversion.
+- Limitation: these are product/vendor patterns, not controlled comparative usability studies; exact feature availability varies by product and plan.
+- Confidence: MEDIUM-HIGH
+- Must not copy: no proprietary layouts, branding, copy, assets, screenshots, or source code.
+
+### Opening-hours UX decision for Menu V3
+- Source: synthesis of repository schema plus the above public patterns
+- Access date: 2026-09-05
+- Category: product design decision
+- VERIFIED finding: Menu V3 currently stores one opening interval and one closing interval per weekday; therefore the safe UI improvement is clearer status selection, readable localized time presentation, current-day emphasis in public presentation, and fast bulk application—not a new multi-interval data model.
+- Transferable principle: make hours scannable in under a few seconds, clearly distinguish Open/Closed, and prevent repetitive data entry where the existing model supports a shared schedule.
+- Relevance: `src/routes/studio/branches.tsx` and public menu business-information presentation.
+- Limitation: multi-period schedules require a deliberate schema/product decision and are outside this task.
+- Confidence: HIGH
+- Must not copy: no external product UI.
+
 ## 2026-09-05 — Noir premium refinement research
 
 ### Repository evidence — Noir theme and fine-dining template

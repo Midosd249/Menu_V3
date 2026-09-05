@@ -110,13 +110,12 @@ test("language switching preserves route search state and makes missing English 
   assert.match(route, /resolvePublicMenuLocale/);
 });
 
-test("temporary theme override is server-controlled and expiry-bound", async () => {
-  const server = await readFile("src/lib/theme/server.ts", "utf8");
+test("theme testing access remains server-time-bound while the production catalog is free", async () => {
   const access = await readFile("src/lib/theme/testing-access.ts", "utf8");
-  assert.match(server, /authMiddleware/);
-  assert.match(server, /isThemeTestingOverrideEnabled\(\)/);
-  assert.doesNotMatch(server, /data\.testingOverride/);
+  const registry = await readFile("src/lib/theme/registry.ts", "utf8");
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE/);
   assert.match(access, /MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT/);
   assert.match(access, /expiry\s*>\s*now/);
+  assert.match(registry, /isPremiumTheme\(_key: ThemeKey\): boolean/);
+  assert.match(registry, /return false/);
 });

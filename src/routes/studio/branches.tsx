@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Clock3, Copy, MapPin, Phone } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Flash, Sheet } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { DEFAULT_HOURS } from "@/lib/menu/hours";
-import { copy, t } from "@/lib/menu/i18n";
+import { copy as copyText, t } from "@/lib/menu/i18n";
 import { deleteBranch, getBranchHours, saveBranch } from "@/lib/menu/owner";
 import { useStudio, useStudioFlash } from "@/lib/menu/studio";
 import type { Branch, BranchHour } from "@/lib/menu/types";
@@ -13,6 +14,7 @@ import { weekdayLabel } from "@/lib/utils";
 
 export const Route = createFileRoute("/studio/branches")({ component: BranchesPage });
 
+type DraftHour = Omit<BranchHour, "branchId">;
 type Draft = {
   id?: string;
   nameAr: string;
@@ -22,7 +24,7 @@ type Draft = {
   mapsUrl: string;
   phone: string;
   isActive: boolean;
-  hours: Array<Omit<BranchHour, "branchId">>;
+  hours: DraftHour[];
 };
 
 function emptyDraft(): Draft {
@@ -56,51 +58,62 @@ function BranchesPage() {
       mapsUrl: branch.mapsUrl,
       phone: branch.phone,
       isActive: branch.isActive,
-      hours: hoursRes.ok && hoursRes.data.hours.length ? hoursRes.data.hours.map(({ branchId: _b, ...rest }) => rest) : DEFAULT_HOURS.map((h) => ({ ...h })),
+      hours: hoursRes.ok && hoursRes.data.hours.length
+        ? hoursRes.data.hours.map(({ branchId: _branchId, ...rest }) => rest)
+        : DEFAULT_HOURS.map((h) => ({ ...h })),
     });
   }
 
   return (
-    <div className="mx-auto grid max-w-3xl gap-6">
-      <div className="flex items-start justify-between gap-3">
+    <div className="mx-auto grid max-w-4xl gap-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t(copy.nav.branches, lang)}</h1>
-          <p className="text-sm text-muted">{snapshot.branches.length} {t(copy.studio.branches, lang)}</p>
+          <p className="text-xs font-semibold uppercase tracking-[.18em] text-muted">Studio</p>
+          <h1 className="mt-1 font-display text-2xl font-semibold">{t(copyText.nav.branches, lang)}</h1>
+          <p className="mt-1 text-sm text-muted">
+            {lang === "ar" ? "الموقع وساعات التشغيل لكل فرع في مكان واحد." : "Location and operating hours for every branch in one place."}
+          </p>
         </div>
         <Button type="button" onClick={() => setDraft(emptyDraft())}>
-          {t(copy.studio.addBranch, lang)}
+          {t(copyText.studio.addBranch, lang)}
         </Button>
       </div>
+
       <Flash error={flash.error} ok={flash.ok} />
+
       <ul className="grid gap-3">
-        {snapshot.branches.map((b) => (
-          <li key={b.id} className="grid gap-2 rounded-xl border border-line p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-medium">{lang === "ar" ? b.nameAr : b.nameEn || b.nameAr}</p>
-                <p className="text-sm text-muted">{b.addressAr || b.addressEn || "—"}</p>
-                <p className="text-xs text-muted">/{snapshot.tenant.slug}/{b.slug}</p>
+        {snapshot.branches.map((branch) => (
+          <li key={branch.id} className="overflow-hidden rounded-2xl border border-line bg-paper shadow-sm">
+            <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-semibold">{lang === "ar" ? branch.nameAr : branch.nameEn || branch.nameAr}</p>
+                  <span className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${branch.isActive ? "bg-good/10 text-good" : "bg-bad/10 text-bad"}`}>
+                    {branch.isActive ? (lang === "ar" ? "نشط" : "Active") : lang === "ar" ? "متوقف" : "Inactive"}
+                  </span>
+                </div>
+                <div className="mt-2 grid gap-1 text-sm text-muted sm:grid-cols-2 sm:gap-x-5">
+                  {branch.addressAr || branch.addressEn ? <span className="inline-flex min-w-0 items-center gap-2"><MapPin className="size-3.5 shrink-0" />{branch.addressAr || branch.addressEn}</span> : null}
+                  {branch.phone ? <span className="inline-flex items-center gap-2"><Phone className="size-3.5 shrink-0" />{branch.phone}</span> : null}
+                </div>
               </div>
-              <span className={`text-xs ${b.isActive ? "text-good" : "text-bad"}`}>
-                {b.isActive ? (lang === "ar" ? "نشط" : "Active") : lang === "ar" ? "متوقف" : "Inactive"}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" size="sm" variant="outline" onClick={() => void openEdit(b)}>
-                {lang === "ar" ? "تعديل" : "Edit"}
-              </Button>
-              {snapshot.branches.length > 1 ? (
-                <Button type="button" size="sm" variant="ghost" onClick={() => setPendingId(b.id)}>
-                  {t(copy.studio.delete, lang)}
+              <div className="flex shrink-0 gap-2">
+                <Button type="button" size="sm" variant="outline" onClick={() => void openEdit(branch)}>
+                  {lang === "ar" ? "إدارة الفرع" : "Manage branch"}
                 </Button>
-              ) : null}
+                {snapshot.branches.length > 1 ? (
+                  <Button type="button" size="sm" variant="ghost" onClick={() => setPendingId(branch.id)}>
+                    {t(copyText.studio.delete, lang)}
+                  </Button>
+                ) : null}
+              </div>
             </div>
           </li>
         ))}
       </ul>
 
       {draft ? (
-        <Sheet title={draft.id ? (lang === "ar" ? "تعديل فرع" : "Edit branch") : t(copy.studio.addBranch, lang)} onClose={() => setDraft(null)}>
+        <Sheet title={draft.id ? (lang === "ar" ? "إدارة الفرع" : "Manage branch") : t(copyText.studio.addBranch, lang)} onClose={() => setDraft(null)}>
           <BranchForm
             draft={draft}
             setDraft={setDraft}
@@ -108,7 +121,7 @@ function BranchesPage() {
             error={flash.error}
             ok={flash.ok}
             onSave={async () => {
-              const ok = await flash.run(() =>
+              const saved = await flash.run(() =>
                 saveBranch({
                   data: {
                     id: draft.id,
@@ -128,28 +141,28 @@ function BranchesPage() {
                   },
                 }),
               );
-              if (ok) setDraft(null);
+              if (saved) setDraft(null);
             }}
           />
         </Sheet>
       ) : null}
 
       {pendingId ? (
-        <Sheet title={t(copy.studio.confirmDelete, lang)} onClose={() => setPendingId(null)}>
+        <Sheet title={t(copyText.studio.confirmDelete, lang)} onClose={() => setPendingId(null)}>
           <div className="flex gap-2">
             <Button
               type="button"
               variant="danger"
               disabled={flash.busy}
               onClick={async () => {
-                const ok = await flash.run(() => deleteBranch({ data: { id: pendingId } }));
-                if (ok) setPendingId(null);
+                const deleted = await flash.run(() => deleteBranch({ data: { id: pendingId } }));
+                if (deleted) setPendingId(null);
               }}
             >
-              {t(copy.studio.yesDelete, lang)}
+              {t(copyText.studio.yesDelete, lang)}
             </Button>
             <Button type="button" variant="outline" onClick={() => setPendingId(null)}>
-              {t(copy.studio.cancel, lang)}
+              {t(copyText.studio.cancel, lang)}
             </Button>
           </div>
         </Sheet>
@@ -167,85 +180,109 @@ function BranchForm({
   onSave,
 }: {
   draft: Draft;
-  setDraft: (d: Draft) => void;
+  setDraft: (draft: Draft) => void;
   busy: boolean;
   error: string;
   ok: boolean;
   onSave: () => void;
 }) {
   const { lang } = useLang();
-  useEffect(() => {
-    /* keep hours array stable */
-  }, []);
+  const setHour = (weekday: number, patch: Partial<DraftHour>) => {
+    setDraft({ ...draft, hours: draft.hours.map((hour) => hour.weekday === weekday ? { ...hour, ...patch } : hour) });
+  };
+  const copyHours = (source: DraftHour) => {
+    setDraft({
+      ...draft,
+      hours: draft.hours.map((hour) => hour.weekday === source.weekday ? hour : {
+        ...hour,
+        opensAt: source.opensAt,
+        closesAt: source.closesAt,
+        isClosed: source.isClosed,
+      }),
+    });
+  };
+
   return (
-    <div className="grid gap-3">
-      <Field label={t(copy.studio.nameAr, lang)}>
-        <Input value={draft.nameAr} onChange={(e) => setDraft({ ...draft, nameAr: e.target.value })} />
-      </Field>
-      <Field label={t(copy.studio.nameEn, lang)}>
-        <Input value={draft.nameEn} onChange={(e) => setDraft({ ...draft, nameEn: e.target.value })} />
-      </Field>
-      <Field label={t(copy.studio.address, lang)}>
-        <Input value={draft.addressAr} onChange={(e) => setDraft({ ...draft, addressAr: e.target.value })} />
-      </Field>
-      <Field label={t(copy.studio.phone, lang)}>
-        <Input value={draft.phone} onChange={(e) => setDraft({ ...draft, phone: e.target.value })} inputMode="tel" />
-      </Field>
-      <Field label={t(copy.studio.maps, lang)}>
-        <Input value={draft.mapsUrl} onChange={(e) => setDraft({ ...draft, mapsUrl: e.target.value })} />
-      </Field>
-      <label className="flex h-11 items-center gap-2 text-sm">
-        <input type="checkbox" checked={draft.isActive} onChange={(e) => setDraft({ ...draft, isActive: e.target.checked })} />
-        {lang === "ar" ? "فرع نشط" : "Active branch"}
-      </label>
-      <p className="text-sm font-medium">{t(copy.studio.hours, lang)}</p>
-      <div className="grid gap-2">
-        {draft.hours.map((h) => (
-          <div key={h.weekday} className="grid grid-cols-[1fr_auto_auto] items-center gap-2 text-sm">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={!h.isClosed}
-                onChange={(e) =>
-                  setDraft({
-                    ...draft,
-                    hours: draft.hours.map((x) => (x.weekday === h.weekday ? { ...x, isClosed: !e.target.checked } : x)),
-                  })
-                }
-              />
-              {weekdayLabel(h.weekday, lang)}
-            </label>
-            <Input
-              type="time"
-              className="h-10"
-              disabled={h.isClosed}
-              value={h.opensAt ?? "07:00"}
-              onChange={(e) =>
-                setDraft({
-                  ...draft,
-                  hours: draft.hours.map((x) => (x.weekday === h.weekday ? { ...x, opensAt: e.target.value } : x)),
-                })
-              }
-            />
-            <Input
-              type="time"
-              className="h-10"
-              disabled={h.isClosed}
-              value={h.closesAt ?? "00:00"}
-              onChange={(e) =>
-                setDraft({
-                  ...draft,
-                  hours: draft.hours.map((x) => (x.weekday === h.weekday ? { ...x, closesAt: e.target.value } : x)),
-                })
-              }
-            />
+    <div className="grid gap-5">
+      <section className="grid gap-3">
+        <div>
+          <h2 className="text-sm font-semibold">{lang === "ar" ? "بيانات الفرع" : "Branch details"}</h2>
+          <p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "هذه المعلومات تظهر للعميل عند توفرها." : "These details appear to customers when provided."}</p>
+        </div>
+        <Field label={t(copyText.studio.nameAr, lang)}><Input value={draft.nameAr} onChange={(e) => setDraft({ ...draft, nameAr: e.target.value })} /></Field>
+        <Field label={t(copyText.studio.nameEn, lang)}><Input value={draft.nameEn} onChange={(e) => setDraft({ ...draft, nameEn: e.target.value })} /></Field>
+        <Field label={t(copyText.studio.address, lang)}><Input value={draft.addressAr} onChange={(e) => setDraft({ ...draft, addressAr: e.target.value })} /></Field>
+        <Field label={lang === "ar" ? "العنوان بالإنجليزية" : "Address in English"}><Input value={draft.addressEn} onChange={(e) => setDraft({ ...draft, addressEn: e.target.value })} /></Field>
+        <Field label={t(copyText.studio.maps, lang)}><Input value={draft.mapsUrl} onChange={(e) => setDraft({ ...draft, mapsUrl: e.target.value })} inputMode="url" placeholder="https://maps.google.com/..." /></Field>
+        <Field label={t(copyText.studio.phone, lang)}><Input value={draft.phone} onChange={(e) => setDraft({ ...draft, phone: e.target.value })} inputMode="tel" /></Field>
+        <label className="flex min-h-11 items-center gap-3 rounded-xl border border-line px-3 text-sm">
+          <input type="checkbox" checked={draft.isActive} onChange={(e) => setDraft({ ...draft, isActive: e.target.checked })} />
+          <span>{lang === "ar" ? "الفرع متاح للعملاء" : "Branch is available to customers"}</span>
+        </label>
+      </section>
+
+      <section className="grid gap-3 border-t border-line pt-5">
+        <div className="flex items-start gap-3">
+          <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-sand"><Clock3 className="size-5" /></div>
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold">{t(copyText.studio.hours, lang)}</h2>
+            <p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "حدد حالة كل يوم والوقت بدقة. استخدم نسخ الساعات لتجنب إعادة الإدخال." : "Set each day's status and times precisely. Copy hours to avoid repetitive entry."}</p>
           </div>
-        ))}
-      </div>
+        </div>
+
+        <div className="grid gap-2">
+          {draft.hours.map((hour) => (
+            <div key={hour.weekday} className={`rounded-2xl border p-3 ${hour.isClosed ? "border-line bg-sand/30" : "border-line bg-paper"}`}>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
+                  <div>
+                    <p className="font-medium">{weekdayLabel(hour.weekday, lang)}</p>
+                    <p className="mt-0.5 text-xs text-muted">{hour.isClosed ? (lang === "ar" ? "لا يستقبل العملاء" : "Closed") : `${formatTime(hour.opensAt)} – ${formatTime(hour.closesAt)}`}</p>
+                  </div>
+                  <div className="flex rounded-xl border border-line bg-paper p-1" role="group" aria-label={weekdayLabel(hour.weekday, lang)}>
+                    <button type="button" aria-pressed={!hour.isClosed} onClick={() => setHour(hour.weekday, { isClosed: false })} className={`min-h-9 rounded-lg px-3 text-xs font-medium ${!hour.isClosed ? "bg-ink text-paper" : "text-muted hover:bg-sand"}`}>
+                      {lang === "ar" ? "مفتوح" : "Open"}
+                    </button>
+                    <button type="button" aria-pressed={hour.isClosed} onClick={() => setHour(hour.weekday, { isClosed: true })} className={`min-h-9 rounded-lg px-3 text-xs font-medium ${hour.isClosed ? "bg-ink text-paper" : "text-muted hover:bg-sand"}`}>
+                      {lang === "ar" ? "مغلق" : "Closed"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 sm:w-64">
+                  <label className="grid gap-1 text-[11px] text-muted">
+                    <span>{lang === "ar" ? "يفتح" : "Opens"}</span>
+                    <Input type="time" className="h-10" disabled={hour.isClosed} value={hour.opensAt ?? "07:00"} onChange={(e) => setHour(hour.weekday, { opensAt: e.target.value })} />
+                  </label>
+                  <label className="grid gap-1 text-[11px] text-muted">
+                    <span>{lang === "ar" ? "يغلق" : "Closes"}</span>
+                    <Input type="time" className="h-10" disabled={hour.isClosed} value={hour.closesAt ?? "00:00"} onChange={(e) => setHour(hour.weekday, { closesAt: e.target.value })} />
+                  </label>
+                </div>
+
+                <button type="button" onClick={() => copyHours(hour)} className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-line px-3 text-xs font-medium hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" title={lang === "ar" ? "نسخ هذه الساعات إلى بقية الأيام" : "Copy these hours to the other days"}>
+                  <Copy className="size-3.5" />
+                  <span>{lang === "ar" ? "تطبيق على الكل" : "Apply to all"}</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <Flash error={error} ok={ok} />
       <Button type="button" disabled={busy || !draft.nameAr.trim()} onClick={onSave}>
-        {busy ? t(copy.state.loading, lang) : t(copy.studio.save, lang)}
+        {busy ? t(copyText.state.loading, lang) : t(copyText.studio.save, lang)}
       </Button>
     </div>
   );
+}
+
+function formatTime(value: string | null | undefined) {
+  if (!value) return "—";
+  const [hour, minute] = value.split(":").map(Number);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return value;
+  const suffix = hour >= 12 ? "PM" : "AM";
+  const normalized = hour % 12 || 12;
+  return `${normalized}:${String(minute).padStart(2, "0")} ${suffix}`;
 }
