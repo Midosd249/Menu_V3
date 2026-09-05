@@ -42,22 +42,21 @@ const env = (key: string): string | undefined => {
 };
 
 const authDisabled = env("VITE_AUTH_ENABLED") === "false";
+const runningOnVercel = Boolean(env("VERCEL"));
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
 const explicitGrokClientId = env("GROK_AUTH_CLIENT_ID");
 const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
-const runningOnVercel = Boolean(env("VERCEL"));
+const googleClientId = env("GOOGLE_CLIENT_ID");
+const googleClientSecret = env("GOOGLE_CLIENT_SECRET");
 
-// The shared preview client is registered only for *.grok-sandbox.com. Never
-// use it for a Vercel deployment: doing so produces an OAuth "invalid redirect
-// URL" because the deployed callback origin is not registered for that client.
-// Vercel/deployed environments must receive the per-app GROK_AUTH_* credentials
-// injected/configured for that deployment. Local/live-preview environments may
-// safely use the shared preview client.
-const grokClientId = runningOnVercel ? explicitGrokClientId : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
-const grokClientSecret = runningOnVercel
-  ? explicitGrokClientSecret
-  : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
-export const authConfigured = !authDisabled && Boolean(grokClientId && grokClientSecret);
+// Live previews use the shared Grok broker client because the broker explicitly
+// accepts dynamic *.grok-sandbox.com callbacks. Standalone Vercel deployments
+// use Google's OAuth endpoints directly so they do not depend on a private
+// per-deployment broker client that is unavailable to ordinary Vercel projects.
+const grokClientId = runningOnVercel ? undefined : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
+const grokClientSecret = runningOnVercel ? undefined : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
+const authConfigured = !authDisabled &&
+  (runningOnVercel ? Boolean(googleClientId && googleClientSecret) : Boolean(grokClientId && grokClientSecret));
 export const authConfigurationError =
   !authDisabled && runningOnVercel && !authConfigured
     ? "Google sign-in is not configured for this Vercel deployment."
@@ -102,19 +101,32 @@ const database = databaseUrl
       keepAlive: true,
     })
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
+
 const issuerBase = grokIssuer.replace(/\/+$/, "");
 const grokOAuthPlugin = authConfigured
   ? genericOAuth({
-      config: GROK_PROVIDERS.map(({ providerId, idp }) => ({
-        providerId,
-        clientId: grokClientId as string,
-        clientSecret: grokClientSecret as string,
-        authorizationUrl: `${issuerBase}/api/auth/oauth2/authorize`,
-        tokenUrl: `${issuerBase}/api/auth/oauth2/token`,
-        userInfoUrl: `${issuerBase}/api/auth/oauth2/userinfo`,
-        scopes: ["openid", "profile", "email"],
-        authorizationUrlParams: { idp, prompt: "login" },
-      })),
+      config: GROK_PROVIDERS.map(({ providerId, idp }) =>
+        runningOnVercel
+          ? {
+              providerId,
+              clientId: googleClientId as string,
+              clientSecret: googleClientSecret as string,
+              authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+              tokenUrl: "https://oauth2.googleapis.com/token",
+              userInfoUrl: "https://openidconnect.googleapis.com/v1/userinfo",
+              scopes: ["openid", "profile", "email"],
+            }
+          : {
+              providerId,
+              clientId: grokClientId as string,
+              clientSecret: grokClientSecret as string,
+              authorizationUrl: `${issuerBase}/api/auth/oauth2/authorize`,
+              tokenUrl: `${issuerBase}/api/auth/oauth2/token`,
+              userInfoUrl: `${issuerBase}/api/auth/oauth2/userinfo`,
+              scopes: ["openid", "profile", "email"],
+              authorizationUrlParams: { idp, prompt: "login" },
+            },
+      ),
     })
   : null;
 
