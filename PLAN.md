@@ -50,7 +50,7 @@ Vercel is a release platform, not the normal development or design-iteration env
 - Never claim `DEPLOYED` without direct Vercel evidence.
 - If Vercel is quota-limited, rate-limited, paused, or unavailable: do not retry randomly; record `DEPLOYMENT_BLOCKED`; do not claim Production equals `main`; preserve verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified.
 - Urgent production outages, critical security, privacy, or data-loss fixes are the only release-process exception and must be narrowly scoped and documented.
-- If production breaks after a release, use Vercel Instant Rollback only when an eligible previous production deployment exists; record the target and reason, preserve the rollback target, then fix forward through the normal verified release batch.
+- If production breaks after a release, use Vercel Instant Rollback only when an eligible previous production deployment exists; record target/reason, preserve the rollback target, then fix forward through the normal verified release batch.
 - Before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to determine which resource is limited.
 - **Exact rule:** visual CSS/theme iteration must not require Vercel deployment.
 
@@ -59,10 +59,16 @@ Vercel is a release platform, not the normal development or design-iteration env
 - Temporary theme testing override must be reviewed and disabled before commercial production launch.
 - Implementation status and deployment status must remain separate.
 
+## Project Memory and Learning System
+- **VERIFIED:** permanent learned-problem memory is maintained at `docs/project-memory/problems-learned.md`.
+- **VERIFIED:** complex tasks and long debugging/design loops must consult the memory before trying new approaches when a similar pattern may exist.
+- **VERIFIED:** the memory records root causes, failed/wasteful approaches, working solutions, lessons, anti-patterns, and detection checklists; uncertain details remain labeled `INFERRED` or `UNKNOWN`.
+- **TODO:** maintain the memory after future major incidents, expensive milestones, or newly discovered hard problems.
+
 ## Documentation Milestone
-- **IN_PROGRESS:** this task updates only the explicitly authorized governance/documentation files and creates only `docs/release-only-vercel-workflow.md`.
+- **IN_PROGRESS:** this task establishes and wires the permanent project-memory learning system using only authorized governance/documentation paths.
 - **VERIFIED:** no application code, template, database schema/migration, authentication/authorization, subscription, tenant/branch isolation, product feature, dependency, CI/CD workflow, Vercel setting, `vercel.json`, environment variable, or deployment configuration is being changed.
 - **VERIFIED:** no intentional Vercel deployment is part of this documentation milestone.
 
 ## Exact Next Action
-After the release-only documentation is fully verified, return to the existing evidence gate: check Vercel for a deployment corresponding to merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`. If READY, inspect runtime evidence, record deployment status, and stop. Do not begin another theme.
+After the project-memory documentation is fully verified, return to the existing evidence gate: check Vercel for a deployment corresponding to merged Editorial commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964`. If READY, inspect runtime evidence, record deployment status, and stop. Do not begin another theme.
