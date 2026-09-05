@@ -9,42 +9,38 @@
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
-- **Theme 1 — Essential — Premium Refinement IMPLEMENTED; automated/browser verification pending.**
+- **Theme 1 — Essential — Premium Refinement IMPLEMENTED and DEPLOYED; quality-gate closure pending.**
 - **Theme 2 — Editorial — DONE / VERIFIED / MERGED; protected.**
 - **Theme 3 — Noir — implementation refinement COMPLETE; final browser/device closure remains blocked pending browser/device evidence.**
 - Heritage and Gallery remain untouched.
 - **Visual/Functional Quality System — DONE / VERIFIED / MERGED.**
 - **External Theme Preview QR Mode — DONE / VERIFIED.**
-- **Shared Public Menu Rendering Stabilization — VERIFIED in repository; browser evidence pending.**
+- **Shared Public Menu Rendering Stabilization — VERIFIED in repository.**
 
-## Current Atomic Task
-### Essential Premium Refinement
-
-**Objective:** turn Essential into a production-premium Arabic-first restaurant menu experience without rebuilding the Public Menu or touching other themes.
-
-**VERIFIED implementation in this batch:**
-- Removed duplicate Essential template chrome; `SmallMenuTemplate` now delegates directly to the existing `PublicMenuView`.
-- Replaced Essential presentation rules with a coherent scoped design system covering canvas, typography, hero, search/categories, featured composition, product hierarchy, hours, action dock, safe areas, focus, bidi handling, and reduced motion.
-- Preserved existing shared cart/order, product details/modifiers, search/category navigation, language, WhatsApp, map, phone, social, analytics, tenant/branch routing, and authorization semantics.
-- Added source-level regression assertions for Essential ownership, deterministic light canvas, safe-area clearance, overlay priority, touch targets, and readable hierarchy.
-- Added Essential design brief and dedicated layering/UI audit.
-- Added material research evidence to `docs/design-research-log.md`.
-
-## Root-Cause / Incident Evidence
-- **VERIFIED:** the prior public-menu stabilization removed route-level duplicate presentation shell ownership and moved server-known theme identity into the document head before hydration.
-- **VERIFIED:** Essential itself also had an unnecessary `small-menu` header/concept wrapper around `PublicMenuView`; this batch removes that duplicate customer-facing chrome.
-- **INFERRED:** the previous first-screen congestion was materially amplified by that duplicate template wrapper and by competing shared hero actions.
-- **UNKNOWN:** exact Opera paint behavior and real-device first-paint timing until browser evidence is collected.
-
-## Verification State
-- **VERIFIED:** `essential` remains the Free theme and maps to `small-menu`.
-- **VERIFIED:** no other theme definition was changed by the Essential refinement.
+## Essential Premium Refinement — Current Evidence
+- **VERIFIED:** Essential `SmallMenuTemplate` now delegates directly to `PublicMenuView`; the duplicate template header/concept wrapper is removed.
+- **VERIFIED:** Essential CSS defines the scoped design system for canvas, typography, hero, search/categories, featured composition, product hierarchy, hours, fixed action dock, safe areas, focus, bidi handling, fallbacks, responsive behavior, and reduced motion.
+- **VERIFIED:** no other theme stylesheet or theme registry definition was changed.
 - **VERIFIED:** no database schema, migration, dependency, authentication, authorization, subscription, tenant/branch isolation, CI/CD, or Vercel configuration was changed.
-- **VERIFIED:** Essential source contract tests were added to `tests/preview-shell.test.mjs`.
-- **BLOCKED:** this session cannot execute the repository runtime locally; GitHub Actions Chromium/browser verification is required after the batch commit.
-- **UNKNOWN:** Opera-specific rendering, real-device screenshots, QR scan behavior, post-hydration console output, and pixel comparison until browser evidence is available.
+- **VERIFIED:** Vercel production deployment `dpl_CjQeR1v9JqDXMzkUatXwcT9kLXRU` is `READY` and points to commit `48430b67a5d6cd9154db237b4cb801e6ee58109e`.
+- **VERIFIED:** deployed public route `/m/mndy-alwtnya` returns HTTP 200 and server-renders `data-menu-theme="essential"`, `data-menu-theme-mode="published"`, `colorScheme="light"`, the deterministic light canvas tokens, one public header, search/categories, featured items, menu sections, hours, and the fixed action dock.
+- **VERIFIED:** the deployed HTML uses `viewport-fit=cover` and includes the head theme bootstrap before the streamed application markup.
+- **VERIFIED:** source-level Essential regression assertions were added to `tests/preview-shell.test.mjs`.
 
-## Files changed in the Essential batch
+## Quality-Gate Result
+- **FAILED / BLOCKED:** GitHub Actions quality job for commit `48430b67a5d6cd9154db237b4cb801e6ee58109e` stopped at `Typecheck`.
+- Root cause shown by CI: the repository's existing `package.json` contains React 19 runtime dependencies but no `@types/react` / `@types/react-dom` development dependencies; TypeScript therefore reports missing React/JSX declarations in existing routes. This failure is not caused by the Essential changes.
+- **VERIFIED:** the CI job's pre-typecheck development build completed successfully and emitted the new Essential CSS asset.
+- **SKIPPED by CI after typecheck failure:** repository tests, lint, production build, Playwright Chromium installation, browser template QA, and later quality steps.
+- We do **not** change dependencies in this Essential milestone solely to repair this pre-existing project-wide typecheck defect; doing so would expand scope without first proving the required downstream type surface.
+
+## Runtime / Browser State
+- **VERIFIED:** Vercel server-rendered HTML is correct enough to inspect first-paint theme identity and public-menu structure.
+- **UNKNOWN:** actual browser paint timing, computed styles after hydration, console errors, Opera rendering, and real-device behavior.
+- **BLOCKED:** Chromium browser QA could not execute because the repository quality workflow stops at the existing typecheck failure.
+- **BLOCKED:** real-device/Opera testing is not available in this session.
+
+## Files changed in the Essential implementation batch
 - `src/components/templates/small-menu.tsx`
 - `src/theme-essential.css`
 - `tests/preview-shell.test.mjs`
@@ -58,8 +54,10 @@
 ## Session Log
 - 2026-09-05 — Reviewed repository state, Essential source, shared public renderer, theme registry, existing regression tests, and five supplied screenshots.
 - 2026-09-05 — Researched WCAG target/focus guidance, MDN safe-area and color-scheme behavior, and responsive media principles.
-- 2026-09-05 — Implemented Essential Premium Refinement as one scoped batch: removed duplicate template chrome and replaced Essential presentation with a cohesive mobile-first design system.
-- 2026-09-05 — Added source-level regression coverage, design brief, layering audit, and research evidence.
+- 2026-09-05 — Implemented Essential Premium Refinement as one scoped code/documentation batch.
+- 2026-09-05 — Pushed commit `48430b67a5d6cd9154db237b4cb801e6ee58109e` to `main`; Vercel production deployment became READY.
+- 2026-09-05 — Inspected CI result: quality job failed at the pre-existing project-wide React type declarations gap; later automated gates were skipped.
+- 2026-09-05 — Inspected the deployed public route through authenticated Vercel fetch: HTTP 200, correct Essential first-paint theme bootstrap, and correct single public renderer structure.
 
 ## Exact Next Task
-Inspect the GitHub Actions result for the Essential refinement commit. If quality/browser QA passes, review the generated browser evidence and verify the Essential public route and owner preview against the supplied screenshots; separately capture Opera/real-device evidence before declaring the milestone `CLOSED`. If CI fails, fix only the Essential batch failure and rerun the affected gates.
+Resolve or separately baseline the existing React type-declaration quality-gate failure (`@types/react` / `@types/react-dom`) in a dedicated project-wide maintenance task, then rerun the full quality workflow. For Essential itself, capture Chromium/real-device/Opera evidence and close only after no Essential-scoped visual, layering, first-render, accessibility, or regression issue remains.
