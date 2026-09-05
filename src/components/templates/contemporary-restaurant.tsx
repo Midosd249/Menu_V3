@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clock, MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
+import { MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
@@ -90,7 +90,7 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
           <MenuMedia src={tenant.logoUrl} alt="" eager fallback={tenant.nameAr.slice(0, 1)} className="editorial-brand-logo" />
           <div className="min-w-0"><p className="editorial-branch">{text(lang, branch.nameAr, branch.nameEn)}</p><h1>{text(lang, tenant.nameAr, tenant.nameEn)}</h1>{tenant.taglineAr || tenant.taglineEn ? <p className="editorial-tagline">{text(lang, tenant.taglineAr, tenant.taglineEn)}</p> : null}</div>
         </div>
-        <div className="editorial-hero-meta"><span>{status == null ? text(lang, "ساعات العمل", "Opening hours") : status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق الآن", "Closed")}</span><span aria-hidden>•</span><span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div>
+        <div className="editorial-hero-meta"><span>{status == null ? text(lang, "ساعات العمل", "Opening hours") : status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span><span aria-hidden>•</span><span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div>
       </div>
     </header>
 
