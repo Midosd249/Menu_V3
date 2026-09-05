@@ -47,9 +47,25 @@ const env = (key: string): string | undefined => {
 
 const authDisabled = env("VITE_AUTH_ENABLED") === "false";
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
-const grokClientId = env("GROK_AUTH_CLIENT_ID") ?? PREVIEW_CLIENT_ID;
-const grokClientSecret = env("GROK_AUTH_CLIENT_SECRET") ?? PREVIEW_CLIENT_SECRET;
+const explicitGrokClientId = env("GROK_AUTH_CLIENT_ID");
+const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
+const runningOnVercel = Boolean(env("VERCEL"));
+
+// The shared preview client is registered only for *.grok-sandbox.com. Never
+// use it for a Vercel deployment: doing so produces an OAuth "invalid redirect
+// URL" because the deployed callback origin is not registered for that client.
+// Vercel/deployed environments must receive the per-app GROK_AUTH_* credentials
+// injected/configured for that deployment. Local/live-preview environments may
+// safely use the shared preview client.
+const grokClientId = runningOnVercel ? explicitGrokClientId : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
+const grokClientSecret = runningOnVercel
+  ? explicitGrokClientSecret
+  : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
 export const authConfigured = !authDisabled && Boolean(grokClientId && grokClientSecret);
+export const authConfigurationError =
+  !authDisabled && runningOnVercel && !authConfigured
+    ? "Google sign-in is not configured for this Vercel deployment."
+    : null;
 
 const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
@@ -81,19 +97,6 @@ const databaseUrl =
   env("SUPABASE_DB_URL") ??
   env("POSTGRES_URL_NON_POOLING");
 const issuerBase = grokIssuer.replace(/\/+$/, "");
-const database = databaseUrl
-  ? new Pool({
-      connectionString: databaseUrl,
-      options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      // Better Auth and application queries share the same Supavisor-backed
-      // database. Keep this pool small to avoid connection spikes on Vercel.
-      max: 2,
-      idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 5000,
-      keepAlive: true,
-    })
-  : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
-
 const grokOAuthPlugin = authConfigured
   ? genericOAuth({
       config: GROK_PROVIDERS.map(({ providerId, idp }) => ({
@@ -116,9 +119,6 @@ async function verifyLegacyOrNativePassword({
   hash: string;
   password: string;
 }): Promise<boolean> {
-  // Existing Supabase Auth accounts use bcrypt hashes. Better Auth's native
-  // format is scrypt salt:key. Verify legacy bcrypt rows through PostgreSQL's
-  // pgcrypto extension without introducing another runtime dependency.
   if (/^\$2[aby]?\$\d{2}\$/.test(hash)) {
     if (!(database instanceof Pool)) return false;
     try {
@@ -171,6 +171,7 @@ export const auth = betterAuth({
     : {}),
   advanced: {
     useSecureCookies: false,
+    trustedProxyHeaders: true,
     defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
     cookies: {
       session_token: { name: SESSION_TOKEN_COOKIE },
