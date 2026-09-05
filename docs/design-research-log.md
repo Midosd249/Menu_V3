@@ -56,8 +56,8 @@ For every material research activity record: source, access date, source categor
 - Access date: 2026-09-05
 - Category: Saudi/MENA digital-menu examples
 - VERIFIED finding: public positioning emphasizes QR-first mobile access, Arabic/English presentation, SAR pricing, categories, imagery, and fast browsing/order paths.
-- Transferable principle: Noir should remain fast and readable even when its visual language is cinematic; mobile scanning and next actions remain primary.
-- Relevance: Saudi-market fit and QR-entry expectations for premium restaurant menus.
+- Transferable principle: mobile scanning and next actions remain primary in a Saudi QR-menu context.
+- Relevance: Saudi-market fit and QR-entry expectations.
 - Limitation: public vendor claims are not independent customer-behavior research.
 - Confidence: MEDIUM
 - Must not copy: no layouts, branding, copy, assets, screenshots, or code.
@@ -69,22 +69,11 @@ For every material research activity record: source, access date, source categor
 - Access date: 2026-09-05
 - Category: repository evidence
 - VERIFIED finding: `noir` maps to the `fine-dining-hospitality` family; the current theme already uses a dark cinematic canvas, immersive hero, sticky category rail, horizontal product cards, and reduced-motion/focus rules. The shared public-menu owns cart/order, search, category navigation, product details, modifiers, and configured customer actions.
-- Transferable principle: refine the existing Noir system instead of introducing a new template or duplicating shared customer-action logic.
-- Relevance: defines the exact safe change boundary for this milestone.
+- Transferable principle: refine the existing theme instead of introducing a new template or duplicating shared customer-action logic.
+- Relevance: defines the exact safe change boundary for premium theme work.
 - Limitation: source inspection cannot prove rendered browser behavior.
 - Confidence: HIGH
 - Must not copy: no external visual assets or proprietary layouts.
-
-### Circular-card screenshot claim
-- Source: user-provided screenshot referenced by task; current repository source
-- Access date: 2026-09-05
-- Category: supplied visual evidence + repository cross-check
-- VERIFIED finding: current `fine-dining-hospitality` source renders featured items as a three-column card grid at medium widths and the main shared renderer uses structured horizontal product cards. No circular product-card CSS was found in the current Noir source reviewed.
-- Transferable principle: do not rewrite or preserve a layout based on an unverified runtime-only observation; first establish whether the composition exists in the current implementation.
-- Relevance: circular-versus-grouped-card decision.
-- Limitation: the agent lacks a live browser/device screenshot session to compare the deployed rendering.
-- Confidence: MEDIUM
-- Must not copy: no screenshot-derived proprietary design.
 
 ### Theme paint/first-render behavior
 - Source: `src/components/menu-theme-controller.tsx`, `src/styles.css`
@@ -96,16 +85,62 @@ For every material research activity record: source, access date, source categor
 - Limitation: no executable browser/device trace is available in this environment.
 - Confidence: HIGH for source behavior; LOW for reported runtime symptom.
 
-### Visual performance — web.dev
-- Source: https://web.dev/articles/optimize-cls and https://web.dev/articles/serve-responsive-images
+## 2026-09-05 — Essential premium refinement research
+
+### W3C — WCAG 2.2 target size and focus visibility
+- Source: https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/ and https://www.w3.org/WAI/WCAG21/Understanding/focus-visible
 - Access date: 2026-09-05
-- Category: authoritative performance guidance
-- VERIFIED finding: reserved image space and responsive image delivery reduce layout movement and unnecessary mobile transfer.
-- Transferable principle: Noir media should remain dimensionally stable and effects should not require heavier assets than the viewport needs.
-- Relevance: immersive hero and product cards.
-- Limitation: exact runtime impact requires performance tooling.
+- Category: authoritative accessibility standard
+- VERIFIED finding: WCAG 2.2 adds Target Size (Minimum) at 24×24 CSS pixels with exceptions; visible keyboard focus remains required, and WCAG 2.2 includes focus-not-obscured guidance relevant to sticky/fixed UI.
+- Transferable principle: important mobile controls should be comfortably sized, visibly focused, and kept clear of fixed action surfaces.
+- Relevance: Essential category chips, search, language, cart, product cards, and fixed action dock.
+- Limitation: standards define conformance requirements, not restaurant-specific visual composition.
 - Confidence: HIGH
-- Must not copy: no assets or layouts.
+- Must not copy: no proprietary visual treatment.
+
+### MDN — CSS environment variables and `color-scheme`
+- Source: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Environment_variables/Using and https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color-scheme
+- Access date: 2026-09-05
+- Category: authoritative web platform documentation
+- VERIFIED finding: `env(safe-area-inset-bottom)` can reserve space for device/browser UI; `color-scheme` controls browser-provided canvas, form controls, and related UI colors.
+- Transferable principle: fixed mobile controls should use safe-area environment values, while a deterministic light theme should explicitly declare its color scheme.
+- Relevance: Essential action dock and reported browser-background inconsistency.
+- Limitation: actual Opera behavior still requires browser reproduction.
+- Confidence: HIGH
+- Must not copy: no external design.
+
+### web.dev / modern CSS layout principles
+- Source: https://web.dev/examples/test
+- Access date: 2026-09-05
+- Category: web platform/performance guidance
+- VERIFIED finding: explicit aspect-ratio containers provide predictable media geometry across responsive layouts.
+- Transferable principle: featured and product media need stable boxes so mixed source ratios do not destabilize scanning or layout.
+- Relevance: Essential featured cards and product-card media.
+- Limitation: exact asset sizes and Core Web Vitals require runtime measurement.
+- Confidence: HIGH
+- Must not copy: no proprietary layout or assets.
+
+### User-provided Essential screenshots — visual baseline
+- Source: five screenshots supplied in this task
+- Access date: 2026-09-05
+- Category: supplied visual evidence
+- VERIFIED finding: the observed Essential states show first-screen congestion, visually dominant WhatsApp treatment, uneven featured composition, dense product-card copy, a fixed bottom owner navigation in preview, and a need for stronger contrast/spacing rhythm. A light public-menu state also confirms that Essential's intended identity is warm/light rather than a dark-only theme.
+- Transferable principle: reduce competing first-screen elements, make product information the primary scan path, and keep fixed controls visually subordinate to content.
+- Relevance: direct acceptance evidence for the refinement milestone.
+- Limitation: screenshots do not prove browser paint timing, console state, exact CSS geometry, or cross-browser behavior.
+- Confidence: HIGH for visual observations; LOW for runtime causality.
+- Must not copy: screenshot-specific branding, imagery, or layout.
+
+### Repository cross-check — Essential ownership and stabilization
+- Source: `src/components/templates/small-menu.tsx`, `src/components/public-menu.tsx`, `src/theme-essential.css`, `src/lib/theme/registry.ts`, `tests/preview-shell.test.mjs`
+- Access date: 2026-09-05
+- Category: repository evidence
+- VERIFIED finding: `essential` maps to the `small-menu` family and is the only free theme; the shared public renderer already owns the customer header/hero, search, categories, featured items, product details, cart, and configured contact actions. The prior stabilization commit already moved theme bootstrap into the document head and removed route-level duplicate public-menu shell ownership.
+- Transferable principle: Essential refinement should remove its duplicate template chrome and refine the shared renderer through scoped theme presentation, preserving shared business behavior.
+- Relevance: defines the smallest safe implementation boundary.
+- Limitation: repository evidence cannot prove rendered visual behavior.
+- Confidence: HIGH
+- Must not copy: no external implementation.
 
 ## Research decision rule
 Research is mandatory when the design choice is material, unfamiliar, consequential, or likely to affect accessibility, performance, SEO, conversion, or Saudi-market fit. Skip broad browsing when repository evidence already answers the question.

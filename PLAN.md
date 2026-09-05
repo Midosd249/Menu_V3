@@ -5,44 +5,32 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential refinement implementation is complete; final browser/device closure remains blocked.
+- **Essential Premium Refinement — IMPLEMENTED; browser/CI verification pending.**
 - Editorial remains protected.
 - Noir implementation refinement is complete; final browser/device closure remains separately blocked and Noir is not being reopened.
 - Heritage and Gallery remain untouched.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - External theme preview QR mode is DONE / VERIFIED.
-- **Current stabilization task:** repository-wide public-menu rendering and shared action visibility.
 
 ## Current Atomic Task
-### Public-menu rendering and shared-action stabilization
+### Essential Premium Refinement — IMPLEMENTATION BATCH COMPLETE / VERIFICATION PENDING
 
-**Objective:** remove redundant presentation layers and eliminate theme-token timing gaps that can cause an old/default visual layer to appear before the intended theme across public routes.
+**Objective:** refine the existing Essential `small-menu` experience into a production-premium Arabic-first restaurant menu without rebuilding the Public Menu or changing other themes.
 
 ## Implementation
-- **VERIFIED:** `src/routes/m.$slug.tsx` no longer wraps selected templates in a second `.menu-public-shell`.
-- **VERIFIED:** `src/routes/m.$slug.$branch.tsx` uses the same pre-hydration theme bootstrap as the primary public route.
-- **VERIFIED:** `createThemeBootstrapScript()` serializes the server-known theme token colors and sets `data-menu-theme` / `data-menu-theme-mode` before hydration.
-- **VERIFIED:** `MenuThemeController` preserves current tokens across dependency updates and clears them only when the controller unmounts.
-- **VERIFIED:** `PublicMenuView` now provides an always-available Cart control and persistent configured WhatsApp, map, and phone quick actions.
-- **VERIFIED:** the action dock has adequate bottom content clearance.
-- **VERIFIED:** regression assertions cover the new invariants.
+- **VERIFIED:** `src/components/templates/small-menu.tsx` no longer duplicates the public renderer's header/concept shell; Essential delegates directly to `PublicMenuView`.
+- **VERIFIED:** `src/theme-essential.css` defines a complete scoped Essential system for typography, canvas, hero, search/categories, featured cards, product cards, hours, action dock, safe areas, focus, bidi, fallbacks, responsive behavior, and reduced motion.
+- **VERIFIED:** fixed customer actions retain the existing shared renderer and use the documented z-index/safe-area model.
+- **VERIFIED:** the prior SSR theme bootstrap and controller cleanup stabilization remain intact.
+- **VERIFIED:** no other theme stylesheet or theme registry definition was modified.
+- **VERIFIED:** source-level Essential regression assertions were added to the existing preview-shell test suite.
+- **VERIFIED:** design brief, layering audit, and research log were updated.
 
-## Design/Engineering Rationale
-The defect is treated as a rendering-system problem rather than a z-index problem. The repository already documented the correct diagnostic order: DOM structure → positioning/sizing → stacking contexts → pseudo-elements → animation/paint timing → responsive constraints → targeted z-index. The selected fix therefore removes duplicated presentation ownership and moves theme identity into the SSR document head rather than adding more stacking rules.
-
-This is consistent with TanStack Start guidance that route head output can provide inline scripts and that scripts intended to prevent theme flicker should execute before hydration. React documents that effects do not run during server rendering, so client-only theme effects cannot be the only source of first-paint theme state. WCAG 2.2 requires at least 24×24 CSS-pixel pointer targets at Level AA, with larger targets preferable for primary mobile actions.
-
-## Acceptance Criteria
-- **VERIFIED:** no route-level duplicate `.menu-public-shell` remains on published public-menu routes.
-- **VERIFIED:** the server-rendered public-menu has a deterministic theme attribute/token bootstrap before hydration.
-- **VERIFIED:** normal theme/controller updates do not clear the document theme between renders.
-- **VERIFIED:** every published theme exposes a Cart entry point even when empty.
-- **VERIFIED:** configured WhatsApp, map, and phone actions have a persistent shared quick-action surface.
-- **VERIFIED:** the dock is excluded from owner preview mode.
-- **UNKNOWN:** actual browser paint timing and device screenshots.
+## Design Decision
+Essential remains the Free everyday-hospitality theme. The refinement prioritizes fast scanning, Arabic readability, clear product hierarchy, restrained terracotta accent, warm/light canvas, stable media, and quiet customer actions. It deliberately avoids image-heavy premium effects, circular clipping, arbitrary high z-index values, and decorative motion that can hide content.
 
 ## Verification
-Required in an executable repository runtime:
+Required:
 1. `npm run typecheck`
 2. `npm test`
 3. `npm run test:platform`
@@ -50,13 +38,18 @@ Required in an executable repository runtime:
 5. `npm run build`
 6. `npm run qa:template`
 7. `npm run performance:audit`
-8. Real browser checks for all five themes, Arabic RTL and English LTR, small/standard/large mobile, and supported desktop/tablet.
+8. GitHub Actions Chromium browser QA for all five themes.
+9. Real-device/Opera verification where available.
+
+Current environment limitation:
+- **BLOCKED:** local repository runtime is unavailable; commands cannot be executed from this GitHub-only session.
+- **UNKNOWN:** Opera-specific rendering, real-device screenshots, QR scan, exact first-paint timing, post-hydration console output, and pixel comparison.
 
 ## Release Policy
-- Do not claim `DEPLOYED` without real Vercel evidence.
-- Keep this stabilization as one coherent release batch.
-- Do not make unrelated template or subscription changes while verifying this defect.
-- Vercel Git integration deploys pushes automatically by default, so avoid fragmented production commits while the batch is incomplete.
+- Keep Essential as one coherent release batch.
+- Do not change other themes while closing Essential.
+- Do not claim `DEPLOYED` without Vercel evidence.
+- Do not start Heritage until the Essential closure gate is satisfied.
 
 ## Exact Next Task
-Verify commit `dd155ee7cf9fdf0d893f0a9289f32371d8a823b8` in an executable browser/device environment, then run the full repository quality gates and prepare one Vercel release batch only after evidence is clean.
+Inspect the GitHub Actions result for the Essential refinement commit. Resolve only any Essential-scoped failures, then review browser evidence and capture remaining Opera/real-device evidence before `CLOSED`.

@@ -46,3 +46,30 @@ test("preview menu cards keep a time-based visible final state", async () => {
   assert.match(styles, /data-menu-theme-mode="preview"[\s\S]*?animation:\s*none\s*!important;[\s\S]*?opacity:\s*1\s*!important;/);
   assert.doesNotMatch(styles, /\.menu-public-shell\s*>\s*div\s*\{[^}]*min-height:\s*100dvh/, "direct preview children must not become full-screen layout layers");
 });
+
+test("Essential owns one public renderer instead of duplicate template chrome", async () => {
+  const source = await readFile("src/components/templates/small-menu.tsx", "utf8");
+  assert.match(source, /<PublicMenuView\s+menu=\{menu\}\s+preview=\{preview\}/);
+  assert.doesNotMatch(source, /<header\b/);
+  assert.doesNotMatch(source, /قائمة مختصرة/);
+});
+
+test("Essential refinement has deterministic light canvas, safe-area clearance, and documented overlay priority", async () => {
+  const styles = await readFile("src/theme-essential.css", "utf8");
+  assert.match(styles, /html\[data-menu-theme="essential"\]\s*\{[\s\S]*color-scheme:\s*light;/);
+  assert.match(styles, /html\[data-menu-theme="essential"\]\s+body\s*\{[\s\S]*background:\s*#f7f3eb;/);
+  assert.match(styles, /padding-bottom:\s*calc\(8\.25rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
+  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)\)/);
+  assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*z-index:\s*40/);
+  assert.doesNotMatch(styles, /z-index:\s*9999/);
+  assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
+});
+
+test("Essential keeps touch targets and readable product hierarchy", async () => {
+  const styles = await readFile("src/theme-essential.css", "utf8");
+  assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*min-height:\s*2\.75rem/);
+  assert.match(styles, /\.menu-public-shell > div\.sticky > div > div:last-child button[\s\S]*min-height:\s*2\.75rem/);
+  assert.match(styles, /font-weight:\s*720/);
+  assert.match(styles, /font-weight:\s*800/);
+  assert.match(styles, /font-size:\s*0\.78rem/);
+});
