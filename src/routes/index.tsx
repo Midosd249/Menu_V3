@@ -82,7 +82,7 @@ function LeadForm({ selectedPlan, selectedTheme }: { selectedPlan: string; selec
     setStatus("saving"); setError("");
     const plan = COMMERCIAL_PLANS.find((item) => item.code === selectedPlan);
     const theme = MENU_THEMES.find((item) => item.key === selectedTheme);
-    const details = [plan ? `Selected plan: ${plan.code} / ${plan.nameEn}` : "Selected plan: not selected", theme ? `Selected theme: ${theme.key} / ${theme.nameEn}` : "Selected theme: not selected", String(form.get("details") || "").trim()].filter(Boolean).join("\n");
+    const details = [plan ? `Selected plan: ${plan.code} / ${plan.nameEn}` : "Selected plan: not selected", theme ? `Selected theme: ${theme.key} / ${theme.name.en}` : "Selected theme: not selected", String(form.get("details") || "").trim()].filter(Boolean).join("\n");
     const result = await submitLead({ data: { businessName: String(form.get("businessName") || ""), city: String(form.get("city") || ""), contactName: String(form.get("contactName") || ""), contactPhone: String(form.get("contactPhone") || ""), contactEmail: String(form.get("contactEmail") || ""), details } });
     if (!result.ok) { setStatus("error"); setError(result.error); return; }
     setReferenceId(result.data.id.slice(0, 8).toUpperCase()); setStatus("done");
