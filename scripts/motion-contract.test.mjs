@@ -38,7 +38,7 @@ test("interactive motion avoids layout properties and supports reduced motion", 
 });
 
 test("public menu has dialog targets for deterministic entrance choreography", () => {
-  assert.equal(publicMenu.includes('aria-labelledby="product-details-title"'), true);
+  assert.equal(publicMenu.includes('aria-labelledby={titleId}'), true);
   assert.equal(publicMenu.includes('aria-labelledby="cart-title"'), true);
   assert.equal(css.includes('[aria-labelledby="product-details-title"]'), true);
   assert.equal(css.includes('[aria-labelledby="cart-title"]'), true);
