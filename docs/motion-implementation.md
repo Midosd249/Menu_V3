@@ -1,7 +1,9 @@
 # Motion and Interaction — W9
 
 ## Status
-- Implementation: `IN_PROGRESS` until the repository Quality Gate passes on the final W9 commit.
+- `CLOSED / VERIFIED`.
+- Final GitHub Quality run: `34010117079` / run `#779`.
+- The final gate passed typecheck, 112 tests, lint, production build, Playwright Chromium installation, all-theme Browser Template QA, performance-baseline upload, and preview shutdown.
 - Scope: shared motion primitives for the existing Menu V3 product and protected five-theme public menu.
 - Themes remain presentation owners; this layer does not introduce a sixth theme or duplicate application shells.
 
@@ -67,10 +69,21 @@ Hover-only movement is disabled for coarse pointers. Primary customer actions re
 The test is included in the default `npm test` suite.
 
 ## Security and compatibility
-- No dependencies added.
+- No new runtime dependency was added.
+- A pre-existing invalid `@radix-ui/react-popover` range (`^1.2.12`) was aligned to the lockfile's installable `^1.1.12` range after CI proved it was blocking `npm install`; no package upgrade was introduced.
 - No Supabase schema or tenant data model changes.
 - No authentication, authorization, branch isolation, or customer-action semantics changed.
 - No theme was replaced or duplicated.
 
-## Remaining release gate
-The final W9 state must pass typecheck, tests, lint, build, applicable template/browser QA, and performance inspection before it can be marked `CLOSED / VERIFIED`.
+## Final verification
+- `npm run typecheck` — PASS in Quality run `34010117079`.
+- `npm test` — PASS: 112/112 tests.
+- `npm run lint` — PASS.
+- Production build — PASS.
+- Playwright Chromium installation — PASS.
+- Browser Template QA — PASS for all protected themes.
+- Performance baseline upload — PASS.
+- Preview shutdown — PASS.
+
+## Closure
+W9 is `CLOSED / VERIFIED`. No further W9 work should be started unless later evidence demonstrates a regression.
