@@ -40,6 +40,23 @@
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
 - W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
 - W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; repository/CI release audit passed, but current `main` is not production-deployed.
+- W17 Public Pages & Themes Integration — `IN_PROGRESS` on `w17-public-pages-themes-integration`.
+
+## W17 Public Pages & Themes Integration
+- VERIFIED: implementation is being applied to the canonical `Menu_V3` architecture, not the legacy `Menu-V2-Sandbox`.
+- VERIFIED: homepage now consumes the canonical `COMMERCIAL_PLANS` catalog and visibly presents Free, Starter, and Pro pricing with operational limits.
+- VERIFIED: homepage now presents the five protected themes from `MENU_THEMES` and links each to the real `/themes/preview` route.
+- VERIFIED: plan selection and theme selection scroll to the existing new-customer request form and display the current selection before submission.
+- VERIFIED: selected plan/theme are included in the existing `submitLead` details payload; no backend schema or RPC contract was changed.
+- VERIFIED: the homepage request area explicitly identifies itself as a `New customer request` and preserves the existing reference-ID confirmation state.
+- VERIFIED: `/themes` now presents theme personality, product-card style, imagery emphasis, preview, and a clear relationship to the existing Menu V3 architecture.
+- VERIFIED: `/themes/preview` remains connected to `MenuThemeController`, `PublicMenuView`, and `ContemporaryRestaurantTemplate`; no static HTML theme renderer was introduced.
+- VERIFIED: preview controls are localized for Arabic/English and provide return-to-theme comparison plus a use-theme path.
+- VERIFIED: a repository-level public-pages/themes contract test was added to protect the commercial catalog, five theme keys, lead flow, and real preview renderer boundary.
+- VERIFIED: `docs/w17-public-pages-themes-design-brief.md` records scope, protected boundaries, journey, pricing, theme, i18n/RTL, accessibility, responsive, and verification requirements.
+- UNKNOWN: browser/device visual QA for the new marketing surfaces has not yet been executed in this connector environment.
+- UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
+- BLOCKED: production deployment remains separately blocked by the previously recorded Vercel capacity/rate condition; W17 implementation does not claim deployment.
 
 ## W15 Growth, Analytics, and Experimentation
 - VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
@@ -77,7 +94,7 @@
 - No sixth theme is created as a substitute for product/design strategy.
 
 ## Current Design Strategy
-- The five-theme system is not the current design focus; themes remain protected.
+- The five-theme system remains protected while W17 improves how the existing themes are presented and selected.
 - External research covers Saudi/MENA and global restaurant technology, branded web presence, public menu UX, Owner Studio, Arabic/RTL, accessibility, typography, performance, SEO/local discovery, conversion, trust, pricing, analytics, and release QA.
 - INFERRED: strongest strategic territory is `Premium Arabic-first Restaurant Presence Platform`.
 - PROPOSED: strengthen shared brand/design system and connected customer/owner experience while preserving theme personality.
@@ -85,15 +102,17 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W16-R — Controlled production release retry after Vercel capacity is cleared
-Objective: once the Vercel rate/build limitation is cleared, perform exactly one intentional production deployment of current `main`, verify the deployed commit, perform real-device production QA, and close W16 only with direct deployment evidence.
+### W17-Q — Verify and harden the public Pages & Themes integration
+Objective: run the repository quality gates against the W17 implementation, inspect the final diff, and resolve only implementation/test defects found in the scoped public pages and themes journey.
 
 Acceptance criteria:
-- Vercel Usage/Billing limitation is rechecked and the deployment condition is clear;
-- current `main` commit `3a7fcffa2bd68cdb034eb3cde05ab3f0df8ecce1` is deployed to production;
-- direct Vercel evidence confirms the production deployment commit matches current `main`;
-- real-device production QA covers supported mobile/browser states and core customer actions;
-- testing override state is confirmed disabled/expired before commercial launch;
-- final release evidence is recorded and W16 is marked CLOSED only after all required evidence is present.
+- `npm run typecheck` passes;
+- `npm test` passes including `tests/public-pages-themes-contract.test.mjs`;
+- `npm run lint` passes;
+- `npm run build` passes;
+- `npm run qa:template` passes where applicable;
+- final diff contains only W17-scoped changes and preserves protected backend/theme architecture;
+- Arabic RTL, English LTR, mobile/responsive, plan selection, theme selection, and preview controls are verified to the extent supported by the available environment;
+- remaining UNKNOWN/BLOCKED items are explicitly recorded rather than hidden behind DONE.
 
-Verification: direct Vercel deployment evidence plus real-device production QA and final continuity review.
+Verification: GitHub Actions quality evidence plus final diff/continuity review and available browser/visual evidence.
