@@ -32,7 +32,7 @@
 - W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed.
 - W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate `34010117079` passed all required steps.
 - W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate `34010619265` passed all required steps.
-- W11 SEO, Local Discovery, and Shareability — READY TO START.
+- W11 SEO, Local Discovery, and Shareability — IMPLEMENTED / QUALITY GATE PENDING.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -50,78 +50,21 @@
 - VERIFIED: GitHub Actions Quality run `34007481599` completed successfully for the P0 closure commit.
 - UNKNOWN: direct authenticated Owner UI -> Public HTTP response cache behavior has not been exercised in an interactive authenticated browser session in this environment.
 
-## Typography Decision — W6
-- VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans is the selected default shared typography system.
-- VERIFIED: Noto Sans Arabic + Noto Sans is Alternate 1.
-- VERIFIED: Tajawal is Alternate 2.
-- VERIFIED: IBM Plex is OFL-1.1, supports Arabic, is designed for UI environments, and exposes web WOFF/WOFF2 assets.
-- VERIFIED: decision record: `docs/design-intelligence.md` under `Typography Decision — 2026-09-06`.
-
-## W6-01 Typography Implementation — CLOSED Evidence
-- VERIFIED: `src/typography.css` defines the shared semantic typography contract.
-- VERIFIED: `src/routes/__root.tsx` loads the typography contract before theme styles.
-- VERIFIED: Arabic and Latin IBM Plex weights 400/500/600/700 use exact Fontsource `5.3.0` CDN WOFF2 URLs.
-- VERIFIED: assets use `font-display: swap`; Google Fonts runtime loading is removed.
-- VERIFIED: `scripts/typography-contract.test.mjs` protects the delivery contract and prevents Google Fonts/font-package regression.
-- VERIFIED: no new runtime font dependency was added.
-- VERIFIED: the previous Browser Template QA failure was traced to 404s on the old IBM GitHub-commit CDN path.
-- VERIFIED: corrected Fontsource delivery passed full Quality run `34009000701`, including all-theme browser QA and performance baseline upload.
-- Delivery boundary: strict local WOFF2 self-hosting remains unclaimed because the repository connector cannot transfer binary assets; exact versioned CDN delivery is the verified production model.
-- Status record: `docs/typography-implementation-status.md`.
-
-## W7 Color / Surface / Contrast — CLOSED Evidence
-- VERIFIED: `src/colors.css` owns the semantic color/surface contract.
-- VERIFIED: semantic roles cover canvas, primary/secondary/elevated/inverse surfaces, overlay, content hierarchy, borders, actions, focus, status, disabled, and interactive states.
-- VERIFIED: all five protected themes have semantic adapters and retain their individual personality.
-- VERIFIED: status semantics are theme-independent.
-- VERIFIED: selected critical palette contrast checks meet WCAG AA targets; Noir accent contrast is checked against its dark canvas.
-- VERIFIED: focus-visible, disabled, placeholder, reduced-motion, and higher-contrast behavior are explicit.
-- VERIFIED: public-menu shell and form controls consume semantic surface/content/border roles.
-- VERIFIED: regression coverage exists in `scripts/color-contract.test.mjs`.
-- VERIFIED: Quality run `34009000701` passed typecheck, tests, lint, production build, all-theme browser QA, performance baseline upload, and preview shutdown.
-- Evidence record: `docs/color-system-implementation-status.md`.
-
-## W8 Imagery and Art Direction — CLOSED Evidence
-- VERIFIED: `docs/image-art-direction.md` defines the evidence-based imagery contract for dish, brand, branch, hero, and product/screenshot media.
-- VERIFIED: the contract defines 4:3 dish/card framing, 16:9/3:2 editorial/brand framing, focal-point controls, responsive behavior, stable geometry, lazy loading defaults, and fallback behavior.
-- VERIFIED: Arabic-first alt-text rules and decorative-image handling are documented.
-- VERIFIED: tenant ownership, provenance, licensing, and competitor-asset exclusions are explicit.
-- VERIFIED: `src/image-art-direction.css` provides shared focal-point and role hooks without changing the protected theme architecture.
-- VERIFIED: root document loads the shared image art-direction layer before theme styles.
-- VERIFIED: `scripts/image-art-direction-contract.test.mjs` protects the contract and confirms the existing public-menu lazy-loading baseline.
-- VERIFIED: the test is part of the default `npm test` suite.
-- VERIFIED: no new runtime dependency was added.
-- VERIFIED: no tenant data model, Supabase schema, or protected theme was changed.
-- UNKNOWN: tenant-specific focal-point metadata is not currently represented as a canonical typed media model; the contract intentionally avoids a schema migration in W8.
-- VERIFIED: final production Quality run `34010117079` passed all-theme Browser Template QA and performance-baseline upload for the W8/W9 release batch.
-- Evidence record: `docs/image-art-direction.md`.
-
-## W9 Motion and Interaction — CLOSED Evidence
-- VERIFIED: `src/motion.css` centralizes duration, easing, distance, scale, and compatibility aliases.
-- VERIFIED: root document loads the motion layer before protected theme styles.
-- VERIFIED: product-detail sheet, cart drawer, and overlay entrance choreography use deterministic transform/opacity motion; RTL reverses cart direction.
-- VERIFIED: reduced-motion behavior removes movement/press scaling while preserving state feedback.
-- VERIFIED: coarse-pointer hover movement is disabled.
-- VERIFIED: `scripts/motion-contract.test.mjs` protects tokens, loading order, reduced-motion behavior, and public-menu dialog hooks.
-- VERIFIED: the motion contract is part of the default `npm test` suite.
-- VERIFIED: no new runtime dependency or Supabase/schema change was introduced.
-- VERIFIED: a pre-existing invalid `@radix-ui/react-popover` range was aligned from `^1.2.12` to the lockfile's installable `^1.1.12` after CI proved it blocked installation; no package upgrade was introduced.
-- VERIFIED: final Quality run `34010117079` passed install, typecheck, 112 tests, lint, production build, Playwright, all-theme Browser Template QA, performance upload, and preview shutdown.
-- Evidence record: `docs/motion-implementation.md`.
-
-## W10 Accessibility and RTL Quality — CLOSED Evidence
-- VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
-- VERIFIED: root document loads the accessibility layer before protected theme CSS.
-- VERIFIED: public product and cart dialogs expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
-- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email direction, and live validation feedback.
-- VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where direction is data-dependent.
-- VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
-- VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level without introducing a second form system.
-- VERIFIED: `scripts/accessibility-contract.test.mjs` protects the W10 contract and is part of the default `npm test` suite.
-- VERIFIED: W9 motion contract compatibility was retained after dialog labels became unique.
-- VERIFIED: final Quality run `34010619265` passed typecheck, 120 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
-- Evidence record: `docs/accessibility-rtl-quality.md`.
+## W11 SEO / Local Discovery / Shareability — Implementation Evidence
+- VERIFIED: public-menu canonical URLs are absolute production URLs.
+- VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when tenant and branch English names both exist.
+- VERIFIED: Arabic/English alternates are reciprocal and use absolute URLs.
+- VERIFIED: preview theme variants remain `noindex, nofollow`.
+- VERIFIED: missing public menus remain `noindex, nofollow`.
+- VERIFIED: public Restaurant structured data is tenant/branch scoped and does not fabricate location data when required Saudi fields are incomplete.
+- VERIFIED: public share metadata includes `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata where an image exists.
+- VERIFIED: `/robots.txt` excludes private/control surfaces and advertises `/sitemap.xml`.
+- VERIFIED: `/sitemap.xml` is generated server-side from active, published tenants and active branches only.
+- VERIFIED: sitemap emits English variants only when real English tenant/branch names exist.
+- VERIFIED: no new runtime dependency or database schema migration was introduced.
+- VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts`; public SEO tests were extended in `src/lib/menu/seo.test.ts`.
+- VERIFIED: implementation contract is recorded in `docs/seo-local-discovery-shareability.md`.
+- UNKNOWN: final GitHub Quality run for the current W11 head has not yet completed.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -132,27 +75,23 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W11 — SEO, Local Discovery, and Shareability
-Objective: audit and strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
+### W11 Quality Closure
+Objective: verify the current W11 implementation through the repository Quality Gate and close only if all checks pass.
 
 Scope:
-- audit metadata contracts, canonical/hreflang behavior, robots/sitemap alignment;
-- verify restaurant/local business structured data and truthful tenant-scoped location signals;
-- audit share-preview surfaces and branch-level public URLs;
-- verify QR source continuity and deep-link context;
-- verify missing-content/noindex rules and exclusion of preview/private routes;
-- add regression coverage and run full Quality Gate.
+- typecheck, tests, lint, production build;
+- Playwright/template QA;
+- robots/sitemap response checks;
+- canonical/hreflang/schema validation;
+- performance inspection.
 
 Acceptance criteria:
-- evidence-based SEO/shareability contract documented;
-- Arabic and English URLs remain canonical and reciprocal;
-- structured data is truthful and tenant-scoped;
-- public routes are indexable only when eligible;
-- share previews are stable;
-- QR/deep links preserve intended context;
-- regression coverage exists;
-- full Quality Gate passes.
+- full Quality Gate passes;
+- no cross-tenant metadata exposure;
+- only eligible public routes are discoverable;
+- no fabricated locale or location claims;
+- no unrelated regression.
 
-Risks: duplicate URLs, fabricated locale content, cross-tenant metadata leakage, incorrect location claims, indexing private/preview surfaces.
+Risks: dependency/install failure, server middleware typing/build issues, malformed XML, incorrect production-origin resolution.
 
 Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
