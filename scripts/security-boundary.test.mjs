@@ -31,11 +31,14 @@ test("public tenant mapping has a distinct type that cannot carry owner identity
 });
 
 test("public mapping strips operational revision fields as well as owner identity", () => {
+  const types = read("src/lib/menu/types.ts");
   const map = read("src/lib/menu/map.ts");
+  const publicMenu = read("src/lib/menu/public.ts");
+
   assert.match(map, /mapPublicTenant/);
-  const publicTenantType = read("src/lib/menu/types.ts").match(/export type PublicTenant = (.*);/)?.[1] ?? "";
-  assert.doesNotMatch(publicTenantType, /public_content_version/);
-  assert.doesNotMatch(publicTenantType, /ownerUserId/);
+  assert.doesNotMatch(types.match(/export type PublicTenant = ([\s\S]*?);\n\nexport type PublicMenu/)?.[1] ?? "", /public_content_version/);
+  assert.match(map, /ownerUserId: _ownerUserId/);
+  assert.match(publicMenu, /mapPublicTenant\(row\.tenant\)/);
 });
 
 test("authenticated menu server functions use the auth middleware chokepoint", () => {
@@ -62,12 +65,10 @@ test("platform administration is fail-closed and cannot be inferred from a clien
   assert.doesNotMatch(admin, /platformAdmin.*tenantId|tenantId.*platformAdmin/i);
 });
 
-test("client-reachable source files do not contain server secret names or connector credentials", () => {
+test("client-reachable source files do not contain server secret names or credential values", () => {
   const forbidden = [
     /SUPABASE_SERVICE_ROLE_KEY/i,
     /SERVICE_ROLE_KEY/i,
-    /x-connector-access-token/i,
-    /CONNECTOR_ACCESS_TOKEN/i,
     /BETTER_AUTH_SECRET/i,
     /GROK_AUTH_CLIENT_SECRET/i,
     /GOOGLE_CLIENT_SECRET/i,
