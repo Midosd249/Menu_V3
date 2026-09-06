@@ -56,7 +56,7 @@
 ## Design Research Findings
 - **VERIFIED:** Saudi/MENA competitors increasingly combine QR menus with branded presence, direct ordering/contact, analytics, branches, local-market fit, and/or customer-data ownership.
 - **VERIFIED:** global restaurant platforms increasingly connect menus, websites, ordering, discoverability, and operational data.
-- **VERIFIED:** Arabic/RTL and mixed-direction content require explicit bidi handling; RTL is not simply visual mirroring. W3C recommends structural direction markup and tightly scoped markup for opposite-direction inline runs. citeturn1search0turn1search6
+- **VERIFIED:** Arabic/RTL and mixed-direction content require explicit bidi handling; RTL is not simply visual mirroring. W3C recommends structural direction markup and tightly scoped markup for opposite-direction inline runs.
 - **VERIFIED:** typography and image delivery affect accessibility, layout stability, and performance.
 - **VERIFIED:** current brand direction supports warm editorial hospitality cues, deep ink, muted terracotta, strong Arabic hierarchy, whitespace, and operational clarity.
 - **PROPOSED:** IBM Plex Sans Arabic is a strong typography candidate but is not yet selected; it must be benchmarked against actual Menu V3 content and current font behavior.
