@@ -20,12 +20,18 @@
 
 ## Completed Research / Planning
 ### Design Intelligence & Product Experience Planning — CLOSED / VERIFIED
-- **VERIFIED:** the final planning round intentionally shifted focus away from theme implementation and covered the complete product/site experience.
+- **VERIFIED:** the final planning round shifted focus away from theme implementation and covered the complete product/site experience.
 - **VERIFIED:** the master plan covers product positioning, brand/content, marketing website, public menu, Owner Studio, shared design system, typography, color, imagery, motion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics/growth, and release QA.
 - **VERIFIED:** Saudi/MENA and global competitive signals, authoritative web guidance, current brand direction, and repository constraints were incorporated.
 - **VERIFIED:** all workstreams, priorities, protected scope, decision principles, governance, readiness criteria, and execution sequence are documented in `docs/design-strategy-master-plan.md`.
 - **VERIFIED:** design intelligence evidence remains in `docs/design-intelligence-audit.md` and `docs/design-research-log.md`.
 - **VERIFIED:** completed themes are explicitly protected and are not the current focus.
+
+### Shared Design System Contract — CLOSED / VERIFIED
+- **VERIFIED:** `docs/design-system-contract.md` establishes implementation-ready shared rules without introducing a new theme.
+- **VERIFIED:** contract covers semantic tokens, typography roles, spacing, radius, elevation, motion, responsive layout, RTL/LTR/bidi, components/states, public menu, Owner Studio, marketing site, imagery, accessibility, performance, SEO, trust/security, and theme boundaries.
+- **VERIFIED:** exact production typography and color values remain unresolved until their dedicated evidence-based decision tasks.
+- **VERIFIED:** no application source, schema, dependency, CI/CD, or Vercel configuration changed in this task.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected from unnecessary reopening.
@@ -36,7 +42,7 @@
 - Do not create a sixth theme as a substitute for product/design strategy.
 
 ## Permanent Quality Gate
-Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, and `docs/design-strategy-master-plan.md` where applicable.
+Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, and `docs/design-system-contract.md` where applicable.
 
 ## Master Design Strategy
 The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md`.
@@ -61,12 +67,13 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### Design Intelligence Synthesis — TODO
-- **Objective:** close the external deep-research round and reconcile its findings with repository evidence before any broad implementation.
-- **Scope:** website, public menu, Owner Studio, brand system, typography, color, content, conversion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics, and growth. Themes are not the focus.
-- **Required outputs:** consolidated evidence map, 10–15 competitor/reference matrix, homepage IA recommendation, public-menu UX priorities, Owner Studio priorities, typography shortlist/decision path, color territory direction, design-system principles, accessibility/RTL/performance requirements, opportunity backlog, explicit do-not-change list, and atomic implementation roadmap.
-- **Constraints:** no code changes; no redesign of completed themes; no unsupported feature assumptions; no proprietary copying; no Vercel deployment for research.
-- **Verification:** reconcile sources against repository evidence, distinguish VERIFIED/INFERRED/PROPOSED/UNKNOWN, review documentation diff, and identify exactly one next atomic task.
+### Typography Decision — benchmark candidate font systems
+- **Objective:** select one production-ready default typography system plus fallbacks using actual Menu V3 Arabic/English/mixed content and measurable performance constraints.
+- **Scope:** Arabic shaping, Latin pairing, numerals, SAR, phones, URLs, mixed-direction content, hierarchy, readability, licensing/availability, font loading, subsetting, and layout stability.
+- **Constraints:** do not reopen themes; do not globally replace fonts without evidence; preserve RTL/bidi semantics; do not add dependencies without a documented need.
+- **Acceptance criteria:** candidate set explicit; real-content comparison complete; performance/licensing evidence recorded; one default plus fallbacks selected or the decision explicitly BLOCKED; if source changes occur, relevant quality gates pass; continuity updated.
+- **Risks:** metric changes can cause layout drift; Arabic shaping/readability can regress; font loading can hurt performance; licensing may be misunderstood.
+- **Verification:** compare representative Arabic/English/mixed strings and UI roles, inspect responsive behavior, run `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build` if source changes are made, then review the final diff.
 
 ## Browser / Deployment Constraint
 - **UNKNOWN / BLOCKED:** authenticated browser/device closure remains pending because the current agent environment does not provide the required interactive browser/device surface.
@@ -74,5 +81,5 @@ Workstreams:
 - Before any deployment-specific check, inspect Vercel Usage/Billing and follow the release-only workflow.
 
 ## Exact Next Task
-### Design Intelligence Synthesis — close external research and reconcile it with repository evidence
-After synthesis is closed, select exactly one implementation task from the master plan based on evidence. Expected candidates include `Design System Contract`, `Typography Decision`, `Marketing Homepage IA`, `Public Menu UX Audit`, or `Owner Studio Activation/Publish UX Audit`.
+### Typography Decision — benchmark candidate font systems against real Menu V3 Arabic/English/mixed content and performance constraints
+After typography is closed, select exactly one next task from the master plan based on evidence: Color Decision, Marketing Homepage IA, Public Menu UX Audit, Owner Studio Activation/Publish UX Audit, or Measurement/Event Baseline.
