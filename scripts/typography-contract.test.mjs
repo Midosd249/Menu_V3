@@ -7,18 +7,31 @@ const rootRoute = fs.readFileSync(new URL("src/routes/__root.tsx", root), "utf8"
 const typography = fs.readFileSync(new URL("src/typography.css", root), "utf8");
 const packageJson = JSON.parse(fs.readFileSync(new URL("package.json", root), "utf8"));
 
-test("shared typography loads pinned official IBM Plex Arabic and Latin families", () => {
+const ARABIC_ASSETS = ["Regular", "Medium", "SemiBold", "Bold"];
+const LATIN_ASSETS = ["Regular", "Medium", "SemiBold", "Bold"];
+
+function assertPinnedFontAsset(fontFamily, weight) {
+  const familyPath = fontFamily === "IBM Plex Sans Arabic" ? "plex-sans-arabic" : "plex-sans";
+  const filePrefix = fontFamily === "IBM Plex Sans Arabic" ? "IBMPlexSansArabic" : "IBMPlexSans";
+  const weightName = weight === 400 ? "Regular" : weight === 500 ? "Medium" : weight === 600 ? "SemiBold" : "Bold";
+  const pattern = new RegExp(
+    `https://cdn\\.jsdelivr\\.net/gh/IBM/plex@[0-9a-f]{40}/packages/${familyPath}/fonts/complete/woff2/${filePrefix}-${weightName}\\.woff2`,
+  );
+  assert.match(typography, pattern);
+}
+
+test("shared typography loads pinned IBM Plex Arabic and Latin families", () => {
   assert.match(rootRoute, /typographyCss/);
   assert.doesNotMatch(rootRoute, /fonts\.googleapis\.com/);
-  assert.match(typography, /@font-face\s*\{/);
-  assert.match(typography, /IBMPlexSansArabic-Regular\.woff2/);
-  assert.match(typography, /IBMPlexSansArabic-Medium\.woff2/);
-  assert.match(typography, /IBMPlexSansArabic-SemiBold\.woff2/);
-  assert.match(typography, /IBMPlexSansArabic-Bold\.woff2/);
-  assert.match(typography, /IBMPlexSans-Regular\.woff2/);
-  assert.match(typography, /IBMPlexSans-Medium\.woff2/);
-  assert.match(typography, /IBMPlexSans-SemiBold\.woff2/);
-  assert.match(typography, /IBMPlexSans-Bold\.woff2/);
+  assert.doesNotMatch(rootRoute, /fonts\.gstatic\.com/);
+
+  for (const weight of [400, 500, 600, 700]) {
+    assertPinnedFontAsset("IBM Plex Sans Arabic", weight);
+    assertPinnedFontAsset("IBM Plex Sans", weight);
+  }
+
+  assert.equal(ARABIC_ASSETS.length, 4);
+  assert.equal(LATIN_ASSETS.length, 4);
   assert.match(typography, /font-display:\s*swap/);
   assert.match(typography, /--type-display-family/);
   assert.match(typography, /--type-body-family/);
