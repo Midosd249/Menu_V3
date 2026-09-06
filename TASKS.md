@@ -104,14 +104,26 @@
 - VERIFIED: W11 final Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
 - Evidence record: `docs/seo-local-discovery-shareability.md`.
 
-### W12-01 — Public Menu Hydration Performance — IMPLEMENTED / QUALITY GATE PENDING
+### W12-01 — Public Menu Hydration Performance — CLOSED / VERIFIED
 - Objective: eliminate the avoidable duplicate public-menu request during SSR hydration.
-- VERIFIED: `src/routes/m.$slug.tsx` now renders from `initialMenu` and writes it to the existing session cache without issuing the mount-time `getPublicMenu` request.
+- VERIFIED: `src/routes/m.$slug.tsx` renders from `initialMenu` and writes it to the existing session cache without issuing the mount-time `getPublicMenu` request.
 - VERIFIED: the existing client-only loading path remains available when `initialMenu` is absent.
 - VERIFIED: branch, locale, theme, timeout, retry, and existing cache-key behavior are preserved.
-- VERIFIED: regression coverage was added to `scripts/quality-workflow.test.mjs`.
+- VERIFIED: regression coverage exists in `scripts/quality-workflow.test.mjs`.
 - VERIFIED: implementation record exists at `docs/performance-public-menu.md`.
-- UNKNOWN: production RUM is not available, so the exact real-user request reduction is not yet measurable.
+- VERIFIED: final Quality Gate `34013861903` passed all required steps.
+- UNKNOWN: production RUM is not available, so the exact real-user request reduction is not quantified.
+
+### W12-02 — Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED
+- Objective: reduce avoidable public-menu resource startup cost using evidence and the smallest safe change.
+- VERIFIED: audited root resource loading, typography delivery, public-menu route, theme CSS loading, and `scripts/performance-audit.mjs`.
+- VERIFIED: critical font origin is `https://cdn.jsdelivr.net` under the established Fontsource typography contract.
+- VERIFIED: `src/routes/__root.tsx` now emits `preconnect` with anonymous CORS mode and `dns-prefetch` for that critical origin.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint ordering and CORS contract.
+- VERIFIED: no runtime dependency, Supabase/schema, tenant/cache, hydration, or theme behavior changed.
+- VERIFIED: existing global theme stylesheet availability was intentionally retained because the current theme/preview architecture depends on immediate availability; speculative runtime stylesheet injection was not introduced.
+- VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- Evidence record: `docs/performance-public-menu-resources.md`.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
@@ -141,12 +153,10 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W12-01 — Public Menu Hydration Performance — QUALITY CLOSURE
-- Objective: verify the hydration optimization through the repository Quality Gate and close W12-01 only if all checks pass.
-- Scope: typecheck, tests, lint, production build, Playwright/template QA, performance audit, and regression review for loader/cache behavior.
-- Acceptance: full Quality Gate passes; no duplicate hydration fetch when SSR `initialMenu` exists; client-only fallback remains functional; no cross-tenant or stale-cache regression; no unrelated changes.
-- Risks: loader/client hydration mismatch, accidental freshness regression, cache-key regression, browser behavior differences.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and performance audit.
+### W12-03 — Reliability and Failure-Path Audit — TODO
+- Objective: inspect public-menu and critical application failure behavior under timeout, upstream failure, malformed/partial data, cache miss, retry, navigation interruption, and dependency degradation; improve only evidenced failure-path weaknesses without changing successful-path architecture.
+- Acceptance: critical failure states remain understandable and actionable in Arabic and English; no unhandled rejection or infinite retry loop; no stale/cross-tenant cache exposure; timeout/retry behavior remains bounded; regression coverage exists for changed paths; full Quality Gate passes; no unrelated changes.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, performance audit, and targeted failure-path tests.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
