@@ -46,7 +46,7 @@ test("dynamic status and validation feedback are exposed to assistive technology
 });
 
 test("mixed-direction content uses semantic bidi isolation", () => {
-  assert.match(publicMenu, /<bdi dir="ltr" className="[^\"]*bidi-isolate/);
+  assert.ok(publicMenu.includes('<bdi dir="ltr" className="tabular bidi-isolate">'));
   assert.ok(publicMenu.includes('dir="auto"'));
   assert.match(css, /\.bidi-isolate\s*\{\s*unicode-bidi:\s*isolate/);
   assert.ok(langToggle.includes("aria-label="));
