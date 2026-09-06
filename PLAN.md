@@ -23,7 +23,7 @@
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED.
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
-- W15 Growth, Analytics, and Experimentation — IMPLEMENTATION COMPLETE; final Quality Gate pending on this branch.
+- W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -61,8 +61,8 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: research reviewed current product-analytics and experimentation guidance from Amplitude and Google Analytics and converted it into a repository-specific, minimal event contract.
 - VERIFIED: existing four-event public analytics contract is preserved: `visit`, `qr_scan`, `product_view`, `whatsapp`.
 - VERIFIED: no new third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
-- VERIFIED: added `src/lib/menu/growth.ts` with pure, denominator-safe growth metrics derived only from authenticated server analytics.
-- VERIFIED: added product-interest, session-engagement, WhatsApp-intent, and QR-to-visit rates plus average product views per session.
+- VERIFIED: added `src/lib/menu/growth.ts` with pure, denominator-safe directional ratios derived only from authenticated server analytics.
+- VERIFIED: added product-view-per-visit, WhatsApp-clicks-per-session, QR-visit ratio, and average product views per session; these are explicitly labeled as operational event ratios rather than unique-user conversion rates.
 - VERIFIED: added a deterministic opportunity classifier: baseline, discovery, conversion, content, distribution.
 - VERIFIED: Studio analytics now surfaces the growth loop and next opportunity in Arabic/English.
 - VERIFIED: zero denominators render as unavailable rather than fabricated percentages.
@@ -73,6 +73,7 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: no database migration was required for W15.
 - INFERRED: the highest-value immediate growth lever is making existing acquisition → engagement → intent data actionable before adding more instrumentation.
 - UNKNOWN: statistical significance, retention, revenue attribution, and true conversion-to-order rates are not measurable until corresponding events exist and enough production traffic accumulates.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 
 ## Protected Work
 - Existing five-theme implementation.
