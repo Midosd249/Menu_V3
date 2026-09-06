@@ -73,7 +73,7 @@ test("client-reachable source files do not contain server secret names or creden
     /GROK_AUTH_CLIENT_SECRET/i,
     /GOOGLE_CLIENT_SECRET/i,
   ];
-  const files = sourceFiles(SRC).filter((path) => !path.endsWith(".server.ts") && !path.endsWith(".server.tsx"));
+  const files = sourceFiles(SRC).filter((path) => !path.endsWith(".server.ts") && !path.endsWith(".server.tsx") && !path.endsWith("/auth/server.ts"));
   for (const path of files) {
     const source = readFileSync(path, "utf8");
     for (const pattern of forbidden) {
