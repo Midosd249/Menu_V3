@@ -79,17 +79,27 @@ async function loadPublicOptions(sql: Awaited<ReturnType<typeof getSql>>, tenant
 }
 
 async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): Promise<FnResult<PublicMenu>> {
-  const cacheKey = `${tenantSlug}:${branchSlug ?? "default"}`;
-  const cached = menuCache.get(cacheKey);
-  if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
-
   if (tenantSlug === DEMO_MENU.tenant.slug && !branchSlug) {
+    const cacheKey = `${tenantSlug}:default:demo`;
+    const cached = menuCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
     menuCache.set(cacheKey, { menu: DEMO_MENU, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
     return { ok: true, data: DEMO_MENU };
   }
 
   try {
     const sql = await getSql();
+    const revisionRows = await sql<{ public_content_version: string | number }>`
+      select public_content_version
+      from tenants
+      where slug = ${tenantSlug} and is_active = true and is_published = true
+      limit 1
+    `;
+    const revision = String(revisionRows[0]?.public_content_version ?? "0");
+    const cacheKey = `${tenantSlug}:${branchSlug ?? "default"}:${revision}`;
+    const cached = menuCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
+
     const rows = await sql<PublicMenuRow>`
       select
         to_jsonb(t) as tenant,
