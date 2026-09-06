@@ -72,7 +72,12 @@ export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: 
   const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const { setLang } = useLang();
   useEffect(() => { setLang(locale); }, [locale, setLang]);
   function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو" , retry: load }); }); }
-  useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, branch]);
+  useEffect(() => {
+    if (initialMenu) {
+      writeCachedMenu(cacheKey, initialMenu);
+      return;
+    }
+    load(); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [slug, branch, initialMenu]);
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const activeTheme = previewTheme ?? state.menu.tenant.themeKey; const family = getThemeFamily(activeTheme); const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } }; return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
 }
