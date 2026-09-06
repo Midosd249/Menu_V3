@@ -13,7 +13,7 @@ const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "ut
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
-  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n[ ]{8}run: \|\n([\s\S]*?)(?=\n[ ]{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
+  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n\x20{8}run: \|\n([\s\S]*?)(?=\n\x20{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
 
   assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
   assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
@@ -77,7 +77,7 @@ test("sitemap deduplicates repeated paths without replacing the first source ent
 
 test("sitemap middleware exposes only published active tenants and active branches", () => {
   assert.match(CRAWL_MIDDLEWARE, /path === "\/sitemap\.xml"/);
-  assert.match(CRAWL_MIDDLEWARE, /from tenants t\n {4}join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
+  assert.match(CRAWL_MIDDLEWARE, /from tenants t\n\x20{4}join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
   assert.match(CRAWL_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
   assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
 });
