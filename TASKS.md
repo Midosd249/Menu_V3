@@ -40,14 +40,23 @@
 - **VERIFIED:** public menu routes and active/published gates are present; public SEO metadata is generated from the same menu data.
 - **VERIFIED:** owner writes are authenticated and tenant-scoped server-side.
 - **PARTIAL:** publish is currently a boolean `is_published` gate; revision history, scheduling, audit trail, and rollback are not proven.
-- **PARTIAL:** server and browser caches exist; complete mutation-to-public invalidation coverage is not proven.
-- **PARTIAL:** dedicated tenant website content and unified cross-surface event taxonomy are not proven in the audited source set.
-- **VERIFIED:** no application source, schema, dependency, CI/CD, or Vercel configuration changed in this audit.
+- **VERIFIED:** the original propagation gap has now been repaired with a database-backed public-content revision.
+
+### P0 — Public Content Propagation Implementation — CLOSED / SOURCE-VERIFIED
+- **VERIFIED:** all current Owner mutations affecting public content were mapped in `src/lib/menu/owner.ts`.
+- **VERIFIED:** mutation surfaces include restaurant creation, tenant settings/publish, category create/update/delete, product create/update/delete/toggle, branch create/update/delete/hours, CSV import, and starter-item seeding.
+- **VERIFIED:** `migrations/20260906001000_public_menu_content_revision.sql` adds `tenants.public_content_version` and database triggers covering tenants, branches, branch hours, categories, products, variants, modifier groups, modifier options, and product-modifier links.
+- **VERIFIED:** `src/lib/menu/public.ts` versions its process-local cache key by the database revision while retaining tenant and branch identity in the key.
+- **VERIFIED:** `src/components/public-menu.tsx` has no browser menu-content cache.
+- **VERIFIED:** `src/lib/menu/session.ts` uses localStorage only for the anonymous analytics session identifier.
+- **VERIFIED:** focused regression coverage was added in `scripts/public-menu-cache.test.mjs`.
+- **VERIFIED:** `docs/canonical-content-publishing-audit.md` was corrected to remove the earlier incorrect browser-cache assumption.
+- **VERIFIED:** no new dependency, theme change, or unrelated refactor was introduced.
+- **BLOCKED:** local typecheck/tests/lint/build were not executable in the current agent environment because outbound DNS/network access is unavailable. No passing test result is claimed.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected from unnecessary reopening.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
-- No database schema/migration changes are planned for design research or presentation strategy without a proven requirement.
 - No weakening of authentication, authorization, tenant/branch isolation, subscription status, SEO, routing, CI/CD, or deployment controls.
 - No client-controlled entitlement bypass.
 - Do not create a sixth theme as a substitute for product/design strategy.
@@ -66,7 +75,7 @@ Workstreams:
 - W4 Owner Studio/admin UX.
 - W5 Shared design system.
 - W6 Typography.
-- W7 Color and brand tokens.
+- W7 Color/brand tokens.
 - W8 Imagery/art direction.
 - W9 Motion/interaction.
 - W10 Accessibility/RTL quality.
@@ -78,13 +87,13 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### P0 — Verify public-content propagation after Owner mutations
-- **Objective:** prove whether an owner edit becomes visible to the public menu within the expected propagation window across server and browser caching, and repair only the smallest proven gap.
-- **Scope:** map all owner mutations that can change public content; verify server-cache invalidation; verify browser session-cache behavior; verify tenant/branch cache-key isolation; add focused regression coverage only if a defect is proven.
-- **Constraints:** do not add schema/dependencies without a proven requirement; do not reopen themes; preserve tenant/branch isolation, authorization, existing cache semantics, and backward compatibility.
-- **Acceptance criteria:** mutation map complete; server invalidation behavior verified; browser cache behavior verified; isolation verified; focused regression coverage added if required; relevant quality gates pass if source changes occur; continuity updated.
-- **Risks:** stale public content, cross-tenant cache contamination, unnecessary cache-busting, performance regression, accidental expansion into revision publishing.
-- **Verification:** inspect existing cache/mutation code and tests first; if source changes occur run `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, plus focused propagation tests.
+### P0 — Runtime verification of public-content propagation
+- **Objective:** apply the new migration in the intended database, exercise representative Owner mutations, confirm revision increments and fresh Public Menu responses, verify cross-branch/tenant isolation, and run the repository quality gates.
+- **Scope:** migration application; trigger behavior; cache-key versioning; tenant/branch isolation; focused regression; typecheck/test/lint/build.
+- **Constraints:** do not add a second invalidation mechanism unless runtime evidence proves a defect; do not add revision publishing; do not reopen themes; preserve authorization and existing cache semantics.
+- **Acceptance criteria:** migration applies; all public-content mutation surfaces increment revision; public cache refreshes after revision change; no cross-tenant/branch leakage; focused test passes; quality gates pass in a runnable repository environment; continuity updated.
+- **Risks:** trigger recursion, migration incompatibility, stale process-local entries, cross-tenant cache contamination, unnecessary cache-busting, accidental expansion into revision publishing.
+- **Verification:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, `node --test scripts/public-menu-cache.test.mjs`, plus a real database Owner → Public mutation check.
 
 ## Browser / Deployment Constraint
 - **UNKNOWN / BLOCKED:** authenticated browser/device closure remains pending because the current agent environment does not provide the required interactive browser/device surface.
@@ -92,5 +101,5 @@ Workstreams:
 - Before any deployment-specific check, inspect Vercel Usage/Billing and follow the release-only workflow.
 
 ## Exact Next Task
-### P0 — Verify public-content propagation after Owner mutations, including server cache invalidation and browser session-cache behavior
-After this task is closed, select exactly one next task from the master plan based on evidence; typography remains queued until propagation correctness is established.
+### P0 — Runtime verification of public-content propagation after Owner mutations, including migration application and cross-branch/tenant isolation
+Only after runtime evidence closes this task should the next task be selected from the master plan; Typography remains queued until propagation correctness is fully verified.
