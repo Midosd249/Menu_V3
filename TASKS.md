@@ -33,6 +33,17 @@
 - **VERIFIED:** exact production typography and color values remain unresolved until their dedicated evidence-based decision tasks.
 - **VERIFIED:** no application source, schema, dependency, CI/CD, or Vercel configuration changed in this task.
 
+### P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED
+- **VERIFIED:** `docs/canonical-content-publishing-audit.md` contains the evidence matrix, security review, decisions, non-actions, and follow-up.
+- **VERIFIED:** existing Tenant, Branch, Category, Product, ProductVariant, ModifierGroup, ModifierOption, BranchHour, and menu-event structures form a viable canonical menu core.
+- **VERIFIED:** Owner Studio and Public Menu consume the same tenant/category/product domain data.
+- **VERIFIED:** public menu routes and active/published gates are present; public SEO metadata is generated from the same menu data.
+- **VERIFIED:** owner writes are authenticated and tenant-scoped server-side.
+- **PARTIAL:** publish is currently a boolean `is_published` gate; revision history, scheduling, audit trail, and rollback are not proven.
+- **PARTIAL:** server and browser caches exist; complete mutation-to-public invalidation coverage is not proven.
+- **PARTIAL:** dedicated tenant website content and unified cross-surface event taxonomy are not proven in the audited source set.
+- **VERIFIED:** no application source, schema, dependency, CI/CD, or Vercel configuration changed in this audit.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected from unnecessary reopening.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -67,13 +78,13 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### Typography Decision — benchmark candidate font systems
-- **Objective:** select one production-ready default typography system plus fallbacks using actual Menu V3 Arabic/English/mixed content and measurable performance constraints.
-- **Scope:** Arabic shaping, Latin pairing, numerals, SAR, phones, URLs, mixed-direction content, hierarchy, readability, licensing/availability, font loading, subsetting, and layout stability.
-- **Constraints:** do not reopen themes; do not globally replace fonts without evidence; preserve RTL/bidi semantics; do not add dependencies without a documented need.
-- **Acceptance criteria:** candidate set explicit; real-content comparison complete; performance/licensing evidence recorded; one default plus fallbacks selected or the decision explicitly BLOCKED; if source changes occur, relevant quality gates pass; continuity updated.
-- **Risks:** metric changes can cause layout drift; Arabic shaping/readability can regress; font loading can hurt performance; licensing may be misunderstood.
-- **Verification:** compare representative Arabic/English/mixed strings and UI roles, inspect responsive behavior, run `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build` if source changes are made, then review the final diff.
+### P0 — Verify public-content propagation after Owner mutations
+- **Objective:** prove whether an owner edit becomes visible to the public menu within the expected propagation window across server and browser caching, and repair only the smallest proven gap.
+- **Scope:** map all owner mutations that can change public content; verify server-cache invalidation; verify browser session-cache behavior; verify tenant/branch cache-key isolation; add focused regression coverage only if a defect is proven.
+- **Constraints:** do not add schema/dependencies without a proven requirement; do not reopen themes; preserve tenant/branch isolation, authorization, existing cache semantics, and backward compatibility.
+- **Acceptance criteria:** mutation map complete; server invalidation behavior verified; browser cache behavior verified; isolation verified; focused regression coverage added if required; relevant quality gates pass if source changes occur; continuity updated.
+- **Risks:** stale public content, cross-tenant cache contamination, unnecessary cache-busting, performance regression, accidental expansion into revision publishing.
+- **Verification:** inspect existing cache/mutation code and tests first; if source changes occur run `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, plus focused propagation tests.
 
 ## Browser / Deployment Constraint
 - **UNKNOWN / BLOCKED:** authenticated browser/device closure remains pending because the current agent environment does not provide the required interactive browser/device surface.
@@ -81,5 +92,5 @@ Workstreams:
 - Before any deployment-specific check, inspect Vercel Usage/Billing and follow the release-only workflow.
 
 ## Exact Next Task
-### Typography Decision — benchmark candidate font systems against real Menu V3 Arabic/English/mixed content and performance constraints
-After typography is closed, select exactly one next task from the master plan based on evidence: Color Decision, Marketing Homepage IA, Public Menu UX Audit, Owner Studio Activation/Publish UX Audit, or Measurement/Event Baseline.
+### P0 — Verify public-content propagation after Owner mutations, including server cache invalidation and browser session-cache behavior
+After this task is closed, select exactly one next task from the master plan based on evidence; typography remains queued until propagation correctness is established.
