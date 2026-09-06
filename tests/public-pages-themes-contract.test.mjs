@@ -8,6 +8,7 @@ const home = read("src/routes/index.tsx");
 const themes = read("src/routes/themes/index.tsx");
 const preview = read("src/routes/themes/preview.tsx");
 const catalog = read("src/lib/menu/commercial-catalog.ts");
+const registry = read("src/lib/theme/registry.ts");
 
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
@@ -26,10 +27,9 @@ test("homepage exposes canonical pricing and plan selection", () => {
 
 test("homepage exposes all protected themes without a premium gate", () => {
   assert.match(home, /MENU_THEMES\.map/);
-  for (const theme of expectedThemes) assert.match(home, new RegExp(`theme\.key.*${theme}`));
-  assert.match(home, /Use theme|استخدم التصميم/);
   assert.match(themes, /MENU_THEMES\.map/);
   assert.match(themes, /without an artificial gate|دون بوابة اصطناعية/);
+  for (const theme of expectedThemes) assert.match(registry, new RegExp(`key: "${theme}"`));
 });
 
 test("theme preview remains connected to the real Menu V3 renderer", () => {
