@@ -39,6 +39,16 @@ test("public menu hydration reuses SSR data without a duplicate network fetch", 
   assert.match(PUBLIC_MENU_ROUTE, /load\(\); \/\/ eslint-disable-line react-hooks\/exhaustive-deps/);
 });
 
+test("public menu failure handling uses bounded retries and localized terminal messages", () => {
+  assert.match(PUBLIC_MENU_ROUTE, /const MENU_RETRY_LIMIT = 2/);
+  assert.match(PUBLIC_MENU_ROUTE, /for \(let attempt = 1; attempt <= MENU_RETRY_LIMIT; attempt \+= 1\)/);
+  assert.match(PUBLIC_MENU_ROUTE, /if \(attempt < MENU_RETRY_LIMIT\) await sleep\(MENU_RETRY_DELAY_MS \* attempt\)/);
+  assert.match(PUBLIC_MENU_ROUTE, /result\.code === "not_found" \|\| result\.code === "invalid"/);
+  assert.match(PUBLIC_MENU_ROUTE, /locale === "en"/);
+  assert.match(PUBLIC_MENU_ROUTE, /استغرق تحميل المنيو وقتًا أطول من المتوقع/);
+  assert.match(PUBLIC_MENU_ROUTE, /المنيو غير متاحة مؤقتًا/);
+});
+
 test("critical font origin is warmed before the typography stylesheet", () => {
   const preconnect = ROOT_ROUTE.indexOf('{ rel: "preconnect", href: "https://cdn.jsdelivr.net"');
   const stylesheet = ROOT_ROUTE.indexOf('{ rel: "stylesheet", href: typographyCss }');
