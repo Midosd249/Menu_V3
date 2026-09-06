@@ -11,7 +11,7 @@ The target model is:
 
 `Owner content → canonical tenant/menu data → preview/review → publish → public menu → website/SEO surfaces → analytics`
 
-This audit is evidence-only. It does not introduce application, schema, dependency, CI/CD, or deployment changes.
+This audit is evidence-first. The audit phase itself introduced no schema/dependency changes; the follow-up propagation task is recorded separately below.
 
 ## Evidence reviewed
 
@@ -20,9 +20,12 @@ This audit is evidence-only. It does not introduce application, schema, dependen
 - `src/lib/menu/owner.ts`
 - `src/lib/menu/studio.tsx`
 - `src/components/studio-shell.tsx`
+- `src/components/public-menu.tsx`
+- `src/lib/menu/session.ts`
 - `src/routes/m.$slug.tsx`
 - `src/routes/m.$slug.$branch.tsx`
 - `migrations/0002_menu_v3.sql`
+- `migrations/0008_menu_product_options.sql`
 - `PROJECT_STATE.md`
 - `PLAN.md`
 - `TASKS.md`
@@ -45,7 +48,9 @@ This audit is evidence-only. It does not introduce application, schema, dependen
 | Owner authorization | EXISTS | Owner server functions use `authMiddleware`, tenant membership, and role checks before writes. |
 | Tenant write isolation | EXISTS | Owner mutations scope updates/inserts to the authenticated member's tenant. |
 | Category/product source of truth | EXISTS | Owner Studio and public menu both consume the same tenant/category/product domain data. |
-| Public cache invalidation | PARTIAL | Server-side public cache exists with 15s TTL and `invalidatePublicMenuCache()`; this audit did not find direct evidence that every owner mutation invokes invalidation. Browser session cache adds another 5-minute layer. This requires targeted verification before promising immediate propagation. |
+| Server public cache | EXISTS / VERIFIED | `getPublicMenu` keeps a 15s process-local cache. It is now keyed by the database-backed `tenants.public_content_version`. |
+| Public cache invalidation | VERIFIED | Owner-facing mutations are covered by database triggers that increment the tenant public-content revision. Direct SQL/import paths are therefore covered too. |
+| Browser content cache | NOT PRESENT | `src/components/public-menu.tsx` does not cache menu content in browser storage. `src/lib/menu/session.ts` uses `localStorage` only for the anonymous analytics session identifier; it is not a menu-content cache. |
 | Publish state | EXISTS / LIMITED | `tenants.is_published` is the current publish switch and public reads honor it. |
 | Publish workflow | PARTIAL | There is not yet evidence of a first-class draft/review/publish state machine, publish audit trail, scheduling, or rollback history. `is_published` is currently a boolean. |
 | Preview | EXISTS | Studio exposes `/studio/preview`; public routes support a theme preview query and `noindex` for preview mode. |
@@ -74,19 +79,40 @@ The repository does not need a new menu schema merely to satisfy the strategy. T
 - publish audit records;
 - surface-level validation before release.
 
-These are **future requirements**, not a reason to add schema now. They must become a separate implementation task only after product requirements and migration safety are proven.
+These are future requirements, not a reason to add a full publishing system now. They must become a separate implementation task only after product requirements and migration safety are proven.
 
-### 3. Immediate propagation needs explicit cache verification
+### 3. Propagation was the concrete gap and is now repaired
 
-`getPublicMenu` has a server cache and the public route adds a browser session cache. The repository exposes `invalidatePublicMenuCache`, but this audit has not proven that every relevant owner mutation invalidates both layers. The resulting risk is stale public content after an edit.
+The original audit identified a 15s server cache and did not find proof that every owner mutation explicitly called `invalidatePublicMenuCache()`.
 
-This is the most concrete technical follow-up discovered by P0-01.
+The follow-up implementation now makes cache correctness independent of individual owner code paths:
 
-### 4. Branch scope is asymmetric by design
+- `tenants.public_content_version` is the database source-of-truth revision.
+- Tenant changes and all public-menu child-table mutations increment that revision through PostgreSQL triggers.
+- `getPublicMenu` includes the revision in its process-local cache key.
+- Any committed public-content change therefore produces a new cache key on the next request, including requests handled by another server instance.
+- The existing `invalidatePublicMenuCache()` helper remains available for explicit same-process invalidation where useful.
 
-Branch identity/hours are branch-specific, while categories and products are tenant-scoped. This may be intentional shared-menu behavior. It is **not** a defect by itself. Branch-specific menu availability/content should only be added if a real product requirement demands it.
+This is stronger than maintaining a growing list of owner-side invalidation calls.
 
-### 5. Website is not yet proven to be a tenant-generated surface
+### 4. There is no browser menu-content cache to invalidate
+
+The initial audit wording referred to a browser session cache. Source inspection corrected that assumption:
+
+- `src/components/public-menu.tsx` does not persist menu data in browser storage.
+- `src/lib/menu/session.ts` stores only the anonymous analytics session identifier in `localStorage`.
+
+Therefore the propagation contract is now:
+
+`Owner mutation → DB transaction → public_content_version → server cache key → fresh Public Menu payload`
+
+There is no separate browser menu-content cache layer in the current implementation.
+
+### 5. Branch scope is asymmetric by design
+
+Branch identity/hours are branch-specific, while categories and products are tenant-scoped. This may be intentional shared-menu behavior. It is not a defect by itself. Branch-specific menu availability/content should only be added if a real product requirement demands it.
+
+### 6. Website is not yet proven to be a tenant-generated surface
 
 The strategy calls for Menu + Website + Local Discovery, but the audited model does not yet prove a dedicated tenant website-content layer. This is an architecture/product question for a later task, not a reason to duplicate product data now.
 
@@ -97,33 +123,72 @@ The strategy calls for Menu + Website + Local Discovery, but the audited model d
 - Category/product mutations enforce tenant ownership through server-side membership lookup.
 - Product category references are validated against the authenticated tenant before writes.
 - Public event input is schema-validated and product/tenant ownership is checked for product-view events.
-- No secret, credential, or client-controlled tenant identity was introduced by this audit.
+- The revision triggers derive tenant scope from trusted foreign-key relationships; no client-supplied tenant identifier is accepted by the revision mechanism.
+- No secret, credential, or client-controlled tenant identity was introduced.
 
 ## Decision
 
 **VERIFIED:** Menu V3 already has the canonical menu-data foundation recommended by Manus.
 
-**PROPOSED:** Do not introduce a new canonical menu schema at this stage.
+**VERIFIED:** The concrete public propagation gap identified by P0-01 has been repaired using a database-backed content revision rather than a fragile mutation-by-mutation invalidation list.
 
-**P0 follow-up:** verify and, if necessary, repair cache invalidation/propagation from Owner mutation to Public Menu.
+**PROPOSED:** Keep the current 15s process-local payload cache, but treat the database revision as the correctness boundary. Optimize further only if measured performance requires it.
 
-**Future P1/P2:** evaluate a formal publish/revision model and a tenant website-content model only after the current publishing behavior and product requirements are measured.
+**Future P1/P2:** evaluate a formal publish/revision model and a tenant website-content model only after current publishing requirements are measured.
 
-## Explicit non-actions
+## Implementation record
 
-- No migration added.
-- No new dependency added.
-- No theme reopened.
-- No public-menu business logic rewritten.
-- No authorization model changed.
-- No Vercel deployment triggered.
+### Changed files
+
+- `migrations/20260906001000_public_menu_content_revision.sql`
+- `src/lib/menu/public.ts`
+- `scripts/public-menu-cache.test.mjs`
+
+### Migration behavior
+
+`public_content_version` is a `bigint` revision counter on `tenants`. PostgreSQL triggers increment it for:
+
+- tenants;
+- branches;
+- branch_hours;
+- categories;
+- products;
+- product_variants;
+- modifier_groups;
+- modifier_options;
+- product_modifier_groups.
+
+The trigger is intentionally database-driven so future imports or trusted SQL mutations cannot silently bypass cache versioning. The tenant trigger explicitly ignores a change that only updates the revision itself, preventing recursive version increments.
+
+## Verification
+
+**VERIFIED by source inspection:**
+
+- All current Owner mutations that change public content were mapped in `src/lib/menu/owner.ts`.
+- Every mapped mutation changes one of the trigger-covered tables.
+- Public cache keys now contain the database revision.
+- Tenant and branch identity remain part of the cache key.
+- No browser menu-content storage exists.
+- `localStorage` is used only for anonymous analytics session identity.
+- No dependency or theme change was introduced.
+
+**ENVIRONMENT LIMITATION:** the agent environment cannot clone the GitHub repository because outbound DNS/network access is unavailable, so local `npm` execution could not be performed in this session. This is not presented as a passing test result.
+
+**REQUIRED external verification before release:**
+
+- `npm run typecheck`
+- `npm test`
+- `npm run lint`
+- `npm run build`
+- focused `node --test scripts/public-menu-cache.test.mjs`
+- apply the migration against the intended database and verify trigger behavior with a real Owner → Public mutation.
 
 ## Acceptance result
 
-**P0-01 Audit: CLOSED / VERIFIED.**
+**P0 — Public-content propagation: IMPLEMENTED / SOURCE-VERIFIED; runtime database verification remains REQUIRED before marking fully runtime-verified.**
 
-The repository has a viable canonical menu-data core. The principal gap is not a missing foundational menu schema; it is the maturity of publishing/propagation and the future multi-surface content model.
+The code now has a database-backed propagation contract. The remaining evidence gap is execution against the actual database/runtime, not an unresolved design or implementation gap.
 
-## Exact follow-up task
+## Exact next task
 
-`P0 — Verify public-content propagation after Owner mutations, including server cache invalidation and browser session-cache behavior.`
+`P0 — Runtime verification of public-content propagation after Owner mutations, including migration application and cross-branch/tenant isolation.`
