@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS } from "./commercial.ts";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS } from "./commercial-catalog.ts";
 
 test("commercial plans mirror the verified subscription catalog", () => {
   assert.deepEqual(
@@ -13,7 +13,7 @@ test("commercial plans mirror the verified subscription catalog", () => {
   );
 });
 
-test("commercial catalog has one recommended plan and no client-side feature entitlement flag", () => {
+test("commercial catalog has one recommended plan and bilingual copy", () => {
   assert.equal(COMMERCIAL_PLANS.filter((plan) => plan.recommended).length, 1);
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.code), ["free", "starter", "pro"]);
   assert.equal(COMMERCIAL_FEATURES.ar.length, COMMERCIAL_FEATURES.en.length);
