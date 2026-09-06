@@ -13,7 +13,7 @@ const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "ut
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
-  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n\x20{8}run: \|\n([\s\S]*?)(?=\n\x20{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
+  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n\s{8}run: \|\n([\s\S]*?)(?=\n\s{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
 
   assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
   assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
