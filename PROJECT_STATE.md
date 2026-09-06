@@ -10,72 +10,64 @@
 - G1–G7.2 completed work remains protected.
 - **Premium Theme System — DONE / VERIFIED / MERGED.**
 - **Theme 1 — Essential — DEPLOYED / VERIFIED.**
-- **Theme 2 — Editorial — DEPLOYED as part of the later verified `main` production release; merged implementation remains protected.**
+- **Theme 2 — Editorial — DEPLOYED / VERIFIED.**
 - **Theme 3 — Noir — implementation refinement COMPLETE; final browser/device closure remains separately blocked.**
-- Heritage and Gallery remain untouched.
+- **Heritage + Gallery — comprehensive repository/design audit COMPLETE; implementation remains next.**
 - **Visual/Functional Quality System — DONE / VERIFIED / MERGED.**
 - **External Theme Preview QR Mode — DONE / VERIFIED.**
 - **Shared Public Menu Rendering Stabilization — VERIFIED in repository.**
 
-## Editorial Reconciliation — Deployment Evidence
-- **VERIFIED:** Editorial implementation was squash-merged into `main` as commit `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` after quality workflow `33941534592` passed typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, and cleanup.
-- **VERIFIED:** current `main` HEAD is `621f94d534e5064225512ea448ea617913dc585f`.
-- **VERIFIED:** Vercel production deployment `dpl_GmryQXLvbcSEKWX296KVLjdzrwK5` is `READY` and deploys GitHub commit `7177cf0e081eed401b09805ad8eaf47804f68629` from `main`.
-- **VERIFIED:** GitHub comparison shows `7177cf0e081eed401b09805ad8eaf47804f68629` is 15 commits ahead of `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` with that Editorial commit as the merge base and zero commits behind; therefore the current production deployment contains the merged Editorial implementation.
-- **VERIFIED:** production aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and the `main` branch alias.
-- **VERIFIED:** production root request returned HTTP 200 with SSR HTML, `lang="ar"`, `dir="rtl"`, and the expected Menu V3 runtime/theme assets.
-- **VERIFIED:** Vercel reports no runtime error clusters in the selected last-24-hour window for the project; deployment runtime log grouping returned 18 HTTP 200 responses.
-- **UNKNOWN:** the current connector cannot expose the local working-tree `git status` or local uncommitted diff.
-- **UNKNOWN:** manual Opera/real-device screenshots and post-hydration console inspection remain outside the available repository/Vercel evidence.
-- **UNKNOWN:** a Vercel deployment whose exact Git SHA is `81a7e0efbdf46bcf320699d0945e1a5d7d29c964` is not the current production deployment; production is instead serving a verified descendant commit containing it.
+## Protected Completed Work
+- Essential, Editorial, and Noir are not reopened by the Heritage/Gallery task.
+- Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
+- No database schema, migration, dependency, CI/CD, or Vercel configuration changes are part of the current theme work.
 
-## Runtime / Browser State
-- **VERIFIED:** automated Playwright browser template QA passed for all five themes on the final Editorial verification workflow. The latest successful quality run was `33999726885` on `621f94d534e5064225512ea448ea617913dc585f`; its browser-template-QA step completed successfully.
-- **VERIFIED:** direct Vercel SSR preview fetches for `/m/nafas` succeeded with HTTP 200 for all five theme query variants: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
-- **VERIFIED:** the preview route resolves `previewTheme` from the `theme` query parameter and bootstraps theme tokens server-side before hydration.
-- **VERIFIED:** Arabic preview fetches return `lang="ar"`, `dir="rtl"`, `robots=noindex,nofollow`, and `preview` theme mode for the requested variant.
-- **VERIFIED:** English Editorial preview fetch returns `lang="en"`, `dir="ltr"`, English navigation/content labels, and the requested `editorial` preview theme.
-- **VERIFIED:** populated preview state is present in the direct SSR evidence, including categories, products, SAR prices, search, language control, and the fixed cart action on Essential/Editorial/Noir/Gallery preview renderings.
-- **UNKNOWN:** mixed-direction rendering under an actual browser/device viewport was not directly observed.
-- **UNKNOWN:** responsive layout, fixed-control overlap/safe-area behavior, interactive language switching, item dialogs/actions, empty-cart interaction, and post-hydration console behavior were not directly observed through the available connector surface.
-- **BLOCKED:** the authenticated browser/device closure gate cannot be marked complete because this session has no direct interactive browser/device automation or real-device screenshot/console surface. HTTP/SSR evidence and repository inspection are insufficient to claim visual success.
+## Current Theme Evidence
+- **VERIFIED:** the theme registry defines five keys: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- **VERIFIED:** Heritage maps to `contemporary-restaurant` with hero/list/horizontal-card/scroll-category/landscape metadata.
+- **VERIFIED:** Gallery maps to `bakery-dessert` with standard-header/gallery-grid/vertical-card/scroll-category/portrait metadata.
+- **VERIFIED:** neither Heritage nor Gallery currently has a dedicated theme stylesheet; their differentiation is presently primarily registry-token/family-template based.
+- **VERIFIED:** shared public-menu logic owns search, categories, product details, modifiers, cart/order, language handling, and configured customer actions.
+- **VERIFIED:** repository memory warns against duplicate shells, broad selectors, unnecessary stacking contexts, arbitrary z-index escalation, and animation-dependent visibility.
+
+## Heritage + Gallery Audit — CLOSED / VERIFIED
+- **VERIFIED:** comprehensive repository audit completed on 2026-09-06.
+- **VERIFIED:** relevant architecture, theme registry, shared renderer, template families, quality checklist, visual audit contract, project memory, and current state documents were inspected.
+- **VERIFIED:** material research was performed using W3C Arabic/i18n guidance, current digital-menu guidance, and Saudi/MENA public examples.
+- **VERIFIED:** the findings and implementation boundary are recorded in `docs/theme-audit-heritage-gallery.md`.
+- **HIGH finding:** Heritage needs a distinct scoped presentation layer; current differentiation is mostly token-level.
+- **HIGH finding:** Gallery needs a distinct scoped presentation layer; current differentiation is mostly token-level.
+- **PROPOSED:** Heritage should use restrained Arabic/Saudi material cues with information hierarchy above ornament.
+- **PROPOSED:** Gallery should use a disciplined image-first catalogue system with stable media boxes and mobile scanability.
+- **VERIFIED:** no new template or customer-action system is required; the existing family templates can be refined through scoped presentation.
+- **UNKNOWN:** rendered browser/device geometry, mixed-direction behavior, safe-area behavior, and post-hydration console state remain unobserved.
+
+## Browser / Deployment State
+- **VERIFIED:** automated Playwright browser template QA previously passed for all five themes.
+- **VERIFIED:** direct Vercel SSR preview requests for `/m/nafas` succeeded with HTTP 200 for `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
+- **VERIFIED:** Arabic previews return `lang="ar"`, `dir="rtl"`, `robots=noindex,nofollow`, and the requested preview theme.
+- **VERIFIED:** English Editorial preview returns `lang="en"`, `dir="ltr"`, English labels, and the requested preview theme.
+- **UNKNOWN / BLOCKED:** authenticated browser/device closure remains pending because the current agent environment has no interactive browser/device surface.
 
 ## Permanent Release-Only Vercel Workflow
-- **VERIFIED:** Vercel is a release platform, not the normal development or design-iteration environment.
-- **VERIFIED:** normal release path is `LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT`.
-- **VERIFIED:** `main` remains stable/deployable; milestone/release branches and local checkpoint commits are preferred when a local workflow is available; small visual changes must not be pushed merely to iterate in Vercel.
-- **VERIFIED:** Preview Deployments are exceptions only when local verification cannot prove deployment-specific behavior, stable candidate sharing, or material release risk that requires production-like infrastructure. They are not ordinary CSS/theme/typography/spacing/RTL/responsive iteration tools.
-- **VERIFIED:** production deployment occurs only after a complete verified release batch; random redeploy/retry behavior is prohibited.
-- **VERIFIED:** implementation status is separate from deployment status and uses `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED`, `DONE`.
-- **VERIFIED:** `DEPLOYED` requires direct Vercel evidence. A descendant deployment is valid evidence that an earlier merged commit is included, but the exact SHA must not be misrepresented.
-- **VERIFIED:** quota/rate/build/platform blocks require `DEPLOYMENT_BLOCKED`, no random retry, no claim that Production equals an older commit, and preservation of verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified.
-- **VERIFIED:** urgent production outage, critical security/privacy issue, or data-loss fix is the only release-process exception and must be narrowly documented.
-- **VERIFIED:** post-release breakage may use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists; record target/reason, do not delete the rollback target, then fix through the normal verified release batch.
-- **VERIFIED:** before any future deployment-related decision, inspect the actual Vercel Usage/Billing page to identify the limited resource.
-- **VERIFIED:** exact rule: visual CSS/theme iteration must not require Vercel deployment.
+- **VERIFIED:** Vercel is a release platform, not the normal development/design iteration environment.
+- **VERIFIED:** normal path is `LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT`.
+- **VERIFIED:** visual CSS/theme iteration must not require Vercel deployment.
+- **VERIFIED:** before future deployment decisions, inspect actual Vercel Usage/Billing and record any limiting resource.
 
-## Project Memory and Learning System
-- **VERIFIED:** permanent problem-learning memory is stored at `docs/project-memory/problems-learned.md`.
-- **VERIFIED:** `AGENTS.md` requires agents to read the memory before complex work or long debugging/design loops, apply matching detection checklists, avoid recorded anti-patterns, and update the memory after major incidents or expensive milestones.
-- **VERIFIED:** this memory is documentation-only and does not change application behavior, templates, schema, auth, subscriptions, dependencies, CI/CD, or deployment configuration.
-
-## Continuity Documents
-- `AGENTS.md` contains the permanent Release-Only Vercel Policy and Project Memory rules.
-- `PROJECT_STATE.md` records the current verified project state, deployment evidence, release policy, and session continuity.
-- `PLAN.md` records the release workflow and exact current/next task.
-- `TASKS.md` records the deployment gate and exact next task.
-- `SESSION_PROTOCOL.md` contains the permanent release-only execution protocol and project-memory startup/incident-learning rule.
-- `docs/release-only-vercel-workflow.md` is the detailed operating procedure.
-- `docs/project-memory/problems-learned.md` is the permanent learned-problems record.
+## Project Memory
+- **VERIFIED:** `docs/project-memory/problems-learned.md` is the permanent evidence-based memory of hard problems and anti-patterns.
+- **VERIFIED:** current work followed the memory rules for theme presentation ownership and Vercel release discipline.
 
 ## Session Log — 2026-09-06
-- **Current task:** authenticated browser/device QA of the five preview variants.
-- **VERIFIED:** latest `main` is `621f94d534e5064225512ea448ea617913dc585f` and the latest quality workflow `33999726885` completed successfully, including the automated browser-template-QA step for all themes.
-- **VERIFIED:** direct Vercel SSR preview requests for all five theme variants succeeded with HTTP 200; the route resolved each requested preview theme server-side.
-- **VERIFIED:** Arabic RTL and English LTR SSR states were observed directly; populated menu data and fixed customer-action markup are present in the returned HTML.
-- **UNKNOWN:** real browser/device visual behavior, mixed-direction layout, responsive/fixed-control geometry, interaction behavior, and post-hydration console output.
-- **BLOCKED:** this connector session cannot provide the direct interactive browser/device evidence required by the acceptance criteria. No application code was changed and no workaround was invented.
-- **Result:** the verification gate remains open; no theme redesign or Theme 4 work was started.
+- **Completed task:** Comprehensive Audit & Design Intelligence Pass — Heritage + Gallery.
+- **VERIFIED:** repository architecture and relevant documentation were inspected before making a design decision.
+- **VERIFIED:** Heritage and Gallery are registry-level themes mapped to existing template families, but neither has a dedicated presentation stylesheet.
+- **VERIFIED:** material research covered Arabic/i18n layout requirements and Saudi/MENA digital-menu patterns.
+- **VERIFIED:** audit findings and implementation boundaries were recorded in `docs/theme-audit-heritage-gallery.md`.
+- **VERIFIED:** no application code, schema, auth, or deployment configuration was changed in this audit task.
+- **UNKNOWN:** browser/device visual behavior remains unverified.
+- **Result:** audit milestone closed; implementation is the next atomic task.
 
 ## Exact Next Task
-Provide direct authenticated browser/device evidence for the five preview variants using an interactive browser/real-device surface, then inspect screenshots and post-hydration console output. Close the gate only if all acceptance criteria pass; otherwise isolate the first failing behavior and make one targeted fix only. Do not begin Theme 4 Heritage work before closure.
+Implement the smallest complete, scoped presentation layer for **Heritage only**, using the audited design brief and existing `contemporary-restaurant` family. Preserve shared public-menu behavior, then run the full applicable quality gates and update continuity. Do not start Gallery implementation in the same task.
