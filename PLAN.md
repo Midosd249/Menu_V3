@@ -21,7 +21,7 @@
 - W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate passed in run `34013861903`.
 - W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; Quality Gate run `34014895325` passed all required steps.
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; Quality Gate run `34015320658` passed all required steps.
-- W13 Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE.
+- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED; final Quality Gate passed in run `34050857106`.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -74,12 +74,15 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: inactive `tenant_members` no longer authorize Owner/Studio server functions; Studio member snapshots exclude inactive records.
 - VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant predicates.
 - VERIFIED: platform-admin access remains server-side and fail-closed through `requirePlatformAdmin` and the database-backed platform-admin check.
-- VERIFIED: no new dependency was added and the existing dependency contract was restored after the security test was wired into `npm test`.
-- VERIFIED: new `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
+- VERIFIED: the public action-link boundary consumes `PublicTenant`.
+- VERIFIED: the Node test runner can execute the menu mapper/theme registry through explicit ESM paths required by this repository.
+- VERIFIED: no new dependency was added; the existing dependency contract was restored.
+- VERIFIED: `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
 - INFERRED: the existing platform-admin mechanism is the correct high-privilege foundation; a client-side permanent superuser flag would be unsafe.
 - Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is recorded for a future atomic task and was not introduced as an insecure shortcut.
+- VERIFIED: final Quality Gate `34050857106` passed Install, route generation, Typecheck, Tests, Lint, Production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: Vercel status for the final W13 verification commit `f156275c274e2d721260d556d55d3791196d5584` is `success`.
 - Evidence record: `docs/security-w13-trust-data-ownership.md`.
-- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
 
 ## Protected Work
 - Existing five-theme implementation.
@@ -97,18 +100,18 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W13 Quality Closure
-Objective: prove the W13 security/data-boundary changes through the complete Quality Gate, then close W13 and move to W14.
+### W14 — Pricing, Packaging, and Commercial UX
+Objective: define and implement the smallest evidence-backed commercial UX layer that makes Menu V3 sellable without disrupting the protected public menu, themes, authentication, authorization, or tenant architecture.
 
 Acceptance criteria:
-- no public response exposes private tenant/owner data;
-- inactive memberships fail closed;
-- authorization boundaries remain tenant/branch scoped;
-- secrets are not embedded in client bundles or logs;
-- error responses do not expose internal SQL, stack traces, or infrastructure details;
-- public analytics/event paths remain tenant-scoped;
-- security regression coverage exists for every changed boundary;
+- pricing/plan presentation is consistent with the existing free-theme catalog and current product capabilities;
+- plan limits and entitlement messaging are explicit and fail closed;
+- upgrade/CTA paths are clear in Arabic and English;
+- no client-side-only entitlement bypass is introduced;
+- commercial UI does not expose private tenant data;
+- existing free/public menu behavior remains unchanged;
+- regression coverage exists for changed commercial contracts;
 - full Quality Gate passes;
-- no unrelated changes.
+- no unrelated refactor.
 
-Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
+Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted commercial/entitlement tests, and final diff review.
