@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { getNotFoundMenuSeo, getPublicMenuLocaleAlternates, getPublicMenuSeo, isPublicMenuLocaleAvailable, resolvePublicMenuLocale } from "./seo.ts";
+import { mapPublicTenant } from "./map.ts";
 import type { PublicMenu } from "./types.ts";
 
 const menu = {
   tenant: {
-    id: "t1", ownerUserId: "u1", slug: "najd-kitchen", nameAr: "مطبخ نجد", nameEn: "Najd Kitchen",
+    id: "t1", slug: "najd-kitchen", nameAr: "مطبخ نجد", nameEn: "Najd Kitchen",
     taglineAr: "أطباق نجدية بطابع معاصر", taglineEn: "Modern Najdi cuisine", logoUrl: "https://example.com/logo.png",
     coverUrl: "https://example.com/cover.jpg", instagramUrl: "", whatsapp: "+966500000000", whatsappTemplate: "",
     primaryColor: "#111", accentColor: "#eee", themeKey: "editorial", currency: "SAR", city: "الرياض", country: "SA",
@@ -19,6 +20,17 @@ const menu = {
   hours: [{ branchId: "b1", weekday: 0, opensAt: "10:00", closesAt: "23:00", isClosed: false }],
   categories: [], products: [],
 } satisfies PublicMenu;
+
+test("public tenant mapping excludes owner identity from the public response shape", () => {
+  const publicTenant = mapPublicTenant({
+    id: "t1", owner_user_id: "private-owner-id", slug: "najd-kitchen", name_ar: "مطبخ نجد", name_en: "Najd Kitchen",
+    tagline_ar: "", tagline_en: "", logo_url: "", cover_url: "", instagram_url: "", whatsapp: "", whatsapp_template: "",
+    primary_color: "#111", accent_color: "#eee", theme_key: "editorial", currency: "SAR", city: "الرياض", country: "SA",
+    is_published: true, is_active: true, created_at: "", updated_at: "", public_content_version: 42,
+  });
+  assert.equal("ownerUserId" in publicTenant, false);
+  assert.equal("public_content_version" in publicTenant, false);
+});
 
 test("public menu SEO derives Arabic title, absolute canonical, and restaurant schema from visible data", () => {
   const seo = getPublicMenuSeo(menu, "/m/najd-kitchen/olaya", "ar", "https://example.com");
