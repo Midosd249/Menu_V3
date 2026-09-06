@@ -12,13 +12,14 @@
 - **Theme 1 — Essential — DEPLOYED / VERIFIED.**
 - **Theme 2 — Editorial — DEPLOYED / VERIFIED.**
 - **Theme 3 — Noir — implementation refinement COMPLETE; final browser/device closure remains separately blocked.**
-- **Heritage + Gallery — comprehensive repository/design audit COMPLETE; implementation remains next.**
+- **Theme 4 — Heritage — IMPLEMENTED / VERIFIED by repository and CI quality gates; browser/device closure remains separately blocked.**
+- **Theme 5 — Gallery — comprehensive audit COMPLETE; implementation remains next.**
 - **Visual/Functional Quality System — DONE / VERIFIED / MERGED.**
 - **External Theme Preview QR Mode — DONE / VERIFIED.**
 - **Shared Public Menu Rendering Stabilization — VERIFIED in repository.**
 
 ## Protected Completed Work
-- Essential, Editorial, and Noir are not reopened by the Heritage/Gallery task.
+- Essential, Editorial, and Noir are not reopened by the Gallery task.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
 - No database schema, migration, dependency, CI/CD, or Vercel configuration changes are part of the current theme work.
 
@@ -26,21 +27,20 @@
 - **VERIFIED:** the theme registry defines five keys: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
 - **VERIFIED:** Heritage maps to `contemporary-restaurant` with hero/list/horizontal-card/scroll-category/landscape metadata.
 - **VERIFIED:** Gallery maps to `bakery-dessert` with standard-header/gallery-grid/vertical-card/scroll-category/portrait metadata.
-- **VERIFIED:** neither Heritage nor Gallery currently has a dedicated theme stylesheet; their differentiation is presently primarily registry-token/family-template based.
+- **VERIFIED:** Heritage now has a dedicated `theme-heritage.css` presentation layer loaded by the root document.
+- **VERIFIED:** Gallery does not yet have a dedicated stylesheet; its differentiation remains registry-token/family-template based.
 - **VERIFIED:** shared public-menu logic owns search, categories, product details, modifiers, cart/order, language handling, and configured customer actions.
 - **VERIFIED:** repository memory warns against duplicate shells, broad selectors, unnecessary stacking contexts, arbitrary z-index escalation, and animation-dependent visibility.
 
-## Heritage + Gallery Audit — CLOSED / VERIFIED
-- **VERIFIED:** comprehensive repository audit completed on 2026-09-06.
-- **VERIFIED:** relevant architecture, theme registry, shared renderer, template families, quality checklist, visual audit contract, project memory, and current state documents were inspected.
-- **VERIFIED:** material research was performed using W3C Arabic/i18n guidance, current digital-menu guidance, and Saudi/MENA public examples.
-- **VERIFIED:** the findings and implementation boundary are recorded in `docs/theme-audit-heritage-gallery.md`.
-- **HIGH finding:** Heritage needs a distinct scoped presentation layer; current differentiation is mostly token-level.
-- **HIGH finding:** Gallery needs a distinct scoped presentation layer; current differentiation is mostly token-level.
-- **PROPOSED:** Heritage should use restrained Arabic/Saudi material cues with information hierarchy above ornament.
-- **PROPOSED:** Gallery should use a disciplined image-first catalogue system with stable media boxes and mobile scanability.
-- **VERIFIED:** no new template or customer-action system is required; the existing family templates can be refined through scoped presentation.
-- **UNKNOWN:** rendered browser/device geometry, mixed-direction behavior, safe-area behavior, and post-hydration console state remain unobserved.
+## Heritage Implementation — CLOSED / VERIFIED
+- **VERIFIED:** Heritage presentation layer implemented on 2026-09-06 using the existing `contemporary-restaurant` family.
+- **VERIFIED:** implementation is scoped to `html[data-menu-theme="heritage"]` and preserves shared renderer behavior.
+- **VERIFIED:** root stylesheet loading was added without creating a new template architecture.
+- **VERIFIED:** design direction follows the audited Heritage brief: warm parchment/stone surfaces, dark ink, restrained terracotta/bronze accents, Arabic-first hierarchy, tactile category treatment, landscape media, and controlled decorative cues.
+- **VERIFIED:** GitHub Actions quality run `34000474005` for commit `6f3e8bcb92ea943bec9ad1edbce25ec7d75cf587` completed with `success`.
+- **VERIFIED:** the quality workflow completed successfully for the Heritage implementation commit.
+- **VERIFIED:** no schema, auth, customer-action, dependency, CI/CD, or Vercel configuration change was introduced by the Heritage implementation.
+- **UNKNOWN / BLOCKED:** authenticated real-browser/device visual closure, Opera-specific behavior, and post-hydration console inspection remain unavailable in the current agent environment.
 
 ## Browser / Deployment State
 - **VERIFIED:** automated Playwright browser template QA previously passed for all five themes.
@@ -57,17 +57,16 @@
 
 ## Project Memory
 - **VERIFIED:** `docs/project-memory/problems-learned.md` is the permanent evidence-based memory of hard problems and anti-patterns.
-- **VERIFIED:** current work followed the memory rules for theme presentation ownership and Vercel release discipline.
+- **VERIFIED:** current Heritage work followed the memory rules for theme presentation ownership and Vercel release discipline.
 
 ## Session Log — 2026-09-06
-- **Completed task:** Comprehensive Audit & Design Intelligence Pass — Heritage + Gallery.
-- **VERIFIED:** repository architecture and relevant documentation were inspected before making a design decision.
-- **VERIFIED:** Heritage and Gallery are registry-level themes mapped to existing template families, but neither has a dedicated presentation stylesheet.
-- **VERIFIED:** material research covered Arabic/i18n layout requirements and Saudi/MENA digital-menu patterns.
-- **VERIFIED:** audit findings and implementation boundaries were recorded in `docs/theme-audit-heritage-gallery.md`.
-- **VERIFIED:** no application code, schema, auth, or deployment configuration was changed in this audit task.
-- **UNKNOWN:** browser/device visual behavior remains unverified.
-- **Result:** audit milestone closed; implementation is the next atomic task.
+- **Completed task:** Heritage Theme Implementation — scoped presentation layer only.
+- **VERIFIED:** existing `contemporary-restaurant` family was reused; no new template architecture was introduced.
+- **VERIFIED:** `src/theme-heritage.css` provides the Heritage presentation layer and `src/routes/__root.tsx` loads it.
+- **VERIFIED:** commit `6f3e8bcb92ea943bec9ad1edbce25ec7d75cf587` passed GitHub Actions quality run `34000474005` with conclusion `success`.
+- **VERIFIED:** the implementation preserved shared public-menu/customer-action semantics and did not change schema, auth, dependencies, CI/CD, or Vercel configuration.
+- **UNKNOWN / BLOCKED:** direct authenticated browser/device evidence remains pending.
+- **Result:** Heritage implementation milestone closed at repository/CI evidence level.
 
 ## Exact Next Task
-Implement the smallest complete, scoped presentation layer for **Heritage only**, using the audited design brief and existing `contemporary-restaurant` family. Preserve shared public-menu behavior, then run the full applicable quality gates and update continuity. Do not start Gallery implementation in the same task.
+Implement the smallest complete, scoped presentation layer for **Gallery only**, using the completed Gallery audit and existing `bakery-dessert` family. Preserve shared public-menu behavior, then run the full applicable quality gates and update continuity. Do not reopen Heritage, Essential, Editorial, or Noir.
