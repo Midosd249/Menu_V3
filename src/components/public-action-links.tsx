@@ -2,13 +2,13 @@ import { Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { getGuestSessionId } from "@/lib/menu/session";
 import { getPublicActions } from "@/lib/menu/public-actions";
-import type { Branch, Lang, Tenant } from "@/lib/menu/types";
+import type { Branch, Lang, PublicTenant } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
 
 const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagram: Instagram };
 
 type PublicActionLinksProps = {
-  tenant: Tenant;
+  tenant: PublicTenant;
   branch: Branch;
   lang: Lang;
   preview?: boolean;
