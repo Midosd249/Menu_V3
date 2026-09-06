@@ -17,64 +17,72 @@
 - **Visual/Functional Quality System — DONE / VERIFIED / MERGED.**
 - **External Theme Preview QR Mode — DONE / VERIFIED.**
 - **Shared Public Menu Rendering Stabilization — VERIFIED in repository.**
+- **Design Intelligence & Product Experience Research — RESEARCH COMPLETE / MASTER PLAN ESTABLISHED; implementation not started.**
 
 ## Protected Completed Work
-- Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are not reopened by the next browser/device task.
+- Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are not reopened by the design-strategy work.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
-- No database schema, migration, dependency, CI/CD, or Vercel configuration changes were introduced by Heritage/Gallery theme presentation work.
+- No database schema, migration, dependency, CI/CD, or Vercel configuration changes are introduced by the design-research program unless a later atomic task proves a requirement.
 
-## Current Theme Evidence
-- **VERIFIED:** the theme registry defines five keys: `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
-- **VERIFIED:** Heritage maps to `contemporary-restaurant` with hero/list/horizontal-card/scroll-category/landscape metadata.
-- **VERIFIED:** Gallery maps to `bakery-dessert` with standard-header/gallery-grid/vertical-card/scroll-category/portrait metadata.
-- **VERIFIED:** Heritage has a dedicated `theme-heritage.css` presentation layer loaded by the root document.
-- **VERIFIED:** Gallery has a dedicated `theme-gallery.css` presentation layer loaded by the root document.
-- **VERIFIED:** shared public-menu logic owns search, categories, product details, modifiers, cart/order, language handling, and configured customer actions.
-- **VERIFIED:** repository memory warns against duplicate shells, broad selectors, unnecessary stacking contexts, arbitrary z-index escalation, and animation-dependent visibility.
+## Current Design Strategy
+- **VERIFIED:** the five-theme system is not the current design focus.
+- **VERIFIED:** the repository already contains substantial theme and public-menu visual work.
+- **VERIFIED:** external research covers Saudi/MENA and global restaurant technology, digital menus, branded restaurant websites, Arabic/RTL, accessibility, typography, performance, SEO/local discovery, conversion, and product UX.
+- **INFERRED:** the strongest strategic territory is `Premium Arabic-first Restaurant Presence Platform`, not another generic QR-menu product.
+- **PROPOSED:** strengthen the shared Menu V3 brand/design system and the connected customer/owner experience while preserving theme personality.
+- **VERIFIED:** the complete cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md`.
 
-## Heritage Implementation — CLOSED / VERIFIED
-- **VERIFIED:** implemented using the existing `contemporary-restaurant` family and shared renderer behavior.
-- **VERIFIED:** implementation is scoped to `html[data-menu-theme="heritage"]`.
-- **VERIFIED:** GitHub Actions quality run `34000474005` completed successfully for the Heritage implementation.
-- **UNKNOWN / BLOCKED:** authenticated real-browser/device visual closure, Opera-specific behavior, and post-hydration console inspection remain unavailable in the current agent environment.
+## Design Strategy Master Plan
+- **W0:** Evidence, measurement, product positioning.
+- **W1:** Brand positioning and content system.
+- **W2:** Marketing website/homepage.
+- **W3:** Public customer menu.
+- **W4:** Owner Studio/admin UX.
+- **W5:** Shared design system.
+- **W6:** Typography.
+- **W7:** Color and brand tokens.
+- **W8:** Imagery/art direction.
+- **W9:** Motion/interaction.
+- **W10:** Accessibility/RTL quality.
+- **W11:** SEO/local discovery/shareability.
+- **W12:** Performance/reliability.
+- **W13:** Trust/security/data ownership.
+- **W14:** Pricing/packaging/commercial UX.
+- **W15:** Growth/analytics/experimentation.
+- **W16:** QA/browser/device/release.
 
-## Gallery Implementation — CLOSED / VERIFIED
-- **VERIFIED:** Gallery presentation layer implemented on 2026-09-06 using the existing `bakery-dessert` family.
-- **VERIFIED:** implementation is scoped to `html[data-menu-theme="gallery"]` and does not introduce a new template architecture.
-- **VERIFIED:** image-led gallery treatment includes stable portrait media, product-name/price hierarchy, category/search treatment, intentional missing-image fallback, safe-area clearance, focus states, and reduced-motion handling.
-- **VERIFIED:** shared public-menu/customer-action semantics remain unchanged.
-- **VERIFIED:** GitHub Actions quality run `34001361889` for commit `924feda71869a45fb161e2524c6bcc59dcf9dd6d` completed with `success`.
-- **VERIFIED:** the quality run passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA for all themes, performance baseline upload, cleanup, and completion.
-- **VERIFIED:** no database schema/migration, auth, customer-action, dependency, CI/CD, or Vercel configuration change was introduced.
-- **UNKNOWN / BLOCKED:** authenticated real-browser/device visual closure, Opera-specific behavior, and post-hydration console inspection remain unavailable in the current agent environment.
+## Design Research Findings
+- **VERIFIED:** Saudi/MENA competitors increasingly combine QR menus with branded presence, direct ordering/contact, analytics, branches, local-market fit, and/or customer-data ownership.
+- **VERIFIED:** global restaurant platforms increasingly connect menus, websites, ordering, discoverability, and operational data.
+- **VERIFIED:** Arabic/RTL and mixed-direction content require explicit bidi handling; RTL is not simply visual mirroring.
+- **VERIFIED:** typography and image delivery affect accessibility, layout stability, and performance.
+- **VERIFIED:** current brand direction supports warm editorial hospitality cues, deep ink, muted terracotta, strong Arabic hierarchy, whitespace, and operational clarity.
+- **PROPOSED:** IBM Plex Sans Arabic is a strong typography candidate but is not yet selected; it must be benchmarked against actual Menu V3 content and current font behavior.
+- **UNKNOWN:** final homepage IA, final typography, final color territory, and conversion priorities require synthesis and measurement.
+
+## Do Not Redo
+- Do not rebuild the five-theme architecture.
+- Do not create a sixth theme as a substitute for brand/product strategy.
+- Do not rewrite shared public-menu business logic for visual polish.
+- Do not weaken RTL/bidi, authentication, authorization, tenant/branch isolation, SEO, or deployment controls.
+- Do not use Vercel for ordinary design iteration.
+- Do not convert competitor layouts, assets, copy, or proprietary interactions into Menu V3.
 
 ## Browser / Deployment State
 - **VERIFIED:** automated Playwright browser template QA passed for all five themes in quality run `34001361889`.
 - **VERIFIED:** performance baseline artifact `g6-performance-baseline` was produced by run `34001361889`.
-- **VERIFIED:** direct Vercel SSR preview requests previously succeeded with HTTP 200 for `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
-- **VERIFIED:** Arabic previews return `lang="ar"`, `dir="rtl"`, and preview-safe robots metadata.
-- **VERIFIED:** English preview support returns `lang="en"` and `dir="ltr"` where requested.
-- **UNKNOWN / BLOCKED:** authenticated browser/device closure remains pending because the current agent environment has no interactive browser/device surface.
-
-## Permanent Release-Only Vercel Workflow
-- **VERIFIED:** Vercel is a release platform, not the normal development/design iteration environment.
-- **VERIFIED:** normal path is `LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT`.
-- **VERIFIED:** visual CSS/theme iteration must not require Vercel deployment.
-- **VERIFIED:** before future deployment decisions, inspect actual Vercel Usage/Billing and record any limiting resource.
-
-## Project Memory
-- **VERIFIED:** `docs/project-memory/problems-learned.md` is the permanent evidence-based memory of hard problems and anti-patterns.
-- **VERIFIED:** Heritage and Gallery work followed the memory rules for theme presentation ownership and Vercel release discipline.
+- **UNKNOWN / BLOCKED:** authenticated browser/device closure, Opera-specific behavior, and post-hydration console inspection remain pending in the current agent environment.
+- **VERIFIED:** production deployment remains release-only and has not been used for ordinary design research/iteration.
 
 ## Session Log — 2026-09-06
-- **Completed task:** Gallery Theme Implementation — scoped presentation layer only.
-- **VERIFIED:** existing `bakery-dessert` family was reused; no new template architecture was introduced.
-- **VERIFIED:** `src/theme-gallery.css` provides the Gallery presentation layer and `src/routes/__root.tsx` loads it.
-- **VERIFIED:** commit `924feda71869a45fb161e2524c6bcc59dcf9dd6d` passed GitHub Actions quality run `34001361889` with conclusion `success`.
-- **VERIFIED:** all required automated quality stages completed successfully, including browser template QA for all five themes and performance baseline generation.
-- **VERIFIED:** the implementation preserved shared public-menu/customer-action semantics and did not change schema, auth, dependencies, CI/CD, or Vercel configuration.
-- **UNKNOWN / BLOCKED:** direct authenticated browser/device evidence remains pending.
-- **Result:** Gallery implementation milestone closed at repository/CI evidence level.
+- **Completed task:** Final design-intelligence planning round focused on the whole product/site rather than theme work.
+- **VERIFIED:** repository state and continuity files were reconciled before planning.
+- **VERIFIED:** the research scope was expanded to product positioning, marketing website, public menu, Owner Studio, typography, color, imagery, motion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics, and release QA.
+- **VERIFIED:** a comprehensive roadmap and priority backlog were created in `docs/design-strategy-master-plan.md`.
+- **VERIFIED:** theme implementations remain protected and are explicitly excluded from broad redesign work.
+- **PROPOSED:** execute the master plan through one atomic task at a time, beginning with Design Intelligence Synthesis.
 
 ## Exact Next Task
-Close the remaining authenticated browser/device QA gate for the five preview variants, then perform final release-batch review. Do not reopen completed theme implementations unless direct QA evidence identifies a concrete regression.
+**Design Intelligence Synthesis — close external research and reconcile it with repository evidence.**
+
+Objective: merge the deep external research report, current repository evidence, competitive findings, Arabic/RTL standards, and existing brand direction into one ranked, evidence-backed design decision set before implementation. No code changes until this synthesis is complete.
