@@ -1,7 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowUpLeft } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
-import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/lang";
 import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
 
@@ -42,12 +41,12 @@ function Pricing() {
                   <Limit label={lang === "ar" ? "أعضاء الفريق" : "Team members"} value={plan.maxTeamMembers} />
                 </div>
                 <ul className="mt-6 grid gap-3 text-sm">
-                  {features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className={`mt-0.5 size-4 shrink-0 ${plan.recommended ? "text-accent" : "text-accent"}`} /><span>{feature}</span></li>)}
+                  {features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-accent" /><span>{feature}</span></li>)}
                 </ul>
-                <a href="/#commercial-contact" className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
+                <Link to="/" className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
                   {plan.code === "free" ? (lang === "ar" ? "ابدأ مجاناً" : "Start free") : (lang === "ar" ? "اطلب الترقية" : "Request upgrade")}
                   <ArrowUpLeft className="size-4" />
-                </a>
+                </Link>
               </article>
             );
           })}
