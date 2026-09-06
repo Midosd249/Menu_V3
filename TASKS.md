@@ -125,6 +125,19 @@
 - VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence record: `docs/performance-public-menu-resources.md`.
 
+### W12-03 — Reliability and Failure-Path Audit — CLOSED / VERIFIED
+- Objective: harden public-menu timeout, transient upstream failure, cache miss, retry, and terminal error handling without changing the successful path.
+- VERIFIED: `src/routes/m.$slug.tsx` uses a bounded two-attempt retry policy with a 10-second per-attempt timeout.
+- VERIFIED: retry delay is deterministic and bounded at 350 ms after the first failed attempt.
+- VERIFIED: `not_found` and invalid results terminate immediately without retry.
+- VERIFIED: terminal timeout, unavailable, and unknown failures provide actionable Arabic/English messages.
+- VERIFIED: existing session cache remains optional and slug/branch keyed; no cross-tenant cache mechanism was introduced.
+- VERIFIED: no Supabase/schema, auth, authorization, theme, routing, or successful-path data contract changed.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects retry bounds, delay, terminal response handling, and localized failure copy.
+- VERIFIED: Quality Gate `34015320658` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: production RUM is unavailable, so real-user timeout/retry frequency and recovery rate cannot be quantified.
+- Evidence record: `docs/reliability-failure-path-audit.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -153,10 +166,10 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W12-03 — Reliability and Failure-Path Audit — TODO
-- Objective: inspect public-menu and critical application failure behavior under timeout, upstream failure, malformed/partial data, cache miss, retry, navigation interruption, and dependency degradation; improve only evidenced failure-path weaknesses without changing successful-path architecture.
-- Acceptance: critical failure states remain understandable and actionable in Arabic and English; no unhandled rejection or infinite retry loop; no stale/cross-tenant cache exposure; timeout/retry behavior remains bounded; regression coverage exists for changed paths; full Quality Gate passes; no unrelated changes.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, performance audit, and targeted failure-path tests.
+### W13 — Trust, Security, and Data Ownership — TODO
+- Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
+- Acceptance: no public response exposes private tenant/owner data; authorization boundaries remain tenant/branch scoped; secrets are not embedded in client bundles or logs; error responses do not expose internal SQL, stack traces, or infrastructure details; public analytics/event paths remain tenant-scoped; security regression coverage exists for every changed boundary; full Quality Gate passes; no unrelated changes.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
