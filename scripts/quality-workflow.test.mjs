@@ -9,6 +9,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
 const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
+const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "utf8");
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
@@ -30,6 +31,13 @@ test("performance audit measures the G6 baseline without imposing guessed budget
   assert.match(PERFORMANCE_AUDIT, /cachedResourceCount/);
   assert.match(PERFORMANCE_AUDIT, /schemaVersion: 1/);
   assert.doesNotMatch(PERFORMANCE_AUDIT, /LCP.*(?:budget|threshold)|CLS.*(?:budget|threshold)|INP.*(?:budget|threshold)/i);
+});
+
+test("public menu hydration reuses SSR data without a duplicate network fetch", () => {
+  assert.match(PUBLIC_MENU_ROUTE, /if \(initialMenu\) \{/);
+  assert.match(PUBLIC_MENU_ROUTE, /writeCachedMenu\(cacheKey, initialMenu\);/);
+  assert.match(PUBLIC_MENU_ROUTE, /return;\n    \}/);
+  assert.match(PUBLIC_MENU_ROUTE, /load\(\); \/\/ eslint-disable-line react-hooks\/exhaustive-deps/);
 });
 
 test("robots.txt allows public pages, protects private surfaces, and declares the sitemap", () => {
