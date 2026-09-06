@@ -7,15 +7,14 @@ const rootRoute = fs.readFileSync(new URL("src/routes/__root.tsx", root), "utf8"
 const typography = fs.readFileSync(new URL("src/typography.css", root), "utf8");
 const packageJson = JSON.parse(fs.readFileSync(new URL("package.json", root), "utf8"));
 
-const ARABIC_ASSETS = ["Regular", "Medium", "SemiBold", "Bold"];
-const LATIN_ASSETS = ["Regular", "Medium", "SemiBold", "Bold"];
+const ARABIC_ASSETS = ["400", "500", "600", "700"];
+const LATIN_ASSETS = ["400", "500", "600", "700"];
 
 function assertPinnedFontAsset(fontFamily, weight) {
-  const familyPath = fontFamily === "IBM Plex Sans Arabic" ? "plex-sans-arabic" : "plex-sans";
-  const filePrefix = fontFamily === "IBM Plex Sans Arabic" ? "IBMPlexSansArabic" : "IBMPlexSans";
-  const weightName = weight === 400 ? "Regular" : weight === 500 ? "Medium" : weight === 600 ? "SemiBold" : "Bold";
+  const familyPath = fontFamily === "IBM Plex Sans Arabic" ? "ibm-plex-sans-arabic" : "ibm-plex-sans";
+  const subset = fontFamily === "IBM Plex Sans Arabic" ? "arabic" : "latin";
   const pattern = new RegExp(
-    `https://cdn\\.jsdelivr\\.net/gh/IBM/plex@[0-9a-f]{40}/packages/${familyPath}/fonts/complete/woff2/${filePrefix}-${weightName}\\.woff2`,
+    `https://cdn\\.jsdelivr\\.net/fontsource/fonts/${familyPath}@5\\.3\\.0/${subset}-${weight}-normal\\.woff2`,
   );
   assert.match(typography, pattern);
 }
