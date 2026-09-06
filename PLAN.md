@@ -11,6 +11,7 @@
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - **P0 Public Content Propagation — CLOSED / VERIFIED.**
+- **W6 Typography Evidence & Decision — CLOSED / VERIFIED.**
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -55,22 +56,52 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: GitHub Actions Quality run `34007481599` completed successfully for commit `a43052b0f1c2ce8c64a00c852dd30f863783aa95`; typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA, performance baseline upload, and cleanup all passed.
 - UNKNOWN: direct authenticated Owner UI -> Public HTTP cache behavior remains unexercised in an interactive authenticated browser session.
 
+## Completed W6 — Typography Evidence & Decision
+- VERIFIED: repository typography inventory found no explicit named font dependency that must be preserved.
+- VERIFIED: eight candidates were evaluated: IBM Plex Sans Arabic + IBM Plex Sans, Noto Sans Arabic + Noto Sans, Tajawal, Mada, Amiri, Noto Kufi Arabic, Lemonada, and Changa.
+- VERIFIED: authoritative/open-source evidence was checked for licensing and web-delivery characteristics.
+- VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans selected as the default shared typography system.
+- VERIFIED: Noto Sans Arabic + Noto Sans selected as Alternate 1.
+- VERIFIED: Tajawal selected as Alternate 2.
+- VERIFIED: decision, candidate matrix, benchmark content, rejection criteria, and implementation boundary are recorded in `docs/design-intelligence.md`.
+- PROPOSED: self-host/subset the smallest required IBM Plex Arabic/Latin weight set; do not add the IBM npm font package solely for font delivery because its package documentation includes telemetry.
+- UNKNOWN until implementation benchmark: final payload, font-swap/CLS behavior, and visual fit across every theme.
+- No application code, themes, schema, dependencies, or deployment configuration changed during the decision task.
+
 ## Exact Current Task
-### W6 — Typography Evidence & Decision
+### W6-01 — Typography Implementation
 
-**Objective:** make an evidence-based Arabic-first typography decision before any production typography implementation.
+**Objective:** introduce IBM Plex Sans Arabic + IBM Plex Sans as the shared typography foundation, self-hosted and subsetted, without changing theme architecture.
 
-**Scope:** candidate font systems; Arabic/Latin pairing; Arabic heading/body readability; Latin readability; numerals and SAR; mixed bidi; weights; loading/performance; licensing/availability; current repository usage; compatibility with the existing design-system contract and five protected themes.
+**Scope:** existing font/style entry points, semantic typography tokens, official font assets/licensing documentation, representative Arabic/English/mixed-direction tests, and performance inspection.
 
 **Acceptance criteria:**
-- shortlist 5–8 credible candidates;
-- verify licensing/availability and web-delivery implications from authoritative sources;
-- compare Arabic, Latin, numeric, SAR, and mixed-direction rendering requirements;
-- select one default and up to two alternates with explicit rationale;
-- record evidence and sources in `docs/design-research-log.md` and the active strategy documents;
-- define the smallest separate implementation task;
-- do not modify application code, themes, schema, dependencies, or deployment configuration in this decision task.
+- use official font assets/licensing;
+- no new dependency;
+- smallest required weight set;
+- shared semantic typography roles remain intact;
+- Arabic/English/mixed-direction/SAR/phone/URL samples render without clipping or bidi defects;
+- responsive typography checked at small mobile, mobile, tablet, and desktop;
+- font loading and layout-shift impact measured;
+- existing five themes remain structurally unchanged;
+- typecheck/tests/lint/build and applicable browser/performance checks pass;
+- update continuity files and stop.
 
-**Risks:** choosing for aesthetics alone, weak Arabic legibility, inconsistent Latin pairing, numeral/bidi defects, excessive font payload, licensing ambiguity, and accidental theme coupling.
+**Risks:** excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
 
-**Verification:** repository typography inventory; authoritative font documentation/licensing sources; representative Arabic/Latin/numeric/bidi comparison; final decision recorded with evidence.
+**Verification commands:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
+
+## Protected Work
+- Existing five-theme implementation.
+- Shared public-menu behavior and customer actions.
+- Authentication, authorization, tenant/branch isolation.
+- Existing migrations/schema unless evidence proves a requirement.
+- Release-only Vercel workflow.
+- Existing visual/functional quality system.
+
+## Research Governance
+- Material research is recorded in `docs/design-research-log.md` and the persistent design-intelligence reference.
+- Use official standards for accessibility, i18n, web platform, SEO, and font licensing.
+- Competitors are pattern evidence, not assets or implementation sources.
+- Label conclusions `VERIFIED`, `INFERRED`, `PROPOSED`, or `UNKNOWN`.
+- Only one atomic task may be active at a time.
