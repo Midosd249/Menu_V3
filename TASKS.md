@@ -9,7 +9,7 @@
 - VERIFIED: `src/lib/menu/public.ts` versions its process-local cache key by tenant, branch, and revision.
 - VERIFIED: no browser menu-content cache exists; browser storage is limited to anonymous analytics session identity.
 - VERIFIED: focused regression test passes in CI.
-- VERIFIED: GitHub Actions Quality run `34007481599` for commit `a43052b0f1c2ce8c64a00c852dd30f863783aa95` passed all steps: route generation, typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA, performance baseline upload, and cleanup.
+- VERIFIED: GitHub Actions Quality run `34007481599` for the P0 closure commit passed all required steps.
 - UNKNOWN: direct authenticated Owner UI -> Public HTTP cache behavior remains unexercised in an interactive authenticated browser session.
 
 ### Project Infrastructure Identity — CLOSED / VERIFIED
@@ -18,16 +18,22 @@
 - VERIFIED: infrastructure identity is recorded in `docs/project-infrastructure.md`.
 
 ### W6 — Typography Evidence & Decision — CLOSED / VERIFIED
-- VERIFIED: repository typography inventory found no explicit named font dependency that must be preserved.
-- VERIFIED: eight candidates were evaluated: IBM Plex Sans Arabic + IBM Plex Sans, Noto Sans Arabic + Noto Sans, Tajawal, Mada, Amiri, Noto Kufi Arabic, Lemonada, and Changa.
-- VERIFIED: authoritative/open-source evidence was checked for licensing and family characteristics.
+- VERIFIED: eight typography candidates were evaluated with authoritative/open-source evidence.
 - VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans selected as the default shared typography system.
-- VERIFIED: Noto Sans Arabic + Noto Sans selected as Alternate 1.
-- VERIFIED: Tajawal selected as Alternate 2.
+- VERIFIED: Noto Sans Arabic + Noto Sans selected as Alternate 1; Tajawal selected as Alternate 2.
 - VERIFIED: decision and implementation boundary are recorded in `docs/design-intelligence.md`.
-- PROPOSED: self-host/subset the smallest IBM Plex Arabic/Latin weight set; avoid the IBM npm font package because its package documentation includes telemetry.
-- UNKNOWN until implementation: final payload, font-swap/CLS behavior, and runtime visual fit across all themes.
-- No application code, theme architecture, database schema, dependencies, or deployment configuration changed during the decision.
+
+### W6-01 — Typography Implementation — CLOSED / VERIFIED
+- VERIFIED: shared semantic typography contract is implemented in `src/typography.css`.
+- VERIFIED: root document loads typography before theme styles.
+- VERIFIED: IBM Plex Sans Arabic and IBM Plex Sans weights 400/500/600/700 are declared with `@font-face`.
+- VERIFIED: WOFF2 URLs are pinned to immutable IBM Plex upstream commit SHAs and delivered through a CORS-compatible CDN.
+- VERIFIED: Google Fonts runtime loading and preconnects were removed.
+- VERIFIED: regression coverage exists in `scripts/typography-contract.test.mjs`.
+- VERIFIED: no new runtime font dependency was added.
+- VERIFIED: the previous browser-template failure was isolated to the font delivery path and the corrected pinned CDN path is the implementation of record.
+- UNKNOWN until the new CI run completes: final browser-template QA and performance result for the corrected delivery path.
+- Implementation status: `docs/typography-implementation-status.md`.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
@@ -57,14 +63,12 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W6-01 — Complete self-hosted typography delivery — IN PROGRESS / BLOCKED
-- Objective: transfer the official IBM Plex Sans Arabic + IBM Plex Sans WOFF2 assets into the repository, replace runtime Google Fonts loading with local `@font-face` declarations, and verify the full typography implementation without changing theme architecture.
-- Completed in this task: shared semantic typography contract, root stylesheet wiring, Arabic + Latin IBM Plex web loading, bidi isolation, numeric treatment, and regression coverage.
-- Remaining blocker: the available GitHub write interface cannot transfer binary WOFF2 content from the official IBM repository into Menu V3. The official IBM asset directory was verified, but local binary assets cannot be honestly claimed until actually committed.
-- Required finalization: transfer official Regular/Medium-or-SemiBold/Bold Arabic and matching Latin WOFF2 assets; add local `@font-face`; remove Google Fonts runtime loading; run all quality and performance checks; then close W6-01.
-- Constraint: no theme rewrite, no database/schema work, no unrelated refactor, no new font dependency.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
-- Status reference: `docs/typography-implementation-status.md`.
+### W7 — Color / Surface / Contrast System — READY TO START
+- Objective: establish and implement a shared, accessible semantic color/surface contract that improves polish and trust without flattening the five protected theme personalities.
+- Scope: audit shared colors/surfaces; define semantic background/surface/elevated/text/muted/border/primary/accent/status/focus/overlay/interactive roles; validate contrast; define applicable light/dark behavior; preserve tenant branding; add regression coverage; validate responsive states; run full Quality Gate.
+- Acceptance: evidence-based semantic contract documented; no theme personality flattened; critical text/controls meet selected accessibility target; focus/hover/active/disabled/error/success states explicit; shared hard-coded colors replaced where semantic tokens are required; regression coverage passes; full Quality Gate passes.
+- Risks: contrast regressions, tenant-brand collisions, theme coupling, dark-mode inconsistencies, hierarchy changes.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
