@@ -29,12 +29,23 @@
 - **Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.**
 - **Shared Design System Contract — BASELINE ESTABLISHED / IMPLEMENTATION NOT STARTED.**
 - **P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.**
-- **P0 Public Content Propagation — IMPLEMENTED / SOURCE-VERIFIED; runtime database verification remains required.**
+- **P0 Public Content Propagation — RUNTIME DATABASE EVIDENCE VERIFIED; repository quality run pending.**
 
 ## Protected Completed Work
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are not reopened by the design-strategy work.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
 - No database schema, migration, dependency, CI/CD, or Vercel configuration changes are introduced by design research unless a later atomic task proves a requirement.
+
+## Runtime Evidence — P0 Public Content Propagation
+- **VERIFIED:** live Supabase database contains `menu_v3.tenants.public_content_version`.
+- **VERIFIED:** live `menu_v3` has public-content revision triggers on tenants, branches, branch hours, categories, products, product variants, modifier groups, modifier options, and product-modifier links.
+- **VERIFIED:** trigger functions are explicitly qualified to `menu_v3` and use `search_path = menu_v3, pg_temp`.
+- **VERIFIED:** representative live Owner-side writes incremented the published tenant revision.
+- **VERIFIED:** changing the `demo-nafas` tenant/branch/product surface advanced its revision while the separate `mndy-alwtnya` tenant remained at its prior revision, demonstrating tenant isolation for the revision mechanism.
+- **VERIFIED:** `src/lib/db.ts` sets PostgreSQL `search_path` to `menu_v3,public`; `src/lib/menu/public.ts` reads the revision and versions its process-local cache key by tenant, branch, and revision.
+- **VERIFIED:** browser menu-content caching is not present in `src/components/public-menu.tsx`; the browser-side session storage is limited to anonymous analytics session identity.
+- **VERIFIED:** the canonical migration was corrected to explicitly target `menu_v3`; a repair migration was applied to the live database for the trigger set.
+- **UNKNOWN:** direct end-to-end Owner UI -> Public HTTP response cache behavior has not been exercised in an interactive browser session in this environment.
 
 ## Current Design Strategy
 - **VERIFIED:** the five-theme system is not the current design focus.
@@ -46,6 +57,4 @@
 - **VERIFIED:** the implementation-ready shared design contract is recorded in `docs/design-system-contract.md`.
 
 ## Exact Next Task
-**P0 — Runtime verification of public-content propagation after Owner mutations, including migration application and cross-branch/tenant isolation.**
-
-Objective: apply the new migration in the intended database, exercise representative owner mutations, confirm revision increments and fresh public responses, and run the repository quality gates. Only after this runtime evidence is obtained should P0 propagation be marked fully VERIFIED.
+**P0 verification closure — wait for the GitHub quality run for commit `c6fd114fa9659d355a99b7a0543b24d22f023422`, review its complete result, and close P0 only if all required gates pass. If it fails, diagnose only the failure relevant to this task.**
