@@ -22,7 +22,8 @@ Restaurant themes may remain expressive. Shared behavior, semantics, accessibili
 - The repository protects the five existing themes and shared public-menu behavior.
 - The master design strategy identifies the strongest strategic territory as `Premium Arabic-first Restaurant Presence Platform`.
 - The strategy requires evidence before broad visual implementation and explicitly protects authentication, authorization, tenant/branch isolation, SEO, deployment controls, and existing customer actions.
-- W3C guidance requires explicit directional markup for RTL and mixed-direction content rather than relying on visual CSS mirroring. citeturn1search0turn1search6
+- W3C guidance requires explicit directional markup for RTL and mixed-direction content rather than relying on visual CSS mirroring.
+- W6 typography evidence selected **IBM Plex Sans Arabic + IBM Plex Sans** as the default shared typography system, with Noto Sans Arabic + Noto Sans and Tajawal as alternates.
 
 ### PROPOSED
 - Use a restrained editorial hospitality foundation: warm neutral surfaces, deep ink, controlled accent color, strong Arabic hierarchy, generous but purposeful whitespace, and high information clarity.
@@ -30,9 +31,9 @@ Restaurant themes may remain expressive. Shared behavior, semantics, accessibili
 - Prefer semantic tokens and logical CSS properties so RTL/LTR behavior is structural rather than duplicated visual styling.
 
 ### UNKNOWN
-- Final production font family until benchmarked against real Menu V3 Arabic/English/mixed content.
 - Final primary accent color until contrast, photography interaction, and conversion testing are completed.
 - Final homepage copy hierarchy until actual capability and conversion evidence is measured.
+- Final runtime font payload, CLS/font-swap behavior, and visual fit across every protected theme until W6-01 implementation benchmark completes.
 
 ## 1. Design Tokens
 
@@ -81,12 +82,28 @@ Required roles:
 - `type.numeric`
 - `type.code`
 
+**Selected shared family:**
+- Arabic: `IBM Plex Sans Arabic`
+- Latin: `IBM Plex Sans`
+- Alternate 1: `Noto Sans Arabic` + `Noto Sans`
+- Alternate 2: `Tajawal`
+
+Initial semantic mapping:
+- display/headings: 600–700;
+- body/body-small: 400;
+- labels/buttons/prices: 500–600;
+- numeric: Plex Arabic/Latin with explicit bidi validation;
+- code: existing monospace stack.
+
 Rules:
 - Arabic and Latin pairing must be evaluated together.
 - Numerals, SAR values, phone numbers, URLs, and Latin brand names must have explicit bidi test cases.
-- Do not globally replace the existing font stack until a real-content benchmark and performance comparison pass.
+- Do not ship all available font weights by default; use the smallest real set.
+- Prefer official self-hosted WOFF2/subset delivery where the existing asset pipeline permits it.
+- Do not add a font npm dependency solely for delivery.
 - Avoid using font weight as the only hierarchy mechanism.
 - Long Arabic labels must wrap without clipping or forced visual truncation unless the component explicitly provides an accessible expansion path.
+- W6-01 must benchmark payload, font swap, CLS/layout stability, and visual fit before broad rollout.
 
 ### 1.3 Spacing
 Use a consistent spacing scale with a small number of reusable steps. Components must consume tokens rather than arbitrary values.
@@ -190,7 +207,7 @@ Do not build separate visual layouts solely because Arabic is RTL.
 - Do not use CSS alone to encode semantic text direction.
 - Preserve logical DOM order.
 
-W3C specifically recommends structural direction markup and warns against treating RTL as visual mirroring. citeturn1search0turn1search1
+W3C specifically recommends structural direction markup and warns against treating RTL as visual mirroring.
 
 ### 3.2 Mixed-direction content
 Mandatory test cases:
@@ -203,7 +220,7 @@ Mandatory test cases:
 - English UI containing Arabic restaurant/product name;
 - form input with unknown-direction content.
 
-Where a run has a known opposite direction, tightly scoped markup should establish that direction. W3C recommends markup for inline bidi handling rather than relying on control characters where markup is available. citeturn1search6turn1search8
+Where a run has a known opposite direction, tightly scoped markup should establish that direction. W3C recommends markup for inline bidi handling rather than relying on control characters where markup is available.
 
 ### 3.3 Forms
 - Inputs containing user-entered mixed-direction content should use appropriate direction behavior such as `dir="auto"` where supported and semantically correct.
@@ -417,7 +434,7 @@ A UI/design implementation cannot be considered complete until:
 The contract intentionally does not finalize unresolved decisions.
 
 Next atomic decisions:
-1. Typography benchmark and final font selection.
+1. W6-01 Typography implementation benchmark.
 2. Color territory and semantic token values.
 3. Marketing homepage IA and copy hierarchy.
 4. Public-menu first-screen/action hierarchy.
@@ -429,4 +446,13 @@ Only one decision/implementation task may be active at a time.
 - W3C, Authoring HTML: Handling Right-to-left Scripts: https://www.w3.org/TR/i18n-html-tech-bidi/
 - W3C, Inline markup and bidirectional text in HTML: https://www.w3.org/International/articles/inline-bidi-markup/
 - W3C, Unicode controls vs. markup for bidi support: https://www.w3.org/International/questions/qa-bidi-controls.en
+- IBM Plex: https://github.com/IBM/plex
+- IBM Plex Sans Arabic web package: https://github.com/IBM/plex/tree/master/packages/plex-sans-arabic
+- Noto Arabic docs: https://github.com/notofonts/noto-docs/blob/main/docs/website/use.md
+- Noto Arabic: https://github.com/notofonts/arabic
+- Tajawal: https://github.com/googlefonts/tajawal
+- Mada: https://github.com/aliftype/mada
+- Amiri: https://github.com/aliftype/amiri
+- Lemonada: https://github.com/Gue3bara/Lemonada
+- Changa: https://github.com/googlefonts/changa-vf
 - Repository source of truth: `AGENTS.md`, `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, and `docs/design-strategy-master-plan.md`.
