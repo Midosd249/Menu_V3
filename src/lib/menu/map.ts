@@ -1,5 +1,5 @@
-import { isThemeKey, DEFAULT_THEME_KEY } from "../theme";
-import { bool, num } from "../utils";
+import { isThemeKey, DEFAULT_THEME_KEY } from "../theme/index.ts";
+import { bool, num } from "../utils.ts";
 import type { Branch, BranchHour, Category, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
