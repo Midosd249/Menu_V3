@@ -31,7 +31,7 @@ test("art direction documents responsive, accessibility, fallback, and licensing
 });
 
 test("current public menu keeps the safe lazy-loading baseline for dish media", () => {
-  assert.match(publicMenu, /loading=\"lazy\"/);
-  assert.match(publicMenu, /decoding=\"async\"/);
-  assert.match(publicMenu, /fetchPriority=\"low\"/);
+  assert.match(publicMenu, /loading=['\"]lazy['\"]/);
+  assert.match(publicMenu, /decoding=['\"]async['\"]/);
+  assert.match(publicMenu, /fetchPriority=['\"]low['\"]/);
 });
