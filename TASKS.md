@@ -74,6 +74,20 @@
 - VERIFIED: Quality run `34010117079` passed install, typecheck, 112 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence record: `docs/motion-implementation.md`.
 
+### W10 — Accessibility and RTL Quality — CLOSED / VERIFIED
+- VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
+- VERIFIED: root document loads the accessibility layer before protected theme CSS.
+- VERIFIED: public product and cart dialogs now expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
+- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email input direction, and live validation feedback.
+- VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where content direction is data-dependent.
+- VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
+- VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level without introducing a second form system.
+- VERIFIED: regression coverage exists in `scripts/accessibility-contract.test.mjs` and is part of the default `npm test` suite.
+- VERIFIED: W9 motion contract was updated only to preserve its dialog-target contract after dialog IDs became unique.
+- VERIFIED: final Quality run `34010619265` passed typecheck, 120 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
+- Evidence record: `docs/accessibility-rtl-quality.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -102,12 +116,12 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W10 — Accessibility and RTL Quality — READY TO START
-- Objective: perform a focused accessibility, RTL/LTR, mixed-direction, keyboard, touch-target, focus, semantics, and screen-reader quality pass across the shared public menu and owner-facing critical flows without reopening protected theme architecture.
-- Scope: semantic HTML and accessible names; landmarks/headings/forms/dialogs/live regions; keyboard navigation and focus containment; WCAG 2.2 target size and focus-not-obscured behavior; Arabic RTL, English LTR, mixed Arabic/Latin/numeric content; bidi isolation and direction-sensitive icons; long labels/wrapping/clipping/overflow; reduced-motion preservation; regression coverage; full Quality Gate.
-- Acceptance: evidence-based accessibility/RTL contract documented; critical flows keyboard-usable; names/landmarks/headings/forms/dialogs correct; focus visible and unobscured; adopted target-size policy satisfied; Arabic/LTR/mixed content stable; five themes remain distinct; regression coverage exists; full Quality Gate passes.
-- Risks: accessibility regressions, RTL mirroring errors, mixed-direction numeric corruption, focus traps, touch-target regressions, theme-specific overrides leaking into shared semantics.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, accessibility checks, RTL/LTR checks, and performance inspection.
+### W11 — SEO, Local Discovery, and Shareability — READY TO START
+- Objective: audit and strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
+- Scope: metadata contracts, canonical/hreflang behavior, robots/sitemap alignment, restaurant/local business structured data, Open Graph/Twitter-style share surfaces where applicable, branch-level URLs, QR source continuity, missing-content/noindex rules, and regression coverage.
+- Acceptance: evidence-based SEO/shareability contract documented; Arabic and English URLs remain canonical and reciprocal; structured data is truthful and tenant-scoped; public routes are indexable only when eligible; share previews are stable; QR/deep links preserve intended context; regression coverage exists; full Quality Gate passes.
+- Risks: duplicate URLs, fabricated locale content, cross-tenant metadata leakage, incorrect location claims, indexing private/preview surfaces.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
