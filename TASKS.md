@@ -48,6 +48,19 @@
 - VERIFIED: GitHub Actions Quality run `34009000701` passed the full required gate, including all-theme browser QA and performance baseline.
 - Evidence record: `docs/color-system-implementation-status.md`.
 
+### W8 — Imagery and Art Direction — CLOSED / VERIFIED at contract and implementation-layer level
+- VERIFIED: `docs/image-art-direction.md` defines image roles, art direction, responsive delivery, fallbacks, accessibility, licensing, provenance, and theme-specific direction.
+- VERIFIED: dish/card imagery uses a 4:3 default framing rule; brand/editorial imagery uses 16:9 or 3:2 according to surface.
+- VERIFIED: focal-point and mobile focal-point hooks are implemented in `src/image-art-direction.css`.
+- VERIFIED: shared image CSS is loaded from `src/routes/__root.tsx` before theme styles.
+- VERIFIED: existing public-menu dish media retains lazy loading, async decoding, and low fetch priority for non-critical media.
+- VERIFIED: `scripts/image-art-direction-contract.test.mjs` protects the new contract and is part of `npm test`.
+- VERIFIED: no new runtime dependency was introduced and existing package versions were preserved.
+- VERIFIED: no Supabase schema, tenant data model, or protected theme was modified.
+- UNKNOWN: tenant-specific focal-point metadata is not currently part of the canonical data model and was intentionally not introduced in W8.
+- UNKNOWN: final production browser/performance result for the latest W8 commit until the new Quality run completes.
+- Evidence record: `docs/image-art-direction.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -76,11 +89,11 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W8 — Imagery and Art Direction — READY TO START
-- Objective: make hospitality quality visible through a disciplined image/art-direction system without weakening performance, accessibility, or the five protected themes.
-- Scope: audit current image usage and placeholders; research hospitality/editorial patterns; define art direction for hero/menu/restaurant/branch/Owner Studio/product screenshots; define aspect ratios, crop/focal point/object-position, responsive sizing, fallbacks, compression, loading priority, stable geometry, alt text, decorative-image handling, licensing, and regression coverage.
-- Acceptance: evidence-based contract documented; protected themes preserved; critical images have explicit sizing/crop/fallback; responsive delivery avoids avoidable CLS; meaningful images have accessible alternatives; no unlicensed/competitor creative; regression coverage exists; full Quality Gate passes.
-- Risks: image licensing, visual inconsistency, CLS/performance regressions, Arabic content context, oversized mobile payloads.
+### W9 — Motion and Interaction — READY TO START
+- Objective: create a restrained, premium motion system that improves hierarchy, feedback, orientation, and perceived quality without introducing motion sickness, blocking interaction, harming accessibility, or compromising mobile performance.
+- Scope: audit existing transitions, drawers, dialogs, buttons, cart interactions, theme previews, loading states, and route changes; define duration/easing/distance/scale/opacity tokens; standardize hover/focus/press/selection/success/error/loading feedback; define drawer/sheet/overlay choreography; preserve immediate customer feedback; support `prefers-reduced-motion`; avoid layout-affecting animation; define mobile/low-power budgets; add regression coverage; run the full Quality Gate.
+- Acceptance: evidence-based motion contract documented; tokens centralized and theme-compatible; key interactions consistent; reduced-motion explicit and verified; no avoidable layout shift or interaction blocking; five themes remain distinct; regression coverage exists; full Quality Gate passes.
+- Risks: excessive motion, accessibility regressions, low-end mobile jank, theme inconsistency, interaction delays.
 - Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
 
 ## Permanent Quality Gate
