@@ -54,6 +54,13 @@
 - **VERIFIED:** no new dependency, theme change, or unrelated refactor was introduced.
 - **BLOCKED:** local typecheck/tests/lint/build were not executable in the current agent environment because outbound DNS/network access is unavailable. No passing test result is claimed.
 
+### Project Infrastructure Identity — CLOSED / VERIFIED
+- **VERIFIED (2026-09-06):** Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
+- **VERIFIED:** Supabase URL is `https://ublxptcqefujkbeepylc.supabase.co`, region `ap-northeast-2` (Seoul), status `ACTIVE_HEALTHY` at verification.
+- **VERIFIED:** Menu V3 canonical database schema is `menu_v3`.
+- **VERIFIED:** Menu V3 is separated from legacy application data by schema boundary; legacy `public` tables are not the default Menu V3 canonical surface.
+- **VERIFIED:** the canonical infrastructure record is `docs/project-infrastructure.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected from unnecessary reopening.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -62,7 +69,7 @@
 - Do not create a sixth theme as a substitute for product/design strategy.
 
 ## Permanent Quality Gate
-Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, and `docs/design-system-contract.md` where applicable.
+Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
 
 ## Master Design Strategy
 The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md`.
