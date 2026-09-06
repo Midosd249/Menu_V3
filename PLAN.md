@@ -17,7 +17,9 @@
 - W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
 - W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
 - W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate passed in run `34010619265`.
-- **W11 SEO, Local Discovery, and Shareability — IMPLEMENTED / QUALITY GATE PENDING.**
+- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED; final Quality Gate passed in run `34013074378`.
+- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate passed in run `34013861903`.
+- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED for the current low-risk resource-efficiency slice; Quality Gate run `34014895325` passed all required steps.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -89,33 +91,42 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
 - Evidence record: `docs/accessibility-rtl-quality.md`.
 
-## W11 — SEO, Local Discovery, and Shareability — Implementation Complete / Gate Pending
-
-**Objective:** strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, sitemap/robots, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
-
-### Implemented
-- Absolute production canonical URLs for public menu and branch routes.
-- Reciprocal Arabic/English `hreflang` only when real English tenant + branch names exist.
-- Stable `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata.
-- Restaurant structured data remains derived from public tenant/branch data and does not fabricate location information.
-- `/robots.txt` excludes private/control routes and advertises `/sitemap.xml`.
-- `/sitemap.xml` is server-generated from active + published tenants and active branches only.
-- English sitemap variants are emitted only when real English tenant/branch names exist.
-- Sitemap and robots helpers are pure/testable in `src/lib/menu/seo-discovery.ts`.
-- Regression coverage added in `src/lib/menu/seo-discovery.test.ts` and expanded in `src/lib/menu/seo.test.ts`.
+## Completed W11 — SEO, Local Discovery, and Shareability
+- VERIFIED: public-menu canonical URLs are absolute production URLs.
+- VERIFIED: reciprocal Arabic/English `hreflang` only when real English tenant + branch names exist.
+- VERIFIED: stable Open Graph/Twitter metadata where visible data supports it.
+- VERIFIED: Restaurant structured data remains tenant/branch scoped and does not fabricate location information.
+- VERIFIED: `/robots.txt` excludes private/control routes and advertises `/sitemap.xml`.
+- VERIFIED: `/sitemap.xml` is server-generated from active + published tenants and active branches only.
+- VERIFIED: English sitemap variants are emitted only when real English names exist.
+- VERIFIED: no unpublished/inactive tenant or branch is emitted.
+- VERIFIED: preview and missing public menus remain noindex.
+- VERIFIED: no new dependency or schema migration was introduced.
+- VERIFIED: discovery regression coverage exists in `src/lib/menu/seo-discovery.test.ts` and `src/lib/menu/seo.test.ts`.
+- VERIFIED: final Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
 - Evidence record: `docs/seo-local-discovery-shareability.md`.
 
-### Security / correctness constraints
-- No unpublished or inactive tenant/branch is emitted into the sitemap.
-- No owner/admin/studio/private route is emitted.
-- Preview theme URLs remain `noindex, nofollow`.
-- No session, user, or private tenant data is placed into metadata.
-- No fabricated reviews, ratings, coordinates, or unsupported business attributes.
-- No new dependency or schema migration.
+## Completed W12-01 — Public Menu Hydration Performance
+- Objective: remove avoidable duplicate client data fetching during SSR hydration without changing freshness, tenant isolation, routing, or theme behavior.
+- VERIFIED: `src/routes/m.$slug.tsx` skips the mount-time `getPublicMenu` request when `initialMenu` is supplied by the route loader.
+- VERIFIED: hydrated `initialMenu` is written to the existing anonymous session cache.
+- VERIFIED: the existing client-only loading path remains unchanged when `initialMenu` is unavailable.
+- VERIFIED: regression coverage was added to `scripts/quality-workflow.test.mjs`.
+- VERIFIED: implementation contract is recorded in `docs/performance-public-menu.md`.
+- VERIFIED: final Quality Gate `34013861903` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: no production RUM measurement is available to quantify the avoided request count for real users.
 
-### Quality closure
-- PENDING: current head `1d56aac367d5297051ba07e480f7ceb43116de25` must pass the repository Quality Gate before W11 is marked CLOSED.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, robots/sitemap response checks, canonical/hreflang/schema validation, and performance inspection.
+## Completed W12-02 — Public Menu Resource & Bundle Efficiency
+- Objective: reduce avoidable public-menu resource startup cost using verified architecture/build evidence and the smallest safe change.
+- VERIFIED: audited root resource loading, typography delivery, public-menu route, theme CSS loading, and `scripts/performance-audit.mjs`.
+- VERIFIED: the public menu's critical font origin is `https://cdn.jsdelivr.net` under the established Fontsource typography contract.
+- VERIFIED: `src/routes/__root.tsx` now warms that critical cross-origin connection with `preconnect` using anonymous CORS mode and provides `dns-prefetch` fallback.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint ordering contract.
+- VERIFIED: no runtime dependency, Supabase/schema, tenant/cache, hydration, or theme behavior changed.
+- VERIFIED: theme CSS remains globally available because the current preview/theme architecture relies on immediate theme availability; route-level stylesheet injection was deliberately rejected for this slice because it would add first-paint/FOUC and switching risk without stronger deployment evidence.
+- VERIFIED: no arbitrary JS/CSS budget was introduced; the repository continues to measure resource transfer and Core Web Vitals through the existing performance audit.
+- VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- Evidence record: `docs/performance-public-menu-resources.md`.
 
 ## Protected Work
 - Existing five-theme implementation.
@@ -131,3 +142,18 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Competitors are pattern evidence, not assets or implementation sources.
 - Label conclusions `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, or `PROPOSED`.
 - Only one atomic task may be active at a time.
+
+## Exact Next Task
+### W12-03 — Reliability and Failure-Path Audit
+Objective: inspect public-menu and critical application failure behavior under timeout, upstream failure, malformed/partial data, cache miss, retry, navigation interruption, and dependency degradation; improve only evidenced failure-path weaknesses without changing successful-path architecture.
+
+Acceptance criteria:
+- critical failure states remain understandable and actionable in Arabic and English;
+- no unhandled rejection or infinite retry loop;
+- no stale/cross-tenant cache exposure;
+- timeout/retry behavior remains bounded;
+- browser and automated regression coverage exists for every changed failure path;
+- full Quality Gate passes;
+- no unrelated changes.
+
+Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, performance audit, and targeted failure-path tests.
