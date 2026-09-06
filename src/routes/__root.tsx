@@ -7,6 +7,7 @@ import appCss from "../styles.css?url";
 import colorsCss from "../colors.css?url";
 import typographyCss from "../typography.css?url";
 import imageArtDirectionCss from "../image-art-direction.css?url";
+import motionCss from "../motion.css?url";
 import themeCss from "../theme-premium.css?url";
 import essentialThemeCss from "../theme-essential.css?url";
 import noirThemeCss from "../theme-noir.css?url";
@@ -39,6 +40,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: colorsCss },
       { rel: "stylesheet", href: typographyCss },
       { rel: "stylesheet", href: imageArtDirectionCss },
+      { rel: "stylesheet", href: motionCss },
       { rel: "stylesheet", href: themeCss },
       { rel: "stylesheet", href: essentialThemeCss },
       { rel: "stylesheet", href: noirThemeCss },
