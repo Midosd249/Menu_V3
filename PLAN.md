@@ -22,6 +22,7 @@
 - W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; Quality Gate run `34014895325` passed all required steps.
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; Quality Gate run `34015320658` passed all required steps.
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED; final Quality Gate passed in run `34050857106`.
+- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED; Quality Gate `34052577671` passed all required steps and Vercel deployment status is `success`.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -55,34 +56,22 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - W15 Growth, analytics, and experimentation.
 - W16 QA, browser/device, and release.
 
-## Completed W12-03 — Reliability and Failure-Path Audit
-- Objective: harden public-menu failure behavior for timeout, transient upstream failure, cache miss, and terminal errors without changing the successful path.
-- VERIFIED: `src/routes/m.$slug.tsx` uses a bounded two-attempt retry policy with a 10-second per-attempt timeout and a deterministic 350 ms first retry delay.
-- VERIFIED: terminal `not_found` and invalid results are not retried.
-- VERIFIED: terminal timeout, unavailable, and unknown failures produce actionable Arabic/English messages.
-- VERIFIED: the existing optional session cache remains slug/branch keyed; no cross-tenant cache mechanism was introduced.
-- VERIFIED: no Supabase/schema, auth, authorization, theme, routing, or successful-path data contract changed.
-- VERIFIED: `scripts/quality-workflow.test.mjs` protects retry bounds, delay, terminal-response behavior, and localized failure copy.
-- VERIFIED: Quality Gate `34015320658` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- UNKNOWN: production RUM is unavailable, so real-user timeout/retry frequency and recovery rate cannot be quantified.
-- Evidence record: `docs/reliability-failure-path-audit.md`.
-
-## Completed W13 — Trust, Security, and Data Ownership Hardening
-- VERIFIED: public tenant responses use `PublicTenant = Omit<Tenant, "ownerUserId">` and `mapPublicTenant()` strips owner identity before public serialization.
-- VERIFIED: operational revision metadata is not part of the public response type.
-- VERIFIED: authenticated Studio code retains the full `Tenant` model for owner-only workflows.
-- VERIFIED: inactive `tenant_members` no longer authorize Owner/Studio server functions; Studio member snapshots exclude inactive records.
-- VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant predicates.
-- VERIFIED: platform-admin access remains server-side and fail-closed through `requirePlatformAdmin` and the database-backed platform-admin check.
-- VERIFIED: the public action-link boundary consumes `PublicTenant`.
-- VERIFIED: the Node test runner can execute the menu mapper/theme registry through explicit ESM paths required by this repository.
-- VERIFIED: no new dependency was added; the existing dependency contract was restored.
-- VERIFIED: `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
-- INFERRED: the existing platform-admin mechanism is the correct high-privilege foundation; a client-side permanent superuser flag would be unsafe.
-- Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is recorded for a future atomic task and was not introduced as an insecure shortcut.
-- VERIFIED: final Quality Gate `34050857106` passed Install, route generation, Typecheck, Tests, Lint, Production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- VERIFIED: Vercel status for the final W13 verification commit `f156275c274e2d721260d556d55d3791196d5584` is `success`.
-- Evidence record: `docs/security-w13-trust-data-ownership.md`.
+## Completed W14 — Pricing, Packaging, and Commercial UX
+- VERIFIED: market scan covered current Saudi/MENA and global digital-menu pricing patterns, with evidence recorded in `docs/commercial-w14-pricing.md`.
+- VERIFIED: commercial display catalog mirrors the existing database subscription catalog: Free 0 SAR / 1 branch / 50 products / 3 team members; Starter 99 SAR / 3 / 300 / 10; Pro 199 SAR / 10 / 1,000 / 25.
+- VERIFIED: all five protected themes remain available across the commercial catalog; no artificial theme entitlement was invented.
+- VERIFIED: public bilingual `/pricing` presents prices and operational limits without exposing tenant data.
+- VERIFIED: pricing UI explicitly states that online checkout is not implemented; no fake payment path was introduced.
+- VERIFIED: authenticated Studio overview reads the subscription through active tenant membership and displays current usage against the plan limits.
+- VERIFIED: active branch count is used in Studio commercial usage messaging so inactive branches do not consume the displayed limit.
+- VERIFIED: commercial contract tests exist in `src/lib/menu/commercial.test.ts` and are part of `npm test`.
+- VERIFIED: no runtime dependency was added and the existing package manifest contract was preserved.
+- VERIFIED: public menu, theme, authentication, authorization, tenant isolation, and existing schema boundaries were not reopened.
+- VERIFIED: Quality Gate `34052577671` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: Vercel deployment status for W14 head commit `d1bfd7ea1d7cbd225bde923850827cd25f80b064` is `success`.
+- INFERRED: operational scale is the strongest current packaging boundary because those limits already exist and are enforced server-side.
+- UNKNOWN: online payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions remain unimplemented and are intentionally outside W14.
+- Evidence record: `docs/commercial-w14-pricing.md`.
 
 ## Protected Work
 - Existing five-theme implementation.
@@ -100,18 +89,17 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W14 — Pricing, Packaging, and Commercial UX
-Objective: define and implement the smallest evidence-backed commercial UX layer that makes Menu V3 sellable without disrupting the protected public menu, themes, authentication, authorization, or tenant architecture.
+### W15 — Growth, Analytics, and Experimentation
+Objective: turn the existing verified analytics and commercial surfaces into a measurable growth loop without weakening privacy, tenant isolation, performance, or the public-menu customer experience.
 
 Acceptance criteria:
-- pricing/plan presentation is consistent with the existing free-theme catalog and current product capabilities;
-- plan limits and entitlement messaging are explicit and fail closed;
-- upgrade/CTA paths are clear in Arabic and English;
-- no client-side-only entitlement bypass is introduced;
-- commercial UI does not expose private tenant data;
-- existing free/public menu behavior remains unchanged;
-- regression coverage exists for changed commercial contracts;
+- identify the smallest evidence-backed growth metrics and event contract;
+- preserve existing analytics integrity and tenant boundaries;
+- add only measurable, reversible experiments;
+- Arabic/English conversion surfaces remain explicit and accessible;
+- no fabricated analytics or client-only business truth;
+- regression coverage exists for changed analytics/growth contracts;
 - full Quality Gate passes;
 - no unrelated refactor.
 
-Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted commercial/entitlement tests, and final diff review.
+Verification: repository-specific analytics tests plus `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and final diff review.
