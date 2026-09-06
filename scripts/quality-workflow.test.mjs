@@ -77,7 +77,8 @@ test("sitemap deduplicates repeated paths without replacing the first source ent
 
 test("sitemap middleware exposes only published active tenants and active branches", () => {
   assert.match(CRAWL_MIDDLEWARE, /path === "\/sitemap\.xml"/);
-  assert.match(CRAWL_MIDDLEWARE, /from tenants t\n\x20{4}join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
+  assert.match(CRAWL_MIDDLEWARE, /from tenants t/);
+  assert.match(CRAWL_MIDDLEWARE, /join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
   assert.match(CRAWL_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
   assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
 });
