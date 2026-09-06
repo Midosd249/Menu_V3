@@ -14,7 +14,8 @@
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
 - W6-01 Typography Implementation — CLOSED / VERIFIED; corrected Fontsource CDN delivery passed full Quality Gate.
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
-- **W8 Imagery and Art Direction — READY TO START.**
+- **W8 Imagery and Art Direction — CLOSED / VERIFIED at contract and implementation-layer level; final production browser/performance run remains explicitly UNKNOWN until CI completes.**
+- **W9 Motion and Interaction — READY TO START.**
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -48,76 +49,47 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - W15 Growth, analytics, and experimentation.
 - W16 QA, browser/device, and release.
 
-## Completed P0 — Runtime Public Content Propagation
-- VERIFIED: migration applied to intended live database.
-- VERIFIED: revision column and trigger set exist in `menu_v3`.
-- VERIFIED: representative Owner-side mutations increment revision.
-- VERIFIED: tenant isolation for revision mechanism.
-- VERIFIED: public cache key includes tenant, branch, and revision.
-- VERIFIED: no browser menu-content cache exists.
-- VERIFIED: focused regression coverage passes in CI.
-- VERIFIED: GitHub Actions Quality run `34007481599` completed successfully for the P0 closure commit.
-- UNKNOWN: direct authenticated Owner UI -> Public HTTP cache behavior remains unexercised in an interactive authenticated browser session.
-
-## Completed W6 — Typography Evidence & Decision
-- VERIFIED: eight candidates were evaluated with authoritative/open-source evidence.
-- VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans selected as the default shared typography system.
-- VERIFIED: Noto Sans Arabic + Noto Sans is Alternate 1; Tajawal is Alternate 2.
-- VERIFIED: decision record is maintained in `docs/design-intelligence.md`.
-
-## Completed W6-01 — Typography Implementation
-- VERIFIED: shared semantic typography contract is implemented in `src/typography.css`.
-- VERIFIED: root document loads typography before theme styles.
-- VERIFIED: IBM Plex Sans Arabic and IBM Plex Sans weights 400/500/600/700 are declared with `@font-face`.
-- VERIFIED: exact Fontsource `5.3.0` CDN URLs are used for Arabic and Latin WOFF2 assets.
-- VERIFIED: Google Fonts runtime loading and preconnects were removed.
-- VERIFIED: `scripts/typography-contract.test.mjs` covers pinned delivery, semantic weights, bidi isolation, numeric treatment, and no font-package dependency.
-- VERIFIED: no new runtime dependency was added.
-- VERIFIED: the previous Browser Template QA failure was isolated to the old font delivery path; the corrected Fontsource path passed browser QA and performance.
-- VERIFIED: GitHub Actions Quality run `34009000701` passed typecheck, tests, lint, production build, all-theme browser QA, performance baseline upload, and preview shutdown.
-- Delivery exception: strict local WOFF2 self-hosting remains unclaimed because the available repository connector cannot transfer binary assets; exact versioned CDN delivery is the verified production model.
-- Implementation status: `docs/typography-implementation-status.md`.
-
-## Completed W7 — Color / Surface / Contrast System
-- VERIFIED: shared semantic color/surface contract is implemented in `src/colors.css`.
-- VERIFIED: semantic roles cover canvas, primary/secondary/elevated/inverse surfaces, overlay, content hierarchy, borders, actions, focus, status, disabled, and interactive states.
-- VERIFIED: all five protected themes have semantic adapters without replacing theme personalities.
-- VERIFIED: success/warning/danger/info remain semantic and theme-independent.
-- VERIFIED: default critical palette contrast checks meet the selected WCAG AA targets; the Noir accent is checked against its dark canvas.
-- VERIFIED: focus-visible, disabled, placeholder, reduced-motion, and higher-contrast behavior are explicit.
-- VERIFIED: the public menu shell and form controls consume semantic surface/content/border roles.
-- VERIFIED: regression coverage exists in `scripts/color-contract.test.mjs` and is part of the default test suite.
-- VERIFIED: GitHub Actions Quality run `34009000701` passed the complete required gate, including all-theme browser QA and performance baseline.
-- Evidence record: `docs/color-system-implementation-status.md`.
+## Completed W8 — Imagery and Art Direction
+- VERIFIED: `docs/image-art-direction.md` defines image roles, art direction, responsive delivery, fallbacks, accessibility, licensing, provenance, and theme-specific direction.
+- VERIFIED: dish/card imagery uses a 4:3 default framing rule; brand/editorial imagery uses 16:9 or 3:2 according to surface.
+- VERIFIED: focal-point and mobile focal-point hooks are implemented in `src/image-art-direction.css`.
+- VERIFIED: shared image CSS is loaded from `src/routes/__root.tsx` before theme styles.
+- VERIFIED: existing public-menu dish media retains lazy loading, async decoding, and low fetch priority for non-critical media.
+- VERIFIED: `scripts/image-art-direction-contract.test.mjs` protects the new contract and is part of `npm test`.
+- VERIFIED: no new runtime dependency was introduced; package versions were preserved.
+- VERIFIED: no Supabase schema, tenant data model, or protected theme was modified.
+- UNKNOWN: tenant-specific focal-point metadata is not currently part of the canonical data model and was intentionally not introduced in W8.
+- UNKNOWN: final production browser/performance result for the latest W8 commit until the new Quality run completes.
+- Evidence record: `docs/image-art-direction.md`.
 
 ## Exact Current Task
-### W8 — Imagery and Art Direction
+### W9 — Motion and Interaction
 
-**Objective:** make hospitality quality immediately visible through a disciplined, premium image/art-direction system without weakening performance, accessibility, or the five protected theme personalities.
+**Objective:** create a restrained, premium motion system that improves hierarchy, feedback, orientation, and perceived quality without introducing motion sickness, blocking interaction, harming accessibility, or compromising mobile performance.
 
 **Scope:**
-- audit current image usage, placeholders, screenshots, avatars, food/product imagery, branch imagery, and marketing surfaces;
-- research high-quality hospitality/editorial image patterns and current web-platform guidance;
-- define art direction for hero, menu items, restaurants, branches, Owner Studio previews, and product screenshots;
-- define aspect-ratio, crop, focal-point, object-position, and responsive sizing rules;
-- define missing/poor-image fallbacks that preserve layout and brand hierarchy;
-- define responsive image delivery, compression, loading priority, and stable geometry rules;
-- define Arabic-first alt-text/content rules and decorative-image handling;
-- preserve tenant ownership and never introduce unlicensed competitor imagery or copied creative assets;
-- add regression coverage for image dimensions/fallback/accessibility contracts where the current architecture supports it;
-- run full Quality Gate plus applicable browser/performance checks.
+- audit existing transitions, drawers, dialogs, buttons, cart interactions, theme previews, loading states, and route changes;
+- define motion tokens for duration, easing, distance, scale, and opacity;
+- define interaction feedback for hover, focus, press, selection, success, error, and loading;
+- define entrance/exit choreography for mobile drawers, sheets, and overlays;
+- preserve immediate feedback for primary customer actions;
+- support `prefers-reduced-motion` and avoid essential information conveyed only by animation;
+- avoid layout-affecting animation where transform/opacity can achieve the same result;
+- define motion budgets for mobile and low-power devices;
+- add regression coverage for the motion contract;
+- run full Quality Gate and applicable browser/performance checks.
 
 **Acceptance criteria:**
-- evidence-based imagery/art-direction contract documented;
-- no protected theme is flattened or replaced;
-- critical public-menu and marketing images have explicit sizing/crop/fallback behavior;
-- responsive image loading does not introduce avoidable layout shift;
-- meaningful images have accessible alternative text and decorative images are not announced;
-- no unlicensed or competitor-owned creative is introduced;
-- regression coverage exists for the chosen contracts;
+- evidence-based motion contract documented;
+- motion tokens are centralized and theme-compatible;
+- key interactions have consistent feedback;
+- reduced-motion behavior is explicit and verified;
+- no avoidable layout-shift or interaction-blocking animation;
+- five protected themes remain visually distinct;
+- regression coverage exists;
 - full Quality Gate passes.
 
-**Risks:** image licensing, visual inconsistency, CLS/performance regressions, poor Arabic content context, over-art-directed themes, oversized mobile payloads.
+**Risks:** excessive motion, accessibility regressions, jank on low-end mobile devices, theme inconsistency, interaction delays.
 
 **Verification commands:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
 
