@@ -100,6 +100,12 @@ try {
         if (!ok) failures += 1;
       }
 
+      if (consoleErrors.length > 0) {
+        for (const [index, error] of consoleErrors.entries()) {
+          console.error(`CONSOLE_ERROR ${theme} · ${viewport.name} · ${index + 1} · ${error}`);
+        }
+      }
+
       if (viewport.name === "mobile") {
         const reducedMotion = await page.emulateMedia({ reducedMotion: "reduce" }).then(() => true).catch(() => false);
         console.log(`${reducedMotion ? "PASS" : "FAIL"} ${theme} · mobile · reduced-motion emulation · ${reducedMotion ? "supported" : "unsupported"}`);
