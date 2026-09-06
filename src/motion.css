@@ -1,0 +1,131 @@
+/* Menu V3 — shared motion contract
+ * Motion is functional: feedback, orientation, hierarchy. Themes may style the
+ * result, but shared motion timing and accessibility remain consistent.
+ */
+:root {
+  --motion-duration-instant: 80ms;
+  --motion-duration-fast: 140ms;
+  --motion-duration-standard: 180ms;
+  --motion-duration-emphasis: 260ms;
+  --motion-duration-slow: 420ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-emphasis: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --motion-distance-sm: 4px;
+  --motion-distance-md: 8px;
+  --motion-distance-lg: 16px;
+  --motion-scale-enter: 0.985;
+  --motion-scale-press: 0.985;
+
+  /* Backward-compatible aliases consumed by the existing theme layer. */
+  --motion-quick: var(--motion-duration-fast);
+  --motion-fast: var(--motion-duration-emphasis);
+  --motion-slow: var(--motion-duration-slow);
+  --ease-out: var(--motion-ease-emphasis);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* High-frequency feedback should never require layout. */
+.menu-motion-target {
+  transition:
+    transform var(--motion-duration-standard) var(--motion-ease-standard),
+    opacity var(--motion-duration-standard) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-standard) var(--motion-ease-standard),
+    background-color var(--motion-duration-standard) var(--motion-ease-standard),
+    border-color var(--motion-duration-standard) var(--motion-ease-standard),
+    color var(--motion-duration-standard) var(--motion-ease-standard);
+}
+
+.menu-motion-target:active {
+  transform: scale(var(--motion-scale-press));
+}
+
+.menu-motion-fade-in {
+  animation: menu-motion-fade-in var(--motion-duration-standard) var(--motion-ease-standard) both;
+}
+
+.menu-motion-rise-in {
+  animation: menu-motion-rise-in var(--motion-duration-emphasis) var(--motion-ease-emphasis) both;
+}
+
+/* Public-menu dialogs are mounted/unmounted, so entrance motion is deterministic.
+ * Exit motion is intentionally not faked without an explicit state lifecycle. */
+.menu-public-shell [role="presentation"] > [role="dialog"] {
+  transform-origin: center bottom;
+  animation: menu-motion-dialog-in var(--motion-duration-emphasis) var(--motion-ease-emphasis) both;
+}
+
+.menu-public-shell [role="presentation"]:has(> [role="dialog"]) {
+  animation: menu-motion-overlay-in var(--motion-duration-standard) var(--motion-ease-standard) both;
+}
+
+.menu-public-shell [aria-labelledby="cart-title"] {
+  transform-origin: inline-end center;
+  animation: menu-motion-drawer-in var(--motion-duration-emphasis) var(--motion-ease-emphasis) both;
+}
+
+.menu-public-shell [aria-labelledby="product-details-title"] {
+  animation: menu-motion-sheet-in var(--motion-duration-emphasis) var(--motion-ease-emphasis) both;
+}
+
+@keyframes menu-motion-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes menu-motion-rise-in {
+  from { opacity: 0; transform: translateY(var(--motion-distance-md)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes menu-motion-dialog-in {
+  from { opacity: 0; transform: translateY(var(--motion-distance-lg)) scale(var(--motion-scale-enter)); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes menu-motion-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes menu-motion-sheet-in {
+  from { opacity: 0; transform: translateY(10%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes menu-motion-drawer-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+html[dir="rtl"] .menu-public-shell [aria-labelledby="cart-title"] {
+  animation-name: menu-motion-drawer-in-rtl;
+}
+
+@keyframes menu-motion-drawer-in-rtl {
+  from { opacity: 0; transform: translateX(-100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Reduced motion removes movement, not state feedback. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  .menu-motion-target:active {
+    transform: none;
+  }
+}
+
+/* Do not animate on touch-only coarse pointers unless the interaction is a dialog/sheet. */
+@media (hover: none) and (pointer: coarse) {
+  .menu-public-shell main ul > li > button:hover {
+    transform: none;
+  }
+}
