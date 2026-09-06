@@ -13,18 +13,20 @@ const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
 
 test("homepage exposes canonical pricing and plan selection", () => {
-  for (const plan of expectedPlans) assert.match(home, new RegExp(`COMMERCIAL_PLANS.*${plan}`, "s"));
+  assert.match(home, /COMMERCIAL_PLANS\.map/);
   assert.match(home, /id="pricing"/);
   assert.match(home, /Choose this plan|اختيار هذه الباقة/);
   assert.match(home, /LeadForm selectedPlan/);
   assert.match(home, /Selected plan:/);
+  for (const plan of expectedPlans) assert.match(catalog, new RegExp(`code: "${plan}"`));
   assert.match(catalog, /monthlyPriceSar: 0/);
   assert.match(catalog, /monthlyPriceSar: 99/);
   assert.match(catalog, /monthlyPriceSar: 199/);
 });
 
 test("homepage exposes all protected themes without a premium gate", () => {
-  for (const theme of expectedThemes) assert.match(home, new RegExp(`MENU_THEMES.*${theme}|theme\.key.*${theme}`, "s"));
+  assert.match(home, /MENU_THEMES\.map/);
+  for (const theme of expectedThemes) assert.match(home, new RegExp(`theme\.key.*${theme}`));
   assert.match(home, /Use theme|استخدم التصميم/);
   assert.match(themes, /MENU_THEMES\.map/);
   assert.match(themes, /without an artificial gate|دون بوابة اصطناعية/);
