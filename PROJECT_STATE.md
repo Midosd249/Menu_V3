@@ -39,8 +39,8 @@
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
 - W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
-- W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; repository/CI release audit passed, but current `main` is not production-deployed.
-- W17 Public Pages & Themes Integration — `IN_PROGRESS` on `w17-public-pages-themes-integration`.
+- W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; repository/CI release audit passed, but the final merged W17-Q state is not yet verified as production-deployed.
+- W17 Public Pages & Themes Integration — `IN_PROGRESS`; implementation is merged to `main` and the focused public-menu hardening subtask is complete.
 
 ## W17 Public Pages & Themes Integration
 - VERIFIED: implementation is being applied to the canonical `Menu_V3` architecture, not the legacy `Menu-V2-Sandbox`.
@@ -52,17 +52,22 @@
 - VERIFIED: `/themes` now presents theme personality, product-card style, imagery emphasis, preview, and a clear relationship to the existing Menu V3 architecture.
 - VERIFIED: `/themes/preview` remains connected to `MenuThemeController`, `PublicMenuView`, and `ContemporaryRestaurantTemplate`; no static HTML theme renderer was introduced.
 - VERIFIED: preview controls are localized for Arabic/English and provide return-to-theme comparison plus a use-theme path.
-- VERIFIED: a repository-level public-pages/themes contract test was added to protect the commercial catalog, five theme keys, lead flow, and real preview renderer boundary.
+- VERIFIED: a repository-level public-pages/themes contract test protects the commercial catalog, five theme keys, lead flow, and real preview renderer boundary.
 - VERIFIED: `docs/w17-public-pages-themes-design-brief.md` records scope, protected boundaries, journey, pricing, theme, i18n/RTL, accessibility, responsive, and verification requirements.
-- UNKNOWN: browser/device visual QA for the new marketing surfaces has not yet been executed in this connector environment.
+- VERIFIED: supplied client screenshots were audited and two concrete public-menu defects were fixed: broken external product-image requests now fall back gracefully, and an empty schedule no longer renders a misleading opening-hours status chip.
+- VERIFIED: `tests/public-menu-resilience.test.mjs` records regression contracts for the hardening subtask.
+- VERIFIED: focused hardening was merged through PR #21 as commit `b0a06dbeca47779f371e118beed6d62b6b63c21c`.
+- VERIFIED: current production HTML for `/m/nafas` already reflects the W17 spacing/bidi/rectangular-card implementation for the Essential route.
+- UNKNOWN: full repository quality gates for the final merged hardening commit have not yet been executed in this connector environment.
+- UNKNOWN: browser/device visual QA of the final merged hardening commit has not yet been executed in this connector environment.
+- UNKNOWN: final merged hardening commit is not yet confirmed as the active production deployment.
 - UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
-- BLOCKED: production deployment remains separately blocked by the previously recorded Vercel capacity/rate condition; W17 implementation does not claim deployment.
+- BLOCKED: production release verification remains separately constrained until Vercel exposes/activates the final deployment state.
 
 ## W15 Growth, Analytics, and Experimentation
 - VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
 - VERIFIED: existing public event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
 - VERIFIED: tenant resolution and product ownership validation remain server-side; owner aggregation remains tenant-scoped.
-- VERIFIED: no third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
 - VERIFIED: `src/lib/menu/growth.ts` derives denominator-safe directional event ratios only from `OwnerAnalytics` returned by the authenticated server function.
 - VERIFIED: Studio analytics now surfaces product views per 100 visits, WhatsApp clicks per 100 sessions, visits per 100 QR scans, average views per session, and a deterministic opportunity category in Arabic/English.
 - VERIFIED: the UI explicitly states that these are operational event ratios, not unique-user conversion rates.
@@ -77,17 +82,17 @@
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
 ## W16 QA, Browser/Device, and Release
-- VERIFIED: repository default branch is `main`; current W15 merge commit is `3a7fcffa2bd68cdb034eb3cde05ab3f0df8ecce1`.
-- VERIFIED: current-main Quality run `34053609808` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium installation, all-theme Browser Template QA, performance baseline upload, and preview cleanup.
-- VERIFIED: W14 Quality Gate `34052577671` and W15 Quality Gate `34053348446` remain documented as passed.
-- VERIFIED: direct Vercel inspection shows the current production deployment is READY but serves W14 commit `f9725b6bb6df3909b5e720abfdb598d776eb2c7c`, not current main.
-- VERIFIED: direct production root fetch returned HTTP 200 and Arabic RTL markup; runtime error/fatal logs were absent in the inspected 24-hour window.
-- BLOCKED: GitHub Vercel status for current main reports `build-rate-limit`; current main has not been established as the production deployment.
-- BLOCKED: the available Vercel deployment connector rejected a deployment invocation before creating a deployment because its required parameters could not be supplied through the exposed action contract; no deployment success is claimed.
+- VERIFIED: repository default branch is `main`; current merged W17-Q hardening commit is `b0a06dbeca47779f371e118beed6d62b6b63c21c` before the continuity-session documentation commit.
+- VERIFIED: W14 and W15 Quality Gates remain passed.
+- VERIFIED: direct Vercel inspection shows the current production deployment is READY but is still associated with the earlier W17 closure commit `822516eb216ba30f628dd839d7b531b3bdd9382d`; final merged hardening commit is not yet confirmed in production.
+- VERIFIED: direct production `/m/nafas` fetch returns HTTP 200 with Arabic RTL and English LTR markup.
+- VERIFIED: current production runtime error/fatal inspection for the inspected production deployment returned no entries.
+- BLOCKED: production deployment of the final merged hardening commit is not yet established; no deployment success is claimed.
 - UNKNOWN: exact Vercel Usage/Billing resource value is not exposed through the available connector surface.
-- VERIFIED: premium-theme testing override logic is fail-closed and expiry-bound; UNKNOWN: current production environment values cannot be inspected through the available repository/Vercel read surface.
+- VERIFIED: premium-theme testing override logic is fail-closed and expiry-bound.
+- UNKNOWN: current production environment values cannot be inspected through the available repository/Vercel read surface.
 - UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior were not directly observed in this connector environment.
-- Evidence: `docs/sessions/2026-09-06-w16-qa-release.md`.
+- Evidence: `docs/sessions/2026-09-06-w16-qa-release.md` and `docs/sessions/2026-09-07-w17-q-public-menu-hardening.md`.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -102,17 +107,18 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W17-Q — Verify and harden the public Pages & Themes integration
-Objective: run the repository quality gates against the W17 implementation, inspect the final diff, and resolve only implementation/test defects found in the scoped public pages and themes journey.
+### W17-Q — Run the complete repository quality gate and final continuity review
+Objective: verify the merged W17 state with the full repository quality suite, inspect the final diff, and resolve only scoped public-pages/themes defects; then re-check Vercel deployment state and record production evidence without claiming deployment until the commit match is verified.
 
 Acceptance criteria:
 - `npm run typecheck` passes;
-- `npm test` passes including `tests/public-pages-themes-contract.test.mjs`;
+- `npm test` passes including `tests/public-pages-themes-contract.test.mjs` and `tests/public-menu-resilience.test.mjs`;
 - `npm run lint` passes;
 - `npm run build` passes;
 - `npm run qa:template` passes where applicable;
 - final diff contains only W17-scoped changes and preserves protected backend/theme architecture;
 - Arabic RTL, English LTR, mobile/responsive, plan selection, theme selection, and preview controls are verified to the extent supported by the available environment;
-- remaining UNKNOWN/BLOCKED items are explicitly recorded rather than hidden behind DONE.
+- remaining UNKNOWN/BLOCKED items are explicitly recorded rather than hidden behind DONE;
+- final merged commit is either directly verified in Vercel production or explicitly remains BLOCKED.
 
-Verification: GitHub Actions quality evidence plus final diff/continuity review and available browser/visual evidence.
+Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
