@@ -7,6 +7,7 @@ import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { getOwnerAnalytics } from "@/lib/menu/owner";
 import { getOrdersDashboard, type OrdersDashboard } from "@/lib/menu/orders";
+import { getMySubscription, type CommercialSnapshot } from "@/lib/menu/commercial";
 import { useStudio } from "@/lib/menu/studio";
 import type { OwnerAnalytics } from "@/lib/menu/types";
 
@@ -18,10 +19,12 @@ function Overview() {
   const { tenant, products, categories, branches, health } = snapshot;
   const [analytics, setAnalytics] = useState<{ status: "loading" } | { status: "error"; message: string } | { status: "ok"; data: OwnerAnalytics }>({ status: "loading" });
   const [orders, setOrders] = useState<OrdersDashboard>({ total: 0, newCount: 0, activeCount: 0, completedCount: 0, cancelledCount: 0, orders: [] });
+  const [subscription, setSubscription] = useState<{ status: "loading" } | { status: "ready"; data: CommercialSnapshot | null }>({ status: "loading" });
 
   useEffect(() => {
     getOwnerAnalytics({ data: { days: 7 } }).then((result) => result.ok ? setAnalytics({ status: "ok", data: result.data }) : setAnalytics({ status: "error", message: result.error })).catch((err: unknown) => setAnalytics({ status: "error", message: err instanceof Error ? err.message : "تعذر التحميل" }));
     getOrdersDashboard({ data: {} }).then((result) => { if (result.ok) setOrders(result.data); }).catch(() => undefined);
+    getMySubscription().then((result) => setSubscription({ status: "ready", data: result })).catch(() => setSubscription({ status: "ready", data: null }));
   }, []);
 
   return <div className="mx-auto grid max-w-5xl gap-6">
@@ -37,6 +40,11 @@ function Overview() {
       <article className="grid content-between gap-5 rounded-3xl border border-line bg-sand/30 p-6"><div><div className="flex size-11 items-center justify-center rounded-2xl bg-paper"><Palette className="size-5" /></div><h2 className="mt-4 font-semibold">هوية بصرية قابلة للتطور</h2><p className="mt-2 text-sm leading-6 text-muted">اختَر الثيم، العلامة، الصور والتكوين من Studio. التخصيص مضبوط ليبقى المنيو متماسكًا واحترافيًا.</p></div><Button asChild variant="outline"><Link to="/studio/design">استوديو التصميم</Link></Button></article>
     </section>
 
+    <section className="grid gap-4 rounded-3xl border border-line bg-sand/25 p-5 md:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "الخطة الحالية" : "Current plan"}</p><h2 className="mt-1 font-display text-2xl font-semibold">{subscription.status === "ready" && subscription.data ? (lang === "ar" ? subscription.data.nameAr : subscription.data.nameEn) : subscription.status === "loading" ? "…" : (lang === "ar" ? "غير متاحة" : "Unavailable")}</h2><p className="mt-1 text-sm text-muted">{subscription.status === "ready" && subscription.data ? (subscription.data.monthlyPriceSar === 0 ? (lang === "ar" ? "مجاناً" : "Free") : `${subscription.data.monthlyPriceSar} ${lang === "ar" ? "ر.س / شهر" : "SAR / month"}`) : (lang === "ar" ? "لا يمكن عرض حالة الاشتراك حالياً" : "Subscription status is unavailable right now")}</p></div><Link to="/pricing" className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-medium text-paper">{lang === "ar" ? "عرض الباقات" : "View plans"}<ArrowUpLeft className="size-4" /></Link></div>
+      {subscription.status === "ready" && subscription.data ? <div className="grid gap-3 sm:grid-cols-3"><LimitStat label={lang === "ar" ? "الفروع" : "Branches"} current={branches.length} max={subscription.data.limits.branches} /><LimitStat label={lang === "ar" ? "الأصناف" : "Items"} current={products.length} max={subscription.data.limits.products} /><LimitStat label={lang === "ar" ? "أعضاء الفريق" : "Team"} current={snapshot.members.length} max={subscription.data.limits.teamMembers} /></div> : null}
+    </section>
+
     <section className="grid gap-3 rounded-3xl border border-line p-5"><h2 className="font-medium">{t(copy.studio.needsAttention, lang)}</h2>{health.attention.length === 0 ? <p className="text-sm text-good">{t(copy.studio.allClear, lang)}</p> : <ul className="grid gap-2">{health.attention.map((item) => <li key={item.key}><Link to={item.href} className="flex items-start gap-3 rounded-xl bg-sand/60 px-3 py-3 text-sm"><AlertTriangle className="mt-0.5 size-4 shrink-0 text-warn" /><span>{lang === "ar" ? item.titleAr : item.titleEn}</span></Link></li>)}</ul>}</section>
 
     {analytics.status === "error" ? <ErrorState message={analytics.message} /> : analytics.status === "ok" && analytics.data.visits === 0 && analytics.data.productViews === 0 ? <p className="rounded-xl border border-line px-4 py-6 text-sm text-muted">{t(copy.state.noDataYet, lang)}</p> : analytics.status === "ok" ? <section className="grid gap-2 rounded-xl border border-line p-5"><h2 className="font-medium">{t(copy.analytics.title, lang)}</h2><p className="text-sm text-muted">{analytics.data.uniqueSessions} {t(copy.analytics.sessions, lang)} · {analytics.data.productViews} {t(copy.analytics.views, lang)}</p></section> : null}
@@ -45,3 +53,4 @@ function Overview() {
   </div>;
 }
 function Stat({ label, value, suffix }: { label: string; value: string; suffix?: string }) { return <div className="rounded-xl border border-line p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl tabular">{value}{suffix ? <span className="text-base">{suffix}</span> : null}</p></div>; }
+function LimitStat({ label, current, max }: { label: string; current: number; max: number }) { const ratio = Math.min(100, max > 0 ? (current / max) * 100 : 100); return <div className="rounded-2xl border border-line bg-paper p-4"><div className="flex items-center justify-between gap-3 text-sm"><span className="text-muted">{label}</span><strong className="tabular">{current} / {max}</strong></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-sand"><div className={`h-full rounded-full ${ratio >= 90 ? "bg-warn" : "bg-ink"}`} style={{ width: `${ratio}%` }} /></div></div>; }
