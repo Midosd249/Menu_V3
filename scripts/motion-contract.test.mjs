@@ -31,7 +31,7 @@ test("motion system is loaded before protected themes", () => {
 });
 
 test("interactive motion avoids layout properties and supports reduced motion", () => {
-  assert.match(css, /transition:[\\s\\S]*transform/);
+  assert.match(css, /transition:\s*transform/);
   assert.match(css, /opacity/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.doesNotMatch(css, /transition:[^;]*(?:width|height|top|left|margin|padding)/i);
