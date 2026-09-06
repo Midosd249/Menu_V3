@@ -161,6 +161,21 @@
 - VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
+### W16 — QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED
+- VERIFIED: repository default branch is `main`; W15 merge commit is `3a7fcffa2bd68cdb034eb3cde05ab3f0df8ecce1`.
+- VERIFIED: current-main Quality run `34053609808` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium installation, all-theme Browser Template QA, performance baseline upload, and preview cleanup.
+- VERIFIED: W14 and W15 regression gates remain green.
+- VERIFIED: direct Vercel inspection shows production deployment `dpl_GrD1BbrCJjm4cxBs471tFCB6n9tJ` is READY but serves W14 commit `f9725b6bb6df3909b5e720abfdb598d776eb2c7c`, not current main.
+- VERIFIED: direct production root fetch returned HTTP 200 with Arabic RTL markup.
+- VERIFIED: Vercel runtime error/fatal inspection for the production deployment returned no entries in the inspected 24-hour window.
+- BLOCKED: GitHub Vercel status for current main reports `build-rate-limit`; current main is not production-deployed.
+- BLOCKED: available Vercel deployment action rejected the invocation before creating a deployment because required deployment parameters were not exposed through the callable contract; no deployment success is claimed.
+- UNKNOWN: exact Vercel Usage/Billing resource value is not exposed through the available connector surface.
+- VERIFIED: premium-theme testing override logic is fail-closed and expiry-bound.
+- UNKNOWN: current production testing-override environment value cannot be inspected through the available read surface.
+- UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior were not directly observed in this connector environment.
+- Evidence: `docs/sessions/2026-09-06-w16-qa-release.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -189,7 +204,7 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W16 — QA, Browser/Device, and Release
-- Objective: perform the final release-readiness pass across the complete Menu V3 surface without reopening completed foundations.
-- Acceptance: full repository state, diff, history, configuration, documentation, and deployment path audited; typecheck/tests/lint/build/Playwright/all-theme QA/performance/release checks pass; W14/W15 regressions remain green; Arabic/English/RTL remain intact; no unresolved P0/P1 security, isolation, accessibility, or reliability issue; final release evidence is recorded before merge.
-- Verification: repository Quality Gate plus final diff review and deployment status.
+### W16-R — Controlled production release retry after Vercel capacity is cleared
+- Objective: once the Vercel rate/build limitation is cleared, perform exactly one intentional production deployment of current `main`, verify the deployed commit, perform real-device production QA, and close W16 only with direct deployment evidence.
+- Acceptance: Vercel Usage/Billing limitation is rechecked; current `main` commit `3a7fcffa2bd68cdb034eb3cde05ab3f0df8ecce1` is deployed; direct Vercel evidence confirms commit match; real-device production QA covers supported mobile/browser states and core customer actions; testing override state is confirmed disabled/expired before commercial launch; final evidence is recorded before W16 closure.
+- Verification: direct Vercel deployment evidence plus real-device production QA and final continuity review.
