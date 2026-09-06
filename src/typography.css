@@ -1,11 +1,11 @@
 /* Menu V3 shared typography contract.
- * IBM Plex assets are pinned to official IBM Plex blob SHAs until the repository
- * gains a binary-capable asset release path. This avoids runtime font packages
- * and prevents mutable upstream branch references.
+ * IBM Plex assets are pinned to immutable upstream commit SHAs and delivered
+ * through jsDelivr so browsers can load the WOFF2 assets with CORS enabled.
+ * No runtime font package dependency is required.
  */
 @font-face {
   font-family: "IBM Plex Sans Arabic";
-  src: url("https://github.com/IBM/plex/raw/695d303cc25104463a86fa0b42bad47b27d187bf/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Regular.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@695d303cc25104463a86fa0b42bad47b27d187bf/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Regular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans Arabic";
-  src: url("https://github.com/IBM/plex/raw/b142a66f712be6b6d3e72aaf53d9a2e88b06eefc/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Medium.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@b142a66f712be6b6d3e72aaf53d9a2e88b06eefc/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Medium.woff2") format("woff2");
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -21,7 +21,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans Arabic";
-  src: url("https://github.com/IBM/plex/raw/eda08d3bb808cc95a73244992a8cee8ad7fbcb59/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-SemiBold.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@eda08d3bb808cc95a73244992a8cee8ad7fbcb59/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-SemiBold.woff2") format("woff2");
   font-style: normal;
   font-weight: 600;
   font-display: swap;
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans Arabic";
-  src: url("https://github.com/IBM/plex/raw/08e2028e2971a41251f29046cdc15ccd229487a6/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Bold.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@08e2028e2971a41251f29046cdc15ccd229487a6/packages/plex-sans-arabic/fonts/complete/woff2/IBMPlexSansArabic-Bold.woff2") format("woff2");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -37,7 +37,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans";
-  src: url("https://github.com/IBM/plex/raw/231a1ad716215de37ce8102dde533be859036f91/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Regular.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@231a1ad716215de37ce8102dde533be859036f91/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Regular.woff2") format("woff2");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -45,7 +45,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans";
-  src: url("https://github.com/IBM/plex/raw/b142a66f712be6b6d3e72aaf53d9a2e88b06eefc/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Medium.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@b142a66f712be6b6d3e72aaf53d9a2e88b06eefc/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Medium.woff2") format("woff2");
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -53,7 +53,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans";
-  src: url("https://github.com/IBM/plex/raw/b96a19c2457d296f597169ea104c5c1ab1435a46/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-SemiBold.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@b96a19c2457d296f597169ea104c5c1ab1435a46/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-SemiBold.woff2") format("woff2");
   font-style: normal;
   font-weight: 600;
   font-display: swap;
@@ -61,7 +61,7 @@
 
 @font-face {
   font-family: "IBM Plex Sans";
-  src: url("https://github.com/IBM/plex/raw/0d0b09aec993c87bc77b6f45e6230e867f24daf9/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Bold.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/gh/IBM/plex@0d0b09aec993c87bc77b6f45e6230e867f24daf9/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Bold.woff2") format("woff2");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
@@ -136,7 +136,6 @@ samp {
   font-family: var(--type-code-family);
 }
 
-/* Keep mixed Arabic/Latin content stable without forcing visual mirroring. */
 [dir="rtl"] [dir="ltr"],
 [dir="ltr"] [dir="rtl"] {
   unicode-bidi: isolate;
