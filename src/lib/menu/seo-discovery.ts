@@ -1,37 +1,69 @@
 import type { PublicMenu } from "./types";
+import { getPublicMenuLocaleAlternates } from "./seo";
 
-export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-kohl.vercel.app";
+export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3.vercel.app";
 
-function clean(value: string): string {
-  return value.replace(/\s+/g, " ").trim();
-}
-
-function normalizeOrigin(value: string | undefined): string {
-  const raw = clean(value ?? "");
-  if (!raw) return DEFAULT_PUBLIC_ORIGIN;
-  return (raw.startsWith("http") ? raw : `https://${raw}`).replace(/\/+$/, "");
-}
-
-export function getPublicOrigin(env: Record<string, string | undefined> = {}): string {
-  return normalizeOrigin(env.VITE_VERCEL_PROJECT_PRODUCTION_URL ?? env.VERCEL_PROJECT_PRODUCTION_URL);
-}
-
-export function publicPath(slug: string, branch?: string, lang: "ar" | "en" = "ar"): string {
-  const base = branch ? `/m/${encodeURIComponent(slug)}/${encodeURIComponent(branch)}` : `/m/${encodeURIComponent(slug)}`;
-  return lang === "en" ? `${base}?lang=en` : base;
-}
+type PublicSitemapSource = {
+  slug: string;
+  branchSlug: string;
+  nameEn: string | null;
+  branchNameEn: string | null;
+};
 
 export type SitemapEntry = {
   loc: string;
   alternates?: Array<{ hreflang: "ar" | "en"; href: string }>;
 };
 
+export function getPublicOrigin(env: { VITE_VERCEL_PROJECT_PRODUCTION_URL?: string; VERCEL_PROJECT_PRODUCTION_URL?: string }): string {
+  const candidate = env.VITE_VERCEL_PROJECT_PRODUCTION_URL || env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (candidate) return /^https?:\/\//i.test(candidate) ? candidate.replace(/\/$/, "") : `https://${candidate}`;
+  return DEFAULT_PUBLIC_ORIGIN;
+}
+
+export function buildRobotsTxt(origin: string): string {
+  return [
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /admin",
+    "Disallow: /studio",
+    "Disallow: /login",
+    "Disallow: /invite/",
+    "Disallow: /themes/preview",
+    `Sitemap: ${origin}/sitemap.xml`,
+    "",
+  ].join("\n");
+}
+
+function publicPath(slug: string, branchSlug: string): string {
+  return `/m/${encodeURIComponent(slug)}/${encodeURIComponent(branchSlug)}`;
+}
+
+export function buildPublicMenuSitemapEntries(rows: PublicSitemapSource[], origin: string): SitemapEntry[] {
+  const seen = new Set<string>();
+  const entries: SitemapEntry[] = [];
+  for (const row of rows) {
+    const path = publicPath(row.slug, row.branchSlug);
+    const loc = `${origin}${path}`;
+    if (seen.has(loc)) continue;
+    seen.add(loc);
+    const alternates = row.nameEn && row.branchNameEn
+      ? [
+          { hreflang: "ar" as const, href: loc },
+          { hreflang: "en" as const, href: `${origin}${path}?lang=en` },
+        ]
+      : undefined;
+    entries.push({ loc, alternates });
+  }
+  return entries;
+}
+
 export function buildSitemapXml(entries: SitemapEntry[]): string {
   const escapeXml = (value: string) => value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
+    .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 
   const urls = entries.map((entry) => {
@@ -45,49 +77,11 @@ export function buildSitemapXml(entries: SitemapEntry[]): string {
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${urls}</urlset>`;
 }
 
-export function buildRobotsTxt(origin = DEFAULT_PUBLIC_ORIGIN): string {
-  const normalized = normalizeOrigin(origin);
-  return [
-    "User-agent: *",
-    "Allow: /",
-    "Disallow: /admin",
-    "Disallow: /owner",
-    "Disallow: /studio",
-    "Disallow: /login",
-    "Disallow: /onboarding",
-    "Disallow: /invite/",
-    "Disallow: /api/",
-    "Disallow: /?install=1",
-    "",
-    `Sitemap: ${normalized}/sitemap.xml`,
-    "",
-  ].join("\n");
-}
-
-export function buildPublicMenuSitemapEntries(
-  rows: Array<{ slug: string; branchSlug: string; nameEn?: string | null; branchNameEn?: string | null }>,
-  origin: string,
-): SitemapEntry[] {
-  const entries: SitemapEntry[] = [];
-  const normalizedOrigin = normalizeOrigin(origin);
-  for (const row of rows) {
-    const hasEnglish = Boolean(clean(row.nameEn ?? "") && clean(row.branchNameEn ?? ""));
-    const branchPathAr = `${normalizedOrigin}${publicPath(row.slug, row.branchSlug, "ar")}`;
-    const branchPathEn = `${normalizedOrigin}${publicPath(row.slug, row.branchSlug, "en")}`;
-    const alternates = hasEnglish
-      ? [{ hreflang: "ar" as const, href: branchPathAr }, { hreflang: "en" as const, href: branchPathEn }]
-      : undefined;
-    entries.push({ loc: branchPathAr, alternates });
-    if (hasEnglish) entries.push({ loc: branchPathEn, alternates });
-  }
-  return entries;
-}
-
-export function getTenantPublicMenuSeoRow(menu: PublicMenu) {
+export function getPublicMenuDiscoverySeo(menu: PublicMenu, pathname: string, origin: string) {
+  const alternates = getPublicMenuLocaleAlternates(menu, pathname, origin);
   return {
-    slug: menu.tenant.slug,
-    branchSlug: menu.branch.slug,
-    nameEn: menu.tenant.nameEn,
-    branchNameEn: menu.branch.nameEn,
+    canonical: `${origin}${pathname}`,
+    alternates,
+    robots: "index, follow",
   };
 }
