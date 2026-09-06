@@ -1,0 +1,217 @@
+/*
+ * Menu V3 — Semantic color and surface contract
+ *
+ * Shared meaning lives here; protected themes provide personality through
+ * scoped values below. Components should consume semantic roles rather than
+ * inventing shared color meanings.
+ */
+
+:root {
+  color-scheme: light;
+
+  --color-surface-canvas: #f3eee6;
+  --color-surface-primary: #fffaf4;
+  --color-surface-secondary: #e8dfd2;
+  --color-surface-elevated: #fffdf9;
+  --color-surface-inverse: #171411;
+  --color-surface-overlay: rgb(23 20 17 / 0.72);
+
+  --color-content-primary: #171411;
+  --color-content-secondary: #3d372f;
+  --color-content-muted: #625b53;
+  --color-content-inverse: #fffaf4;
+
+  --color-border-subtle: rgb(23 20 17 / 0.14);
+  --color-border-strong: rgb(23 20 17 / 0.24);
+
+  --color-action-primary: #7f3f2b;
+  --color-action-primary-hover: #6f3524;
+  --color-action-primary-foreground: #fffaf4;
+  --color-action-secondary: #f3eee6;
+  --color-action-secondary-hover: #e8dfd2;
+  --color-action-secondary-foreground: #171411;
+
+  --color-focus-ring: #7f3f2b;
+  --color-status-success: #2f6b4f;
+  --color-status-warning: #8a5a1f;
+  --color-status-danger: #9a3b32;
+  --color-status-info: #315f7a;
+
+  --color-disabled-surface: #e8dfd2;
+  --color-disabled-content: #766f68;
+  --color-disabled-border: #cfc6bb;
+
+  --color-interactive-hover: color-mix(in oklab, var(--color-action-primary) 7%, var(--color-surface-primary));
+  --color-interactive-active: color-mix(in oklab, var(--color-action-primary) 13%, var(--color-surface-primary));
+  --color-interactive-selected: color-mix(in oklab, var(--color-action-primary) 10%, var(--color-surface-primary));
+  --color-status-success-surface: color-mix(in oklab, var(--color-status-success) 10%, var(--color-surface-primary));
+  --color-status-warning-surface: color-mix(in oklab, var(--color-status-warning) 11%, var(--color-surface-primary));
+  --color-status-danger-surface: color-mix(in oklab, var(--color-status-danger) 10%, var(--color-surface-primary));
+  --color-status-info-surface: color-mix(in oklab, var(--color-status-info) 10%, var(--color-surface-primary));
+}
+
+/* Theme adapters: personality changes the palette, not semantic meaning. */
+html[data-menu-theme="essential"] .menu-public-shell {
+  --color-surface-canvas: var(--essential-bg);
+  --color-surface-primary: var(--essential-surface);
+  --color-surface-secondary: var(--essential-surface-muted);
+  --color-surface-elevated: #fffdf9;
+  --color-surface-inverse: var(--essential-hero);
+  --color-content-primary: var(--essential-ink);
+  --color-content-secondary: var(--essential-ink-soft);
+  --color-content-muted: var(--essential-muted);
+  --color-content-inverse: #fffdf9;
+  --color-border-subtle: var(--essential-border);
+  --color-border-strong: var(--essential-border-strong);
+  --color-action-primary: var(--essential-accent-strong);
+  --color-action-primary-hover: #713522;
+  --color-action-primary-foreground: #fffdf9;
+  --color-action-secondary: var(--essential-surface-muted);
+  --color-action-secondary-hover: #e4dbcf;
+  --color-action-secondary-foreground: var(--essential-ink);
+  --color-focus-ring: var(--essential-accent-strong);
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell {
+  --color-surface-canvas: var(--editorial-paper);
+  --color-surface-primary: var(--editorial-white);
+  --color-surface-secondary: var(--editorial-paper-deep);
+  --color-surface-elevated: #fffdf9;
+  --color-surface-inverse: var(--editorial-ink);
+  --color-content-primary: var(--editorial-ink);
+  --color-content-secondary: #4f4841;
+  --color-content-muted: var(--editorial-muted);
+  --color-content-inverse: var(--editorial-white);
+  --color-border-subtle: var(--editorial-rule);
+  --color-border-strong: rgb(23 21 19 / 0.28);
+  --color-action-primary: #8c3824;
+  --color-action-primary-hover: #762e1e;
+  --color-action-primary-foreground: #fffaf3;
+  --color-action-secondary: var(--editorial-paper-deep);
+  --color-action-secondary-hover: #ddd0c1;
+  --color-action-secondary-foreground: var(--editorial-ink);
+  --color-focus-ring: #8c3824;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell {
+  color-scheme: dark;
+  --color-surface-canvas: var(--noir-void);
+  --color-surface-primary: var(--noir-surface);
+  --color-surface-secondary: var(--noir-surface-2);
+  --color-surface-elevated: var(--noir-surface-3);
+  --color-surface-inverse: #f3eee7;
+  --color-content-primary: var(--noir-ink);
+  --color-content-secondary: var(--noir-soft);
+  --color-content-muted: #b0a79f;
+  --color-content-inverse: #0b0a09;
+  --color-border-subtle: var(--noir-line);
+  --color-border-strong: var(--noir-line-strong);
+  --color-action-primary: var(--noir-bronze);
+  --color-action-primary-hover: var(--noir-bronze-soft);
+  --color-action-primary-foreground: #0b0a09;
+  --color-action-secondary: var(--noir-surface-2);
+  --color-action-secondary-hover: var(--noir-surface-3);
+  --color-action-secondary-foreground: var(--noir-ink);
+  --color-focus-ring: var(--noir-bronze-soft);
+  --color-disabled-surface: #24201c;
+  --color-disabled-content: #766f68;
+  --color-disabled-border: #51483f;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell {
+  --color-surface-canvas: var(--heritage-bg);
+  --color-surface-primary: var(--heritage-surface);
+  --color-surface-secondary: var(--heritage-surface-muted);
+  --color-surface-elevated: var(--heritage-paper);
+  --color-surface-inverse: var(--heritage-ink);
+  --color-content-primary: var(--heritage-ink);
+  --color-content-secondary: var(--heritage-ink-soft);
+  --color-content-muted: var(--heritage-muted);
+  --color-content-inverse: var(--heritage-paper);
+  --color-border-subtle: var(--heritage-border);
+  --color-border-strong: var(--heritage-border-strong);
+  --color-action-primary: var(--heritage-accent-strong);
+  --color-action-primary-hover: #6e431f;
+  --color-action-primary-foreground: var(--heritage-paper);
+  --color-action-secondary: var(--heritage-surface-muted);
+  --color-action-secondary-hover: #dcc7a9;
+  --color-action-secondary-foreground: var(--heritage-ink);
+  --color-focus-ring: var(--heritage-accent-strong);
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell {
+  --color-surface-canvas: var(--gallery-bg);
+  --color-surface-primary: var(--gallery-surface);
+  --color-surface-secondary: var(--gallery-surface-soft);
+  --color-surface-elevated: var(--gallery-paper);
+  --color-surface-inverse: var(--gallery-ink);
+  --color-content-primary: var(--gallery-ink);
+  --color-content-secondary: var(--gallery-ink-soft);
+  --color-content-muted: var(--gallery-muted);
+  --color-content-inverse: var(--gallery-paper);
+  --color-border-subtle: var(--gallery-border);
+  --color-border-strong: var(--gallery-border-strong);
+  --color-action-primary: var(--gallery-accent-strong);
+  --color-action-primary-hover: #6d3b27;
+  --color-action-primary-foreground: var(--gallery-paper);
+  --color-action-secondary: var(--gallery-surface-soft);
+  --color-action-secondary-hover: #ded5ca;
+  --color-action-secondary-foreground: var(--gallery-ink);
+  --color-focus-ring: var(--gallery-accent-strong);
+}
+
+.menu-public-shell {
+  --menu-background: var(--color-surface-canvas);
+  --menu-surface: var(--color-surface-primary);
+  --menu-surface-muted: var(--color-surface-secondary);
+  --menu-foreground: var(--color-content-primary);
+  --menu-border: var(--color-border-subtle);
+  --menu-accent: var(--color-action-primary);
+  --menu-focus-ring: var(--color-focus-ring);
+  --menu-shadow: 0 4px 18px color-mix(in oklab, var(--color-content-primary) 6%, transparent);
+  --menu-shadow-hover: 0 18px 42px color-mix(in oklab, var(--color-content-primary) 14%, transparent);
+}
+
+/* Shared interaction states. Theme CSS may add shape/texture, but meaning is stable. */
+.menu-public-shell :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px var(--color-surface-primary), 0 0 0 4px color-mix(in oklab, var(--color-focus-ring) 42%, transparent);
+}
+
+.menu-public-shell :where(button, a)[aria-disabled="true"],
+.menu-public-shell :where(button, input, textarea, select):disabled {
+  color: var(--color-disabled-content);
+  background-color: var(--color-disabled-surface);
+  border-color: var(--color-disabled-border);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.menu-public-shell :where(button, a):active:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--color-interactive-active);
+}
+
+.menu-public-shell :where(input, textarea, select)::placeholder {
+  color: var(--color-content-muted);
+  opacity: 1;
+}
+
+.menu-public-shell .status-success { color: var(--color-status-success); background: var(--color-status-success-surface); }
+.menu-public-shell .status-warning { color: var(--color-status-warning); background: var(--color-status-warning-surface); }
+.menu-public-shell .status-danger { color: var(--color-status-danger); background: var(--color-status-danger-surface); }
+.menu-public-shell .status-info { color: var(--color-status-info); background: var(--color-status-info-surface); }
+
+@media (prefers-contrast: more) {
+  .menu-public-shell {
+    --color-border-subtle: var(--color-border-strong);
+    --menu-border: var(--color-border-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-public-shell :where(*, *::before, *::after) {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
