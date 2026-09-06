@@ -1,5 +1,5 @@
 import type { BranchHour, Lang, PublicMenu } from "./types";
-import { DEFAULT_PUBLIC_ORIGIN, getPublicOrigin } from "./seo-discovery";
+import { DEFAULT_PUBLIC_ORIGIN, getPublicOrigin } from "./seo-discovery.ts";
 
 const DAY_NAMES = [
   "Monday",
