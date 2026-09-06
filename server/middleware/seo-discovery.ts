@@ -1,5 +1,5 @@
 import { getSql } from "@/lib/db";
-import { buildPublicMenuSitemapEntries, buildRobotsTxt, getPublicOrigin } from "@/lib/menu/seo-discovery";
+import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml, getPublicOrigin } from "@/lib/menu/seo-discovery";
 
 const XML_CONTENT_TYPE = "application/xml; charset=utf-8";
 const TEXT_CONTENT_TYPE = "text/plain; charset=utf-8";
@@ -53,19 +53,3 @@ export default defineEventHandler(async (event) => {
     return "Sitemap temporarily unavailable";
   }
 });
-
-function buildSitemapXml(entries: Parameters<typeof buildPublicMenuSitemapEntries>[0] extends never ? never : ReturnType<typeof buildPublicMenuSitemapEntries>) {
-  const escapeXml = (value: string) => value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-  const urls = entries.map((entry) => {
-    const links = (entry.alternates ?? [])
-      .map((alternate) => `<xhtml:link rel="alternate" hreflang="${escapeXml(alternate.hreflang)}" href="${escapeXml(alternate.href)}"/>`)
-      .join("");
-    return `<url><loc>${escapeXml(entry.loc)}</loc>${links}</url>`;
-  }).join("");
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${urls}</urlset>`;
-}
