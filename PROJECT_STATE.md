@@ -23,10 +23,11 @@
 - External Theme Preview QR Mode — DONE / VERIFIED.
 - Shared Public Menu Rendering Stabilization — VERIFIED.
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
-- Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.
+- Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation is being introduced incrementally.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
-- **P0 Public Content Propagation — CLOSED / VERIFIED.**
-- **W6 Typography Evidence & Decision — CLOSED / VERIFIED.**
+- P0 Public Content Propagation — CLOSED / VERIFIED.
+- W6 Typography Evidence & Decision — CLOSED / VERIFIED.
+- **W6-01 Typography Implementation — IN PROGRESS / PARTIALLY VERIFIED.**
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -46,16 +47,25 @@
 - UNKNOWN: direct authenticated Owner UI -> Public HTTP response cache behavior has not been exercised in an interactive authenticated browser session in this environment.
 
 ## Typography Decision — W6
-- VERIFIED: repository search found no explicit current IBM Plex, Noto, Tajawal, Cairo, Mada, Amiri, or other named font dependency.
+- VERIFIED: repository search found no explicit current IBM Plex, Noto, Tajawal, Cairo, Mada, Amiri, or other named font dependency before W6 implementation.
 - VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans is the selected default shared typography system.
 - VERIFIED: Noto Sans Arabic + Noto Sans is Alternate 1.
 - VERIFIED: Tajawal is Alternate 2.
-- VERIFIED: IBM Plex is OFL-1.1, supports Arabic, is designed for UI environments, and provides web WOFF/WOFF2/subset delivery through the official project.
+- VERIFIED: IBM Plex is OFL-1.1, supports Arabic, is designed for UI environments, and the official project exposes web WOFF/WOFF2 assets and split subsets.
 - VERIFIED: Noto Arabic is maintained by the Noto project and OFL-1.1; official Noto documentation recommends Noto Sans Arabic UI for constrained UI.
 - VERIFIED: Tajawal is an OFL-1.1 modern Arabic/Latin family with seven weights.
-- PROPOSED implementation: self-host and subset the smallest required IBM Plex Arabic/Latin weights; do not add the IBM npm package solely for font delivery because its package documentation includes telemetry.
-- UNKNOWN until implementation benchmark: final payload, CLS/font-swap behavior, and visual fit against every existing theme at runtime.
+- PROPOSED: self-host and subset the smallest required IBM Plex Arabic/Latin weights; do not add a font runtime package dependency.
+- UNKNOWN until final asset implementation: exact payload, CLS/font-swap behavior, and visual fit against every existing theme at runtime.
 - Decision record: `docs/design-intelligence.md` under `Typography Decision — 2026-09-06`.
+
+## W6-01 Typography Implementation — Current Evidence
+- VERIFIED: `src/typography.css` now defines the shared semantic typography contract.
+- VERIFIED: `src/routes/__root.tsx` loads the typography contract before theme styles.
+- VERIFIED: the document requests IBM Plex Sans Arabic and IBM Plex Sans at weights 400/500/600/700.
+- VERIFIED: `scripts/typography-contract.test.mjs` protects family loading, semantic weights, bidi isolation, numeric treatment, and no-font-package dependency.
+- VERIFIED: no new font runtime dependency was added.
+- BLOCKED: final self-hosted WOFF2 delivery is not complete because the current GitHub write interface cannot transfer binary WOFF2 files from the official IBM repository into Menu V3. Do not mark W6-01 DONE until local font assets are actually present and verified.
+- Status details: `docs/typography-implementation-status.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus.
@@ -66,13 +76,14 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W6-01 — Typography Implementation
-Objective: introduce IBM Plex Sans Arabic + IBM Plex Sans as the shared typography foundation, self-hosted and subsetted, without changing theme architecture.
+### W6-01 — Complete self-hosted typography delivery
+Objective: transfer the official IBM Plex Sans Arabic + IBM Plex Sans WOFF2 assets into the repository, replace runtime Google Fonts loading with local `@font-face` declarations, then verify the full typography implementation.
 
 Acceptance criteria:
-- use official font assets/licensing;
+- official IBM assets and OFL license are present in the repository;
+- local `@font-face` declarations cover only the required weights;
+- Google Fonts runtime loading is removed;
 - no new dependency;
-- smallest required weight set;
 - shared semantic typography roles remain intact;
 - Arabic/English/mixed-direction/SAR/phone/URL samples render without clipping or bidi defects;
 - responsive typography checked at small mobile, mobile, tablet, and desktop;
@@ -81,6 +92,6 @@ Acceptance criteria:
 - typecheck/tests/lint/build and applicable browser/performance checks pass;
 - update continuity files and stop.
 
-Risks: excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
+Risks: binary asset transfer, excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
 
 Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
