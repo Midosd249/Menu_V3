@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MenuLoader, createThemeBootstrapScript } from "./m.$slug";
 import { getPublicMenu } from "@/lib/menu/public";
-import { getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
+import { getNotFoundMenuSeo, getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
 import { normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
@@ -27,9 +27,22 @@ export const Route = createFileRoute("/m/$slug/$branch")({
       const { menu, locale, localeAvailable, previewTheme } = loaderData.data as BranchMenuRouteData;
       const seo = getPublicMenuSeo(menu, pathname, locale);
       const activeTheme = previewTheme ?? menu.tenant.themeKey;
-      return { meta: [{ title: seo.title }, { name: "description", content: seo.description }, { name: "robots", content: previewTheme ? "noindex, nofollow" : localeAvailable ? "index, follow" : "noindex, follow" }, { property: "og:type", content: "website" }, { property: "og:title", content: seo.title }, { property: "og:description", content: seo.description }, { property: "og:locale", content: locale === "ar" ? "ar_SA" : "en_US" }, ...(seo.image ? [{ property: "og:image", content: seo.image }] : [])], links: [{ rel: "canonical", href: seo.canonical }, ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href }))], scripts: [{ children: createThemeBootstrapScript(activeTheme, Boolean(previewTheme)) }, { type: "application/ld+json", children: JSON.stringify(seo.schema) }] };
+      return { meta: [
+        { title: seo.title },
+        { name: "description", content: seo.description },
+        { name: "robots", content: previewTheme ? "noindex, nofollow" : localeAvailable ? "index, follow" : "noindex, follow" },
+        { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "منيو" },
+        { property: "og:title", content: seo.title },
+        { property: "og:description", content: seo.description },
+        { property: "og:url", content: seo.canonical },
+        { property: "og:locale", content: locale === "ar" ? "ar_SA" : "en_US" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(seo.image ? [{ property: "og:image", content: seo.image }, { name: "twitter:image", content: seo.image }] : []),
+      ], links: [{ rel: "canonical", href: seo.canonical }, ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href }))], scripts: [{ children: createThemeBootstrapScript(activeTheme, Boolean(previewTheme)) }, { type: "application/ld+json", children: JSON.stringify(seo.schema) }] };
     }
-    return { meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: "noindex, nofollow" }], links: [{ rel: "canonical", href: pathname }] };
+    const fallback = getNotFoundMenuSeo(pathname);
+    return { meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: fallback.robots }], links: [{ rel: "canonical", href: fallback.canonical }] };
   },
   component: BranchMenuPage,
 });
