@@ -37,6 +37,8 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" },
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: colorsCss },
       { rel: "stylesheet", href: typographyCss },
