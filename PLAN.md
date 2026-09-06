@@ -10,6 +10,7 @@
 - **Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.**
 - **Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.**
 - **P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.**
+- **P0 Public Content Propagation — IMPLEMENTED / SOURCE-VERIFIED; runtime verification remains required.**
 
 ## Current Strategic Direction
 Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platform`: live menu + branded web presence + direct customer action + owner operations + local discoverability, while preserving the existing architecture and completed theme work.
@@ -47,12 +48,13 @@ The complete roadmap is recorded in `docs/design-strategy-master-plan.md`.
 - **PROPOSED:** IBM Plex Sans Arabic remains a strong typography candidate, pending benchmark against real content and performance.
 - **VERIFIED:** current repository data already provides a canonical menu core across tenant, branch, category, product, options, hours, and public events.
 - **VERIFIED:** current publish behavior is a boolean `is_published` gate rather than a revision/schedule/audit publishing system.
-- **PARTIAL:** public-content propagation has both server and browser caching; complete owner-mutation invalidation coverage is not yet proven.
+- **VERIFIED:** public menu uses a 15s process-local server cache; browser storage is not used for menu content.
+- **VERIFIED:** public-content cache correctness is now based on the database-backed `tenants.public_content_version` revision.
 - **PARTIAL:** future tenant website content and broader local-discovery content are not yet represented as a verified shared content surface.
 - **UNKNOWN:** final conversion priorities and final font/color values require measurement and implementation-level testing.
 
 ## Canonical Content Audit
-`docs/canonical-content-publishing-audit.md` is the evidence record for P0-01.
+`docs/canonical-content-publishing-audit.md` is the evidence record for P0-01 and the subsequent propagation repair.
 
 ### P0-01 result
 - **VERIFIED:** no new canonical menu schema is justified at this stage.
@@ -62,11 +64,17 @@ The complete roadmap is recorded in `docs/design-strategy-master-plan.md`.
 - **VERIFIED:** branch routing exists for `/m/$slug` and `/m/$slug/$branch`.
 - **VERIFIED:** public SEO metadata/canonical/hreflang/JSON-LD is already generated from public menu data.
 - **PARTIAL:** publish is currently a boolean gate, not a revisioned/scheduled/audited publish system.
-- **PARTIAL:** server cache and browser session cache can make propagation stale; every mutation's invalidation behavior is not proven.
-- **PARTIAL:** a dedicated tenant website-content model and unified cross-surface analytics taxonomy are not proven.
 
-### P0-01 decision
-Do not add schema or redesign the canonical model now. First prove the concrete propagation behavior and only then create a separate publishing/revision or website-content task if evidence requires it.
+### P0 propagation result
+- **VERIFIED:** all current Owner mutations that can change public menu content map to trigger-covered database tables.
+- **VERIFIED:** `tenants.public_content_version` provides a database-backed public-content revision.
+- **VERIFIED:** `src/lib/menu/public.ts` includes the revision in the process-local cache key.
+- **VERIFIED:** tenant and branch identity remain part of the cache key.
+- **VERIFIED:** no browser menu-content cache exists; `localStorage` is used only for the anonymous analytics session identifier.
+- **RUNTIME REQUIRED:** migration application and live Owner → Public propagation testing remain outstanding because the current agent environment cannot execute the repository locally.
+
+### P0 propagation decision
+Do not add a mutation-by-mutation invalidation list or a full revision publishing system. The database-backed revision is the smallest cross-instance correctness mechanism compatible with the existing architecture. Only add more publishing machinery if later evidence proves a product requirement.
 
 ## Design Contract
 `docs/design-system-contract.md` is now the implementation baseline for semantic color/type roles, spacing, radius, elevation, motion, responsive/layout rules, RTL/LTR/bidi behavior, components/states, public-menu hierarchy, Owner Studio journey, marketing website hierarchy, imagery, accessibility, performance, SEO/local discovery, trust/security boundaries, and the theme boundary.
@@ -94,7 +102,7 @@ Before deployment-specific work, inspect actual Vercel Usage/Billing. Never clai
 2. Product positioning/message hierarchy.
 3. ~~Shared design-system contract~~ — BASELINE ESTABLISHED / VERIFIED.
 4. **Canonical content & publishing model audit — CLOSED / VERIFIED.**
-5. **Public-content propagation/cache verification — CURRENT.**
+5. **Public-content propagation implementation — SOURCE-VERIFIED; runtime verification CURRENT.**
 6. Typography decision with real Arabic/English/mixed content.
 7. Public-menu first-screen/action hierarchy.
 8. Owner Studio activation/publish journey.
@@ -119,22 +127,20 @@ Before deployment-specific work, inspect actual Vercel Usage/Billing. Never clai
 6. Additional integrations only when validated by demand.
 
 ## Exact Current Task
-### P0 — Verify public-content propagation after Owner mutations
+### P0 — Runtime verification of public-content propagation
 
-**Objective:** prove whether an owner edit becomes visible to the public menu within the expected propagation window across server and browser caching, and repair only the smallest proven gap.
-
-**Files likely to change:** only the existing cache/mutation source files and focused regression tests if a defect is proven; otherwise documentation only.
+**Objective:** apply the new migration in the intended database, exercise representative Owner mutations, confirm revision increments and fresh Public Menu responses, verify cross-branch/tenant isolation, and run the repository quality gates.
 
 **Acceptance criteria:**
-- map all owner mutations that can change public content;
-- verify server-cache invalidation behavior for each mutation;
-- verify browser session-cache behavior and its expected staleness window;
-- verify tenant/branch cache-key isolation;
-- add or adjust a focused regression test if the current behavior is incorrect;
-- do not add schema/dependencies unless a separate proven requirement exists;
-- run relevant typecheck/tests/lint/build when source changes occur;
-- update continuity files with evidence and exactly one next task.
+- migration applies cleanly;
+- revision increments for tenant, branch, hours, category, product, variant, modifier-group, modifier-option, and product-modifier-group changes;
+- public cache misses after a revision change and returns the fresh payload;
+- tenant and branch cache keys cannot cross-contaminate;
+- no browser menu-content cache exists;
+- focused regression test passes;
+- `npm run typecheck`, `npm test`, `npm run lint`, and `npm run build` pass when executed in a network-enabled repository environment;
+- continuity files record evidence and exactly one next task.
 
-**Risks:** stale public content, cross-tenant cache contamination, unnecessary cache-busting, performance regressions, and accidental expansion into a full publish/revision system.
+**Risks:** trigger recursion, migration incompatibility, stale process-local entries, cross-tenant cache contamination, unnecessary cache-busting, and accidental expansion into revision publishing.
 
-**Verification commands:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, plus focused tests for cache propagation when available.
+**Verification commands:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, `node --test scripts/public-menu-cache.test.mjs`, plus a real database Owner → Public mutation check.
