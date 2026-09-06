@@ -20,11 +20,12 @@
 
 ## Completed Research / Planning
 ### Design Intelligence & Product Experience Planning — CLOSED / VERIFIED
-- **VERIFIED:** broad research scope was established across product positioning, marketing website, public menu, Owner Studio, typography, color, imagery, motion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics, growth, and release QA.
-- **VERIFIED:** Saudi/MENA and global restaurant-tech/product patterns were incorporated as transferable evidence.
-- **VERIFIED:** a comprehensive roadmap was created in `docs/design-strategy-master-plan.md`.
-- **VERIFIED:** themes are explicitly not the current focus and completed theme work is protected.
-- **VERIFIED:** research governance and evidence labels are documented.
+- **VERIFIED:** the final planning round intentionally shifted focus away from theme implementation and covered the complete product/site experience.
+- **VERIFIED:** the master plan covers product positioning, brand/content, marketing website, public menu, Owner Studio, shared design system, typography, color, imagery, motion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics/growth, and release QA.
+- **VERIFIED:** Saudi/MENA and global competitive signals, authoritative web guidance, current brand direction, and repository constraints were incorporated.
+- **VERIFIED:** all workstreams, priorities, protected scope, decision principles, governance, readiness criteria, and execution sequence are documented in `docs/design-strategy-master-plan.md`.
+- **VERIFIED:** design intelligence evidence remains in `docs/design-intelligence-audit.md` and `docs/design-research-log.md`.
+- **VERIFIED:** completed themes are explicitly protected and are not the current focus.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected from unnecessary reopening.
@@ -38,7 +39,7 @@
 Every future template/public-menu UI task must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, and `docs/design-strategy-master-plan.md` where applicable.
 
 ## Master Design Strategy
-The cross-functional design/product roadmap is recorded in `docs/design-strategy-master-plan.md`.
+The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md`.
 
 Workstreams:
 - W0 Evidence, measurement, product positioning.
@@ -60,8 +61,8 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### Design Intelligence Synthesis — IN_PROGRESS
-- **Objective:** close the broad research round and reconcile external research, repository evidence, existing brand direction, competitive signals, Arabic/RTL standards, and product capabilities into one ranked decision set before implementation.
+### Design Intelligence Synthesis — TODO
+- **Objective:** close the external deep-research round and reconcile its findings with repository evidence before any broad implementation.
 - **Scope:** website, public menu, Owner Studio, brand system, typography, color, content, conversion, accessibility, RTL/bidi, SEO/local discovery, performance, trust/security, pricing, analytics, and growth. Themes are not the focus.
 - **Required outputs:** consolidated evidence map, 10–15 competitor/reference matrix, homepage IA recommendation, public-menu UX priorities, Owner Studio priorities, typography shortlist/decision path, color territory direction, design-system principles, accessibility/RTL/performance requirements, opportunity backlog, explicit do-not-change list, and atomic implementation roadmap.
 - **Constraints:** no code changes; no redesign of completed themes; no unsupported feature assumptions; no proprietary copying; no Vercel deployment for research.
@@ -74,4 +75,4 @@ Workstreams:
 
 ## Exact Next Task
 ### Design Intelligence Synthesis — close external research and reconcile it with repository evidence
-After this task is closed, the next atomic task will be selected from the master plan based on evidence. The expected candidates are `Design System Contract`, `Typography Decision`, `Marketing Homepage IA`, `Public Menu UX Audit`, or `Owner Studio Activation/Publish UX Audit`; do not start more than one without updating this file.
+After synthesis is closed, select exactly one implementation task from the master plan based on evidence. Expected candidates include `Design System Contract`, `Typography Decision`, `Marketing Homepage IA`, `Public Menu UX Audit`, or `Owner Studio Activation/Publish UX Audit`.
