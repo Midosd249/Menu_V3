@@ -1,6 +1,6 @@
 import { isThemeKey, DEFAULT_THEME_KEY } from "@/lib/theme";
 import { bool, num } from "@/lib/utils";
-import type { Branch, BranchHour, Category, Product, Tenant } from "./types";
+import type { Branch, BranchHour, Category, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
   return value == null ? "" : String(value);
@@ -37,6 +37,11 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
     createdAt: str(row.created_at),
     updatedAt: str(row.updated_at),
   };
+}
+
+export function mapPublicTenant(row: Record<string, unknown>): PublicTenant {
+  const { ownerUserId: _ownerUserId, ...publicTenant } = mapTenant(row);
+  return publicTenant;
 }
 
 export function mapBranch(row: Record<string, unknown>): Branch {
