@@ -26,6 +26,7 @@
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - **P0 Public Content Propagation — CLOSED / VERIFIED.**
+- **W6 Typography Evidence & Decision — CLOSED / VERIFIED.**
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -44,6 +45,18 @@
 - VERIFIED: the focused cache regression test passed in CI after the lint/regex correction.
 - UNKNOWN: direct authenticated Owner UI -> Public HTTP response cache behavior has not been exercised in an interactive authenticated browser session in this environment.
 
+## Typography Decision — W6
+- VERIFIED: repository search found no explicit current IBM Plex, Noto, Tajawal, Cairo, Mada, Amiri, or other named font dependency.
+- VERIFIED: IBM Plex Sans Arabic + IBM Plex Sans is the selected default shared typography system.
+- VERIFIED: Noto Sans Arabic + Noto Sans is Alternate 1.
+- VERIFIED: Tajawal is Alternate 2.
+- VERIFIED: IBM Plex is OFL-1.1, supports Arabic, is designed for UI environments, and provides web WOFF/WOFF2/subset delivery through the official project.
+- VERIFIED: Noto Arabic is maintained by the Noto project and OFL-1.1; official Noto documentation recommends Noto Sans Arabic UI for constrained UI.
+- VERIFIED: Tajawal is an OFL-1.1 modern Arabic/Latin family with seven weights.
+- PROPOSED implementation: self-host and subset the smallest required IBM Plex Arabic/Latin weights; do not add the IBM npm package solely for font delivery because its package documentation includes telemetry.
+- UNKNOWN until implementation benchmark: final payload, CLS/font-swap behavior, and visual fit against every existing theme at runtime.
+- Decision record: `docs/design-intelligence.md` under `Typography Decision — 2026-09-06`.
+
 ## Current Design Strategy
 - The five-theme system is not the current design focus.
 - External research covers Saudi/MENA and global restaurant technology, branded web presence, public menu UX, Owner Studio, Arabic/RTL, accessibility, typography, performance, SEO/local discovery, conversion, trust, pricing, analytics, and release QA.
@@ -53,14 +66,21 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W6 — Typography Evidence & Decision
-Objective: perform the evidence-based Arabic-first typography decision using repository usage, current design contract, performance constraints, mixed Arabic/Latin readability, numeric/bidi behavior, and authoritative font/licensing evidence. Do not change application code until the decision is documented and acceptance criteria are defined.
+### W6-01 — Typography Implementation
+Objective: introduce IBM Plex Sans Arabic + IBM Plex Sans as the shared typography foundation, self-hosted and subsetted, without changing theme architecture.
 
 Acceptance criteria:
-- shortlist and compare candidate Arabic/Latin font systems;
-- verify licensing/availability and web delivery implications;
-- assess Arabic headings/body, Latin, numbers, SAR, and mixed bidi cases;
-- select one default and up to two alternates with rationale;
-- record decision and sources in the design research log/plan;
-- define the smallest implementation task separately;
-- no theme rewrite and no unrelated application changes.
+- use official font assets/licensing;
+- no new dependency;
+- smallest required weight set;
+- shared semantic typography roles remain intact;
+- Arabic/English/mixed-direction/SAR/phone/URL samples render without clipping or bidi defects;
+- responsive typography checked at small mobile, mobile, tablet, and desktop;
+- font loading and layout-shift impact measured;
+- existing five themes remain structurally unchanged;
+- typecheck/tests/lint/build and applicable browser/performance checks pass;
+- update continuity files and stop.
+
+Risks: excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
+
+Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
