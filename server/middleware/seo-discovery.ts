@@ -21,12 +21,12 @@ export default defineEventHandler(async (event) => {
 
   try {
     const sql = await getSql();
-    const rows = await sql<Array<{
+    const rows = await sql<{
       slug: string;
       branch_slug: string;
       name_en: string | null;
       branch_name_en: string | null;
-    }>>`
+    }[]>`
       select
         t.slug,
         b.slug as branch_slug,
