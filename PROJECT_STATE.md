@@ -30,33 +30,35 @@
 - W6-01 Typography Implementation — CLOSED / VERIFIED.
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
 - W8 Imagery and Art Direction — CLOSED / VERIFIED.
-- W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate `34010117079` passed all required steps.
-- W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate `34010619265` passed all required steps.
-- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED; final Quality Gate `34013074378` passed all required steps.
-- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate `34013861903` passed all required steps.
-- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; final Quality Gate `34014895325` passed all required steps.
-- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; final Quality Gate `34015320658` passed all required steps.
-- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED; final Quality Gate `34050857106` passed all required steps.
-- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED; final Quality Gate `34052577671` passed all required steps.
+- W9 Motion and Interaction — CLOSED / VERIFIED.
+- W10 Accessibility and RTL Quality — CLOSED / VERIFIED.
+- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED.
+- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED.
+- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED.
+- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED.
+- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
+- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
+- W15 Growth, Analytics, and Experimentation — IMPLEMENTATION COMPLETE; final Quality Gate pending.
+
+## W15 Growth, Analytics, and Experimentation
+- VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
+- VERIFIED: existing public event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
+- VERIFIED: tenant resolution and product ownership validation remain server-side; owner aggregation remains tenant-scoped.
+- VERIFIED: no third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
+- VERIFIED: `src/lib/menu/growth.ts` derives denominator-safe growth metrics only from `OwnerAnalytics` returned by the authenticated server function.
+- VERIFIED: Studio analytics now surfaces product-interest, session-engagement, WhatsApp-intent, QR-to-visit, average views/session, and a deterministic opportunity category in Arabic/English.
+- VERIFIED: zero-denominator metrics render as unavailable instead of fabricated percentages.
+- VERIFIED: `src/lib/menu/growth.test.ts` protects calculations and the event contract.
+- VERIFIED: the existing `src/lib/menu/analytics-integrity.test.ts` remains part of the default test suite and protects tenant scoping.
+- VERIFIED: no database migration was required.
+- VERIFIED: production A/B experimentation is not falsely enabled; the current event schema lacks an experiment exposure/variant property.
+- INFERRED: existing acquisition → engagement → intent data is the highest-value immediate growth surface.
+- UNKNOWN: statistical significance, retention, revenue attribution, and true order conversion remain unmeasurable until corresponding production events exist.
+- Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
 - No sixth theme is created as a substitute for product/design strategy.
-
-## W14 Pricing, Packaging, and Commercial UX
-- VERIFIED: current market scan covers Saudi/MENA and global digital-menu pricing patterns and is recorded in `docs/commercial-w14-pricing.md`.
-- VERIFIED: commercial plan display contract mirrors the active subscription catalog: Free 0 SAR / 1 branch / 50 products / 3 team members; Starter 99 SAR / 3 / 300 / 10; Pro 199 SAR / 10 / 1,000 / 25.
-- VERIFIED: five protected themes remain available across plans; no theme entitlement gate was invented.
-- VERIFIED: public bilingual `/pricing` route exposes only safe static commercial data.
-- VERIFIED: online checkout is explicitly not claimed; upgrade discovery routes to the existing start/contact surface.
-- VERIFIED: authenticated Studio subscription summary resolves through active tenant membership and shows active-branch, item, and active-team usage against plan limits.
-- VERIFIED: commercial catalog regression coverage is part of `npm test`.
-- VERIFIED: no new runtime dependency or schema change was introduced by W14.
-- VERIFIED: Quality Gate `34052577671` passed Install, route generation, Typecheck, Tests, Lint, Production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- VERIFIED: Vercel status for W14 head commit `d1bfd7ea1d7cbd225bde923850827cd25f80b064` is `success`.
-- INFERRED: operational scale is the strongest current packaging boundary because the product already has server-side limits for these resources.
-- UNKNOWN: payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions are not implemented and remain outside W14.
-- Evidence: `docs/commercial-w14-pricing.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -67,17 +69,15 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W15 — Growth, Analytics, and Experimentation
-Objective: turn the existing verified analytics and commercial surfaces into a measurable growth loop without weakening privacy, tenant isolation, performance, or the public-menu customer experience.
+### W16 — QA, Browser/Device, and Release
+Objective: perform the final release-readiness pass across the complete Menu V3 surface without reopening completed foundations.
 
 Acceptance criteria:
-- identify the smallest evidence-backed growth metrics and event contract;
-- preserve existing analytics integrity and tenant boundaries;
-- add only measurable, reversible experiments;
-- Arabic/English conversion surfaces remain explicit and accessible;
-- no fabricated analytics or client-only business truth;
-- regression coverage exists for changed analytics/growth contracts;
-- full Quality Gate passes;
-- no unrelated refactor.
+- full repository state, diff, history, configuration, documentation, and deployment path audited;
+- typecheck, tests, lint, build, Playwright, all-theme browser/template QA, performance, and release checks pass;
+- W14 and W15 regressions remain green;
+- Arabic/English and RTL behavior remain intact;
+- no unresolved P0/P1 security, data-isolation, accessibility, or reliability issue;
+- final release evidence is recorded before merge.
 
-Verification: repository-specific analytics tests plus `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and final diff review.
+Verification: repository Quality Gate plus final diff review and deployment status.
