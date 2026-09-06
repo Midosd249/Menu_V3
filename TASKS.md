@@ -57,12 +57,14 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W6-01 — Typography Implementation
-- Objective: introduce IBM Plex Sans Arabic + IBM Plex Sans as the shared typography foundation, self-hosted and subsetted, without changing theme architecture.
-- Scope: existing font/style entry points, semantic typography tokens, official font assets/licensing documentation, representative Arabic/English/mixed-direction tests, and performance inspection.
-- Acceptance: official assets/licensing; no new dependency; smallest required weight set; semantic roles preserved; Arabic/English/SAR/phone/URL/bidi samples correct; responsive states checked; font loading/layout shift measured; five themes structurally unchanged; quality gates pass.
+### W6-01 — Complete self-hosted typography delivery — IN PROGRESS / BLOCKED
+- Objective: transfer the official IBM Plex Sans Arabic + IBM Plex Sans WOFF2 assets into the repository, replace runtime Google Fonts loading with local `@font-face` declarations, and verify the full typography implementation without changing theme architecture.
+- Completed in this task: shared semantic typography contract, root stylesheet wiring, Arabic + Latin IBM Plex web loading, bidi isolation, numeric treatment, and regression coverage.
+- Remaining blocker: the available GitHub write interface cannot transfer binary WOFF2 content from the official IBM repository into Menu V3. The official IBM asset directory was verified, but local binary assets cannot be honestly claimed until actually committed.
+- Required finalization: transfer official Regular/Medium-or-SemiBold/Bold Arabic and matching Latin WOFF2 assets; add local `@font-face`; remove Google Fonts runtime loading; run all quality and performance checks; then close W6-01.
 - Constraint: no theme rewrite, no database/schema work, no unrelated refactor, no new font dependency.
 - Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
+- Status reference: `docs/typography-implementation-status.md`.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
