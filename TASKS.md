@@ -146,11 +146,11 @@
 - UNKNOWN: payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions remain unimplemented and are outside W14.
 - Evidence record: `docs/commercial-w14-pricing.md`.
 
-### W15 — Growth, Analytics, and Experimentation — IMPLEMENTATION COMPLETE / VERIFIED PENDING FINAL QUALITY GATE
+### W15 — Growth, Analytics, and Experimentation — CLOSED / VERIFIED
 - VERIFIED: current product-analytics and experimentation research is recorded in `docs/growth-w15-analytics-experimentation.md`.
 - VERIFIED: existing event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
-- VERIFIED: added denominator-safe growth metrics in `src/lib/menu/growth.ts`.
-- VERIFIED: added product-interest, session-engagement, WhatsApp-intent, QR-to-visit, average views/session, and opportunity classification.
+- VERIFIED: added denominator-safe directional growth ratios in `src/lib/menu/growth.ts`.
+- VERIFIED: added product views per 100 visits, WhatsApp clicks per 100 sessions, visits per 100 QR scans, average views/session, and opportunity classification; UI explicitly avoids unique-user conversion claims.
 - VERIFIED: Studio Analytics now presents the growth loop in Arabic/English.
 - VERIFIED: added `src/lib/menu/growth.test.ts` to the default test suite.
 - VERIFIED: tenant-scoped analytics integrity remains protected by `src/lib/menu/analytics-integrity.test.ts`.
@@ -158,6 +158,7 @@
 - VERIFIED: production A/B experimentation is explicitly not activated because the current event schema lacks experiment exposure/variant data.
 - INFERRED: acquisition → engagement → intent is the strongest immediate growth loop supported by current evidence.
 - UNKNOWN: retention, revenue attribution, statistical significance, and true order conversion remain unavailable until corresponding production events exist.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
 ## Protected Scope
