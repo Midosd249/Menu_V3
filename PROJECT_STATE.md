@@ -38,22 +38,24 @@
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED.
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
-- W15 Growth, Analytics, and Experimentation — IMPLEMENTATION COMPLETE; final Quality Gate pending.
+- W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
 
 ## W15 Growth, Analytics, and Experimentation
 - VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
 - VERIFIED: existing public event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
 - VERIFIED: tenant resolution and product ownership validation remain server-side; owner aggregation remains tenant-scoped.
 - VERIFIED: no third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
-- VERIFIED: `src/lib/menu/growth.ts` derives denominator-safe growth metrics only from `OwnerAnalytics` returned by the authenticated server function.
-- VERIFIED: Studio analytics now surfaces product-interest, session-engagement, WhatsApp-intent, QR-to-visit, average views/session, and a deterministic opportunity category in Arabic/English.
-- VERIFIED: zero-denominator metrics render as unavailable instead of fabricated percentages.
+- VERIFIED: `src/lib/menu/growth.ts` derives denominator-safe directional event ratios only from `OwnerAnalytics` returned by the authenticated server function.
+- VERIFIED: Studio analytics now surfaces product views per 100 visits, WhatsApp clicks per 100 sessions, visits per 100 QR scans, average views per session, and a deterministic opportunity category in Arabic/English.
+- VERIFIED: the UI explicitly states that these are operational event ratios, not unique-user conversion rates.
+- VERIFIED: zero-denominator metrics render as unavailable rather than fabricated percentages.
 - VERIFIED: `src/lib/menu/growth.test.ts` protects calculations and the event contract.
 - VERIFIED: the existing `src/lib/menu/analytics-integrity.test.ts` remains part of the default test suite and protects tenant scoping.
 - VERIFIED: no database migration was required.
 - VERIFIED: production A/B experimentation is not falsely enabled; the current event schema lacks an experiment exposure/variant property.
 - INFERRED: existing acquisition → engagement → intent data is the highest-value immediate growth surface.
 - UNKNOWN: statistical significance, retention, revenue attribution, and true order conversion remain unmeasurable until corresponding production events exist.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
 ## Protected Completed Work
