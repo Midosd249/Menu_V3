@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
-import { mapBranch, mapCategory, mapHour, mapProduct, mapTenant } from "./map";
+import { mapBranch, mapCategory, mapHour, mapProduct, mapPublicTenant } from "./map";
 import { DEMO_MENU } from "./demo";
 import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOptions, ProductVariant, PublicMenu } from "./types";
 
@@ -120,7 +120,7 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
     `;
     const row = rows[0];
     if (!row) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
-    const tenant = mapTenant(row.tenant);
+    const tenant = mapPublicTenant(row.tenant);
     const products = (row.products ?? []).map(mapProduct);
     const menu: PublicMenu = {
       tenant,
