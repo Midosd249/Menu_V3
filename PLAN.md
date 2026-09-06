@@ -12,17 +12,18 @@
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
-- W6-01 Typography Implementation — CLOSED / VERIFIED; corrected Fontsource CDN delivery passed full Quality Gate.
+- W6-01 Typography Implementation — CLOSED / VERIFIED.
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
-- W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
-- W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
-- W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate passed in run `34010619265`.
-- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED; final Quality Gate passed in run `34013074378`.
-- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate passed in run `34013861903`.
-- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; Quality Gate run `34014895325` passed all required steps.
-- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; Quality Gate run `34015320658` passed all required steps.
-- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED; final Quality Gate passed in run `34050857106`.
-- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED; Quality Gate `34052577671` passed all required steps and Vercel deployment status is `success`.
+- W8 Imagery and Art Direction — CLOSED / VERIFIED.
+- W9 Motion and Interaction — CLOSED / VERIFIED.
+- W10 Accessibility and RTL Quality — CLOSED / VERIFIED.
+- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED.
+- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED.
+- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED.
+- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED.
+- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
+- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
+- W15 Growth, Analytics, and Experimentation — IMPLEMENTATION COMPLETE; final Quality Gate pending on this branch.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -56,22 +57,22 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - W15 Growth, analytics, and experimentation.
 - W16 QA, browser/device, and release.
 
-## Completed W14 — Pricing, Packaging, and Commercial UX
-- VERIFIED: market scan covered current Saudi/MENA and global digital-menu pricing patterns, with evidence recorded in `docs/commercial-w14-pricing.md`.
-- VERIFIED: commercial display catalog mirrors the existing database subscription catalog: Free 0 SAR / 1 branch / 50 products / 3 team members; Starter 99 SAR / 3 / 300 / 10; Pro 199 SAR / 10 / 1,000 / 25.
-- VERIFIED: all five protected themes remain available across the commercial catalog; no artificial theme entitlement was invented.
-- VERIFIED: public bilingual `/pricing` presents prices and operational limits without exposing tenant data.
-- VERIFIED: pricing UI explicitly states that online checkout is not implemented; no fake payment path was introduced.
-- VERIFIED: authenticated Studio overview reads the subscription through active tenant membership and displays current usage against the plan limits.
-- VERIFIED: active branch count is used in Studio commercial usage messaging so inactive branches do not consume the displayed limit.
-- VERIFIED: commercial contract tests exist in `src/lib/menu/commercial.test.ts` and are part of `npm test`.
-- VERIFIED: no runtime dependency was added and the existing package manifest contract was preserved.
-- VERIFIED: public menu, theme, authentication, authorization, tenant isolation, and existing schema boundaries were not reopened.
-- VERIFIED: Quality Gate `34052577671` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- VERIFIED: Vercel deployment status for W14 head commit `d1bfd7ea1d7cbd225bde923850827cd25f80b064` is `success`.
-- INFERRED: operational scale is the strongest current packaging boundary because those limits already exist and are enforced server-side.
-- UNKNOWN: online payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions remain unimplemented and are intentionally outside W14.
-- Evidence record: `docs/commercial-w14-pricing.md`.
+## Completed W15 — Growth, Analytics, and Experimentation
+- VERIFIED: research reviewed current product-analytics and experimentation guidance from Amplitude and Google Analytics and converted it into a repository-specific, minimal event contract.
+- VERIFIED: existing four-event public analytics contract is preserved: `visit`, `qr_scan`, `product_view`, `whatsapp`.
+- VERIFIED: no new third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
+- VERIFIED: added `src/lib/menu/growth.ts` with pure, denominator-safe growth metrics derived only from authenticated server analytics.
+- VERIFIED: added product-interest, session-engagement, WhatsApp-intent, and QR-to-visit rates plus average product views per session.
+- VERIFIED: added a deterministic opportunity classifier: baseline, discovery, conversion, content, distribution.
+- VERIFIED: Studio analytics now surfaces the growth loop and next opportunity in Arabic/English.
+- VERIFIED: zero denominators render as unavailable rather than fabricated percentages.
+- VERIFIED: `src/lib/menu/growth.test.ts` protects metric math and the implemented event taxonomy.
+- VERIFIED: event integrity and tenant-scoped aggregation remain protected by the existing analytics integrity suite.
+- VERIFIED: production experimentation is intentionally not activated because the current event schema has no experiment exposure/variant property; claiming an A/B result without that data would be false.
+- VERIFIED: experimentation policy and first recommended experiment are recorded in `docs/growth-w15-analytics-experimentation.md`.
+- VERIFIED: no database migration was required for W15.
+- INFERRED: the highest-value immediate growth lever is making existing acquisition → engagement → intent data actionable before adding more instrumentation.
+- UNKNOWN: statistical significance, retention, revenue attribution, and true conversion-to-order rates are not measurable until corresponding events exist and enough production traffic accumulates.
 
 ## Protected Work
 - Existing five-theme implementation.
@@ -82,24 +83,22 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Existing visual/functional quality system.
 
 ## Research Governance
-- Material research is recorded in `docs/design-research-log.md` and persistent task evidence documents.
-- Use official standards for accessibility, i18n, web platform, SEO, and font licensing.
+- Material research is recorded in persistent evidence documents.
+- Use official standards for accessibility, i18n, web platform, SEO, and analytics event conventions.
 - Competitors are pattern evidence, not assets or implementation sources.
 - Label conclusions `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, or `PROPOSED`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W15 — Growth, Analytics, and Experimentation
-Objective: turn the existing verified analytics and commercial surfaces into a measurable growth loop without weakening privacy, tenant isolation, performance, or the public-menu customer experience.
+### W16 — QA, Browser/Device, and Release
+Objective: perform the final release-readiness pass across the complete Menu V3 surface without reopening completed foundations.
 
 Acceptance criteria:
-- identify the smallest evidence-backed growth metrics and event contract;
-- preserve existing analytics integrity and tenant boundaries;
-- add only measurable, reversible experiments;
-- Arabic/English conversion surfaces remain explicit and accessible;
-- no fabricated analytics or client-only business truth;
-- regression coverage exists for changed analytics/growth contracts;
-- full Quality Gate passes;
-- no unrelated refactor.
+- full repository state, diff, history, configuration, documentation, and deployment path audited;
+- typecheck, tests, lint, build, Playwright, all-theme browser/template QA, performance, and release checks pass;
+- W14 and W15 regressions remain green;
+- Arabic/English and RTL behavior remain intact;
+- no unresolved P0/P1 security, data-isolation, accessibility, or reliability issue;
+- final release evidence is recorded before merge.
 
-Verification: repository-specific analytics tests plus `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and final diff review.
+Verification: repository Quality Gate plus final diff review and deployment status.
