@@ -63,21 +63,49 @@ export const Route = createFileRoute("/m/$slug")({
 });
 
 const MENU_TIMEOUT_MS = 10_000;
+const MENU_RETRY_LIMIT = 2;
+const MENU_RETRY_DELAY_MS = 350;
 const MENU_CACHE_PREFIX = "menu-v3:public:";
 function readCachedMenu(key: string): PublicMenu | null { if (typeof window === "undefined") return null; try { const raw = window.sessionStorage.getItem(`${MENU_CACHE_PREFIX}${key}`); if (!raw) return null; const parsed = JSON.parse(raw) as { menu?: PublicMenu; at?: number }; if (!parsed.menu || !parsed.at || Date.now() - parsed.at > 5 * 60_000) return null; return parsed.menu; } catch { return null; } }
 function writeCachedMenu(key: string, menu: PublicMenu): void { if (typeof window === "undefined") return; try { window.sessionStorage.setItem(`${MENU_CACHE_PREFIX}${key}`, JSON.stringify({ menu, at: Date.now() })); } catch { /* Optional cache. */ } }
-async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> { let timer: ReturnType<typeof setTimeout> | undefined; try { return await Promise.race([promise, new Promise<T>((_, reject) => { timer = setTimeout(() => reject(new Error("استغرق تحميل المنيو وقتاً أطول من المتوقع.")), ms); })]); } finally { if (timer) clearTimeout(timer); } }
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> { let timer: ReturnType<typeof setTimeout> | undefined; try { return await Promise.race([promise, new Promise<T>((_, reject) => { timer = setTimeout(() => reject(new Error("menu-timeout")), ms); })]); } finally { if (timer) clearTimeout(timer); } }
+function sleep(ms: number): Promise<void> { return new Promise((resolve) => setTimeout(resolve, ms)); }
+function failureMessage(locale: Lang, kind: "timeout" | "unavailable" | "unknown"): string {
+  if (locale === "en") {
+    if (kind === "timeout") return "The menu is taking longer than expected. Please try again.";
+    if (kind === "unavailable") return "The menu is temporarily unavailable. Please try again.";
+    return "The menu could not be loaded. Please try again.";
+  }
+  if (kind === "timeout") return "استغرق تحميل المنيو وقتًا أطول من المتوقع. حاول مرة أخرى.";
+  if (kind === "unavailable") return "المنيو غير متاحة مؤقتًا. حاول مرة أخرى.";
+  return "تعذر تحميل المنيو. حاول مرة أخرى.";
+}
+async function loadMenuWithRetry(slug: string, branch: string | undefined, locale: Lang) {
+  let lastKind: "timeout" | "unavailable" | "unknown" = "unknown";
+  for (let attempt = 1; attempt <= MENU_RETRY_LIMIT; attempt += 1) {
+    try {
+      const result = await withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS);
+      if (result.ok) return result;
+      if (result.code === "not_found" || result.code === "invalid") return result;
+      lastKind = "unavailable";
+    } catch (error) {
+      lastKind = error instanceof Error && error.message === "menu-timeout" ? "timeout" : "unknown";
+    }
+    if (attempt < MENU_RETRY_LIMIT) await sleep(MENU_RETRY_DELAY_MS * attempt);
+  }
+  return { ok: false as const, code: "unavailable" as const, error: failureMessage(locale, lastKind) };
+}
 function PublicMenuPage() { const { slug } = Route.useParams(); const { branch, lang, theme } = Route.useSearch(); const loaderData = Route.useLoaderData(); const menuData = loaderData?.ok ? loaderData.data as PublicMenuRouteData : undefined; return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} />; }
 export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu; previewTheme?: ThemeKey }) {
   const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const { setLang } = useLang();
   useEffect(() => { setLang(locale); }, [locale, setLang]);
-  function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو" , retry: load }); }); }
+  function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); loadMenuWithRetry(slug, branch, locale).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch(() => { if (!instant) setState({ status: "error", message: failureMessage(locale, "unknown"), retry: load }); }); }
   useEffect(() => {
     if (initialMenu) {
       writeCachedMenu(cacheKey, initialMenu);
       return;
     }
     load(); // eslint-disable-line react-hooks/exhaustive-deps
-  }, [slug, branch, initialMenu]);
-  if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const activeTheme = previewTheme ?? state.menu.tenant.themeKey; const family = getThemeFamily(activeTheme); const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } }; return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
+  }, [slug, branch, initialMenu, locale]);
+  if (state.status === "loading") return <LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const activeTheme = previewTheme ?? state.menu.tenant.themeKey; const family = getThemeFamily(activeTheme); const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } }; return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
 }
