@@ -27,8 +27,9 @@
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
-- W6-01 Typography Implementation — CLOSED / VERIFIED using immutable upstream IBM Plex assets delivered through a CORS-compatible CDN; no runtime font package dependency.
-- **W7 Color / Surface / Contrast System — READY TO START.**
+- W6-01 Typography Implementation — CLOSED / VERIFIED; corrected Fontsource CDN delivery passed full Quality Gate.
+- W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
+- **W8 Imagery and Art Direction — READY TO START.**
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -56,13 +57,26 @@
 ## W6-01 Typography Implementation — CLOSED Evidence
 - VERIFIED: `src/typography.css` defines the shared semantic typography contract.
 - VERIFIED: `src/routes/__root.tsx` loads the typography contract before theme styles.
-- VERIFIED: Arabic and Latin IBM Plex WOFF2 assets are pinned to immutable upstream commit SHAs.
-- VERIFIED: assets are delivered through jsDelivr with CORS-compatible URLs; Google Fonts runtime loading is removed.
-- VERIFIED: weights 400/500/600/700, `font-display: swap`, semantic roles, numeric treatment, and bidi isolation are covered.
+- VERIFIED: Arabic and Latin IBM Plex weights 400/500/600/700 use exact Fontsource `5.3.0` CDN WOFF2 URLs.
+- VERIFIED: assets use `font-display: swap`; Google Fonts runtime loading is removed.
 - VERIFIED: `scripts/typography-contract.test.mjs` protects the delivery contract and prevents Google Fonts/font-package regression.
 - VERIFIED: no new runtime font dependency was added.
-- VERIFIED: the previous Browser Template QA failure was traced to the font delivery path; the implementation was changed to the pinned CORS-compatible CDN path.
-- UNKNOWN until the new CI run completes: final browser-template QA and performance result for the corrected delivery path.
+- VERIFIED: the previous Browser Template QA failure was traced to 404s on the old IBM GitHub-commit CDN path.
+- VERIFIED: corrected Fontsource delivery passed full Quality run `34009000701`, including all-theme browser QA and performance baseline upload.
+- Delivery boundary: strict local WOFF2 self-hosting remains unclaimed because the repository connector cannot transfer binary assets; exact versioned CDN delivery is the verified production model.
+- Status record: `docs/typography-implementation-status.md`.
+
+## W7 Color / Surface / Contrast — CLOSED Evidence
+- VERIFIED: `src/colors.css` owns the semantic color/surface contract.
+- VERIFIED: semantic roles cover canvas, primary/secondary/elevated/inverse surfaces, overlay, content hierarchy, borders, actions, focus, status, disabled, and interactive states.
+- VERIFIED: all five protected themes have semantic adapters and retain their individual personality.
+- VERIFIED: status semantics are theme-independent.
+- VERIFIED: selected critical palette contrast checks meet WCAG AA targets; Noir accent contrast is checked against its dark canvas.
+- VERIFIED: focus-visible, disabled, placeholder, reduced-motion, and higher-contrast behavior are explicit.
+- VERIFIED: public-menu shell and form controls consume semantic surface/content/border roles.
+- VERIFIED: regression coverage exists in `scripts/color-contract.test.mjs`.
+- VERIFIED: Quality run `34009000701` passed typecheck, tests, lint, production build, all-theme browser QA, performance baseline upload, and preview shutdown.
+- Evidence record: `docs/color-system-implementation-status.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -73,28 +87,31 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W7 — Color / Surface / Contrast System
-Objective: establish and implement a shared, accessible semantic color/surface contract that improves product polish and trust without flattening the five protected theme personalities.
+### W8 — Imagery and Art Direction
+Objective: make hospitality quality immediately visible through a disciplined, premium image/art-direction system without weakening performance, accessibility, or the five protected theme personalities.
 
 Scope:
-- audit existing color tokens and surfaces across shared UI and all five themes;
-- establish semantic roles for background, surface, elevated surface, text, muted text, border, primary, accent, success, warning, danger, focus, overlay, and interactive states;
-- verify WCAG contrast for text, controls, focus indicators, and meaningful non-text UI;
-- define light/dark behavior where applicable without forcing every theme into the same palette;
-- preserve tenant branding and theme-specific visual identity;
-- add regression tests for the semantic contract;
-- validate mobile and desktop states;
-- run typecheck, tests, lint, build, browser QA, and applicable performance checks.
+- audit current image usage, placeholders, screenshots, avatars, food/product imagery, branch imagery, and marketing surfaces;
+- research high-quality hospitality/editorial image patterns and current web-platform guidance;
+- define art direction for hero, menu items, restaurants, branches, Owner Studio previews, and product screenshots;
+- define aspect-ratio, crop, focal-point, object-position, and responsive sizing rules;
+- define missing/poor-image fallbacks that preserve layout and brand hierarchy;
+- define responsive image delivery, compression, loading priority, and stable geometry rules;
+- define Arabic-first alt-text/content rules and decorative-image handling;
+- preserve tenant ownership and never introduce unlicensed competitor imagery or copied creative assets;
+- add regression coverage for image dimensions/fallback/accessibility contracts where the current architecture supports it;
+- run full Quality Gate plus applicable browser/performance checks.
 
 Acceptance criteria:
-- evidence-based semantic color contract documented;
-- no theme personality is flattened or replaced;
-- critical text and controls meet the selected accessibility target;
-- focus/hover/active/disabled/error/success states are explicit;
-- no hard-coded shared UI colors remain where a semantic token is required;
-- regression coverage exists;
+- evidence-based imagery/art-direction contract documented;
+- no protected theme is flattened or replaced;
+- critical public-menu and marketing images have explicit sizing/crop/fallback behavior;
+- responsive image loading does not introduce avoidable layout shift;
+- meaningful images have accessible alternative text and decorative images are not announced;
+- no unlicensed or competitor-owned creative is introduced;
+- regression coverage exists for the chosen contracts;
 - full Quality Gate passes.
 
-Risks: contrast regressions, tenant-brand collisions, theme coupling, dark-mode inconsistencies, visual hierarchy changes.
+Risks: image licensing, visual inconsistency, CLS/performance regressions, poor Arabic content context, over-art-directed themes, oversized mobile payloads.
 
 Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
