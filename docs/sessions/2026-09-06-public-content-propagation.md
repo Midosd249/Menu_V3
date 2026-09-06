@@ -1,42 +1,42 @@
 # Session — 2026-09-06 — Public Content Propagation
 
 ## Current Position
-P0-01 canonical content audit is closed. The concrete public-menu propagation gap is implemented and source-verified; runtime verification remains required.
+P0-01 canonical content audit is closed. P0 public-content propagation is now closed and verified by live database evidence plus the repository Quality workflow.
 
 ## Completed Task
-Implement the smallest architecture-compatible public-content propagation mechanism.
+Runtime verification of the public-content propagation mechanism, including migration application, representative Owner mutations, revision isolation, cache-key versioning, regression coverage, and repository quality gates.
 
 ## Evidence
-- Mapped all current Owner mutations in `src/lib/menu/owner.ts` that can affect public content.
-- Confirmed those mutations write to `tenants`, `branches`, `branch_hours`, `categories`, `products`, `product_variants`, `modifier_groups`, `modifier_options`, or `product_modifier_groups`.
-- Added `tenants.public_content_version` as a database-backed revision.
-- Added database triggers for all public-menu mutation surfaces.
-- Updated `src/lib/menu/public.ts` so the process-local cache key includes tenant, branch, and content revision.
-- Confirmed there is no browser menu-content cache. `src/lib/menu/session.ts` uses `localStorage` only for anonymous analytics session identity.
-- Added `scripts/public-menu-cache.test.mjs` for the cache/revision contract.
-- Corrected `docs/canonical-content-publishing-audit.md` so the earlier browser-cache assumption is no longer part of the source of truth.
+- Live Supabase project verified as `ublxptcqefujkbeepylc`, canonical Menu V3 schema `menu_v3`.
+- `menu_v3.tenants.public_content_version` exists in the live database.
+- Revision triggers exist for tenants, branches, branch hours, categories, products, product variants, modifier groups, modifier options, and product-modifier links.
+- Trigger functions explicitly qualify `menu_v3` and use a controlled `search_path`.
+- Representative live Owner-side tenant, branch, and product mutations advanced the published tenant revision.
+- Separate tenant revision state remained isolated during the live mutation checks.
+- `src/lib/menu/public.ts` versions the process-local cache key by tenant, branch, and revision.
+- `src/components/public-menu.tsx` has no browser menu-content cache; `src/lib/menu/session.ts` uses browser storage only for anonymous analytics session identity.
+- Canonical migration was corrected to explicitly target `menu_v3`; live repair migration was applied successfully.
+- GitHub Actions Quality run `34007481599` for commit `a43052b0f1c2ce8c64a00c852dd30f863783aa95` completed successfully. Route generation, typecheck, tests, lint, production build, Playwright Chromium installation, browser template QA, performance baseline upload, and cleanup all passed.
+- The focused `scripts/public-menu-cache.test.mjs` regression test passed in CI after the lint correction.
 
 ## Security / Compatibility
+- Existing authorization and active/published gates were not changed.
 - Tenant scope is derived from trusted database relationships inside triggers.
-- Existing public active/published gates are unchanged.
-- Existing owner authorization is unchanged.
-- Existing cache TTL remains 15 seconds; correctness is now determined by the database revision.
+- Cache semantics remain process-local with the existing 15-second TTL; revisioning provides correctness across content changes without a second invalidation mechanism.
 - No dependency, theme, deployment, or unrelated refactor was introduced.
 
-## Verification
-- Source inspection: VERIFIED.
-- Mutation coverage: VERIFIED.
-- Cache-key isolation: VERIFIED by source inspection.
-- Browser content-cache absence: VERIFIED by source inspection.
-- Local test execution: BLOCKED because outbound DNS/network access is unavailable in the current agent environment; no test pass is claimed.
-
-## Remaining Runtime Verification
-- Apply the migration to the intended database.
-- Exercise tenant publish/brand change, category, product, branch/hour, variant/modifier, and product-modifier mutations.
-- Confirm `public_content_version` increments once per committed mutation transaction as expected.
-- Confirm a fresh public response is returned after a revision change.
-- Confirm branch and tenant isolation.
-- Run typecheck, tests, lint, build, and focused cache test in a network-enabled repository environment.
+## Verification Status
+- Database migration: VERIFIED.
+- Runtime revision propagation: VERIFIED.
+- Tenant isolation: VERIFIED for the revision mechanism.
+- Cache-key contract: VERIFIED.
+- Browser content-cache absence: VERIFIED.
+- Typecheck: VERIFIED by CI.
+- Tests: VERIFIED by CI.
+- Lint: VERIFIED by CI.
+- Production build: VERIFIED by CI.
+- Browser template QA: VERIFIED by CI.
+- Direct authenticated Owner UI -> Public HTTP response cache behavior: UNKNOWN; interactive authenticated browser surface is unavailable in this environment.
 
 ## Exact Next Task
-P0 — Runtime verification of public-content propagation after Owner mutations, including migration application and cross-branch/tenant isolation.
+W6 — Typography Evidence & Decision. Make the production Arabic-first typography decision from repository usage, authoritative font/licensing evidence, Arabic/Latin readability, numerals/SAR, mixed bidi, performance, and the existing design-system contract. No production typography implementation until the decision is documented.
