@@ -1,0 +1,40 @@
+/* Shared accessibility primitives for the Arabic-first public and owner surfaces. */
+
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  scroll-margin-block: 7rem;
+}
+
+:where(html, body) {
+  scroll-padding-block: 7rem;
+}
+
+.bidi-isolate {
+  unicode-bidi: isolate;
+}
+
+.bidi-plaintext {
+  unicode-bidi: plaintext;
+}
+
+[dir="ltr"] {
+  text-align: start;
+}
+
+@media (pointer: coarse) {
+  :where(button, a, input, textarea, select) {
+    touch-action: manipulation;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, a, input, textarea, select):focus-visible {
+    scroll-behavior: auto;
+  }
+}
