@@ -33,31 +33,25 @@
 - W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate `34010117079` passed all required steps.
 - W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate `34010619265` passed all required steps.
 - W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED; final Quality Gate `34013074378` passed all required steps.
-- W12-01 Public Menu Hydration Performance — IMPLEMENTED / QUALITY GATE PENDING.
+- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate `34013861903` passed all required steps.
+- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED for the current low-risk resource-efficiency slice; final Quality Gate `34014895325` passed all required steps.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
 - No sixth theme is created as a substitute for product/design strategy.
 
-## W11 Closure Evidence
-- VERIFIED: public-menu canonical URLs are absolute production URLs.
-- VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when real English tenant and branch names exist.
-- VERIFIED: Arabic/English alternates are reciprocal and absolute.
-- VERIFIED: preview and missing public menus are noindex.
-- VERIFIED: Restaurant structured data is tenant/branch scoped and does not fabricate incomplete Saudi location data.
-- VERIFIED: public share metadata includes canonical/Open Graph/Twitter fields where supported by visible data.
-- VERIFIED: `/robots.txt` excludes private/control surfaces and advertises `/sitemap.xml`.
-- VERIFIED: `/sitemap.xml` is server-generated from active, published tenants and active branches only.
-- VERIFIED: W11 Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
-
-## W12-01 Public Menu Hydration Performance
-- Objective: remove avoidable duplicate client data fetching during SSR hydration without changing freshness, tenant isolation, routing, or theme behavior.
-- VERIFIED: `src/routes/m.$slug.tsx` now skips the mount-time `getPublicMenu` request when `initialMenu` is already supplied by the route loader.
-- VERIFIED: hydrated `initialMenu` is written to the existing anonymous session cache.
-- VERIFIED: the existing client-only loading path remains unchanged when `initialMenu` is unavailable.
-- VERIFIED: regression coverage was added to `scripts/quality-workflow.test.mjs`.
-- VERIFIED: implementation contract is recorded in `docs/performance-public-menu.md`.
-- UNKNOWN: no production RUM measurement is available in this repository to quantify the avoided request count for real users.
+## W12-02 Public Menu Resource & Bundle Efficiency
+- Objective: reduce avoidable public-menu resource startup cost without changing protected architecture or introducing speculative bundle refactors.
+- VERIFIED: audited `src/routes/__root.tsx`, `src/routes/m.$slug.tsx`, `src/typography.css`, theme loading, and `scripts/performance-audit.mjs`.
+- VERIFIED: the critical third-party font origin is `https://cdn.jsdelivr.net` under the established Fontsource typography contract.
+- VERIFIED: `src/routes/__root.tsx` now emits `preconnect` with anonymous CORS mode and `dns-prefetch` for the critical font origin.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint ordering and CORS contract.
+- VERIFIED: no runtime dependency, Supabase/schema, tenant/cache, hydration, or theme behavior changed.
+- VERIFIED: no arbitrary JavaScript/CSS performance budget was introduced; the existing browser audit remains report-only and evidence driven.
+- VERIFIED: the existing globally available theme styles were intentionally retained because the current preview/theme architecture relies on immediate theme availability; route-level stylesheet injection was not introduced without evidence that its FOUC/switching risk is acceptable.
+- VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: production RUM is not available, so the real-user latency improvement from connection warming cannot be quantified in this repository.
+- Evidence: `docs/performance-public-menu-resources.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -68,22 +62,16 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W12 Quality Closure for W12-01
-Objective: verify the public-menu hydration optimization through the repository Quality Gate and close W12-01 only if all checks pass.
-
-Scope:
-- typecheck, tests, lint, production build;
-- Playwright/template QA across all themes;
-- performance audit;
-- regression review for public-menu loader/cache behavior.
+### W12-03 — Reliability and Failure-Path Audit
+Objective: inspect public-menu and critical application failure behavior under timeout, upstream failure, malformed/partial data, cache miss, retry, navigation interruption, and dependency degradation; improve only evidenced failure-path weaknesses without changing successful-path architecture.
 
 Acceptance criteria:
+- critical failure states remain understandable and actionable in Arabic and English;
+- no unhandled rejection or infinite retry loop;
+- no stale/cross-tenant cache exposure;
+- timeout/retry behavior remains bounded;
+- browser and automated regression coverage exists for every changed failure path;
 - full Quality Gate passes;
-- no duplicate hydration fetch when SSR `initialMenu` exists;
-- client-only fallback remains functional;
-- no cross-tenant or stale-cache regression;
 - no unrelated changes.
 
-Risks: loader/client hydration mismatch, accidental freshness regression, cache-key regression, browser behavior differences.
-
-Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and performance audit.
+Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, performance audit, and targeted failure-path tests.
