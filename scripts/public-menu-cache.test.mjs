@@ -8,8 +8,8 @@ const migrationSource = fs.readFileSync(new URL("migrations/20260906001000_publi
 
 test("public menu cache is versioned by the database content revision", () => {
   assert.match(publicSource, /select public_content_version/);
-  assert.match(publicSource, /const revision = String\(revisionRows\[0\]\?\.public_content_version/);
-  assert.match(publicSource, /`\$\{tenantSlug\}:\$\{branchSlug \?\? \"default\"\}:\$\{revision\}`/);
+  assert.match(publicSource, /const revision = String\(revisionRows[0\]\?\.public_content_version/);
+  assert.match(publicSource, /`\$\{tenantSlug\}:\$\{branchSlug \?\? "default"\}:\$\{revision\}`/);
   assert.match(publicSource, /const MENU_CACHE_TTL_MS = 15_000/);
 });
 
