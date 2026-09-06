@@ -15,7 +15,7 @@
     "performance:audit": "node scripts/performance-audit.mjs",
     "typecheck": "tsc --noEmit",
     "check:auth": "node scripts/check-auth-invariant.mjs",
-    "test": "node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/permissions.test.ts src/lib/auth/authorization.server.test.ts src/lib/auth/platform-admin.server.test.ts src/lib/menu/safe.test.ts src/lib/menu/subscriptions.test.ts src/lib/menu/seo.test.ts src/lib/menu/seo-discovery.test.ts src/lib/menu/analytics-integrity.test.ts src/lib/theme/registry.test.ts src/lib/theme/testing-access.test.ts src/components/public-action-links.test.ts tests/team-invitations.test.ts tests/preview-shell.test.mjs scripts/quality-workflow.test.mjs scripts/pglite-asset.test.mjs scripts/migration-schema.test.mjs scripts/db-migration.test.mjs scripts/typography-contract.test.mjs scripts/color-contract.test.mjs scripts/image-art-direction-contract.test.mjs scripts/motion-contract.test.mjs scripts/accessibility-contract.test.mjs scripts/security-boundary.test.mjs",
+    "test": "node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/permissions.test.ts src/lib/auth/authorization.server.test.ts src/lib/auth/platform-admin.server.test.ts src/lib/menu/safe.test.ts src/lib/menu/subscriptions.test.ts src/lib/menu/commercial.test.ts src/lib/menu/seo.test.ts src/lib/menu/seo-discovery.test.ts src/lib/menu/analytics-integrity.test.ts src/lib/theme/registry.test.ts src/lib/theme/testing-access.test.ts src/components/public-action-links.test.ts tests/team-invitations.test.ts tests/preview-shell.test.mjs scripts/quality-workflow.test.mjs scripts/pglite-asset.test.mjs scripts/migration-schema.test.mjs scripts/db-migration.test.mjs scripts/typography-contract.test.mjs scripts/color-contract.test.mjs scripts/image-art-direction-contract.test.mjs scripts/motion-contract.test.mjs scripts/accessibility-contract.test.mjs scripts/security-boundary.test.mjs",
     "test:platform": "node --test 'scripts/**/*.test.mjs'",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -79,7 +79,6 @@
     "nitro": "3.0.260610-beta",
     "playwright": "^1.62.0",
     "prettier": "^3.4.0",
-    "typescript": "^5.7.0",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.2.0"
   }

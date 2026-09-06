@@ -1,10 +1,10 @@
 # TASKS
 
 ## Completed Tasks
-### W13 — Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE
+### W13 — Trust, Security, and Data Ownership — CLOSED / VERIFIED
 - VERIFIED: public tenant responses use a distinct `PublicTenant` type that omits `ownerUserId`.
 - VERIFIED: `mapPublicTenant()` strips `owner_user_id` before public serialization; operational revision metadata is not exposed through the public type.
-- VERIFIED: authenticated Studio workflows retain the full `Tenant` shape.
+- VERIFIED: authenticated Studio workflows retain the full `Tenant` type.
 - VERIFIED: inactive `tenant_members` records fail closed and inactive members are excluded from Studio member snapshots.
 - VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant/branch predicates.
 - VERIFIED: platform administration remains fail-closed through the existing `requirePlatformAdmin` and database-backed platform-admin check.
@@ -13,7 +13,7 @@
 - INFERRED: the existing platform-admin mechanism is the correct foundation for high-privilege operations; a client-side permanent superuser flag is intentionally rejected.
 - Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is a follow-up design, not an insecure shortcut.
 - Evidence: `docs/security-w13-trust-data-ownership.md`.
-- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
+- VERIFIED: final Quality Gate `34050857106` passed all required steps.
 
 ### P0 — Runtime Public Content Propagation — CLOSED / VERIFIED
 - VERIFIED: live Supabase migration was applied to the intended `menu_v3` schema.
@@ -89,68 +89,62 @@
 - Evidence record: `docs/motion-implementation.md`.
 
 ### W10 — Accessibility and RTL Quality — CLOSED / VERIFIED
-- VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
-- VERIFIED: root document loads the accessibility layer before protected theme CSS.
-- VERIFIED: public product and cart dialogs expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
-- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email input direction, and live validation feedback.
-- VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where content direction is data-dependent.
-- VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
-- VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level without introducing a second form system.
-- VERIFIED: regression coverage exists in `scripts/accessibility-contract.test.mjs` and is part of the default `npm test` suite.
-- VERIFIED: W9 motion contract was updated only to preserve its dialog-target contract after dialog IDs became unique.
-- VERIFIED: final Quality run `34010619265` passed typecheck, 120 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: shared accessibility primitives, focus behavior, bidi handling, forced-colors focus, and reduced-motion compatibility are implemented.
+- VERIFIED: public dialogs expose modal semantics, labels, focus entry, keyboard containment, Escape handling, and focus restoration.
+- VERIFIED: public order controls have programmatic labels, autocomplete hints, appropriate phone/email direction, and live validation feedback.
+- VERIFIED: mixed Arabic/Latin/numeric values use semantic bidi isolation and `dir="auto"` where needed.
+- VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level.
+- VERIFIED: regression coverage exists in `scripts/accessibility-contract.test.mjs`.
+- VERIFIED: final Quality run `34010619265` passed required checks.
 - UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
 - Evidence record: `docs/accessibility-rtl-quality.md`.
 
 ### W11 — SEO, Local Discovery, and Shareability — CLOSED / VERIFIED
 - VERIFIED: public-menu canonical URLs are absolute production URLs.
 - VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when real English tenant + branch names exist.
-- VERIFIED: Arabic/English alternates are reciprocal and use absolute URLs.
-- VERIFIED: preview theme variants remain `noindex, nofollow`.
-- VERIFIED: missing public menus remain `noindex, nofollow`.
-- VERIFIED: public Restaurant structured data is tenant/branch scoped and does not fabricate location data when required Saudi fields are incomplete.
-- VERIFIED: public share metadata includes `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata where an image exists.
-- VERIFIED: `/robots.txt` excludes private/control surfaces and advertises `/sitemap.xml`.
-- VERIFIED: `/sitemap.xml` is generated server-side from active, published tenants and active branches only.
-- VERIFIED: sitemap emits English variants only when real English names exist.
-- VERIFIED: no new runtime dependency or database schema migration was introduced.
-- VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts`; public SEO tests were extended in `src/lib/menu/seo.test.ts`.
-- VERIFIED: W11 final Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
+- VERIFIED: reciprocal Arabic/English alternates, preview noindex behavior, scoped Restaurant structured data, share metadata, robots, and sitemap generation are protected.
+- VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts` and `src/lib/menu/seo.test.ts`.
+- VERIFIED: W11 final Quality run `34013074378` passed all required steps.
 - Evidence record: `docs/seo-local-discovery-shareability.md`.
 
 ### W12-01 — Public Menu Hydration Performance — CLOSED / VERIFIED
-- Objective: eliminate the avoidable duplicate public-menu request during SSR hydration.
-- VERIFIED: `src/routes/m.$slug.tsx` renders from `initialMenu` and writes it to the existing session cache without issuing the mount-time `getPublicMenu` request.
-- VERIFIED: the existing client-only loading path remains available when `initialMenu` is absent.
-- VERIFIED: branch, locale, theme, timeout, retry, and existing cache-key behavior are preserved.
-- VERIFIED: regression coverage exists in `scripts/quality-workflow.test.mjs`.
-- VERIFIED: implementation record exists at `docs/performance-public-menu.md`.
-- VERIFIED: final Quality Gate `34013861903` passed all required steps.
+- VERIFIED: SSR `initialMenu` prevents the avoidable mount-time duplicate public-menu request.
+- VERIFIED: client-only loading remains available when SSR data is absent.
+- VERIFIED: branch, locale, theme, timeout, retry, and cache-key behavior are preserved.
+- VERIFIED: Quality Gate `34013861903` passed all required steps.
 - UNKNOWN: production RUM is not available, so the exact real-user request reduction is not quantified.
 
 ### W12-02 — Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED
-- Objective: reduce avoidable public-menu resource startup cost using evidence and the smallest safe change.
-- VERIFIED: audited root resource loading, typography delivery, public-menu route, theme CSS loading, and `scripts/performance-audit.mjs`.
-- VERIFIED: critical font origin is `https://cdn.jsdelivr.net` under the established Fontsource typography contract.
-- VERIFIED: `src/routes/__root.tsx` now emits `preconnect` with anonymous CORS mode and `dns-prefetch` for that critical origin.
-- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint ordering and CORS contract.
-- VERIFIED: no runtime dependency, Supabase/schema, tenant/cache, hydration, or theme behavior changed.
-- VERIFIED: existing global theme stylesheet availability was intentionally retained because the current theme/preview architecture depends on immediate availability; speculative runtime stylesheet injection was not introduced.
-- VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: critical font origin and root resource loading were audited.
+- VERIFIED: anonymous-CORS `preconnect` and `dns-prefetch` were added for the established critical font origin.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint contract.
+- VERIFIED: Quality Gate `34014895325` passed all required steps.
 - Evidence record: `docs/performance-public-menu-resources.md`.
 
 ### W12-03 — Reliability and Failure-Path Audit — CLOSED / VERIFIED
-- Objective: harden public-menu timeout, transient upstream failure, cache miss, retry, and terminal error handling without changing the successful path.
-- VERIFIED: `src/routes/m.$slug.tsx` uses a bounded two-attempt retry policy with a 10-second per-attempt timeout.
-- VERIFIED: retry delay is deterministic and bounded at 350 ms after the first failed attempt.
+- VERIFIED: bounded two-attempt retry policy with 10-second per-attempt timeout and 350 ms retry delay.
 - VERIFIED: `not_found` and invalid results terminate immediately without retry.
-- VERIFIED: terminal timeout, unavailable, and unknown failures provide actionable Arabic/English messages.
-- VERIFIED: existing session cache remains optional and slug/branch keyed; no cross-tenant cache mechanism was introduced.
-- VERIFIED: no Supabase/schema, auth, authorization, theme, routing, or successful-path data contract changed.
-- VERIFIED: `scripts/quality-workflow.test.mjs` protects retry bounds, delay, terminal response handling, and localized failure copy.
-- VERIFIED: Quality Gate `34015320658` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- UNKNOWN: production RUM is unavailable, so real-user timeout/retry frequency and recovery rate cannot be quantified.
+- VERIFIED: terminal failure messages are actionable in Arabic and English.
+- VERIFIED: existing optional cache remains tenant/branch safe.
+- VERIFIED: `scripts/quality-workflow.test.mjs` protects retry and terminal-response behavior.
+- VERIFIED: Quality Gate `34015320658` passed all required steps.
+- UNKNOWN: production RUM is unavailable for real-user timeout/retry frequency.
 - Evidence record: `docs/reliability-failure-path-audit.md`.
+
+### W14 — Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED
+- VERIFIED: market scan covers current Saudi/MENA and global digital-menu pricing patterns; evidence is recorded in `docs/commercial-w14-pricing.md`.
+- VERIFIED: commercial plan catalog mirrors the active subscription catalog: Free 0 SAR / 1 branch / 50 products / 3 team members; Starter 99 SAR / 3 / 300 / 10; Pro 199 SAR / 10 / 1,000 / 25.
+- VERIFIED: all five protected themes remain available across plans; no artificial theme gate was introduced.
+- VERIFIED: bilingual `/pricing` presents prices and operational limits without exposing private tenant data.
+- VERIFIED: online checkout is explicitly not claimed; no fake payment path was introduced.
+- VERIFIED: authenticated Studio overview resolves subscription state through active tenant membership and displays active-branch, item, and active-team usage against limits.
+- VERIFIED: `src/lib/menu/commercial.test.ts` protects the commercial catalog and is included in `npm test`.
+- VERIFIED: no runtime dependency or database schema change was introduced by W14.
+- VERIFIED: Quality Gate `34052577671` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: Vercel deployment status for W14 head commit `d1bfd7ea1d7cbd225bde923850827cd25f80b064` is `success`.
+- INFERRED: operational scale is the strongest current packaging boundary because those limits already exist and are enforced server-side.
+- UNKNOWN: payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions remain unimplemented and are outside W14.
+- Evidence record: `docs/commercial-w14-pricing.md`.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
@@ -180,21 +174,7 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W13 — Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE
-- VERIFIED: public tenant responses use a distinct `PublicTenant` type that omits `ownerUserId`.
-- VERIFIED: `mapPublicTenant()` strips `owner_user_id` before public serialization; operational revision metadata is not exposed through the public type.
-- VERIFIED: authenticated Studio workflows retain the full `Tenant` model.
-- VERIFIED: inactive `tenant_members` records fail closed and inactive members are excluded from Studio member snapshots.
-- VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant/branch predicates.
-- VERIFIED: platform administration remains fail-closed through the existing `requirePlatformAdmin` and database-backed platform-admin check.
-- VERIFIED: `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
-- VERIFIED: existing dependency versions were preserved; no new dependency was added.
-- INFERRED: the existing platform-admin mechanism is the correct foundation for high-privilege operations; a client-side permanent superuser flag is intentionally rejected.
-- Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is a follow-up design, not an insecure shortcut.
-- Evidence: `docs/security-w13-trust-data-ownership.md`.
-- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
-
-## Exact Next Task
-### W13 Quality Closure
-- Objective: prove the W13 security/data-boundary changes through the complete Quality Gate, then close W13 and move to W14.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
+### W15 — Growth, Analytics, and Experimentation
+- Objective: turn the existing verified analytics and commercial surfaces into a measurable growth loop without weakening privacy, tenant isolation, performance, or the public-menu customer experience.
+- Acceptance: identify the smallest evidence-backed growth metrics and event contract; preserve analytics integrity and tenant boundaries; add only measurable and reversible experiments; keep Arabic/English conversion surfaces explicit and accessible; avoid fabricated analytics or client-only business truth; add regression coverage for changed growth contracts; pass the full Quality Gate; avoid unrelated refactor.
+- Verification: repository-specific analytics tests plus `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and final diff review.
