@@ -29,14 +29,14 @@ async function membershipOf(
   if (tenantId) {
     const rows = await sql<MemberRow>`
       select tenant_id, user_id, role from tenant_members
-      where user_id = ${userId} and tenant_id = ${tenantId}
+      where user_id = ${userId} and tenant_id = ${tenantId} and is_active = true
       limit 1
     `;
     return rows[0] ?? null;
   }
   const rows = await sql<MemberRow>`
     select tenant_id, user_id, role from tenant_members
-    where user_id = ${userId}
+    where user_id = ${userId} and is_active = true
     order by created_at
     limit 1
   `;
@@ -56,7 +56,7 @@ async function loadSnapshot(sql: Sql, tenantId: string, role: Role): Promise<Stu
     sql`select * from branches where tenant_id = ${tenantId} order by created_at`,
     sql`select * from categories where tenant_id = ${tenantId} order by sort_order, created_at`,
     sql`select * from products where tenant_id = ${tenantId} order by sort_order, created_at`,
-    sql`select user_id, role from tenant_members where tenant_id = ${tenantId}`,
+    sql`select user_id, role from tenant_members where tenant_id = ${tenantId} and is_active = true`,
   ]);
   const tenant = mapTenant(tenantRows[0] as Record<string, unknown>);
   const branches = branchRows.map((r) => mapBranch(r as Record<string, unknown>));
