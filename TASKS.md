@@ -88,6 +88,22 @@
 - UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
 - Evidence record: `docs/accessibility-rtl-quality.md`.
 
+### W11 — SEO, Local Discovery, and Shareability — IMPLEMENTED / QUALITY GATE PENDING
+- VERIFIED: public-menu canonical URLs are absolute production URLs.
+- VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when tenant and branch English names both exist.
+- VERIFIED: Arabic/English alternates are reciprocal and use absolute URLs.
+- VERIFIED: preview theme variants remain `noindex, nofollow`.
+- VERIFIED: missing public menus remain `noindex, nofollow`.
+- VERIFIED: public Restaurant structured data is tenant/branch scoped and does not fabricate location data when required Saudi fields are incomplete.
+- VERIFIED: public share metadata includes `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata where an image exists.
+- VERIFIED: `/robots.txt` excludes private/control surfaces and advertises `/sitemap.xml`.
+- VERIFIED: `/sitemap.xml` is generated server-side from active, published tenants and active branches only.
+- VERIFIED: sitemap emits English variants only when real English tenant/branch names exist.
+- VERIFIED: no new runtime dependency or database schema migration was introduced.
+- VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts`; public SEO tests were extended in `src/lib/menu/seo.test.ts`.
+- VERIFIED: implementation contract is recorded in `docs/seo-local-discovery-shareability.md`.
+- UNKNOWN: final GitHub Quality run for the current W11 head has not yet completed.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -116,11 +132,11 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W11 — SEO, Local Discovery, and Shareability — READY TO START
-- Objective: audit and strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
-- Scope: metadata contracts, canonical/hreflang behavior, robots/sitemap alignment, restaurant/local business structured data, Open Graph/Twitter-style share surfaces where applicable, branch-level URLs, QR source continuity, missing-content/noindex rules, and regression coverage.
-- Acceptance: evidence-based SEO/shareability contract documented; Arabic and English URLs remain canonical and reciprocal; structured data is truthful and tenant-scoped; public routes are indexable only when eligible; share previews are stable; QR/deep links preserve intended context; regression coverage exists; full Quality Gate passes.
-- Risks: duplicate URLs, fabricated locale content, cross-tenant metadata leakage, incorrect location claims, indexing private/preview surfaces.
+### W11 — SEO, Local Discovery, and Shareability — QUALITY CLOSURE
+- Objective: verify the current W11 implementation through the repository Quality Gate and close only if all checks pass.
+- Scope: typecheck, tests, lint, production build, Playwright/template QA, robots/sitemap response checks, canonical/hreflang/schema validation, and performance inspection.
+- Acceptance: full Quality Gate passes; no cross-tenant metadata exposure; only eligible public routes are discoverable; no fabricated locale or location claims; no unrelated regression.
+- Risks: dependency/install failure, server middleware typing/build issues, malformed XML, incorrect production-origin resolution.
 - Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
 
 ## Permanent Quality Gate
