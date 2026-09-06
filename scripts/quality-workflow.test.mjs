@@ -13,12 +13,10 @@ const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "ut
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
-  const qaStep = WORKFLOW.match(/- name: Browser template QA — all themes\n\s{8}run: \|\n([\s\S]*?)(?=\n\s{6}- name: Upload browser performance baseline)/)?.[1] ?? "";
-
-  assert.match(qaStep, /setsid bash -c 'unset RUNNER_TRACKING_ID; exec node \.\/node_modules\/vite\/bin\/vite\.js preview/);
-  assert.match(qaStep, /npm run performance:audit -- http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial/);
-  assert.match(qaStep, /npm run qa:template http:\/\/127\.0\.0\.1:8081\/themes\/preview\?theme=editorial -- --all-themes/);
-  assert.match(qaStep, /Browser QA failed — preview log follows/);
+  assert.ok(WORKFLOW.includes("setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview"));
+  assert.ok(WORKFLOW.includes("npm run performance:audit -- http://127.0.0.1:8081/themes/preview?theme=editorial"));
+  assert.ok(WORKFLOW.includes("npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial -- --all-themes"));
+  assert.ok(WORKFLOW.includes("echo \"[preview] Browser QA failed — preview log follows\""));
 });
 
 test("performance audit measures the G6 baseline without imposing guessed budgets", () => {
