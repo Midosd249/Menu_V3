@@ -29,7 +29,8 @@
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
 - W6-01 Typography Implementation — CLOSED / VERIFIED; corrected Fontsource CDN delivery passed full Quality Gate.
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
-- **W8 Imagery and Art Direction — READY TO START.**
+- **W8 Imagery and Art Direction — CLOSED / VERIFIED.**
+- **W9 Motion and Interaction — READY TO START.**
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -78,6 +79,21 @@
 - VERIFIED: Quality run `34009000701` passed typecheck, tests, lint, production build, all-theme browser QA, performance baseline upload, and preview shutdown.
 - Evidence record: `docs/color-system-implementation-status.md`.
 
+## W8 Imagery and Art Direction — CLOSED Evidence
+- VERIFIED: `docs/image-art-direction.md` defines the evidence-based imagery contract for dish, brand, branch, hero, and product/screenshot media.
+- VERIFIED: the contract defines 4:3 dish/card framing, 16:9/3:2 editorial/brand framing, focal-point controls, responsive behavior, stable geometry, lazy loading defaults, and fallback behavior.
+- VERIFIED: Arabic-first alt-text rules and decorative-image handling are documented.
+- VERIFIED: tenant ownership, provenance, licensing, and competitor-asset exclusions are explicit.
+- VERIFIED: `src/image-art-direction.css` provides shared focal-point and role hooks without changing the protected theme architecture.
+- VERIFIED: root document loads the shared image art-direction layer before theme styles.
+- VERIFIED: `scripts/image-art-direction-contract.test.mjs` protects the contract and confirms the existing public-menu lazy-loading baseline.
+- VERIFIED: the test is part of the default `npm test` suite.
+- VERIFIED: no new runtime dependency was added.
+- VERIFIED: no tenant data model, Supabase schema, or protected theme was changed.
+- UNKNOWN: tenant-specific image URLs and focal-point metadata are not currently represented as a canonical typed media model; the contract intentionally avoids a schema migration in W8.
+- UNKNOWN: full production browser/performance results for the final W8 commits require the new GitHub Quality run to complete.
+- Evidence record: `docs/image-art-direction.md`.
+
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
 - External research covers Saudi/MENA and global restaurant technology, branded web presence, public menu UX, Owner Studio, Arabic/RTL, accessibility, typography, performance, SEO/local discovery, conversion, trust, pricing, analytics, and release QA.
@@ -87,31 +103,31 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W8 — Imagery and Art Direction
-Objective: make hospitality quality immediately visible through a disciplined, premium image/art-direction system without weakening performance, accessibility, or the five protected theme personalities.
+### W9 — Motion and Interaction
+Objective: create a restrained, premium motion system that improves hierarchy, feedback, orientation, and perceived quality without introducing motion sickness, blocking interaction, harming accessibility, or compromising mobile performance.
 
 Scope:
-- audit current image usage, placeholders, screenshots, avatars, food/product imagery, branch imagery, and marketing surfaces;
-- research high-quality hospitality/editorial image patterns and current web-platform guidance;
-- define art direction for hero, menu items, restaurants, branches, Owner Studio previews, and product screenshots;
-- define aspect-ratio, crop, focal-point, object-position, and responsive sizing rules;
-- define missing/poor-image fallbacks that preserve layout and brand hierarchy;
-- define responsive image delivery, compression, loading priority, and stable geometry rules;
-- define Arabic-first alt-text/content rules and decorative-image handling;
-- preserve tenant ownership and never introduce unlicensed competitor imagery or copied creative assets;
-- add regression coverage for image dimensions/fallback/accessibility contracts where the current architecture supports it;
-- run full Quality Gate plus applicable browser/performance checks.
+- audit existing transitions, drawers, dialogs, buttons, cart interactions, theme previews, loading states, and route changes;
+- define motion tokens for duration, easing, distance, scale, and opacity;
+- define interaction feedback for hover, focus, press, selection, success, error, and loading;
+- define entrance/exit choreography for mobile drawers, sheets, and overlays;
+- preserve immediate feedback for primary customer actions;
+- support `prefers-reduced-motion` and avoid essential information conveyed only by animation;
+- avoid layout-affecting animation where transform/opacity can achieve the same result;
+- define motion budgets for mobile and low-power devices;
+- add regression coverage for the motion contract;
+- run full Quality Gate and applicable browser/performance checks.
 
 Acceptance criteria:
-- evidence-based imagery/art-direction contract documented;
-- no protected theme is flattened or replaced;
-- critical public-menu and marketing images have explicit sizing/crop/fallback behavior;
-- responsive image loading does not introduce avoidable layout shift;
-- meaningful images have accessible alternative text and decorative images are not announced;
-- no unlicensed or competitor-owned creative is introduced;
-- regression coverage exists for the chosen contracts;
+- evidence-based motion contract documented;
+- motion tokens are centralized and theme-compatible;
+- key interactions have consistent feedback;
+- reduced-motion behavior is explicit and verified;
+- no avoidable layout-shift or interaction-blocking animation;
+- five protected themes remain visually distinct;
+- regression coverage exists;
 - full Quality Gate passes.
 
-Risks: image licensing, visual inconsistency, CLS/performance regressions, poor Arabic content context, over-art-directed themes, oversized mobile payloads.
+Risks: excessive motion, accessibility regressions, jank on low-end mobile devices, theme inconsistency, interaction delays.
 
 Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
