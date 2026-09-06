@@ -12,7 +12,7 @@ import { SmallMenuTemplate } from "@/components/templates/small-menu";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getPublicMenu } from "@/lib/menu/public";
-import { getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
+import { getNotFoundMenuSeo, getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
 import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
@@ -56,12 +56,11 @@ export const Route = createFileRoute("/m/$slug")({
         ...(seo.image ? [{ property: "og:image", content: seo.image }, { name: "twitter:image", content: seo.image }] : []),
       ], links: [{ rel: "canonical", href: seo.canonical }, ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href }))], scripts: [{ children: createThemeBootstrapScript(activeTheme, Boolean(previewTheme)) }, { type: "application/ld+json", children: JSON.stringify(seo.schema) }] };
     }
-    return { meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: "noindex, nofollow" }], links: [{ rel: "canonical", href: `${seoFallbackOrigin()}/m/${encodeURIComponent(params.slug)}` }] };
+    const fallback = getNotFoundMenuSeo(pathname);
+    return { meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: fallback.robots }], links: [{ rel: "canonical", href: fallback.canonical }] };
   },
   component: PublicMenuPage,
 });
-
-function seoFallbackOrigin(): string { return "https://menu-v3-kohl.vercel.app"; }
 
 const MENU_TIMEOUT_MS = 10_000;
 const MENU_CACHE_PREFIX = "menu-v3:public:";
@@ -72,7 +71,7 @@ function PublicMenuPage() { const { slug } = Route.useParams(); const { branch, 
 export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu; previewTheme?: ThemeKey }) {
   const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const { setLang } = useLang();
   useEffect(() => { setLang(locale); }, [locale, setLang]);
-  function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو", retry: load }); }); }
+  function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); withTimeout(getPublicMenu({ data: { slug, branch } }), MENU_TIMEOUT_MS).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch((err: unknown) => { if (!instant) setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المنيو" , retry: load }); }); }
   useEffect(() => { load(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, branch]);
   if (state.status === "loading") return <LoadingState label="جارٍ تحميل المنيو…" />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const activeTheme = previewTheme ?? state.menu.tenant.themeKey; const family = getThemeFamily(activeTheme); const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } }; return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
