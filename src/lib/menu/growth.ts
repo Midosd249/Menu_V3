@@ -1,36 +1,33 @@
 import type { OwnerAnalytics } from "./types";
 
-export type GrowthRate = { numerator: number; denominator: number; percent: number };
+export type GrowthRatio = { numerator: number; denominator: number; per100: number };
 
 export type GrowthMetrics = {
-  engagementRate: GrowthRate;
-  productInterestRate: GrowthRate;
-  whatsappRate: GrowthRate;
-  qrToVisitRate: GrowthRate;
+  productInterest: GrowthRatio;
+  whatsappIntent: GrowthRatio;
+  qrVisitRatio: GrowthRatio;
   averageViewsPerSession: number;
   leadingProduct: OwnerAnalytics["topProducts"][number] | null;
   leadingCategory: OwnerAnalytics["byCategory"][number] | null;
   primaryOpportunity: "discovery" | "conversion" | "content" | "distribution" | "baseline";
 };
 
-function rate(numerator: number, denominator: number): GrowthRate {
+function ratio(numerator: number, denominator: number): GrowthRatio {
   const safeNumerator = Math.max(0, numerator);
   const safeDenominator = Math.max(0, denominator);
   return {
     numerator: safeNumerator,
     denominator: safeDenominator,
-    percent: safeDenominator > 0 ? Math.min(100, (safeNumerator / safeDenominator) * 100) : 0,
+    per100: safeDenominator > 0 ? (safeNumerator / safeDenominator) * 100 : 0,
   };
 }
 
 /**
- * Derives decision metrics only from server-reported OwnerAnalytics.
- * It never invents a denominator when the source data is missing.
+ * Derives directional operating ratios only from server-reported OwnerAnalytics.
+ * These are not unique-user conversion rates because the current event stream
+ * does not expose a unique-user count for every event type.
  */
 export function buildGrowthMetrics(analytics: OwnerAnalytics): GrowthMetrics {
-  const engagedSessions = analytics.productViews > 0
-    ? Math.min(analytics.uniqueSessions, analytics.productViews)
-    : 0;
   const primaryOpportunity = analytics.uniqueSessions === 0
     ? "baseline"
     : analytics.productViews === 0
@@ -42,10 +39,9 @@ export function buildGrowthMetrics(analytics: OwnerAnalytics): GrowthMetrics {
           : "distribution";
 
   return {
-    engagementRate: rate(engagedSessions, analytics.uniqueSessions),
-    productInterestRate: rate(analytics.productViews, analytics.visits),
-    whatsappRate: rate(analytics.whatsappClicks, analytics.uniqueSessions),
-    qrToVisitRate: rate(analytics.visits, analytics.qrScans),
+    productInterest: ratio(analytics.productViews, analytics.visits),
+    whatsappIntent: ratio(analytics.whatsappClicks, analytics.uniqueSessions),
+    qrVisitRatio: ratio(analytics.visits, analytics.qrScans),
     averageViewsPerSession: analytics.uniqueSessions > 0
       ? Number((analytics.productViews / analytics.uniqueSessions).toFixed(1))
       : 0,
