@@ -170,6 +170,14 @@ html[data-menu-theme="gallery"] .menu-public-shell {
   --menu-focus-ring: var(--color-focus-ring);
   --menu-shadow: 0 4px 18px color-mix(in oklab, var(--color-content-primary) 6%, transparent);
   --menu-shadow-hover: 0 18px 42px color-mix(in oklab, var(--color-content-primary) 14%, transparent);
+  background-color: var(--color-surface-canvas);
+  color: var(--color-content-primary);
+}
+
+.menu-public-shell :where(input, textarea, select) {
+  color: var(--color-content-primary);
+  background-color: var(--color-surface-primary);
+  border-color: var(--color-border-subtle);
 }
 
 /* Shared interaction states. Theme CSS may add shape/texture, but meaning is stable. */
