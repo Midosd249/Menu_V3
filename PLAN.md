@@ -25,6 +25,7 @@
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
 - W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
 - W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; repository and CI release-readiness audit passed, but current `main` is not production-deployed.
+- W17 Public Pages & Themes Integration — `IN_PROGRESS` on `w17-public-pages-themes-integration`.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -57,6 +58,22 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - W14 Pricing, packaging, and commercial UX.
 - W15 Growth, analytics, and experimentation.
 - W16 QA, browser/device, and release.
+- W17 Public Pages & Themes Integration.
+
+## W17 Public Pages & Themes Integration
+- VERIFIED: canonical source is `Midosd249/Menu_V3`; legacy `Menu-V2-Sandbox` is not part of this implementation.
+- VERIFIED: homepage uses `COMMERCIAL_PLANS` for Free, Starter, and Pro pricing and displays branch/product/team limits.
+- VERIFIED: homepage exposes the five protected themes from `MENU_THEMES` and links them to the real Menu V3 preview route.
+- VERIFIED: plan and theme selections are shown in the new-customer request area before submission.
+- VERIFIED: selected plan/theme are serialized into the existing `submitLead` details field without changing the server contract.
+- VERIFIED: `/themes` presents personality, product style, imagery emphasis, and preview actions without introducing a sixth theme or a paywall.
+- VERIFIED: `/themes/preview` continues to render through the existing Menu V3 theme controller and public-menu/template system.
+- VERIFIED: preview controls are localized and include a return-to-comparison action and a use-theme path.
+- VERIFIED: `tests/public-pages-themes-contract.test.mjs` protects the pricing/theme/lead/renderer boundaries.
+- VERIFIED: `docs/w17-public-pages-themes-design-brief.md` records scope and acceptance requirements.
+- UNKNOWN: new public marketing surfaces have not yet received direct browser/device visual QA in this connector environment.
+- UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
+- BLOCKED: production deployment remains separately blocked by the existing Vercel capacity/rate condition.
 
 ## Completed W15 — Growth, Analytics, and Experimentation
 - VERIFIED: research reviewed current product-analytics and experimentation guidance from Amplitude and Google Analytics and converted it into a repository-specific, minimal event contract.
@@ -69,7 +86,7 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: zero denominators render as unavailable rather than fabricated percentages.
 - VERIFIED: `src/lib/menu/growth.test.ts` protects metric math and the implemented event taxonomy.
 - VERIFIED: event integrity and tenant-scoped aggregation remain protected by the existing analytics integrity suite.
-- VERIFIED: production experimentation is intentionally not activated because the current event schema has no experiment exposure/variant property; claiming an A/B result without that data would be false.
+- VERIFIED: production experimentation is intentionally not activated because the current event schema has no experiment exposure/variant property.
 - VERIFIED: experimentation policy and first recommended experiment are recorded in `docs/growth-w15-analytics-experimentation.md`.
 - VERIFIED: no database migration was required for W15.
 - INFERRED: the highest-value immediate growth lever is making existing acquisition → engagement → intent data actionable before adding more instrumentation.
@@ -105,15 +122,17 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W16-R — Controlled production release retry after Vercel capacity is cleared
-Objective: once the Vercel rate/build limitation is cleared, perform exactly one intentional production deployment of current `main`, verify the deployed commit, perform real-device production QA, and close W16 only with direct deployment evidence.
+### W17-Q — Verify and harden the public Pages & Themes integration
+Objective: run the repository quality gates against the W17 implementation, inspect the final diff, and resolve only implementation/test defects found in the scoped public pages and themes journey.
 
 Acceptance criteria:
-- Vercel Usage/Billing limitation is rechecked and the deployment condition is clear;
-- current `main` commit `3a7fcffa2bd68cdb034eb3cde05ab3f0df8ecce1` is deployed to production;
-- direct Vercel evidence confirms the production deployment commit matches current `main`;
-- real-device production QA covers supported mobile/browser states and core customer actions;
-- testing override state is confirmed disabled/expired before commercial launch;
-- final release evidence is recorded and W16 is marked CLOSED only after all required evidence is present.
+- `npm run typecheck` passes;
+- `npm test` passes including `tests/public-pages-themes-contract.test.mjs`;
+- `npm run lint` passes;
+- `npm run build` passes;
+- `npm run qa:template` passes where applicable;
+- final diff contains only W17-scoped changes and preserves protected backend/theme architecture;
+- Arabic RTL, English LTR, mobile/responsive, plan selection, theme selection, and preview controls are verified to the extent supported by the available environment;
+- remaining UNKNOWN/BLOCKED items are explicitly recorded rather than hidden behind DONE.
 
-Verification: direct Vercel deployment evidence plus real-device production QA and final continuity review.
+Verification: GitHub Actions quality evidence plus final diff/continuity review and available browser/visual evidence.
