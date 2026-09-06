@@ -21,6 +21,7 @@
 - W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate passed in run `34013861903`.
 - W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; Quality Gate run `34014895325` passed all required steps.
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; Quality Gate run `34015320658` passed all required steps.
+- W13 Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE.
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -66,6 +67,20 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - UNKNOWN: production RUM is unavailable, so real-user timeout/retry frequency and recovery rate cannot be quantified.
 - Evidence record: `docs/reliability-failure-path-audit.md`.
 
+## Completed W13 — Trust, Security, and Data Ownership Hardening
+- VERIFIED: public tenant responses use `PublicTenant = Omit<Tenant, "ownerUserId">` and `mapPublicTenant()` strips owner identity before public serialization.
+- VERIFIED: operational revision metadata is not part of the public response type.
+- VERIFIED: authenticated Studio code retains the full `Tenant` model for owner-only workflows.
+- VERIFIED: inactive `tenant_members` no longer authorize Owner/Studio server functions; Studio member snapshots exclude inactive records.
+- VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant predicates.
+- VERIFIED: platform-admin access remains server-side and fail-closed through `requirePlatformAdmin` and the database-backed platform-admin check.
+- VERIFIED: no new dependency was added and the existing dependency contract was restored after the security test was wired into `npm test`.
+- VERIFIED: new `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
+- INFERRED: the existing platform-admin mechanism is the correct high-privilege foundation; a client-side permanent superuser flag would be unsafe.
+- Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is recorded for a future atomic task and was not introduced as an insecure shortcut.
+- Evidence record: `docs/security-w13-trust-data-ownership.md`.
+- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
+
 ## Protected Work
 - Existing five-theme implementation.
 - Shared public-menu behavior and customer actions.
@@ -82,11 +97,12 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W13 — Trust, Security, and Data Ownership
-Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
+### W13 Quality Closure
+Objective: prove the W13 security/data-boundary changes through the complete Quality Gate, then close W13 and move to W14.
 
 Acceptance criteria:
 - no public response exposes private tenant/owner data;
+- inactive memberships fail closed;
 - authorization boundaries remain tenant/branch scoped;
 - secrets are not embedded in client bundles or logs;
 - error responses do not expose internal SQL, stack traces, or infrastructure details;
