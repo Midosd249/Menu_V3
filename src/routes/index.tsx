@@ -8,36 +8,38 @@ import { SignedIn, SignedOut } from "@/lib/auth/gates";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { submitLead } from "@/lib/menu/public";
+import { COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
+import { MENU_THEMES, type ThemeKey } from "@/lib/theme";
 
 export const Route = createFileRoute("/")({ component: Home });
 
 const HERO_IMAGE = "https://cdn-pipeline-output.picsart.com/pipeline-output/d89fb75b-a8fa-4c54-9f4f-5ab0c7c6e4d7.png";
-const MENU_IMAGE = "https://cdn-pipeline-output.picsart.com/pipeline-output/5dec344a-27fb-4da1-b99d-2669d11fd8c7.png";
 
 function Home() {
   const { lang } = useLang();
+  const [selectedPlan, setSelectedPlan] = useState<string>("");
+  const [selectedTheme, setSelectedTheme] = useState<ThemeKey | "">("");
+
+  function choose(plan = "", theme: ThemeKey | "" = "") {
+    setSelectedPlan(plan);
+    setSelectedTheme(theme);
+    document.getElementById("request-service")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <div className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <Link to="/" className="group flex items-center gap-3">
-            <span className="grid size-9 place-items-center rounded-xl bg-ink text-paper shadow-sm transition-transform group-hover:-rotate-3">
-              <span className="font-display text-lg">م</span>
-            </span>
+            <span className="grid size-9 place-items-center rounded-xl bg-ink text-paper shadow-sm transition-transform group-hover:-rotate-3"><span className="font-display text-lg">م</span></span>
             <span className="font-display text-xl font-semibold tracking-tight">{t(copy.brand, lang)}</span>
           </Link>
           <div className="flex items-center gap-2">
+            <a href="#themes" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "التصاميم" : "Themes"}</a>
+            <a href="#pricing" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "الباقات" : "Plans"}</a>
             <LangToggle />
-            <SignedOut>
-              <Link to="/login" className="hidden h-10 items-center rounded-xl border border-line px-3 text-sm sm:inline-flex">
-                {t(copy.marketing.ctaLogin, lang)}
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <Link to="/studio" className="inline-flex h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper shadow-sm">
-                {t(copy.nav.overview, lang)}
-              </Link>
-            </SignedIn>
+            <SignedOut><Link to="/login" className="hidden h-10 items-center rounded-xl border border-line px-3 text-sm sm:inline-flex">{t(copy.marketing.ctaLogin, lang)}</Link></SignedOut>
+            <SignedIn><Link to="/studio" className="inline-flex h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper shadow-sm">{t(copy.nav.overview, lang)}</Link></SignedIn>
           </div>
         </div>
       </header>
@@ -47,102 +49,37 @@ function Home() {
           <div className="pointer-events-none absolute inset-0 opacity-40" style={{ background: "radial-gradient(55% 70% at 10% 10%, rgba(154,90,56,.18), transparent 70%), radial-gradient(45% 60% at 90% 20%, rgba(23,20,17,.10), transparent 70%)" }} />
           <div className="relative mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-16 lg:pb-24 lg:pt-16">
             <div className="grid max-w-2xl gap-7">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-paper/80 px-3 py-1.5 text-xs font-medium text-muted shadow-sm">
-                <Sparkles className="size-3.5 text-accent" />
-                {t(copy.marketing.heroEyebrow, lang)}
-              </div>
-              <div className="grid gap-5">
-                <h1 className="font-display text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-[4.4rem]">
-                  {t(copy.marketing.heroTitle, lang)}
-                </h1>
-                <p className="max-w-xl text-base leading-8 text-ink-soft sm:text-lg">
-                  {t(copy.marketing.heroBody, lang)}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild size="lg" className="rounded-xl px-5 shadow-lg shadow-ink/10">
-                  <Link to="/login">
-                    {t(copy.marketing.ctaPrimary, lang)}
-                    <ArrowUpLeft className="size-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-xl bg-paper/70 px-5">
-                  <Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }}>{t(copy.marketing.ctaSecondary, lang)}</Link>
-                </Button>
-              </div>
-              <div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-3">
-                {[copy.marketing.proofA, copy.marketing.proofB, copy.marketing.proofC].map((item) => (
-                  <div key={item.ar} className="flex items-start gap-2 text-sm text-ink-soft">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent/10 text-accent"><Check className="size-3.5" /></span>
-                    {t(item, lang)}
-                  </div>
-                ))}
-              </div>
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-paper/80 px-3 py-1.5 text-xs font-medium text-muted shadow-sm"><Sparkles className="size-3.5 text-accent" />{t(copy.marketing.heroEyebrow, lang)}</div>
+              <div className="grid gap-5"><h1 className="font-display text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-[4.4rem]">{t(copy.marketing.heroTitle, lang)}</h1><p className="max-w-xl text-base leading-8 text-ink-soft sm:text-lg">{t(copy.marketing.heroBody, lang)}</p></div>
+              <div className="flex flex-wrap gap-3"><Button size="lg" className="rounded-xl px-5 shadow-lg shadow-ink/10" onClick={() => choose()}>{lang === "ar" ? "ابدأ طلبك" : "Start your request"}<ArrowUpLeft className="size-4" /></Button><Button asChild variant="outline" size="lg" className="rounded-xl bg-paper/70 px-5"><Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }}>{t(copy.marketing.ctaSecondary, lang)}</Link></Button></div>
+              <div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-3">{[copy.marketing.proofA, copy.marketing.proofB, copy.marketing.proofC].map((item) => <div key={item.ar} className="flex items-start gap-2 text-sm text-ink-soft"><span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent/10 text-accent"><Check className="size-3.5" /></span>{t(item, lang)}</div>)}</div>
             </div>
             <LiveCard />
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-4 px-5 py-12 sm:grid-cols-3 lg:py-16">
-          <ValueCard icon={<Palette className="size-5" />} title={lang === "ar" ? "هوية بصرية راقية" : "Premium visual identity"} body={lang === "ar" ? "ألوان دافئة، صور قوية، وتسلسل بصري يجعل المنيو يبدو كمنتج حقيقي." : "Warm neutrals, strong imagery, and hierarchy that feels like a real product."} />
-          <ValueCard icon={<QrCode className="size-5" />} title={lang === "ar" ? "من QR إلى المنيو فوراً" : "QR to menu instantly"} body={lang === "ar" ? "تجربة سريعة على الجوال، فروع متعددة، واتصال مباشر بالمطعم." : "Fast mobile experience, branches, and direct restaurant contact."} />
-          <ValueCard icon={<BarChart3 className="size-5" />} title={lang === "ar" ? "بيانات قابلة للتصرف" : "Actionable data"} body={lang === "ar" ? "زيارات، مشاهدات الأصناف ومسح QR لتعرف ما يهم العملاء." : "Visits, product views, and QR scans so owners know what matters."} />
-        </section>
+        <section className="mx-auto grid max-w-6xl gap-4 px-5 py-12 sm:grid-cols-3 lg:py-16"><ValueCard icon={<Palette className="size-5" />} title={lang === "ar" ? "هوية بصرية راقية" : "Premium visual identity"} body={lang === "ar" ? "ألوان دافئة، صور قوية، وتسلسل بصري يجعل المنيو يبدو كمنتج حقيقي." : "Warm neutrals, strong imagery, and hierarchy that feels like a real product."} /><ValueCard icon={<QrCode className="size-5" />} title={lang === "ar" ? "من QR إلى المنيو فوراً" : "QR to menu instantly"} body={lang === "ar" ? "تجربة سريعة على الجوال، فروع متعددة، واتصال مباشر بالمطعم." : "Fast mobile experience, branches, and direct restaurant contact."} /><ValueCard icon={<BarChart3 className="size-5" />} title={lang === "ar" ? "بيانات قابلة للتصرف" : "Actionable data"} body={lang === "ar" ? "زيارات، مشاهدات الأصناف ومسح QR لتعرف ما يهم العملاء." : "Visits, product views, and QR scans so owners know what matters."} /></section>
 
-        <section className="border-y border-line bg-sand/35">
-          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:py-20">
-            <div className="grid gap-4">
-              <p className="text-sm font-medium text-accent">{t(copy.marketing.sectionProduct, lang)}</p>
-              <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{lang === "ar" ? "ليس مجرد رابط للمنيو." : "More than a menu link."}</h2>
-              <p className="max-w-lg leading-7 text-ink-soft">{lang === "ar" ? "نصمم تجربة ضيافة رقمية تجمع العرض، الهوية، الفروع، التواصل والتحليلات في مكان واحد." : "A hospitality experience that brings presentation, identity, branches, contact, and analytics together."}</p>
-            </div>
-            <div className="grid gap-3 md:grid-cols-3">
-              {[[copy.marketing.f1t, copy.marketing.f1d], [copy.marketing.f2t, copy.marketing.f2d], [copy.marketing.f3t, copy.marketing.f3d]].map(([title, body]) => (
-                <article key={title.ar} className="grid gap-3 rounded-2xl border border-line bg-paper p-5 shadow-sm">
-                  <h3 className="text-base font-semibold">{t(title, lang)}</h3>
-                  <p className="text-sm leading-6 text-ink-soft">{t(body, lang)}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <section id="themes" className="scroll-mt-24 border-y border-line bg-sand/35"><div className="mx-auto max-w-6xl px-5 py-16 lg:py-20"><div className="mb-8 grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="text-sm font-medium text-accent">{lang === "ar" ? "التصاميم" : "Themes"}</p><h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{lang === "ar" ? "اختر الشخصية التي تناسب مطعمك." : "Choose the personality that fits your restaurant."}</h2><p className="mt-3 max-w-2xl leading-7 text-ink-soft">{lang === "ar" ? "خمسة تصاميم مختلفة تعمل على نفس بيانات المنيو، مع الحفاظ على نظام Menu V3 الحالي." : "Five distinct design personalities using the same menu data and the existing Menu V3 theme system."}</p></div><Link to="/themes" className="text-sm font-medium text-accent hover:underline">{lang === "ar" ? "مقارنة كل التصاميم" : "Compare all themes"} ↗</Link></div><div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{MENU_THEMES.map((theme) => <article key={theme.key} className="overflow-hidden rounded-3xl border border-line bg-paper shadow-sm"><div className={`menu-theme-preview ${theme.preview.className}`}><div className="preview-orb" /><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[.18em] opacity-70">{theme.key}</span><span className="rounded-full border border-white/30 bg-black/10 px-2 py-1 text-[10px] text-white backdrop-blur">{lang === "ar" ? "متاح" : "Available"}</span></div><strong>{lang === "ar" ? theme.name.ar : theme.name.en}</strong></div><div className="grid gap-3 p-5"><div><h3 className="font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h3><p className="mt-1 text-xs font-medium text-accent">{lang === "ar" ? theme.promise.ar : theme.promise.en}</p><p className="mt-2 text-sm leading-6 text-muted">{lang === "ar" ? theme.description.ar : theme.description.en}</p></div><div className="grid grid-cols-2 gap-2 text-xs text-muted"><span className="rounded-lg bg-sand px-3 py-2">{theme.layout.productCard}</span><span className="rounded-lg bg-sand px-3 py-2">{theme.layout.imageRatio}</span></div><div className="flex gap-2"><Link to="/themes/preview" search={{ theme: theme.key }} className="inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-line text-sm">{lang === "ar" ? "معاينة" : "Preview"}</Link><button type="button" onClick={() => choose("", theme.key)} className="inline-flex h-10 flex-1 items-center justify-center rounded-xl bg-ink text-sm text-paper">{lang === "ar" ? "استخدم التصميم" : "Use theme"}</button></div></div></article>)}</div></div></section>
 
-        <LeadForm />
+        <section id="pricing" className="scroll-mt-24 mx-auto max-w-6xl px-5 py-16 lg:py-24"><div className="mb-10 grid gap-3 text-center"><p className="text-sm font-medium text-accent">{lang === "ar" ? "الباقات والأسعار" : "Plans & pricing"}</p><h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{lang === "ar" ? "ابدأ مجاناً، وتوسع عندما تحتاج." : "Start free, then scale when you need it."}</h2><p className="mx-auto max-w-2xl leading-7 text-ink-soft">{lang === "ar" ? "أسعار واضحة وحدود تشغيلية واضحة، من دون مسار دفع وهمي." : "Clear prices and operational limits, without inventing a checkout flow."}</p></div><div className="grid gap-4 lg:grid-cols-3">{COMMERCIAL_PLANS.map((plan) => { const active = selectedPlan === plan.code; return <article key={plan.code} className={`relative grid gap-5 rounded-3xl border p-6 ${active ? "border-accent bg-sand/55 shadow-xl" : "border-line bg-paper shadow-sm"}`}>{plan.recommended ? <span className="absolute -top-3 start-5 rounded-full bg-accent px-3 py-1 text-[11px] font-semibold text-white">{lang === "ar" ? "الأكثر ملاءمة" : "Recommended"}</span> : null}<div><h3 className="font-display text-2xl font-semibold">{lang === "ar" ? plan.nameAr : plan.nameEn}</h3><div className="mt-3 flex items-end gap-1"><span className="font-display text-4xl font-semibold">{plan.monthlyPriceSar}</span><span className="pb-1 text-sm text-muted">SAR / {lang === "ar" ? "شهر" : "month"}</span></div></div><div className="grid gap-2 text-sm text-ink-soft"><PlanLine value={lang === "ar" ? `${plan.maxBranches} فرع` : `${plan.maxBranches} branch${plan.maxBranches === 1 ? "" : "es"}`} /><PlanLine value={lang === "ar" ? `${plan.maxProducts.toLocaleString("ar-SA")} صنف` : `${plan.maxProducts.toLocaleString("en-US")} products`} /><PlanLine value={lang === "ar" ? `${plan.maxTeamMembers} أعضاء فريق` : `${plan.maxTeamMembers} team members`} /></div><p className="text-xs leading-5 text-muted">{lang === "ar" ? "منيو ثنائي اللغة · QR ورابط عام · الثيمات الخمسة · تحليلات المنيو" : "Bilingual menu · QR and public link · five themes · menu analytics"}</p><button type="button" onClick={() => choose(plan.code)} className={`h-11 rounded-xl text-sm font-medium ${active ? "bg-accent text-white" : "bg-ink text-paper"}`}>{active ? (lang === "ar" ? "الباقة مختارة" : "Plan selected") : (lang === "ar" ? "اختيار هذه الباقة" : "Choose this plan")}</button></article>; })}</div><p className="mt-6 text-center text-xs text-muted"><Link to="/pricing" className="underline underline-offset-4">{lang === "ar" ? "راجع تفاصيل الباقات والحدود" : "See full plan details and limits"}</Link></p></section>
+
+        <section className="border-y border-line bg-sand/35"><div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:py-20"><div className="grid gap-4"><p className="text-sm font-medium text-accent">{t(copy.marketing.sectionProduct, lang)}</p><h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{lang === "ar" ? "ليس مجرد رابط للمنيو." : "More than a menu link."}</h2><p className="max-w-lg leading-7 text-ink-soft">{lang === "ar" ? "نصمم تجربة ضيافة رقمية تجمع العرض، الهوية، الفروع، التواصل والتحليلات في مكان واحد." : "A hospitality experience that brings presentation, identity, branches, contact, and analytics together."}</p></div><div className="grid gap-3 md:grid-cols-3">{[[copy.marketing.f1t, copy.marketing.f1d], [copy.marketing.f2t, copy.marketing.f2d], [copy.marketing.f3t, copy.marketing.f3d]].map(([title, body]) => <article key={title.ar} className="grid gap-3 rounded-2xl border border-line bg-paper p-5 shadow-sm"><h3 className="text-base font-semibold">{t(title, lang)}</h3><p className="text-sm leading-6 text-ink-soft">{t(body, lang)}</p></article>)}</div></div></section>
+
+        <LeadForm selectedPlan={selectedPlan} selectedTheme={selectedTheme} />
       </main>
-      <footer className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-        <span>{t(copy.brand, lang)}</span>
-        <span>{lang === "ar" ? "منصة Menu V3 — تجربة عربية أولاً" : "Menu V3 — Arabic-first hospitality experience"}</span>
-      </footer>
+      <footer className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"><span>{t(copy.brand, lang)}</span><span>{lang === "ar" ? "منصة Menu V3 — تجربة عربية أولاً" : "Menu V3 — Arabic-first hospitality experience"}</span></footer>
     </div>
   );
 }
 
-function LiveCard() {
-  const { lang } = useLang();
-  return (
-    <Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }} className="group relative block min-h-[480px] overflow-hidden rounded-[2rem] bg-ink text-paper shadow-2xl shadow-ink/15">
-      <img src={HERO_IMAGE} alt="" className="absolute inset-0 size-full object-cover opacity-75 transition duration-700 group-hover:scale-105" />
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
-      <div className="relative flex min-h-[480px] flex-col justify-between p-6 sm:p-8">
-        <div className="flex items-center justify-between">
-          <span className="rounded-full border border-paper/20 bg-ink/30 px-3 py-1.5 text-xs backdrop-blur">{t(copy.marketing.liveExample, lang)}</span>
-          <span className="grid size-10 place-items-center rounded-full bg-paper text-ink shadow-lg"><ArrowUpLeft className="size-4" /></span>
-        </div>
-        <div className="grid gap-2">
-          <p className="text-xs uppercase tracking-[.22em] text-paper/65">Al Olaya · Riyadh</p>
-          <p className="font-display text-4xl font-semibold">نَفَس</p>
-          <p className="max-w-xs text-sm leading-6 text-paper/80">{lang === "ar" ? "قهوة مختصة ومخبوزات يومية — نموذج حي من Menu V3" : "Specialty coffee and daily pastry — a live Menu V3 demo"}</p>
-        </div>
-      </div>
-    </Link>
-  );
-}
+function PlanLine({ value }: { value: string }) { return <div className="flex items-center gap-2"><Check className="size-4 shrink-0 text-good" />{value}</div>; }
 
-function ValueCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
-  return <article className="grid gap-3 rounded-2xl border border-line bg-paper p-5 shadow-sm"><span className="grid size-10 place-items-center rounded-xl bg-ink text-paper">{icon}</span><h2 className="font-semibold">{title}</h2><p className="text-sm leading-6 text-ink-soft">{body}</p></article>;
-}
+function LiveCard() { const { lang } = useLang(); return <Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }} className="group relative block min-h-[480px] overflow-hidden rounded-[2rem] bg-ink text-paper shadow-2xl shadow-ink/15"><img src={HERO_IMAGE} alt="" className="absolute inset-0 size-full object-cover opacity-75 transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" /><div className="relative flex min-h-[480px] flex-col justify-between p-6 sm:p-8"><div className="flex items-center justify-between"><span className="rounded-full border border-paper/20 bg-ink/30 px-3 py-1.5 text-xs backdrop-blur">{t(copy.marketing.liveExample, lang)}</span><span className="grid size-10 place-items-center rounded-full bg-paper text-ink shadow-lg"><ArrowUpLeft className="size-4" /></span></div><div className="grid gap-2"><p className="text-xs uppercase tracking-[.22em] text-paper/65">Al Olaya · Riyadh</p><p className="font-display text-4xl font-semibold">نَفَس</p><p className="max-w-xs text-sm leading-6 text-paper/80">{lang === "ar" ? "قهوة مختصة ومخبوزات يومية — نموذج حي من Menu V3" : "Specialty coffee and daily pastry — a live Menu V3 demo"}</p></div></div></Link>; }
 
-function LeadForm() {
+function ValueCard({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) { return <article className="grid gap-3 rounded-2xl border border-line bg-paper p-5 shadow-sm"><span className="grid size-10 place-items-center rounded-xl bg-ink text-paper">{icon}</span><h2 className="font-semibold">{title}</h2><p className="text-sm leading-6 text-ink-soft">{body}</p></article>; }
+
+function LeadForm({ selectedPlan, selectedTheme }: { selectedPlan: string; selectedTheme: ThemeKey | "" }) {
   const { lang } = useLang();
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [error, setError] = useState("");
@@ -151,47 +88,14 @@ function LeadForm() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    setStatus("saving");
-    setError("");
-    const result = await submitLead({ data: {
-      businessName: String(form.get("businessName") || ""), city: String(form.get("city") || ""), contactName: String(form.get("contactName") || ""), contactPhone: String(form.get("contactPhone") || ""), contactEmail: String(form.get("contactEmail") || ""), details: String(form.get("details") || ""),
-    } });
+    setStatus("saving"); setError("");
+    const plan = COMMERCIAL_PLANS.find((item) => item.code === selectedPlan);
+    const theme = MENU_THEMES.find((item) => item.key === selectedTheme);
+    const details = [plan ? `Selected plan: ${plan.code} / ${plan.nameEn}` : "Selected plan: not selected", theme ? `Selected theme: ${theme.key} / ${theme.nameEn}` : "Selected theme: not selected", String(form.get("details") || "").trim()].filter(Boolean).join("\n");
+    const result = await submitLead({ data: { businessName: String(form.get("businessName") || ""), city: String(form.get("city") || ""), contactName: String(form.get("contactName") || ""), contactPhone: String(form.get("contactPhone") || ""), contactEmail: String(form.get("contactEmail") || ""), details } });
     if (!result.ok) { setStatus("error"); setError(result.error); return; }
-    setReferenceId(result.data.id.slice(0, 8).toUpperCase());
-    setStatus("done");
+    setReferenceId(result.data.id.slice(0, 8).toUpperCase()); setStatus("done");
   }
 
-  return (
-    <section className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[.8fr_1.2fr] lg:py-24">
-      <div className="grid content-start gap-4">
-        <p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ من هنا" : "Start here"}</p>
-        <h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{t(copy.marketing.leadTitle, lang)}</h2>
-        <p className="max-w-lg leading-7 text-ink-soft">{t(copy.marketing.leadBody, lang)}</p>
-        <div className="mt-3 rounded-2xl border border-line bg-sand/50 p-4 text-sm text-ink-soft">{lang === "ar" ? "يصل الطلب مباشرة إلى مركز إدارة المنصة، حيث يمكن متابعة الحالة والتواصل معك." : "Your request goes directly to the platform lead center for follow-up."}</div>
-      </div>
-      {status === "done" ? (
-        <div className="grid content-center gap-4 rounded-[1.75rem] border border-line bg-sand/55 p-8 sm:p-10">
-          <span className="grid size-12 place-items-center rounded-full bg-ink text-paper"><Check className="size-6" /></span>
-          <h3 className="font-display text-2xl font-semibold">{lang === "ar" ? "تم استلام طلبك" : "Request received"}</h3>
-          <p className="text-sm leading-6 text-ink-soft">{t(copy.marketing.sent, lang)}</p>
-          <p className="font-mono text-xs text-muted">REF-{referenceId}</p>
-        </div>
-      ) : (
-        <form className="grid gap-4 rounded-[1.75rem] border border-line bg-paper p-5 shadow-xl shadow-ink/5 sm:p-7" onSubmit={onSubmit}>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={lang === "ar" ? "اسم المطعم" : "Restaurant name"}><Input name="businessName" required minLength={2} className="rounded-xl" /></Field>
-            <Field label={lang === "ar" ? "المدينة" : "City"}><Input name="city" placeholder={lang === "ar" ? "الرياض" : "Riyadh"} className="rounded-xl" /></Field>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={lang === "ar" ? "اسم المسؤول" : "Contact name"}><Input name="contactName" required minLength={2} className="rounded-xl" /></Field>
-            <Field label={lang === "ar" ? "الجوال / واتساب" : "Mobile / WhatsApp"}><Input name="contactPhone" required minLength={8} inputMode="tel" className="rounded-xl" /></Field>
-          </div>
-          <Field label={lang === "ar" ? "البريد (اختياري)" : "Email (optional)"}><Input name="contactEmail" type="email" className="rounded-xl" /></Field>
-          <Field label={lang === "ar" ? "ما الذي تريد تطويره؟" : "What would you like to improve?"}><Textarea name="details" rows={4} className="rounded-xl" /></Field>
-          {error ? <p className="text-sm text-bad">{error}</p> : null}
-          <Button type="submit" disabled={status === "saving"} size="lg" className="rounded-xl">{status === "saving" ? t(copy.state.loading, lang) : t(copy.marketing.ctaPrimary, lang)}</Button>
-        </form>
-      )}
-    </section>
-  );
+  return <section id="request-service" className="mx-auto grid max-w-6xl scroll-mt-24 gap-10 px-5 py-16 lg:grid-cols-[.8fr_1.2fr] lg:py-24"><div className="grid content-start gap-4"><p className="text-sm font-medium text-accent">{lang === "ar" ? "طلب عميل جديد" : "New customer request"}</p><h2 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{t(copy.marketing.leadTitle, lang)}</h2><p className="max-w-lg leading-7 text-ink-soft">{t(copy.marketing.leadBody, lang)}</p>{selectedPlan || selectedTheme ? <div className="grid gap-2 rounded-2xl border border-accent/30 bg-accent/5 p-4 text-sm"><strong>{lang === "ar" ? "اختياراتك" : "Your selections"}</strong>{selectedPlan ? <span>{lang === "ar" ? `الباقة: ${COMMERCIAL_PLANS.find((p) => p.code === selectedPlan)?.nameAr ?? selectedPlan}` : `Plan: ${COMMERCIAL_PLANS.find((p) => p.code === selectedPlan)?.nameEn ?? selectedPlan}`}</span> : null}{selectedTheme ? <span>{lang === "ar" ? `التصميم: ${MENU_THEMES.find((item) => item.key === selectedTheme)?.name.ar ?? selectedTheme}` : `Theme: ${MENU_THEMES.find((item) => item.key === selectedTheme)?.name.en ?? selectedTheme}`}</span> : null}</div> : null}<div className="mt-1 rounded-2xl border border-line bg-sand/50 p-4 text-sm text-ink-soft">{lang === "ar" ? "هذا نموذج طلب عميل جديد. بعد الإرسال يظهر لك رقم مرجعي لتسهيل المتابعة." : "This is a new customer request. After submission you receive a reference ID for follow-up."}</div></div>{status === "done" ? <div className="grid content-center gap-4 rounded-[1.75rem] border border-line bg-sand/55 p-8 sm:p-10"><span className="grid size-12 place-items-center rounded-full bg-ink text-paper"><Check className="size-6" /></span><h3 className="font-display text-2xl font-semibold">{lang === "ar" ? "تم استلام طلب العميل الجديد" : "New customer request received"}</h3><p className="text-sm leading-6 text-ink-soft">{t(copy.marketing.sent, lang)}</p><p className="font-mono text-xs text-muted">REF-{referenceId}</p></div> : <form className="grid gap-4 rounded-[1.75rem] border border-line bg-paper p-5 shadow-xl shadow-ink/5 sm:p-7" onSubmit={onSubmit}><div className="grid gap-4 sm:grid-cols-2"><Field label={lang === "ar" ? "اسم المطعم" : "Restaurant name"}><Input name="businessName" required minLength={2} className="rounded-xl" /></Field><Field label={lang === "ar" ? "المدينة" : "City"}><Input name="city" placeholder={lang === "ar" ? "الرياض" : "Riyadh"} required className="rounded-xl" /></Field></div><div className="grid gap-4 sm:grid-cols-2"><Field label={lang === "ar" ? "اسم المسؤول" : "Contact name"}><Input name="contactName" required minLength={2} className="rounded-xl" /></Field><Field label={lang === "ar" ? "الجوال / واتساب" : "Mobile / WhatsApp"}><Input name="contactPhone" required minLength={8} inputMode="tel" className="rounded-xl" /></Field></div><Field label={lang === "ar" ? "البريد (اختياري)" : "Email (optional)"}><Input name="contactEmail" type="email" className="rounded-xl" /></Field><Field label={lang === "ar" ? "ما الذي تريد تطويره؟" : "What would you like to improve?"}><Textarea name="details" rows={4} className="rounded-xl" /></Field>{error ? <p className="text-sm text-bad">{error}</p> : null}<Button type="submit" disabled={status === "saving"} size="lg" className="rounded-xl">{status === "saving" ? t(copy.state.loading, lang) : (lang === "ar" ? "إرسال طلب عميل جديد" : "Submit new customer request")}</Button></form>}</section>;
 }
