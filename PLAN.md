@@ -8,10 +8,11 @@
 - Essential, Editorial, Noir, Heritage, and Gallery milestones are protected; browser/device closure remains separately tracked.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
-- Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.
+- Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is being introduced incrementally.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
-- **P0 Public Content Propagation — CLOSED / VERIFIED.**
-- **W6 Typography Evidence & Decision — CLOSED / VERIFIED.**
+- P0 Public Content Propagation — CLOSED / VERIFIED.
+- W6 Typography Evidence & Decision — CLOSED / VERIFIED.
+- **W6-01 Typography Implementation — IN PROGRESS / BLOCKED on binary asset transfer.**
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -65,20 +66,28 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: Tajawal selected as Alternate 2.
 - VERIFIED: decision, candidate matrix, benchmark content, rejection criteria, and implementation boundary are recorded in `docs/design-intelligence.md`.
 - PROPOSED: self-host/subset the smallest required IBM Plex Arabic/Latin weight set; do not add the IBM npm font package solely for font delivery because its package documentation includes telemetry.
-- UNKNOWN until implementation benchmark: final payload, font-swap/CLS behavior, and visual fit across every theme.
-- No application code, themes, schema, dependencies, or deployment configuration changed during the decision task.
+- UNKNOWN until final implementation benchmark: final payload, font-swap/CLS behavior, and visual fit across every theme.
+
+## Current W6-01 Progress
+- VERIFIED: shared semantic typography contract is implemented in `src/typography.css`.
+- VERIFIED: root document loads the shared typography stylesheet before theme styles.
+- VERIFIED: IBM Plex Sans Arabic and IBM Plex Sans are requested at weights 400/500/600/700.
+- VERIFIED: regression coverage exists in `scripts/typography-contract.test.mjs` and is included in the default test suite.
+- VERIFIED: no new font package dependency was added.
+- BLOCKED: official WOFF2 binaries cannot currently be transferred into the repository through the available GitHub connector because binary blobs are not accepted by the connector's file transfer path.
+- Required remaining work: add official local WOFF2 assets, replace Google Fonts runtime loading with local `@font-face`, then run all quality/performance/browser checks.
+- Status detail: `docs/typography-implementation-status.md`.
 
 ## Exact Current Task
-### W6-01 — Typography Implementation
+### W6-01 — Complete self-hosted typography delivery
 
-**Objective:** introduce IBM Plex Sans Arabic + IBM Plex Sans as the shared typography foundation, self-hosted and subsetted, without changing theme architecture.
-
-**Scope:** existing font/style entry points, semantic typography tokens, official font assets/licensing documentation, representative Arabic/English/mixed-direction tests, and performance inspection.
+**Objective:** transfer the official IBM Plex Sans Arabic + IBM Plex Sans WOFF2 assets into the repository, replace runtime Google Fonts loading with local `@font-face` declarations, and verify the full typography implementation without changing theme architecture.
 
 **Acceptance criteria:**
-- use official font assets/licensing;
+- official font assets/licensing are present locally;
+- local `@font-face` covers only the required weights;
+- Google Fonts runtime loading is removed;
 - no new dependency;
-- smallest required weight set;
 - shared semantic typography roles remain intact;
 - Arabic/English/mixed-direction/SAR/phone/URL samples render without clipping or bidi defects;
 - responsive typography checked at small mobile, mobile, tablet, and desktop;
@@ -87,7 +96,7 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - typecheck/tests/lint/build and applicable browser/performance checks pass;
 - update continuity files and stop.
 
-**Risks:** excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
+**Risks:** binary asset transfer, excessive payload, font swap/CLS, unintended theme coupling, weight mismatch, mixed-direction regressions.
 
 **Verification commands:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and typography/performance inspection.
 
