@@ -1,8 +1,8 @@
-export * from "./types";
-export * from "./registry";
+export * from "./types.ts";
+export * from "./registry.ts";
 
-import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey } from "./registry";
-import type { ThemeKey } from "./types";
+import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey } from "./registry.ts";
+import type { ThemeKey } from "./types.ts";
 
 export type ThemeResolution = {
   key: ThemeKey;
