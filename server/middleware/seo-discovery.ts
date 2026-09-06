@@ -1,8 +1,16 @@
+import { defineEventHandler, getRequestURL, setResponseHeader, setResponseStatus } from "h3";
 import { getSql } from "@/lib/db";
 import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml, getPublicOrigin } from "@/lib/menu/seo-discovery";
 
 const XML_CONTENT_TYPE = "application/xml; charset=utf-8";
 const TEXT_CONTENT_TYPE = "text/plain; charset=utf-8";
+
+type PublicSitemapRow = {
+  slug: string;
+  branch_slug: string;
+  name_en: string | null;
+  branch_name_en: string | null;
+};
 
 export default defineEventHandler(async (event) => {
   const pathname = getRequestURL(event).pathname;
@@ -21,12 +29,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const sql = await getSql();
-    const rows = await sql<{
-      slug: string;
-      branch_slug: string;
-      name_en: string | null;
-      branch_name_en: string | null;
-    }[]>`
+    const rows = await sql<PublicSitemapRow[]>`
       select
         t.slug,
         b.slug as branch_slug,
