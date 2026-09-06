@@ -7,10 +7,19 @@ const rootRoute = fs.readFileSync(new URL("src/routes/__root.tsx", root), "utf8"
 const typography = fs.readFileSync(new URL("src/typography.css", root), "utf8");
 const packageJson = JSON.parse(fs.readFileSync(new URL("package.json", root), "utf8"));
 
-test("shared typography loads Arabic and Latin IBM Plex families", () => {
+test("shared typography loads pinned official IBM Plex Arabic and Latin families", () => {
   assert.match(rootRoute, /typographyCss/);
-  assert.match(rootRoute, /family=IBM\+Plex\+Sans:wght@400;500;600;700/);
-  assert.match(rootRoute, /family=IBM\+Plex\+Sans\+Arabic:wght@400;500;600;700/);
+  assert.doesNotMatch(rootRoute, /fonts\.googleapis\.com/);
+  assert.match(typography, /@font-face\s*\{/);
+  assert.match(typography, /IBMPlexSansArabic-Regular\.woff2/);
+  assert.match(typography, /IBMPlexSansArabic-Medium\.woff2/);
+  assert.match(typography, /IBMPlexSansArabic-SemiBold\.woff2/);
+  assert.match(typography, /IBMPlexSansArabic-Bold\.woff2/);
+  assert.match(typography, /IBMPlexSans-Regular\.woff2/);
+  assert.match(typography, /IBMPlexSans-Medium\.woff2/);
+  assert.match(typography, /IBMPlexSans-SemiBold\.woff2/);
+  assert.match(typography, /IBMPlexSans-Bold\.woff2/);
+  assert.match(typography, /font-display:\s*swap/);
   assert.match(typography, /--type-display-family/);
   assert.match(typography, /--type-body-family/);
   assert.match(typography, /font-synthesis:\s*none/);
