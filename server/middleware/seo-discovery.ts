@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const sql = await getSql();
-    const rows = await sql<PublicSitemapRow[]>`
+    const rows = await sql<PublicSitemapRow>`
       select
         t.slug,
         b.slug as branch_slug,
