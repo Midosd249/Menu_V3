@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildGrowthMetrics, GROWTH_EVENT_CONTRACT } from "./growth";
+import { buildGrowthMetrics, GROWTH_EVENT_CONTRACT } from "./growth.ts";
 import type { OwnerAnalytics } from "./types";
 
 const base: OwnerAnalytics = {
