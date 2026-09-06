@@ -146,6 +146,21 @@
 - UNKNOWN: payment collection, automated billing, invoices, refunds, and webhook-driven subscription transitions remain unimplemented and are outside W14.
 - Evidence record: `docs/commercial-w14-pricing.md`.
 
+### W15 — Growth, Analytics, and Experimentation — CLOSED / VERIFIED
+- VERIFIED: current product-analytics and experimentation research is recorded in `docs/growth-w15-analytics-experimentation.md`.
+- VERIFIED: existing event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
+- VERIFIED: added denominator-safe directional growth ratios in `src/lib/menu/growth.ts`.
+- VERIFIED: added product views per 100 visits, WhatsApp clicks per 100 sessions, visits per 100 QR scans, average views/session, and opportunity classification; UI explicitly avoids unique-user conversion claims.
+- VERIFIED: Studio Analytics now presents the growth loop in Arabic/English.
+- VERIFIED: added `src/lib/menu/growth.test.ts` to the default test suite.
+- VERIFIED: tenant-scoped analytics integrity remains protected by `src/lib/menu/analytics-integrity.test.ts`.
+- VERIFIED: no third-party analytics SDK, fingerprinting, IP storage, schema migration, or parallel tracking system was introduced.
+- VERIFIED: production A/B experimentation is explicitly not activated because the current event schema lacks experiment exposure/variant data.
+- INFERRED: acquisition → engagement → intent is the strongest immediate growth loop supported by current evidence.
+- UNKNOWN: retention, revenue attribution, statistical significance, and true order conversion remain unavailable until corresponding production events exist.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- Evidence: `docs/growth-w15-analytics-experimentation.md`.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -174,7 +189,7 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W15 — Growth, Analytics, and Experimentation
-- Objective: turn the existing verified analytics and commercial surfaces into a measurable growth loop without weakening privacy, tenant isolation, performance, or the public-menu customer experience.
-- Acceptance: identify the smallest evidence-backed growth metrics and event contract; preserve analytics integrity and tenant boundaries; add only measurable and reversible experiments; keep Arabic/English conversion surfaces explicit and accessible; avoid fabricated analytics or client-only business truth; add regression coverage for changed growth contracts; pass the full Quality Gate; avoid unrelated refactor.
-- Verification: repository-specific analytics tests plus `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and final diff review.
+### W16 — QA, Browser/Device, and Release
+- Objective: perform the final release-readiness pass across the complete Menu V3 surface without reopening completed foundations.
+- Acceptance: full repository state, diff, history, configuration, documentation, and deployment path audited; typecheck/tests/lint/build/Playwright/all-theme QA/performance/release checks pass; W14/W15 regressions remain green; Arabic/English/RTL remain intact; no unresolved P0/P1 security, isolation, accessibility, or reliability issue; final release evidence is recorded before merge.
+- Verification: repository Quality Gate plus final diff review and deployment status.
