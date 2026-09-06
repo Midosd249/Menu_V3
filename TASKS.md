@@ -1,6 +1,20 @@
 # TASKS
 
 ## Completed Tasks
+### W13 — Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE
+- VERIFIED: public tenant responses use a distinct `PublicTenant` type that omits `ownerUserId`.
+- VERIFIED: `mapPublicTenant()` strips `owner_user_id` before public serialization; operational revision metadata is not exposed through the public type.
+- VERIFIED: authenticated Studio workflows retain the full `Tenant` shape.
+- VERIFIED: inactive `tenant_members` records fail closed and inactive members are excluded from Studio member snapshots.
+- VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant/branch predicates.
+- VERIFIED: platform administration remains fail-closed through the existing `requirePlatformAdmin` and database-backed platform-admin check.
+- VERIFIED: `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
+- VERIFIED: existing dependency versions were preserved; no new dependency was added.
+- INFERRED: the existing platform-admin mechanism is the correct foundation for high-privilege operations; a client-side permanent superuser flag is intentionally rejected.
+- Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is a follow-up design, not an insecure shortcut.
+- Evidence: `docs/security-w13-trust-data-ownership.md`.
+- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
+
 ### P0 — Runtime Public Content Propagation — CLOSED / VERIFIED
 - VERIFIED: live Supabase migration was applied to the intended `menu_v3` schema.
 - VERIFIED: revision triggers cover tenant, branch, branch hours, categories, products, variants, modifier groups, modifier options, and product-modifier links.
@@ -166,7 +180,21 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W13 — Trust, Security, and Data Ownership — TODO
-- Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
-- Acceptance: no public response exposes private tenant/owner data; authorization boundaries remain tenant/branch scoped; secrets are not embedded in client bundles or logs; error responses do not expose internal SQL, stack traces, or infrastructure details; public analytics/event paths remain tenant-scoped; security regression coverage exists for every changed boundary; full Quality Gate passes; no unrelated changes.
+### W13 — Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE
+- VERIFIED: public tenant responses use a distinct `PublicTenant` type that omits `ownerUserId`.
+- VERIFIED: `mapPublicTenant()` strips `owner_user_id` before public serialization; operational revision metadata is not exposed through the public type.
+- VERIFIED: authenticated Studio workflows retain the full `Tenant` model.
+- VERIFIED: inactive `tenant_members` records fail closed and inactive members are excluded from Studio member snapshots.
+- VERIFIED: Owner/Admin server functions retain the shared `authMiddleware` chokepoint and tenant/branch predicates.
+- VERIFIED: platform administration remains fail-closed through the existing `requirePlatformAdmin` and database-backed platform-admin check.
+- VERIFIED: `scripts/security-boundary.test.mjs` covers public/private data separation, authenticated middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
+- VERIFIED: existing dependency versions were preserved; no new dependency was added.
+- INFERRED: the existing platform-admin mechanism is the correct foundation for high-privilege operations; a client-side permanent superuser flag is intentionally rejected.
+- Decision: future emergency/holiday client support should use a time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is a follow-up design, not an insecure shortcut.
+- Evidence: `docs/security-w13-trust-data-ownership.md`.
+- UNKNOWN: final Quality Gate result until the latest security changes complete CI.
+
+## Exact Next Task
+### W13 Quality Closure
+- Objective: prove the W13 security/data-boundary changes through the complete Quality Gate, then close W13 and move to W14.
 - Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
