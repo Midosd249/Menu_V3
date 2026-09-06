@@ -16,8 +16,8 @@
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
 - W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
 - W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate passed in run `34010117079`.
-- **W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate passed in run `34010619265`.**
-- **W11 SEO, Local Discovery, and Shareability — READY TO START.**
+- W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate passed in run `34010619265`.
+- **W11 SEO, Local Discovery, and Shareability — IMPLEMENTED / QUALITY GATE PENDING.**
 
 ## Canonical Backend Identity
 - VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
@@ -79,7 +79,7 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
 - VERIFIED: root document loads the accessibility layer before protected theme CSS.
 - VERIFIED: public product and cart dialogs expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
-- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email direction, and live validation feedback.
+- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email input direction, and live validation feedback.
 - VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where direction is data-dependent.
 - VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
 - VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level without introducing a second form system.
@@ -89,33 +89,33 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
 - Evidence record: `docs/accessibility-rtl-quality.md`.
 
-## Exact Current Task
-### W11 — SEO, Local Discovery, and Shareability
+## W11 — SEO, Local Discovery, and Shareability — Implementation Complete / Gate Pending
 
-**Objective:** audit and strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
+**Objective:** strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, sitemap/robots, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
 
-**Scope:**
-- metadata contracts, canonical/hreflang behavior, robots/sitemap alignment;
-- restaurant/local business structured data and truthful tenant-scoped location signals;
-- Open Graph/share-preview surfaces where applicable;
-- branch-level public URLs and locale variants;
-- QR source continuity and deep-link context;
-- missing-content/noindex rules and preview/private route exclusion;
-- regression coverage and full Quality Gate.
+### Implemented
+- Absolute production canonical URLs for public menu and branch routes.
+- Reciprocal Arabic/English `hreflang` only when real English tenant + branch names exist.
+- Stable `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata.
+- Restaurant structured data remains derived from public tenant/branch data and does not fabricate location information.
+- `/robots.txt` excludes private/control routes and advertises `/sitemap.xml`.
+- `/sitemap.xml` is server-generated from active + published tenants and active branches only.
+- English sitemap variants are emitted only when real English tenant/branch names exist.
+- Sitemap and robots helpers are pure/testable in `src/lib/menu/seo-discovery.ts`.
+- Regression coverage added in `src/lib/menu/seo-discovery.test.ts` and expanded in `src/lib/menu/seo.test.ts`.
+- Evidence record: `docs/seo-local-discovery-shareability.md`.
 
-**Acceptance criteria:**
-- evidence-based SEO/shareability contract documented;
-- Arabic and English URLs remain canonical and reciprocal;
-- structured data is truthful and tenant-scoped;
-- public routes are indexable only when eligible;
-- share previews are stable;
-- QR/deep links preserve intended context;
-- regression coverage exists;
-- full Quality Gate passes.
+### Security / correctness constraints
+- No unpublished or inactive tenant/branch is emitted into the sitemap.
+- No owner/admin/studio/private route is emitted.
+- Preview theme URLs remain `noindex, nofollow`.
+- No session, user, or private tenant data is placed into metadata.
+- No fabricated reviews, ratings, coordinates, or unsupported business attributes.
+- No new dependency or schema migration.
 
-**Risks:** duplicate URLs, fabricated locale content, cross-tenant metadata leakage, incorrect location claims, indexing private/preview surfaces.
-
-**Verification:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
+### Quality closure
+- PENDING: current head `1d56aac367d5297051ba07e480f7ceb43116de25` must pass the repository Quality Gate before W11 is marked CLOSED.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, robots/sitemap response checks, canonical/hreflang/schema validation, and performance inspection.
 
 ## Protected Work
 - Existing five-theme implementation.
