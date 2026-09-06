@@ -1,4 +1,5 @@
 import type { BranchHour, Lang, PublicMenu } from "./types";
+import { DEFAULT_PUBLIC_ORIGIN, getPublicOrigin } from "./seo-discovery";
 
 const DAY_NAMES = [
   "Monday",
@@ -9,8 +10,6 @@ const DAY_NAMES = [
   "Saturday",
   "Sunday",
 ] as const;
-
-const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-kohl.vercel.app";
 
 export type PublicLocale = Lang;
 export type LocaleAlternate = { hreflang: PublicLocale; href: string };
@@ -25,9 +24,10 @@ function absoluteHttpUrl(value: string): string | undefined {
 
 function publicOrigin(): string {
   const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
-  const configured = env?.VITE_VERCEL_PROJECT_PRODUCTION_URL?.trim();
-  if (configured) return configured.startsWith("http") ? configured.replace(/\/+$/, "") : `https://${configured}`;
-  return DEFAULT_PUBLIC_ORIGIN;
+  return getPublicOrigin({
+    VITE_VERCEL_PROJECT_PRODUCTION_URL: env?.VITE_VERCEL_PROJECT_PRODUCTION_URL,
+    VERCEL_PROJECT_PRODUCTION_URL: env?.VERCEL_PROJECT_PRODUCTION_URL,
+  });
 }
 
 function branchName(menu: PublicMenu, lang: Lang = "ar"): string {
@@ -92,7 +92,7 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string, requestedLa
   const image = absoluteHttpUrl(menu.tenant.coverUrl) ?? absoluteHttpUrl(menu.tenant.logoUrl);
   const logo = absoluteHttpUrl(menu.tenant.logoUrl);
   const mapsUrl = absoluteHttpUrl(menu.branch.mapsUrl);
-  const canonical = localePath(pathname, lang);
+  const canonical = `${origin}${localePath(pathname, lang)}`;
   const alternates = lang === requestedLang ? getPublicMenuLocaleAlternates(menu, pathname, origin) : [];
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -131,9 +131,11 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string, requestedLa
   };
 }
 
-export function getNotFoundMenuSeo(pathname: string) {
+export function getNotFoundMenuSeo(pathname: string, origin = publicOrigin()) {
   return {
-    canonical: pathname,
+    canonical: `${origin}${pathname}`,
     robots: "noindex, nofollow",
   };
 }
+
+export { DEFAULT_PUBLIC_ORIGIN };
