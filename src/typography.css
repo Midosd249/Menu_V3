@@ -1,0 +1,90 @@
+/* Menu V3 shared typography contract.
+ * Font assets remain external until the repository can receive the official IBM
+ * Plex web binaries through a binary-capable release path. Do not add a runtime
+ * font package dependency just to obtain CSS.
+ */
+:root {
+  --type-display-family: "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --type-body-family: "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --type-code-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --type-display-weight: 700;
+  --type-heading-weight: 700;
+  --type-subheading-weight: 600;
+  --type-body-weight: 400;
+  --type-label-weight: 600;
+  --type-button-weight: 600;
+  --type-price-weight: 600;
+}
+
+html,
+body {
+  font-family: var(--type-body-family);
+  font-synthesis: none;
+}
+
+body {
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-feature-settings: "kern", "liga", "clig", "calt";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display,
+[data-type="display"] {
+  font-family: var(--type-display-family);
+  font-weight: var(--type-heading-weight);
+  text-wrap: balance;
+}
+
+button,
+[role="button"],
+label,
+input,
+textarea,
+select {
+  font-family: var(--type-body-family);
+}
+
+button,
+[role="button"] {
+  font-weight: var(--type-button-weight);
+}
+
+.price,
+[data-type="price"],
+.tabular,
+[data-type="numeric"] {
+  font-family: var(--type-body-family);
+  font-weight: var(--type-price-weight);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "kern", "liga", "calt";
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--type-code-family);
+}
+
+/* Keep mixed Arabic/Latin content stable without forcing visual mirroring. */
+[dir="rtl"] [dir="ltr"],
+[dir="ltr"] [dir="rtl"] {
+  unicode-bidi: isolate;
+}
+
+[dir="rtl"] .bidi-isolate,
+[dir="ltr"] .bidi-isolate {
+  unicode-bidi: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
