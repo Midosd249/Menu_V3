@@ -71,13 +71,13 @@
 - VERIFIED: the motion contract is part of the default `npm test` suite.
 - VERIFIED: no new runtime dependency or Supabase/schema change was introduced.
 - VERIFIED: pre-existing invalid `@radix-ui/react-popover` range `^1.2.12` was aligned to the lockfile's installable `^1.1.12` range after CI proved it blocked installation; no package upgrade was introduced.
-- VERIFIED: Quality run `34010117079` passed install, typecheck, 112 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: Quality run `34010117079` passed install, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence record: `docs/motion-implementation.md`.
 
 ### W10 — Accessibility and RTL Quality — CLOSED / VERIFIED
 - VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
 - VERIFIED: root document loads the accessibility layer before protected theme CSS.
-- VERIFIED: public product and cart dialogs now expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
+- VERIFIED: public product and cart dialogs expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
 - VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email input direction, and live validation feedback.
 - VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where content direction is data-dependent.
 - VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
@@ -88,9 +88,9 @@
 - UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
 - Evidence record: `docs/accessibility-rtl-quality.md`.
 
-### W11 — SEO, Local Discovery, and Shareability — IMPLEMENTED / QUALITY GATE PENDING
+### W11 — SEO, Local Discovery, and Shareability — CLOSED / VERIFIED
 - VERIFIED: public-menu canonical URLs are absolute production URLs.
-- VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when tenant and branch English names both exist.
+- VERIFIED: Arabic is the canonical default locale; English alternates are emitted only when real English tenant + branch names exist.
 - VERIFIED: Arabic/English alternates are reciprocal and use absolute URLs.
 - VERIFIED: preview theme variants remain `noindex, nofollow`.
 - VERIFIED: missing public menus remain `noindex, nofollow`.
@@ -101,8 +101,17 @@
 - VERIFIED: sitemap emits English variants only when real English tenant/branch names exist.
 - VERIFIED: no new runtime dependency or database schema migration was introduced.
 - VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts`; public SEO tests were extended in `src/lib/menu/seo.test.ts`.
-- VERIFIED: implementation contract is recorded in `docs/seo-local-discovery-shareability.md`.
-- UNKNOWN: final GitHub Quality run for the current W11 head has not yet completed.
+- VERIFIED: W11 final Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
+- Evidence record: `docs/seo-local-discovery-shareability.md`.
+
+### W12-01 — Public Menu Hydration Performance — IMPLEMENTED / QUALITY GATE PENDING
+- Objective: eliminate the avoidable duplicate public-menu request during SSR hydration.
+- VERIFIED: `src/routes/m.$slug.tsx` now renders from `initialMenu` and writes it to the existing session cache without issuing the mount-time `getPublicMenu` request.
+- VERIFIED: the existing client-only loading path remains available when `initialMenu` is absent.
+- VERIFIED: branch, locale, theme, timeout, retry, and existing cache-key behavior are preserved.
+- VERIFIED: regression coverage was added to `scripts/quality-workflow.test.mjs`.
+- VERIFIED: implementation record exists at `docs/performance-public-menu.md`.
+- UNKNOWN: production RUM is not available, so the exact real-user request reduction is not yet measurable.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
@@ -132,12 +141,12 @@ Workstreams:
 - W16 QA/browser/device/release.
 
 ## Current Task
-### W11 — SEO, Local Discovery, and Shareability — QUALITY CLOSURE
-- Objective: verify the current W11 implementation through the repository Quality Gate and close only if all checks pass.
-- Scope: typecheck, tests, lint, production build, Playwright/template QA, robots/sitemap response checks, canonical/hreflang/schema validation, and performance inspection.
-- Acceptance: full Quality Gate passes; no cross-tenant metadata exposure; only eligible public routes are discoverable; no fabricated locale or location claims; no unrelated regression.
-- Risks: dependency/install failure, server middleware typing/build issues, malformed XML, incorrect production-origin resolution.
-- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
+### W12-01 — Public Menu Hydration Performance — QUALITY CLOSURE
+- Objective: verify the hydration optimization through the repository Quality Gate and close W12-01 only if all checks pass.
+- Scope: typecheck, tests, lint, production build, Playwright/template QA, performance audit, and regression review for loader/cache behavior.
+- Acceptance: full Quality Gate passes; no duplicate hydration fetch when SSR `initialMenu` exists; client-only fallback remains functional; no cross-tenant or stale-cache regression; no unrelated changes.
+- Risks: loader/client hydration mismatch, accidental freshness regression, cache-key regression, browser behavior differences.
+- Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, and performance audit.
 
 ## Permanent Quality Gate
 Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
