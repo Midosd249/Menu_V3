@@ -98,7 +98,7 @@
 - VERIFIED: public share metadata includes `og:url`, `og:site_name`, `og:title`, `og:description`, locale, and Twitter card/image metadata where an image exists.
 - VERIFIED: `/robots.txt` excludes private/control surfaces and advertises `/sitemap.xml`.
 - VERIFIED: `/sitemap.xml` is generated server-side from active, published tenants and active branches only.
-- VERIFIED: sitemap emits English variants only when real English tenant/branch names exist.
+- VERIFIED: sitemap emits English variants only when real English names exist.
 - VERIFIED: no new runtime dependency or database schema migration was introduced.
 - VERIFIED: discovery regression tests exist in `src/lib/menu/seo-discovery.test.ts`; public SEO tests were extended in `src/lib/menu/seo.test.ts`.
 - VERIFIED: W11 final Quality run `34013074378` passed install, route generation, typecheck, 123 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance audit/upload, and preview shutdown.
@@ -170,6 +170,3 @@ Workstreams:
 - Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
 - Acceptance: no public response exposes private tenant/owner data; authorization boundaries remain tenant/branch scoped; secrets are not embedded in client bundles or logs; error responses do not expose internal SQL, stack traces, or infrastructure details; public analytics/event paths remain tenant-scoped; security regression coverage exists for every changed boundary; full Quality Gate passes; no unrelated changes.
 - Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
-
-## Permanent Quality Gate
-Future UI work must use `AGENTS.md`, `docs/design-intelligence.md`, `docs/template-review-checklist.md`, `docs/visual-functional-audit.md`, `docs/design-research-log.md`, `docs/project-memory/problems-learned.md`, `docs/design-strategy-master-plan.md`, `docs/design-system-contract.md`, and `docs/project-infrastructure.md` where applicable.
