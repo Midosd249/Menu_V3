@@ -11,6 +11,7 @@ import themeRefinementsCss from "../theme-refinements.css?url";
 import themeRefinementsV2Css from "../theme-refinements-v2.css?url";
 import editorialThemeCss from "../theme-editorial.css?url";
 import heritageThemeCss from "../theme-heritage.css?url";
+import galleryThemeCss from "../theme-gallery.css?url";
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
 
 const APP_NAME = "منيو";
@@ -39,6 +40,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: themeRefinementsV2Css },
       { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: heritageThemeCss },
+      { rel: "stylesheet", href: galleryThemeCss },
       { rel: "stylesheet", href: menuPreviewLayerCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
