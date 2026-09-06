@@ -1,4 +1,4 @@
-import type { Branch, Lang, Tenant } from "./types";
+import type { Branch, Lang, PublicTenant } from "./types";
 
 export type PublicActionKey = "whatsapp" | "location" | "phone" | "instagram";
 export type PublicAction = { key: PublicActionKey; href: string; label: string; external?: boolean };
@@ -37,7 +37,7 @@ export function normalizePhoneDigits(value: string, country = "SA"): string | nu
   return digits;
 }
 
-export function buildWhatsAppUrl(tenant: Tenant, lang: Lang): string | null {
+export function buildWhatsAppUrl(tenant: PublicTenant, lang: Lang): string | null {
   const digits = normalizePhoneDigits(tenant.whatsapp, tenant.country);
   if (!digits) return null;
   const restaurant = lang === "ar" ? tenant.nameAr || tenant.nameEn : tenant.nameEn || tenant.nameAr;
@@ -49,7 +49,7 @@ export function buildWhatsAppUrl(tenant: Tenant, lang: Lang): string | null {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-export function getPublicActions(tenant: Tenant, branch: Branch, lang: Lang): PublicAction[] {
+export function getPublicActions(tenant: PublicTenant, branch: Branch, lang: Lang): PublicAction[] {
   const whatsapp = buildWhatsAppUrl(tenant, lang);
   const maps = sanitizeExternalUrl(branch.mapsUrl, MAP_HOSTS);
   const instagram = sanitizeExternalUrl(tenant.instagramUrl, SOCIAL_HOSTS);
