@@ -10,6 +10,7 @@ const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8
 const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "utf8");
+const ROOT_ROUTE = readFileSync(join(ROOT, "src/routes/__root.tsx"), "utf8");
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
@@ -36,6 +37,15 @@ test("public menu hydration reuses SSR data without a duplicate network fetch", 
   assert.match(PUBLIC_MENU_ROUTE, /writeCachedMenu\(cacheKey, initialMenu\);/);
   assert.ok(PUBLIC_MENU_ROUTE.includes("return;"));
   assert.match(PUBLIC_MENU_ROUTE, /load\(\); \/\/ eslint-disable-line react-hooks\/exhaustive-deps/);
+});
+
+test("critical font origin is warmed before the typography stylesheet", () => {
+  const preconnect = ROOT_ROUTE.indexOf('{ rel: "preconnect", href: "https://cdn.jsdelivr.net"');
+  const stylesheet = ROOT_ROUTE.indexOf('{ rel: "stylesheet", href: typographyCss }');
+  assert.ok(preconnect >= 0, "missing jsDelivr preconnect");
+  assert.ok(ROOT_ROUTE.includes('{ rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" }'));
+  assert.ok(ROOT_ROUTE.includes('crossOrigin: "anonymous"'));
+  assert.ok(stylesheet > preconnect, "font connection hint must precede typography stylesheet");
 });
 
 test("robots.txt allows public pages, protects private surfaces, and declares the sitemap", () => {
