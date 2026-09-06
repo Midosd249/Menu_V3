@@ -36,23 +36,27 @@
 - W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate `34013861903` passed all required steps.
 - W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; final Quality Gate `34014895325` passed all required steps.
 - W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; final Quality Gate `34015320658` passed all required steps.
+- W13 Trust, Security, and Data Ownership — IMPLEMENTED / AWAITING FINAL QUALITY GATE.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
 - No sixth theme is created as a substitute for product/design strategy.
 
-## W12-03 Reliability and Failure-Path Audit
-- VERIFIED: public-menu loading now uses a bounded two-attempt retry policy.
-- VERIFIED: each attempt has a 10-second timeout.
-- VERIFIED: retry delay is bounded and deterministic at 350 ms after the first failed attempt.
-- VERIFIED: terminal `not_found` / invalid responses are not retried.
-- VERIFIED: terminal timeout, unavailable, and unknown failures receive Arabic/English actionable messages.
-- VERIFIED: existing session cache remains optional and uses the established slug/branch key; no cross-tenant cache mechanism was introduced.
-- VERIFIED: no Supabase schema, auth, authorization, theme, routing, or successful-path data contract changed.
-- VERIFIED: regression coverage protects retry bounds, terminal-response behavior, delay, and localized failure messages.
-- VERIFIED: Quality Gate `34015320658` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- UNKNOWN: production RUM is not available, so real-user timeout/retry frequency and recovery rate cannot be quantified.
-- Evidence: `docs/reliability-failure-path-audit.md`.
+## W13 Trust, Security, and Data Ownership
+- VERIFIED: public menu responses use `PublicTenant`, which omits `ownerUserId`.
+- VERIFIED: `mapPublicTenant()` strips `owner_user_id`; operational `public_content_version` is not part of the public type.
+- VERIFIED: authenticated Studio code retains the full `Tenant` shape for owner-only workflows.
+- VERIFIED: inactive `tenant_members` records no longer authorize Owner/Studio server functions.
+- VERIFIED: Studio member snapshots exclude inactive memberships.
+- VERIFIED: Owner/Admin server functions continue to pass through the shared `authMiddleware` chokepoint.
+- VERIFIED: tenant-scoped mutations continue to include `tenant_id` predicates and branch ownership checks.
+- VERIFIED: platform administration remains fail-closed through `requirePlatformAdmin` and the database-backed platform-admin check.
+- VERIFIED: a static security boundary suite checks public/private data separation, auth middleware coverage, platform-admin fail-closed behavior, and client-reachable secret-name leakage.
+- VERIFIED: the existing dependency contract was preserved; no new dependency was added.
+- INFERRED: the existing platform-admin capability is the correct high-privilege operational foundation; a permanent client-side superuser flag would be unsafe.
+- UNKNOWN: production RUM cannot quantify real-world security/failure frequency.
+- Decision: emergency client support should use a future time-bound, tenant-scoped, audited support session rather than a blanket bypass. This is recorded as a follow-up, not silently implemented as a security shortcut.
+- Evidence: `docs/security-w13-trust-data-ownership.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -63,11 +67,12 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W13 — Trust, Security, and Data Ownership
-Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
+### W13 Quality Closure
+Objective: prove the W13 security/data-boundary changes through the complete Quality Gate, then close W13 and move to the next roadmap task.
 
 Acceptance criteria:
 - no public response exposes private tenant/owner data;
+- inactive memberships fail closed;
 - authorization boundaries remain tenant/branch scoped;
 - secrets are not embedded in client bundles or logs;
 - error responses do not expose internal SQL, stack traces, or infrastructure details;
