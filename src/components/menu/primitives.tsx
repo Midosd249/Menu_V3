@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { Lang, Product } from "@/lib/menu/types";
 import { cn, formatSar } from "@/lib/utils";
 
@@ -11,11 +11,13 @@ export type MenuMediaProps = {
 };
 
 export function MenuMedia({ src, alt = "", className, eager = false, fallback }: MenuMediaProps) {
-  if (!src) {
+  const [failed, setFailed] = useState(false);
+
+  if (!src || failed) {
     return <div className={cn("grid place-items-center bg-sand text-xs text-muted", className)} aria-hidden>{fallback ?? "Menu"}</div>;
   }
 
-  return <img src={src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("object-cover", className)} />;
+  return <img src={src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("object-cover", className)} onError={() => setFailed(true)} />;
 }
 
 export function MenuPrice({ price, currency, lang, className }: { price: number; currency?: string; lang: Lang; className?: string }) {
