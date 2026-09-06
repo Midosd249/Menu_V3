@@ -20,12 +20,14 @@ const menu = {
   categories: [], products: [],
 } satisfies PublicMenu;
 
-test("public menu SEO derives Arabic title, canonical, and restaurant schema from visible data", () => {
-  const seo = getPublicMenuSeo(menu, "/m/najd-kitchen/olaya");
+test("public menu SEO derives Arabic title, absolute canonical, and restaurant schema from visible data", () => {
+  const seo = getPublicMenuSeo(menu, "/m/najd-kitchen/olaya", "ar", "https://example.com");
   assert.equal(seo.title, "فرع العليا — القائمة والمنيو في الرياض");
-  assert.equal(seo.canonical, "/m/najd-kitchen/olaya");
+  assert.equal(seo.canonical, "https://example.com/m/najd-kitchen/olaya");
   assert.equal(seo.schema["@type"], "Restaurant");
   assert.equal(seo.schema.name, "فرع العليا");
+  assert.equal(seo.schema.url, "https://example.com/m/najd-kitchen/olaya");
+  assert.equal(seo.schema.hasMenu, "https://example.com/m/najd-kitchen/olaya");
   assert.equal(seo.schema.currenciesAccepted, "SAR");
   assert.equal(seo.localSeoEligible, true);
   assert.equal(seo.locale, "ar");
@@ -50,7 +52,7 @@ test("English public menu SEO is a real URL-level locale variant with reciprocal
   assert.equal(seo.locale, "en");
   assert.equal(seo.localeAvailable, true);
   assert.equal(seo.title, "Olaya Branch — Menu in الرياض");
-  assert.equal(seo.canonical, "/m/najd-kitchen/olaya?lang=en");
+  assert.equal(seo.canonical, "https://example.com/m/najd-kitchen/olaya?lang=en");
   assert.deepEqual(seo.alternates, [
     { hreflang: "ar", href: "https://example.com/m/najd-kitchen/olaya" },
     { hreflang: "en", href: "https://example.com/m/najd-kitchen/olaya?lang=en" },
@@ -70,7 +72,7 @@ test("missing English locale does not create a fabricated English variant", () =
   const seo = getPublicMenuSeo(withoutEnglish, "/m/najd-kitchen/olaya", "en", "https://example.com");
   assert.equal(seo.locale, "ar");
   assert.equal(seo.localeAvailable, false);
-  assert.equal(seo.canonical, "/m/najd-kitchen/olaya");
+  assert.equal(seo.canonical, "https://example.com/m/najd-kitchen/olaya");
   assert.deepEqual(seo.alternates, []);
 });
 
@@ -80,15 +82,15 @@ test("local SEO omits location markup when verified Saudi location data is incom
     tenant: { ...menu.tenant, city: "" },
     branch: { ...menu.branch, addressAr: "", mapsUrl: "https://maps.google.com/?q=unknown" },
   } satisfies PublicMenu;
-  const seo = getPublicMenuSeo(incomplete, "/m/najd-kitchen/olaya");
+  const seo = getPublicMenuSeo(incomplete, "/m/najd-kitchen/olaya", "ar", "https://example.com");
   assert.equal(seo.localSeoEligible, false);
   assert.equal("address" in seo.schema, false);
   assert.equal(seo.schema.hasMap, "https://maps.google.com/?q=unknown");
 });
 
-test("missing public menu SEO is explicitly noindex", () => {
-  assert.deepEqual(getNotFoundMenuSeo("/m/missing"), {
-    canonical: "/m/missing",
+test("missing public menu SEO is explicitly noindex with an absolute canonical", () => {
+  assert.deepEqual(getNotFoundMenuSeo("/m/missing", "https://example.com"), {
+    canonical: "https://example.com/m/missing",
     robots: "noindex, nofollow",
   });
 });
