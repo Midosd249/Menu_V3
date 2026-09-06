@@ -5,23 +5,19 @@
 - Repository: `Midosd249/Menu_V3`.
 - Source of truth: `main`.
 - Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential premium refinement is DEPLOYED / VERIFIED; manual real-device/Opera evidence remains UNKNOWN.
-- Editorial premium refinement, contact/location actions, language switching, and temporary public theme testing access are IMPLEMENTED / VERIFIED / MERGED.
-- Noir implementation refinement is COMPLETE; final browser/device closure remains separately blocked and Noir is not being reopened.
-- Heritage implementation is COMPLETE / VERIFIED by repository and GitHub Actions quality gates; browser/device closure remains separately blocked.
-- Gallery implementation is COMPLETE / VERIFIED by repository and GitHub Actions quality gates; browser/device closure remains separately blocked.
+- Essential, Editorial, Noir, Heritage, and Gallery milestones are protected; remaining browser/device closure is tracked separately.
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
-- External theme preview QR mode is DONE / VERIFIED.
-- **Design Intelligence & Product Experience Research is COMPLETE at planning level; implementation is intentionally not started.**
+- **Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.**
+- **Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED as documentation; implementation not started.**
 
 ## Current Strategic Direction
-The next product-development program is broader than themes. The objective is to make Menu V3 a distinctive `Premium Arabic-first Restaurant Presence Platform`: live menu + branded web presence + direct customer action + owner operations + local discoverability, while preserving the existing architecture and completed theme work.
+Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platform`: live menu + branded web presence + direct customer action + owner operations + local discoverability, while preserving the existing architecture and completed theme work.
 
 ## Master Design Strategy
-The complete cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md`.
+The complete roadmap is recorded in `docs/design-strategy-master-plan.md`.
 
 ### Workstreams
-- W0 Evidence, measurement, and product positioning.
+- W0 Evidence, measurement, product positioning.
 - W1 Brand positioning and content system.
 - W2 Marketing website/homepage.
 - W3 Public customer menu.
@@ -39,15 +35,35 @@ The complete cross-functional roadmap is recorded in `docs/design-strategy-maste
 - W15 Growth, analytics, and experimentation.
 - W16 QA, browser/device, and release.
 
-## Research Conclusions So Far
-- **VERIFIED:** Saudi/MENA competitors increasingly bundle digital menus with branded presence, direct ordering/contact, analytics, branches, compliance/local-market fit, and customer-data ownership.
+## Research Conclusions
+- **VERIFIED:** Saudi/MENA competitors increasingly bundle digital menus with branded presence, direct ordering/contact, analytics, branches, local-market fit, and/or customer-data ownership.
 - **VERIFIED:** global restaurant platforms increasingly connect menus, websites, ordering, discoverability, and operational data.
 - **VERIFIED:** Arabic/RTL and mixed-direction content require explicit bidi handling and dedicated acceptance cases.
 - **VERIFIED:** fonts and images are performance/layout inputs, not decoration only.
-- **VERIFIED:** the current brand direction is compatible with premium hospitality/editorial cues, warm neutral surfaces, deep ink, muted terracotta, strong Arabic hierarchy, whitespace, and operational clarity.
+- **VERIFIED:** current brand direction supports premium hospitality/editorial cues, warm neutral surfaces, deep ink, muted terracotta, strong Arabic hierarchy, whitespace, and operational clarity.
+- **INFERRED:** the strongest territory is a premium Arabic-first restaurant presence platform rather than another generic QR-menu product.
 - **PROPOSED:** build a shared Menu V3 signature above the five existing themes rather than introducing another theme.
-- **PROPOSED:** IBM Plex Sans Arabic is a strong typography candidate, pending benchmark against real product content and performance.
-- **UNKNOWN:** final homepage IA, typography, color territory, and conversion priorities until synthesis and measurement are completed.
+- **PROPOSED:** IBM Plex Sans Arabic remains a strong typography candidate, pending benchmark against real content and performance.
+- **UNKNOWN:** final conversion priorities and final font/color values require measurement and implementation-level testing.
+
+## Design Contract
+`docs/design-system-contract.md` is now the implementation baseline for:
+- semantic color/type roles;
+- spacing, radius, elevation, motion;
+- responsive/layout rules;
+- RTL/LTR/bidi behavior;
+- buttons, inputs, cards, search, dialogs, fixed actions;
+- public-menu hierarchy;
+- Owner Studio journey;
+- marketing website hierarchy;
+- imagery;
+- accessibility;
+- performance;
+- SEO/local discovery;
+- trust/security boundaries;
+- theme boundary.
+
+Exact production token values remain deliberately unresolved until the relevant decision tasks pass evidence checks.
 
 ## Protected Scope
 - Do not reopen Essential, Editorial, Noir, Heritage, or Gallery without direct defect evidence.
@@ -55,39 +71,21 @@ The complete cross-functional roadmap is recorded in `docs/design-strategy-maste
 - Do not create a sixth theme before a proven market/design requirement exists.
 - Do not weaken authentication, authorization, tenant/branch isolation, SEO, or deployment controls.
 - Do not use Vercel for ordinary design iteration.
+- Do not copy competitor layouts, assets, copy, or proprietary interactions.
 
 ## Permanent Release-Only Vercel Strategy
 Vercel is a release platform, not the normal development or design-iteration environment.
 
-**LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT**
+`LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT`
 
-- `main` must remain stable and deployable.
-- Preview deployments are exceptions only when deployment-specific behavior cannot be locally verified.
-- Before any deployment-related decision, inspect actual Vercel Usage/Billing.
-- Production deployment occurs only after a complete verified release batch.
-
-## Existing Release Policy Constraints
-- Authenticated browser/device verification remains pending for the five preview variants.
-- Temporary theme testing override must be reviewed and disabled before commercial production launch.
-- Implementation and deployment status remain separate.
-
-## Design Research Governance
-- Material research is recorded in `docs/design-research-log.md`.
-- Use official standards for accessibility, internationalization, web platform, and SEO.
-- Use competitor products as positioning/pattern evidence, not as design assets.
-- Use design galleries/UI libraries as inspiration only.
-- Label findings `VERIFIED`, `INFERRED`, `PROPOSED`, or `UNKNOWN`.
-- Do not convert an unverified trend into a product requirement.
-
-## Master Design Execution Order
-`Evidence → Positioning → Design System Contract → Typography/Color Decisions → Homepage IA → Public Menu UX → Owner Studio UX → SEO/Local Discovery → Performance/Accessibility → Prototype/Visual QA → Atomic Implementation Tasks → Quality Gates → Controlled Release`
+Before deployment-specific work, inspect actual Vercel Usage/Billing. Never claim production deployment without direct evidence.
 
 ## Priority Backlog
-### P0 — Foundation before broad visual implementation
-1. Design Intelligence Synthesis.
+### P0 — Foundation
+1. ~~Design Intelligence Synthesis~~ — CLOSED / VERIFIED.
 2. Product positioning/message hierarchy.
-3. Shared design-system contract.
-4. Typography decision with real Arabic/English/mixed content.
+3. ~~Shared design-system contract~~ — BASELINE ESTABLISHED / VERIFIED.
+4. **Typography decision with real Arabic/English/mixed content — CURRENT.**
 5. Public-menu first-screen/action hierarchy.
 6. Owner Studio activation/publish journey.
 7. Measurement/event baseline where infrastructure supports it.
@@ -111,22 +109,24 @@ Vercel is a release platform, not the normal development or design-iteration env
 6. Additional integrations only when validated by demand.
 
 ## Exact Current Task
-### Design Intelligence Synthesis — close external research and reconcile it with repository evidence
+### Typography Decision — benchmark candidate font systems
 
-**Objective:** produce one ranked, evidence-backed design decision set covering the website, public customer experience, Owner Studio, brand system, typography, color, content, conversion, accessibility, RTL, SEO, performance, trust, pricing, analytics, and growth.
+**Objective:** select one production-ready default typography system plus fallbacks using actual Menu V3 Arabic/English/mixed content and measurable performance constraints.
 
-**Files likely to change:** `docs/design-intelligence-audit.md`, `docs/design-research-log.md`, `docs/design-strategy-master-plan.md`, `PROJECT_STATE.md`, `TASKS.md` only if synthesis changes the queue.
+**Files likely to change:** typography research/decision documentation and, only if evidence supports it, the existing font configuration/source files.
 
 **Acceptance criteria:**
-- external research report reconciled with repository evidence;
-- competitor matrix and transferable patterns consolidated;
-- final design opportunities ranked P0/P1/P2;
-- explicit do-not-change boundaries retained;
-- typography and color remain decisions backed by tests/evidence, not assumptions;
-- homepage, public menu, and Owner Studio priorities are explicit;
-- no code changed during synthesis;
-- exact next atomic implementation/research task identified.
+- candidate set is explicit;
+- Arabic shaping and Latin pairing are checked;
+- numerals, SAR, phones, URLs, and mixed-direction strings are checked;
+- heading/body/UI/price roles are compared;
+- loading/subsetting/performance impact is measured where tooling permits;
+- licensing/availability is verified;
+- one default system and fallbacks are selected, or the decision remains explicitly BLOCKED with evidence;
+- no theme is reopened;
+- relevant tests/build/lint/typecheck run if source changes are introduced;
+- continuity files are updated.
 
-**Risks:** research bias, vendor marketing claims, trend-chasing, unsupported feature assumptions, scope creep, and reopening completed theme work.
+**Risks:** font metrics changing layout, Arabic readability regressions, mixed bidi issues, loading cost, licensing assumptions, and accidental global visual drift.
 
-**Verification:** inspect repository state/docs, validate important external claims against primary sources, review final diff, and ensure only the single synthesis task was performed.
+**Verification commands when source changes occur:** `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, plus applicable visual/template QA.
