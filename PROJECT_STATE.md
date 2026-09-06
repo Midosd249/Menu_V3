@@ -34,24 +34,25 @@
 - W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate `34010619265` passed all required steps.
 - W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED; final Quality Gate `34013074378` passed all required steps.
 - W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED; final Quality Gate `34013861903` passed all required steps.
-- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED for the current low-risk resource-efficiency slice; final Quality Gate `34014895325` passed all required steps.
+- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED; final Quality Gate `34014895325` passed all required steps.
+- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED; final Quality Gate `34015320658` passed all required steps.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
 - No sixth theme is created as a substitute for product/design strategy.
 
-## W12-02 Public Menu Resource & Bundle Efficiency
-- Objective: reduce avoidable public-menu resource startup cost without changing protected architecture or introducing speculative bundle refactors.
-- VERIFIED: audited `src/routes/__root.tsx`, `src/routes/m.$slug.tsx`, `src/typography.css`, theme loading, and `scripts/performance-audit.mjs`.
-- VERIFIED: the critical third-party font origin is `https://cdn.jsdelivr.net` under the established Fontsource typography contract.
-- VERIFIED: `src/routes/__root.tsx` now emits `preconnect` with anonymous CORS mode and `dns-prefetch` for the critical font origin.
-- VERIFIED: `scripts/quality-workflow.test.mjs` protects the connection-hint ordering and CORS contract.
-- VERIFIED: no runtime dependency, Supabase/schema, tenant/cache, hydration, or theme behavior changed.
-- VERIFIED: no arbitrary JavaScript/CSS performance budget was introduced; the existing browser audit remains report-only and evidence driven.
-- VERIFIED: the existing globally available theme styles were intentionally retained because the current preview/theme architecture relies on immediate theme availability; route-level stylesheet injection was not introduced without evidence that its FOUC/switching risk is acceptable.
-- VERIFIED: Quality Gate `34014895325` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- UNKNOWN: production RUM is not available, so the real-user latency improvement from connection warming cannot be quantified in this repository.
-- Evidence: `docs/performance-public-menu-resources.md`.
+## W12-03 Reliability and Failure-Path Audit
+- VERIFIED: public-menu loading now uses a bounded two-attempt retry policy.
+- VERIFIED: each attempt has a 10-second timeout.
+- VERIFIED: retry delay is bounded and deterministic at 350 ms after the first failed attempt.
+- VERIFIED: terminal `not_found` / invalid responses are not retried.
+- VERIFIED: terminal timeout, unavailable, and unknown failures receive Arabic/English actionable messages.
+- VERIFIED: existing session cache remains optional and uses the established slug/branch key; no cross-tenant cache mechanism was introduced.
+- VERIFIED: no Supabase schema, auth, authorization, theme, routing, or successful-path data contract changed.
+- VERIFIED: regression coverage protects retry bounds, terminal-response behavior, delay, and localized failure messages.
+- VERIFIED: Quality Gate `34015320658` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: production RUM is not available, so real-user timeout/retry frequency and recovery rate cannot be quantified.
+- Evidence: `docs/reliability-failure-path-audit.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -62,16 +63,17 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W12-03 — Reliability and Failure-Path Audit
-Objective: inspect public-menu and critical application failure behavior under timeout, upstream failure, malformed/partial data, cache miss, retry, navigation interruption, and dependency degradation; improve only evidenced failure-path weaknesses without changing successful-path architecture.
+### W13 — Trust, Security, and Data Ownership
+Objective: audit public/owner boundaries, tenant and branch authorization, public data exposure, secrets/configuration, error/logging exposure, and data-ownership UX; harden only evidenced risks without changing protected product behavior.
 
 Acceptance criteria:
-- critical failure states remain understandable and actionable in Arabic and English;
-- no unhandled rejection or infinite retry loop;
-- no stale/cross-tenant cache exposure;
-- timeout/retry behavior remains bounded;
-- browser and automated regression coverage exists for every changed failure path;
+- no public response exposes private tenant/owner data;
+- authorization boundaries remain tenant/branch scoped;
+- secrets are not embedded in client bundles or logs;
+- error responses do not expose internal SQL, stack traces, or infrastructure details;
+- public analytics/event paths remain tenant-scoped;
+- security regression coverage exists for every changed boundary;
 - full Quality Gate passes;
 - no unrelated changes.
 
-Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, performance audit, and targeted failure-path tests.
+Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, Playwright/template QA, targeted security tests, and final diff review.
