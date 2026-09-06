@@ -1,0 +1,116 @@
+/*
+ * Menu V3 — Editorial browser-hardening layer
+ *
+ * Keeps Editorial's magazine personality while protecting mobile geometry,
+ * mixed-direction values, and readable scan order under real restaurant data.
+ * Loaded after the final Editorial presentation layer so these are intentional
+ * last-mile constraints, not generic theme overrides.
+ */
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero-meta {
+  min-width: 0;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero-meta > span,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-name,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-price,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-price {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-main {
+  padding-bottom: max(7.5rem, calc(5rem + env(safe-area-inset-bottom, 0px)));
+}
+
+@media (max-width: 640px) {
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero {
+    min-height: min(48dvh, 440px);
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero-inner {
+    padding: 1.15rem 1rem 1.35rem;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero h1,
+  html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell .editorial-hero h1 {
+    font-size: clamp(2.35rem, 12vw, 4.5rem);
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-main > section {
+    padding-block: clamp(2.2rem, 7vw, 3.4rem);
+    scroll-margin-top: 8.5rem;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-copy {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-price {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-description {
+    grid-column: 2;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card > .editorial-product-image {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 4 / 3;
+    align-self: start;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-topline {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.35rem 0.55rem;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-price {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-image {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+@media (min-width: 768px) {
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero {
+    min-height: min(58dvh, 620px);
+  }
+}
+
+@media (max-width: 360px) {
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero {
+    min-height: min(46dvh, 410px);
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-hero h1,
+  html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell .editorial-hero h1 {
+    font-size: clamp(2.15rem, 12vw, 3.5rem);
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card {
+    grid-template-columns: 5.75rem minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-image,
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-image {
+    transform: none !important;
+    transition: none !important;
+  }
+}
