@@ -72,7 +72,7 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
   const selected = visible.find((p) => p.id === selectedId);
   const featured = visible.filter((p) => p.isFeatured);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
-  const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed || !h.opensAt || !h.closesAt) return h ? false : null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
+  const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed) return h?.isClosed ? false : null; if (!h.opensAt || !h.closesAt) return null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   const englishAvailable = isPublicMenuLocaleAvailable(menu, "en");
   useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } }); }, [tenant.slug, branch.slug, lang, preview]);
@@ -90,7 +90,7 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
           <MenuMedia src={tenant.logoUrl} alt="" eager fallback={tenant.nameAr.slice(0, 1)} className="editorial-brand-logo" />
           <div className="min-w-0"><p className="editorial-branch">{text(lang, branch.nameAr, branch.nameEn)}</p><h1>{text(lang, tenant.nameAr, tenant.nameEn)}</h1>{tenant.taglineAr || tenant.taglineEn ? <p className="editorial-tagline">{text(lang, tenant.taglineAr, tenant.taglineEn)}</p> : null}</div>
         </div>
-        <div className="editorial-hero-meta"><span>{status == null ? text(lang, "ساعات العمل", "Opening hours") : status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span><span aria-hidden>•</span><span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div>
+        <div className="editorial-hero-meta">{status !== null ? <><span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span><span aria-hidden>•</span></> : null}<span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div>
       </div>
     </header>
 
