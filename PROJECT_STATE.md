@@ -31,7 +31,8 @@
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
 - W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed.
 - W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate `34010117079` passed all required steps.
-- W10 Accessibility and RTL Quality — READY TO START.
+- W10 Accessibility and RTL Quality — CLOSED / VERIFIED; final Quality Gate `34010619265` passed all required steps.
+- W11 SEO, Local Discovery, and Shareability — READY TO START.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -108,6 +109,20 @@
 - VERIFIED: final Quality run `34010117079` passed install, typecheck, 112 tests, lint, production build, Playwright, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence record: `docs/motion-implementation.md`.
 
+## W10 Accessibility and RTL Quality — CLOSED Evidence
+- VERIFIED: `src/accessibility.css` provides shared focus scroll margins, document scroll padding, bidi primitives, coarse-pointer behavior, forced-colors focus, and reduced-motion compatibility.
+- VERIFIED: root document loads the accessibility layer before protected theme CSS.
+- VERIFIED: public product and cart dialogs expose modal semantics, accessible labels, focus entry, Tab/Shift+Tab containment, Escape handling, and focus restoration.
+- VERIFIED: public order form controls have programmatic labels, autocomplete hints, appropriate phone/email direction, and live validation feedback.
+- VERIFIED: mixed Arabic/Latin/numeric values use semantic `<bdi>` isolation and `dir="auto"` where direction is data-dependent.
+- VERIFIED: fixed/sticky public UI has focus scroll clearance and important mobile controls meet the repository target-size baseline.
+- VERIFIED: owner-critical Studio forms were audited at the shared `Field`/`Input` primitive level without introducing a second form system.
+- VERIFIED: `scripts/accessibility-contract.test.mjs` protects the W10 contract and is part of the default `npm test` suite.
+- VERIFIED: W9 motion contract compatibility was retained after dialog labels became unique.
+- VERIFIED: final Quality run `34010619265` passed typecheck, 120 tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- UNKNOWN: direct screen-reader output and authenticated Owner UI keyboard traversal were not manually observed in this connector environment.
+- Evidence record: `docs/accessibility-rtl-quality.md`.
+
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
 - External research covers Saudi/MENA and global restaurant technology, branded web presence, public menu UX, Owner Studio, Arabic/RTL, accessibility, typography, performance, SEO/local discovery, conversion, trust, pricing, analytics, and release QA.
@@ -117,30 +132,27 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W10 — Accessibility and RTL Quality
-Objective: perform a focused accessibility, RTL/LTR, mixed-direction, keyboard, touch-target, focus, semantics, and screen-reader quality pass across the shared public menu and owner-facing critical flows without reopening protected theme architecture.
+### W11 — SEO, Local Discovery, and Shareability
+Objective: audit and strengthen public-menu discoverability, canonical/locale metadata, restaurant structured data, local discovery signals, share previews, QR/deep-link continuity, and indexability without changing protected tenant/auth/theme architecture.
 
 Scope:
-- audit semantic HTML, accessible names, landmarks, headings, form labels, dialog semantics, live regions, and status announcements;
-- verify keyboard navigation and focus visibility/containment for search, categories, product details, cart, modifiers, language switching, and owner-critical controls;
-- verify WCAG 2.2 target size and focus-not-obscured behavior;
-- audit Arabic RTL, English LTR, and mixed Arabic/Latin/numeric content including prices, phone numbers, URLs, and product names;
-- verify bidi isolation and direction-sensitive icons/layout;
-- test long Arabic/English labels, wrapping, clipping, overflow, and sparse/dense content;
-- verify reduced-motion remains intact after accessibility changes;
-- add regression coverage and run full Quality Gate plus applicable browser checks.
+- audit metadata contracts, canonical/hreflang behavior, robots/sitemap alignment;
+- verify restaurant/local business structured data and truthful tenant-scoped location signals;
+- audit share-preview surfaces and branch-level public URLs;
+- verify QR source continuity and deep-link context;
+- verify missing-content/noindex rules and exclusion of preview/private routes;
+- add regression coverage and run full Quality Gate.
 
 Acceptance criteria:
-- evidence-based accessibility/RTL contract documented;
-- critical customer and owner flows keyboard-usable;
-- accessible names/landmarks/headings/forms/dialogs are correct;
-- focus is visible and not obscured by fixed UI;
-- touch targets satisfy the repository's adopted WCAG target policy;
-- Arabic RTL, English LTR, and mixed-direction content remain stable;
-- no regression to five protected themes;
+- evidence-based SEO/shareability contract documented;
+- Arabic and English URLs remain canonical and reciprocal;
+- structured data is truthful and tenant-scoped;
+- public routes are indexable only when eligible;
+- share previews are stable;
+- QR/deep links preserve intended context;
 - regression coverage exists;
 - full Quality Gate passes.
 
-Risks: accessibility regressions, RTL mirroring errors, mixed-direction numeric corruption, focus traps, touch-target regressions, theme-specific overrides leaking into shared semantics.
+Risks: duplicate URLs, fabricated locale content, cross-tenant metadata leakage, incorrect location claims, indexing private/preview surfaces.
 
-Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, accessibility checks, RTL/LTR checks, and performance inspection.
+Verification: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, structured-data validation, sitemap/robots checks, and performance inspection.
