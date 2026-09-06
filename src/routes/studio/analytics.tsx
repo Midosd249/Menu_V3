@@ -4,6 +4,7 @@ import { ErrorState, LoadingState } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
+import { buildGrowthMetrics } from "@/lib/menu/growth";
 import { getOwnerAnalytics } from "@/lib/menu/owner";
 import type { OwnerAnalytics } from "@/lib/menu/types";
 
@@ -31,7 +32,12 @@ function AnalyticsPage() {
   return (
     <div className="mx-auto grid max-w-4xl gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-2xl font-semibold">{t(copy.analytics.title, lang)}</h1>
+        <div>
+          <h1 className="font-display text-2xl font-semibold">{t(copy.analytics.title, lang)}</h1>
+          <p className="mt-1 text-sm text-muted">
+            {lang === "ar" ? "أرقام تشغيلية قابلة لاتخاذ القرار، وليست أرقاماً تقديرية." : "Decision-ready operational data, never estimated numbers."}
+          </p>
+        </div>
         <div className="flex gap-2">
           <Button type="button" size="sm" variant={days === 7 ? "solid" : "outline"} onClick={() => setDays(7)}>
             {t(copy.analytics.days7, lang)}
@@ -54,21 +60,18 @@ function AnalyticsPage() {
             <Stat label={t(copy.analytics.views, lang)} value={state.data.productViews} />
             <Stat label={t(copy.analytics.qr, lang)} value={state.data.qrScans} />
           </section>
+          <GrowthFunnel analytics={state.data} lang={lang} />
           <section className="grid gap-3 rounded-xl border border-line p-5 sm:grid-cols-2">
             <Stat label={t(copy.analytics.wa, lang)} value={state.data.whatsappClicks} />
             <div>
               <p className="text-xs text-muted">{t(copy.analytics.language, lang)}</p>
-              <p className="mt-1 text-sm">
-                عربي {state.data.langAr} · EN {state.data.langEn}
-              </p>
+              <p className="mt-1 text-sm">عربي {state.data.langAr} · EN {state.data.langEn}</p>
             </div>
           </section>
           {state.data.series.length ? (
             <section className="rounded-xl border border-line p-5">
               <h2 className="mb-3 font-medium">{t(copy.analytics.visits, lang)}</h2>
-              <SimpleBars
-                points={state.data.series.map((p) => ({ label: p.day.slice(5), value: p.visits + p.views }))}
-              />
+              <SimpleBars points={state.data.series.map((p) => ({ label: p.day.slice(5), value: p.visits + p.views }))} />
             </section>
           ) : null}
           <Rank title={t(copy.analytics.topItems, lang)} rows={state.data.topProducts} lang={lang} />
@@ -79,24 +82,61 @@ function AnalyticsPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function GrowthFunnel({ analytics, lang }: { analytics: OwnerAnalytics; lang: "ar" | "en" }) {
+  const metrics = buildGrowthMetrics(analytics);
+  const opportunity = {
+    ar: {
+      baseline: "اجمع أولاً عينة كافية قبل الحكم على الأداء.",
+      discovery: "الفرصة الحالية في الاكتشاف: حسّن الوصول إلى المنيو ووضوح نقاط الدخول.",
+      conversion: "الفرصة الحالية في التحويل: اجعل الإجراء المباشر مثل واتساب أو الطلب أوضح.",
+      content: "الفرصة الحالية في المحتوى: حسّن اكتمال الأصناف والتصنيفات قبل اختبار الرسائل.",
+      distribution: "الفرصة الحالية في التوزيع: ركّز على QR والمشاركة المحلية بعد وجود تفاعل أساسي.",
+    },
+    en: {
+      baseline: "Build a baseline before judging performance.",
+      discovery: "Current opportunity: improve menu discovery and entry points.",
+      conversion: "Current opportunity: make high-intent actions such as WhatsApp or ordering clearer.",
+      content: "Current opportunity: improve product/category completeness before testing messaging.",
+      distribution: "Current opportunity: scale QR and local distribution after core engagement exists.",
+    },
+  }[lang];
+
   return (
-    <div className="rounded-xl border border-line p-4">
+    <section className="grid gap-4 rounded-2xl border border-line bg-sand/20 p-5">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "مسار النمو" : "Growth loop"}</p>
+        <h2 className="mt-1 font-display text-xl font-semibold">{lang === "ar" ? "من الزيارة إلى الإجراء" : "From visit to action"}</h2>
+        <p className="mt-1 text-sm text-muted">{opportunity[metrics.primaryOpportunity]}</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <RateCard label={lang === "ar" ? "اهتمام بالأصناف" : "Product interest"} rate={metrics.productInterestRate} />
+        <RateCard label={lang === "ar" ? "تفاعل الجلسات" : "Session engagement"} rate={metrics.engagementRate} />
+        <RateCard label={lang === "ar" ? "تحويل واتساب" : "WhatsApp intent"} rate={metrics.whatsappRate} />
+        <RateCard label={lang === "ar" ? "QR → زيارة" : "QR → visit"} rate={metrics.qrToVisitRate} />
+      </div>
+      <div className="grid gap-2 text-sm text-muted sm:grid-cols-2">
+        <p>{lang === "ar" ? "متوسط مشاهدات الصنف لكل جلسة" : "Average product views per session"}: <strong className="text-ink tabular">{metrics.averageViewsPerSession}</strong></p>
+        {metrics.leadingProduct ? <p>{lang === "ar" ? "الأكثر مشاهدة" : "Top product"}: <strong className="text-ink">{lang === "ar" ? metrics.leadingProduct.nameAr : metrics.leadingProduct.nameEn || metrics.leadingProduct.nameAr}</strong></p> : null}
+      </div>
+    </section>
+  );
+}
+
+function RateCard({ label, rate }: { label: string; rate: { numerator: number; denominator: number; percent: number } }) {
+  return (
+    <div className="rounded-xl border border-line bg-paper p-4">
       <p className="text-xs text-muted">{label}</p>
-      <p className="mt-1 font-display text-2xl tabular">{value}</p>
+      <p className="mt-1 font-display text-2xl tabular">{rate.denominator > 0 ? `${rate.percent.toFixed(1)}%` : "—"}</p>
+      <p className="mt-1 text-xs text-muted tabular">{rate.numerator} / {rate.denominator}</p>
     </div>
   );
 }
 
-function Rank({
-  title,
-  rows,
-  lang,
-}: {
-  title: string;
-  rows: Array<{ id: string; nameAr: string; nameEn: string; count: number }>;
-  lang: "ar" | "en";
-}) {
+function Stat({ label, value }: { label: string; value: number }) {
+  return <div className="rounded-xl border border-line p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl tabular">{value}</p></div>;
+}
+
+function Rank({ title, rows, lang }: { title: string; rows: Array<{ id: string; nameAr: string; nameEn: string; count: number }>; lang: "ar" | "en" }) {
   if (!rows.length) return null;
   const max = Math.max(...rows.map((r) => r.count), 1);
   return (
@@ -105,13 +145,8 @@ function Rank({
       <ul className="grid gap-2">
         {rows.map((r) => (
           <li key={r.id} className="grid gap-1">
-            <div className="flex justify-between text-sm">
-              <span>{lang === "ar" ? r.nameAr : r.nameEn || r.nameAr}</span>
-              <span className="tabular text-muted">{r.count}</span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-sand">
-              <div className="h-full bg-accent" style={{ width: `${(r.count / max) * 100}%` }} />
-            </div>
+            <div className="flex justify-between text-sm"><span>{lang === "ar" ? r.nameAr : r.nameEn || r.nameAr}</span><span className="tabular text-muted">{r.count}</span></div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-sand"><div className="h-full bg-accent" style={{ width: `${(r.count / max) * 100}%` }} /></div>
           </li>
         ))}
       </ul>
@@ -123,12 +158,7 @@ function SimpleBars({ points }: { points: Array<{ label: string; value: number }
   const max = Math.max(...points.map((p) => p.value), 1);
   return (
     <div className="flex h-32 items-end gap-1">
-      {points.map((p) => (
-        <div key={p.label} className="grid min-w-0 flex-1 justify-items-center gap-1">
-          <div className="w-full rounded-t-sm bg-accent" style={{ height: `${(p.value / max) * 100}%` }} />
-          <span className="text-xs text-muted">{p.label}</span>
-        </div>
-      ))}
+      {points.map((p) => <div key={p.label} className="grid min-w-0 flex-1 justify-items-center gap-1"><div className="w-full rounded-t-sm bg-accent" style={{ height: `${(p.value / max) * 100}%` }} /><span className="text-xs text-muted">{p.label}</span></div>)}
     </div>
   );
 }
