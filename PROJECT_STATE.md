@@ -29,8 +29,9 @@
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
 - W6-01 Typography Implementation — CLOSED / VERIFIED; corrected Fontsource CDN delivery passed full Quality Gate.
 - W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
-- **W8 Imagery and Art Direction — CLOSED / VERIFIED.**
-- **W9 Motion and Interaction — READY TO START.**
+- W8 Imagery and Art Direction — CLOSED / VERIFIED; final Quality Gate passed.
+- W9 Motion and Interaction — CLOSED / VERIFIED; final Quality Gate `34010117079` passed all required steps.
+- W10 Accessibility and RTL Quality — READY TO START.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
@@ -90,9 +91,22 @@
 - VERIFIED: the test is part of the default `npm test` suite.
 - VERIFIED: no new runtime dependency was added.
 - VERIFIED: no tenant data model, Supabase schema, or protected theme was changed.
-- UNKNOWN: tenant-specific image URLs and focal-point metadata are not currently represented as a canonical typed media model; the contract intentionally avoids a schema migration in W8.
-- UNKNOWN: full production browser/performance results for the final W8 commits require the new GitHub Quality run to complete.
+- UNKNOWN: tenant-specific focal-point metadata is not currently represented as a canonical typed media model; the contract intentionally avoids a schema migration in W8.
+- VERIFIED: final production Quality run `34010117079` passed all-theme Browser Template QA and performance-baseline upload for the W8/W9 release batch.
 - Evidence record: `docs/image-art-direction.md`.
+
+## W9 Motion and Interaction — CLOSED Evidence
+- VERIFIED: `src/motion.css` centralizes duration, easing, distance, scale, and compatibility aliases.
+- VERIFIED: root document loads the motion layer before protected theme styles.
+- VERIFIED: product-detail sheet, cart drawer, and overlay entrance choreography use deterministic transform/opacity motion; RTL reverses cart direction.
+- VERIFIED: reduced-motion behavior removes movement/press scaling while preserving state feedback.
+- VERIFIED: coarse-pointer hover movement is disabled.
+- VERIFIED: `scripts/motion-contract.test.mjs` protects tokens, loading order, reduced-motion behavior, and public-menu dialog hooks.
+- VERIFIED: the motion contract is part of the default `npm test` suite.
+- VERIFIED: no new runtime dependency or Supabase/schema change was introduced.
+- VERIFIED: a pre-existing invalid `@radix-ui/react-popover` range was aligned from `^1.2.12` to the lockfile's installable `^1.1.12` after CI proved it blocked installation; no package upgrade was introduced.
+- VERIFIED: final Quality run `34010117079` passed install, typecheck, 112 tests, lint, production build, Playwright, all-theme Browser Template QA, performance upload, and preview shutdown.
+- Evidence record: `docs/motion-implementation.md`.
 
 ## Current Design Strategy
 - The five-theme system is not the current design focus; themes remain protected.
@@ -103,31 +117,30 @@
 - Design contract: `docs/design-system-contract.md`.
 
 ## Exact Next Task
-### W9 — Motion and Interaction
-Objective: create a restrained, premium motion system that improves hierarchy, feedback, orientation, and perceived quality without introducing motion sickness, blocking interaction, harming accessibility, or compromising mobile performance.
+### W10 — Accessibility and RTL Quality
+Objective: perform a focused accessibility, RTL/LTR, mixed-direction, keyboard, touch-target, focus, semantics, and screen-reader quality pass across the shared public menu and owner-facing critical flows without reopening protected theme architecture.
 
 Scope:
-- audit existing transitions, drawers, dialogs, buttons, cart interactions, theme previews, loading states, and route changes;
-- define motion tokens for duration, easing, distance, scale, and opacity;
-- define interaction feedback for hover, focus, press, selection, success, error, and loading;
-- define entrance/exit choreography for mobile drawers, sheets, and overlays;
-- preserve immediate feedback for primary customer actions;
-- support `prefers-reduced-motion` and avoid essential information conveyed only by animation;
-- avoid layout-affecting animation where transform/opacity can achieve the same result;
-- define motion budgets for mobile and low-power devices;
-- add regression coverage for the motion contract;
-- run full Quality Gate and applicable browser/performance checks.
+- audit semantic HTML, accessible names, landmarks, headings, form labels, dialog semantics, live regions, and status announcements;
+- verify keyboard navigation and focus visibility/containment for search, categories, product details, cart, modifiers, language switching, and owner-critical controls;
+- verify WCAG 2.2 target size and focus-not-obscured behavior;
+- audit Arabic RTL, English LTR, and mixed Arabic/Latin/numeric content including prices, phone numbers, URLs, and product names;
+- verify bidi isolation and direction-sensitive icons/layout;
+- test long Arabic/English labels, wrapping, clipping, overflow, and sparse/dense content;
+- verify reduced-motion remains intact after accessibility changes;
+- add regression coverage and run full Quality Gate plus applicable browser checks.
 
 Acceptance criteria:
-- evidence-based motion contract documented;
-- motion tokens are centralized and theme-compatible;
-- key interactions have consistent feedback;
-- reduced-motion behavior is explicit and verified;
-- no avoidable layout-shift or interaction-blocking animation;
-- five protected themes remain visually distinct;
+- evidence-based accessibility/RTL contract documented;
+- critical customer and owner flows keyboard-usable;
+- accessible names/landmarks/headings/forms/dialogs are correct;
+- focus is visible and not obscured by fixed UI;
+- touch targets satisfy the repository's adopted WCAG target policy;
+- Arabic RTL, English LTR, and mixed-direction content remain stable;
+- no regression to five protected themes;
 - regression coverage exists;
 - full Quality Gate passes.
 
-Risks: excessive motion, accessibility regressions, jank on low-end mobile devices, theme inconsistency, interaction delays.
+Risks: accessibility regressions, RTL mirroring errors, mixed-direction numeric corruption, focus traps, touch-target regressions, theme-specific overrides leaking into shared semantics.
 
-Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, and performance inspection.
+Verification commands: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, applicable Playwright/template QA, accessibility checks, RTL/LTR checks, and performance inspection.
