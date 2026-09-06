@@ -4,6 +4,7 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
+import typographyCss from "../typography.css?url";
 import themeCss from "../theme-premium.css?url";
 import essentialThemeCss from "../theme-essential.css?url";
 import noirThemeCss from "../theme-noir.css?url";
@@ -33,6 +34,7 @@ export const Route = createRootRoute({
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: typographyCss },
       { rel: "stylesheet", href: themeCss },
       { rel: "stylesheet", href: essentialThemeCss },
       { rel: "stylesheet", href: noirThemeCss },
@@ -48,7 +50,7 @@ export const Route = createRootRoute({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap",
       },
     ],
   }),
