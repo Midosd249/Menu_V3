@@ -65,7 +65,7 @@ test("semantic color contract declares every required role", () => {
 
 test("all protected themes adapt semantic meaning without redefining status semantics", () => {
   for (const theme of themes) {
-    assert.match(css, new RegExp(`data-menu-theme=\\\"${theme}\\\"`), `missing adapter for ${theme}`);
+    assert.match(css, new RegExp(`data-menu-theme="${theme}"`), `missing adapter for ${theme}`);
   }
 
   assert.match(css, /--color-status-success:\s*#2f6b4f/);
