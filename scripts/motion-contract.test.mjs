@@ -38,10 +38,10 @@ test("interactive motion avoids layout properties and supports reduced motion", 
 });
 
 test("public menu has dialog targets for deterministic entrance choreography", () => {
-  assert.match(publicMenu, /aria-labelledby=\"product-details-title\"/);
-  assert.match(publicMenu, /aria-labelledby=\"cart-title\"/);
-  assert.match(css, /aria-labelledby="product-details-title"/);
-  assert.match(css, /aria-labelledby="cart-title"/);
+  assert.match(publicMenu, /aria-labelledby=['\"]product-details-title['\"]/);
+  assert.match(publicMenu, /aria-labelledby=['\"]cart-title['\"]/);
+  assert.match(css, /aria-labelledby=['\"]product-details-title['\"]/);
+  assert.match(css, /aria-labelledby=['\"]cart-title['\"]/);
 });
 
 test("reduced motion preserves state changes without press scaling", () => {
