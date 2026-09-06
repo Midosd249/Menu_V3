@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpLeft, BarChart3, Check, Palette, QrCode, Sparkles } from "lucide-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
@@ -9,7 +9,7 @@ import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { submitLead } from "@/lib/menu/public";
 import { COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
-import { MENU_THEMES, type ThemeKey } from "@/lib/theme";
+import { MENU_THEMES, isThemeKey, type ThemeKey } from "@/lib/theme";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -19,6 +19,17 @@ function Home() {
   const { lang } = useLang();
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [selectedTheme, setSelectedTheme] = useState<ThemeKey | "">("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get("plan");
+    const theme = params.get("theme")?.toLowerCase();
+    if (plan && COMMERCIAL_PLANS.some((item) => item.code === plan)) setSelectedPlan(plan);
+    if (theme && isThemeKey(theme)) setSelectedTheme(theme);
+    if ((plan && COMMERCIAL_PLANS.some((item) => item.code === plan)) || (theme && isThemeKey(theme))) {
+      window.setTimeout(() => document.getElementById("request-service")?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
+    }
+  }, []);
 
   function choose(plan = "", theme: ThemeKey | "" = "") {
     setSelectedPlan(plan);
@@ -30,33 +41,13 @@ function Home() {
     <div className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-          <Link to="/" className="group flex items-center gap-3">
-            <span className="grid size-9 place-items-center rounded-xl bg-ink text-paper shadow-sm transition-transform group-hover:-rotate-3"><span className="font-display text-lg">م</span></span>
-            <span className="font-display text-xl font-semibold tracking-tight">{t(copy.brand, lang)}</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <a href="#themes" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "التصاميم" : "Themes"}</a>
-            <a href="#pricing" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "الباقات" : "Plans"}</a>
-            <LangToggle />
-            <SignedOut><Link to="/login" className="hidden h-10 items-center rounded-xl border border-line px-3 text-sm sm:inline-flex">{t(copy.marketing.ctaLogin, lang)}</Link></SignedOut>
-            <SignedIn><Link to="/studio" className="inline-flex h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper shadow-sm">{t(copy.nav.overview, lang)}</Link></SignedIn>
-          </div>
+          <Link to="/" className="group flex items-center gap-3"><span className="grid size-9 place-items-center rounded-xl bg-ink text-paper shadow-sm transition-transform group-hover:-rotate-3"><span className="font-display text-lg">م</span></span><span className="font-display text-xl font-semibold tracking-tight">{t(copy.brand, lang)}</span></Link>
+          <div className="flex items-center gap-2"><a href="#themes" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "التصاميم" : "Themes"}</a><a href="#pricing" className="hidden h-10 items-center rounded-xl px-3 text-sm text-muted hover:text-ink sm:inline-flex">{lang === "ar" ? "الباقات" : "Plans"}</a><LangToggle /><SignedOut><Link to="/login" className="hidden h-10 items-center rounded-xl border border-line px-3 text-sm sm:inline-flex">{t(copy.marketing.ctaLogin, lang)}</Link></SignedOut><SignedIn><Link to="/studio" className="inline-flex h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper shadow-sm">{t(copy.nav.overview, lang)}</Link></SignedIn></div>
         </div>
       </header>
 
       <main>
-        <section className="relative overflow-hidden border-b border-line/70">
-          <div className="pointer-events-none absolute inset-0 opacity-40" style={{ background: "radial-gradient(55% 70% at 10% 10%, rgba(154,90,56,.18), transparent 70%), radial-gradient(45% 60% at 90% 20%, rgba(23,20,17,.10), transparent 70%)" }} />
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-16 lg:pb-24 lg:pt-16">
-            <div className="grid max-w-2xl gap-7">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-paper/80 px-3 py-1.5 text-xs font-medium text-muted shadow-sm"><Sparkles className="size-3.5 text-accent" />{t(copy.marketing.heroEyebrow, lang)}</div>
-              <div className="grid gap-5"><h1 className="font-display text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-[4.4rem]">{t(copy.marketing.heroTitle, lang)}</h1><p className="max-w-xl text-base leading-8 text-ink-soft sm:text-lg">{t(copy.marketing.heroBody, lang)}</p></div>
-              <div className="flex flex-wrap gap-3"><Button size="lg" className="rounded-xl px-5 shadow-lg shadow-ink/10" onClick={() => choose()}>{lang === "ar" ? "ابدأ طلبك" : "Start your request"}<ArrowUpLeft className="size-4" /></Button><Button asChild variant="outline" size="lg" className="rounded-xl bg-paper/70 px-5"><Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }}>{t(copy.marketing.ctaSecondary, lang)}</Link></Button></div>
-              <div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-3">{[copy.marketing.proofA, copy.marketing.proofB, copy.marketing.proofC].map((item) => <div key={item.ar} className="flex items-start gap-2 text-sm text-ink-soft"><span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent/10 text-accent"><Check className="size-3.5" /></span>{t(item, lang)}</div>)}</div>
-            </div>
-            <LiveCard />
-          </div>
-        </section>
+        <section className="relative overflow-hidden border-b border-line/70"><div className="pointer-events-none absolute inset-0 opacity-40" style={{ background: "radial-gradient(55% 70% at 10% 10%, rgba(154,90,56,.18), transparent 70%), radial-gradient(45% 60% at 90% 20%, rgba(23,20,17,.10), transparent 70%)" }} /><div className="relative mx-auto grid max-w-6xl gap-12 px-5 pb-16 pt-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-16 lg:pb-24 lg:pt-16"><div className="grid max-w-2xl gap-7"><div className="inline-flex w-fit items-center gap-2 rounded-full border border-line bg-paper/80 px-3 py-1.5 text-xs font-medium text-muted shadow-sm"><Sparkles className="size-3.5 text-accent" />{t(copy.marketing.heroEyebrow, lang)}</div><div className="grid gap-5"><h1 className="font-display text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-[4.4rem]">{t(copy.marketing.heroTitle, lang)}</h1><p className="max-w-xl text-base leading-8 text-ink-soft sm:text-lg">{t(copy.marketing.heroBody, lang)}</p></div><div className="flex flex-wrap gap-3"><Button size="lg" className="rounded-xl px-5 shadow-lg shadow-ink/10" onClick={() => choose()}>{lang === "ar" ? "ابدأ طلبك" : "Start your request"}<ArrowUpLeft className="size-4" /></Button><Button asChild variant="outline" size="lg" className="rounded-xl bg-paper/70 px-5"><Link to="/m/$slug" params={{ slug: "nafas" }} search={{ branch: undefined }}>{t(copy.marketing.ctaSecondary, lang)}</Link></Button></div><div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-3">{[copy.marketing.proofA, copy.marketing.proofB, copy.marketing.proofC].map((item) => <div key={item.ar} className="flex items-start gap-2 text-sm text-ink-soft"><span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent/10 text-accent"><Check className="size-3.5" /></span>{t(item, lang)}</div>)}</div></div><LiveCard /></div></section>
 
         <section className="mx-auto grid max-w-6xl gap-4 px-5 py-12 sm:grid-cols-3 lg:py-16"><ValueCard icon={<Palette className="size-5" />} title={lang === "ar" ? "هوية بصرية راقية" : "Premium visual identity"} body={lang === "ar" ? "ألوان دافئة، صور قوية، وتسلسل بصري يجعل المنيو يبدو كمنتج حقيقي." : "Warm neutrals, strong imagery, and hierarchy that feels like a real product."} /><ValueCard icon={<QrCode className="size-5" />} title={lang === "ar" ? "من QR إلى المنيو فوراً" : "QR to menu instantly"} body={lang === "ar" ? "تجربة سريعة على الجوال، فروع متعددة، واتصال مباشر بالمطعم." : "Fast mobile experience, branches, and direct restaurant contact."} /><ValueCard icon={<BarChart3 className="size-5" />} title={lang === "ar" ? "بيانات قابلة للتصرف" : "Actionable data"} body={lang === "ar" ? "زيارات، مشاهدات الأصناف ومسح QR لتعرف ما يهم العملاء." : "Visits, product views, and QR scans so owners know what matters."} /></section>
 
