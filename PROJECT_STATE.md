@@ -24,6 +24,7 @@
 - Shared Public Menu Rendering Stabilization — VERIFIED.
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
+- Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level workflow; no application implementation status changed.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -105,6 +106,8 @@
 - PROPOSED: strengthen shared brand/design system and connected customer/owner experience while preserving theme personality.
 - Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Design contract: `docs/design-system-contract.md`.
+- VERIFIED: the specialized Design Agent definition is `docs/agents/design-agent.md`; it is a documentation-only specialist for visual, image, layout, theme, and site-consistency quality.
+- PROPOSED: invoke the Design Agent workflow for significant future visual/theme/layout/image/site-consistency tasks while keeping the main agent as the owner of product and infrastructure boundaries.
 
 ## Exact Next Task
 ### W17-Q — Run the complete repository quality gate and final continuity review
@@ -122,3 +125,13 @@ Acceptance criteria:
 - final merged commit is either directly verified in Vercel production or explicitly remains BLOCKED.
 
 Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
+
+## Session Log — 2026-09-07 — Specialized Design Agent Definition
+- VERIFIED: created `docs/agents/design-agent.md` as the permanent Menu V3 Design Agent definition.
+- VERIFIED: registered the Design Agent workflow in `AGENTS.md` and continuity records without changing application behavior.
+- VERIFIED: no theme implementation status was changed.
+- VERIFIED: no application code, templates, schema/migrations, auth/authorization, entitlements/subscriptions, dependencies, CI/CD, Vercel settings, environment variables, or deployment configuration were modified.
+- VERIFIED: no Vercel deployment was intentionally triggered.
+- Files in this documentation task: `docs/agents/design-agent.md`, `AGENTS.md`, `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`.
+- Verification limitation: this connector does not expose a local `git status`; repository commit/file evidence was inspected through GitHub instead.
+- Next task remains exactly W17-Q as defined above.

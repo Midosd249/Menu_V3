@@ -44,6 +44,14 @@ Urgent production outages, critical security/privacy issues, and data-loss fixes
 ### Rollback
 If production is broken after a release, use Vercel Instant Rollback only when an eligible previous production-serving healthy deployment exists. Record the rollback target and reason. Do not delete or invalidate the rollback target. Then fix forward through the normal local verification → quality gates → coherent release batch → `main` → production workflow. Not every preview deployment is an eligible rollback target.
 
+## Design Agent Workflow
+- `docs/agents/design-agent.md` defines the permanent Menu V3 Design Agent, a separate visual/layout/image/theme/site-consistency specialist.
+- For significant visual, layout, image, theme, or site-consistency tasks, invoke that workflow in addition to the main repository workflow.
+- The Design Agent must read the continuity files plus relevant `docs/design-intelligence.md`, `docs/design-research-log.md`, `docs/template-review-checklist.md`, template brief/audit records, and `docs/project-memory/problems-learned.md` when visual issues resemble known problems.
+- The Design Agent may propose visual changes and may implement them only when explicitly authorized. It must not take ownership of architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, deployment, or unrelated product logic.
+- Design work must preserve the implementation status of Essential, Editorial, Noir, Heritage, and Gallery unless explicit evidence and authorization require a change.
+- Use `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, and `BLOCKED` for design findings and decisions. Major visual fixes belong in `docs/template-audits/`.
+
 ## Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
 2. Before material template changes, create/update the template brief and visual/functional audit.
