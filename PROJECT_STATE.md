@@ -27,6 +27,7 @@
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED as a documentation-level workflow; no application implementation status changed.
+- Research and Connected-Tools Discovery Agent — DEFINED / VERIFIED as an internal AI research workflow; no application implementation status changed.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -118,3 +119,12 @@
 - BLOCKED: production commit match remains unverified through the available Vercel surface.
 - VERIFIED: no application code, template, test, migration, dependency, CI/CD, Vercel setting, environment variable, or deployment configuration was changed by this reconciliation.
 - Next TODO: Editorial browser/device verification against the latest refinement state.
+
+## Session Log — 2026-09-07 — Research and Connected-Tools Discovery Agent
+- VERIFIED: existing specialized agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent research/connected-tools discovery agent.
+- VERIFIED: the new `docs/agents/research-connected-tools-agent.md` is an internal AI workflow and does not represent a human collaborator, teammate, contributor, or developer.
+- VERIFIED: the workflow requires repository-first evidence, dynamic discovery of currently available connected tools, relevance/authorization/safety selection, and explicit side-effect authorization.
+- VERIFIED: AGENTS and SESSION_PROTOCOL now invoke the new research workflow for consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work.
+- VERIFIED: no application, theme, test, migration, dependency, CI/CD, Vercel configuration, environment variable, or product behavior changed.
+- UNKNOWN: browser/connected-service availability remains session-dependent and must be rediscovered dynamically for each task.
+- Next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
