@@ -28,6 +28,7 @@
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED as a documentation-level workflow; no application implementation status changed.
 - Research and Connected-Tools Discovery Agent — DEFINED / VERIFIED as an internal AI research workflow; no application implementation status changed.
+- Automatic Specialist Routing and Orchestration — DEFINED / VERIFIED as a documentation-level governance workflow; no application implementation status changed.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -121,10 +122,21 @@
 - Next TODO: Editorial browser/device verification against the latest refinement state.
 
 ## Session Log — 2026-09-07 — Research and Connected-Tools Discovery Agent
-- VERIFIED: existing specialized agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent research/connected-tools discovery agent.
+- VERIFIED: existing specialized agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent Research and Connected-Tools Discovery Agent.
 - VERIFIED: the new `docs/agents/research-connected-tools-agent.md` is an internal AI workflow and does not represent a human collaborator, teammate, contributor, or developer.
 - VERIFIED: the workflow requires repository-first evidence, dynamic discovery of currently available connected tools, relevance/authorization/safety selection, and explicit side-effect authorization.
 - VERIFIED: AGENTS and SESSION_PROTOCOL now invoke the new research workflow for consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work.
 - VERIFIED: no application, theme, test, migration, dependency, CI/CD, Vercel configuration, environment variable, or product behavior changed.
 - UNKNOWN: browser/connected-service availability remains session-dependent and must be rediscovered dynamically for each task.
+- Next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
+
+## Session Log — 2026-09-07 — Automatic Specialist Routing and Orchestration
+- VERIFIED: the existing Research and Connected-Tools Discovery Agent at `docs/agents/research-connected-tools-agent.md` and Design Agent at `docs/agents/design-agent.md` were inspected; no duplicate specialist agent was created.
+- VERIFIED: `docs/automatic-specialist-routing.md` establishes the Principal Engineer as the single orchestration point for natural-language user requests and maps task classes to relevant internal AI workflows.
+- VERIFIED: routing includes automatic use of project memory, proportional repository-first research, Design Agent, QA/regression, Security/data, and Release/reliability workflows when their risk surfaces apply.
+- VERIFIED: connected tools remain dynamically discovered and are selected only when available, authorized, relevant, safe, and materially useful.
+- VERIFIED: all specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
+- VERIFIED: no application code, theme implementation, tests, migrations, dependencies, CI/CD, Vercel configuration, environment variables, deployment configuration, authentication, authorization, subscription, entitlement, tenant isolation, branch isolation, or product behavior changed.
+- UNKNOWN: future connected-tool availability remains session-dependent and must be rediscovered per task.
+- BLOCKED: the remote GitHub file-writing surface does not expose a multi-file batch-commit operation; documentation updates therefore require the minimum technically possible separate file commits.
 - Next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
