@@ -11,7 +11,7 @@ const catalog = read("src/lib/menu/commercial-catalog.ts");
 const registry = read("src/lib/theme/registry.ts");
 
 const expectedPlans = ["free", "starter", "pro"];
-const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
+const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery", "premium-menu-v3"];
 
 test("homepage exposes canonical pricing and plan selection", () => {
   assert.match(home, /COMMERCIAL_PLANS\.map/);
@@ -25,7 +25,7 @@ test("homepage exposes canonical pricing and plan selection", () => {
   assert.match(catalog, /monthlyPriceSar: 199/);
 });
 
-test("homepage exposes all protected themes without a premium gate", () => {
+test("homepage exposes all registered themes without changing the existing plan gate", () => {
   assert.match(home, /MENU_THEMES\.map/);
   assert.match(themes, /MENU_THEMES\.map/);
   assert.match(themes, /without an artificial gate|دون بوابة اصطناعية/);
