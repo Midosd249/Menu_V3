@@ -212,6 +212,13 @@ Workstreams:
 - W16 QA/browser/device/release.
 - W17 Public Pages & Themes Integration.
 
+## Design Agent — Permanent Workflow
+- VERIFIED: `docs/agents/design-agent.md` defines a separate Menu V3 Design Agent specializing in visual, layout, image, theme, RTL/LTR, mobile-first, accessibility/performance, and site-consistency quality.
+- VERIFIED: the Design Agent is documentation/workflow scope only until explicitly authorized to implement a visual change.
+- VERIFIED: the main repository agent remains responsible for architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, deployment, and general product logic.
+- PROTECTED: Essential, Editorial, Noir, Heritage, and Gallery implementation milestones remain unchanged.
+- PROPOSED: invoke the Design Agent for significant future visual/layout/image/theme/site-consistency tasks and require the relevant design-intelligence, project-memory, checklist, brief, and audit records.
+
 ## Current Task
 ### W17-Q — Verify and harden the public Pages & Themes integration
 - Objective: run the complete repository quality gate against the merged W17 state, inspect the final diff, and resolve only scoped implementation/test defects; then re-check Vercel deployment state and record production evidence without claiming deployment until the commit match is verified.
