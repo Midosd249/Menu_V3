@@ -1,77 +1,74 @@
 # Premium Menu V3 — Implementation Audit
 
 ## Current position
-- `VERIFIED`: implementation branch is `feat/premium-menu-v3`, based directly on current `main` commit `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
-- `VERIFIED`: Premium Menu V3 is registered as a sixth, explicitly named theme key: `premium-menu-v3`.
-- `VERIFIED`: no database, auth, authorization, subscription, entitlement, tenant, branch, dependency, CI/CD, Vercel, environment, or deployment files were changed in this branch.
-- `UNKNOWN`: local working-tree status and browser/device pixels cannot be inspected through the available GitHub connector.
+- `VERIFIED`: implementation branch is `feat/premium-menu-v3`, based on `main` commit `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
+- `VERIFIED`: Premium Menu V3 is registered as the explicit sixth theme key `premium-menu-v3`.
+- `VERIFIED`: no database, auth, authorization, subscription, entitlement, tenant, branch, dependency, CI/CD, Vercel configuration, environment, or production deployment change was introduced.
+- `VERIFIED`: Vercel created a READY preview deployment for the current head commit.
 
 ## Repository scan
 - `VERIFIED`: theme registry/types and preview/theme-controller boundaries were inspected.
-- `VERIFIED`: public route `/m/$slug`, branch route, theme preview, and studio preview architecture were inspected through repository source/search evidence.
-- `VERIFIED`: existing public renderer and `contemporary-restaurant` template were inspected; they own the current product details, modifier, cart, and order interaction contract.
-- `VERIFIED`: existing theme hardening patterns were reviewed for Essential, Editorial, Noir, Heritage, and Gallery.
-- `VERIFIED`: repository memory identifies five protected existing themes and requires scoped visual changes.
-- `VERIFIED`: image handling is owned by existing `MenuMedia`/public renderer components; Premium does not introduce a new image pipeline.
-- `VERIFIED`: `PublicMenu` exposes restaurant, branch, category, product, variant, modifier, availability, contact, and locale data used by the existing public renderer.
+- `VERIFIED`: public menu, branch, theme preview, and Studio preview architecture were inspected.
+- `VERIFIED`: the existing public renderer and `contemporary-restaurant` template remain the owners of product details, modifiers, cart, order, analytics, and configured customer actions.
+- `VERIFIED`: existing hardening patterns for Essential, Editorial, Noir, Heritage, and Gallery were reviewed.
+- `VERIFIED`: image handling remains with the existing public-menu media pipeline; Premium adds no alternate image pipeline.
 
 ## Existing-theme comparison
 | Theme | Existing role | Premium Menu V3 differentiation |
 |---|---|---|
-| Essential | Minimal, fast small-menu experience | Premium is immersive, image-led, warm dark, and editorial rather than minimal |
-| Editorial | Light hospitality editorial | Premium uses dark cinematic surfaces, restrained gold, stronger conversion hierarchy |
-| Noir | Dark fine-dining/cinematic | Premium is warmer and more operationally focused; less atmospheric ornament and more menu scanability |
-| Heritage | Arabic contemporary hospitality | Premium is not pattern/material-led; it uses restrained luxury and food photography |
-| Gallery | Image-first catalogue | Premium balances imagery with price, description, category discovery, and ordering actions |
+| Essential | Minimal, fast small-menu experience | Immersive, image-led, warm dark luxury |
+| Editorial | Light hospitality editorial | Dark cinematic surfaces with restrained gold and stronger conversion hierarchy |
+| Noir | Dark fine-dining/cinematic | Warmer, quieter, more operationally scannable |
+| Heritage | Arabic contemporary hospitality | Restrained luxury without material/pattern-heavy decoration |
+| Gallery | Image-first catalogue | Balances imagery with information, pricing, discovery, and ordering |
 
 ## Visual audit of supplied references
-- `VERIFIED`: first reference uses a dark premium canvas, centered restaurant identity, warm gold accents, large hero food image, clear featured product, category navigation, product information, price emphasis, and persistent lower navigation/action treatment.
-- `VERIFIED`: second reference uses a full-screen product detail state with product image, title, price, description, selectable options, and a prominent add action.
-- `INFERRED`: the strongest transferable principle is hierarchy and material language rather than literal layout copying.
-- `PROPOSED`: Premium Menu V3 improves the references by reducing decorative density, stabilizing product media geometry, isolating price hierarchy, preserving long text, and keeping fixed actions safe-area aware.
-- `UNKNOWN`: exact source font, physical device/browser, and production screenshot rendering environment.
+- `VERIFIED`: reference 1 establishes dark premium surfaces, centered restaurant identity, hero food photography, gold accents, category discovery, featured products, price emphasis, and persistent action/navigation.
+- `VERIFIED`: reference 2 establishes a product-detail state centered on image, title, price, description, choices, quantity/order intent, and a strong add action.
+- `INFERRED`: hierarchy and material language are the transferable principles; literal screenshot recreation is not appropriate.
+- `PROPOSED`: Premium improves those principles through lower decorative density, stable media geometry, stronger price/action hierarchy, natural long-text wrapping, and safe-area-aware controls.
 
 ## Implemented visual system
-- `VERIFIED`: near-black canvas with warm ivory foreground and champagne-gold accent.
-- `VERIFIED`: scoped CSS only under `html[data-menu-theme="premium-menu-v3"]`.
-- `VERIFIED`: immersive hero is capped rather than allowed to consume the whole page.
-- `VERIFIED`: product media is normalized to `4 / 3` geometry.
-- `VERIFIED`: product cards remove unstable transform/stagger behavior and use stable two-column mobile geometry.
-- `VERIFIED`: long Arabic/English content uses wrapping rather than forced two-line truncation.
-- `VERIFIED`: missing media receives a neutral premium fallback surface rather than a broken-image treatment.
-- `VERIFIED`: product details and cart surfaces use the same dark/gold material language.
-- `VERIFIED`: sticky/fixed actions reserve bottom safe-area space.
-- `VERIFIED`: focus-visible outlines use the Premium accent.
-- `VERIFIED`: reduced-motion handling is included.
+- `VERIFIED`: near-black warm canvas, warm ivory content, champagne-gold accent.
+- `VERIFIED`: CSS is scoped to `html[data-menu-theme="premium-menu-v3"]`.
+- `VERIFIED`: immersive hero is capped.
+- `VERIFIED`: product media uses `4 / 3` geometry.
+- `VERIFIED`: product cards remove unstable transforms/staggering and use stable mobile geometry.
+- `VERIFIED`: long Arabic/English content wraps naturally.
+- `VERIFIED`: missing media receives a neutral premium fallback.
+- `VERIFIED`: product details and cart use the same dark/gold material language.
+- `VERIFIED`: fixed/sticky actions reserve safe-area space.
+- `VERIFIED`: focus-visible and reduced-motion rules are present.
 
 ## Functional compatibility
-- `VERIFIED`: Premium reuses the existing `contemporary-restaurant` data/interaction contract, preserving product options, variants, required modifier validation, add-to-cart, cart quantity editing, public order submission, analytics event semantics, and configured contact actions.
+- `VERIFIED`: Premium reuses the existing data/interaction contract for variants, modifiers, required validation, add-to-cart, cart quantity editing, public order submission, analytics, and configured contact actions.
 - `VERIFIED`: no data model or RPC contract was introduced.
-- `INFERRED`: product quantity is currently edited in the existing cart contract rather than inside the product dialog; a dedicated quantity control inside the Premium product dialog remains a follow-up if that exact interaction is required by product design.
-- `UNKNOWN`: end-to-end browser confirmation of modifier selection, cart update, and order submission on the new theme.
+- `INFERRED`: quantity is currently edited in the existing cart flow rather than a separate pre-add control inside product details.
+- `UNKNOWN`: physical-device confirmation and manual end-to-end ordering remain outside this connector environment.
 
-## Verification
-- `VERIFIED`: branch diff contains six implementation/documentation/test commits and six changed files at the implementation checkpoint; later audit/session files add documentation only.
-- `VERIFIED`: registry test expectations were updated from five to six themes without changing plan gating.
-- `VERIFIED`: public theme contract expectations were extended to include `premium-menu-v3`.
-- `VERIFIED`: no workflow run exists yet for the feature branch through the available Actions read surface.
-- `UNKNOWN`: `npm run typecheck`.
-- `UNKNOWN`: `npm test`.
-- `UNKNOWN`: `npm run lint`.
-- `UNKNOWN`: `npm run build`.
-- `UNKNOWN`: Playwright/browser QA.
-- `UNKNOWN`: physical mobile/tablet/desktop pixel QA.
-- `UNKNOWN`: production deployment verification.
+## Quality verification
+- `VERIFIED`: Quality run `34098529285` completed successfully for the current implementation head merge commit.
+- `VERIFIED`: Typecheck passed.
+- `VERIFIED`: all 165 default tests passed, including the Premium Menu V3 regression suite.
+- `VERIFIED`: lint passed with 0 errors and 15 pre-existing warnings.
+- `VERIFIED`: production build passed.
+- `VERIFIED`: Playwright Chromium installed and browser template QA passed.
+- `VERIFIED`: Browser Template QA covered all 6 themes across mobile `390×844`, tablet `768×1024`, and desktop `1440×900`.
+- `VERIFIED`: Premium Menu V3 specifically passed HTTP status, theme resolution, theme token presence, RTL, Arabic document language, horizontal-overflow, accessible-name, heading, runtime-console, and reduced-motion checks at all three viewports.
+- `VERIFIED`: performance audit completed at `390×844`; measured 5 image requests / 424,918 transferred image bytes, 5 font requests / 202,200 transferred font bytes, and first contentful paint of 968 ms in that CI run.
+- `UNKNOWN`: physical iOS/Android pixels and manual screen-reader output.
+- `UNKNOWN`: production deployment of this feature branch; the READY deployment is a preview, not production.
 
 ## Risks
-- `UNKNOWN`: visual interaction between the new Premium CSS and any future shared CSS layer not present in the current inspected branch.
-- `INFERRED`: because Premium reuses the Contemporary renderer, future changes to that shared renderer can affect Premium and Editorial/Heritage together; any such change must remain backward-compatible.
-- `PROPOSED`: if the product requirement is strict that quantity must be selected before the first add-to-cart inside the product details surface, implement that as a narrowly scoped Premium-only interaction after browser verification, without changing shared order contracts.
+- `INFERRED`: because Premium reuses the Contemporary renderer, future shared-renderer changes can affect Premium and must remain backward-compatible.
+- `PROPOSED`: if product requirements later demand quantity selection before first add-to-cart, add it as a Premium-scoped interaction without changing the shared ordering contract.
 
 ## Scope boundary
 - `VERIFIED`: no schema/migrations.
 - `VERIFIED`: no auth/authz.
 - `VERIFIED`: no entitlements/subscriptions.
-- `VERIFIED`: no tenant/branch isolation changes.
+- `VERIFIED`: no tenant/branch isolation.
 - `VERIFIED`: no dependencies.
-- `VERIFIED`: no CI/CD, Vercel, environment, or deployment changes.
+- `VERIFIED`: no CI/CD workflow configuration.
+- `VERIFIED`: no Vercel configuration/environment changes.
+- `VERIFIED`: no production deployment was intentionally triggered.
