@@ -52,6 +52,14 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Design work must preserve the implementation status of Essential, Editorial, Noir, Heritage, and Gallery unless explicit evidence and authorization require a change.
 - Use `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, and `BLOCKED` for design findings and decisions. Major visual fixes belong in `docs/template-audits/`.
 
+## Research and Connected-Tools Discovery Workflow
+- For consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work, invoke `docs/agents/research-connected-tools-agent.md`.
+- Begin with current repository evidence, then dynamically inspect all currently available connected tools/apps/plugins/connectors and use only relevant authorized capabilities.
+- Do not hard-code a provider list, claim unavailable access, or use tools merely because they exist.
+- Prefer read/search/analysis operations. External write, publish, send, delete, purchase, deploy, or other side-effect actions require explicit user authorization and any required platform confirmation.
+- The user is the sole human owner and primary developer; the Research Agent is an internal AI workflow and not a human collaborator or development-team role.
+- Use the research depth appropriate to risk: Light, Focused, or Deep. Record material findings with `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, and `BLOCKED` labels and hand off to the Principal Engineer or the applicable specialized workflow.
+
 ## Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
 2. Before material template changes, create/update the template brief and visual/functional audit.
