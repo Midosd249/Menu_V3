@@ -11,6 +11,7 @@
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED at `docs/agents/design-agent.md`.
+- Research and Connected-Tools Discovery Agent — DEFINED / VERIFIED at `docs/agents/research-connected-tools-agent.md` as an internal AI workflow; no application implementation status changed.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 through W15 — CLOSED / VERIFIED, with W14 MERGED and W15 Quality Gate `34053348446` passed.
@@ -35,6 +36,14 @@ Workstreams W0–W17 remain the historical roadmap. Completed work is not re-ope
 - VERIFIED: `docs/agents/design-agent.md` defines the specialist workflow for significant visual, image, layout, theme, and site-consistency work.
 - VERIFIED: it does not own architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, or general product logic.
 - PROPOSED: invoke it for significant future visual work only when evidence supports reopening that scope.
+
+## Permanent Research and Connected-Tools Discovery Workflow
+- VERIFIED: `docs/agents/research-connected-tools-agent.md` is the canonical research/discovery workflow for consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work.
+- VERIFIED: connected tools are discovered dynamically per session; no fixed provider list is authoritative.
+- VERIFIED: repository evidence is required first; connected sources and authoritative external sources are selected only when relevant, authorized, safe, and materially useful.
+- VERIFIED: the workflow is an internal AI workflow and not a human collaborator/team role.
+- VERIFIED: external write/publish/send/delete/purchase/deploy and other side-effect actions require explicit user authorization and platform confirmation.
+- VERIFIED: material research must preserve source attribution, evidence labels, privacy/security boundaries, and anti-copy constraints.
 
 ## Editorial Image / Card Refinement
 - VERIFIED: legacy mobile Editorial `min-height: 25rem` behavior was neutralized; the two-column scan unit and `4 / 3` media geometry were stabilized.
@@ -85,6 +94,7 @@ Workstreams W0–W17 remain the historical roadmap. Completed work is not re-ope
 - Use official standards for accessibility, i18n, web platform, SEO, and analytics event conventions.
 - Label conclusions `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, or `PROPOSED`.
 - Only one atomic task may be active at a time.
+- For consequential or unfamiliar work, use `docs/agents/research-connected-tools-agent.md` before implementation.
 
 ## Exact Next TODO
 ### Editorial browser/device verification against the latest refinement state
@@ -103,3 +113,8 @@ Acceptance criteria:
 - VERIFIED: latest Gallery refinement is recorded.
 - VERIFIED: deployment is explicitly separated from implementation and CI evidence; the pre-reconciliation Vercel `build-rate-limit` result is retained as platform limitation evidence.
 - UNKNOWN/BLOCKED items remain explicit rather than being converted into completion claims.
+
+## Research Agent Governance Note — 2026-09-07
+- VERIFIED: the repository had `docs/agents/design-agent.md` but no adequate equivalent dynamic research/connected-tools discovery agent.
+- VERIFIED: the new research agent establishes a repository-first, dynamic-capability, evidence-based workflow with explicit side-effect authorization and anti-copy/privacy safeguards.
+- VERIFIED: the existing exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
