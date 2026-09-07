@@ -25,6 +25,7 @@
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level workflow; no application implementation status changed.
+- Editorial image/card balance refinement — IMPLEMENTATION IN PROGRESS; scoped to Editorial presentation only; final browser/device evidence remains pending.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -64,6 +65,16 @@
 - UNKNOWN: final merged hardening commit is not yet confirmed as the active production deployment.
 - UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
 - BLOCKED: production release verification remains separately constrained until Vercel exposes/activates the final deployment state.
+
+## Editorial Image / Card Refinement
+- VERIFIED: supplied mobile screenshot shows the first Editorial product image separated from its name/price by excessive vertical space and visually inconsistent card height.
+- VERIFIED: repository contains a legacy Editorial mobile rule assigning `min-height: 25rem` to every `3n + 1` card through `src/theme-refinements.css`.
+- VERIFIED: `src/theme-editorial-hardening.css` now neutralizes that legacy height, preserves a stable two-column product scan unit, standardizes product media to `4 / 3`, and keeps featured imagery on the same geometry.
+- VERIFIED: `tests/editorial-browser-hardening.test.mjs` protects the new mobile geometry contract.
+- VERIFIED: audit and design rationale are recorded in `docs/template-audits/editorial-image-layout-audit-2026-09-07.md`.
+- PROTECTED: no Essential, Noir, Heritage, or Gallery implementation was changed.
+- UNKNOWN: final rendered pixels on a browser/device after the refinement are not yet directly observed in this connector environment.
+- PROPOSED: complete the next browser QA pass at small/standard/large mobile plus tablet/desktop before declaring the Editorial refinement visually closed.
 
 ## W15 Growth, Analytics, and Experimentation
 - VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
@@ -126,12 +137,13 @@ Acceptance criteria:
 
 Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
 
-## Session Log — 2026-09-07 — Specialized Design Agent Definition
-- VERIFIED: created `docs/agents/design-agent.md` as the permanent Menu V3 Design Agent definition.
-- VERIFIED: registered the Design Agent workflow in `AGENTS.md` and continuity records without changing application behavior.
-- VERIFIED: no theme implementation status was changed.
-- VERIFIED: no application code, templates, schema/migrations, auth/authorization, entitlements/subscriptions, dependencies, CI/CD, Vercel settings, environment variables, or deployment configuration were modified.
+## Session Log — 2026-09-07 — Editorial Design Agent Image/Card Refinement
+- VERIFIED: supplied mobile evidence was reconciled with repository CSS and the Editorial refinement brief.
+- VERIFIED: the observed vertical imbalance maps to a legacy mobile `25rem` first-card rule in `src/theme-refinements.css` that was not neutralized by the previous hardening layer.
+- VERIFIED: `src/theme-editorial-hardening.css` was refined in commit `0518acf985fc0692cfe786ee1e89f87626439e93` to reset the oversized card height, stabilize media geometry, and normalize featured media.
+- VERIFIED: `tests/editorial-browser-hardening.test.mjs` was updated in commit `c2e03fc729c55cffc73655c44056b1017b26695a` with regression coverage for stable mobile card geometry.
+- VERIFIED: `docs/template-audits/editorial-image-layout-audit-2026-09-07.md` records the evidence, diagnosis, design rationale, and remaining verification.
+- VERIFIED: no database/schema, auth/authorization, subscriptions/entitlements, tenant/branch isolation, dependency, CI/CD, Vercel configuration, environment variable, or deployment behavior was changed.
 - VERIFIED: no Vercel deployment was intentionally triggered.
-- Files in this documentation task: `docs/agents/design-agent.md`, `AGENTS.md`, `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`.
-- Verification limitation: this connector does not expose a local `git status`; repository commit/file evidence was inspected through GitHub instead.
-- Next task remains exactly W17-Q as defined above.
+- UNKNOWN: browser/device visual proof for the new commit remains pending.
+- Next task: run Editorial/all-theme browser QA against the refinement, inspect mobile/tablet/desktop screenshots, and resolve only remaining evidence-backed Editorial image/card defects before the final W17-Q gate.
