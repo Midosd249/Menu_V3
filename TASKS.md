@@ -161,7 +161,7 @@
 - VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
-### W16 — QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED
+### W16 — QA, Browser/Device, and Release — IN PROGRESS / DEPLOYMENT_BLOCKED
 - VERIFIED: repository default branch is `main`.
 - VERIFIED: W14 and W15 regression gates remain green.
 - VERIFIED: direct Vercel inspection shows production remains on the earlier W17 closure state; final merged hardening commit is not yet confirmed in production.
@@ -183,6 +183,19 @@
 - VERIFIED: branch preview builds reached READY; final post-merge quality execution is still pending.
 - UNKNOWN: full repository test suite has not yet been executed after the hardening merge.
 - UNKNOWN: final merged commit is not yet confirmed as the active production deployment.
+
+### W17-Q — Heritage Full Visual / Layout / Image Refinement — IN PROGRESS
+- VERIFIED: the supplied Heritage screenshot was audited at 695×1536 and reconciled with the canonical `contemporary-restaurant` renderer and Heritage CSS.
+- VERIFIED: the principal source defects are oversized/unbounded brand-logo media, excessive hero dominance on mobile, dense kicker metadata, and inherited asymmetric card geometry.
+- VERIFIED: added `src/theme-heritage-hardening.css` with Heritage-only scoped corrections.
+- VERIFIED: added `tests/heritage-browser-hardening.test.mjs` and registered it in the existing default test suite.
+- VERIFIED: added `docs/template-audits/heritage-full-refinement.md` and `docs/sessions/2026-09-07-heritage-design-agent-full-refinement.md`.
+- VERIFIED: `PLAN.md` records the Heritage milestone and its acceptance criteria.
+- VERIFIED: no other template was intentionally modified.
+- VERIFIED: no dependency was added or upgraded; the package manifest was restored to the `main` baseline plus the Heritage regression-test registration only.
+- UNKNOWN: complete quality run for the final Heritage head commit is not yet complete.
+- UNKNOWN: final browser pixel/device evidence remains pending.
+- VERIFIED: no Vercel deployment was intentionally triggered.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
@@ -220,7 +233,7 @@ Workstreams:
 - PROPOSED: invoke the Design Agent for significant future visual/layout/image/theme/site-consistency tasks and require the relevant design-intelligence, project-memory, checklist, brief, and audit records.
 
 ## Current Task
-### W17-Q — Verify and harden the public Pages & Themes integration
-- Objective: run the complete repository quality gate against the merged W17 state, inspect the final diff, and resolve only scoped implementation/test defects; then re-check Vercel deployment state and record production evidence without claiming deployment until the commit match is verified.
-- Acceptance: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, and applicable `npm run qa:template` pass; final diff is W17-scoped; Arabic/RTL, English/LTR, responsive, theme selection, and preview controls are verified where the environment supports it; final Vercel commit match is verified or explicitly remains BLOCKED.
-- Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
+### W17-Q — Verify the Heritage refinement with the complete quality and browser gate
+- Objective: complete the Heritage-only visual refinement verification, inspect the final diff, and resolve only evidence-backed Heritage defects before closing this milestone. Do not start another theme.
+- Acceptance: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, and applicable `npm run qa:template` / browser QA pass; final diff is Heritage-scoped; Arabic/RTL, English/LTR, responsive, mixed-direction, varied images, SAR pricing, actions, product dialog, cart/order, and preview states are verified where the environment supports them; remaining UNKNOWN/BLOCKED items are explicit; no production deployment is claimed without Vercel evidence.
+- Verification: GitHub Actions quality evidence, browser/visual evidence, final diff/continuity review, and Vercel deployment evidence only if independently available.
