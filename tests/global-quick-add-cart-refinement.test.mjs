@@ -5,7 +5,7 @@ import test from "node:test";
 const publicMenu = fs.readFileSync("src/components/public-menu.tsx", "utf8");
 const contemporary = fs.readFileSync("src/components/templates/contemporary-restaurant.tsx", "utf8");
 const quickAdd = fs.readFileSync("src/lib/menu/quick-add.ts", "utf8");
-const styles = fs.readFileSync("src/styles.css", "utf8");
+const themeRecovery = fs.readFileSync("src/theme-public-quality-recovery.css", "utf8");
 
 test("quick-add eligibility is conservative and availability-aware", () => {
   assert.match(quickAdd, /product\.isAvailable/);
@@ -32,14 +32,15 @@ test("eligible products use direct add while configurable products keep options 
   assert.match(contemporary, /decision === "requires-options"/);
 });
 
-test("cart remains persistent and has safe mobile spacing", () => {
+test("cart remains persistent and uses safe mobile touch spacing", () => {
   assert.match(contemporary, /!preview \? <button/);
-  assert.match(styles, /\.public-menu-bottom-bar/);
-  assert.match(styles, /env\(safe-area-inset-bottom\)/);
-  assert.match(styles, /min-height: 44px/);
+  assert.match(publicMenu, /min-h-11/);
+  assert.match(themeRecovery, /\.public-menu-quick-add/);
+  assert.match(themeRecovery, /min-height: 44px/);
+  assert.match(themeRecovery, /env\(safe-area-inset-bottom\)/);
 });
 
-test("quick-add actions are separate interactive controls", () => {
+test("quick-add actions are sibling interactive controls, never nested buttons", () => {
   assert.doesNotMatch(publicMenu, /<button[^>]*>[\s\S]*<button[^>]*className=\"public-menu-quick-add/);
   assert.doesNotMatch(contemporary, /<button[^>]*>[\s\S]*<button[^>]*className=\"public-menu-quick-add/);
 });
