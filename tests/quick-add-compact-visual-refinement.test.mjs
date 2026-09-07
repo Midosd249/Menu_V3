@@ -10,7 +10,7 @@ const fineDining = fs.readFileSync("src/components/templates/fine-dining-hospita
 
 test("compact quick-add layer is loaded after the existing public theme layers", () => {
   assert.match(root, /import quickAddCompactRefinementCss from "\.\.\/quick-add-compact-refinement\.css\?url";/);
-  assert.match(root, /heritageCascadeCss },\n      \{ rel: "stylesheet", href: quickAddCompactRefinementCss \}/);
+  assert.match(root, /heritageCascadeCss },\n\s{6}\{ rel: "stylesheet", href: quickAddCompactRefinementCss \}/);
 });
 
 test("quick-add keeps an accessible 44px interactive target while using a compact visual footprint", () => {
