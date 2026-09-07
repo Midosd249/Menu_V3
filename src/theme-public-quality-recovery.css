@@ -1,0 +1,221 @@
+/*
+ * Menu V3 — public theme quality recovery layer
+ *
+ * Presentation-only recovery for verified Gallery and Heritage issues.
+ * Shared customer behavior remains owned by the existing public renderer.
+ * Scope: ThemeKeys `gallery` and `heritage` only.
+ */
+
+/* Gallery — Most Popular / Featured section */
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div {
+  align-items: stretch;
+  grid-auto-rows: minmax(0, auto);
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button {
+  min-height: 0;
+  grid-template-rows: minmax(0, auto) minmax(5.35rem, auto);
+  align-content: stretch;
+  overflow: hidden;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :first-child {
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+  overflow: hidden;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child {
+  min-height: 5.35rem;
+  align-content: center;
+  justify-items: start;
+  overflow: hidden;
+  text-align: start;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child > :first-child {
+  display: -webkit-box;
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+  line-height: 1.48;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child > :last-child {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+  line-height: 1.35;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :first-child > div,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :first-child > div {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  background: var(--gallery-surface-soft);
+  color: var(--gallery-muted);
+}
+
+/* Gallery product catalogue — keep information readable when descriptions vary. */
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
+  grid-template-rows: minmax(0, auto) minmax(6rem, auto);
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child {
+  min-height: 6rem;
+  align-content: start;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child > :first-child {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+}
+
+/* Heritage — information-first composition and stable scan units. */
+html[data-menu-theme="heritage"] .menu-public-shell main {
+  padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section {
+  min-width: 0;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li {
+  min-width: 0;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  grid-template-columns: minmax(6.25rem, 31%) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :first-child {
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :first-child img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  align-content: center;
+  gap: 0.28rem;
+  overflow: hidden;
+  text-align: start;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(3) {
+  min-width: 0;
+  direction: ltr;
+  unicode-bidi: isolate;
+  justify-self: start;
+  white-space: nowrap;
+  line-height: 1.35;
+}
+
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(3) {
+  justify-self: end;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button {
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: minmax(0, auto) minmax(5rem, auto);
+  overflow: hidden;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :first-child {
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  overflow: hidden;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child {
+  min-height: 5rem;
+  align-content: center;
+  overflow: hidden;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child > :first-child {
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child > :last-child {
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div {
+    gap: 0.65rem;
+  }
+
+  html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button {
+    grid-template-rows: minmax(0, auto) minmax(5rem, auto);
+  }
+
+  html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child {
+    min-height: 5rem;
+    padding: 0.7rem;
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(5.8rem, 30%) minmax(0, 1fr);
+    gap: 0.6rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button,
+  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
+    transition: none !important;
+  }
+}
