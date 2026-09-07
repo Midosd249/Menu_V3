@@ -39,9 +39,7 @@ export function FineDiningHospitalityTemplate({ menu, preview = false }: { menu:
         </div>
         {signature.length ? <div className="noir-template-featured-grid">
           {signature.map((product) => <article key={product.id} className="noir-template-featured-card">
-            <button type="button" onClick={() => undefined} className="noir-template-featured-hit" aria-label={text(lang, `فتح ${product.nameAr}`, `Open ${product.nameEn || product.nameAr}`)} tabIndex={-1}>
-              <MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="noir-template-featured-image" />
-            </button>
+            <MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="noir-template-featured-image" />
             <div className="noir-template-featured-copy">
               <h3>{text(lang, product.nameAr, product.nameEn)}</h3>
               {product.descriptionAr || product.descriptionEn ? <p dir="auto">{text(lang, product.descriptionAr, product.descriptionEn)}</p> : null}
