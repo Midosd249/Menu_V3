@@ -106,7 +106,7 @@
 - VERIFIED: Quality Gate `34080681231` passed `161/161` tests with zero failures and zero skips.
 - VERIFIED: all five canonical themes passed Browser Template QA across mobile, tablet, and desktop.
 - VERIFIED: browser runtime console errors `0`; horizontal overflow `0px`.
-- VERIFIED: typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance baseline upload, and preview shutdown all completed successfully.
+- VERIFIED: typecheck, tests, lint, production build, Playwright Chromium, all-theme browser QA, performance baseline upload, and preview shutdown all completed successfully in the gate.
 - UNKNOWN: physical-device rendering and manual screen-reader output remain unverified.
 - Evidence: `docs/sessions/2026-09-07-w17-q-closure.md`.
 
@@ -134,6 +134,12 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 - VERIFIED: the workflow is an internal AI workflow, not a human teammate, collaborator, contributor, or developer role.
 - VERIFIED: external side-effect actions require explicit user authorization and platform confirmation.
 
+## Automatic Specialist Routing and Orchestration — Permanent Workflow
+- VERIFIED: `docs/automatic-specialist-routing.md` defines the routing matrix and orchestration contract for meaningful natural-language user requests.
+- VERIFIED: the Principal Engineer is the single orchestration point; the user does not need to manually name specialist workflows.
+- VERIFIED: Research, Design, QA/regression, Security/data, and Release/reliability workflows are selected automatically according to task relevance and risk; no fixed provider list is assumed.
+- VERIFIED: all specialist roles are internal AI workflows, not human collaborators or development-team roles.
+
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN: physical-device rendering and manual screen-reader output.
 - UNKNOWN: authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
@@ -157,4 +163,12 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 - VERIFIED: existing agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent research/connected-tools discovery agent.
 - VERIFIED: `docs/agents/research-connected-tools-agent.md` was created as the canonical internal AI research workflow.
 - VERIFIED: the workflow dynamically discovers available capabilities and requires relevance, authorization, safety, and material-use criteria before source selection.
+- VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
+
+## Automatic Specialist Routing Governance Note — 2026-09-07
+- VERIFIED: `docs/automatic-specialist-routing.md` was created as the canonical orchestration contract without creating duplicate specialist agents.
+- VERIFIED: routing covers themes/public menus, customer actions, auth/authz/isolation/subscriptions/entitlements, database/migrations, bugs/browser/performance/Vercel/CI, SEO/public content, and release/reliability.
+- VERIFIED: routing requires proportional repository-first research and dynamically discovered connected tools only when relevant, authorized, safe, and materially useful.
+- VERIFIED: the user remains the sole human owner and primary developer; specialist roles are internal AI workflows only.
+- VERIFIED: no implementation or product-development status changed.
 - VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
