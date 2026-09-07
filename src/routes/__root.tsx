@@ -17,6 +17,7 @@ import themeRefinementsV2Css from "../theme-refinements-v2.css?url";
 import editorialThemeCss from "../theme-editorial.css?url";
 import editorialHardeningCss from "../theme-editorial-hardening.css?url";
 import heritageThemeCss from "../theme-heritage.css?url";
+import heritageHardeningCss from "../theme-heritage-hardening.css?url";
 import galleryThemeCss from "../theme-gallery.css?url";
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
 
@@ -54,6 +55,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: editorialHardeningCss },
       { rel: "stylesheet", href: heritageThemeCss },
+      { rel: "stylesheet", href: heritageHardeningCss },
       { rel: "stylesheet", href: galleryThemeCss },
       { rel: "stylesheet", href: menuPreviewLayerCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
