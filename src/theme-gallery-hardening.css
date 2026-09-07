@@ -102,6 +102,32 @@ html[dir="ltr"][data-menu-theme="gallery"] .menu-public-shell main > section:fir
   text-align: left;
 }
 
+/* Gallery featured presentation: one image-led item at a time. */
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div {
+  display: block;
+  width: 100%;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button {
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto auto;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:not(:first-child) {
+  display: none;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 720px) {
+  html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child {
+    aspect-ratio: 16 / 9;
+  }
+}
+
 @media (max-width: 520px) {
   html[data-menu-theme="gallery"] .gallery-brand-header {
     padding-inline: 0.7rem;
