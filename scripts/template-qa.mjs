@@ -22,7 +22,9 @@ if (!baseUrl) {
 
 const parsed = new URL(baseUrl);
 const requestedTheme = parsed.searchParams.get("theme") || "editorial";
-const themes = allThemes ? ["essential", "editorial", "noir", "heritage", "gallery"] : [requestedTheme];
+const themes = allThemes
+  ? ["essential", "editorial", "noir", "heritage", "gallery", "premium-menu-v3"]
+  : [requestedTheme];
 const viewports = [
   { name: "mobile", width: 390, height: 844 },
   { name: "tablet", width: 768, height: 1024 },
