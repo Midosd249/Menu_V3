@@ -68,6 +68,15 @@ const definitions: readonly ThemeDefinition[] = [
     tokens: { ...baseTokens, colors: { ...baseTokens.colors, background: "#eee9e1", surface: "#fffdf9", surfaceMuted: "#e4ddd3", border: "#d1c7ba", accent: "#7b4d36" }, typography: { ...baseTokens.typography, headingWeight: 650, lineHeight: "1.58", letterSpacing: "-0.01em" }, shape: { ...baseTokens.shape, radiusLg: "1.25rem", radiusXl: "1.75rem" }, spacing: { page: "1rem", section: "3rem", card: "0", gap: "1rem" }, effects: { shadow: "0 2px 5px rgb(33 28 23 / .08)", shadowHover: "0 22px 55px rgb(33 28 23 / .17)", overlay: "rgb(20 15 12 / .36)" } },
     layout: { header: "standard", productGrid: "gallery-grid", productCard: "vertical", categoryNav: "scroll", imageRatio: "portrait" }, capabilities: { dark: false, imageFirst: true, compact: false, immersive: false, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "gallery", preview: { className: "preview-gallery" },
   },
+  {
+    key: "premium-menu-v3", family: "contemporary-restaurant", tier: "free", name: { ar: "بريميوم Menu V3", en: "Premium Menu V3" },
+    description: { ar: "منيو فاخر دافئ مصمم للضيافة الراقية مع تجربة عربية أولاً.", en: "A warm luxury menu system designed for elevated hospitality." },
+    promise: { ar: "فخامة هادئة، صور شهية، وقرار طلب واضح.", en: "Quiet luxury, appetizing imagery, and a decisive ordering flow." },
+    tags: [{ ar: "بريميوم", en: "Premium" }, { ar: "عربي أولاً", en: "Arabic-first" }, { ar: "ضيافة", en: "Hospitality" }],
+    tokens: { ...baseTokens, colors: { background: "#0b0a09", foreground: "#f6efe6", surface: "#141210", surfaceMuted: "#1d1814", border: "#3a2e25", primary: "#f6efe6", primaryForeground: "#0b0a09", accent: "#d9ae69", accentForeground: "#1a130d", muted: "#b6a99c", mutedForeground: "#b6a99c" }, typography: { ...baseTokens.typography, headingWeight: 650, lineHeight: "1.62", letterSpacing: "-0.006em" }, shape: { radiusSm: "0.4rem", radiusMd: "0.75rem", radiusLg: "1rem", radiusXl: "1.35rem" }, spacing: { page: "1rem", section: "2.75rem", card: "0.9rem", gap: "0.85rem" }, effects: { shadow: "0 10px 32px rgb(0 0 0 / .28)", shadowHover: "0 22px 58px rgb(0 0 0 / .38)", overlay: "rgb(0 0 0 / .58)" } },
+    layout: { header: "immersive", productGrid: "list", productCard: "editorial", categoryNav: "sticky", imageRatio: "landscape" },
+    capabilities: { dark: true, imageFirst: true, compact: false, immersive: true, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "premium", preview: { className: "preview-premium-menu-v3" },
+  },
 ] as const satisfies readonly ThemeDefinition[];
 
 export const MENU_THEMES = definitions;
