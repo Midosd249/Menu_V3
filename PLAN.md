@@ -3,149 +3,79 @@
 ## Status
 - Status: IN_PROGRESS.
 - Repository: `Midosd249/Menu_V3`.
-- Source of truth: `main`.
-- Premium Theme System is DONE / VERIFIED / MERGED.
-- Essential, Editorial, Noir, Heritage, and Gallery milestones are protected; browser/device closure remains separately tracked.
-- Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
+- Canonical branch: `main`.
+- Verified application baseline before reconciliation: `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
+- Premium Theme System — DONE / VERIFIED / MERGED.
+- Essential, Editorial, Noir, Heritage, and Gallery — protected.
+- Permanent visual/functional/research quality workflow — DONE / VERIFIED.
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
-- Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level visual-quality role at `docs/agents/design-agent.md`.
-- Editorial image/card balance refinement — IMPLEMENTATION IN PROGRESS; scoped to Editorial presentation only; final browser evidence remains pending.
-- Noir full visual/layout/image/theme refinement — IMPLEMENTATION IN PROGRESS on `feat/noir-full-refinement`; PR #24 is draft; final browser evidence remains pending.
+- Specialized Design Agent — DEFINED / VERIFIED at `docs/agents/design-agent.md`.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
-- W6 Typography Evidence & Decision — CLOSED / VERIFIED.
-- W6-01 Typography Implementation — CLOSED / VERIFIED.
-- W7 Color / Surface / Contrast System — CLOSED / VERIFIED.
-- W8 Imagery and Art Direction — CLOSED / VERIFIED.
-- W9 Motion and Interaction — CLOSED / VERIFIED.
-- W10 Accessibility and RTL Quality — CLOSED / VERIFIED.
-- W11 SEO, Local Discovery, and Shareability — CLOSED / VERIFIED.
-- W12-01 Public Menu Hydration Performance — CLOSED / VERIFIED.
-- W12-02 Public Menu Resource & Bundle Efficiency — CLOSED / VERIFIED.
-- W12-03 Reliability and Failure-Path Audit — CLOSED / VERIFIED.
-- W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
-- W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
-- W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
-- W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; final production verification remains open.
-- W17 Public Pages & Themes Integration — `IN_PROGRESS`; Noir refinement is the current atomic visual task.
+- W6 through W15 — CLOSED / VERIFIED, with W14 MERGED and W15 Quality Gate `34053348446` passed.
+- W16 QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED.
+- W17 Public Pages & Themes Integration — W17-Q recovery COMPLETED / MERGED; no W17 implementation task is active.
 
 ## Canonical Backend Identity
-- VERIFIED (2026-09-06): Menu V3 uses Supabase project ref `ublxptcqefujkbeepylc`.
-- VERIFIED: Supabase URL is `https://ublxptcqefujkbeepylc.supabase.co`, region `ap-northeast-2` (Seoul), status `ACTIVE_HEALTHY` at verification.
-- VERIFIED: Menu V3 canonical database schema is `menu_v3`.
-- VERIFIED: Menu V3 is separated from legacy application data by schema boundary; legacy `public` tables are not the default Menu V3 canonical surface.
-- Canonical infrastructure record: `docs/project-infrastructure.md`.
+- VERIFIED: Supabase project ref `ublxptcqefujkbeepylc`.
+- VERIFIED: Supabase URL `https://ublxptcqefujkbeepylc.supabase.co`, region `ap-northeast-2` (Seoul), status `ACTIVE_HEALTHY` at last verification.
+- VERIFIED: canonical database schema is `menu_v3`.
+- VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Strategic Direction
-Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platform`: live menu + branded web presence + direct customer action + owner operations + local discoverability, while preserving existing architecture and completed theme work.
+Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platform`: live menu + branded web presence + direct customer action + owner operations + local discoverability, while preserving existing architecture and completed work.
 
 ## Master Design Strategy
 Complete roadmap: `docs/design-strategy-master-plan.md`.
 
-### Workstreams
-- W0 Evidence, measurement, product positioning.
-- W1 Brand positioning and content system.
-- W2 Marketing website/homepage.
-- W3 Public customer menu.
-- W4 Owner Studio/admin UX.
-- W5 Shared design system.
-- W6 Typography.
-- W7 Color and brand tokens.
-- W8 Imagery and art direction.
-- W9 Motion and interaction.
-- W10 Accessibility and RTL quality.
-- W11 SEO/local discovery/shareability.
-- W12 Performance and reliability.
-- W13 Trust, security, and data ownership.
-- W14 Pricing, packaging, and commercial UX.
-- W15 Growth, analytics, and experimentation.
-- W16 QA, browser/device, and release.
-- W17 Public Pages & Themes Integration.
+Workstreams W0–W17 remain the historical roadmap. Completed work is not re-opened merely because the roadmap remains present.
 
 ## Permanent Design Agent Workflow
-- VERIFIED: the specialized visual, image, layout, theme, and site-consistency Design Agent is defined in `docs/agents/design-agent.md`.
-- VERIFIED: the Design Agent is a separate specialist from the main repository agent and does not own architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, or general product logic.
-- PROPOSED: invoke the Design Agent workflow for significant visual, layout, image, theme, and site-consistency work; require evidence labels and relevant design documentation.
-- PROTECTED: Essential, Editorial, Noir, Heritage, and Gallery implementation status remains unchanged by the Design Agent definition task.
+- VERIFIED: `docs/agents/design-agent.md` defines the specialist workflow for significant visual, image, layout, theme, and site-consistency work.
+- VERIFIED: it does not own architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, or general product logic.
+- PROPOSED: invoke it for significant future visual work only when evidence supports reopening that scope.
 
 ## Editorial Image / Card Refinement
-- VERIFIED: supplied mobile screenshot shows an oversized first Editorial product composition where image and product copy are visually separated by excessive vertical space.
-- VERIFIED: repository contains a legacy mobile Editorial rule assigning `min-height: 25rem` to every `3n + 1` card through `src/theme-refinements.css`.
-- VERIFIED: final Editorial hardening layer now resets product-card `min-height`, preserves a stable two-column scan unit, standardizes product media to `4 / 3`, and keeps featured media consistent.
-- VERIFIED: `tests/editorial-browser-hardening.test.mjs` now protects the stable mobile geometry.
-- VERIFIED: audit is recorded in `docs/template-audits/editorial-image-layout-audit-2026-09-07.md`.
-- PROTECTED: no other theme implementation was changed.
-- UNKNOWN: final browser/device rendering after the new refinement has not yet been observed in this connector environment.
-- PROPOSED: use the next browser QA pass to verify that Editorial remains visually premium at 360px, 390px, 430px, tablet, and desktop widths without reopening unrelated theme work.
+- VERIFIED: legacy mobile Editorial `min-height: 25rem` behavior was neutralized; the two-column scan unit and `4 / 3` media geometry were stabilized.
+- VERIFIED: `tests/editorial-browser-hardening.test.mjs` protects the refinement.
+- VERIFIED: audit: `docs/template-audits/editorial-image-layout-audit-2026-09-07.md`.
+- UNKNOWN: physical-device pixel verification remains pending.
+- NEXT VERIFICATION: run the existing Editorial browser/device verification; do not begin new Editorial implementation without evidence.
 
-## Noir Full Refinement
-- VERIFIED: actual theme ID is `noir`; template family is `fine-dining-hospitality`; public routes are `/m/$slug` and `/m/$slug/$branch`; preview route is `/themes/preview?theme=noir`.
-- VERIFIED: the previous Noir template rendered a custom hero/featured composition and then mounted the shared `PublicMenuView`, creating a second public-menu shell.
-- VERIFIED: `PublicMenuView` is the interaction owner for search, categories, product details, cart/order, pricing, and configured WhatsApp/phone/map/Instagram actions.
-- VERIFIED: three existing Noir visual layers overlapped on product geometry: `src/theme-noir.css`, `src/theme-refinements.css`, and `src/theme-refinements-v2.css`.
-- VERIFIED: those layers contained item-position transforms, alternating radii, different image heights, image zoom/filter effects, pseudo-element light pools, and view-timeline reveal decoration.
-- VERIFIED: supplied 695×1536 mobile evidence shows a cinematic Noir hero, featured imagery, image/card imbalance, and visual noise; screenshot 2's muted/covered lower state is not yet causally reproduced.
-- VERIFIED: `src/components/templates/fine-dining-hospitality.tsx` now preserves the Noir hero/featured identity, delegates customer interaction to the shared renderer, and removes duplicate template-level visit-event ownership.
-- VERIFIED: `src/theme-noir-hardening.css` is a final scoped layer loaded after the existing Noir refinement layers. It removes duplicate inner chrome, stabilizes featured/product media at `4 / 3`, removes item-position staggering and ornamental transforms, and preserves RTL/LTR and safe-area behavior.
-- VERIFIED: `tests/noir-browser-hardening.test.mjs` protects the shell, geometry, RTL/safe-area, and stylesheet-order contracts and is registered in `npm test`.
-- VERIFIED: audit is recorded in `docs/template-audits/noir-full-refinement.md`.
-- VERIFIED: PR #24 is open as a draft from `feat/noir-full-refinement` to `main`.
-- VERIFIED: no database schema, auth/authz, subscriptions, tenant/branch isolation, dependency, CI/CD, Vercel configuration, environment variable, or deployment behavior was intentionally changed.
-- VERIFIED: no Vercel deployment was intentionally triggered.
-- UNKNOWN: GitHub workflow run evidence for PR #24 is not yet exposed in this connector session.
-- UNKNOWN: physical-device browser rendering and screenshot 2's muted/covered layer remain unverified.
-- Acceptance: complete repository quality gate, all-theme browser QA, and final diff review must pass before this milestone is called visually closed.
+## Noir Full Refinement — COMPLETED / MERGED
+- VERIFIED: PR #24 is MERGED, not Draft/Open/In Progress.
+- Merge commit: `d2401a9276719bdab4305f89160aba2ca15f0b58`.
+- VERIFIED: the Noir refinement preserved the custom hero/featured identity, kept `PublicMenuView` as interaction owner, removed duplicate visit-event ownership, stabilized media, removed card staggering/ornamental transforms, and preserved RTL/LTR and safe-area behavior.
+- VERIFIED: `tests/noir-browser-hardening.test.mjs` and `docs/template-audits/noir-full-refinement.md` provide regression/audit evidence.
+- UNKNOWN: physical-device rendering and manual screen-reader output remain unobserved.
 
-## W17 Public Pages & Themes Integration
-- VERIFIED: canonical source is `Midosd249/Menu_V3`; legacy `Menu-V2-Sandbox` is not part of this implementation.
-- VERIFIED: homepage uses `COMMERCIAL_PLANS` for Free, Starter, and Pro pricing and displays branch/product/team limits.
-- VERIFIED: homepage exposes the five protected themes from `MENU_THEMES` and links them to the real Menu V3 preview route.
-- VERIFIED: plan and theme selections are shown in the new-customer request area before submission.
-- VERIFIED: selected plan/theme are serialized into the existing `submitLead` details field without changing the server contract.
-- VERIFIED: `/themes` presents personality, product style, imagery emphasis, and preview actions without introducing a sixth theme or a paywall.
-- VERIFIED: `/themes/preview` continues to render through the existing Menu V3 theme controller and public-menu/template system.
-- VERIFIED: preview controls are localized and include a return-to-comparison action and a use-theme path.
-- VERIFIED: `tests/public-pages-themes-contract.test.mjs` protects the pricing/theme/lead/renderer boundaries.
-- VERIFIED: `docs/w17-public-pages-themes-design-brief.md` records scope and acceptance requirements.
-- VERIFIED: client screenshot audit identified and fixed public-menu image-failure fallback and empty-hours placeholder defects.
-- VERIFIED: focused hardening is merged to `main` through PR #21.
-- UNKNOWN: the full final W17-Q repository quality suite has not yet been executed after the hardening merge.
-- UNKNOWN: new hardening browser/device visual QA has not yet been directly observed in this connector environment.
-- UNKNOWN: live lead submission and owner notification delivery have not yet been directly exercised here.
-- BLOCKED: final production deployment evidence for the merged hardening state is not yet established.
+## W17-Q Public Theme Quality Recovery — COMPLETED / MERGED
+- VERIFIED: PR #26 is MERGED.
+- Merge commit: `219f79024fec088c6a9e2e1bd050d6fe2e394e91`.
+- VERIFIED: Quality Gate `34080681231` passed.
+- VERIFIED: `161/161` tests passed; `0` failures; `0` skips.
+- VERIFIED: all five themes passed Browser Template QA across mobile, tablet, and desktop.
+- VERIFIED: browser runtime console errors `0`; horizontal overflow `0px`.
+- VERIFIED: typecheck, test suite, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance baseline upload, and preview shutdown all completed successfully.
+- UNKNOWN: physical-device rendering and manual screen-reader output remain unverified.
+- Deployment remains separate from this CI evidence.
 
-## Completed W15 — Growth, Analytics, and Experimentation
-- VERIFIED: research reviewed current product-analytics and experimentation guidance from Amplitude and Google Analytics and converted it into a repository-specific, minimal event contract.
-- VERIFIED: existing four-event public analytics contract is preserved: `visit`, `qr_scan`, `product_view`, `whatsapp`.
-- VERIFIED: no new third-party analytics SDK, fingerprinting, IP storage, or parallel tracking system was introduced.
-- VERIFIED: added `src/lib/menu/growth.ts` with pure, denominator-safe directional ratios derived only from authenticated server analytics.
-- VERIFIED: added product-view-per-visit, WhatsApp-clicks-per-session, QR-visit ratio, and average product views per session; these are explicitly labeled as operational event ratios rather than unique-user conversion rates.
-- VERIFIED: added a deterministic opportunity classifier: baseline, discovery, conversion, content, distribution.
-- VERIFIED: Studio analytics now surfaces the growth loop and next opportunity in Arabic/English.
-- VERIFIED: zero denominators render as unavailable rather than fabricated percentages.
-- VERIFIED: `src/lib/menu/growth.test.ts` protects metric math and the implemented event taxonomy.
-- VERIFIED: event integrity and tenant-scoped aggregation remain protected by the existing analytics integrity suite.
-- VERIFIED: production experimentation is intentionally not activated because the current event schema has no experiment exposure/variant property.
-- VERIFIED: experimentation policy and first recommended experiment are recorded in `docs/growth-w15-analytics-experimentation.md`.
-- VERIFIED: no database migration was required for W15.
-- INFERRED: the highest-value immediate growth lever is making existing acquisition → engagement → intent data actionable before adding more instrumentation.
-- UNKNOWN: statistical significance, retention, revenue attribution, and true order conversion are not measurable until corresponding events exist and enough production traffic accumulates.
-- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+## Gallery Latest Refinement — COMPLETED / VERIFIED
+- `e21c14fe337f820c371539b09d086b114216da94` — `fix(gallery): show one featured item at a time`.
+- `7d57bb0eb6dc5a5bf2198dc5b3219d0628973882` — `test(gallery): lock single featured presentation`.
+- `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` — `docs(gallery): record single featured item refinement` and the application/documentation baseline before this reconciliation.
+- VERIFIED: Gallery featured presentation now uses one image-led item at a time with responsive media geometry.
 
-## W16 QA, Browser/Device, and Release — Audit Result
-- VERIFIED: repository default branch is `main`.
-- VERIFIED: W14 and W15 regression quality gates remain green.
-- VERIFIED: direct Vercel inspection confirms the current production deployment is READY but remains on the earlier W17 closure state; the final merged hardening commit is not yet confirmed as production.
-- VERIFIED: direct production `/m/nafas` fetch returns HTTP 200 with Arabic RTL and English LTR markup.
-- VERIFIED: current production runtime error/fatal inspection for the inspected deployment returned no entries.
-- BLOCKED: final merged W17-Q hardening commit is not yet established as the active production deployment.
-- UNKNOWN: exact Vercel Usage/Billing resource value is not exposed through the available connector surface.
-- VERIFIED: premium-theme testing override is fail-closed and expiry-bound; UNKNOWN: its current production environment value cannot be inspected through the available read surface.
-- UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior remain unobserved in this connector environment.
-- Evidence: `docs/sessions/2026-09-06-w16-qa-release.md` and `docs/sessions/2026-09-07-w17-q-public-menu-hardening.md`.
+## W16 QA, Browser/Device, and Release
+- VERIFIED: W14 and W15 quality gates remain green.
+- VERIFIED: current GitHub `main` status exposes a Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
+- BLOCKED: this is a Vercel/provider capacity or plan limitation; it is not evidence of an application build failure.
+- UNKNOWN: current Vercel production deployment identity and deployed-commit match are not directly verifiable through the available Vercel connector surface.
+- UNKNOWN: production must not be described as matching current `main` without direct deployment evidence.
+- UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior remain unobserved.
 
-## Protected Work
+## Protected Scope
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
 - Do not create a sixth theme as a substitute for product/design strategy.
@@ -153,24 +83,23 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 ## Research Governance
 - Material research is recorded in persistent evidence documents.
 - Use official standards for accessibility, i18n, web platform, SEO, and analytics event conventions.
-- Competitors are pattern evidence, not assets or implementation sources.
 - Label conclusions `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, or `PROPOSED`.
 - Only one atomic task may be active at a time.
 
-## Exact Next Task
-### W17-Q — Verify the Noir refinement and run the complete public-pages/themes quality gate
-Objective: verify PR #24 with the complete repository quality suite and browser/device QA, inspect the final diff, resolve only evidence-backed Noir defects, and then record deployment status without claiming production deployment until the commit match is verified.
+## Exact Next TODO
+### Editorial browser/device verification against the latest refinement state
+Objective: verify the existing Editorial refinement in the supported browser viewport matrix and record evidence. This is a verification task, not permission to begin a new theme refinement.
 
 Acceptance criteria:
-- `npm run typecheck` passes;
-- `npm test` passes including `tests/noir-browser-hardening.test.mjs` and existing public-menu resilience/theme contracts;
-- `npm run lint` passes;
-- `npm run build` passes;
-- `npm run qa:template` and the all-theme browser QA pass where applicable;
-- Noir Arabic RTL, English LTR, small/standard/large mobile, tablet/desktop, mixed-direction content, long names, varied SAR prices, missing/mixed images, sparse/dense categories, fixed actions, product dialog, cart/order, and preview state are verified to the extent supported by the environment;
-- no Essential, Editorial, Heritage, or Gallery regression is introduced;
-- final diff contains only Noir refinement plus required continuity/test evidence;
-- remaining UNKNOWN/BLOCKED items are explicitly recorded;
-- production status is recorded separately from implementation status and is not called DEPLOYED without Vercel evidence.
+- verify the supported small/standard/large mobile, tablet, and desktop states;
+- check Arabic RTL, English LTR, mixed-direction content, long names, varied SAR prices, missing/mixed images, sparse/dense content, and safe-area/action behavior where supported;
+- record browser evidence and remaining UNKNOWN items;
+- do not modify unrelated themes or product architecture;
+- keep production deployment verification separate.
 
-Verification: GitHub Actions quality evidence, browser/visual evidence, final diff review, and Vercel deployment evidence where available.
+## Reconciliation Note — 2026-09-07
+- VERIFIED: stale Noir and W17-Q active-state claims were closed/reclassified.
+- VERIFIED: PR #24/#26 merge state and Quality Gate `34080681231` are now reflected accurately.
+- VERIFIED: latest Gallery refinement is recorded.
+- VERIFIED: deployment is explicitly separated from implementation and CI evidence.
+- UNKNOWN/BLOCKED items remain explicit rather than being converted into completion claims.
