@@ -114,3 +114,90 @@ html[data-menu-theme="editorial"] .menu-public-shell .editorial-main {
     transition: none !important;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Image distribution / card balance v2                                      */
+/* -------------------------------------------------------------------------- */
+/*
+ * Legacy Editorial refinement layers used an intentionally oversized
+ * 25rem first-card treatment on small screens. That treatment conflicts with
+ * the current stable product-card system: it creates an orphaned image at
+ * the top of the card and pushes the product copy far below it.
+ *
+ * Editorial now keeps the magazine character through typography, rhythm and
+ * a controlled lead composition — not through arbitrary card height.
+ */
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card {
+  min-height: 0 !important;
+  height: auto;
+  align-items: stretch;
+  grid-template-columns: minmax(7.25rem, 31%) minmax(0, 1fr);
+  gap: 0.9rem;
+  transform: none !important;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card > .editorial-product-image {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 / 3 !important;
+  align-self: start;
+  object-fit: cover;
+  transform: none !important;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card > .editorial-card-copy {
+  min-width: 0;
+  min-height: 0;
+  align-self: center;
+  align-content: center;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card {
+  min-width: 0;
+  min-height: 0;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card .editorial-featured-image,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card.is-lead .editorial-featured-image {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 4 / 3 !important;
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card {
+    min-height: 0 !important;
+    grid-template-columns: minmax(7.25rem, 34%) minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card > .editorial-product-image {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card,
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card.is-lead {
+    grid-template-rows: auto auto;
+  }
+
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card .editorial-featured-image,
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card.is-lead .editorial-featured-image {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > .editorial-product-card {
+    min-height: 0 !important;
+    grid-template-columns: minmax(6.75rem, 33%) minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+}
