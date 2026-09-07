@@ -2,9 +2,11 @@
 
 ## Status
 - **VERIFIED:** focused presentation-only refinement branch: `feat/quick-add-compact-visual-refinement`.
+- **VERIFIED:** current branch head is `849056ced1c13a30e4f0573e8f650ac99940f58b`.
 - **VERIFIED:** PR #32 is already merged into `main` as merge commit `930ffd4cfe1c20782079a7d5b70d48150ed6f80c`. This audit does not reopen, amend, or merge PR #32.
 - **VERIFIED:** Quick Add eligibility remains owned by `getQuickAddDecision` and is not changed by this refinement.
 - **VERIFIED:** the existing cart/order architecture and product-options flow remain unchanged.
+- **VERIFIED:** the new visual contract test is included in the repository `test` script.
 - **PROPOSED:** the compact action should read as a secondary, fast-selection affordance rather than a primary full-width CTA.
 - **UNKNOWN:** live physical-device rendering is not directly observable from the repository connector environment.
 
@@ -31,6 +33,7 @@ The theme registry maps the five active themes as follows:
 - **VERIFIED:** Noir delegates the full menu interaction surface to `PublicMenuView`, so the compact shared treatment applies without adding a second control system.
 - **VERIFIED:** the refinement does not alter image dimensions, aspect ratios, `object-fit`, image loading, or missing-image fallbacks.
 - **VERIFIED:** long titles/descriptions/prices remain owned by the existing content regions; the compact action no longer consumes a full-width row.
+- **VERIFIED:** the refinement stylesheet introduces no `position: absolute`, `position: fixed`, or new `z-index` rule for Quick Add.
 
 ## Compact interaction contract
 - **VERIFIED:** visible action geometry is `44px × 44px`.
@@ -40,6 +43,7 @@ The theme registry maps the five active themes as follows:
 - **VERIFIED:** `touch-action: manipulation` is retained.
 - **VERIFIED:** reduced-motion disables the refinement's transforms/transitions.
 - **VERIFIED:** the Options action is not targeted by the compact Quick Add stylesheet.
+- **VERIFIED:** `tests/quick-add-compact-visual-refinement.test.mjs` is part of `npm test`.
 
 ## Layering safety
 - **VERIFIED:** the refinement introduces no new fixed, sticky, modal, toast, cart, or overlay layer.
@@ -54,20 +58,14 @@ The theme registry maps the five active themes as follows:
 - **VERIFIED:** mobile spacing uses the existing responsive breakpoint and safe-area architecture; no fixed viewport overlay was added.
 - **PROPOSED:** final browser QA should cover Arabic RTL, English LTR, mixed-direction names, narrow mobile widths, standard mobile widths, and tablet/desktop.
 
-## Regression boundaries
-This refinement intentionally does **not** change:
-- Quick Add eligibility logic
-- availability or pricing logic
-- variants or modifiers
-- cart state or cart persistence
-- order submission API/path
-- database/schema/migrations
-- authentication/authorization
-- subscriptions/entitlements
-- tenant/branch isolation
-- unrelated theme behavior
+## Verification performed in this session
+- **VERIFIED:** repository/source inspection of the five active public theme families, shared renderer, contemporary renderer, Noir delegation, card/image structure, Quick Add markup, cart controls, and stylesheet cascade order.
+- **VERIFIED:** branch comparison confirms the refinement is isolated to four presentation/test/documentation files plus the test-script registration in `package.json`.
+- **VERIFIED:** no workflow run exists for the feature branch because no PR was opened and no deployment-triggering workflow was intentionally started.
+- **UNKNOWN:** `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`, Playwright, console-error checks, and physical-device rendering could not be executed because no local repository/runtime/browser is available in this session.
+- **BLOCKED:** creating a PR solely to obtain hosted browser/CI execution would also invoke the repository's Vercel integration, so it was intentionally not used under the explicit no-deployment constraint.
 
-## Verification plan
+## Verification plan for the next authorized browser/CI pass
 Run on the refinement branch:
 1. `npm test`
 2. `npm run lint`
@@ -96,4 +94,5 @@ Manual browser/device matrix:
 - `src/quick-add-compact-refinement.css`
 - `src/routes/__root.tsx`
 - `tests/quick-add-compact-visual-refinement.test.mjs`
+- `package.json`
 - `docs/template-audits/quick-add-compact-visual-refinement.md`
