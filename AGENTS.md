@@ -65,6 +65,16 @@ Audit supported cart/order, WhatsApp, phone, map/location, social, search, and c
 ### Real-data and quality gate
 No material template/public-menu change is complete until the applicable `docs/template-review-checklist.md` is satisfied, the design brief is current, realistic data states are tested, and evidence is documented. Browser/device visual claims require browser/device evidence when available; otherwise mark the visual portion `UNKNOWN` and state the exact evidence needed later. Do not use HTTP 200, source inspection, or unit tests as proof of visual success.
 
+## Design Agent — Visual, Image, Layout, and Theme Specialist
+
+Menu V3 has a separate specialized Design Agent defined in `docs/agents/design-agent.md`. It is a permanent visual-quality role, not a replacement for the main repository agent.
+
+Invoke the Design Agent workflow for any significant visual, layout, image, theme, or site-consistency task. The Design Agent is responsible for visual audits, image/art direction, layout, typography, hierarchy, theme identity, site-wide consistency, RTL/LTR presentation, mobile-first interaction, and visual aspects of accessibility/performance. It must read the project memory and the design-intelligence documents before relevant work, especially `docs/project-memory/problems-learned.md` when a theme has known visual issues.
+
+The Design Agent proposes visual changes and implements them only when explicitly authorized. The main agent remains responsible for architecture, data model, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, deployment, and general product logic. The Design Agent must not change those boundaries. It must preserve the implementation status of Essential, Editorial, Noir, Heritage, and Gallery unless explicit evidence and authorization require a change.
+
+For material theme/template work, the Design Agent must document major visual fixes in `docs/template-audits/`, use the repository's evidence labels, and follow `docs/agents/design-agent.md` methodology and audit rules. A small shared visual utility may be proposed only when backward-compatible, theme-safe, and documented.
+
 ## Engineering Rules
 - Preserve existing architecture, routes, schemas, integrations, compatibility layers, naming, typing, and error-handling conventions.
 - Prefer small, focused, reversible changes; no unrelated refactors or rewrites.
