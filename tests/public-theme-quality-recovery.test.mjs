@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Gallery Most Popular keeps image and product information in separate stable regions", async () => {
+test("Gallery Most Popular uses the semantic Featured section and stable image/content regions", async () => {
   const styles = await readFile("src/theme-public-quality-recovery.css", "utf8");
 
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*section:has\(> #featured-heading\)/);
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*grid-template-rows:\s*minmax\(0,\s*auto\)\s+minmax\(5\.35rem,\s*auto\)/);
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child[\s\S]*min-height:\s*5\.35rem/);
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child > :first-child[\s\S]*-webkit-line-clamp:\s*2/);
