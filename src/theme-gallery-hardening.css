@@ -1,0 +1,133 @@
+/*
+ * Menu V3 — Gallery final visual hardening
+ *
+ * Presentation-only correction layer for Gallery. The first screen is kept
+ * compact and brand-led so the image catalogue appears quickly without
+ * pushing the restaurant identity below the fold.
+ *
+ * Scope: ThemeKey `gallery` only.
+ */
+
+html[data-menu-theme="gallery"] .gallery-public-frame {
+  min-width: 0;
+  overflow-x: clip;
+  background: #f4f0ea;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-header {
+  padding-top: clamp(0.75rem, 2.5vw, 1.25rem);
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-header > div {
+  border-radius: 1.35rem;
+  box-shadow: 0 8px 26px rgb(36 32 29 / 0.07);
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-row {
+  align-items: center;
+  gap: 0.75rem;
+  padding: clamp(0.8rem, 3vw, 1.15rem) clamp(0.9rem, 4vw, 1.35rem);
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-copy {
+  min-width: 0;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-logo {
+  width: clamp(3.75rem, 15vw, 4.5rem) !important;
+  height: clamp(3.75rem, 15vw, 4.5rem) !important;
+  flex: none;
+  border: 1px solid rgb(36 32 29 / 0.12);
+  border-radius: 1rem !important;
+  object-fit: contain !important;
+  background: var(--gallery-paper);
+  box-shadow: 0 6px 16px rgb(36 32 29 / 0.08);
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-kicker {
+  margin-bottom: 0.2rem;
+  color: var(--gallery-accent-strong) !important;
+  line-height: 1.25;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-name {
+  max-width: 16ch;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  color: var(--gallery-ink) !important;
+  font-size: clamp(1.45rem, 6vw, 2.35rem) !important;
+  line-height: 1.18;
+}
+
+html[dir="rtl"][data-menu-theme="gallery"] .gallery-brand-name {
+  line-height: 1.32;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-language {
+  display: grid;
+  place-items: center;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-language button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+html[data-menu-theme="gallery"] .gallery-brand-tagline {
+  max-width: 48ch;
+  padding-inline: clamp(0.9rem, 4vw, 1.35rem);
+  padding-bottom: clamp(0.75rem, 3vw, 1rem);
+  color: var(--gallery-ink-soft) !important;
+}
+
+html[data-menu-theme="gallery"] .gallery-public-frame > div:last-child {
+  padding-top: 0;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child {
+  margin-top: 0;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child {
+  min-height: 4.25rem;
+  align-content: center;
+  text-align: start;
+}
+
+html[dir="rtl"][data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child {
+  text-align: right;
+}
+
+html[dir="ltr"][data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child {
+  text-align: left;
+}
+
+@media (max-width: 520px) {
+  html[data-menu-theme="gallery"] .gallery-brand-header {
+    padding-inline: 0.7rem;
+  }
+
+  html[data-menu-theme="gallery"] .gallery-brand-header > div {
+    border-radius: 1.15rem;
+  }
+
+  html[data-menu-theme="gallery"] .gallery-brand-row {
+    padding-inline: 0.8rem;
+  }
+
+  html[data-menu-theme="gallery"] .gallery-brand-logo {
+    width: 3.7rem !important;
+    height: 3.7rem !important;
+  }
+
+  html[data-menu-theme="gallery"] .gallery-brand-name {
+    font-size: 1.45rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="gallery"] .gallery-public-frame * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
