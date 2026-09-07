@@ -106,7 +106,7 @@
 - VERIFIED: Quality Gate `34080681231` passed `161/161` tests with zero failures and zero skips.
 - VERIFIED: all five canonical themes passed Browser Template QA across mobile, tablet, and desktop.
 - VERIFIED: browser runtime console errors `0`; horizontal overflow `0px`.
-- VERIFIED: typecheck, tests, lint, production build, Playwright Chromium, all-theme browser QA, performance baseline upload, and preview shutdown all completed successfully.
+- VERIFIED: typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance baseline upload, and preview shutdown all completed successfully.
 - UNKNOWN: physical-device rendering and manual screen-reader output remain unverified.
 - Evidence: `docs/sessions/2026-09-07-w17-q-closure.md`.
 
@@ -128,6 +128,12 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 - VERIFIED: `docs/agents/design-agent.md` defines the specialist workflow for visual/layout/image/theme/site-consistency work.
 - VERIFIED: architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, deployment, and general product logic remain outside that specialist scope.
 
+## Research and Connected-Tools Discovery Agent — Permanent Workflow
+- VERIFIED: `docs/agents/research-connected-tools-agent.md` defines the repository-first dynamic research/discovery workflow for consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work.
+- VERIFIED: connected tools are discovered dynamically per session; no fixed provider list is authoritative.
+- VERIFIED: the workflow is an internal AI workflow, not a human teammate, collaborator, contributor, or developer role.
+- VERIFIED: external side-effect actions require explicit user authorization and platform confirmation.
+
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN: physical-device rendering and manual screen-reader output.
 - UNKNOWN: authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
@@ -146,3 +152,9 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 - VERIFIED: latest Gallery refinement is on `main`.
 - VERIFIED: stale Noir/W17-Q active-state claims are reclassified; deployment remains separate from implementation and CI evidence.
 - VERIFIED: remaining device/manual checks remain UNKNOWN rather than being converted into completion claims.
+
+## Research Agent Governance Note — 2026-09-07
+- VERIFIED: existing agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent research/connected-tools discovery agent.
+- VERIFIED: `docs/agents/research-connected-tools-agent.md` was created as the canonical internal AI research workflow.
+- VERIFIED: the workflow dynamically discovers available capabilities and requires relevance, authorization, safety, and material-use criteria before source selection.
+- VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
