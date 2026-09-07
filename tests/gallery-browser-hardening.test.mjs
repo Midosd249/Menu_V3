@@ -24,6 +24,15 @@ test("Gallery preserves RTL/LTR and safe first-screen spacing", async () => {
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
 });
 
+test("Gallery featured section presents one image-led item at a time", async () => {
+  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+
+  assert.match(styles, /featured presentation: one image-led item at a time/);
+  assert.match(styles, /first-child:has\(> h2\.text-sm\) > div \{[\s\S]*display:\s*block/);
+  assert.match(styles, /button:not\(:first-child\)\s*\{\s*display:\s*none/);
+  assert.match(styles, /button > :first-child\s*\{\s*aspect-ratio:\s*4\s*\/\s*3/);
+});
+
 test("Gallery hardening is loaded after the base Gallery stylesheet", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
 
