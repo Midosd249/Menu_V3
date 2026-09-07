@@ -116,3 +116,19 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - `DEPLOYED` — direct Vercel evidence confirms the intended production deployment.
 - `DEPLOYMENT_BLOCKED` — implementation/release is blocked specifically by Vercel availability, quota, rate, pause, build, or platform conditions.
 - `IMPLEMENTATION_BLOCKED` — implementation cannot proceed because of a hard technical, permission, dependency, or environment blocker.
+
+## Project Ownership and Human Roles
+- The user is the sole human owner and primary developer of Menu V3.
+- Do not assume collaborators, teammates, contributors, or a development team.
+- Git commits, pull requests, branches, CI activity, and documentation history are repository evidence, not proof of multiple human developers.
+- Refer to prior work as prior repository work, prior sessions, historical commits, or user-authorized AI-assisted work unless the user explicitly confirms a human collaborator.
+- The user remains the only human authority for product, architecture, security, release, and deployment decisions.
+
+## Documentation Commit Batching
+- When remote-only repository tools create commits directly, prepare and review all documentation changes first.
+- Create one coherent documentation commit per documentation-only task whenever the available tool supports batching.
+- Do not create one commit per file unless batching is technically impossible.
+- If separate commits are technically unavoidable, state the limitation before writing and keep commits minimal.
+- Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
+- Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
+- A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
