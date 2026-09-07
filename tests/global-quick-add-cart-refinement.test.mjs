@@ -11,7 +11,7 @@ test("quick-add eligibility is conservative and availability-aware", () => {
   assert.match(quickAdd, /product\.isAvailable/);
   assert.match(quickAdd, /Number\.isFinite\(product\.price\)/);
   assert.match(quickAdd, /requires-options/);
-  assert.match(quickAdd, /variant\.isAvailable/);
+  assert.match(quickAdd, /\(options\?\.variants \?\? \[\]\)\.length > 0/);
   assert.match(quickAdd, /group\.isActive/);
 });
 
