@@ -30,14 +30,14 @@ test("all five public themes receive distinct compact Quick Add treatments", () 
 });
 
 test("Quick Add remains outside product-card navigation controls", () => {
-  assert.match(publicMenu, /className=\\"public-menu-quick-add/);
-  assert.match(contemporary, /className=\\"public-menu-quick-add editorial-quick-add/);
+  assert.match(publicMenu, /className="public-menu-quick-add/);
+  assert.match(contemporary, /className="public-menu-quick-add editorial-quick-add/);
   assert.match(fineDining, /PublicMenuView/);
-  assert.doesNotMatch(publicMenu, /<button[^>]*>[\\s\\S]*<button[^>]*className=\\"public-menu-quick-add/);
-  assert.doesNotMatch(contemporary, /<button[^>]*>[\\s\\S]*<button[^>]*className=\\"public-menu-quick-add/);
+  assert.doesNotMatch(publicMenu, /<button[^>]*>[\s\S]*<button[^>]*className="public-menu-quick-add/);
+  assert.doesNotMatch(contemporary, /<button[^>]*>[\s\S]*<button[^>]*className="public-menu-quick-add/);
 });
 
 test("compact action preserves reduced-motion behavior", () => {
-  assert.match(refinement, /@media \\(prefers-reduced-motion: reduce\\)/);
+  assert.match(refinement, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(refinement, /transition: none !important;/);
 });
