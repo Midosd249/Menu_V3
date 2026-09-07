@@ -68,9 +68,9 @@ Workstreams W0–W17 remain the historical roadmap. Completed work is not re-ope
 - VERIFIED: Gallery featured presentation now uses one image-led item at a time with responsive media geometry.
 
 ## W16 QA, Browser/Device, and Release
-- VERIFIED: W14 and W15 quality gates remain green.
-- VERIFIED: current GitHub `main` status exposes a Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
-- BLOCKED: this is a Vercel/provider capacity or plan limitation; it is not evidence of an application build failure.
+- VERIFIED: W14 and W15 regression gates remain green.
+- VERIFIED: before reconciliation, the application/documentation head `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` exposed a GitHub Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
+- BLOCKED: that Vercel result is a provider/capacity or plan limitation; it is not evidence of an application build failure.
 - UNKNOWN: current Vercel production deployment identity and deployed-commit match are not directly verifiable through the available Vercel connector surface.
 - UNKNOWN: production must not be described as matching current `main` without direct deployment evidence.
 - UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior remain unobserved.
@@ -101,5 +101,5 @@ Acceptance criteria:
 - VERIFIED: stale Noir and W17-Q active-state claims were closed/reclassified.
 - VERIFIED: PR #24/#26 merge state and Quality Gate `34080681231` are now reflected accurately.
 - VERIFIED: latest Gallery refinement is recorded.
-- VERIFIED: deployment is explicitly separated from implementation and CI evidence.
+- VERIFIED: deployment is explicitly separated from implementation and CI evidence; the pre-reconciliation Vercel `build-rate-limit` result is retained as platform limitation evidence.
 - UNKNOWN/BLOCKED items remain explicit rather than being converted into completion claims.
