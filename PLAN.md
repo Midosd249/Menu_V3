@@ -12,6 +12,7 @@
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED at `docs/agents/design-agent.md`.
 - Research and Connected-Tools Discovery Agent — DEFINED / VERIFIED at `docs/agents/research-connected-tools-agent.md` as an internal AI workflow; no application implementation status changed.
+- Automatic Specialist Routing and Orchestration — DEFINED / VERIFIED at `docs/automatic-specialist-routing.md` as a documentation-level governance workflow; no application implementation status changed.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 through W15 — CLOSED / VERIFIED, with W14 MERGED and W15 Quality Gate `34053348446` passed.
@@ -44,6 +45,13 @@ Workstreams W0–W17 remain the historical roadmap. Completed work is not re-ope
 - VERIFIED: the workflow is an internal AI workflow and not a human collaborator/team role.
 - VERIFIED: external write/publish/send/delete/purchase/deploy and other side-effect actions require explicit user authorization and platform confirmation.
 - VERIFIED: material research must preserve source attribution, evidence labels, privacy/security boundaries, and anti-copy constraints.
+
+## Automatic Specialist Routing and Orchestration
+- VERIFIED: `docs/automatic-specialist-routing.md` is the canonical routing matrix and orchestration contract for meaningful user requests.
+- VERIFIED: the Principal Engineer is the single orchestration point and automatically classifies requests, checks continuity/project memory, selects relevant internal AI workflows, integrates findings, verifies results, and stops at the authorized boundary.
+- VERIFIED: the user does not need to manually name Research, Design, QA/regression, Security/data, or Release/reliability workflows.
+- VERIFIED: routing is dynamic and does not assume a fixed connected-tool provider list; source/tool use remains conditional on availability, authorization, relevance, safety, and material usefulness.
+- VERIFIED: all specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
 
 ## Editorial Image / Card Refinement
 - VERIFIED: legacy mobile Editorial `min-height: 25rem` behavior was neutralized; the two-column scan unit and `4 / 3` media geometry were stabilized.
@@ -95,6 +103,7 @@ Workstreams W0–W17 remain the historical roadmap. Completed work is not re-ope
 - Label conclusions `VERIFIED`, `INFERRED`, `UNKNOWN`, `BLOCKED`, or `PROPOSED`.
 - Only one atomic task may be active at a time.
 - For consequential or unfamiliar work, use `docs/agents/research-connected-tools-agent.md` before implementation.
+- Automatic specialist routing is governed by `docs/automatic-specialist-routing.md`; the user provides desired outcomes rather than internal workflow instructions.
 
 ## Exact Next TODO
 ### Editorial browser/device verification against the latest refinement state
@@ -118,3 +127,10 @@ Acceptance criteria:
 - VERIFIED: the repository had `docs/agents/design-agent.md` but no adequate equivalent dynamic research/connected-tools discovery agent.
 - VERIFIED: the new research agent establishes a repository-first, dynamic-capability, evidence-based workflow with explicit side-effect authorization and anti-copy/privacy safeguards.
 - VERIFIED: the existing exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
+
+## Automatic Specialist Routing Governance Note — 2026-09-07
+- VERIFIED: `docs/automatic-specialist-routing.md` was created as the canonical orchestration contract without creating duplicate specialist agents.
+- VERIFIED: routing covers themes/public menus, customer actions, auth/authz/isolation/subscriptions/entitlements, database/migrations, bugs/browser/performance/Vercel/CI, SEO/public content, and release/reliability.
+- VERIFIED: routing requires proportional repository-first research and dynamically discovered connected tools only when relevant, authorized, safe, and materially useful.
+- VERIFIED: no implementation or product-development status changed.
+- VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
