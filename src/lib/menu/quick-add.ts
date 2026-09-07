@@ -9,7 +9,7 @@ export type QuickAddDecision = "eligible" | "requires-options" | "unavailable" |
 export function getQuickAddDecision(product: Product, options?: ProductOptions): QuickAddDecision {
   if (!product.isAvailable) return "unavailable";
   if (!Number.isFinite(product.price) || product.price < 0) return "invalid-price";
-  if ((options?.variants ?? []).some((variant) => variant.isAvailable) || (options?.groups ?? []).some((group) => group.isActive)) {
+  if ((options?.variants ?? []).length > 0 || (options?.groups ?? []).some((group) => group.isActive)) {
     return "requires-options";
   }
   return "eligible";
