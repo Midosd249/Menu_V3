@@ -33,7 +33,7 @@ test("theme controller does not clear tokens between theme changes", async () =>
 
 test("public menu keeps an always-available cart entry point and shared quick actions", async () => {
   const source = await readFile("src/components/public-menu.tsx", "utf8");
-  assert.match(source, /aria-label=\{label\(lang, "السلة", "Cart"\)\}/);
+  assert.match(source, /aria-label=\{label\(lang, `السلة،/);
   assert.match(source, /setCartOpen\(true\)/);
   assert.match(source, /branch\.mapsUrl/);
   assert.match(source, /branch\.phone/);
