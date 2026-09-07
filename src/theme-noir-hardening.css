@@ -1,0 +1,427 @@
+/* Noir presentation hardening — final scoped layer for the fine-dining template. */
+html[data-menu-theme="noir"] .noir-template-shell {
+  --noir-hard-void: #0b0a09;
+  --noir-hard-surface: #151311;
+  --noir-hard-surface-2: #1b1815;
+  --noir-hard-ink: #f3eee7;
+  --noir-hard-soft: #c9c0b7;
+  --noir-hard-muted: #91877d;
+  --noir-hard-bronze: #c79a67;
+  --noir-hard-line: rgb(243 238 231 / 0.13);
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% -8%, rgb(199 154 103 / 0.08), transparent 26rem),
+    linear-gradient(180deg, var(--noir-hard-void) 0%, #0e0c0b 24rem, var(--noir-hard-void) 100%);
+  color: var(--noir-hard-ink);
+}
+
+html[data-menu-theme="noir"] .noir-template-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--noir-hard-line);
+  background:
+    radial-gradient(circle at 72% 18%, rgb(199 154 103 / 0.13), transparent 20rem),
+    var(--noir-hard-void);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.34);
+}
+
+html[data-menu-theme="noir"] .noir-template-hero::after {
+  content: "N / 03";
+  position: absolute;
+  inset-inline-end: clamp(1rem, 5vw, 2.5rem);
+  top: 1rem;
+  color: rgb(199 154 103 / 0.72);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  pointer-events: none;
+}
+
+html[data-menu-theme="noir"] .noir-template-hero-inner {
+  position: relative;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding: clamp(1.15rem, 4vw, 2rem) clamp(1rem, 5vw, 3rem) clamp(2rem, 6vw, 3.5rem);
+}
+
+html[data-menu-theme="noir"] .noir-template-identity {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-brand > img,
+html[data-menu-theme="noir"] .noir-template-brand-fallback {
+  width: clamp(4.25rem, 16vw, 5.75rem);
+  height: clamp(4.25rem, 16vw, 5.75rem);
+  flex: 0 0 auto;
+  border: 1px solid rgb(199 154 103 / 0.28);
+  border-radius: 999px;
+  object-fit: cover;
+  background: var(--noir-hard-surface);
+  box-shadow: 0 12px 34px rgb(0 0 0 / 0.3);
+}
+
+html[data-menu-theme="noir"] .noir-template-brand-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--noir-hard-bronze);
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-family: Georgia, "Times New Roman", "IBM Plex Sans Arabic", serif;
+}
+
+html[data-menu-theme="noir"] .noir-template-kicker,
+html[data-menu-theme="noir"] .noir-template-section-heading > p {
+  margin: 0 0 0.45rem;
+  color: #e0bd8d;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+html[data-menu-theme="noir"] .noir-template-brand h1 {
+  max-width: 12ch;
+  margin: 0;
+  color: #fbf7f1;
+  font-size: clamp(2.25rem, 10vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .noir-template-brand h1 {
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+html[data-menu-theme="noir"] .noir-template-branch {
+  margin: 0.45rem 0 0;
+  color: var(--noir-hard-soft);
+  font-size: 0.9rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-lang {
+  flex: 0 0 auto;
+  border: 1px solid var(--noir-hard-line);
+  border-radius: 999px;
+  background: rgb(243 238 231 / 0.045);
+  backdrop-filter: blur(12px);
+}
+
+html[data-menu-theme="noir"] .noir-template-tagline {
+  max-width: 48rem;
+  margin: clamp(1.35rem, 5vw, 2.5rem) 0 0;
+  color: var(--noir-hard-soft);
+  font-size: clamp(1rem, 3.6vw, 1.3rem);
+  line-height: 1.75;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .noir-template-tagline {
+  line-height: 1.85;
+}
+
+html[data-menu-theme="noir"] .noir-template-main {
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 3rem);
+  padding-bottom: max(5rem, env(safe-area-inset-bottom));
+}
+
+html[data-menu-theme="noir"] .noir-template-featured {
+  padding-block: clamp(2.2rem, 6vw, 4rem);
+  border-bottom: 1px solid var(--noir-hard-line);
+}
+
+html[data-menu-theme="noir"] .noir-template-section-heading h2 {
+  margin: 0;
+  color: var(--noir-hard-ink);
+  font-size: clamp(1.7rem, 5vw, 2.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .noir-template-section-heading h2 {
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.1rem);
+  margin-top: 1.35rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--noir-hard-line);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, var(--noir-hard-surface-2), var(--noir-hard-surface));
+  box-shadow: 0 14px 38px rgb(0 0 0 / 0.24);
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.06) brightness(0.82);
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-copy {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.9rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-copy h3 {
+  margin: 0;
+  color: var(--noir-hard-ink);
+  font-size: clamp(1rem, 3.2vw, 1.25rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .noir-template-featured-copy h3 {
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-copy p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--noir-hard-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-price {
+  color: #e0bd8d;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+html[data-menu-theme="noir"] .noir-template-featured-empty {
+  margin: 1.25rem 0 0;
+  border: 1px dashed var(--noir-hard-line);
+  border-radius: 1rem;
+  padding: 1rem;
+  color: var(--noir-hard-muted);
+}
+
+/* The shared public renderer owns interaction. Noir supplies only the presentation shell. */
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell {
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > header,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > nav[aria-label="الفروع"],
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > nav[aria-label="Branches"] {
+  display: none !important;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > main > section:has(> #featured-heading) {
+  display: none !important;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > .sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-inline: 0;
+  border-inline: 0;
+  border-radius: 0;
+  background: rgb(11 10 9 / 0.92);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.25);
+  backdrop-filter: blur(18px) saturate(110%);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > main {
+  width: 100%;
+  max-width: none;
+  padding: clamp(2rem, 5vw, 3rem) 0 max(7rem, calc(5rem + env(safe-area-inset-bottom)));
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > main > section {
+  padding-block: clamp(2rem, 5vw, 3.75rem);
+  border-top: 1px solid var(--noir-hard-line);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > main > section > h2 {
+  margin-bottom: 1.1rem;
+  color: var(--noir-hard-ink);
+}
+
+/* Final product-card contract: stable geometry, no odd/even staggering, no ornamental transforms. */
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+  min-width: 0;
+  transform: none !important;
+  animation: none !important;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+  display: grid;
+  grid-template-columns: minmax(7rem, 32%) minmax(0, 1fr);
+  gap: 0.9rem;
+  min-height: 0 !important;
+  padding: 0.5rem;
+  border-radius: 1rem !important;
+  border-color: var(--noir-hard-line);
+  background: linear-gradient(145deg, var(--noir-hard-surface-2), var(--noir-hard-surface));
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.2);
+}
+
+html[dir="rtl"][data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+  grid-template-columns: minmax(0, 1fr) minmax(7rem, 32%);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button > :first-child,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li:nth-child(3n + 2) > button > :first-child,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li:nth-child(3n + 3) > button > :first-child,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li:nth-child(4n + 1) > button > :first-child {
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+  background: var(--noir-hard-surface-2);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button img {
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  object-fit: cover;
+  transform: none !important;
+  filter: saturate(0.78) contrast(1.07) brightness(0.8);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button > :last-child {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  padding: 0.25rem 0.35rem;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button h4 {
+  max-width: none;
+  margin: 0;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button p {
+  margin-top: 0.35rem;
+  color: var(--noir-hard-muted);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button [class*="text-accent"] {
+  margin-top: 0.45rem;
+  color: #e0bd8d;
+  text-shadow: none;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button:hover,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button:focus-visible {
+  transform: none !important;
+  border-color: rgb(199 154 103 / 0.42);
+  box-shadow: 0 16px 38px rgb(0 0 0 / 0.3);
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button::before,
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button::after {
+  display: none !important;
+}
+
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > nav[aria-label="إجراءات المنيو"],
+html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > nav[aria-label="Menu actions"] {
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 760px) {
+  html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(8rem, 36%) minmax(0, 1fr);
+  }
+
+  html[dir="rtl"][data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(0, 1fr) minmax(8rem, 36%);
+  }
+
+  html[data-menu-theme="noir"] .noir-template-featured-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  html[data-menu-theme="noir"] .noir-template-hero-inner {
+    padding-inline: 0.9rem;
+  }
+
+  html[data-menu-theme="noir"] .noir-template-brand {
+    gap: 0.75rem;
+  }
+
+  html[data-menu-theme="noir"] .noir-template-brand > img,
+  html[data-menu-theme="noir"] .noir-template-brand-fallback {
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+
+  html[data-menu-theme="noir"] .noir-template-brand h1 {
+    font-size: clamp(2rem, 10vw, 3.25rem);
+  }
+
+  html[data-menu-theme="noir"] .noir-template-featured-grid {
+    gap: 0.7rem;
+  }
+
+  html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(6.5rem, 31%) minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  html[dir="rtl"][data-menu-theme="noir"] .noir-template-menu > .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(0, 1fr) minmax(6.5rem, 31%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="noir"] .noir-template-shell *,
+  html[data-menu-theme="noir"] .noir-template-shell *::before,
+  html[data-menu-theme="noir"] .noir-template-shell *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
