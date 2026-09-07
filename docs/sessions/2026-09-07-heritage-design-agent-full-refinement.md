@@ -24,18 +24,20 @@
 
 ## Regression protection
 - **VERIFIED:** added `tests/heritage-browser-hardening.test.mjs`.
-- **VERIFIED:** registered the test in the existing `npm test` script.
-- **VERIFIED:** no package dependency was added or upgraded; the existing `zustand` dependency remains present.
+- **VERIFIED:** registered the test in the existing default test suite.
+- **VERIFIED:** no package dependency was added or upgraded; the package manifest matches the `main` baseline except for the test registration.
 
 ## Documentation
 - **VERIFIED:** full audit is recorded in `docs/template-audits/heritage-full-refinement.md`.
+- **VERIFIED:** `PLAN.md` and `TASKS.md` record the active Heritage refinement milestone.
 
 ## Verification
 - **VERIFIED:** PR #25 is open as a draft against `main`.
-- **UNKNOWN:** GitHub Actions workflow result for the current PR head has not yet been exposed by the available connector surface.
+- **VERIFIED:** package-manifest correction removed unrelated dependency drift from the PR diff.
+- **UNKNOWN:** GitHub Actions workflow result for the latest PR head remains pending.
 - **UNKNOWN:** final browser pixel evidence for the new commit remains pending.
 - **UNKNOWN:** physical-device rendering remains pending.
 - **VERIFIED:** no Vercel deployment was intentionally triggered.
 
 ## Exact next task
-Run the complete repository quality gate for PR #25, inspect Heritage browser screenshots at supported viewports and content states, fix only evidence-backed Heritage defects, then update the continuity state and stop. Do not start another template.
+Run the complete repository quality gate for the latest PR #25 head, inspect Heritage browser screenshots at supported viewports and content states, fix only evidence-backed Heritage defects, then update the continuity state and stop. Do not start another template.
