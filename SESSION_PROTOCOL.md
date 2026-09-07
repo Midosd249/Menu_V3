@@ -60,6 +60,15 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - The user is the sole human owner and primary developer; the Research Agent is an internal AI workflow and not a human collaborator or development-team role.
 - Use the research depth appropriate to risk: Light, Focused, or Deep. Record material findings with `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, and `BLOCKED` labels and hand off to the Principal Engineer or the applicable specialized workflow.
 
+## Automatic Specialist Routing and Orchestration
+- For every meaningful user request, the Principal Engineer is the single orchestration point: classify the request, read continuity/project memory, identify applicable internal AI workflows, state the routing plan briefly, integrate findings, implement only authorized work, verify, document, and stop at the correct boundary.
+- The user must not be required to manually select Research, Design, QA/regression, Security/data, or Release/reliability workflows.
+- Use `docs/automatic-specialist-routing.md` as the canonical routing matrix and orchestration contract. Select workflows by task relevance rather than invoking every workflow indiscriminately.
+- Research is automatic when it materially improves a consequential, unfamiliar, high-risk, external-knowledge-dependent, browser-specific, market-specific, security-sensitive, or major design decision. It remains repository-first and dynamically discovers currently available connected capabilities.
+- Public-menu/theme/UI work invokes the Design Agent when relevant; QA/regression, Security/data, and Release/reliability workflows are invoked when their risk surface applies.
+- All specialist roles are internal AI workflows, not human teammates, collaborators, contributors, or developers. The user remains the sole human owner and primary developer.
+- Route: classify request → select relevant internal workflows → `[MEMORY]` check lessons → `[RESEARCH]` proportional repository-first research → `[PLAN]` → `[BUILD]` → `[TEST]` → `[STATE]` → `[STOP]`.
+
 ## Work
 1. Preserve completed work; do not restart, rebuild, replace, or remove completed features.
 2. Before material template changes, create/update the template brief and visual/functional audit.
