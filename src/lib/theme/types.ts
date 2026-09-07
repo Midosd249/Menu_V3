@@ -1,4 +1,4 @@
-export const THEME_KEYS = ["essential", "editorial", "noir", "heritage", "gallery"] as const;
+export const THEME_KEYS = ["essential", "editorial", "noir", "heritage", "gallery", "premium-menu-v3"] as const;
 export type ThemeKey = (typeof THEME_KEYS)[number];
 
 export const TEMPLATE_FAMILIES = [
@@ -13,7 +13,7 @@ export type TemplateFamily = (typeof TEMPLATE_FAMILIES)[number];
 
 export type ThemeLocaleText = { readonly ar: string; readonly en: string };
 export type ThemeTier = "free" | "premium";
-export type ThemeMotion = "quiet" | "editorial" | "cinematic" | "heritage" | "gallery";
+export type ThemeMotion = "quiet" | "editorial" | "cinematic" | "heritage" | "gallery" | "premium";
 export type ThemeTokens = {
   readonly colors: {
     readonly background: string;
