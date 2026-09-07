@@ -6,6 +6,15 @@
 - Source of truth: `main`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
+## Backend Identity (VERIFIED — 2026-09-06)
+- Supabase project ref: `ublxptcqefujkbeepylc`.
+- Supabase URL: `https://ublxptcqefujkbeepylc.supabase.co`.
+- Supabase region: `ap-northeast-2` (Seoul).
+- Supabase status: `ACTIVE_HEALTHY` at last verification.
+- Menu V3 canonical database schema: `menu_v3`.
+- Menu V3 is separated from legacy application data by schema boundary; legacy `public` tables are not the canonical Menu V3 surface.
+- Canonical infrastructure reference: `docs/project-infrastructure.md`.
+
 ## Current Position
 - G1–G7.2 completed work remains protected.
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -33,8 +42,40 @@
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
 - W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
-- W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; final merged visual refinements are not yet verified as production-deployed.
-- W17 Public Pages & Themes Integration — `IN_PROGRESS`; Noir refinement is the current atomic visual task.
+- W16 QA, Browser/Device, and Release — `IN_PROGRESS / DEPLOYMENT_BLOCKED`; repository/CI release audit passed, but the final merged W17-Q state is not yet verified as production-deployed.
+- W17 Public Pages & Themes Integration — `IN_PROGRESS`; implementation is merged to `main` for prior hardening, and Noir refinement is the current atomic visual task on PR #24.
+
+## W17 Public Pages & Themes Integration
+- VERIFIED: implementation is being applied to the canonical `Menu_V3` architecture, not the legacy `Menu-V2-Sandbox`.
+- VERIFIED: homepage now consumes the canonical `COMMERCIAL_PLANS` catalog and visibly presents Free, Starter, and Pro pricing with operational limits.
+- VERIFIED: homepage now presents the five protected themes from `MENU_THEMES` and links each to the real `/themes/preview` route.
+- VERIFIED: plan selection and theme selection scroll to the existing new-customer request form and display the current selection before submission.
+- VERIFIED: selected plan/theme are included in the existing `submitLead` details payload; no backend schema or RPC contract was changed.
+- VERIFIED: the homepage request area explicitly identifies itself as a `New customer request` and preserves the existing reference-ID confirmation state.
+- VERIFIED: `/themes` now presents theme personality, product-card style, imagery emphasis, preview, and a clear relationship to the existing Menu V3 architecture.
+- VERIFIED: `/themes/preview` remains connected to `MenuThemeController`, `PublicMenuView`, and `ContemporaryRestaurantTemplate`; no static HTML theme renderer was introduced.
+- VERIFIED: preview controls are localized for Arabic/English and provide return-to-theme comparison plus a use-theme path.
+- VERIFIED: a repository-level public-pages/themes contract test protects the commercial catalog, five theme keys, lead flow, and real preview renderer boundary.
+- VERIFIED: `docs/w17-public-pages-themes-design-brief.md` records scope, protected boundaries, journey, pricing, theme, i18n/RTL, accessibility, responsive, and verification requirements.
+- VERIFIED: supplied client screenshots were audited and two concrete public-menu defects were fixed: broken external product-image requests now fall back gracefully, and an empty schedule no longer renders a misleading opening-hours status chip.
+- VERIFIED: `tests/public-menu-resilience.test.mjs` records regression contracts for the hardening subtask.
+- VERIFIED: focused hardening was merged through PR #21 as commit `b0a06dbeca47779f371e118beed6d62b6b63c21c`.
+- VERIFIED: current production HTML for `/m/nafas` already reflects the W17 spacing/bidi/rectangular-card implementation for the Essential route.
+- UNKNOWN: full repository quality gates for the final merged hardening commit have not yet been executed in this connector environment.
+- UNKNOWN: browser/device visual QA of the final merged hardening commit has not yet been executed in this connector environment.
+- UNKNOWN: final merged hardening commit is not yet confirmed as the active production deployment.
+- UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
+- BLOCKED: production release verification remains separately constrained until Vercel exposes/activates the final deployment state.
+
+## Editorial Image / Card Refinement
+- VERIFIED: supplied mobile screenshot shows the first Editorial product image separated from its name/price by excessive vertical space and visually inconsistent card height.
+- VERIFIED: repository contains a legacy Editorial mobile rule assigning `min-height: 25rem` to every `3n + 1` card through `src/theme-refinements.css`.
+- VERIFIED: `src/theme-editorial-hardening.css` now neutralizes that legacy height, preserves a stable two-column product scan unit, standardizes product media to `4 / 3`, and keeps featured imagery on the same geometry.
+- VERIFIED: `tests/editorial-browser-hardening.test.mjs` protects the new mobile geometry contract.
+- VERIFIED: audit and design rationale are recorded in `docs/template-audits/editorial-image-layout-audit-2026-09-07.md`.
+- PROTECTED: no Essential, Noir, Heritage, or Gallery implementation was changed.
+- UNKNOWN: final rendered pixels on a browser/device after the refinement are not yet directly observed in this connector environment.
+- PROPOSED: complete the next browser QA pass at small/standard/large mobile plus tablet/desktop before declaring the Editorial refinement visually closed.
 
 ## Noir Full Refinement — 2026-09-07
 - VERIFIED: target theme is `noir`, template family `fine-dining-hospitality`, public route `/m/$slug` and `/m/$slug/$branch`, preview route `/themes/preview?theme=noir`.
@@ -53,6 +94,36 @@
 - UNKNOWN: local Git working-tree status cannot be inspected through the available GitHub connector surface.
 - UNKNOWN: typecheck, default test suite, lint, production build, performance audit, and Playwright browser QA have not yet produced a visible run for PR #24 in this connector session.
 - UNKNOWN: physical-device rendering and the causal source of the muted/covered state in supplied screenshot 2 remain unverified.
+
+## W15 Growth, Analytics, and Experimentation
+- VERIFIED: research reviewed current product-analytics and experimentation guidance and recorded the evidence in `docs/growth-w15-analytics-experimentation.md`.
+- VERIFIED: existing public event taxonomy remains exactly `visit`, `qr_scan`, `product_view`, `whatsapp`.
+- VERIFIED: tenant resolution and product ownership validation remain server-side; owner aggregation remains tenant-scoped.
+- VERIFIED: `src/lib/menu/growth.ts` derives denominator-safe directional event ratios only from `OwnerAnalytics` returned by the authenticated server function.
+- VERIFIED: Studio analytics now surfaces product views per 100 visits, WhatsApp clicks per 100 sessions, visits per 100 QR scans, average views per session, and a deterministic opportunity category in Arabic/English.
+- VERIFIED: the UI explicitly states that these are operational event ratios, not unique-user conversion rates.
+- VERIFIED: zero-denominator metrics render as unavailable rather than fabricated percentages.
+- VERIFIED: `src/lib/menu/growth.test.ts` protects calculations and the event contract.
+- VERIFIED: the existing `src/lib/menu/analytics-integrity.test.ts` remains part of the default test suite and protects tenant scoping.
+- VERIFIED: no database migration was required.
+- VERIFIED: production A/B experimentation is not falsely enabled; the current event schema lacks an experiment exposure/variant property.
+- INFERRED: existing acquisition → engagement → intent data is the highest-value immediate growth surface.
+- UNKNOWN: statistical significance, retention, revenue attribution, and true order conversion remain unmeasurable until corresponding production events exist.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- Evidence: `docs/growth-w15-analytics-experimentation.md`.
+
+## W16 QA, Browser/Device, and Release
+- VERIFIED: repository default branch is `main`; current merged W17-Q hardening commit is `b0a06dbeca47779f371e118beed6d62b6b63c21c` before the continuity-session documentation commit.
+- VERIFIED: W14 and W15 Quality Gates remain passed.
+- VERIFIED: direct Vercel inspection shows the current production deployment is READY but is still associated with the earlier W17 closure commit `822516eb216ba30f628dd839d7b531b3bdd9382d`; final merged hardening commit is not yet confirmed in production.
+- VERIFIED: direct production `/m/nafas` fetch returns HTTP 200 with Arabic RTL and English LTR markup.
+- VERIFIED: current production runtime error/fatal inspection for the inspected production deployment returned no entries.
+- BLOCKED: production deployment of the final merged hardening commit is not yet established; no deployment success is claimed.
+- UNKNOWN: exact Vercel Usage/Billing resource value is not exposed through the available connector surface.
+- VERIFIED: premium-theme testing override logic is fail-closed and expiry-bound.
+- UNKNOWN: current production environment values cannot be inspected through the available repository/Vercel read surface.
+- UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior were not directly observed in this connector environment.
+- Evidence: `docs/sessions/2026-09-06-w16-qa-release.md` and `docs/sessions/2026-09-07-w17-q-public-menu-hardening.md`.
 
 ## Protected Completed Work
 - Existing themes, public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls are not reopened without evidence.
