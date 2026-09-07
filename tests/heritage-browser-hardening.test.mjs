@@ -39,9 +39,33 @@ test("Heritage becomes a stacked mobile art-directed hero", async () => {
   assert.match(styles, /@media \(max-width:\s*700px\)[\s\S]*main ul > li > button[\s\S]*min-height:\s*6\.6rem/);
 });
 
-test("Heritage hardening remains the final Heritage stylesheet", async () => {
+test("Heritage final cascade neutralizes legacy decoration and geometry", async () => {
+  const styles = await readFile("src/theme-heritage-cascade.css", "utf8");
+
+  assert.match(styles, /background-image:\s*none\s*!important/);
+  assert.match(styles, /header::before[\s\S]*opacity:\s*0\s*!important/);
+  assert.match(styles, /main ul > li > button[\s\S]*border-radius:\s*0\s*!important/);
+  assert.match(styles, /main ul > li:nth-child\(even\) > button[\s\S]*transform:\s*none\s*!important/);
+  assert.match(styles, /main > section > ul > li[\s\S]*animation:\s*none\s*!important/);
+});
+
+test("Heritage final cascade loads after all shared and recovery layers", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
-  assert.match(source, /import heritageThemeCss from "\.\.\/theme-heritage\.css\?url"/);
-  assert.match(source, /import heritageHardeningCss from "\.\.\/theme-heritage-hardening\.css\?url"/);
-  assert.match(source, /href: heritageThemeCss \},\s*\{ rel: "stylesheet", href: heritageHardeningCss \}/);
+  const order = [
+    "appCss",
+    "colorsCss",
+    "themeCss",
+    "heritageThemeCss",
+    "heritageHardeningCss",
+    "galleryHardeningCss",
+    "publicThemeQualityRecoveryCss",
+    "menuPreviewLayerCss",
+    "heritageCascadeCss",
+  ];
+  const positions = order.map((name) => source.indexOf(name));
+
+  assert.ok(positions.every((position) => position >= 0));
+  assert.ok(positions.every((position, index) => index === 0 || position > positions[index - 1]));
+  assert.match(source, /import heritageCascadeCss from "\.\.\/theme-heritage-cascade\.css\?url"/);
+  assert.match(source, /href: menuPreviewLayerCss \},\s*\{ rel: "stylesheet", href: heritageCascadeCss \}/);
 });
