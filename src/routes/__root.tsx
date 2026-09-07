@@ -22,6 +22,7 @@ import galleryThemeCss from "../theme-gallery.css?url";
 import galleryHardeningCss from "../theme-gallery-hardening.css?url";
 import publicThemeQualityRecoveryCss from "../theme-public-quality-recovery.css?url";
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
+import heritageCascadeCss from "../theme-heritage-cascade.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -63,6 +64,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: galleryHardeningCss },
       { rel: "stylesheet", href: publicThemeQualityRecoveryCss },
       { rel: "stylesheet", href: menuPreviewLayerCss },
+      { rel: "stylesheet", href: heritageCascadeCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
