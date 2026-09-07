@@ -52,6 +52,13 @@ For every future public-menu, template, theme, SEO, customer-action, or conversi
 - Do not copy proprietary UI, assets, screenshots, text, branding, layouts, or source code.
 - Record material research in `docs/design-research-log.md` with source, date, category, VERIFIED finding, transferable principle, relevance, limitation, confidence, and what must not be copied.
 
+### Research and Connected Tools
+For consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work, invoke the workflow in `docs/agents/research-connected-tools-agent.md`.
+
+The workflow must begin with repository evidence, dynamically inspect all currently available connected tools/apps/plugins/connectors, and use every relevant authorized source that materially improves the decision.
+
+Do not hard-code a provider list. Do not use irrelevant tools. Do not claim unavailable access. Prefer read/search/analysis actions and require explicit user authorization for external side-effect actions.
+
 ### Permanent visual audit
 Before implementation, inspect the full relevant journey across supported small/standard/large mobile, tablet, and desktop states. Review Arabic RTL, English LTR, mixed-direction content, long names, long categories, long restaurant names, SAR price lengths, missing/poor images, varied image ratios, missing descriptions, sold-out/available items, modifiers/discounts when supported, sparse/dense categories, one/multiple branches, and loading/empty/error/offline/unavailable states when supported.
 
