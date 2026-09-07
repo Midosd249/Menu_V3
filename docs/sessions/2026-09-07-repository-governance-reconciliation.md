@@ -25,7 +25,6 @@ Canonical continuity reconciliation for the active Menu V3 continuity files afte
 - VERIFIED: browser runtime console errors were `0` and horizontal overflow was `0px` in the all-theme QA.
 - VERIFIED: latest Gallery refinement includes `e21c14fe337f820c371539b09d086b114216da94` (`fix(gallery): show one featured item at a time`), regression test `7d57bb0eb6dc5a5bf2198dc5b3219d0628973882`, and documentation commit `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
 - VERIFIED: the pre-reconciliation GitHub Vercel status for `main` exposed a `failure` target pointing to the Vercel `build-rate-limit` upgrade path. This is provider/platform evidence, not evidence of an application build failure.
-- VERIFIED: the documentation-only reconciliation commits were subsequently created on `main`; the final documentation head is `c8c1f0b2d8f8b7d1d2b3c4e5f6a7b8c9d0e1f2a3` only if directly observed. Since the connector did not expose a final commit hash for this last session-file update in the write response, the exact final head after this edit is UNKNOWN here.
 
 ## Stale Continuity Claims Corrected
 - PR #24 was incorrectly described as Draft/Open/In Progress in continuity files; it is MERGED.
@@ -38,7 +37,7 @@ Canonical continuity reconciliation for the active Menu V3 continuity files afte
 - `PROJECT_STATE.md`: reconciled canonical branch/application baseline, PR #24/#26 closure, W17-Q quality evidence, Gallery latest refinement, UNKNOWN physical-device/manual screen-reader evidence, implementation/deployment separation, and the Vercel build-rate-limit limitation. Added this session summary and exactly one next TODO.
 - `PLAN.md`: moved Noir/W17-Q implementation work out of active status, recorded the completed Gallery refinement and W17-Q quality gate, kept deployment verification separate, and identified one next unblocked verification task.
 - `TASKS.md`: reconciled Noir/W17-Q completion, recorded Gallery's latest refinement, retained UNKNOWN device/manual checks, and reduced the active queue to one next TODO without falsely marking deployment complete.
-- `docs/sessions/2026-09-07-repository-governance-reconciliation.md`: records the reconciliation itself and distinguishes the pre-reconciliation Vercel limitation from the later documentation-commit status.
+- `docs/sessions/2026-09-07-repository-governance-reconciliation.md`: records the reconciliation itself and distinguishes the pre-reconciliation Vercel limitation from the later documentation-only commit status.
 
 ## UNKNOWN / BLOCKED
 - UNKNOWN: physical-device rendering is not directly verified in this connector environment.
@@ -46,7 +45,7 @@ Canonical continuity reconciliation for the active Menu V3 continuity files afte
 - UNKNOWN: authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior remain unobserved.
 - UNKNOWN: current Vercel production deployment identity/commit match is not directly verified through the available Vercel connector surface.
 - BLOCKED: the pre-reconciliation Vercel status reported `build-rate-limit`; this is a provider/platform limitation, not application-build failure evidence.
-- UNKNOWN: the Vercel status of the final documentation-only head after this session-file update is not yet directly re-read.
+- UNKNOWN: the final documentation-only commit's Vercel deployment state is not used as evidence of production deployment.
 
 ## Deployment Status
 - IMPLEMENTATION_STATUS: VERIFIED_LOCALLY / MERGED for the completed Noir/W17-Q/Gallery work represented by the verified Git/CI evidence.
