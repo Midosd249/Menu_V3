@@ -1,0 +1,113 @@
+/* Menu V3 — compact Quick Add visual refinement
+ * Behavioral contract remains owned by the existing renderers.
+ * Presentation only: reduce visual dominance while preserving a 44px action.
+ */
+
+.public-menu-quick-add {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  margin-inline-start: auto;
+  margin-inline-end: 0.75rem;
+  margin-bottom: 0.75rem;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  border-radius: 999px;
+  font-size: 0;
+  line-height: 1;
+  flex: 0 0 44px;
+  box-shadow: 0 5px 14px rgb(23 20 17 / 0.14);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.public-menu-quick-add > svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.public-menu-quick-add:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.public-menu-quick-add:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.public-menu-quick-add:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Shared renderer cards: the action owns a small footer footprint, never the image. */
+.menu-public-shell main > section > div > article > .public-menu-quick-add {
+  justify-self: end;
+}
+
+.menu-public-shell main ul > li > div > .public-menu-quick-add {
+  justify-self: end;
+}
+
+/* Editorial / Heritage use the contemporary card wrappers. Keep the action outside
+ * the product button and aligned to the card edge instead of over the image. */
+.editorial-featured-card-wrap > .public-menu-quick-add,
+.editorial-product-card-wrap > .public-menu-quick-add {
+  justify-self: end;
+}
+
+/* Theme personality: same compact geometry, distinct surface treatment. */
+html[data-menu-theme="essential"] .public-menu-quick-add {
+  background: var(--essential-accent-strong, var(--menu-accent, #8f4e32));
+  color: #fffaf4;
+  border-color: color-mix(in oklab, var(--essential-accent-strong, #8f4e32) 72%, #171411);
+  box-shadow: 0 4px 12px rgb(23 20 17 / 0.12);
+}
+
+html[data-menu-theme="editorial"] .public-menu-quick-add {
+  background: var(--menu-accent, #9b5134);
+  color: #fffdf9;
+  border: 1px solid color-mix(in oklab, var(--menu-accent, #9b5134) 70%, #ffffff);
+  box-shadow: 0 5px 15px rgb(23 20 17 / 0.15);
+}
+
+html[data-menu-theme="noir"] .public-menu-quick-add {
+  background: #171311;
+  color: #f0c28b;
+  border-color: #a56b3e;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.34), inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+html[data-menu-theme="heritage"] .public-menu-quick-add {
+  background: #8f5d31;
+  color: #fffaf1;
+  border-color: #704c2b;
+  box-shadow: 0 4px 12px rgb(67 45 25 / 0.16);
+}
+
+html[data-menu-theme="gallery"] .public-menu-quick-add {
+  background: var(--menu-accent, #7b4d36);
+  color: #fffdf9;
+  border-color: color-mix(in oklab, var(--menu-accent, #7b4d36) 76%, #ffffff);
+  box-shadow: 0 5px 14px rgb(33 28 23 / 0.14);
+}
+
+@media (max-width: 700px) {
+  .public-menu-quick-add {
+    margin-inline-end: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-menu-quick-add {
+    transition: none !important;
+  }
+  .public-menu-quick-add:hover,
+  .public-menu-quick-add:active {
+    transform: none;
+  }
+}
