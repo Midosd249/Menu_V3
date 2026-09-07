@@ -11,6 +11,7 @@
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level visual-quality role at `docs/agents/design-agent.md`.
 - Editorial image/card balance refinement — IMPLEMENTATION IN PROGRESS; scoped to Editorial presentation only; final browser evidence remains pending.
+- Heritage full visual/layout/image refinement — IMPLEMENTATION IN PROGRESS; scoped to Heritage presentation only; final browser evidence remains pending.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -78,6 +79,24 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - UNKNOWN: final browser/device rendering after the new refinement has not yet been observed in this connector environment.
 - PROPOSED: use the next browser QA pass to verify that Editorial remains visually premium at 360px, 390px, 430px, tablet, and desktop widths without reopening unrelated theme work.
 
+## Heritage Full Visual / Layout / Image Refinement — 2026-09-07
+- VERIFIED: supplied 695×1536 mobile screenshot shows an oversized white logo block, dominant cover imagery, dense kicker metadata, and weak first-screen menu utility.
+- VERIFIED: `src/components/templates/contemporary-restaurant.tsx` provides dedicated hero/media/logo classes, while the existing Heritage stylesheet did not explicitly bound the brand logo class.
+- VERIFIED: shared Heritage styling included alternating product-card radius geometry that conflicts with stable scanning.
+- INFERRED: the oversized logo is amplified by the light background of the supplied logo asset and generic image presentation.
+- VERIFIED: added `src/theme-heritage-hardening.css` scoped exclusively to `data-menu-theme="heritage"`.
+- VERIFIED: Heritage hero media is isolated and the brand logo is explicitly bounded with `object-fit: contain` and protected from generic positioning, filters, and transforms.
+- VERIFIED: mobile hero density is reduced and identity metadata is separated into scannable runs.
+- VERIFIED: product cards use stable horizontal geometry with `4 / 3` media and no inherited alternating radius/transform treatment.
+- VERIFIED: Heritage featured media uses stable `4 / 3` geometry while preserving the shared renderer and interactions.
+- VERIFIED: `tests/heritage-browser-hardening.test.mjs` protects logo isolation, card geometry, bidi-safe values, reduced motion, and stylesheet order.
+- VERIFIED: `src/routes/__root.tsx` loads the Heritage hardening layer after `theme-heritage.css`.
+- VERIFIED: full audit is recorded in `docs/template-audits/heritage-full-refinement.md`.
+- VERIFIED: session is recorded in `docs/sessions/2026-09-07-heritage-design-agent-full-refinement.md`.
+- VERIFIED: no database/schema, auth/authz, subscriptions/entitlements, tenant/branch isolation, dependency, CI/CD, Vercel configuration, environment variable, or deployment behavior was intentionally changed.
+- UNKNOWN: final browser/device pixel verification is pending.
+- UNKNOWN: current PR quality run is still executing.
+
 ## W17 Public Pages & Themes Integration
 - VERIFIED: canonical source is `Midosd249/Menu_V3`; legacy `Menu-V2-Sandbox` is not part of this implementation.
 - VERIFIED: homepage uses `COMMERCIAL_PLANS` for Free, Starter, and Pro pricing and displays branch/product/team limits.
@@ -112,11 +131,11 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: no database migration was required for W15.
 - INFERRED: the highest-value immediate growth lever is making existing acquisition → engagement → intent data actionable before adding more instrumentation.
 - UNKNOWN: statistical significance, retention, revenue attribution, and true conversion-to-order rates are not measurable until corresponding events exist and enough production traffic accumulates.
-- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
+- VERIFIED: Quality Gate `34053348446` passed install, route generation, typecheck, tests, lint, production build, Playwright Chromium, all-theme browser QA, performance upload, and preview shutdown.
 
 ## W16 QA, Browser/Device, and Release — Audit Result
 - VERIFIED: repository default branch is `main`.
-- VERIFIED: W14 and W15 regression quality gates remain green.
+- VERIFIED: W14 and W15 regression gates remain green.
 - VERIFIED: direct Vercel inspection confirms the current production deployment is READY but remains on the earlier W17 closure state; the final merged hardening commit is not yet confirmed as production.
 - VERIFIED: direct production `/m/nafas` fetch returns HTTP 200 with Arabic RTL and English LTR markup.
 - VERIFIED: current production runtime error/fatal inspection for the inspected deployment returned no entries.
@@ -142,18 +161,19 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - Only one atomic task may be active at a time.
 
 ## Exact Next Task
-### W17-Q — Verify and harden the public Pages & Themes integration
-Objective: run the complete repository quality gate against the merged W17 state, inspect the final diff, and resolve only scoped implementation/test defects; then re-check Vercel deployment state and record production evidence without claiming deployment until the commit match is verified.
+### W17-Q — Verify the Heritage refinement with the complete quality and browser gate
+Objective: complete the Heritage-only visual refinement verification, inspect the final diff, and resolve only evidence-backed Heritage defects before closing this milestone. Do not start another theme.
 
 Acceptance criteria:
 - `npm run typecheck` passes;
-- `npm test` passes including `tests/public-pages-themes-contract.test.mjs` and `tests/public-menu-resilience.test.mjs`;
+- `npm test` passes including `tests/heritage-browser-hardening.test.mjs` and existing public-menu/theme contracts;
 - `npm run lint` passes;
 - `npm run build` passes;
-- `npm run qa:template` passes where applicable;
-- final diff contains only W17-scoped changes and preserves protected backend/theme architecture;
-- Arabic RTL, English LTR, mobile/responsive, plan selection, theme selection, and preview controls are verified to the extent supported by the available environment;
-- remaining UNKNOWN/BLOCKED items are explicitly recorded rather than hidden behind DONE;
-- final merged commit is either directly verified in Vercel production or explicitly remains BLOCKED.
+- `npm run qa:template` / all-theme browser QA passes where applicable;
+- Heritage Arabic RTL, English LTR, mobile/tablet/desktop, mixed-direction content, long names, varied SAR prices, missing/mixed images, sparse/dense categories, actions, product dialog, cart/order, and preview state are verified to the extent supported by the environment;
+- no Essential, Editorial, Noir, or Gallery regression is introduced;
+- final diff contains only Heritage refinement plus required continuity/test evidence;
+- remaining UNKNOWN/BLOCKED items are explicitly recorded;
+- production status remains separate from implementation status and is not called DEPLOYED without Vercel evidence.
 
-Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
+Verification: GitHub Actions quality evidence, browser/visual evidence, final diff review, and Vercel deployment evidence only if independently available.
