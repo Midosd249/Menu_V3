@@ -80,9 +80,10 @@
 - PROPOSED: verify the existing Editorial refinement in the supported browser/device matrix; do not reopen implementation without new evidence.
 
 ## W16 Release / Deployment State
-- VERIFIED: current canonical repository branch is `main`.
-- VERIFIED: current `main` GitHub status exposes a Vercel `failure` status whose target points to `upgradeToPro=build-rate-limit`.
-- BLOCKED: this is a Vercel/provider capacity or plan limitation; it is not evidence that the application build failed.
+- VERIFIED: canonical repository branch is `main`.
+- VERIFIED: before reconciliation, the application/documentation head `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` had a GitHub Vercel `failure` status pointing to `upgradeToPro=build-rate-limit`.
+- BLOCKED: that Vercel result is a provider/capacity or plan limitation; it is not evidence that the application build failed.
+- UNKNOWN: the current documentation-only reconciliation head's Vercel deployment identity/status is not used as production evidence.
 - UNKNOWN: current Vercel production deployment identity and deployed-commit match cannot be directly verified through the available Vercel connector surface.
 - UNKNOWN: production must not be stated to match current `main` without direct deployment evidence.
 - UNKNOWN: current production environment values cannot be inspected through the available repository/Vercel read surface.
@@ -112,8 +113,8 @@
 - VERIFIED: Quality Gate `34080681231` passed `161/161` tests with zero failures and zero skips and passed all-theme browser QA across mobile/tablet/desktop with zero console errors and `0px` horizontal overflow.
 - VERIFIED: latest Gallery refinement is represented by `e21c14fe337f820c371539b09d086b114216da94`, test `7d57bb0eb6dc5a5bf2198dc5b3219d0628973882`, and documentation `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
 - VERIFIED: continuity files had stale pre-closure claims for Noir/W17-Q and did not reflect the latest Gallery refinement.
-- VERIFIED: implementation status is separated from deployment status; current Vercel `build-rate-limit` is retained as a platform/deployment limitation.
+- VERIFIED: implementation status is separated from deployment status; the pre-reconciliation Vercel `build-rate-limit` evidence is retained as a platform/deployment limitation.
 - UNKNOWN: physical-device and manual screen-reader evidence remain unverified.
-- BLOCKED: current production commit match remains unverified through the available Vercel surface.
+- BLOCKED: production commit match remains unverified through the available Vercel surface.
 - VERIFIED: no application code, template, test, migration, dependency, CI/CD, Vercel setting, environment variable, or deployment configuration was changed by this reconciliation.
 - Next TODO: Editorial browser/device verification against the latest refinement state.
