@@ -10,6 +10,7 @@
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
 - Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level visual-quality role at `docs/agents/design-agent.md`.
+- Editorial image/card balance refinement — IMPLEMENTATION IN PROGRESS; scoped to Editorial presentation only; final browser evidence remains pending.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -66,6 +67,16 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: the Design Agent is a separate specialist from the main repository agent and does not own architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, or general product logic.
 - PROPOSED: invoke the Design Agent workflow for significant visual, layout, image, theme, and site-consistency work; require evidence labels and relevant design documentation.
 - PROTECTED: Essential, Editorial, Noir, Heritage, and Gallery implementation status remains unchanged by the Design Agent definition task.
+
+## Editorial Image / Card Refinement
+- VERIFIED: supplied mobile screenshot shows an oversized first Editorial product composition where image and product copy are visually separated by excessive vertical space.
+- VERIFIED: repository contains a legacy mobile Editorial rule assigning `min-height: 25rem` to every `3n + 1` card through `src/theme-refinements.css`.
+- VERIFIED: final Editorial hardening layer now resets product-card `min-height`, preserves a stable two-column scan unit, standardizes product media to `4 / 3`, and keeps featured media consistent.
+- VERIFIED: `tests/editorial-browser-hardening.test.mjs` now protects the stable mobile geometry.
+- VERIFIED: audit is recorded in `docs/template-audits/editorial-image-layout-audit-2026-09-07.md`.
+- PROTECTED: no other theme implementation was changed.
+- UNKNOWN: final browser/device rendering after the new refinement has not yet been observed in this connector environment.
+- PROPOSED: use the next browser QA pass to verify that Editorial remains visually premium at 360px, 390px, 430px, tablet, and desktop widths without reopening unrelated theme work.
 
 ## W17 Public Pages & Themes Integration
 - VERIFIED: canonical source is `Midosd249/Menu_V3`; legacy `Menu-V2-Sandbox` is not part of this implementation.
