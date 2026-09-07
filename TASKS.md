@@ -219,8 +219,18 @@ Workstreams:
 - PROTECTED: Essential, Editorial, Noir, Heritage, and Gallery implementation milestones remain unchanged.
 - PROPOSED: invoke the Design Agent for significant future visual/layout/image/theme/site-consistency tasks and require the relevant design-intelligence, project-memory, checklist, brief, and audit records.
 
+## Noir Full Refinement — IMPLEMENTATION IN PROGRESS
+- VERIFIED: target theme is `noir` / `fine-dining-hospitality`.
+- VERIFIED: duplicate public-menu shell and competing Noir card geometry were identified from repository source and supplied screenshots.
+- VERIFIED: PR #24 is open as a draft from `feat/noir-full-refinement` to `main`.
+- VERIFIED: audit is recorded in `docs/template-audits/noir-full-refinement.md`.
+- VERIFIED: regression coverage is in `tests/noir-browser-hardening.test.mjs` and is registered in the default suite.
+- UNKNOWN: complete typecheck/test/lint/build/browser/performance verification is still pending in the current connector session.
+- UNKNOWN: final physical-device visual evidence is pending.
+- PROTECTED: no other theme, backend, auth, tenant/branch, subscription, CI/CD, Vercel, or deployment behavior was intentionally changed.
+
 ## Current Task
-### W17-Q — Verify and harden the public Pages & Themes integration
-- Objective: run the complete repository quality gate against the merged W17 state, inspect the final diff, and resolve only scoped implementation/test defects; then re-check Vercel deployment state and record production evidence without claiming deployment until the commit match is verified.
-- Acceptance: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, and applicable `npm run qa:template` pass; final diff is W17-scoped; Arabic/RTL, English/LTR, responsive, theme selection, and preview controls are verified where the environment supports it; final Vercel commit match is verified or explicitly remains BLOCKED.
-- Verification: GitHub Actions quality evidence plus final diff/continuity review, Vercel deployment evidence, and available browser/visual evidence.
+### W17-Q — Verify the Noir refinement and run the complete public-pages/themes quality gate
+- Objective: verify PR #24 with the complete repository quality suite and browser/device QA, inspect the final diff, resolve only evidence-backed Noir defects, and record deployment status separately from implementation status.
+- Acceptance: `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, and applicable `npm run qa:template`/all-theme browser QA pass; Noir Arabic/English, responsive, image, card, action, dialog/cart/order, and preview scenarios remain stable; no other theme regresses; final Vercel commit match is verified or explicitly remains BLOCKED.
+- Verification: GitHub Actions quality evidence, browser/visual evidence, final diff/continuity review, and Vercel deployment evidence.
