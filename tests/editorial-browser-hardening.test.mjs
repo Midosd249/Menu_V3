@@ -15,6 +15,16 @@ test("Editorial browser hardening protects mobile geometry and mixed-direction v
   assert.match(styles, /editorial-main[\s\S]*safe-area-inset-bottom/);
 });
 
+test("Editorial product cards reject legacy oversized mobile heights", async () => {
+  const styles = await readFile("src/theme-editorial-hardening.css", "utf8");
+
+  assert.match(styles, /editorial-product-card[\s\S]*min-height:\s*0\s*!important/);
+  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\(7\.25rem,\s*34%\)\s+minmax\(0,\s*1fr\)/);
+  assert.match(styles, /editorial-product-card[\s\S]*gap:\s*0\.85rem/);
+  assert.match(styles, /editorial-product-card[\s\S]*transform:\s*none\s*!important/);
+  assert.match(styles, /editorial-featured-card\.is-lead[\s\S]*aspect-ratio:\s*4\s*\/\s*3\s*!important/);
+});
+
 test("Editorial omits unknown opening status instead of inventing a state", async () => {
   const source = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
 
