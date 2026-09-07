@@ -1,0 +1,272 @@
+/*
+ * Menu V3 — Heritage final visual hardening
+ *
+ * Presentation-only correction layer for the Heritage theme. It isolates the
+ * shared contemporary hero media from the logo, removes legacy asymmetric
+ * card geometry, and keeps the mobile menu compact and scan-friendly.
+ *
+ * Scope: ThemeKey `heritage` only.
+ */
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero {
+  min-height: min(52dvh, 520px);
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: end;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--heritage-surface-muted);
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-media > img,
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-media > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-media > img {
+  opacity: 0.52;
+  filter: saturate(0.68) contrast(1.04) brightness(0.72);
+  transform: none !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgb(43 33 24 / 0.08) 0%, rgb(43 33 24 / 0.30) 42%, rgb(43 33 24 / 0.94) 100%);
+  pointer-events: none;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-inner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 64rem);
+  min-height: 0;
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 2rem) clamp(0.95rem, 4vw, 2.25rem) clamp(1.15rem, 4vw, 2.25rem);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+  color: rgb(255 250 241 / 0.82);
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-kicker > span {
+  min-height: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.6rem;
+  border: 1px solid rgb(255 250 241 / 0.18);
+  border-radius: 999px;
+  background: rgb(43 33 24 / 0.34);
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-kicker > span:nth-child(2) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-logo {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 3 !important;
+  width: clamp(4.25rem, 17vw, 5.75rem) !important;
+  height: clamp(4.25rem, 17vw, 5.75rem) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  flex: none;
+  object-fit: contain !important;
+  border: 1px solid rgb(255 250 241 / 0.55) !important;
+  border-radius: 1rem !important;
+  background: var(--heritage-paper) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.20) !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-row > div {
+  min-width: 0;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-row h1 {
+  max-width: 15ch;
+  color: var(--heritage-paper);
+  font-size: clamp(1.9rem, 8vw, 3.35rem);
+  line-height: 1.18;
+  font-weight: 760;
+  letter-spacing: -0.025em;
+  text-shadow: 0 4px 22px rgb(0 0 0 / 0.26);
+}
+
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-brand-row h1 {
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-branch,
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-tagline {
+  color: rgb(255 250 241 / 0.78);
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-tagline {
+  max-width: 42ch;
+  line-height: 1.65;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+  color: rgb(255 250 241 / 0.82);
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero-meta > span {
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.65rem;
+  border: 1px solid rgb(255 250 241 / 0.16);
+  border-radius: 999px;
+  background: rgb(43 33 24 / 0.32);
+  font-size: 0.76rem;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
+  grid-template-columns: minmax(6.75rem, 31%) minmax(0, 1fr);
+  min-height: 7rem;
+  border-radius: 0.95rem !important;
+  border-width: 1px !important;
+  transform: none !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:hover,
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:focus-visible {
+  transform: translateY(-1px) !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :first-child {
+  aspect-ratio: 4 / 3;
+  height: auto;
+  min-height: 0;
+  border-radius: 0.7rem;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  transform: none !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child {
+  min-width: 0;
+  padding-block: 0.15rem;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :first-child,
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
+  overflow-wrap: anywhere;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(3) {
+  direction: ltr;
+  unicode-bidi: isolate;
+  justify-self: start;
+}
+
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(3) {
+  justify-self: end;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button {
+  border-radius: 0.95rem !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child {
+  aspect-ratio: 4 / 3;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button img {
+  transform: none !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:hover img,
+html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:focus-visible img {
+  transform: scale(1.02) !important;
+}
+
+@media (max-width: 700px) {
+  html[data-menu-theme="heritage"] .menu-public-shell .editorial-hero {
+    min-height: min(44dvh, 430px);
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-row h1 {
+    font-size: clamp(1.75rem, 8.2vw, 2.5rem);
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell .editorial-brand-logo {
+    width: clamp(4rem, 18vw, 5rem) !important;
+    height: clamp(4rem, 18vw, 5rem) !important;
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
+    grid-template-columns: minmax(6.5rem, 30%) minmax(0, 1fr);
+    min-height: 6.6rem;
+    gap: 0.7rem;
+    padding: 0.55rem;
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:only-child {
+    grid-template-columns: minmax(6.5rem, 30%) minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="heritage"] .menu-public-shell * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
