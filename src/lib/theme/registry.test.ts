@@ -3,10 +3,10 @@ import test from "node:test";
 import { canUseTheme, getTheme, getThemeFamily, isPremiumTheme, isThemeKey, MENU_THEMES, normalizeThemeKey } from "./registry.ts";
 import { TEMPLATE_FAMILIES } from "./types.ts";
 
-test("the catalog contains exactly five themes", () => {
+test("the catalog contains exactly six themes", () => {
   const families = new Set<string>(TEMPLATE_FAMILIES);
-  assert.equal(MENU_THEMES.length, 5);
-  assert.deepEqual(MENU_THEMES.map((theme) => theme.key), ["essential", "editorial", "noir", "heritage", "gallery"]);
+  assert.equal(MENU_THEMES.length, 6);
+  assert.deepEqual(MENU_THEMES.map((theme) => theme.key), ["essential", "editorial", "noir", "heritage", "gallery", "premium-menu-v3"]);
   for (const theme of MENU_THEMES) {
     assert.ok(families.has(theme.family));
     assert.equal(getThemeFamily(theme.key), theme.family);
@@ -15,13 +15,13 @@ test("the catalog contains exactly five themes", () => {
   }
 });
 
-test("all five themes are free", () => {
-  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "free").length, 5);
+test("all six themes are free", () => {
+  assert.equal(MENU_THEMES.filter((theme) => theme.tier === "free").length, 6);
   assert.equal(MENU_THEMES.filter((theme) => theme.tier === "premium").length, 0);
   for (const theme of MENU_THEMES) assert.equal(isPremiumTheme(theme.key), false);
 });
 
-test("legacy theme keys normalize to the new five-theme catalog", () => {
+test("legacy theme keys normalize to the catalog without changing existing aliases", () => {
   assert.equal(normalizeThemeKey("minimal"), "essential");
   assert.equal(normalizeThemeKey("fast-casual"), "essential");
   assert.equal(normalizeThemeKey("coffee"), "gallery");
@@ -30,6 +30,7 @@ test("legacy theme keys normalize to the new five-theme catalog", () => {
   assert.equal(normalizeThemeKey("unknown-theme"), null);
   assert.equal(isThemeKey("dark-dining"), true);
   assert.equal(getTheme("editorial").key, "editorial");
+  assert.equal(getTheme("premium-menu-v3").family, "contemporary-restaurant");
 });
 
 test("all themes are selectable on the free plan", () => {
