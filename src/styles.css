@@ -33,65 +33,28 @@
   button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
   :focus-visible { outline: 2px solid var(--menu-accent, var(--color-accent)); outline-offset: 2px; }
 }
-
 button, a { -webkit-tap-highlight-color: transparent; }
 .tabular { font-variant-numeric: tabular-nums; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .hairline { box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--menu-foreground, var(--color-ink)) 10%, transparent); }
-
-/* Shared menu canvas. Theme-specific systems below intentionally override these primitives. */
-.menu-public-shell {
-  min-height: 100dvh;
-  color: var(--menu-foreground, var(--color-ink));
-  background: var(--menu-background, var(--color-paper));
-  --menu-card-bg: var(--menu-surface, var(--color-paper));
-  --menu-card-border: var(--menu-border, var(--color-line));
-}
+.menu-public-shell { min-height: 100dvh; color: var(--menu-foreground, var(--color-ink)); background: var(--menu-background, var(--color-paper)); --menu-card-bg: var(--menu-surface, var(--color-paper)); --menu-card-border: var(--menu-border, var(--color-line)); }
 .menu-public-shell header { position: relative; isolation: isolate; }
 .menu-public-shell main { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
 .menu-public-shell main > section > h2 { letter-spacing: -0.02em; }
-.menu-public-shell main ul > li > button,
-.menu-public-shell main section > div > button {
-  background: var(--menu-card-bg);
-  color: var(--menu-foreground);
-  border-color: var(--menu-card-border);
-  box-shadow: var(--menu-shadow, 0 4px 18px rgb(23 20 17 / .04));
-  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) ease;
-}
-.menu-public-shell main ul > li > button:hover,
-.menu-public-shell main section > div > button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--menu-shadow-hover, 0 18px 42px rgb(23 20 17 / .12));
-  border-color: color-mix(in oklab, var(--menu-accent) 38%, var(--menu-card-border));
-}
+.menu-public-shell main ul > li > button, .menu-public-shell main section > div > button { background: var(--menu-card-bg); color: var(--menu-foreground); border-color: var(--menu-card-border); box-shadow: var(--menu-shadow, 0 4px 18px rgb(23 20 17 / .04)); transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) ease; }
+.menu-public-shell main ul > li > button:hover, .menu-public-shell main section > div > button:hover { transform: translateY(-2px); box-shadow: var(--menu-shadow-hover, 0 18px 42px rgb(23 20 17 / .12)); border-color: color-mix(in oklab, var(--menu-accent) 38%, var(--menu-card-border)); }
 .menu-public-shell img { background: var(--menu-surface-muted, var(--color-sand)); }
-.menu-public-shell input,
-.menu-public-shell textarea,
-.menu-public-shell select { background: var(--menu-surface); color: var(--menu-foreground); border-color: var(--menu-border); }
+.menu-public-shell input, .menu-public-shell textarea, .menu-public-shell select { background: var(--menu-surface); color: var(--menu-foreground); border-color: var(--menu-border); }
 .menu-public-shell [class*="sticky"] { box-shadow: 0 12px 34px rgb(23 20 17 / .06); }
-
-/* Shared visual grammar: layered texture, cinematic image treatment, and restrained entry motion. */
-.menu-public-shell header::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: .55;
-  background: radial-gradient(circle at 88% 14%, color-mix(in oklab, var(--menu-accent) 18%, transparent), transparent 24rem);
-}
+.menu-public-shell header::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .55; background: radial-gradient(circle at 88% 14%, color-mix(in oklab, var(--menu-accent) 18%, transparent), transparent 24rem); }
 .menu-public-shell header img { transition: transform 1.2s var(--ease-out), filter 700ms ease; }
 .menu-public-shell main > section { position: relative; }
-
-/* FREE — Essential: deliberately restrained and extremely usable. */
 html[data-menu-theme="essential"] .menu-public-shell { --essential-rule: color-mix(in oklab, var(--menu-foreground) 12%, transparent); }
 html[data-menu-theme="essential"] .menu-public-shell header { border-bottom: 1px solid var(--essential-rule); box-shadow: 0 14px 30px rgb(23 20 17 / .05); }
 html[data-menu-theme="essential"] .menu-public-shell main ul > li > button { border-radius: var(--menu-radius-lg); }
 html[data-menu-theme="essential"] .menu-public-shell main ul > li > button img { border-radius: var(--menu-radius-md); }
 html[data-menu-theme="essential"] .menu-public-shell main > section > h2 { font-weight: 700; }
-
-/* PREMIUM — Editorial: art-directed magazine rhythm, asymmetric emphasis, typographic drama. */
 html[data-menu-theme="editorial"] .menu-public-shell { background: linear-gradient(180deg, #f7f1e9 0%, var(--menu-background) 30rem); }
 html[data-menu-theme="editorial"] .menu-public-shell header { min-height: min(74dvh, 760px); display: flex; align-items: end; padding-bottom: 2.5rem; border-radius: 0 0 2.25rem 2.25rem; overflow: hidden; box-shadow: 0 24px 70px rgb(23 20 17 / .16); }
 html[data-menu-theme="editorial"] .menu-public-shell header::after { content: ""; position: absolute; inset: auto 8% 9% 8%; height: 1px; background: rgb(255 255 255 / .55); pointer-events: none; }
@@ -106,8 +69,6 @@ html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n +
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img { border-radius: var(--menu-radius-md); }
 html[data-menu-theme="editorial"] .menu-public-shell main section > div > button { border-radius: 999px; }
 html[data-menu-theme="editorial"] .menu-public-shell [class*="sticky"] { backdrop-filter: blur(16px); background: color-mix(in oklab, var(--menu-background) 88%, transparent); border-color: var(--menu-border); }
-
-/* PREMIUM — Noir: cinematic, dark, restrained glow, large opening and quiet cards. */
 html[data-menu-theme="noir"] .menu-public-shell { background: #0d0b0a; color: #f6efe6; }
 html[data-menu-theme="noir"] .menu-public-shell header { min-height: 84dvh; display: flex; align-items: end; border-radius: 0; overflow: hidden; box-shadow: 0 32px 90px rgb(0 0 0 / .48); }
 html[data-menu-theme="noir"] .menu-public-shell header::before { opacity: .9; background: radial-gradient(circle at 50% 72%, color-mix(in oklab, var(--menu-accent) 25%, transparent), transparent 25rem), linear-gradient(180deg, transparent 20%, rgb(0 0 0 / .68) 100%); }
@@ -116,20 +77,13 @@ html[data-menu-theme="noir"] .menu-public-shell main { max-width: 54rem; }
 html[data-menu-theme="noir"] .menu-public-shell main > section { padding-block: var(--menu-section-space); }
 html[data-menu-theme="noir"] .menu-public-shell main > section > h2 { color: #f6efe6; font-size: clamp(1.35rem, 4.5vw, 2rem); }
 html[data-menu-theme="noir"] .menu-public-shell main ul { gap: 1rem; }
-html[data-menu-theme="noir"] .menu-public-shell main ul > li > button,
-html[data-menu-theme="noir"] .menu-public-shell main section > div > button { background: #171311; color: #f6efe6; border-color: #3a2e27; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button, html[data-menu-theme="noir"] .menu-public-shell main section > div > button { background: #171311; color: #f6efe6; border-color: #3a2e27; }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button { border-radius: var(--menu-radius-lg); }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img { border-radius: var(--menu-radius-md); filter: saturate(.88); }
 html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] { background: rgb(13 11 10 / .82); color: #f6efe6; border-color: #3a2e27; backdrop-filter: blur(18px); }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { border-color: color-mix(in oklab, var(--menu-accent) 70%, #3a2e27); }
 html[data-menu-theme="noir"] .menu-public-shell footer { color: #c9bbb0; }
-
-/* PREMIUM — Heritage: contemporary Saudi/Arabic hospitality through material, rhythm and geometry. */
-html[data-menu-theme="heritage"] .menu-public-shell {
-  background-color: #eee3d1;
-  background-image: radial-gradient(circle at 1px 1px, rgb(112 76 43 / .10) 1px, transparent 1.2px), linear-gradient(135deg, rgb(255 255 255 / .25), transparent 48%);
-  background-size: 20px 20px, auto;
-}
+html[data-menu-theme="heritage"] .menu-public-shell { background-color: #eee3d1; background-image: radial-gradient(circle at 1px 1px, rgb(112 76 43 / .10) 1px, transparent 1.2px), linear-gradient(135deg, rgb(255 255 255 / .25), transparent 48%); background-size: 20px 20px, auto; }
 html[data-menu-theme="heritage"] .menu-public-shell header { border-bottom: 3px double rgb(117 75 40 / .42); box-shadow: 0 18px 45px rgb(67 45 25 / .12); }
 html[data-menu-theme="heritage"] .menu-public-shell header::before { background: linear-gradient(135deg, rgb(255 250 240 / .42), transparent 52%), radial-gradient(circle at 15% 10%, rgb(152 101 50 / .18), transparent 18rem); }
 html[data-menu-theme="heritage"] .menu-public-shell main { max-width: 50rem; }
@@ -141,8 +95,6 @@ html[data-menu-theme="heritage"] .menu-public-shell main ul > li:nth-child(even)
 html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button img { border-radius: 8px; }
 html[data-menu-theme="heritage"] .menu-public-shell main section > div > button { border-radius: 999px; }
 html[data-menu-theme="heritage"] .menu-public-shell [class*="sticky"] { background: rgb(238 227 209 / .9); border-color: rgb(117 75 40 / .22); backdrop-filter: blur(12px); }
-
-/* PREMIUM — Gallery: image-first catalogue, bold media blocks, editorial cropping and hover depth. */
 html[data-menu-theme="gallery"] .menu-public-shell { background: #eee9e1; }
 html[data-menu-theme="gallery"] .menu-public-shell main { max-width: 58rem; }
 html[data-menu-theme="gallery"] .menu-public-shell main > section { padding-block: var(--menu-section-space); }
@@ -157,8 +109,6 @@ html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3
 html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > button:hover { transform: translateY(1rem); }
 html[data-menu-theme="gallery"] .menu-public-shell main section > div > button { width: 12rem; border-radius: 999px; }
 html[data-menu-theme="gallery"] .menu-public-shell [class*="sticky"] { background: color-mix(in oklab, var(--menu-background) 90%, transparent); backdrop-filter: blur(14px); }
-
-/* Theme previews: each card is a miniature art direction, not a color swatch. */
 .menu-theme-preview { position: relative; height: 220px; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; color: white; background: #171411; isolation: isolate; }
 .menu-theme-preview::before { content: ""; position: absolute; inset: 0; z-index: -2; background: var(--preview-bg, linear-gradient(135deg, #171411, #8f4e32)); }
 .menu-theme-preview::after { content: ""; position: absolute; inset: 12px; border: 1px solid rgb(255 255 255 / .24); border-radius: 18px; pointer-events: none; z-index: -1; }
@@ -176,49 +126,31 @@ html[data-menu-theme="gallery"] .menu-public-shell [class*="sticky"] { backgroun
 .preview-gallery { --preview-bg: linear-gradient(120deg, #d2c0ac 0 34%, #5b4638 34% 65%, #b18d70 65%); }
 .preview-gallery::after { inset: 18px 52px 18px 18px; border-radius: 10px; }
 .preview-orb { position: absolute !important; width: 170px; height: 170px; border-radius: 999px; inset-inline-end: -48px; top: -54px; background: rgb(255 255 255 / .14); filter: blur(2px); z-index: 0 !important; }
-
-/* Premium motion layer. The final state is always usable without the enhancement. */
 @keyframes menu-fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes menu-hero-drift { from { transform: scale(1.02); } to { transform: scale(1.07); } }
 @keyframes menu-glow-pulse { 0%, 100% { opacity: .35; } 50% { opacity: .7; } }
-
-html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li,
-html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li,
-html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li,
-html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li { animation: menu-fade-up .65s var(--ease-out) both; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(2),
-html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(2),
-html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(2),
-html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(2) { animation-delay: 70ms; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(3),
-html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(3),
-html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(3),
-html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(3) { animation-delay: 140ms; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(n + 4),
-html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(n + 4),
-html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(n + 4),
-html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(n + 4) { animation-delay: 210ms; }
-
-/* Preview must expose the complete menu immediately; entrance motion is a published-menu enhancement only. */
-html[data-menu-theme-mode="preview"] .menu-public-shell main > section > ul > li {
-  animation: none !important;
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-@media (max-width: 639px) {
-  html[data-menu-theme="gallery"] .menu-public-shell main ul { grid-template-columns: 1fr; }
-  html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > button { transform: none; }
-  html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > button:hover { transform: translateY(-2px); }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > button,
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > button:hover { transform: none; }
-  html[data-menu-theme="editorial"] .menu-public-shell header { min-height: 64dvh; }
-  html[data-menu-theme="noir"] .menu-public-shell header { min-height: 70dvh; }
-  html[data-menu-theme="heritage"] .menu-public-shell main > section { padding-block: 2.25rem; }
-}
-
+html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li, html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li, html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li, html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li { animation: menu-fade-up .65s var(--ease-out) both; }
+html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(2), html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(2), html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(2), html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(2) { animation-delay: 70ms; }
+html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(3), html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(3), html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(3), html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(3) { animation-delay: 140ms; }
+html[data-menu-theme="editorial"] .menu-public-shell main > section > ul > li:nth-child(n + 4), html[data-menu-theme="noir"] .menu-public-shell main > section > ul > li:nth-child(n + 4), html[data-menu-theme="heritage"] .menu-public-shell main > section > ul > li:nth-child(n + 4), html[data-menu-theme="gallery"] .menu-public-shell main > section > ul > li:nth-child(n + 4) { animation-delay: 210ms; }
+html[data-menu-theme-mode="preview"] .menu-public-shell main > section > ul > li { animation: none !important; opacity: 1 !important; transform: none !important; }
+@media (max-width: 639px) { html[data-menu-theme="gallery"] .menu-public-shell main ul { grid-template-columns: 1fr; } html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > button { transform: none; } html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > button:hover { transform: translateY(-2px); } html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > button, html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > button:hover { transform: none; } html[data-menu-theme="editorial"] .menu-public-shell header { min-height: 64dvh; } html[data-menu-theme="noir"] .menu-public-shell header { min-height: 70dvh; } html[data-menu-theme="heritage"] .menu-public-shell main > section { padding-block: 2.25rem; } }
 @media (min-width: 640px) { .menu-public-shell main { max-width: 44rem; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-}
+/* Global customer-action contract: never let quick actions compete with the product information hierarchy. */
+.public-menu-quick-add, .public-menu-options-action { min-height: 44px; touch-action: manipulation; transition: transform var(--motion-quick) var(--ease-out), background-color var(--motion-quick) ease, border-color var(--motion-quick) ease; }
+.public-menu-quick-add:hover, .public-menu-options-action:hover { transform: translateY(-1px); }
+.public-menu-quick-add:active, .public-menu-options-action:active { transform: translateY(0); }
+.public-menu-quick-add { background: var(--menu-accent, var(--color-accent)); color: var(--menu-accent-foreground, #fffaf4); border-color: var(--menu-accent, var(--color-accent)); }
+.public-menu-options-action { background: var(--menu-surface, var(--color-paper)); color: var(--menu-foreground, var(--color-ink)); }
+.public-menu-bottom-bar { padding-bottom: max(.5rem, env(safe-area-inset-bottom)); }
+.editorial-product-card-wrap, .editorial-featured-card-wrap { display: grid; gap: .65rem; min-width: 0; }
+.editorial-quick-add { width: 100%; justify-content: center; }
+html[data-menu-theme="noir"] .public-menu-quick-add { background: var(--menu-accent, #8f4e32); color: #fffaf4; border-color: color-mix(in oklab, var(--menu-accent, #8f4e32) 75%, #3a2e27); }
+html[data-menu-theme="noir"] .public-menu-options-action { background: #171311; color: #f6efe6; border-color: #3a2e27; }
+html[data-menu-theme="heritage"] .public-menu-quick-add { background: color-mix(in oklab, var(--menu-accent, #8f4e32) 88%, #5b3a22); border-color: #704c2b; }
+html[data-menu-theme="heritage"] .public-menu-options-action { background: rgb(251 246 236 / .92); border-color: rgb(117 75 40 / .34); }
+html[data-menu-theme="gallery"] .public-menu-quick-add { background: var(--menu-accent, #8f4e32); border-color: var(--menu-accent, #8f4e32); }
+html[data-menu-theme="editorial"] .editorial-cart-trigger { min-height: 52px; bottom: max(1rem, env(safe-area-inset-bottom)); }
+@media (max-width: 639px) { .public-menu-bottom-bar { inset-inline: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); } .editorial-cart-trigger { inset-inline: .75rem; width: auto; bottom: max(.75rem, env(safe-area-inset-bottom)); } .editorial-featured-card-wrap, .editorial-product-card-wrap { gap: .5rem; } }
