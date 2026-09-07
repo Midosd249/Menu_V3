@@ -9,6 +9,7 @@
 - Permanent visual/functional/research quality workflow is DONE / VERIFIED and mandatory.
 - Design Intelligence & Product Experience Research — CLOSED / VERIFIED at planning level.
 - Shared Design System Contract — BASELINE ESTABLISHED / VERIFIED; implementation is incremental.
+- Specialized Design Agent — DEFINED / VERIFIED as a permanent documentation-level visual-quality role at `docs/agents/design-agent.md`.
 - P0-01 Canonical Content & Publishing Model Audit — CLOSED / VERIFIED.
 - P0 Public Content Propagation — CLOSED / VERIFIED.
 - W6 Typography Evidence & Decision — CLOSED / VERIFIED.
@@ -60,6 +61,12 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - W16 QA, browser/device, and release.
 - W17 Public Pages & Themes Integration.
 
+## Permanent Design Agent Workflow
+- VERIFIED: the specialized visual, image, layout, theme, and site-consistency Design Agent is defined in `docs/agents/design-agent.md`.
+- VERIFIED: the Design Agent is a separate specialist from the main repository agent and does not own architecture, data, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, or general product logic.
+- PROPOSED: invoke the Design Agent workflow for significant visual, layout, image, theme, and site-consistency work; require evidence labels and relevant design documentation.
+- PROTECTED: Essential, Editorial, Noir, Heritage, and Gallery implementation status remains unchanged by the Design Agent definition task.
+
 ## W17 Public Pages & Themes Integration
 - VERIFIED: canonical source is `Midosd249/Menu_V3`; legacy `Menu-V2-Sandbox` is not part of this implementation.
 - VERIFIED: homepage uses `COMMERCIAL_PLANS` for Free, Starter, and Pro pricing and displays branch/product/team limits.
@@ -75,7 +82,7 @@ Complete roadmap: `docs/design-strategy-master-plan.md`.
 - VERIFIED: focused hardening is merged to `main` through PR #21.
 - UNKNOWN: the full final W17-Q repository quality suite has not yet been executed after the hardening merge.
 - UNKNOWN: new hardening browser/device visual QA has not yet been directly observed in this connector environment.
-- UNKNOWN: live lead submission and owner notification delivery have not been directly exercised here.
+- UNKNOWN: live lead submission and owner notification delivery have not yet been directly exercised here.
 - BLOCKED: final production deployment evidence for the merged hardening state is not yet established.
 
 ## Completed W15 — Growth, Analytics, and Experimentation
