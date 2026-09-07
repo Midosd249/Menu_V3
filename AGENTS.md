@@ -111,6 +111,22 @@ If a check cannot run, record the exact command, reason, alternative evidence, a
 - Never rewrite history, force-push, or discard other work without explicit authorization.
 - Every changed line must belong to the current atomic task.
 
+## Project Ownership and Human Roles
+- The user is the sole human owner and primary developer of Menu V3.
+- Do not assume collaborators, teammates, contributors, or a development team.
+- Git commits, pull requests, branches, CI activity, and documentation history are repository evidence, not proof of multiple human developers.
+- Refer to prior work as prior repository work, prior sessions, historical commits, or user-authorized AI-assisted work unless the user explicitly confirms a human collaborator.
+- The user remains the only human authority for product, architecture, security, release, and deployment decisions.
+
+## Documentation Commit Batching
+- When remote-only repository tools create commits directly, prepare and review all documentation changes first.
+- Create one coherent documentation commit per documentation-only task whenever the available tool supports batching.
+- Do not create one commit per file unless batching is technically impossible.
+- If separate commits are technically unavoidable, state the limitation before writing and keep commits minimal.
+- Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
+- Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
+- A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
+
 ## Continuity Contract
 At the end of every session, update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update `SESSION_PROTOCOL.md` whenever workflow rules change. Append a dated session log to `PROJECT_STATE.md`. Record current commit/state, files changed, commands/results, known issues/blockers, uncertainty, and exactly one next task. Keep continuity files consistent. Do not mark `DONE` without direct evidence.
 
