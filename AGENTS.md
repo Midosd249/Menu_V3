@@ -59,6 +59,13 @@ The workflow must begin with repository evidence, dynamically inspect all curren
 
 Do not hard-code a provider list. Do not use irrelevant tools. Do not claim unavailable access. Prefer read/search/analysis actions and require explicit user authorization for external side-effect actions.
 
+### Automatic Specialist Routing
+For every meaningful user request, the Principal Engineer automatically classifies the request, reads repository continuity and project memory, identifies the relevant internal AI workflows, and routes the work without requiring the user to name agents.
+
+Use `docs/automatic-specialist-routing.md` as the canonical routing and orchestration contract. The Principal Engineer must invoke the Research and Connected-Tools workflow when research can materially improve the result, the Design Agent for relevant visual/theme/UI work, and QA/regression, security/data, and release/reliability workflows when the task requires them. The Principal Engineer integrates findings, protects scope, implements only authorized work, verifies evidence, documents the result, and stops at the correct boundary.
+
+The routing system is dynamic: it does not hard-code a provider list or assume every connected tool is available. Connected capabilities are discovered per session and used only when available, authorized, relevant, safe, and materially useful. All specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
+
 ### Permanent visual audit
 Before implementation, inspect the full relevant journey across supported small/standard/large mobile, tablet, and desktop states. Review Arabic RTL, English LTR, mixed-direction content, long names, long categories, long restaurant names, SAR price lengths, missing/poor images, varied image ratios, missing descriptions, sold-out/available items, modifiers/discounts when supported, sparse/dense categories, one/multiple branches, and loading/empty/error/offline/unavailable states when supported.
 
