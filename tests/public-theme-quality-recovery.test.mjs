@@ -6,9 +6,9 @@ test("Gallery Most Popular uses the semantic Featured section and stable image/c
   const styles = await readFile("src/theme-public-quality-recovery.css", "utf8");
 
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*section:has\(> #featured-heading\)/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*grid-template-rows:\s*minmax\(0,\s*auto\)\s+minmax\(5\.35rem,\s*auto\)/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child[\s\S]*min-height:\s*5\.35rem/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child > :first-child[\s\S]*-webkit-line-clamp:\s*2/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*grid-template-rows:\s*minmax\(0,\s*auto\)\s+auto/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child[\s\S]*min-height:\s*0/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child > :first-child[\s\S]*-webkit-line-clamp:\s*unset/);
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child > :last-child[\s\S]*direction:\s*ltr/);
   assert.match(styles, /data-menu-theme="gallery"[\s\S]*> :last-child > :last-child[\s\S]*unicode-bidi:\s*isolate/);
 });

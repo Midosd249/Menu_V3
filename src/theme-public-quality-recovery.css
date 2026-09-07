@@ -219,3 +219,28 @@ html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featur
     transition: none !important;
   }
 }
+
+/* Final scoped content-visibility pass: never hide featured item identity. */
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button {
+  grid-template-rows: minmax(0, auto) auto;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child {
+  min-height: 0;
+  overflow: visible;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child > :first-child {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button {
+  grid-template-rows: minmax(0, auto) auto;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featured-heading) > div > button > :last-child {
+  min-height: 0;
+  overflow: visible;
+}
