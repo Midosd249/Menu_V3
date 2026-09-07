@@ -6,6 +6,7 @@ import { useLang } from "@/lib/lang";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getGuestSessionId } from "@/lib/menu/session";
+import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 
@@ -39,30 +40,16 @@ function useModalAccessibility(open: boolean, close: () => void, dialogRef: Reac
     restoreRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const frame = requestAnimationFrame(() => (initialFocusRef?.current ?? dialogRef.current)?.focus());
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-        return;
-      }
+      if (event.key === "Escape") { event.preventDefault(); close(); return; }
       if (event.key !== "Tab" || !dialogRef.current) return;
       const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>("a[href],button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex='-1'])")).filter((el) => el.getAttribute("aria-hidden") !== "true");
       if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+      const first = focusable[0]; const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     };
     document.addEventListener("keydown", onKeyDown);
-    return () => {
-      cancelAnimationFrame(frame);
-      document.removeEventListener("keydown", onKeyDown);
-      restoreRef.current?.focus();
-    };
+    return () => { cancelAnimationFrame(frame); document.removeEventListener("keydown", onKeyDown); restoreRef.current?.focus(); };
   }, [open, close, dialogRef, initialFocusRef]);
 }
 
@@ -70,12 +57,10 @@ function ProductSheet({ lang, product, options, close, addToCart, ordering }: { 
   const [variantId, setVariantId] = useState(options?.variants[0]?.id ?? "");
   const [selected, setSelected] = useState<string[]>([]);
   const [error, setError] = useState("");
-  const dialogRef = useRef<HTMLElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLElement>(null); const closeRef = useRef<HTMLButtonElement>(null);
   const titleId = `product-details-title-${product.id}`;
   useModalAccessibility(true, close, dialogRef, closeRef);
-  const variants = options?.variants ?? [];
-  const groups = options?.groups.filter((g) => g.isActive) ?? [];
+  const variants = options?.variants ?? []; const groups = options?.groups.filter((g) => g.isActive) ?? [];
   const basePrice = variants.find((v) => v.id === variantId)?.price ?? product.price;
   const optionTotal = (options?.options ?? []).filter((o) => selected.includes(o.id)).reduce((sum, o) => sum + o.priceDelta, 0);
   const total = basePrice + optionTotal;
@@ -88,10 +73,7 @@ function ProductSheet({ lang, product, options, close, addToCart, ordering }: { 
   const add = () => {
     for (const group of groups) {
       const count = selected.filter((id) => (options?.options ?? []).some((o) => o.id === id && o.groupId === group.id)).length;
-      if (count < group.minSelect || count > group.maxSelect) {
-        setError(label(lang, `أكمل اختيار «${group.nameAr}»`, `Complete “${group.nameEn || group.nameAr}”`));
-        return;
-      }
+      if (count < group.minSelect || count > group.maxSelect) { setError(label(lang, `أكمل اختيار «${group.nameAr}»`, `Complete “${group.nameEn || group.nameAr}”`)); return; }
     }
     addToCart({ key: `${product.id}:${variantId}:${[...selected].sort().join(",")}`, product, options: options ?? { variants: [], groups: [], options: [] }, variantId, modifierOptionIds: [...selected].sort(), unitPrice: total, quantity: 1 });
     close();
@@ -114,25 +96,15 @@ function ProductSheet({ lang, product, options, close, addToCart, ordering }: { 
 }
 
 function CartDrawer({ lang, items, setItems, close, submit, submitting, error }: { lang: Lang; items: CartItem[]; setItems: (items: CartItem[]) => void; close: () => void; submit: (customer: { name: string; phone: string; email: string; notes: string }) => void; submitting: boolean; error: string }) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [notes, setNotes] = useState("");
-  const dialogRef = useRef<HTMLElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
-  useModalAccessibility(true, close, dialogRef, closeRef);
-  const total = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  const count = items.reduce((sum, item) => sum + item.quantity, 0);
+  const [name, setName] = useState(""); const [phone, setPhone] = useState(""); const [email, setEmail] = useState(""); const [notes, setNotes] = useState("");
+  const dialogRef = useRef<HTMLElement>(null); const closeRef = useRef<HTMLButtonElement>(null); useModalAccessibility(true, close, dialogRef, closeRef);
+  const total = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const count = items.reduce((sum, item) => sum + item.quantity, 0);
   const changeQty = (key: string, delta: number) => setItems(items.flatMap((item) => item.key !== key ? [item] : item.quantity + delta <= 0 ? [] : [{ ...item, quantity: Math.min(20, item.quantity + delta) }]));
   return <div className="fixed inset-0 z-[60] bg-black/45" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
     <section ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="cart-title" className="ms-auto flex h-full w-full max-w-lg flex-col bg-paper shadow-2xl">
       <div className="flex items-center justify-between border-b border-line px-4 py-4"><div><h2 id="cart-title" className="text-lg font-semibold">{label(lang, "طلبك", "Your order")}</h2><p className="text-xs text-muted" aria-live="polite">{count} {label(lang, "صنف", "items")}</p></div><button ref={closeRef} type="button" onClick={close} aria-label={label(lang, "إغلاق", "Close")} className="grid size-10 place-items-center rounded-full hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><X className="size-5" aria-hidden="true" /></button></div>
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
-        {items.length === 0 ? <EmptyState title={label(lang, "السلة فارغة", "Your cart is empty")} /> : items.map((item) => {
-          const variant = item.options.variants.find((v) => v.id === item.variantId);
-          const modifiers = item.options.options.filter((o) => item.modifierOptionIds.includes(o.id));
-          return <div key={item.key} className="rounded-xl border border-line p-3"><div className="flex gap-3"><DishMedia product={item.product} className="size-16 shrink-0 rounded-lg" /><div className="min-w-0 flex-1"><p className="font-medium" dir="auto">{value(lang, item.product.nameAr, item.product.nameEn)}</p>{variant ? <p className="text-xs text-muted" dir="auto">{value(lang, variant.nameAr, variant.nameEn)}</p> : null}{modifiers.length ? <p className="text-xs text-muted" dir="auto">{modifiers.map((o) => value(lang, o.nameAr, o.nameEn)).join(" · ")}</p> : null}<p className="mt-1 text-sm font-medium text-accent"><bdi dir="ltr" className="tabular bidi-isolate">{formatSar(item.unitPrice * item.quantity, lang)}</bdi></p></div></div><div className="mt-3 flex items-center justify-end gap-2"><button type="button" onClick={() => changeQty(item.key, -1)} className="grid size-10 place-items-center rounded-lg border border-line" aria-label={label(lang, "تقليل الكمية", "Decrease quantity")}><Minus className="size-4" aria-hidden="true" /></button><span className="min-w-7 text-center tabular" aria-label={`${item.quantity} ${label(lang, "من الكمية", "quantity")}`}>{item.quantity}</span><button type="button" onClick={() => changeQty(item.key, 1)} className="grid size-10 place-items-center rounded-lg border border-line" aria-label={label(lang, "زيادة الكمية", "Increase quantity")}><Plus className="size-4" aria-hidden="true" /></button></div></div>;
-        })}
+        {items.length === 0 ? <EmptyState title={label(lang, "السلة فارغة", "Your cart is empty")} /> : items.map((item) => { const variant = item.options.variants.find((v) => v.id === item.variantId); const modifiers = item.options.options.filter((o) => item.modifierOptionIds.includes(o.id)); return <div key={item.key} className="rounded-xl border border-line p-3"><div className="flex gap-3"><DishMedia product={item.product} className="size-16 shrink-0 rounded-lg" /><div className="min-w-0 flex-1"><p className="font-medium" dir="auto">{value(lang, item.product.nameAr, item.product.nameEn)}</p>{variant ? <p className="text-xs text-muted" dir="auto">{value(lang, variant.nameAr, variant.nameEn)}</p> : null}{modifiers.length ? <p className="text-xs text-muted" dir="auto">{modifiers.map((o) => value(lang, o.nameAr, o.nameEn)).join(" · ")}</p> : null}<p className="mt-1 text-sm font-medium text-accent"><bdi dir="ltr" className="tabular bidi-isolate">{formatSar(item.unitPrice * item.quantity, lang)}</bdi></p></div></div><div className="mt-3 flex items-center justify-end gap-2"><button type="button" onClick={() => changeQty(item.key, -1)} className="grid size-10 place-items-center rounded-lg border border-line" aria-label={label(lang, "تقليل الكمية", "Decrease quantity")}><Minus className="size-4" aria-hidden="true" /></button><span className="min-w-7 text-center tabular">{item.quantity}</span><button type="button" onClick={() => changeQty(item.key, 1)} className="grid size-10 place-items-center rounded-lg border border-line" aria-label={label(lang, "زيادة الكمية", "Increase quantity")}><Plus className="size-4" aria-hidden="true" /></button></div></div>; })}
         {items.length ? <fieldset className="grid gap-3 border-t border-line pt-4"><legend className="text-sm font-semibold">{label(lang, "بيانات العميل", "Customer details")}</legend><div className="grid gap-1"><label htmlFor="order-name" className="text-sm">{label(lang, "الاسم", "Name")} <span aria-hidden="true">*</span></label><input id="order-name" required value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder={label(lang, "الاسم", "Name")} className="h-11 rounded-xl border border-line bg-paper px-3 text-sm" /></div><div className="grid gap-1"><label htmlFor="order-phone" className="text-sm">{label(lang, "رقم الجوال", "Phone")} <span aria-hidden="true">*</span></label><input id="order-phone" required value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="tel" type="tel" autoComplete="tel" dir="ltr" placeholder={label(lang, "رقم الجوال", "Phone")} className="h-11 rounded-xl border border-line bg-paper px-3 text-sm" /></div><div className="grid gap-1"><label htmlFor="order-email" className="text-sm">{label(lang, "البريد الإلكتروني (اختياري)", "Email (optional)")}</label><input id="order-email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" dir="ltr" placeholder={label(lang, "البريد الإلكتروني", "Email")} className="h-11 rounded-xl border border-line bg-paper px-3 text-sm" /></div><div className="grid gap-1"><label htmlFor="order-notes" className="text-sm">{label(lang, "ملاحظات على الطلب", "Order notes")}</label><textarea id="order-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={label(lang, "ملاحظات على الطلب", "Order notes")} className="min-h-24 rounded-xl border border-line p-3 text-sm" dir="auto" /></div>{error ? <p role="alert" aria-live="assertive" className="rounded-xl bg-bad/10 p-3 text-sm text-bad">{error}</p> : null}</fieldset> : null}
       </div>
       {items.length ? <div className="border-t border-line bg-paper p-4"><div className="mb-3 flex items-center justify-between"><span className="text-sm text-muted">{label(lang, "الإجمالي", "Total")}</span><strong className="text-lg text-accent"><bdi dir="ltr" className="tabular bidi-isolate">{formatSar(total, lang)}</bdi></strong></div><button type="button" disabled={submitting || name.trim().length < 2 || phone.trim().length < 8} onClick={() => submit({ name, phone, email, notes })} className="h-12 w-full rounded-xl bg-ink font-medium text-paper disabled:opacity-50">{submitting ? label(lang, "جاري إرسال الطلب…", "Submitting…") : label(lang, "تأكيد إرسال الطلب", "Submit order")}</button></div> : null}
@@ -144,46 +116,21 @@ function openNow(hours: PublicMenu["hours"]) {
   const h = hours.find((x) => x.weekday === new Date().getDay());
   if (!h || h.isClosed || !h.opensAt || !h.closesAt) return h ? false : null;
   const minutes = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; };
-  const now = new Date().getHours() * 60 + new Date().getMinutes();
-  const a = minutes(h.opensAt), b = minutes(h.closesAt);
+  const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = minutes(h.opensAt), b = minutes(h.closesAt);
   return b <= a ? now >= a || now <= b : now >= a && now <= b;
 }
 
 export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; preview?: boolean }) {
-  const { lang } = useLang();
-  const { tenant, branch, branches, hours, categories, products } = menu;
-  const [query, setQuery] = useState("");
-  const [categoryId, setCategoryId] = useState("all");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [orderError, setOrderError] = useState("");
-  const [successOrder, setSuccessOrder] = useState<{ number: number; total: number; currency: string } | null>(null);
-  const visible = preview ? products : products.filter((p) => p.isAvailable);
-  const selected = visible.find((p) => p.id === selectedId);
-  const featured = visible.filter((p) => p.isFeatured);
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q))));
-  }, [visible, query, categoryId]);
-  const status = openNow(hours);
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-
-  useEffect(() => {
-    if (preview) return;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } });
-  }, [tenant.slug, branch.slug, lang, preview]);
+  const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products } = menu;
+  const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [orderError, setOrderError] = useState(""); const [successOrder, setSuccessOrder] = useState<{ number: number; total: number; currency: string } | null>(null);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
+  const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
+  const status = openNow(hours); const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
+  useEffect(() => { if (preview) return; void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } }); }, [tenant.slug, branch.slug, lang, preview]);
   const trackProduct = (p: Product) => { setSelectedId(p.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: p.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } }); };
   const addToCart = (item: CartItem) => setCart((current) => { const existing = current.find((x) => x.key === item.key); return existing ? current.map((x) => x.key === item.key ? { ...x, quantity: Math.min(20, x.quantity + 1) } : x) : [...current, item]; });
-  const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => {
-    setSubmitting(true); setOrderError("");
-    const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds } })) } });
-    setSubmitting(false);
-    if (!result.ok) { setOrderError(result.error); return; }
-    setCart([]); setCartOpen(false); setSuccessOrder({ number: result.data.orderNumber, total: result.data.total, currency: result.data.currency });
-  };
+  const addSimpleProduct = (product: Product) => { if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return; addToCart({ key: quickAddKey(product.id), product, options: menu.productOptions?.[product.id] ?? { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], unitPrice: product.price, quantity: 1 }); };
+  const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => { setSubmitting(true); setOrderError(""); const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds } })) } }); setSubmitting(false); if (!result.ok) { setOrderError(result.error); return; } setCart([]); setCartOpen(false); setSuccessOrder({ number: result.data.orderNumber, total: result.data.total, currency: result.data.currency }); };
   const wa = tenant.whatsapp ? `https://wa.me/${tenant.whatsapp.replace(/[^\d]/g, "")}?text=${encodeURIComponent(tenant.whatsappTemplate.replace("{restaurant}", value(lang, tenant.nameAr, tenant.nameEn)))}` : null;
 
   return <div className="menu-public-shell min-h-dvh bg-paper text-ink" style={{ "--menu-accent": tenant.accentColor, "--menu-ink": tenant.primaryColor } as CSSProperties}>
@@ -195,16 +142,12 @@ export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; pr
     </div></header>
     {branches.length > 1 ? <nav aria-label={label(lang, "الفروع", "Branches")} className="mx-auto flex max-w-2xl gap-2 overflow-x-auto px-4 py-3 no-scrollbar">{branches.map((b) => <a key={b.id} href={`/m/${tenant.slug}/${b.slug}`} className={cn("shrink-0 rounded-full border px-3 py-1.5 text-sm", b.id === branch.id ? "border-ink bg-ink text-paper" : "border-line")}><bdi dir="auto">{value(lang, b.nameAr, b.nameEn)}</bdi></a>)}</nav> : null}
     <div className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur"><div className="mx-auto grid max-w-2xl gap-3 px-4 py-3"><label className="relative block"><span className="sr-only">{label(lang, "بحث في المنيو", "Search menu")}</span><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 text-muted start-3" aria-hidden="true" /><input value={query} onChange={(e) => setQuery(e.target.value)} aria-label={label(lang, "بحث في المنيو", "Search menu")} placeholder={label(lang, "ابحث في المنيو", "Search menu")} className="h-11 w-full rounded-xl border border-line bg-paper pe-3 ps-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="flex gap-2 overflow-x-auto no-scrollbar" role="group" aria-label={label(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", label(lang, "الكل", "All")], ...categories.map((c) => [c.id, value(lang, c.nameAr, c.nameEn)])].map(([id, text]) => <button key={id} type="button" onClick={() => setCategoryId(id)} aria-pressed={categoryId === id} className={cn("min-h-9 shrink-0 rounded-full px-3 text-sm", categoryId === id ? "bg-ink text-paper" : "bg-sand text-ink-soft")}>{text}</button>)}</div></div></div>
-    <main className="mx-auto grid max-w-2xl gap-8 px-4 py-7 pb-28">{featured.length && categoryId === "all" && !query ? <section className="grid gap-3" aria-labelledby="featured-heading"><h2 id="featured-heading" className="text-sm font-medium text-muted">{label(lang, "الأكثر تميزاً", "Featured")}</h2><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{featured.map((p) => <button key={p.id} type="button" onClick={() => trackProduct(p)} className="min-h-11 overflow-hidden rounded-xl border border-line bg-paper text-start shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><DishMedia product={p} className="h-32 w-full" /><span className="grid gap-1 p-3"><span className="font-medium" dir="auto">{value(lang, p.nameAr, p.nameEn)}</span><bdi dir="ltr" className="text-sm text-accent tabular bidi-isolate">{formatSar(p.price, lang)}</bdi></span></button>)}</div></section> : null}
-      {filtered.length === 0 ? <EmptyState title={label(lang, "لا توجد أصناف مطابقة", "No matching items")} /> : (categoryId === "all" ? categories : categories.filter((c) => c.id === categoryId)).map((c) => { const items = filtered.filter((p) => p.categoryId === c.id); if (!items.length) return null; return <section key={c.id} className="grid gap-3" aria-labelledby={`category-${c.id}`}><h2 id={`category-${c.id}`} className="text-xl font-semibold" dir="auto">{value(lang, c.nameAr, c.nameEn)}</h2><ul className="grid gap-3 sm:grid-cols-2">{items.map((p) => <li key={p.id}><button type="button" onClick={() => trackProduct(p)} className="grid min-h-11 w-full grid-cols-[96px_1fr] gap-3 rounded-xl border border-line bg-paper p-2 text-start shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><DishMedia product={p} className="h-24 w-24 rounded-lg sm:h-28 sm:w-28" /><span className="grid min-w-0 content-center gap-1"><span className="font-medium" dir="auto">{value(lang, p.nameAr, p.nameEn)}</span><span className="line-clamp-2 text-sm text-muted" dir="auto">{value(lang, p.descriptionAr, p.descriptionEn)}</span><bdi dir="ltr" className="text-sm font-medium text-accent tabular bidi-isolate">{formatSar(p.price, lang)}</bdi>{p.dietaryLabels.length ? <span className="text-[11px] text-muted" dir="auto">{p.dietaryLabels.slice(0, 2).join(" · ")}</span> : null}</span></button></li>)}</ul></section>; })}
+    <main className="mx-auto grid max-w-2xl gap-8 px-4 py-7 pb-32">
+      {featured.length && categoryId === "all" && !query ? <section className="grid gap-3" aria-labelledby="featured-heading"><h2 id="featured-heading" className="text-sm font-medium text-muted">{label(lang, "الأكثر تميزاً", "Featured")}</h2><div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{featured.map((p) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <article key={p.id} className="overflow-hidden rounded-xl border border-line bg-paper shadow-sm"><button type="button" onClick={() => trackProduct(p)} className="block min-h-11 w-full text-start focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><DishMedia product={p} className="h-32 w-full" /><span className="grid gap-1 p-3"><span className="font-medium" dir="auto">{value(lang, p.nameAr, p.nameEn)}</span><bdi dir="ltr" className="text-sm text-accent tabular bidi-isolate">{formatSar(p.price, lang)}</bdi></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add mx-3 mb-3 flex min-h-11 w-[calc(100%-1.5rem)] items-center justify-center gap-2 rounded-xl border border-line bg-sand px-3 text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" aria-label={label(lang, `إضافة ${value(lang, p.nameAr, p.nameEn)} للسلة`, `Add ${value(lang, p.nameAr, p.nameEn)} to cart`)}><Plus className="size-4" aria-hidden="true" />{label(lang, "أضف", "Add")}</button> : null}</article>; })}</div></section> : null}
+      {filtered.length === 0 ? <EmptyState title={label(lang, "لا توجد أصناف مطابقة", "No matching items")} /> : (categoryId === "all" ? categories : categories.filter((c) => c.id === categoryId)).map((c) => { const items = filtered.filter((p) => p.categoryId === c.id); if (!items.length) return null; return <section key={c.id} className="grid gap-3" aria-labelledby={`category-${c.id}`}><h2 id={`category-${c.id}`} className="text-xl font-semibold" dir="auto">{value(lang, c.nameAr, c.nameEn)}</h2><ul className="grid gap-3 sm:grid-cols-2">{items.map((p) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <li key={p.id} className="grid gap-2"><div className="grid min-h-11 w-full grid-cols-[96px_1fr] overflow-hidden rounded-xl border border-line bg-paper shadow-sm"><button type="button" onClick={() => trackProduct(p)} className="col-span-2 grid grid-cols-[96px_1fr] gap-3 p-2 text-start focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><DishMedia product={p} className="h-24 w-24 rounded-lg sm:h-28 sm:w-28" /><span className="grid min-w-0 content-center gap-1"><span className="font-medium" dir="auto">{value(lang, p.nameAr, p.nameEn)}</span><span className="line-clamp-2 text-sm text-muted" dir="auto">{value(lang, p.descriptionAr, p.descriptionEn)}</span><bdi dir="ltr" className="text-sm font-medium text-accent tabular bidi-isolate">{formatSar(p.price, lang)}</bdi>{p.dietaryLabels.length ? <span className="text-[11px] text-muted" dir="auto">{p.dietaryLabels.slice(0, 2).join(" · ")}</span> : null}</span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add col-span-2 mx-2 mb-2 flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-sand px-3 text-sm font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" aria-label={label(lang, `إضافة ${value(lang, p.nameAr, p.nameEn)} للسلة`, `Add ${value(lang, p.nameAr, p.nameEn)} to cart`)}><Plus className="size-4" aria-hidden="true" />{label(lang, "أضف للسلة", "Add to cart")}</button> : null}{!preview && decision === "requires-options" ? <button type="button" onClick={() => trackProduct(p)} className="public-menu-options-action col-span-2 mx-2 mb-2 flex min-h-11 items-center justify-center rounded-xl border border-line px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">{label(lang, "اختر الخيارات", "Choose options")}</button> : null}</div></li>; })}</ul></section>; })}
       {hours.length ? <section className="grid gap-3 rounded-2xl border border-line bg-sand p-4" aria-labelledby="hours-heading"><div className="flex items-center gap-2"><Clock className="size-4" aria-hidden="true" /><h2 id="hours-heading" className="font-medium">{label(lang, "ساعات العمل", "Opening hours")}</h2></div>{[0,1,2,3,4,5,6].map((d) => { const h = hours.find((x) => x.weekday === d); return <div key={d} className="flex justify-between text-sm"><span>{weekdayLabel(d, lang)}</span><bdi dir="ltr" className="text-muted tabular bidi-isolate">{!h || h.isClosed ? label(lang, "مغلق", "Closed") : `${h.opensAt} – ${h.closesAt}`}</bdi></div>; })}</section> : null}
     </main>
-    {!preview ? <nav aria-label={label(lang, "إجراءات المنيو", "Menu actions")} className="fixed inset-x-3 bottom-3 z-40 mx-auto flex max-w-lg items-center gap-2 rounded-2xl border border-line bg-paper/95 p-2 shadow-2xl backdrop-blur sm:bottom-5 sm:gap-3 sm:p-2.5">
-      <button type="button" onClick={() => setCartOpen(true)} aria-label={label(lang, "السلة", "Cart")} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-ink px-3 text-sm font-medium text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ShoppingBag className="size-5" aria-hidden="true" /><span>{label(lang, "السلة", "Cart")}</span><span className="rounded-full bg-paper/15 px-2 py-0.5 tabular" aria-live="polite">{cartCount}</span>{cartCount ? <bdi dir="ltr" className="hidden sm:inline tabular bidi-isolate">{formatSar(cartTotal, lang)}</bdi> : null}</button>
-      {wa ? <a href={wa} aria-label={label(lang, "التواصل عبر واتساب", "Contact on WhatsApp")} className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "واتساب", "WhatsApp")}><WhatsAppIcon /></a> : null}
-      {branch.mapsUrl ? <a href={branch.mapsUrl} aria-label={label(lang, "الموقع", "Location")} className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "الموقع", "Location")}><MapPin className="size-5" aria-hidden="true" /></a> : null}
-      {branch.phone ? <a href={`tel:${branch.phone}`} aria-label={label(lang, "اتصال", "Call")} dir="ltr" className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "اتصال", "Call")}><Phone className="size-5" aria-hidden="true" /></a> : null}
-    </nav> : null}
+    {!preview ? <nav aria-label={label(lang, "إجراءات المنيو", "Menu actions")} className="public-menu-bottom-bar fixed inset-x-3 bottom-3 z-40 mx-auto flex max-w-lg items-center gap-2 rounded-2xl border border-line bg-paper/95 p-2 shadow-2xl backdrop-blur sm:bottom-5 sm:gap-3 sm:p-2.5"><button type="button" onClick={() => setCartOpen(true)} aria-label={label(lang, `السلة، ${cartCount} ${label(lang, "صنف", "items")}`, `Cart, ${cartCount} ${label(lang, "صنف", "items")}`)} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-ink px-3 text-sm font-medium text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ShoppingBag className="size-5" aria-hidden="true" /><span>{label(lang, "السلة", "Cart")}</span><span className="rounded-full bg-paper/15 px-2 py-0.5 tabular" aria-live="polite">{cartCount}</span>{cartCount ? <bdi dir="ltr" className="hidden sm:inline tabular bidi-isolate">{formatSar(cartTotal, lang)}</bdi> : null}</button>{wa ? <a href={wa} aria-label={label(lang, "التواصل عبر واتساب", "Contact on WhatsApp")} className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "واتساب", "WhatsApp")}><WhatsAppIcon /></a> : null}{branch.mapsUrl ? <a href={branch.mapsUrl} aria-label={label(lang, "الموقع", "Location")} className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "الموقع", "Location")}><MapPin className="size-5" aria-hidden="true" /></a> : null}{branch.phone ? <a href={`tel:${branch.phone}`} aria-label={label(lang, "اتصال", "Call")} dir="ltr" className="grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-paper text-ink" title={label(lang, "اتصال", "Call")}><Phone className="size-5" aria-hidden="true" /></a> : null}</nav> : null}
     {selected ? <ProductSheet lang={lang} product={selected} options={menu.productOptions?.[selected.id]} close={() => setSelectedId(null)} addToCart={addToCart} ordering={submitting} /> : null}
     {cartOpen ? <CartDrawer lang={lang} items={cart} setItems={setCart} close={() => setCartOpen(false)} submit={submit} submitting={submitting} error={orderError} /> : null}
     {successOrder ? <div className="fixed inset-0 z-[70] grid place-items-center bg-black/45 p-4" role="presentation"><section role="alertdialog" aria-modal="true" aria-labelledby="order-success-title" className="w-full max-w-sm rounded-2xl bg-paper p-6 text-center shadow-2xl"><div className="mx-auto mb-4 grid size-14 place-items-center rounded-full bg-sand text-xl" aria-hidden="true">✓</div><h2 id="order-success-title" className="text-xl font-semibold">{label(lang, "تم استلام طلبك", "Order received")}</h2><p className="mt-2 text-sm text-muted">{label(lang, "رقم الطلب", "Order number")} <strong className="text-ink"><bdi dir="ltr" className="tabular bidi-isolate">#{successOrder.number}</bdi></strong></p><p className="mt-1 text-sm text-muted"><bdi dir="ltr" className="tabular bidi-isolate">{formatSar(successOrder.total, lang)}</bdi></p><button type="button" autoFocus onClick={() => setSuccessOrder(null)} className="mt-5 h-11 w-full rounded-xl bg-ink text-sm font-medium text-paper">{label(lang, "العودة للمنيو", "Back to menu")}</button></section></div> : null}

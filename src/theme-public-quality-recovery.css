@@ -244,3 +244,66 @@ html[data-menu-theme="heritage"] .menu-public-shell main > section:has(> #featur
   min-height: 0;
   overflow: visible;
 }
+
+/* New shared-renderer siblings: keep the existing Gallery/Heritage geometry without nested interactive controls. */
+.menu-public-shell main > section > div > article > button {
+  background: var(--menu-card-bg);
+  color: var(--menu-foreground);
+  border-color: var(--menu-card-border);
+  box-shadow: var(--menu-shadow, 0 4px 18px rgb(23 20 17 / .04));
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--menu-radius-xl);
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button > :first-child {
+  width: 100%;
+  height: clamp(190px, 35vw, 290px);
+  overflow: hidden;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button > :first-child img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 1) > div > button { border-radius: 2rem 1rem 2rem 1rem; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > div > button { transform: translateY(1.25rem); }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3) > div > button:hover { transform: translateY(1rem); }
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > div > button { border-width: 1px 1px 3px; border-radius: var(--menu-radius-md); background: rgb(251 246 236 / .9); }
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li:nth-child(even) > div > button { border-radius: 2px var(--menu-radius-lg) 2px var(--menu-radius-lg); }
+html[data-menu-theme="heritage"] .menu-public-shell main ul > li > div > button > :first-child img { border-radius: 8px; }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > div > button { border-radius: var(--menu-radius-lg); padding: .75rem; background: color-mix(in oklab, var(--menu-surface) 94%, var(--menu-background)); }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > div > button { transform: translateX(4%); }
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > div > button:hover { transform: translate(4%, -3px); }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > div > button { background: #171311; color: #f6efe6; border-color: #3a2e27; border-radius: var(--menu-radius-lg); }
+
+.public-menu-quick-add,
+.public-menu-options-action {
+  min-height: 44px;
+  touch-action: manipulation;
+  transition: transform var(--motion-quick) var(--ease-out), background-color var(--motion-quick) ease, border-color var(--motion-quick) ease;
+}
+.public-menu-quick-add:hover,
+.public-menu-options-action:hover { transform: translateY(-1px); }
+.public-menu-quick-add:active,
+.public-menu-options-action:active { transform: translateY(0); }
+.public-menu-quick-add { background: var(--menu-accent, var(--color-accent)); color: var(--menu-accent-foreground, #fffaf4); border-color: var(--menu-accent, var(--color-accent)); }
+.public-menu-options-action { background: var(--menu-surface, var(--color-paper)); color: var(--menu-foreground, var(--color-ink)); border-color: var(--menu-border, var(--color-line)); }
+.public-menu-bottom-bar { padding-bottom: max(.5rem, env(safe-area-inset-bottom)); }
+html[data-menu-theme="noir"] .public-menu-quick-add { background: var(--menu-accent, #8f4e32); color: #fffaf4; border-color: color-mix(in oklab, var(--menu-accent, #8f4e32) 75%, #3a2e27); }
+html[data-menu-theme="noir"] .public-menu-options-action { background: #171311; color: #f6efe6; border-color: #3a2e27; }
+html[data-menu-theme="heritage"] .public-menu-quick-add { background: color-mix(in oklab, var(--menu-accent, #8f4e32) 88%, #5b3a22); border-color: #704c2b; }
+html[data-menu-theme="heritage"] .public-menu-options-action { background: rgb(251 246 236 / .92); border-color: rgb(117 75 40 / .34); }
+html[data-menu-theme="gallery"] .public-menu-quick-add { background: var(--menu-accent, #8f4e32); border-color: var(--menu-accent, #8f4e32); }
+html[data-menu-theme="editorial"] .editorial-cart-trigger { min-height: 52px; bottom: max(1rem, env(safe-area-inset-bottom)); }
+@media (max-width: 639px) {
+  .public-menu-bottom-bar { inset-inline: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); }
+  .editorial-cart-trigger { inset-inline: .75rem; width: auto; bottom: max(.75rem, env(safe-area-inset-bottom)); }
+}
