@@ -83,8 +83,8 @@
 
 ### W16 — QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED
 - VERIFIED: W14/W15 regression gates remain green.
-- VERIFIED: current `main` GitHub status exposes a Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
-- BLOCKED: this is a Vercel/provider capacity or plan limitation, not evidence of application build failure.
+- VERIFIED: before reconciliation, the application/documentation head `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` exposed a GitHub Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
+- BLOCKED: that Vercel result is a provider/capacity or plan limitation, not evidence of application build failure.
 - UNKNOWN: current Vercel production deployment identity and deployed-commit match are not directly verifiable through the available Vercel surface.
 - UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
 - Production is not marked `DEPLOYED` without direct Vercel evidence.
@@ -132,7 +132,7 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 - UNKNOWN: physical-device rendering and manual screen-reader output.
 - UNKNOWN: authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
 - UNKNOWN: current Vercel production deployment identity and commit match.
-- BLOCKED: current Vercel GitHub status reports `build-rate-limit` for the current `main` head; this is a provider/platform limitation.
+- BLOCKED: the pre-reconciliation Vercel status for `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` reported `build-rate-limit`; this is a provider/platform limitation.
 
 ## Exact Next TODO
 ### Editorial browser/device verification against the latest refinement state
