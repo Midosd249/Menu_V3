@@ -1,550 +1,113 @@
-/*
- * Menu V3 — Heritage premium presentation layer
- *
- * Heritage is a restrained Arabic/Saudi hospitality system: warm parchment,
- * dark ink, terracotta/bronze accents, tactile navigation, and stable
- * landscape product media. Presentation only; shared menu behavior remains
- * owned by the public renderer.
- *
- * Scope: ThemeKey `heritage` / template family `contemporary-restaurant`.
+/* Menu V3 — Taste / مذاق
+ * Complete visual identity for ThemeKey `heritage`.
+ * Inspired by the supplied Taste Canva reference: olive green, cream paper,
+ * warm gold, image-led hero, clean sticky categories and editorial dishes.
+ * Shared renderer owns all menu data, cart, ordering and options behavior.
  */
 
-html[data-menu-theme="heritage"] {
-  color-scheme: light;
-  background: #eee3d1;
-}
-
-html[data-menu-theme="heritage"] body {
-  background: #eee3d1;
-  color: #2b2118;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell {
-  --heritage-bg: #eee3d1;
-  --heritage-surface: #fbf6ec;
-  --heritage-surface-muted: #e5d4bb;
-  --heritage-ink: #2b2118;
-  --heritage-ink-soft: #554536;
-  --heritage-muted: #75624f;
-  --heritage-border: rgb(74 51 30 / 0.16);
-  --heritage-border-strong: rgb(74 51 30 / 0.26);
-  --heritage-accent: #986532;
-  --heritage-accent-strong: #7e4f27;
-  --heritage-accent-soft: rgb(152 101 50 / 0.11);
-  --heritage-paper: #fffaf1;
-  --heritage-shadow: 0 8px 26px rgb(67 45 25 / 0.07);
-  --heritage-shadow-hover: 0 18px 42px rgb(67 45 25 / 0.14);
-  min-width: 0;
-  overflow-x: clip;
-  background: var(--heritage-bg);
-  color: var(--heritage-ink);
-  font-family: var(--font-sans);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div,
-html[data-menu-theme="heritage"] .menu-public-shell main {
-  background: transparent;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Type + document rhythm                                                     */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell h1,
-html[data-menu-theme="heritage"] .menu-public-shell h2,
-html[data-menu-theme="heritage"] .menu-public-shell h3,
-html[data-menu-theme="heritage"] .menu-public-shell h4 {
-  font-family: var(--font-display);
-  color: var(--heritage-ink);
-  text-wrap: balance;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main {
-  padding-inline: clamp(0.9rem, 3vw, 1.5rem);
-  padding-bottom: calc(8.5rem + env(safe-area-inset-bottom, 0px));
-  gap: clamp(2.4rem, 6vw, 3.5rem);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section {
-  scroll-margin-top: 8.5rem;
-  gap: 0.85rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section > h2 {
-  margin: 0;
-  font-size: clamp(1.2rem, 4.8vw, 1.55rem);
-  line-height: 1.45;
-  font-weight: 750;
-  letter-spacing: 0;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section > h2::after {
-  content: "";
-  display: block;
-  width: 2.8rem;
-  height: 0.16rem;
-  margin-block-start: 0.55rem;
-  border-radius: 999px;
-  background: var(--heritage-accent);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Hero / identity                                                            */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell header {
-  position: relative;
-  overflow: hidden;
-  background: var(--heritage-ink);
-  color: var(--heritage-paper);
-  border-bottom: 1px solid rgb(255 250 241 / 0.12);
-  box-shadow: 0 14px 36px rgb(67 45 25 / 0.12);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header::before {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  inset-inline-end: 0;
-  width: min(42%, 24rem);
-  background: repeating-linear-gradient(135deg, rgb(255 250 241 / 0.045) 0 1px, transparent 1px 13px);
-  opacity: 0.75;
-  pointer-events: none;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div:first-child {
-  opacity: 0.42;
-  filter: sepia(0.18) saturate(0.72) contrast(1.04);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div:first-child::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(43 33 24 / 0.08), rgb(43 33 24 / 0.78));
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative {
-  gap: 0.85rem;
-  padding: 1rem clamp(1rem, 4vw, 2rem) 1.25rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header h1 {
-  max-width: 14ch;
-  color: var(--heritage-paper);
-  font-size: clamp(1.65rem, 7vw, 3rem);
-  line-height: 1.18;
-  font-weight: 750;
-  letter-spacing: -0.025em;
-}
-
-html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header h1 {
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header p {
-  max-width: 44ch;
-  color: rgb(255 250 241 / 0.74);
-  line-height: 1.7;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header img,
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:first-child > div:first-child {
-  border: 1px solid rgb(255 250 241 / 0.2);
-  box-shadow: 0 10px 24px rgb(0 0 0 / 0.18);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header button {
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  border-color: rgb(255 250 241 / 0.2);
-  border-radius: 999px;
-  background: rgb(255 250 241 / 0.08);
-  color: var(--heritage-paper);
-  box-shadow: none;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header button:hover,
-html[data-menu-theme="heritage"] .menu-public-shell header button:focus-visible {
-  background: rgb(255 250 241 / 0.14);
-  transform: none;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:nth-last-child(2) span {
-  min-height: 2rem;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid rgb(255 250 241 / 0.14);
-  background: rgb(255 250 241 / 0.07);
-  color: rgb(255 250 241 / 0.82);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child {
-  gap: 0.45rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a {
-  min-height: 2.75rem;
-  border: 1px solid rgb(255 250 241 / 0.16);
-  border-radius: 0.8rem;
-  background: rgb(255 250 241 / 0.08);
-  color: var(--heritage-paper);
-  padding-inline: 0.8rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a:first-child {
-  background: var(--heritage-accent);
-  border-color: var(--heritage-accent);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a:hover,
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a:focus-visible {
-  transform: translateY(-1px);
-  background: rgb(255 250 241 / 0.14);
-  border-color: rgb(255 250 241 / 0.28);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a:first-child:hover,
-html[data-menu-theme="heritage"] .menu-public-shell header > div.relative > div:last-child a:first-child:focus-visible {
-  background: var(--heritage-accent-strong);
-  border-color: var(--heritage-accent-strong);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Category / search rail                                                     */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell > nav:not(.fixed) {
-  background: var(--heritage-bg);
-  border-bottom: 1px solid var(--heritage-border);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > nav:not(.fixed) a {
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky {
-  top: 0;
-  z-index: 20;
-  border-color: var(--heritage-border);
-  background: color-mix(in oklab, var(--heritage-bg) 95%, transparent);
-  box-shadow: 0 8px 24px rgb(67 45 25 / 0.07);
-  backdrop-filter: blur(12px) saturate(108%);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky > div {
-  gap: 0.6rem;
-  padding-block: 0.65rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky input {
-  min-height: 3rem;
-  border: 1px solid var(--heritage-border-strong);
-  border-radius: 0.85rem;
-  background: var(--heritage-surface);
-  color: var(--heritage-ink);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky input::placeholder {
-  color: var(--heritage-muted);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky input:focus {
-  border-color: var(--heritage-accent);
-  box-shadow: 0 0 0 3px var(--heritage-accent-soft);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky > div > div:last-child {
-  gap: 0.45rem;
-  padding-bottom: 0.1rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky > div > div:last-child button {
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding-inline: 0.9rem;
-  background: var(--heritage-surface-muted);
-  color: var(--heritage-ink-soft);
-  font-weight: 600;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell > div.sticky > div > div:last-child button[aria-pressed="true"] {
-  background: var(--heritage-ink);
-  color: var(--heritage-paper);
-  border-color: var(--heritage-ink);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Featured composition                                                       */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  padding: 0;
-  border: 1px solid var(--heritage-border);
-  border-radius: 1rem;
-  background: var(--heritage-surface);
-  color: var(--heritage-ink);
-  box-shadow: var(--heritage-shadow);
-  text-align: start;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child {
-  width: 100%;
-  aspect-ratio: 1.3 / 1;
-  min-height: 0;
-  overflow: hidden;
-  background: var(--heritage-surface-muted);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 500ms var(--ease-out), filter 350ms ease;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child {
-  display: grid;
-  align-content: center;
-  gap: 0.3rem;
-  min-width: 0;
-  padding: 0.8rem 0.9rem 0.95rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child > :first-child {
-  color: var(--heritage-ink);
-  font-size: 0.98rem;
-  line-height: 1.45;
-  font-weight: 720;
-  overflow-wrap: anywhere;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child > :last-child {
-  color: var(--heritage-accent-strong);
-  font-weight: 750;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Product list / horizontal cards                                            */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell main ul {
-  gap: 0.7rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li {
-  min-width: 0;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(7.25rem, 32%) minmax(0, 1fr);
-  gap: 0.9rem;
-  width: 100%;
-  min-height: 7.2rem;
-  padding: 0.65rem;
-  border: 1px solid var(--heritage-border);
-  border-radius: 1rem;
-  background: var(--heritage-surface);
-  color: var(--heritage-ink);
-  box-shadow: var(--heritage-shadow);
-  text-align: start;
-  transition: transform 180ms var(--ease-out), box-shadow 220ms ease, border-color 220ms ease, background-color 220ms ease;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :first-child {
-  min-width: 0;
-  min-height: 0;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 0.72rem;
-  background: var(--heritage-surface-muted);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button img {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  object-fit: cover;
-  transition: transform 550ms var(--ease-out), filter 350ms ease;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child {
-  display: grid;
-  align-content: center;
-  gap: 0.22rem;
-  min-width: 0;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :first-child {
-  color: var(--heritage-ink);
-  font-size: 0.98rem;
-  line-height: 1.5;
-  font-weight: 720;
-  overflow-wrap: anywhere;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
-  color: var(--heritage-ink-soft);
-  font-size: 0.78rem;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(3) {
-  color: var(--heritage-accent-strong);
-  font-size: 0.86rem;
-  line-height: 1.35;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(4) {
-  color: var(--heritage-muted);
-  font-size: 0.68rem;
-  line-height: 1.4;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button::before {
-  content: "";
-  position: absolute;
-  inset-block: 0.7rem;
-  inset-inline-start: 0.1rem;
-  width: 2px;
-  border-radius: 999px;
-  background: var(--heritage-accent);
-  opacity: 0;
-  transition: opacity 180ms ease;
-  pointer-events: none;
-}
-
-html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul > li > button::before {
-  inset-inline-start: auto;
-  inset-inline-end: 0.1rem;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:hover,
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:focus-visible {
-  transform: translateY(-1px);
-  border-color: var(--heritage-border-strong);
-  box-shadow: var(--heritage-shadow-hover);
-  background: #fff9ef;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:hover::before,
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:focus-visible::before {
-  opacity: 0.75;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:hover img,
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:focus-visible img {
-  transform: scale(1.035);
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:focus-visible,
-html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:focus-visible {
-  outline: 2px solid var(--heritage-accent);
-  outline-offset: 3px;
-}
-
-/* -------------------------------------------------------------------------- */
-/* Utility / hours / status                                                   */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="heritage"] .menu-public-shell main > section:last-child:has(> div > svg) {
-  gap: 0.7rem;
-  padding: 1rem;
-  border: 1px solid var(--heritage-border-strong);
-  border-radius: 0.95rem;
-  background: var(--heritage-surface-muted);
-  box-shadow: none;
-}
-
-html[data-menu-theme="heritage"] .menu-public-shell main > section:last-child:has(> div > svg) h2::after {
-  display: none;
-}
-
-/* Keep the fixed customer action surface clear of menu content. */
-html[data-menu-theme="heritage"] .menu-public-shell > div.fixed {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* -------------------------------------------------------------------------- */
-/* Responsive density + reduced motion                                       */
-/* -------------------------------------------------------------------------- */
-@media (max-width: 700px) {
-  html[data-menu-theme="heritage"] .menu-public-shell main {
-    padding-inline: 0.85rem;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main > section {
-    padding-block: clamp(1.75rem, 6vw, 2.8rem);
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button {
-    grid-template-columns: minmax(6.5rem, 31%) minmax(0, 1fr);
-    min-height: 6.7rem;
-    gap: 0.75rem;
-    padding: 0.55rem;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :first-child {
-    aspect-ratio: 4 / 3;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :first-child {
-    font-size: 0.94rem;
-    line-height: 1.48;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main ul > li > button:hover {
-    transform: none;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div {
-    grid-template-columns: 1fr;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:only-child {
-    grid-template-columns: minmax(7.5rem, 34%) minmax(0, 1fr);
-    grid-template-rows: 1fr;
-  }
-
-  html[data-menu-theme="heritage"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button:only-child > :first-child {
-    aspect-ratio: auto;
-    min-height: 8rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme="heritage"] .menu-public-shell * {
-    animation: none !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+html[data-menu-theme="heritage"]{color-scheme:light;background:#f6f0e5}
+html[data-menu-theme="heritage"] body{margin:0;background:#f6f0e5;color:#344331}
+html[data-menu-theme="heritage"] .menu-public-shell{--taste-green:#344331;--taste-green-dark:#263522;--taste-gold:#b78a42;--taste-gold-light:#d9bb7d;--taste-cream:#f6f0e5;--taste-paper:#fffdf8;--taste-paper-warm:#fffaf0;--taste-sand:#ede3d1;--taste-line:#e6dac7;--taste-muted:#756f63;--taste-shadow:0 8px 24px rgb(52 67 49/.07);--taste-shadow-strong:0 18px 42px rgb(52 67 49/.13);min-width:0;overflow-x:clip;background:var(--taste-cream)!important;color:var(--taste-green)!important;font-family:var(--font-sans)}
+html[data-menu-theme="heritage"] .menu-public-shell,html[data-menu-theme="heritage"] .menu-public-shell *{box-sizing:border-box}
+html[data-menu-theme="heritage"] .menu-public-shell main,html[data-menu-theme="heritage"] .menu-public-shell main>section{background:transparent}
+html[data-menu-theme="heritage"] .menu-public-shell h1,html[data-menu-theme="heritage"] .menu-public-shell h2,html[data-menu-theme="heritage"] .menu-public-shell h3,html[data-menu-theme="heritage"] .menu-public-shell h4{font-family:var(--font-display);color:var(--taste-green);text-wrap:balance}
+
+/* HERO — the supplied Canva composition is the visual anchor. */
+html[data-menu-theme="heritage"] .menu-public-shell header{position:relative!important;min-height:27rem;overflow:hidden!important;isolation:isolate;background:var(--taste-green)!important;color:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell header>div:first-child{position:absolute!important;inset:0!important;opacity:1!important;filter:none!important;z-index:-2}
+html[data-menu-theme="heritage"] .menu-public-shell header>div:first-child::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgb(17 25 15/.22),rgb(31 43 26/.35) 42%,rgb(25 36 21/.86));z-index:1}
+html[data-menu-theme="heritage"] .menu-public-shell header>div:first-child img,html[data-menu-theme="heritage"] .menu-public-shell header img{width:100%!important;height:100%!important;min-height:27rem;object-fit:cover!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative{position:relative!important;z-index:2;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:end!important;min-height:27rem;width:min(100%,72rem);margin-inline:auto;padding:1.15rem clamp(1rem,4vw,2rem) 2rem!important;gap:1rem}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header>div.relative{grid-template-columns:auto minmax(0,1fr)!important}
+html[data-menu-theme="heritage"] .menu-public-shell header h1{grid-column:1;max-width:12ch;margin:0!important;color:#fff!important;font-size:clamp(2rem,9vw,4rem)!important;font-weight:750!important;line-height:1.08!important;letter-spacing:-.035em;text-shadow:0 2px 18px rgb(0 0 0/.18)}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header h1{grid-column:2}
+html[data-menu-theme="heritage"] .menu-public-shell header p{max-width:38ch;margin:.65rem 0 0!important;color:rgb(255 250 240/.9)!important;font-size:clamp(.9rem,2.5vw,1.05rem)!important;line-height:1.75!important}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:first-child{min-width:0}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:first-child>div:first-child{width:fit-content;max-width:100%;padding:.3rem .7rem;border:0!important;border-bottom:1px solid rgb(217 187 125/.6)!important;border-radius:0!important;color:var(--taste-gold-light)!important;background:transparent!important;font-size:.78rem!important;font-weight:750;letter-spacing:.04em}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:first-child>div:first-child{letter-spacing:0}
+html[data-menu-theme="heritage"] .menu-public-shell header button,html[data-menu-theme="heritage"] .menu-public-shell header a{min-height:2.75rem;border-radius:.8rem}
+html[data-menu-theme="heritage"] .menu-public-shell header button{border-color:rgb(255 255 255/.22)!important;background:rgb(255 255 255/.09)!important;color:#fff!important;box-shadow:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell header button:hover,html[data-menu-theme="heritage"] .menu-public-shell header button:focus-visible{background:rgb(255 255 255/.16)!important;transform:translateY(-1px)}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child{align-self:end;display:flex;flex-wrap:wrap;justify-content:end;gap:.45rem}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child{justify-content:start}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child a{display:inline-flex;align-items:center;gap:.4rem;padding-inline:.85rem;border:1px solid rgb(255 255 255/.2)!important;background:rgb(255 255 255/.09)!important;color:#fff!important}
+html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child a:first-child{background:var(--taste-gold)!important;border-color:var(--taste-gold)!important}
+
+/* STICKY SEARCH / CATEGORY RAIL */
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky{position:sticky!important;top:0!important;z-index:30!important;padding:.65rem 0!important;border-bottom:1px solid var(--taste-line)!important;background:rgb(246 240 229/.94)!important;box-shadow:0 6px 20px rgb(52 67 49/.06)!important;backdrop-filter:blur(14px) saturate(110%)}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky>div{width:min(100%,72rem);margin-inline:auto;gap:.55rem!important;padding-inline:clamp(1rem,4vw,2rem)!important}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky input{min-height:3rem;border:1px solid var(--taste-line)!important;border-radius:.75rem!important;background:#fff!important;color:var(--taste-green)!important;box-shadow:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky input:focus{border-color:var(--taste-gold)!important;box-shadow:0 0 0 3px rgb(183 138 66/.13)!important}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky>div>div:last-child{display:flex;gap:.4rem!important;overflow-x:auto;scrollbar-width:none}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky>div>div:last-child::-webkit-scrollbar{display:none}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky>div>div:last-child button{flex:0 0 auto;min-height:2.65rem;padding-inline:1rem;border:1px solid var(--taste-line)!important;border-radius:999px!important;background:var(--taste-paper)!important;color:var(--taste-green)!important;font-size:.82rem;font-weight:700}
+html[data-menu-theme="heritage"] .menu-public-shell>div.sticky>div>div:last-child button[aria-pressed="true"]{background:var(--taste-green)!important;border-color:var(--taste-green)!important;color:#fff!important}
+
+/* MAIN RHYTHM */
+html[data-menu-theme="heritage"] .menu-public-shell main{width:min(100%,72rem)!important;margin-inline:auto!important;padding:2.15rem clamp(1rem,4vw,2rem) calc(7rem + env(safe-area-inset-bottom,0px))!important;gap:3.25rem!important}
+html[data-menu-theme="heritage"] .menu-public-shell main>section{scroll-margin-top:5rem}
+html[data-menu-theme="heritage"] .menu-public-shell main>section>h2,html[data-menu-theme="heritage"] .menu-public-shell .editorial-section-heading h2{margin:0!important;color:var(--taste-green)!important;font-size:clamp(1.45rem,5vw,2.15rem)!important;font-weight:750!important;line-height:1.25!important}
+html[data-menu-theme="heritage"] .menu-public-shell main>section>h2::after{content:"";display:block;width:2.8rem;height:.16rem;margin-top:.55rem;border-radius:999px;background:var(--taste-gold)}
+
+/* FEATURED */
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-featured-grid,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:.9rem!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-featured-card,html[data-menu-theme="heritage"] .menu-public-shell .editorial-featured-card.is-lead,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div>button{min-width:0!important;min-height:0!important;display:grid!important;grid-template-rows:auto 1fr!important;overflow:hidden!important;padding:0!important;border:1px solid var(--taste-line)!important;border-radius:1rem!important;background:var(--taste-paper)!important;color:var(--taste-green)!important;box-shadow:var(--taste-shadow)!important;text-align:start!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-featured-image,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div>button img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/10!important;object-fit:cover!important;border:0!important;border-radius:0!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-card-title,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div>button>:last-child>:first-child{min-width:0;margin:0!important;padding:.8rem .9rem .15rem!important;color:var(--taste-green)!important;font-size:.98rem!important;font-weight:730!important;line-height:1.45!important;overflow-wrap:anywhere}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-card-description,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div>button>:last-child>:nth-child(2){min-width:0;margin:0!important;padding:0 .9rem .55rem!important;color:var(--taste-muted)!important;font-size:.8rem!important;line-height:1.55!important;overflow-wrap:anywhere}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-card-price,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div>button>:last-child>:last-child{width:fit-content;margin:0 .9rem .9rem!important;padding:.3rem .55rem!important;border-radius:999px!important;background:rgb(183 138 66/.1)!important;color:var(--taste-gold)!important;font-size:.8rem!important;font-weight:760!important;direction:ltr!important;unicode-bidi:isolate!important;white-space:nowrap!important}
+
+/* PRODUCTS — exact intent of the supplied Canva card: no surrounding white frame. */
+html[data-menu-theme="heritage"] .menu-public-shell main ul{display:grid;gap:0!important}
+html[data-menu-theme="heritage"] .menu-public-shell main ul>li{min-width:0;list-style:none}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-card,html[data-menu-theme="heritage"] .menu-public-shell main ul>li>div>button:not(.public-menu-quick-add):not(.public-menu-options-action),html[data-menu-theme="heritage"] .menu-public-shell main ul>li>button:not(.public-menu-quick-add):not(.public-menu-options-action){position:relative!important;display:grid!important;grid-template-columns:minmax(6.9rem,28%) minmax(0,1fr)!important;grid-template-rows:auto!important;column-gap:.9rem!important;align-items:start!important;width:100%!important;min-width:0!important;min-height:0!important;padding:.85rem 0!important;border:0!important;border-bottom:1px solid var(--taste-line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;text-align:start!important}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-card,html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul>li>div>button:not(.public-menu-quick-add):not(.public-menu-options-action),html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul>li>button:not(.public-menu-quick-add):not(.public-menu-options-action){grid-template-columns:minmax(0,1fr) minmax(6.9rem,28%)!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-image,html[data-menu-theme="heritage"] .menu-public-shell main ul>li>div>button:not(.public-menu-quick-add):not(.public-menu-options-action)>:first-child,html[data-menu-theme="heritage"] .menu-public-shell main ul>li>button:not(.public-menu-quick-add):not(.public-menu-options-action)>:first-child{grid-column:1;grid-row:1;width:100%!important;height:auto!important;aspect-ratio:4/3!important;min-height:0!important;object-fit:cover!important;overflow:hidden!important;border:0!important;border-radius:.7rem!important;background:var(--taste-sand)!important;box-shadow:none!important}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-image,html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul>li>div>button:not(.public-menu-quick-add):not(.public-menu-options-action)>:first-child,html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell main ul>li>button:not(.public-menu-quick-add):not(.public-menu-options-action)>:first-child{grid-column:2}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-copy{grid-column:2!important;grid-row:1!important;display:grid!important;grid-template-rows:auto auto auto!important;align-content:start!important;min-width:0!important;padding:.05rem 0 0!important}
+html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-copy{grid-column:1!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-topline{display:contents!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-name{grid-row:1!important;min-width:0!important;margin:0!important;color:var(--taste-green)!important;font-size:.98rem!important;font-weight:730!important;line-height:1.45!important;overflow-wrap:anywhere!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-description{grid-row:2!important;min-width:0!important;margin:.25rem 0 0!important;color:var(--taste-muted)!important;font-size:.78rem!important;line-height:1.58!important;overflow:visible!important;display:block!important;-webkit-line-clamp:unset!important;-webkit-box-orient:initial!important;max-height:none!important;overflow-wrap:anywhere!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price{position:static!important;grid-row:3!important;grid-column:1!important;justify-self:start!important;align-self:end!important;min-width:max-content!important;margin:.6rem 0 0!important;padding:0!important;color:var(--taste-gold)!important;font-size:.86rem!important;font-weight:800!important;line-height:1.25!important;direction:ltr!important;unicode-bidi:isolate!important;white-space:nowrap!important;transform:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-tags{grid-row:4!important;grid-column:1!important;display:flex!important;flex-wrap:wrap!important;gap:.3rem!important;margin-top:.4rem!important;min-width:0}
+html[data-menu-theme="heritage"] .menu-public-shell main ul>li>div,html[data-menu-theme="heritage"] .menu-public-shell main ul>li>article{border:0!important;background:transparent!important;box-shadow:none!important}
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-quick-add,html[data-menu-theme="heritage"] .menu-public-shell .public-menu-options-action{display:none!important}
+
+/* OFFER / INFORMATION */
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-offer,html[data-menu-theme="heritage"] .menu-public-shell main section:has(.editorial-offer)>div{border:0!important;border-radius:1.25rem!important;overflow:hidden!important;background:var(--taste-green)!important;color:#fff!important;box-shadow:var(--taste-shadow-strong)!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-offer img{width:100%!important;height:100%!important;min-height:15rem;object-fit:cover!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-offer h2,html[data-menu-theme="heritage"] .menu-public-shell .editorial-offer p{color:#fff!important}
+html[data-menu-theme="heritage"] .menu-public-shell main section article,html[data-menu-theme="heritage"] .menu-public-shell .editorial-info-card{border:1px solid var(--taste-line)!important;border-radius:1rem!important;background:var(--taste-paper)!important;box-shadow:none!important}
+
+/* ACTIONS / HOURS */
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-action-bar,html[data-menu-theme="heritage"] .menu-public-shell .editorial-actions{display:flex!important;flex-wrap:wrap;justify-content:center;gap:.55rem!important;padding:1rem!important;border-block:1px solid var(--taste-line)!important;background:var(--taste-sand)!important}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-action-bar a,html[data-menu-theme="heritage"] .menu-public-shell .editorial-action-bar button,html[data-menu-theme="heritage"] .menu-public-shell .editorial-actions a,html[data-menu-theme="heritage"] .menu-public-shell .editorial-actions button{min-height:2.75rem!important;padding-inline:1rem!important;border-radius:.75rem!important;border:1px solid var(--taste-green)!important;background:var(--taste-paper)!important;color:var(--taste-green)!important;font-weight:700}
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-action-bar a:first-child,html[data-menu-theme="heritage"] .menu-public-shell .editorial-actions a:first-child,html[data-menu-theme="heritage"] .menu-public-shell .editorial-action-bar button:first-child,html[data-menu-theme="heritage"] .menu-public-shell .editorial-actions button:first-child{background:var(--taste-green)!important;color:#fff!important}
+
+/* ALLERGY FOOTER */
+html[data-menu-theme="heritage"] .menu-public-shell footer{border-top:0!important;background:var(--taste-green)!important;color:#fff!important}
+html[data-menu-theme="heritage"] .menu-public-shell footer strong,html[data-menu-theme="heritage"] .menu-public-shell footer [data-template-id="allergy-title"]{color:var(--taste-gold-light)!important}
+
+/* CART / PRODUCT SHEET */
+html[data-menu-theme="heritage"] .menu-public-shell [role="dialog"]{border-radius:1.15rem!important;background:var(--taste-paper)!important;color:var(--taste-green)!important}
+html[data-menu-theme="heritage"] .menu-public-shell [role="dialog"] .bg-ink,html[data-menu-theme="heritage"] .menu-public-shell [role="dialog"] button.bg-ink{background:var(--taste-green)!important;color:#fff!important}
+html[data-menu-theme="heritage"] .menu-public-shell [role="dialog"] .text-accent{color:var(--taste-gold)!important}
+
+@media (min-width:720px){
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-featured-grid,html[data-menu-theme="heritage"] .menu-public-shell main>section:first-child:has(>h2.text-sm)>div{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-card{grid-template-columns:minmax(8rem,24%) minmax(0,1fr)!important}
+ html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-card{grid-template-columns:minmax(0,1fr) minmax(8rem,24%)!important}
+}
+@media (max-width:520px){
+ html[data-menu-theme="heritage"] .menu-public-shell header,html[data-menu-theme="heritage"] .menu-public-shell header>div:first-child img{min-height:24rem}
+ html[data-menu-theme="heritage"] .menu-public-shell header>div.relative{min-height:24rem;padding-bottom:1.35rem!important}
+ html[data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child{grid-column:1/-1;justify-content:start}
+ html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell header>div.relative>div:last-child{justify-content:end}
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-card{grid-template-columns:minmax(5.8rem,30%) minmax(0,1fr)!important;column-gap:.75rem!important}
+ html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-card{grid-template-columns:minmax(0,1fr) minmax(5.8rem,30%)!important}
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-name{font-size:.92rem!important}
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-description{font-size:.75rem!important}
+ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price{font-size:.8rem!important}
+}
+@media (prefers-reduced-motion:reduce){html[data-menu-theme="heritage"] .menu-public-shell *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
