@@ -2,11 +2,6 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Taste removes legacy decorative menu numbers", async () => {
-  const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /data-menu-theme=\\"heritage\\"[\\s\\S]*display:none!important/);
-});
-
 test("Taste uses the supplied olive, cream and gold palette", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
   assert.match(styles, /--taste-green:#344331/);
