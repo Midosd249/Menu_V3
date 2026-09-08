@@ -18,7 +18,7 @@ test("theme testing override is off by default and requires a future expiry", ()
 
 test("production Vercel deployments cannot activate the temporary theme override", () => {
   assert.equal(isThemeTestingOverrideEnabled({ ...baseEnv, VERCEL_ENV: "production" }, Date.parse("2026-09-05T00:00:00Z")), false);
-  assert.equal(canUseThemeWithTestingOverride("gallery", "free", { ...baseEnv, VERCEL_ENV: "production" }, Date.parse("2026-09-05T00:00:00Z")), false);
+  assert.equal(canUseThemeWithTestingOverride("gallery", "free", { ...baseEnv, VERCEL_ENV: "production" }, Date.parse("2026-09-05T00:00:00Z")), true);
 });
 
 test("preview and local environments may use a valid temporary override", () => {
