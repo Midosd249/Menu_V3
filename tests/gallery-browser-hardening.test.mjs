@@ -58,3 +58,13 @@ test("Public menu root does not overwrite route-selected theme during hydration"
   assert.doesNotMatch(source, /<MenuThemeController\s*\/>/);
   assert.doesNotMatch(source, /import \{ MenuThemeController \}/);
 });
+
+test("Gallery final hardening clears legacy wrapper chrome and prevents description clipping", async () => {
+  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+
+  assert.match(styles, /html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li,\s*html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li > div,/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*border-width:\s*0\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*overflow:\s*visible\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*overflow:\s*visible\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*height:\s*auto\s*!important/);
+});
