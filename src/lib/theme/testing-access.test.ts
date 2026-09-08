@@ -16,9 +16,20 @@ test("theme testing override is off by default and requires a future expiry", ()
   assert.equal(isThemeTestingOverrideEnabled({ ...baseEnv, MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT: past }, Date.parse("2026-09-05T00:00:00Z")), false);
 });
 
-test("free theme catalog remains usable with or without the temporary override", () => {
+test("production Vercel deployments cannot activate the temporary theme override", () => {
+  assert.equal(isThemeTestingOverrideEnabled({ ...baseEnv, VERCEL_ENV: "production" }, Date.parse("2026-09-05T00:00:00Z")), false);
+  assert.equal(canUseThemeWithTestingOverride("gallery", "free", { ...baseEnv, VERCEL_ENV: "production" }, Date.parse("2026-09-05T00:00:00Z")), true);
+});
+
+test("preview and local environments may use a valid temporary override", () => {
   const now = Date.parse("2026-09-05T00:00:00Z");
-  assert.equal(canUseThemeWithTestingOverride("editorial", "free", baseEnv, now), true);
+  assert.equal(isThemeTestingOverrideEnabled({ ...baseEnv, VERCEL_ENV: "preview" }, now), true);
+  assert.equal(isThemeTestingOverrideEnabled(baseEnv, now), true);
+  assert.equal(canUseThemeWithTestingOverride("gallery", "free", { ...baseEnv, VERCEL_ENV: "preview" }, now), true);
+});
+
+test("free theme catalog remains usable without the temporary override", () => {
+  const now = Date.parse("2026-09-05T00:00:00Z");
   assert.equal(canUseThemeWithTestingOverride("editorial", "free", {}, now), true);
   assert.equal(canUseThemeWithTestingOverride("essential", "free", {}, now), true);
   assert.equal(canUseThemeWithTestingOverride("gallery", null, {}, now), true);

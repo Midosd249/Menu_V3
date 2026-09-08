@@ -8,6 +8,7 @@ export function isThemeTestingOverrideEnabled(
   env: Record<string, string | undefined> = process.env,
   now = Date.now(),
 ): boolean {
+  if (env.VERCEL_ENV?.trim().toLowerCase() === "production") return false;
   if (env[THEME_TESTING_OVERRIDE_ENV]?.trim().toLowerCase() !== "true") return false;
   const expiry = Date.parse(env[THEME_TESTING_OVERRIDE_EXPIRES_ENV]?.trim() ?? "");
   return Number.isFinite(expiry) && expiry > now;
