@@ -13,17 +13,31 @@ test("compact quick-add layer is loaded after the existing public theme layers",
   assert.match(root, /heritageCascadeCss },\n\s{6}\{ rel: "stylesheet", href: quickAddCompactRefinementCss \}/);
 });
 
-test("quick-add keeps an accessible 44px interactive target while using a compact visual footprint", () => {
+test("Quick Add keeps a 44px hit target with a smaller icon-only visual", () => {
+  assert.match(refinement, /position: absolute;/);
+  assert.match(refinement, /z-index: 2;/);
   assert.match(refinement, /width: 44px;/);
   assert.match(refinement, /height: 44px;/);
   assert.match(refinement, /min-height: 44px;/);
+  assert.match(refinement, /border: 0;/);
+  assert.match(refinement, /background: transparent;/);
   assert.match(refinement, /font-size: 0;/);
   assert.match(refinement, /\.public-menu-quick-add > svg/);
+  assert.match(refinement, /width: 22px;/);
+  assert.match(refinement, /height: 22px;/);
   assert.match(refinement, /outline: 2px solid currentColor;/);
   assert.doesNotMatch(refinement, /public-menu-options-action/);
 });
 
-test("all five public themes receive distinct compact Quick Add treatments", () => {
+test("Quick Add is positioned against the card/media in both shared renderers", () => {
+  assert.match(refinement, /\.menu-public-shell main > section > div > article,\n\.menu-public-shell main ul > li > div,/);
+  assert.match(refinement, /\.editorial-featured-card-wrap,\n\.editorial-product-card-wrap/);
+  assert.match(refinement, /inset-inline-start: 0\.65rem;/);
+  assert.match(refinement, /top: 0\.65rem;/);
+  assert.match(refinement, /inset-inline-end: auto;/);
+});
+
+test("all five public themes receive the same compact action geometry", () => {
   for (const theme of ["essential", "editorial", "noir", "heritage", "gallery"]) {
     assert.match(refinement, new RegExp(`html\\[data-menu-theme=\\"${theme}\\"\\] \\.public-menu-quick-add`));
   }
