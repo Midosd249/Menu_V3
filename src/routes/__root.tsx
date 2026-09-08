@@ -17,12 +17,10 @@ import noirHardeningCss from "../theme-noir-hardening.css?url";
 import editorialThemeCss from "../theme-editorial.css?url";
 import editorialHardeningCss from "../theme-editorial-hardening.css?url";
 import heritageThemeCss from "../theme-heritage.css?url";
-import heritageHardeningCss from "../theme-heritage-hardening.css?url";
 import galleryThemeCss from "../theme-gallery.css?url";
 import galleryHardeningCss from "../theme-gallery-hardening.css?url";
 import publicThemeQualityRecoveryCss from "../theme-public-quality-recovery.css?url";
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
-import heritageCascadeCss from "../theme-heritage-cascade.css?url";
 import quickAddCompactRefinementCss from "../quick-add-compact-refinement.css?url";
 import priceConsistencyCss from "../theme-price-consistency.css?url";
 
@@ -36,11 +34,9 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
-      { name: "theme-color", content: "#171411" },
+      { name: "theme-color", content: "#344331" },
       { name: "description", content: "منصة المنيو الرقمية للمطاعم السعودية" },
-      ...(searchConsoleVerification
-        ? [{ name: "google-site-verification", content: searchConsoleVerification }]
-        : []),
+      ...(searchConsoleVerification ? [{ name: "google-site-verification", content: searchConsoleVerification }] : []),
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -60,15 +56,13 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: noirHardeningCss },
       { rel: "stylesheet", href: editorialThemeCss },
       { rel: "stylesheet", href: editorialHardeningCss },
-      { rel: "stylesheet", href: heritageThemeCss },
-      { rel: "stylesheet", href: heritageHardeningCss },
       { rel: "stylesheet", href: galleryThemeCss },
       { rel: "stylesheet", href: galleryHardeningCss },
       { rel: "stylesheet", href: publicThemeQualityRecoveryCss },
       { rel: "stylesheet", href: menuPreviewLayerCss },
-      { rel: "stylesheet", href: heritageCascadeCss },
       { rel: "stylesheet", href: quickAddCompactRefinementCss },
       { rel: "stylesheet", href: priceConsistencyCss },
+      { rel: "stylesheet", href: heritageThemeCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
@@ -81,15 +75,11 @@ function RootDocument() {
   const locale = new URLSearchParams(search).get("lang") === "en" ? "en" : "ar";
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
+      <head><HeadContent /></head>
       <body>
         <PreviewHostBridge />
         <AuthProvider>
-          <LangProvider initialLang={locale}>
-            <Outlet />
-          </LangProvider>
+          <LangProvider initialLang={locale}><Outlet /></LangProvider>
         </AuthProvider>
         <Scripts />
       </body>
