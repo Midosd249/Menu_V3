@@ -33,6 +33,15 @@ test("Gallery featured section presents one image-led item at a time", async () 
   assert.match(styles, /button > :first-child\s*\{\s*aspect-ratio:\s*4\s*\/\s*3/);
 });
 
+test("Gallery removes boxed card chrome while retaining image shape", async () => {
+  const styles = await readFile("src/theme-price-consistency.css", "utf8");
+
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > button[\s\S]*border:\s*0\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > button[\s\S]*background:\s*transparent\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > button[\s\S]*box-shadow:\s*none\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > button > :first-child[\s\S]*border-radius:\s*1rem\s*!important/);
+});
+
 test("Gallery hardening is loaded after the base Gallery stylesheet", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
 

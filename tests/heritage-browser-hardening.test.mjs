@@ -26,14 +26,19 @@ test("Heritage featured cards keep price in normal document flow", async () => {
   assert.match(styles, /editorial-featured-card \.editorial-card-title[\s\S]*overflow-wrap:\s*anywhere/);
 });
 
-test("Heritage category products use separate title, price, and description cells", async () => {
+test("Heritage category products place price on its own row below the description", async () => {
   const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
   assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\(6\.9rem, 27%\)\s+minmax\(0, 1fr\)/);
-  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
+  assert.match(styles, /editorial-product-copy[\s\S]*display:\s*grid\s*!important/);
+  assert.match(styles, /editorial-product-copy[\s\S]*grid-template-rows:\s*auto auto auto auto/);
+  assert.match(styles, /editorial-product-topline[\s\S]*display:\s*contents\s*!important/);
+  assert.match(styles, /editorial-product-name[\s\S]*grid-row:\s*1/);
+  assert.match(styles, /editorial-product-description[\s\S]*grid-row:\s*2/);
+  assert.match(styles, /editorial-product-price[\s\S]*grid-row:\s*3/);
   assert.match(styles, /editorial-product-price[\s\S]*position:\s*static\s*!important/);
   assert.match(styles, /editorial-product-price[\s\S]*direction:\s*ltr\s*!important/);
   assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:\s*isolate\s*!important/);
-  assert.match(styles, /editorial-product-description[\s\S]*grid-column:\s*2/);
+  assert.match(styles, /editorial-product-tags[\s\S]*grid-row:\s*4/);
 });
 
 test("Heritage action rail gives language a deliberate header position", async () => {
