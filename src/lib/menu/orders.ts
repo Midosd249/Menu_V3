@@ -8,7 +8,7 @@ import type { FnResult } from "./types";
 export const ORDER_STATUSES = ["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
-export type SelectedOrderOption = { type: "variant" | "modifier"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
+export type SelectedOrderOption = { type: "variant" | "modifier" | "note"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
 export type OrderItemDetail = { id: string; productId: string; productNameAr: string; productNameEn: string; quantity: number; unitPrice: number; lineTotal: number; selectedOptions: SelectedOrderOption[] };
 export type AdminOrder = { id: string; orderNumber: number; tenantId: string; restaurantName: string; branchName: string; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
 export type OrdersDashboard = { total: number; newCount: number; activeCount: number; completedCount: number; cancelledCount: number; orders: AdminOrder[] };
@@ -50,7 +50,22 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
 
 function mapItem(row: Record<string, unknown>): OrderItemDetail {
   const rawOptions = Array.isArray(row.selected_options) ? row.selected_options : [];
-  return { id: String(row.id), productId: String(row.product_id ?? ""), productNameAr: String(row.product_name_ar ?? ""), productNameEn: String(row.product_name_en ?? ""), quantity: Number(row.quantity ?? 0), unitPrice: Number(row.unit_price ?? 0), lineTotal: Number(row.line_total ?? 0), selectedOptions: rawOptions.flatMap((item): SelectedOrderOption[] => { if (!item || typeof item !== "object") return []; const option = item as Record<string, unknown>; const type = option.type === "variant" ? "variant" : option.type === "modifier" ? "modifier" : null; if (!type || typeof option.id !== "string") return []; return [{ type, id: option.id, ...(typeof option.groupId === "string" ? { groupId: option.groupId } : {}), nameAr: String(option.nameAr ?? ""), nameEn: String(option.nameEn ?? ""), priceDelta: Number(option.priceDelta ?? 0) }]; }) };
+  return {
+    id: String(row.id),
+    productId: String(row.product_id ?? ""),
+    productNameAr: String(row.product_name_ar ?? ""),
+    productNameEn: String(row.product_name_en ?? ""),
+    quantity: Number(row.quantity ?? 0),
+    unitPrice: Number(row.unit_price ?? 0),
+    lineTotal: Number(row.line_total ?? 0),
+    selectedOptions: rawOptions.flatMap((item): SelectedOrderOption[] => {
+      if (!item || typeof item !== "object") return [];
+      const option = item as Record<string, unknown>;
+      const type = option.type === "variant" ? "variant" : option.type === "modifier" ? "modifier" : option.type === "note" ? "note" : null;
+      if (!type || typeof option.id !== "string") return [];
+      return [{ type, id: option.id, ...(typeof option.groupId === "string" ? { groupId: option.groupId } : {}), nameAr: String(option.nameAr ?? ""), nameEn: String(option.nameEn ?? ""), priceDelta: Number(option.priceDelta ?? 0) }];
+    }),
+  };
 }
 
 function mapOrder(row: Record<string, unknown>): AdminOrder {
