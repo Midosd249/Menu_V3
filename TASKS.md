@@ -81,13 +81,16 @@
 - UNKNOWN: retention, revenue attribution, statistical significance, and true order conversion remain unavailable.
 - Evidence: `docs/growth-w15-analytics-experimentation.md`.
 
-### W16 — QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED
+### W16 — QA, Browser/Device, and Release — IN_PROGRESS / DEVICE_VERIFICATION_REMAINING
 - VERIFIED: W14/W15 regression gates remain green.
-- VERIFIED: before reconciliation, the application/documentation head `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` exposed a GitHub Vercel `failure` target pointing to `upgradeToPro=build-rate-limit`.
-- BLOCKED: that Vercel result is a provider/capacity or plan limitation, not evidence of application build failure.
-- UNKNOWN: current Vercel production deployment identity and deployed-commit match are not directly verifiable through the available Vercel surface.
+- VERIFIED: current Vercel project `menu-v3` is linked to `Midosd249/Menu_V3`.
+- VERIFIED: current production deployment `dpl_Cv1zzzwMaFKfzoDWUj6GtKXERdT1` is `READY`, targets `production`, and is explicitly tied to `main` commit `e8ac80ec43774da98bd5bbe12bdf8260a244954f`.
+- VERIFIED: current production aliases include `menu-v3-kohl.vercel.app`.
+- VERIFIED: current production deployment has no alias error and uses region `icn1`.
+- VERIFIED: no production error/fatal runtime logs were found in the last six-hour query window.
+- VERIFIED: the historical `getMyStudio` / `is_active` error is attached to older deployment `dpl_4vYyUatnMdhU5H5gJBTnbh8mG6NU`, not the current production deployment.
 - UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
-- Production is not marked `DEPLOYED` without direct Vercel evidence.
+- W16 deployment verification is no longer blocked; the remaining blocker is direct physical-device/accessibility evidence.
 
 ### W17-Q — Public Menu Hardening Subtask — COMPLETED / MERGED
 - VERIFIED: image-failure fallback and empty-hours placeholder defects were corrected.
@@ -143,32 +146,24 @@ The cross-functional roadmap is recorded in `docs/design-strategy-master-plan.md
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN: physical-device rendering and manual screen-reader output.
 - UNKNOWN: authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior.
-- UNKNOWN: current Vercel production deployment identity and commit match.
-- BLOCKED: the pre-reconciliation Vercel status for `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` reported `build-rate-limit`; this is a provider/platform limitation.
+- UNKNOWN: current production Supabase environment variable value; repository evidence still identifies canonical project ref `ublxptcqefujkbeepylc` and schema `menu_v3`.
+- BLOCKED: direct physical-device and assistive-technology observation cannot be produced by repository/Vercel tooling alone.
 
 ## Exact Next TODO
-### Editorial browser/device verification against the latest refinement state
-- Verify the existing Editorial refinement using the supported browser viewport matrix and record evidence.
-- Do not begin new theme refinement or alter product architecture unless new evidence requires it.
-- Keep production deployment verification separate from implementation verification.
+### Physical-device and manual accessibility verification
+- Verify the current production menu on a real Android/iOS device at small, standard, and large mobile widths.
+- Check Arabic RTL, English LTR, mixed-direction content, long product names/prices, missing images, product details, cart open/closed, sticky/floating controls, safe areas, and scrolling.
+- Perform manual screen-reader/focus checks where supported.
+- Verify QR-camera scanning and record any reproducible defect.
+- Do not reopen completed theme implementation unless a real-device defect is reproduced.
 
-## Reconciliation — 2026-09-07
-- VERIFIED: PR #24 and PR #26 are MERGED.
-- VERIFIED: W17-Q Quality Gate `34080681231` is green with `161/161` tests, zero failures, zero skips, all five themes browser-tested on mobile/tablet/desktop, zero console errors, and `0px` horizontal overflow.
-- VERIFIED: latest Gallery refinement is on `main`.
-- VERIFIED: stale Noir/W17-Q active-state claims are reclassified; deployment remains separate from implementation and CI evidence.
-- VERIFIED: remaining device/manual checks remain UNKNOWN rather than being converted into completion claims.
-
-## Research Agent Governance Note — 2026-09-07
-- VERIFIED: existing agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent research/connected-tools discovery agent.
-- VERIFIED: `docs/agents/research-connected-tools-agent.md` was created as the canonical internal AI research workflow.
-- VERIFIED: the workflow dynamically discovers available capabilities and requires relevance, authorization, safety, and material-use criteria before source selection.
-- VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
-
-## Automatic Specialist Routing Governance Note — 2026-09-07
-- VERIFIED: `docs/automatic-specialist-routing.md` was created as the canonical orchestration contract without creating duplicate specialist agents.
-- VERIFIED: routing covers themes/public menus, customer actions, auth/authz/isolation/subscriptions/entitlements, database/migrations, bugs/browser/performance/Vercel/CI, SEO/public content, and release/reliability.
-- VERIFIED: routing requires proportional repository-first research and dynamically discovered connected tools only when relevant, authorized, safe, and materially useful.
-- VERIFIED: the user remains the sole human owner and primary developer; specialist roles are internal AI workflows only.
-- VERIFIED: no implementation or product-development status changed.
-- VERIFIED: the exact next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
+## Release Identity Verification — 2026-09-08
+- VERIFIED: Vercel team `Midosd2's projects` is `team_4qTUNnhDhAW00uQId6JvETf4`.
+- VERIFIED: Vercel project `menu-v3` is `prj_ydfrFBE7ZJVmuNnCOTv3WjWkhuH1` and is linked to GitHub repository `Midosd249/Menu_V3`.
+- VERIFIED: production deployment `dpl_Cv1zzzwMaFKfzoDWUj6GtKXERdT1` is READY and explicitly targets production.
+- VERIFIED: deployment metadata records `main` and commit `e8ac80ec43774da98bd5bbe12bdf8260a244954f`.
+- VERIFIED: production aliases include `menu-v3-kohl.vercel.app`.
+- VERIFIED: no error/fatal production runtime logs were found during the queried six-hour window.
+- VERIFIED: the only aggregated runtime error found in the preceding 24 hours belongs to the older deployment `dpl_4vYyUatnMdhU5H5gJBTnbh8mG6NU`.
+- VERIFIED: no deployment was triggered by this verification.
+- Next TODO: physical-device and manual accessibility verification.
