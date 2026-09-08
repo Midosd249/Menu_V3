@@ -19,10 +19,11 @@ Temporarily allow authenticated restaurant owners/admins to save any public/gene
 ## How the override works
 - **VERIFIED:** `saveTenantTheme` remains behind `authMiddleware` and only owner/admin tenant members can change a theme.
 - **VERIFIED:** the override is server-side and reads only server environment variables; the client cannot submit or toggle it.
-- Enable both variables in the approved testing environment:
+- Enable both variables in an approved non-production testing environment:
   - `MENU_THEME_TESTING_OVERRIDE=true`
   - `MENU_THEME_TESTING_OVERRIDE_EXPIRES_AT=<future ISO-8601 timestamp>`
-- Both values are required. A missing, invalid, or expired timestamp means the override is OFF.
+- **VERIFIED:** the override is hard-disabled whenever Vercel reports `VERCEL_ENV=production`.
+- Both values are required outside production. A missing, invalid, or expired timestamp means the override is OFF.
 - The override affects only premium-theme entitlement checking. Inactive subscription status remains enforced.
 
 ## Default behavior
@@ -37,17 +38,19 @@ Temporarily allow authenticated restaurant owners/admins to save any public/gene
 - Existing subscription status check remains enforced.
 - Theme keys are still normalized against the canonical registry.
 - The override must have a future expiry; it cannot be enabled indefinitely through a single boolean.
+- **VERIFIED:** production Vercel deployments cannot activate the override even if the two testing variables are accidentally present.
 - When active for a premium save, the server logs the tenant, theme, expiry, and Vercel environment for operational evidence.
 
 ## Disable/revert
 1. Set `MENU_THEME_TESTING_OVERRIDE=false`, or remove the variable.
 2. Remove the expiry variable as well when the testing period ends.
-3. Redeploy the approved environment if its platform requires deployment for environment changes.
+3. Redeploy the approved non-production environment if its platform requires deployment for environment changes.
 4. The expiry timestamp independently disables the override even if the boolean is accidentally left true.
+5. Production remains protected by the `VERCEL_ENV=production` hard stop regardless of testing-variable state.
 
 ## Test results
-- **VERIFIED:** unit tests cover default-off behavior, future expiry, expired override, premium unlock with override, and normal entitlement behavior without override.
-- **UNKNOWN:** live production environment variables cannot be inspected through the available repository/deployment read tools; no claim is made that the override is currently enabled in Vercel.
+- **VERIFIED:** unit tests cover default-off behavior, future expiry, expired override, production hard-disable, preview/local enablement, and normal entitlement behavior without override.
+- **UNKNOWN:** live production environment variables cannot be inspected through the available deployment read tools; no claim is made that the testing variables are currently configured.
 
 ## Review / expiry reminder
-The override is temporary test infrastructure. Review its environment state before every release and **disable it before commercial production launch**. Do not silently carry the flag into permanent billing enforcement.
+The override remains temporary test infrastructure. Review its environment state before every release and disable it in non-production environments when testing ends. The production hard stop must remain in place; do not convert the override into permanent billing enforcement.
