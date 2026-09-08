@@ -4,40 +4,40 @@ import test from "node:test";
 
 test("Taste uses the supplied olive, cream and gold palette", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /--taste-green:#344331/);
-  assert.match(styles, /--taste-gold:#b78a42/);
-  assert.match(styles, /--taste-cream:#f6f0e5/);
-  assert.match(styles, /--taste-line:#e6dac7/);
+  assert.match(styles, /--taste-green:\s*#344331/);
+  assert.match(styles, /--taste-gold:\s*#b78a42/);
+  assert.match(styles, /--taste-cream:\s*#f6f0e5/);
+  assert.match(styles, /--taste-line:\s*#e6dac7/);
 });
 
 test("Taste hero is image-led and full bleed", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /header\{position:relative!important;min-height:27rem/);
-  assert.match(styles, /header>div:first-child img[\s\S]*object-fit:cover!important/);
-  assert.match(styles, /header>div.relative[\s\S]*min-height:27rem/);
+  assert.match(styles, /\.taste-hero\s*\{[\s\S]*min-height:/);
+  assert.match(styles, /\.taste-hero-image\s*\{[\s\S]*object-fit:\s*cover/);
+  assert.match(styles, /\.taste-hero-overlay/);
 });
 
-test("Taste product cards remove the legacy white frame", async () => {
+test("Taste product rows remove the legacy card frame", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /editorial-product-card[\s\S]*border:0!important/);
-  assert.match(styles, /editorial-product-card[\s\S]*background:transparent!important/);
-  assert.match(styles, /editorial-product-card[\s\S]*border-bottom:1px solid var\(--taste-line\)!important/);
+  assert.match(styles, /\.taste-product-main\s*\{[\s\S]*border:\s*0/);
+  assert.match(styles, /\.taste-product\s*\{[\s\S]*border-bottom:\s*1px solid var\(--taste-line\)/);
+  assert.match(styles, /\.taste-product-image\s*\{[\s\S]*border-radius:\s*\.75rem/);
 });
 
 test("Taste product hierarchy keeps description visible and price below it", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /editorial-product-name[\s\S]*grid-row:1!important/);
-  assert.match(styles, /editorial-product-description[\s\S]*grid-row:2!important/);
-  assert.match(styles, /editorial-product-description[\s\S]*-webkit-line-clamp:unset!important/);
-  assert.match(styles, /editorial-product-price[\s\S]*grid-row:3!important/);
-  assert.match(styles, /editorial-product-price[\s\S]*direction:ltr!important/);
-  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:isolate!important/);
+  assert.match(styles, /\.taste-product-copy\s*>\s*p[\s\S]*overflow:\s*visible/);
+  assert.match(styles, /\.taste-product-copy\s*>\s*p[\s\S]*max-height:\s*none/);
+  assert.match(styles, /\.taste-product-price[\s\S]*white-space:\s*nowrap/);
+  assert.match(styles, /\.taste-product-price[\s\S]*unicode-bidi:\s*isolate/);
 });
 
-test("Taste removes duplicate quick-add/options presentation", async () => {
+test("Taste does not introduce Quick Add or options buttons", async () => {
+  const source = await readFile("src/components/templates/taste.tsx", "utf8");
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /public-menu-quick-add[\s\S]*display:none!important/);
-  assert.match(styles, /public-menu-options-action[\s\S]*display:none!important/);
+  assert.doesNotMatch(source, /public-menu-quick-add/);
+  assert.doesNotMatch(source, /public-menu-options-action/);
+  assert.match(styles, /\.taste-floating-cart/);
 });
 
 test("Taste preserves data-driven customer action ownership", async () => {
@@ -53,6 +53,6 @@ test("Taste preserves data-driven customer action ownership", async () => {
 
 test("Taste mobile rows preserve compact image-to-copy geometry", async () => {
   const styles = await readFile("src/theme-heritage.css", "utf8");
-  assert.match(styles, /@media \(max-width:520px\)[\s\S]*editorial-product-card[\s\S]*grid-template-columns:minmax\(5\.8rem,30%\)/);
-  assert.match(styles, /@media \(max-width:520px\)[\s\S]*editorial-product-description[\s\S]*font-size:\.75rem/);
+  assert.match(styles, /@media \(max-width: 540px\)[\s\S]*\.taste-product-main[\s\S]*minmax\(5\.8rem, 30%\)/);
+  assert.match(styles, /@media \(max-width: 540px\)[\s\S]*\.taste-product-copy\s*>\s*p[\s\S]*font-size:\s*\.76rem/);
 });
