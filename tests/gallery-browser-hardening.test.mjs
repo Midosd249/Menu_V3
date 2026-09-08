@@ -33,6 +33,17 @@ test("Gallery featured section presents one image-led item at a time", async () 
   assert.match(styles, /button > :first-child\s*\{\s*aspect-ratio:\s*4\s*\/\s*3/);
 });
 
+test("Gallery removes boxed card chrome from both legacy and shared-renderer cards", async () => {
+  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*border:\s*0\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*background:\s*transparent\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*box-shadow:\s*none\s*!important/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :first-child[\s\S]*border-radius:\s*1rem\s*!important/);
+  assert.match(styles, /public-menu-quick-add/);
+  assert.match(styles, /public-menu-options-action/);
+});
+
 test("Gallery hardening is loaded after the base Gallery stylesheet", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
 
@@ -46,4 +57,14 @@ test("Public menu root does not overwrite route-selected theme during hydration"
 
   assert.doesNotMatch(source, /<MenuThemeController\s*\/>/);
   assert.doesNotMatch(source, /import \{ MenuThemeController \}/);
+});
+
+test("Gallery final hardening clears legacy wrapper chrome and prevents description clipping", async () => {
+  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+
+  assert.match(styles, /html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li,\s*html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li > div,/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*border-width:\s*0\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*overflow:\s*visible\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*overflow:\s*visible\s*!important/);
+  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*height:\s*auto\s*!important/);
 });
