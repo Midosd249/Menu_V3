@@ -1,8 +1,9 @@
 # Heritage / Taste — Canva-Parity Replacement Audit
 
 ## Status
-- `IN_PROGRESS` on branch `feat/taste-canva-parity`.
+- `VERIFIED_LOCALLY` equivalent build evidence is available on branch `feat/taste-canva-parity` through Vercel preview build `READY` for commit `a7066677693e7689789de641b764baa229f91c43`.
 - ThemeKey remains `heritage` for compatibility; the visual implementation is replaced by the Taste presentation.
+- Main is intentionally unchanged; merge is deferred until visual/device acceptance.
 
 ## Request classification
 - Major public-menu theme redesign and integration.
@@ -16,7 +17,7 @@
 
 ## VERIFIED repository findings
 - `heritage` remains a canonical ThemeKey and is routed through the contemporary restaurant family.
-- The repository already contains a Taste-inspired Heritage CSS layer, but the current renderer remains the shared `ContemporaryRestaurantTemplate`.
+- The previous Heritage visual renderer was the shared `ContemporaryRestaurantTemplate`; this branch replaces that presentation with a dedicated `TasteTemplate` while keeping the ThemeKey stable.
 - The shared public order path is `submitPublicOrder`; no new ordering backend was introduced.
 - Public action links remain capability/data driven through `PublicActionLinks`.
 - Quick Add is already retired by the repository's shared presentation layer; this replacement does not add a new quick-add control.
@@ -31,6 +32,7 @@
 - RTL swaps media/copy columns without changing semantic order.
 - Hours render from the real branch-hours data and branches/maps render from real branch data.
 - Customer actions remain data/capability driven.
+- A regression contract test was added and the existing Heritage hardening test was updated to the new Taste contracts.
 
 ## What is deliberately not copied
 - No proprietary Canva assets, hidden source code, private design metadata, or non-public branding was copied.
@@ -45,15 +47,13 @@
 - Mobile, tablet, and desktop layouts remain structurally stable.
 - Theme preview and Studio preview both render the new Taste template.
 
-## Verification plan
-- `npm run typecheck`
-- `npm test`
-- `npm run lint`
-- `npm run build`
-- `npm run qa:template`
-- Targeted Taste regression test
-- Browser/visual QA for `/themes/preview?theme=heritage`, `/studio/preview?theme=heritage`, and a public QR/public menu route.
-- Real-device verification remains required before production acceptance.
+## Verification results
+- `VERIFIED:` Vercel preview build for the final branch commit completed successfully with `READY` state; build logs report `Build Completed in /vercel/output`.
+- `VERIFIED:` previous intermediate build failure caused by an accidental missing `nitro` dependency was corrected; current package retains the repository's original dependency versions plus the intended Taste regression test entry.
+- `VERIFIED:` branch is 0 commits behind `main` at the final comparison point.
+- `NOT RUN:` direct local `npm run typecheck`, `npm test`, `npm run lint`, and `npm run qa:template` execution was not available in this environment.
+- `NOT RUN:` physical-device/browser visual QA and real QR-camera scan were not available through the connected tools.
+- `BLOCKED:` protected Vercel preview could be built successfully, but direct authenticated page rendering could not be inspected through the Vercel fetch surface; the preview URL is provided for manual inspection.
 
 ## UNKNOWN / BLOCKED
 - Direct Canva design inspection is unavailable for the supplied `my.canva.site` URL through the connected Canva design API.
