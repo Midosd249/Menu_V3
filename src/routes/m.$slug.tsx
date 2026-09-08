@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { PublicMenuView } from "@/components/public-menu";
+import { TasteTemplate } from "@/components/templates/taste";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { SpecialtyCafeTemplate } from "@/components/templates/specialty-cafe";
 import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
@@ -101,11 +102,13 @@ export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: 
   useEffect(() => { setLang(locale); }, [locale, setLang]);
   function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); loadMenuWithRetry(slug, branch, locale).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch(() => { if (!instant) setState({ status: "error", message: failureMessage(locale, "unknown"), retry: load }); }); }
   useEffect(() => {
-    if (initialMenu) {
-      writeCachedMenu(cacheKey, initialMenu);
-      return;
-    }
+    if (initialMenu) { writeCachedMenu(cacheKey, initialMenu); return; }
     load(); // eslint-disable-line react-hooks/exhaustive-deps
   }, [slug, branch, initialMenu, locale]);
-  if (state.status === "loading") return <LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />; if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />; const activeTheme = previewTheme ?? state.menu.tenant.themeKey; const family = getThemeFamily(activeTheme); const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } }; return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
+  if (state.status === "loading") return <LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />;
+  if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
+  const activeTheme = previewTheme ?? state.menu.tenant.themeKey;
+  const family = getThemeFamily(activeTheme);
+  const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
+  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{activeTheme === "heritage" ? <TasteTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}</>;
 }
