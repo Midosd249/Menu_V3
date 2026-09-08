@@ -2,54 +2,50 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Heritage removes every decorative menu number", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /editorial-selection[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /editorial-category[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /editorial-hours[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /editorial-card-index[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /editorial-product-number[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /editorial-kicker span:nth-child\(2\)[\s\S]*display:\s*none\s*!important/);
+test("Taste removes legacy decorative menu numbers", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /data-menu-theme=\\"heritage\\"[\\s\\S]*display:none!important/);
 });
 
-test("Heritage homepage keeps a clear heading", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /editorial-section-heading[\s\S]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
-  assert.match(styles, /editorial-section-heading h2[\s\S]*line-height:\s*1\.3/);
+test("Taste uses the supplied olive, cream and gold palette", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /--taste-green:#344331/);
+  assert.match(styles, /--taste-gold:#b78a42/);
+  assert.match(styles, /--taste-cream:#f6f0e5/);
+  assert.match(styles, /--taste-line:#e6dac7/);
 });
 
-test("Heritage featured cards keep price in normal document flow", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /editorial-featured-card \.editorial-card-price[\s\S]*position:\s*static\s*!important/);
-  assert.match(styles, /editorial-featured-card \.editorial-card-price[\s\S]*white-space:\s*nowrap\s*!important/);
-  assert.match(styles, /editorial-featured-card \.editorial-card-price[\s\S]*unicode-bidi:\s*isolate\s*!important/);
-  assert.match(styles, /editorial-featured-card \.editorial-card-title[\s\S]*overflow-wrap:\s*anywhere/);
+test("Taste hero is image-led and full bleed", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /header\{position:relative!important;min-height:27rem/);
+  assert.match(styles, /header>div:first-child img[\s\S]*object-fit:cover!important/);
+  assert.match(styles, /header>div.relative[\s\S]*min-height:27rem/);
 });
 
-test("Heritage category products place price on its own row below the description", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\(6\.9rem, 27%\)\s+minmax\(0, 1fr\)/);
-  assert.match(styles, /editorial-product-copy[\s\S]*display:\s*grid\s*!important/);
-  assert.match(styles, /editorial-product-copy[\s\S]*grid-template-rows:\s*auto auto auto auto/);
-  assert.match(styles, /editorial-product-topline[\s\S]*display:\s*contents\s*!important/);
-  assert.match(styles, /editorial-product-name[\s\S]*grid-row:\s*1/);
-  assert.match(styles, /editorial-product-description[\s\S]*grid-row:\s*2/);
-  assert.match(styles, /editorial-product-price[\s\S]*grid-row:\s*3/);
-  assert.match(styles, /editorial-product-price[\s\S]*position:\s*static\s*!important/);
-  assert.match(styles, /editorial-product-price[\s\S]*direction:\s*ltr\s*!important/);
-  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:\s*isolate\s*!important/);
-  assert.match(styles, /editorial-product-tags[\s\S]*grid-row:\s*4/);
+test("Taste product cards remove the legacy white frame", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /editorial-product-card[\s\S]*border:0!important/);
+  assert.match(styles, /editorial-product-card[\s\S]*background:transparent!important/);
+  assert.match(styles, /editorial-product-card[\s\S]*border-bottom:1px solid var\(--taste-line\)!important/);
 });
 
-test("Heritage action rail gives language a deliberate header position", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /editorial-actions-wrap[\s\S]*position:\s*relative\s*!important/);
-  assert.match(styles, /editorial-actions-wrap[\s\S]*margin:\s*-1\.1rem auto 0\s*!important/);
-  assert.match(styles, /editorial-lang-toggle[\s\S]*order:\s*-1\s*!important/);
-  assert.match(styles, /editorial-lang-toggle button\[aria-pressed="true"\][\s\S]*background:\s*var\(--heritage-brass-final\)\s*!important/);
+test("Taste product hierarchy keeps description visible and price below it", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /editorial-product-name[\s\S]*grid-row:1!important/);
+  assert.match(styles, /editorial-product-description[\s\S]*grid-row:2!important/);
+  assert.match(styles, /editorial-product-description[\s\S]*-webkit-line-clamp:unset!important/);
+  assert.match(styles, /editorial-product-price[\s\S]*grid-row:3!important/);
+  assert.match(styles, /editorial-product-price[\s\S]*direction:ltr!important/);
+  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:isolate!important/);
 });
 
-test("Heritage retains data-driven customer action ownership", async () => {
+test("Taste removes duplicate quick-add/options presentation", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /public-menu-quick-add[\s\S]*display:none!important/);
+  assert.match(styles, /public-menu-options-action[\s\S]*display:none!important/);
+});
+
+test("Taste preserves data-driven customer action ownership", async () => {
   const source = await readFile("src/components/public-action-links.tsx", "utf8");
   const actions = await readFile("src/lib/menu/public-actions.ts", "utf8");
   assert.match(source, /getPublicActions\(tenant, branch, lang\)/);
@@ -60,16 +56,8 @@ test("Heritage retains data-driven customer action ownership", async () => {
   assert.match(actions, /instagram \? \{ key: "instagram"/);
 });
 
-test("Heritage mobile rows preserve readable spacing and wrapping", async () => {
-  const styles = await readFile("src/theme-heritage-hardening.css", "utf8");
-  assert.match(styles, /@media \(max-width:\s*700px\)[\s\S]*editorial-featured-grid[\s\S]*grid-template-columns:\s*1fr/);
-  assert.match(styles, /@media \(max-width:\s*700px\)[\s\S]*editorial-product-card[\s\S]*column-gap:\s*0\.75rem/);
-  assert.match(styles, /@media \(max-width:\s*700px\)[\s\S]*editorial-product-description[\s\S]*line-height:\s*1\.5/);
-});
-
-test("Heritage retains the final cascade firewall", async () => {
-  const styles = await readFile("src/theme-heritage-cascade.css", "utf8");
-  assert.match(styles, /background-image:\s*none\s*!important/);
-  assert.match(styles, /header::before[\s\S]*opacity:\s*0\s*!important/);
-  assert.match(styles, /main ul > li > button[\s\S]*border-radius:\s*0\s*!important/);
+test("Taste mobile rows preserve compact image-to-copy geometry", async () => {
+  const styles = await readFile("src/theme-heritage.css", "utf8");
+  assert.match(styles, /@media \(max-width:520px\)[\s\S]*editorial-product-card[\s\S]*grid-template-columns:minmax\(5\.8rem,30%\)/);
+  assert.match(styles, /@media \(max-width:520px\)[\s\S]*editorial-product-description[\s\S]*font-size:\.75rem/);
 });
