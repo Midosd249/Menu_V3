@@ -8,6 +8,7 @@ const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
 const selectedSchema = z.object({
   variantId: z.string().max(80).nullable().optional(),
   modifierOptionIds: z.array(z.string().max(80)).max(40).default([]),
+  note: z.string().trim().max(500).optional().or(z.literal("")),
 });
 const itemSchema = z.object({ productId: z.string().max(80), quantity: z.number().int().min(1).max(20), selected: selectedSchema });
 const submitOrderSchema = z.object({
@@ -25,6 +26,7 @@ type ProductRow = { id: string; tenant_id: string; name_ar: string; name_en: str
 type VariantRow = { id: string; product_id: string; name_ar: string; name_en: string; price: number; is_available: boolean };
 type GroupRow = { id: string; product_id: string; name_ar: string; name_en: string; min_select: number; max_select: number; is_required: boolean };
 type OptionRow = { id: string; group_id: string; name_ar: string; name_en: string; price_delta: number; is_available: boolean };
+type PreparedSelectedOption = { type: "variant" | "modifier" | "note"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
 
 type PreparedItem = {
   id: string;
@@ -34,7 +36,7 @@ type PreparedItem = {
   lineTotal: number;
   productNameAr: string;
   productNameEn: string;
-  selectedOptions: Array<{ type: "variant" | "modifier"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number }>;
+  selectedOptions: PreparedSelectedOption[];
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
@@ -129,6 +131,8 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         const selectedOptions: PreparedItem["selectedOptions"] = [];
         if (variant) selectedOptions.push({ type: "variant", id: String(variant.id), nameAr: variant.name_ar, nameEn: variant.name_en, priceDelta: Number(variant.price) - Number(product.price) });
         for (const option of optionRows) selectedOptions.push({ type: "modifier", id: String(option.id), groupId: String(option.group_id), nameAr: option.name_ar, nameEn: option.name_en, priceDelta: Number(option.price_delta) });
+        const note = item.selected.note?.trim().slice(0, 500) ?? "";
+        if (note) selectedOptions.push({ type: "note", id: "item-note", nameAr: note, nameEn: note, priceDelta: 0 });
 
         const unitPrice = Number(variant?.price ?? product.price) + optionRows.reduce((sum, option) => sum + Number(option.price_delta), 0);
         prepared.push({
@@ -140,7 +144,6 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const subtotal = prepared.reduce((sum, item) => sum + item.lineTotal, 0);
       const orderId = newId();
       const eventId = newId();
-      // Keep the JSON record keys aligned with the snake_case database columns used by jsonb_to_recordset below.
       const itemsJson = JSON.stringify(prepared.map((item) => ({
         id: item.id,
         product_id: item.productId,
