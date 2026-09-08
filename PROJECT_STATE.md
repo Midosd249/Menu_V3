@@ -5,7 +5,7 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Verified application/documentation baseline before this reconciliation: `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` — `docs(gallery): record single featured item refinement`.
+- Current verified main head: `1813d013d5292afdbfd7cde8e85ff3efdecd8407` — `docs(tasks): reconcile W16 deployment evidence and remaining device verification`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Canonical Backend Identity (VERIFIED — 2026-09-06)
@@ -44,7 +44,7 @@
 - W13 Trust, Security, and Data Ownership — CLOSED / VERIFIED.
 - W14 Pricing, Packaging, and Commercial UX — CLOSED / VERIFIED / MERGED.
 - W15 Growth, Analytics, and Experimentation — CLOSED / VERIFIED; Quality Gate `34053348446` passed all required steps.
-- W16 QA, Browser/Device, and Release — IN_PROGRESS / DEPLOYMENT_BLOCKED; implementation completion and deployment verification remain separate.
+- W16 QA, Browser/Device, and Release — IN_PROGRESS / DEVICE_VERIFICATION_REMAINING; deployment verification is now directly verified.
 - W17 Public Pages & Themes Integration — W17-Q recovery is COMPLETED / MERGED; no new W17 implementation is active.
 
 ## Noir — PR #24 (VERIFIED)
@@ -63,7 +63,7 @@
 - Test result: `161/161` passing; `0` failures; `0` skips; `0` cancelled; `0` todo.
 - Browser Template QA: all five themes — Essential, Editorial, Noir, Heritage, Gallery — passed across mobile, tablet, and desktop.
 - Browser QA: `0` runtime console errors and `0px` horizontal overflow.
-- Typecheck, test suite, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance baseline upload, and preview shutdown all completed successfully in the gate.
+- Typecheck, tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance baseline upload, and preview shutdown all completed successfully in the gate.
 - UNKNOWN: physical-device rendering and manual screen-reader output remain unobserved.
 - No production deployment is inferred from this CI result.
 
@@ -71,7 +71,7 @@
 - Latest Gallery refinement is on `main`.
 - `e21c14fe337f820c371539b09d086b114216da94` — `fix(gallery): show one featured item at a time`.
 - `7d57bb0eb6dc5a5bf2198dc5b3219d0628973882` — `test(gallery): lock single featured presentation`.
-- `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` — `docs(gallery): record single featured item refinement` and the verified application/documentation baseline before this reconciliation.
+- `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` — `docs(gallery): record single featured item refinement`.
 - Gallery featured presentation now shows one image-led item at a time, with responsive media geometry; this is implementation evidence, not a new theme task.
 
 ## Editorial Image / Card Refinement
@@ -83,12 +83,15 @@
 
 ## W16 Release / Deployment State
 - VERIFIED: canonical repository branch is `main`.
-- VERIFIED: before reconciliation, the application/documentation head `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5` had a GitHub Vercel `failure` status pointing to `upgradeToPro=build-rate-limit`.
-- BLOCKED: that Vercel result is a provider/capacity or plan limitation; it is not evidence that the application build failed.
-- UNKNOWN: the current documentation-only reconciliation head's Vercel deployment identity/status is not used as production evidence.
-- UNKNOWN: current Vercel production deployment identity and deployed-commit match cannot be directly verified through the available Vercel connector surface.
-- UNKNOWN: production must not be stated to match current `main` without direct deployment evidence.
-- UNKNOWN: current production environment values cannot be inspected through the available repository/Vercel read surface.
+- VERIFIED: Vercel team is `team_4qTUNnhDhAW00uQId6JvETf4` and project is `menu-v3` / `prj_ydfrFBE7ZJVmuNnCOTv3WjWkhuH1`.
+- VERIFIED: production deployment `dpl_Cv1zzzwMaFKfzoDWUj6GtKXERdT1` is READY and targets `production`.
+- VERIFIED: deployment metadata identifies GitHub repository `Midosd249/Menu_V3`, branch `main`, and commit `e8ac80ec43774da98bd5bbe12bdf8260a244954f`.
+- VERIFIED: production aliases include `menu-v3-kohl.vercel.app`.
+- VERIFIED: deployment has no alias error and uses region `icn1`.
+- VERIFIED: no error/fatal production runtime logs were found in the queried six-hour window.
+- VERIFIED: the historical `getMyStudio` / `is_active` error is attached to older deployment `dpl_4vYyUatnMdhU5H5gJBTnbh8mG6NU`, not the current production deployment.
+- UNKNOWN: the current Vercel environment variable value for the Supabase connection is not exposed by the Vercel read surface.
+- UNKNOWN: live Supabase schema/RLS/grant parity has not been re-queried in this session.
 - UNKNOWN: physical-device rendering, manual screen-reader output, authenticated Owner keyboard traversal, QR-camera scanning, and Opera-specific behavior remain unobserved.
 
 ## Protected Completed Work
@@ -103,40 +106,29 @@
 - PROPOSED: invoke the Design Agent workflow for significant future visual/theme/layout/image/site-consistency tasks while the main agent retains product and infrastructure ownership.
 
 ## Exact Next TODO
-### Editorial browser/device verification against the latest refinement state
-- Verify the existing Editorial refinement using the supported browser viewport matrix and record evidence.
-- Do not start new theme refinement unless new evidence requires it.
-- Keep production deployment verification separate from implementation verification.
+### Physical-device and manual accessibility verification
+- Verify the current production menu on a real Android/iOS device at small, standard, and large mobile widths.
+- Check Arabic RTL, English LTR, mixed-direction content, long product names/prices, missing images, product details, cart open/closed, sticky/floating controls, safe areas, and scrolling.
+- Perform manual screen-reader/focus checks where supported.
+- Verify QR-camera scanning and record any reproducible defect.
+- Do not reopen completed theme implementation unless a real-device defect is reproduced.
 
-## Session Log — 2026-09-07 — Canonical Continuity Reconciliation
-- VERIFIED: reconciliation was performed against the actual GitHub repository state, current `main` ref, recent Git history, PR #24, PR #26, Quality Gate `34080681231`, Gallery commits, current GitHub Vercel status, and the active continuity files.
-- VERIFIED: PR #24 is MERGED at `d2401a9276719bdab4305f89160aba2ca15f0b58`.
-- VERIFIED: PR #26 is MERGED at `219f79024fec088c6a9e2e1bd050d6fe2e394e91`.
-- VERIFIED: Quality Gate `34080681231` passed `161/161` tests with zero failures and zero skips and passed all-theme browser QA across mobile/tablet/desktop with zero console errors and `0px` horizontal overflow.
-- VERIFIED: latest Gallery refinement is represented by `e21c14fe337f820c371539b09d086b114216da94`, test `7d57bb0eb6dc5a5bf2198dc5b3219d0628973882`, and documentation `bd84d9f663e74eb166c3ad8d89a97521d0c66ce5`.
-- VERIFIED: continuity files had stale pre-closure claims for Noir/W17-Q and did not reflect the latest Gallery refinement.
-- VERIFIED: implementation status is separated from deployment status; the pre-reconciliation Vercel `build-rate-limit` evidence is retained as a platform/deployment limitation.
-- UNKNOWN: physical-device and manual screen-reader evidence remain unverified.
-- BLOCKED: production commit match remains unverified through the available Vercel surface.
-- VERIFIED: no application code, template, test, migration, dependency, CI/CD, Vercel setting, environment variable, or deployment configuration was changed by this reconciliation.
-- Next TODO: Editorial browser/device verification against the latest refinement state.
+## Release Identity Verification — 2026-09-08
+- VERIFIED: Vercel team `Midosd2's projects` is `team_4qTUNnhDhAW00uQId6JvETf4`.
+- VERIFIED: Vercel project `menu-v3` is `prj_ydfrFBE7ZJVmuNnCOTv3WjWkhuH1` and is linked to GitHub repository `Midosd249/Menu_V3`.
+- VERIFIED: production deployment `dpl_Cv1zzzwMaFKfzoDWUj6GtKXERdT1` is READY and explicitly targets production.
+- VERIFIED: deployment metadata records `main` and commit `e8ac80ec43774da98bd5bbe12bdf8260a244954f`.
+- VERIFIED: production aliases include `menu-v3-kohl.vercel.app`.
+- VERIFIED: no error/fatal production runtime logs were found during the queried six-hour window.
+- VERIFIED: the only aggregated runtime error found in the preceding 24 hours belongs to the older deployment `dpl_4vYyUatnMdhU5H5gJBTnbh8mG6NU`.
+- VERIFIED: no deployment was triggered by the verification itself.
+- Next TODO: physical-device and manual accessibility verification.
 
-## Session Log — 2026-09-07 — Research and Connected-Tools Discovery Agent
-- VERIFIED: existing specialized agent inventory contained `docs/agents/design-agent.md` but no adequate equivalent Research and Connected-Tools Discovery Agent.
-- VERIFIED: the new `docs/agents/research-connected-tools-agent.md` is an internal AI workflow and does not represent a human collaborator, teammate, contributor, or developer.
-- VERIFIED: the workflow requires repository-first evidence, dynamic discovery of currently available connected tools, relevance/authorization/safety selection, and explicit side-effect authorization.
-- VERIFIED: AGENTS and SESSION_PROTOCOL now invoke the new research workflow for consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work.
-- VERIFIED: no application, theme, test, migration, dependency, CI/CD, Vercel configuration, environment variable, or product behavior changed.
-- UNKNOWN: browser/connected-service availability remains session-dependent and must be rediscovered dynamically for each task.
-- Next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
-
-## Session Log — 2026-09-07 — Automatic Specialist Routing and Orchestration
-- VERIFIED: the existing Research and Connected-Tools Discovery Agent at `docs/agents/research-connected-tools-agent.md` and Design Agent at `docs/agents/design-agent.md` were inspected; no duplicate specialist agent was created.
-- VERIFIED: `docs/automatic-specialist-routing.md` establishes the Principal Engineer as the single orchestration point for natural-language user requests and maps task classes to relevant internal AI workflows.
-- VERIFIED: routing includes automatic use of project memory, proportional repository-first research, Design Agent, QA/regression, Security/data, and Release/reliability workflows when their risk surfaces apply.
-- VERIFIED: connected tools remain dynamically discovered and are selected only when available, authorized, relevant, safe, and materially useful.
-- VERIFIED: all specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
-- VERIFIED: no application code, theme implementation, tests, migrations, dependencies, CI/CD, Vercel configuration, environment variables, deployment configuration, authentication, authorization, subscription, entitlement, tenant isolation, branch isolation, or product behavior changed.
-- UNKNOWN: future connected-tool availability remains session-dependent and must be rediscovered per task.
-- BLOCKED: the remote GitHub file-writing surface does not expose a multi-file batch-commit operation; documentation updates therefore require the minimum technically possible separate file commits.
-- Next TODO remains unchanged: Editorial browser/device verification against the latest refinement state.
+## Session Log — 2026-09-08 — Release Identity Verification
+- VERIFIED: current Vercel project identity, GitHub repository linkage, production deployment target, READY state, production aliases, and deployed commit were directly inspected.
+- VERIFIED: production runtime error/fatal query returned no entries in the queried six-hour window.
+- VERIFIED: historical `getMyStudio` / `is_active` error is isolated to an older deployment.
+- VERIFIED: the repository-declared canonical Supabase identity remains `ublxptcqefujkbeepylc` with schema `menu_v3`.
+- UNKNOWN: current production environment variable values and live Supabase RLS/schema parity.
+- UNKNOWN: physical-device and manual accessibility evidence.
+- Next TODO: physical-device and manual accessibility verification.
