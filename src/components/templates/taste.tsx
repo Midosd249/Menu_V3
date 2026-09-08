@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Clock3, MapPin, Minus, Plus, Search, ShoppingBag, Sparkles, X } from "lucide-react";
+import { Clock3, MapPin, Minus, Plus, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
 import { getGuestSessionId } from "@/lib/menu/session";
+import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
@@ -12,7 +13,7 @@ import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 
-type CartItem = { key: string; product: Product; options: ProductOptions; variantId: string; modifierOptionIds: string[]; unitPrice: number; quantity: number };
+type CartItem = { key: string; product: Product; options: ProductOptions; variantId: string; modifierOptionIds: string[]; note: string; unitPrice: number; quantity: number };
 
 type Props = { menu: PublicMenu; preview?: boolean };
 
@@ -21,6 +22,7 @@ function ProductSheet({ lang, product, options, close, add, submitting }: { lang
   const groups = options?.groups.filter((g) => g.isActive) ?? [];
   const [variantId, setVariantId] = useState(variants[0]?.id ?? "");
   const [selected, setSelected] = useState<string[]>([]);
+  const [itemNote, setItemNote] = useState("");
   const [error, setError] = useState("");
   const basePrice = variants.find((v) => v.id === variantId)?.price ?? product.price;
   const optionTotal = (options?.options ?? []).filter((o) => selected.includes(o.id)).reduce((sum, o) => sum + o.priceDelta, 0);
@@ -38,7 +40,8 @@ function ProductSheet({ lang, product, options, close, add, submitting }: { lang
         return;
       }
     }
-    add({ key: `${product.id}:${variantId}:${[...selected].sort().join(",")}`, product, options: options ?? { variants: [], groups: [], options: [] }, variantId, modifierOptionIds: [...selected].sort(), unitPrice: total, quantity: 1 });
+    const note = itemNote.trim().slice(0, 500);
+    add({ key: `${product.id}:${variantId}:${[...selected].sort().join(",")}:${note}`, product, options: options ?? { variants: [], groups: [], options: [] }, variantId, modifierOptionIds: [...selected].sort(), note, unitPrice: total, quantity: 1 });
     close();
   };
   useEffect(() => {
@@ -57,6 +60,7 @@ function ProductSheet({ lang, product, options, close, add, submitting }: { lang
           {product.allergens ? <p className="taste-allergen"><strong>{text(lang, "مسببات الحساسية:", "Allergens:")}</strong> {product.allergens}</p> : null}
           {variants.length ? <fieldset className="taste-option-group"><legend>{text(lang, "الحجم", "Size")}</legend>{variants.map((variant) => <label key={variant.id} className={cn("taste-option", variantId === variant.id && "is-selected")}><span><input type="radio" name={`taste-size-${product.id}`} checked={variantId === variant.id} onChange={() => setVariantId(variant.id)} />{text(lang, variant.nameAr, variant.nameEn)}</span><MenuPrice price={variant.price} currency={product.currency} lang={lang} /></label>)}</fieldset> : null}
           {groups.map((group) => <fieldset key={group.id} className="taste-option-group"><legend>{text(lang, group.nameAr, group.nameEn)} {group.isRequired ? "*" : ""}</legend><p>{text(lang, `اختر ${group.minSelect} إلى ${group.maxSelect}`, `Choose ${group.minSelect} to ${group.maxSelect}`)}</p>{(options?.options ?? []).filter((option) => option.groupId === group.id && option.isAvailable).map((option) => <label key={option.id} className="taste-option"><span><input type={group.maxSelect === 1 ? "radio" : "checkbox"} name={`taste-modifier-${product.id}-${group.id}`} checked={selected.includes(option.id)} onChange={() => toggle(group.id, option.id, group.maxSelect)} />{text(lang, option.nameAr, option.nameEn)}</span><span>{option.priceDelta === 0 ? "—" : `${option.priceDelta > 0 ? "+" : ""}${formatSar(option.priceDelta, lang)}`}</span></label>)}</fieldset>)}
+          <label className="taste-item-note"><span>{text(lang, "ملاحظة للصنف (اختياري)", "Item note (optional)")}</span><textarea value={itemNote} maxLength={500} onChange={(event) => setItemNote(event.target.value)} placeholder={text(lang, "مثال: بدون بصل، الصوص على الجانب...", "Example: no onions, sauce on the side...")} rows={3} /></label>
           {error ? <p className="taste-error" role="alert">{error}</p> : null}
           <button type="button" disabled={submitting} onClick={confirm} className="taste-primary-button">{text(lang, `أضف للطلب · ${formatSar(total, lang)}`, `Add to order · ${formatSar(total, lang)}`)}</button>
         </div>
@@ -77,8 +81,8 @@ function CartSheet({ lang, items, setItems, close, submit, error, submitting }: 
     <div className="taste-dialog-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && close()}>
       <section role="dialog" aria-modal="true" aria-labelledby="taste-cart-title" className="taste-cart">
         <header className="taste-dialog-header"><div><h2 id="taste-cart-title">{text(lang, "سلة الطلب", "Your order")}</h2><small>{count} {text(lang, "صنف", "items")}</small></div><button type="button" onClick={close} aria-label={text(lang, "إغلاق", "Close")}><X className="size-5" /></button></header>
-        <div className="taste-cart-body">{items.map((item) => <article key={item.key} className="taste-cart-item"><MenuMedia src={item.product.imageUrl} alt="" className="taste-cart-image" /><div className="min-w-0 flex-1"><h3>{text(lang, item.product.nameAr, item.product.nameEn)}</h3><MenuPrice price={item.unitPrice * item.quantity} currency={item.product.currency} lang={lang} className="text-sm" /></div><div className="taste-qty"><button type="button" onClick={() => change(item.key, -1)} aria-label={text(lang, "تقليل الكمية", "Decrease quantity")}><Minus className="size-3.5" /></button><span>{item.quantity}</span><button type="button" onClick={() => change(item.key, 1)} aria-label={text(lang, "زيادة الكمية", "Increase quantity")}><Plus className="size-3.5" /></button></div></article>)}
-          {items.length ? <div className="taste-customer-fields"><input value={name} onChange={(event) => setName(event.target.value)} placeholder={text(lang, "الاسم *", "Name *")} /><input value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" placeholder={text(lang, "رقم الجوال *", "Phone *")} /><input value={email} onChange={(event) => setEmail(event.target.value)} type="email" placeholder={text(lang, "البريد الإلكتروني (اختياري)", "Email (optional)")} /><textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder={text(lang, "ملاحظات", "Notes")} />{error ? <p className="taste-error" role="alert">{error}</p> : null}</div> : <div className="taste-empty-cart">{text(lang, "السلة فارغة", "Your cart is empty")}</div>}</div>
+        <div className="taste-cart-body">{items.map((item) => <article key={item.key} className="taste-cart-item"><MenuMedia src={item.product.imageUrl} alt="" className="taste-cart-image" /><div className="min-w-0 flex-1"><h3>{text(lang, item.product.nameAr, item.product.nameEn)}</h3>{item.note ? <p className="text-xs leading-5 opacity-70">{text(lang, "ملاحظة:", "Note:")} {item.note}</p> : null}<MenuPrice price={item.unitPrice * item.quantity} currency={item.product.currency} lang={lang} className="text-sm" /></div><div className="taste-qty"><button type="button" onClick={() => change(item.key, -1)} aria-label={text(lang, "تقليل الكمية", "Decrease quantity")}><Minus className="size-3.5" /></button><span>{item.quantity}</span><button type="button" onClick={() => change(item.key, 1)} aria-label={text(lang, "زيادة الكمية", "Increase quantity")}><Plus className="size-3.5" /></button></div></article>)}
+          {items.length ? <div className="taste-customer-fields"><input value={name} onChange={(event) => setName(event.target.value)} placeholder={text(lang, "الاسم *", "Name *")} /><input value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" placeholder={text(lang, "رقم الجوال *", "Phone *")} /><input value={email} onChange={(event) => setEmail(event.target.value)} type="email" placeholder={text(lang, "البريد الإلكتروني (اختياري)", "Email (optional)")} /><textarea value={notes} onChange={(event) => setNotes(event.target.value)} placeholder={text(lang, "ملاحظات على الطلب", "Order notes")} />{error ? <p className="taste-error" role="alert">{error}</p> : null}</div> : <div className="taste-empty-cart">{text(lang, "السلة فارغة", "Your cart is empty")}</div>}</div>
         {items.length ? <footer className="taste-cart-footer"><div><span>{text(lang, "الإجمالي", "Total")}</span><strong>{formatSar(total, lang)}</strong></div><button type="button" disabled={submitting || name.trim().length < 2 || phone.trim().length < 8} onClick={() => submit({ name, phone, email, notes })} className="taste-primary-button">{submitting ? text(lang, "جاري الإرسال…", "Submitting…") : text(lang, "تأكيد الطلب", "Submit order")}</button></footer> : null}
       </section>
     </div>
@@ -118,9 +122,13 @@ export function TasteTemplate({ menu, preview = false }: Props) {
     const existing = current.find((entry) => entry.key === item.key);
     return existing ? current.map((entry) => entry.key === item.key ? { ...entry, quantity: Math.min(20, entry.quantity + 1) } : entry) : [...current, item];
   });
+  const addSimpleProduct = (product: Product) => {
+    if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return;
+    add({ key: quickAddKey(product.id), product, options: { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], note: "", unitPrice: product.price, quantity: 1 });
+  };
   const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => {
     setSubmitting(true); setOrderError("");
-    const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds } })) } });
+    const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds, note: item.note || undefined } })) } });
     setSubmitting(false);
     if (!result.ok) { setOrderError(result.error); return; }
     setCart([]); setCartOpen(false); setSuccess(result.data.orderNumber);
@@ -149,7 +157,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
       <main id="taste-menu" className="taste-main">
         {featured.length ? <section className="taste-section taste-featured"><div className="taste-section-heading"><div><span>{text(lang, "اختياراتنا", "Our picks")}</span><h2>{text(lang, "أطباق تستحق التجربة", "Worth trying")}</h2></div></div><div className="taste-featured-grid">{featured.map((product) => <button type="button" key={product.id} className="taste-featured-card" onClick={() => openProduct(product)}><MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="taste-featured-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><div><h3>{text(lang, product.nameAr, product.nameEn)}</h3><p>{text(lang, product.descriptionAr, product.descriptionEn)}</p><MenuPrice price={product.price} currency={product.currency} lang={lang} /></div></button>)}</div></section> : null}
 
-        <section className="taste-section"><div className="taste-section-heading"><div><span>{text(lang, "قائمة الطعام", "Menu")}</span><h2>{text(lang, "اكتشف القائمة", "Explore the menu")}</h2></div><p>{filtered.length} {text(lang, "صنف", "items")}</p></div><div className="taste-product-list">{filtered.length ? filtered.map((product) => <article key={product.id} className="taste-product"><button type="button" className="taste-product-main" onClick={() => openProduct(product)}><MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="taste-product-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><div className="taste-product-copy"><div className="taste-product-title"><h3>{text(lang, product.nameAr, product.nameEn)}</h3></div><p>{text(lang, product.descriptionAr, product.descriptionEn)}</p><div className="taste-product-price"><MenuPrice price={product.price} currency={product.currency} lang={lang} /></div>{product.dietaryLabels.length ? <div className="taste-product-tags">{product.dietaryLabels.map((label) => <MenuBadge key={label} tone="muted">{label}</MenuBadge>)}</div> : null}</div></button></article>) : <div className="taste-empty-state"><Search className="size-8" /><h3>{text(lang, "لم نجد ما تبحث عنه", "Nothing found")}</h3><p>{text(lang, "جرّب كلمة أخرى أو اختر تصنيفًا مختلفًا.", "Try another search or category.")}</p></div>}</div></section>
+        <section className="taste-section"><div className="taste-section-heading"><div><span>{text(lang, "قائمة الطعام", "Menu")}</span><h2>{text(lang, "اكتشف القائمة", "Explore the menu")}</h2></div><p>{filtered.length} {text(lang, "صنف", "items")}</p></div><div className="taste-product-list">{filtered.length ? filtered.map((product) => <article key={product.id} className="taste-product relative"><button type="button" className="taste-product-main" onClick={() => openProduct(product)}><MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="taste-product-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><div className="taste-product-copy"><div className="taste-product-title"><h3>{text(lang, product.nameAr, product.nameEn)}</h3></div><p>{text(lang, product.descriptionAr, product.descriptionEn)}</p><div className="taste-product-price"><MenuPrice price={product.price} currency={product.currency} lang={lang} /></div>{product.dietaryLabels.length ? <div className="taste-product-tags">{product.dietaryLabels.map((label) => <MenuBadge key={label} tone="muted">{label}</MenuBadge>)}</div> : null}</div></button>{getQuickAddDecision(product, menu.productOptions?.[product.id]) === "eligible" ? <button type="button" onClick={(event) => { event.stopPropagation(); addSimpleProduct(product); }} aria-label={text(lang, `إضافة ${product.nameAr || product.nameEn} للسلة`, `Add ${product.nameEn || product.nameAr} to cart`)} title={text(lang, "إضافة للسلة", "Add to cart")} className="absolute left-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/95 text-[#344331] shadow-md ring-1 ring-black/5 backdrop-blur transition hover:scale-105 active:scale-95"><Plus className="size-5" /></button> : null}</article>) : <div className="taste-empty-state"><Search className="size-8" /><h3>{text(lang, "لم نجد ما تبحث عنه", "Nothing found")}</h3><p>{text(lang, "جرّب كلمة أخرى أو اختر تصنيفًا مختلفًا.", "Try another search or category.")}</p></div>}</div></section>
 
         {featured[0] ? <section className="taste-offer"><MenuMedia src={featured[0].imageUrl} alt="" className="taste-offer-image" /><div><span>{text(lang, "اختيار اليوم", "Today's pick")}</span><h2>{text(lang, "وليمة المشاركة", "Sharing feast")}</h2><p>{text(lang, featured[0].descriptionAr, featured[0].descriptionEn)}</p><button type="button" onClick={() => openProduct(featured[0])} className="taste-offer-button">{text(lang, "عرض الصنف", "View item")}</button></div></section> : null}
 
