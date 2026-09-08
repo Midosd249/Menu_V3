@@ -1,0 +1,142 @@
+/*
+ * Menu V3 — final public-menu visual polish
+ *
+ * Presentation-only corrections for the current Heritage evidence and the
+ * theme-preview cover art. Loaded after the existing theme layers so older
+ * presentation rules cannot reintroduce the observed geometry.
+ */
+
+/* Heritage: keep the persistent cart action as one centered bottom control. */
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar {
+  position: fixed !important;
+  inset-block-start: auto !important;
+  inset-inline: 0.75rem !important;
+  inset-block-end: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
+  width: min(calc(100% - 1.5rem), 42rem) !important;
+  max-width: 42rem !important;
+  margin-inline: auto !important;
+  margin-block: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.55rem !important;
+  padding: 0.45rem !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar > button:first-child {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar > a,
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar > button:last-child {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+
+/* Heritage: the information block is a readable editorial utility, not a
+   loose vertical stack. Keep every schedule row aligned and prevent Arabic
+   punctuation/time values from visually colliding. */
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours {
+  display: grid !important;
+  gap: 1rem !important;
+  width: 100% !important;
+  max-width: 42rem !important;
+  margin-inline: auto !important;
+  padding-block: 0.5rem 1rem !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  border-top: 1px solid var(--heritage-border, rgb(74 51 30 / 0.16)) !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours-grid > div {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  min-height: 2.65rem !important;
+  padding-block: 0.5rem !important;
+  border-bottom: 1px solid var(--heritage-border, rgb(74 51 30 / 0.16)) !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours-grid > div > *:last-child {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  white-space: nowrap !important;
+  text-align: end !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours .editorial-section-heading {
+  margin: 0 !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours .editorial-heading-rule {
+  align-self: end !important;
+}
+
+@media (max-width: 639px) {
+  html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar {
+    inset-inline: 0.65rem !important;
+    width: calc(100% - 1.3rem) !important;
+  }
+
+  html[data-menu-theme="heritage"] .menu-public-shell .editorial-hours-grid > div {
+    grid-template-columns: minmax(0, 1fr) minmax(7.2rem, auto) !important;
+    gap: 0.7rem !important;
+    min-height: 2.5rem !important;
+  }
+}
+
+/* Theme-preview cover art: each protected theme gets a distinct, premium
+   editorial cover while real tenant cover data remains untouched. */
+.menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+.menu-public-shell[data-menu-preview="true"] header > div:first-child img {
+  opacity: 0 !important;
+}
+
+html[data-menu-theme="essential"] .menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-image: url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=88") !important;
+}
+
+html[data-menu-theme="editorial"] .menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-image: url("https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1600&q=88") !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-image: url("https://images.unsplash.com/photo-1514437215073-8b5b8f9b7a4a?auto=format&fit=crop&w=1600&q=88") !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-image: url("https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=1600&q=88") !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell[data-menu-preview="true"] header > div:first-child {
+  background-image: url("https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=1600&q=88") !important;
+}
+
+/* Preserve the theme-specific visual mood while keeping text readable over
+   the new cover art. */
+html[data-menu-theme="essential"] .menu-public-shell[data-menu-preview="true"] header > div:first-child::after,
+html[data-menu-theme="editorial"] .menu-public-shell[data-menu-preview="true"] header > div:first-child::after,
+html[data-menu-theme="noir"] .menu-public-shell[data-menu-preview="true"] header > div:first-child::after,
+html[data-menu-theme="heritage"] .menu-public-shell[data-menu-preview="true"] header > div:first-child::after,
+html[data-menu-theme="gallery"] .menu-public-shell[data-menu-preview="true"] header > div:first-child::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.58));
+  pointer-events: none;
+}
