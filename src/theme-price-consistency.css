@@ -1,0 +1,131 @@
+/*
+ * Menu V3 — Global public-menu price consistency
+ *
+ * Presentation-only layer. Prices remain data-driven and are deliberately
+ * kept in normal document flow so Arabic, English, and mixed-direction values
+ * remain readable on every supported public theme.
+ *
+ * Reference: Essential's restrained name/price hierarchy.
+ */
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "name price"
+    "description description"
+    "meta meta";
+  align-items: start;
+  gap: 0.22rem 0.65rem;
+  min-width: 0;
+}
+
+html[dir="rtl"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+  text-align: right;
+}
+
+html[dir="ltr"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+  text-align: left;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:first-child {
+  grid-area: name;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span.line-clamp-2 {
+  grid-area: description;
+  min-width: 0;
+  margin-top: 0.05rem;
+  line-height: 1.5;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+  grid-area: price;
+  justify-self: end;
+  align-self: start;
+  min-width: max-content;
+  margin: 0;
+  padding: 0.1rem 0;
+  color: var(--menu-accent) !important;
+  font-size: 0.82rem;
+  font-weight: 750;
+  line-height: 1.3;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+html[dir="ltr"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+  justify-self: end;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:last-child {
+  grid-area: meta;
+  min-width: 0;
+}
+
+/* Featured cards use the same compact hierarchy without adding a badge or pill. */
+html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name price";
+  align-items: start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > span:first-child {
+  grid-area: name;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > bdi {
+  grid-area: price;
+  justify-self: end;
+  align-self: start;
+  min-width: max-content;
+  padding: 0;
+  color: var(--menu-accent) !important;
+  font-size: 0.78rem;
+  font-weight: 750;
+  line-height: 1.35;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Preserve the deliberately art-directed Editorial / Heritage / Noir price
+   systems while enforcing the same bidi and flow guarantees. */
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-price,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-price,
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-card-price,
+html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price,
+html[data-menu-theme="noir"] .menu-public-shell .noir-template-featured-price {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  white-space: nowrap !important;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 420px) {
+  html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+    gap: 0.18rem 0.5rem;
+  }
+
+  html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+    font-size: 0.76rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme] .menu-public-shell main > section ul > li > div > button {
+    transition-duration: 0.01ms !important;
+  }
+}
