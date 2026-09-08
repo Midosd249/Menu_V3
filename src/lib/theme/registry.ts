@@ -53,12 +53,12 @@ const definitions: readonly ThemeDefinition[] = [
     layout: { header: "immersive", productGrid: "list", productCard: "editorial", categoryNav: "sticky", imageRatio: "portrait" }, capabilities: { dark: true, imageFirst: true, compact: false, immersive: true, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "cinematic", preview: { className: "preview-noir" },
   },
   {
-    key: "heritage", family: "contemporary-restaurant", tier: "free", name: { ar: "أصالة", en: "Heritage" },
-    description: { ar: "ضيافة عربية معاصرة تستلهم الخامات والنقوش بدون ازدحام بصري.", en: "Contemporary Arabic hospitality inspired by material, pattern and craft." },
-    promise: { ar: "هوية عربية فاخرة تبدو أصلية لا مزخرفة.", en: "A distinctly Arabic luxury identity without ornament overload." },
-    tags: [{ ar: "مجاني", en: "Free" }, { ar: "عربي", en: "Arabic" }, { ar: "سعودي", en: "Saudi" }],
-    tokens: { ...baseTokens, colors: { background: "#eee3d1", foreground: "#2b2118", surface: "#fbf6ec", surfaceMuted: "#e5d4bb", border: "#cbb391", primary: "#2b2118", primaryForeground: "#fffaf1", accent: "#986532", accentForeground: "#fffaf1", muted: "#75624f", mutedForeground: "#75624f" }, typography: { ...baseTokens.typography, headingWeight: 700, lineHeight: "1.65", letterSpacing: "0" }, shape: { radiusSm: "0.25rem", radiusMd: "0.625rem", radiusLg: "0.875rem", radiusXl: "1.25rem" }, spacing: { page: "1.125rem", section: "3rem", card: "1rem", gap: "1rem" }, effects: { shadow: "0 1px 0 rgb(67 45 25 / .10)", shadowHover: "0 18px 40px rgb(67 45 25 / .16)", overlay: "rgb(48 31 18 / .45)" } },
-    layout: { header: "hero", productGrid: "list", productCard: "horizontal", categoryNav: "scroll", imageRatio: "landscape" }, capabilities: { dark: false, imageFirst: true, compact: false, immersive: false, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "heritage", preview: { className: "preview-heritage" },
+    key: "heritage", family: "contemporary-restaurant", tier: "free", name: { ar: "مذاق", en: "Taste" },
+    description: { ar: "هوية مطعم عربية معاصرة مستوحاة من تصميم مذاق: أخضر زيتوني، كريمي وذهبي بهدوء فاخر.", en: "A contemporary Arabic restaurant identity inspired by Taste: olive green, cream and restrained gold." },
+    promise: { ar: "منيو فاخر يشبه موقع المطعم الحقيقي، لا قالباً جاهزاً.", en: "A premium restaurant menu that feels like the real brand, not a template." },
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "مذاق", en: "Taste" }, { ar: "بريميوم", en: "Premium" }],
+    tokens: { ...baseTokens, colors: { background: "#f6f0e5", foreground: "#344331", surface: "#fffdf8", surfaceMuted: "#ede3d1", border: "#e6dac7", primary: "#344331", primaryForeground: "#ffffff", accent: "#b78a42", accentForeground: "#ffffff", muted: "#756f63", mutedForeground: "#756f63" }, typography: { ...baseTokens.typography, headingWeight: 700, lineHeight: "1.6", letterSpacing: "-0.006em" }, shape: { radiusSm: "0.375rem", radiusMd: "0.75rem", radiusLg: "1rem", radiusXl: "1.5rem" }, spacing: { page: "1rem", section: "3rem", card: "0.95rem", gap: "0.9rem" }, effects: { shadow: "0 8px 24px rgb(52 67 49 / .07)", shadowHover: "0 18px 40px rgb(52 67 49 / .13)", overlay: "rgb(18 26 16 / .48)" } },
+    layout: { header: "hero", productGrid: "list", productCard: "editorial", categoryNav: "sticky", imageRatio: "landscape" }, capabilities: { dark: false, imageFirst: true, compact: false, immersive: false, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "heritage", preview: { className: "preview-heritage" },
   },
   {
     key: "gallery", family: "bakery-dessert", tier: "free", name: { ar: "غاليري", en: "Gallery" },
@@ -73,33 +73,10 @@ const definitions: readonly ThemeDefinition[] = [
 export const MENU_THEMES = definitions;
 export const DEFAULT_THEME_KEY: ThemeKey = "essential";
 const THEME_MAP = new Map<ThemeKey, ThemeDefinition>(definitions.map((theme) => [theme.key, theme]));
-
-const LEGACY_THEME_ALIASES: Record<string, ThemeKey> = {
-  minimal: "essential", coffee: "gallery", "fast-casual": "essential", "dark-dining": "noir", immersive: "noir",
-};
-
-export function normalizeThemeKey(value: unknown): ThemeKey | null {
-  if (typeof value !== "string") return null;
-  if (THEME_MAP.has(value as ThemeKey)) return value as ThemeKey;
-  return LEGACY_THEME_ALIASES[value] ?? null;
-}
-
-export function isThemeKey(value: unknown): value is ThemeKey {
-  return normalizeThemeKey(value) !== null;
-}
-
-export function getTheme(key: ThemeKey): ThemeDefinition {
-  return THEME_MAP.get(key) ?? THEME_MAP.get(DEFAULT_THEME_KEY)!;
-}
-
-export function getThemeFamily(key: ThemeKey): TemplateFamily {
-  return getTheme(key).family;
-}
-
-export function isPremiumTheme(_key: ThemeKey): boolean {
-  return false;
-}
-
-export function canUseTheme(_key: ThemeKey, _planCode: string | null | undefined): boolean {
-  return true;
-}
+const LEGACY_THEME_ALIASES: Record<string, ThemeKey> = { minimal: "essential", coffee: "gallery", "fast-casual": "essential", "dark-dining": "noir", immersive: "noir" };
+export function normalizeThemeKey(value: unknown): ThemeKey | null { if (typeof value !== "string") return null; if (THEME_MAP.has(value as ThemeKey)) return value as ThemeKey; return LEGACY_THEME_ALIASES[value] ?? null; }
+export function isThemeKey(value: unknown): value is ThemeKey { return normalizeThemeKey(value) !== null; }
+export function getTheme(key: ThemeKey): ThemeDefinition { return THEME_MAP.get(key) ?? THEME_MAP.get(DEFAULT_THEME_KEY)!; }
+export function getThemeFamily(key: ThemeKey): TemplateFamily { return getTheme(key).family; }
+export function isPremiumTheme(_key: ThemeKey): boolean { return false; }
+export function canUseTheme(_key: ThemeKey, _planCode: string | null | undefined): boolean { return true; }
