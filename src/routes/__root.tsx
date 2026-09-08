@@ -25,6 +25,7 @@ import menuPreviewLayerCss from "../menu-preview-layer.css?url";
 import heritageCascadeCss from "../theme-heritage-cascade.css?url";
 import quickAddCompactRefinementCss from "../quick-add-compact-refinement.css?url";
 import priceConsistencyCss from "../theme-price-consistency.css?url";
+import finalVisualPolishCss from "../theme-final-visual-polish.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -69,6 +70,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: heritageCascadeCss },
       { rel: "stylesheet", href: quickAddCompactRefinementCss },
       { rel: "stylesheet", href: priceConsistencyCss },
+      { rel: "stylesheet", href: finalVisualPolishCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
