@@ -57,6 +57,13 @@ html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:fo
   background: rgb(52 67 49 / 0.25);
 }
 
+/* Taste hero: the supplied design repeats the same tagline in the large
+ * heading and the supporting copy. Keep the supporting copy as the visible
+ * hero message and remove the duplicated oversized heading. */
+html[data-menu-theme="heritage"] .taste-page .taste-hero-copy > h1 {
+  display: none;
+}
+
 @media (max-width: 700px) {
   html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute {
     inset-inline-start: 0.45rem;
