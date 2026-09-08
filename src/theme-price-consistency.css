@@ -150,3 +150,100 @@ html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last
     transition-duration: 0.01ms !important;
   }
 }
+
+/* 2026-09-08 public-menu coherence refinement. */
+
+/* Product options are intentionally presented inside the existing item-detail
+   sheet. Do not expose a second options CTA in the catalogue itself. The main
+   product card remains the single entry point for variants/modifiers. */
+html[data-menu-theme] .menu-public-shell .public-menu-options-action {
+  display: none !important;
+}
+
+/* Keep the information row open to variable-length descriptions across every
+   theme. Image geometry remains owned by each theme's media wrapper. */
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Heritage uses the same stable bottom cart action surface as the other
+   non-Editorial themes. Keep it clear of the safe area and page content. */
+html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar {
+  position: fixed !important;
+  top: auto !important;
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
+  inset-inline: 0.75rem !important;
+  inset-block-start: auto !important;
+  width: auto !important;
+  max-width: 42rem;
+  margin-inline: auto !important;
+  z-index: 40 !important;
+}
+
+html[data-menu-theme="heritage"] .menu-public-shell main {
+  padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Noir footer/hours are part of the dark dining surface, not a white utility
+   block. Preserve the existing content and schedule data; only presentation
+   is changed. */
+html[data-menu-theme="noir"] .menu-public-shell footer {
+  background: #171311 !important;
+  color: #c9bbb0 !important;
+  border-color: #3a2e27 !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell footer > div,
+html[data-menu-theme="noir"] .menu-public-shell footer section,
+html[data-menu-theme="noir"] .menu-public-shell footer article {
+  background: transparent !important;
+  color: inherit !important;
+  border-color: #3a2e27 !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell footer h2,
+html[data-menu-theme="noir"] .menu-public-shell footer h3,
+html[data-menu-theme="noir"] .menu-public-shell footer strong {
+  color: #f6efe6 !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell footer a,
+html[data-menu-theme="noir"] .menu-public-shell footer button {
+  color: #e7d8ca !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell footer [class*="bg-white"],
+html[data-menu-theme="noir"] .menu-public-shell footer [class*="bg-paper"],
+html[data-menu-theme="noir"] .menu-public-shell footer [class*="bg-sand"] {
+  background: #211b18 !important;
+  color: #e7d8ca !important;
+}
+
+html[data-menu-theme="noir"] .menu-public-shell footer [class*="border-line"] {
+  border-color: #3a2e27 !important;
+}
+
+@media (max-width: 639px) {
+  html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar {
+    inset-inline: 0.75rem !important;
+    width: auto !important;
+    max-width: none;
+  }
+}
