@@ -114,6 +114,27 @@ html[data-menu-theme="noir"] .menu-public-shell .noir-template-featured-price {
   font-variant-numeric: tabular-nums;
 }
 
+/* Gallery card chrome is intentionally removed: image and typography should
+   read as an open editorial catalogue rather than boxed tiles. */
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :first-child {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :last-child,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child {
+  padding-inline: 0.2rem;
+}
+
 @media (max-width: 420px) {
   html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
     gap: 0.18rem 0.5rem;

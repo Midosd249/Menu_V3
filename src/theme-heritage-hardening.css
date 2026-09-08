@@ -161,7 +161,7 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-card {
   position: relative !important;
   display: grid !important;
   grid-template-columns: minmax(6.9rem, 27%) minmax(0, 1fr) !important;
-  grid-template-rows: auto !important;
+  grid-template-rows: auto auto auto auto !important;
   column-gap: 0.85rem !important;
   row-gap: 0 !important;
   align-items: start !important;
@@ -180,7 +180,7 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-card {
 html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-card { grid-template-columns: minmax(0, 1fr) minmax(6.9rem, 27%) !important; }
 html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-image {
   grid-column: 1;
-  grid-row: 1 / span 3;
+  grid-row: 1 / span 4;
   display: block;
   width: 100% !important;
   height: auto !important;
@@ -193,10 +193,8 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-image {
 html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-image { grid-column: 2; }
 html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-topline {
   grid-column: 2 !important;
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: start !important;
-  gap: 0.55rem !important;
+  grid-row: 1 !important;
+  display: block !important;
   min-width: 0 !important;
   margin: 0 !important;
 }
@@ -214,12 +212,12 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price {
   position: static !important;
   inset: auto !important;
   grid-column: 2 !important;
-  grid-row: 1 !important;
+  grid-row: 3 !important;
   justify-self: end !important;
-  align-self: start !important;
+  align-self: end !important;
   min-width: max-content !important;
-  margin: 0 !important;
-  padding: 0.2rem 0 !important;
+  margin: 0.55rem 0 0 !important;
+  padding: 0 !important;
   color: var(--heritage-brass-final) !important;
   font-size: 0.82rem !important;
   font-weight: 760 !important;
@@ -232,6 +230,7 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price {
 html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-price { grid-column: 1 !important; justify-self: end !important; }
 html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-description {
   grid-column: 2 !important;
+  grid-row: 2 !important;
   min-width: 0 !important;
   margin: 0.22rem 0 0 !important;
   color: var(--heritage-ink-soft-final) !important;
@@ -242,6 +241,7 @@ html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-descripti
 html[dir="rtl"][data-menu-theme="heritage"] .menu-public-shell .editorial-product-description { grid-column: 1 !important; }
 html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-tags {
   grid-column: 2 !important;
+  grid-row: 4 !important;
   min-width: 0;
   display: flex !important;
   flex-wrap: wrap !important;
