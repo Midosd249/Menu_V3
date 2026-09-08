@@ -1,118 +1,22 @@
-/* Menu V3 — unified Quick Add visual treatment
- * Behavior and eligibility remain owned by the existing renderers.
- * The control keeps a 44px hit target, while the visible mark is a small
- * icon-only plus placed over the product media for one consistent language.
+/* Menu V3 — Quick Add retirement layer
+ *
+ * Quick Add is intentionally removed from the public-menu experience.
+ * Product selection remains available through the existing product/details
+ * flow and the persistent cart remains unchanged.
+ *
+ * This file is loaded after the public theme layers so no theme-specific
+ * button geometry, background, border, transform, or positioning can leak
+ * a retired Quick Add control back into the rendered menu.
  */
 
 .public-menu-quick-add {
-  position: absolute;
-  z-index: 2;
-  inset-inline-start: 0.65rem;
-  top: 0.65rem;
-  width: 44px;
-  min-width: 44px;
-  height: 44px;
-  min-height: 44px;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #fffaf4;
-  font-size: 0;
-  line-height: 1;
-  flex: 0 0 44px;
-  box-shadow: none;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  display: none !important;
 }
 
-.public-menu-quick-add > svg {
-  width: 22px;
-  height: 22px;
-  flex: none;
-  stroke-width: 2.25;
-  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.62));
-}
-
-/* The shared renderer owns the card; this layer only establishes a positioning
- * context so the action can sit on the media without changing card geometry. */
-.menu-public-shell main > section > div > article,
-.menu-public-shell main ul > li > div,
-.editorial-featured-card-wrap,
-.editorial-product-card-wrap {
-  position: relative;
-}
-
-/* Keep the action on the media edge in both document directions. */
-.menu-public-shell main > section > div > article > .public-menu-quick-add,
-.menu-public-shell main ul > li > div > .public-menu-quick-add,
-.editorial-featured-card-wrap > .public-menu-quick-add,
-.editorial-product-card-wrap > .public-menu-quick-add {
-  inset-inline-start: 0.65rem;
-  inset-inline-end: auto;
-  top: 0.65rem;
-  margin: 0;
-  justify-self: auto;
-}
-
-.public-menu-quick-add:hover {
-  transform: translateY(-1px) scale(1.04);
-}
-
-.public-menu-quick-add:active {
-  transform: translateY(0) scale(0.96);
-}
-
-.public-menu-quick-add:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: -2px;
-  border-radius: 0.35rem;
-}
-
-/* Theme personality remains distinct through the icon color, not different
- * control shapes or sizes. */
-html[data-menu-theme="essential"] .public-menu-quick-add {
-  color: #fffaf4;
-}
-
-html[data-menu-theme="editorial"] .public-menu-quick-add {
-  color: #fffaf3;
-}
-
-html[data-menu-theme="noir"] .public-menu-quick-add {
-  color: #f0c28b;
-}
-
-html[data-menu-theme="heritage"] .public-menu-quick-add {
-  color: #fffaf1;
-}
-
+html[data-menu-theme="essential"] .public-menu-quick-add,
+html[data-menu-theme="editorial"] .public-menu-quick-add,
+html[data-menu-theme="noir"] .public-menu-quick-add,
+html[data-menu-theme="heritage"] .public-menu-quick-add,
 html[data-menu-theme="gallery"] .public-menu-quick-add {
-  color: #fffdf9;
-}
-
-/* A text-free action must remain discoverable against bright photography. */
-.public-menu-quick-add > svg {
-  paint-order: stroke fill;
-}
-
-@media (max-width: 700px) {
-  .public-menu-quick-add {
-    inset-inline-start: 0.5rem;
-    top: 0.5rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .public-menu-quick-add {
-    transition: none !important;
-  }
-
-  .public-menu-quick-add:hover,
-  .public-menu-quick-add:active {
-    transform: none;
-  }
+  display: none !important;
 }
