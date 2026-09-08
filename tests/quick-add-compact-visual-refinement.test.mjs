@@ -18,7 +18,7 @@ test("compact Quick Add layer is loaded after public theme layers", () => {
   assert.ok(price > quickAdd);
 });
 
-test("Quick Add keeps a 44px hit target with a small icon-only visual", () => {
+test("Quick Add keeps a 44px hit target with a smaller icon-only visual", () => {
   assert.match(refinement, /position: absolute;/);
   assert.match(refinement, /z-index: 2;/);
   assert.match(refinement, /width: 44px;/);
@@ -34,7 +34,7 @@ test("Quick Add keeps a 44px hit target with a small icon-only visual", () => {
   assert.doesNotMatch(refinement, /public-menu-options-action/);
 });
 
-test("Quick Add is positioned against card/media wrappers in shared and editorial renderers", () => {
+test("Quick Add is positioned against the card/media in shared and editorial renderers", () => {
   assert.match(refinement, /\.menu-public-shell main > section > div > article,\n\.menu-public-shell main ul > li > div,/);
   assert.match(refinement, /\.editorial-featured-card-wrap,\n\.editorial-product-card-wrap/);
   assert.match(refinement, /inset-inline-start: 0\.65rem;/);
