@@ -1,22 +1,85 @@
-/* Menu V3 — Quick Add retirement layer
- *
- * Quick Add is intentionally removed from the public-menu experience.
- * Product selection remains available through the existing product/details
- * flow and the persistent cart remains unchanged.
- *
- * This file is loaded after the public theme layers so no theme-specific
- * button geometry, background, border, transform, or positioning can leak
- * a retired Quick Add control back into the rendered menu.
+/* Menu V3 — Taste Quick Add refinement
+ * The action keeps the existing eligibility and cart behavior.
+ * Only the visual treatment is refined for the Taste presentation.
  */
 
 .public-menu-quick-add {
   display: none !important;
 }
 
-html[data-menu-theme="essential"] .public-menu-quick-add,
-html[data-menu-theme="editorial"] .public-menu-quick-add,
-html[data-menu-theme="noir"] .public-menu-quick-add,
-html[data-menu-theme="heritage"] .public-menu-quick-add,
-html[data-menu-theme="gallery"] .public-menu-quick-add {
-  display: none !important;
+/* Taste owns its Quick Add control locally. Keep the shared historical
+ * quick-add class retired so other themes cannot inherit this action. */
+html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute {
+  display: grid !important;
+  position: absolute;
+  inset-inline-start: 0.55rem;
+  inset-inline-end: auto;
+  top: 0.55rem;
+  z-index: 10;
+  width: 2.25rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  min-height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.7rem;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  place-items: center;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  font-size: 0;
+  line-height: 1;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute > svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.65));
+}
+
+html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:hover {
+  background: transparent;
+  transform: scale(1.06);
+}
+
+html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:active {
+  transform: scale(0.94);
+}
+
+html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:focus-visible {
+  outline: 2px solid #d9bb7d;
+  outline-offset: 2px;
+  background: rgb(52 67 49 / 0.25);
+}
+
+@media (max-width: 700px) {
+  html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute {
+    inset-inline-start: 0.45rem;
+    top: 0.45rem;
+    width: 2rem;
+    min-width: 2rem;
+    height: 2rem;
+    min-height: 2rem;
+  }
+
+  html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute > svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute {
+    transition: none !important;
+  }
+
+  html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:hover,
+  html[data-menu-theme="heritage"] .taste-page .taste-product > button.absolute:active {
+    transform: none;
+  }
 }
