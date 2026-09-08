@@ -16,9 +16,10 @@
 - **VERIFIED:** the first high-value catalogue section used structural selectors tied to the first section and `h2.text-sm`, making the intended information hierarchy brittle.
 - **INFERRED:** real data variation in product names, descriptions, and prices can create uneven card information regions and make the image dominate the scan.
 - **VERIFIED:** image failure fallback exists in the shared renderer; Gallery needed a stable visual surface for the fallback region.
+- **VERIFIED — 2026-09-08:** the current shared-renderer Gallery product wrapper uses `li > div > button`, while the earlier border-removal contract only covered the legacy `li > button` structure. This left the visible border around the image/text/price composition on the current Gallery rendering.
 
 ## Design decision
-Keep Gallery image-first. Do not place mandatory product information on top of food photography. Use a stable image row followed by a dedicated information row with predictable height, readable name wrapping, and an isolated price run.
+Keep Gallery image-first. Do not place mandatory product information on top of food photography. Use a stable image row followed by a dedicated information row with predictable height, readable name wrapping, and an isolated price run. Gallery product tiles should read as an open editorial catalogue: no enclosing card border, no enclosing card shadow, and no enclosing card background; the image remains the visual anchor with a controlled radius, while typography sits directly on the Gallery canvas.
 
 ## Implementation
 - **VERIFIED:** added `src/theme-public-quality-recovery.css`, scoped to `data-menu-theme="gallery"`.
@@ -29,6 +30,10 @@ Keep Gallery image-first. Do not place mandatory product information on top of f
 - **VERIFIED:** image fallback surfaces remain bounded.
 - **VERIFIED:** mobile spacing is reduced slightly while preserving the existing portrait-gallery identity.
 - **VERIFIED:** existing Gallery stylesheet and hardening remain loaded before the new recovery layer.
+- **VERIFIED — 2026-09-08:** `src/theme-gallery-hardening.css` now explicitly removes `border`, `border-color`, `background`, `box-shadow`, and padding from the current shared-renderer Gallery product card selector while excluding `.public-menu-quick-add` and `.public-menu-options-action`.
+- **VERIFIED — 2026-09-08:** the image region retains a controlled `1rem` radius; the text region is borderless and aligned to the Gallery canvas.
+- **VERIFIED — 2026-09-08:** hover/focus states no longer reintroduce card chrome; keyboard focus uses an outline instead of a border.
+- **VERIFIED — 2026-09-08:** the correction is scoped to `data-menu-theme="gallery"` and does not alter Essential, Editorial, Noir, or Heritage card chrome.
 
 ## Tested data scenarios
 Source-level contracts cover:
@@ -37,6 +42,8 @@ Source-level contracts cover:
 - Missing image fallback.
 - Stable aspect-ratio media.
 - Price direction isolation.
+- Current shared-renderer Gallery card structure.
+- Preservation of quick-add/options action classes.
 
 Browser-level scenarios still requiring execution:
 - 360/390/430px mobile.
@@ -54,17 +61,22 @@ Browser-level scenarios still requiring execution:
 - Price remains immediately identifiable.
 - Card height remains stable for realistic content variation.
 - RTL/LTR behavior is correct.
-- Existing card click/product-details behavior remains unchanged.
+- Gallery product cards have no enclosing border, shadow, or background chrome.
+- Gallery image retains a deliberate radius and remains visually anchored.
+- Existing card click/product-details and customer-action behavior remains unchanged.
+- Other themes are not visually modified by the Gallery correction.
 
 ## Regression risk
-- Low-to-medium: recovery selectors intentionally target the current shared public-menu card structure.
+- Low: selectors are explicitly scoped to `data-menu-theme="gallery"` and target only the current Gallery shared-renderer card wrapper.
+- The quick-add/options exclusions prevent the correction from stripping action-specific styling.
 - No shared business logic was changed.
 
 ## Verification
 - **VERIFIED:** branch diff and repository source contracts.
-- **UNKNOWN:** final browser pixels and physical safe-area behavior.
+- **VERIFIED:** dedicated regression assertions cover the current shared-renderer selector and preserve quick-add/options exclusions.
+- **UNKNOWN:** final browser pixels and physical safe-area behavior until the branch is exercised in a browser/device environment.
 - **UNKNOWN:** screen-reader output.
-- **BLOCKED:** deployment verification until direct Vercel evidence exists.
+- **NOT CLAIMED:** deployment.
 
 ## Rollback
-Remove the Gallery-specific rules from `src/theme-public-quality-recovery.css` and the stylesheet import from `src/routes/__root.tsx`; no data or migration rollback is required.
+Revert the Gallery-specific additions in `src/theme-gallery-hardening.css` and the associated regression assertion. No data or migration rollback is required.

@@ -122,6 +122,60 @@ html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:ha
   aspect-ratio: 4 / 3;
 }
 
+/* Gallery product catalogue is intentionally borderless. The card remains a
+   semantic interactive surface, while image and typography read as one open
+   editorial composition. This selector targets the current shared-renderer
+   wrapper (`li > div > button`) and does not affect quick-add/action buttons. */
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) {
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :first-child {
+  border: 0 !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.65rem 0.15rem 0.2rem !important;
+}
+
+html[dir="rtl"][data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+  text-align: right;
+}
+
+html[dir="ltr"][data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+  text-align: left;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action):hover {
+  border: 0 !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action):focus-visible {
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: 3px solid var(--gallery-accent-soft);
+  outline-offset: 3px;
+  box-shadow: none !important;
+}
+
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) img {
+  border: 0 !important;
+}
+
 @media (min-width: 720px) {
   html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > :first-child {
     aspect-ratio: 16 / 9;
