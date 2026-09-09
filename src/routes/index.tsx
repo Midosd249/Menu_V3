@@ -64,7 +64,7 @@ function Home() {
         contactEmail: String(form.get("contactEmail") ?? "").trim(), details: details || undefined,
       } });
       if (!result.ok) throw new Error(result.error);
-      setReferenceId(result.data.referenceId);
+      setReferenceId(result.data.id.slice(0, 8).toUpperCase());
       setStatus("success"); event.currentTarget.reset();
     } catch { setStatus("error"); }
   }
