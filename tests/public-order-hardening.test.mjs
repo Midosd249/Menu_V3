@@ -6,7 +6,7 @@ const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
 const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_security_definer_rpc_grants.sql", "utf8");
 
- test("public orders enforce a bounded database-backed rate limit", () => {
+test("public orders enforce a bounded database-backed rate limit", () => {
   assert.match(orderSource, /public_order_rate_limits/);
   assert.match(orderSource, /request_count/);
   assert.match(orderSource, /600000/);
@@ -14,8 +14,9 @@ const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_
   assert.match(abuseMigration, /primary key \(tenant_id, branch_id, client_token, window_start\)/);
 });
 
-test("public orders have deterministic replay protection", () => {
-  assert.match(orderSource, /createHash\("sha256"\)/);
+test("public orders have deterministic replay protection without Node-only imports", () => {
+  assert.doesNotMatch(orderSource, /from \"node:crypto\"/);
+  assert.match(orderSource, /crypto\.subtle\.digest/);
   assert.match(orderSource, /idempotencyKey/);
   assert.match(orderSource, /public_order_idempotency/);
   assert.match(orderSource, /on conflict \(tenant_id, branch_id, client_token, idempotency_key\) do nothing/);
