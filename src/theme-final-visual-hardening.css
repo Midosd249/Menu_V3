@@ -1,0 +1,69 @@
+/* Final production visual contract for the public themes. Scoped deliberately so
+   it cannot alter Studio/Admin surfaces or cross-theme behavior. */
+
+/* Editorial: remove the legacy magazine volume marker and keep long Arabic
+   product content intact instead of splitting inside words. */
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-kicker > span:nth-child(2) {
+  display: none !important;
+}
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-name,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-title,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-description {
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: none !important;
+}
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-card,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-featured-card {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+/* Noir: enforce the dark contract on the shared hours component and preserve
+   readable contrast when old utility classes are present. */
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] {
+  background: linear-gradient(145deg, #171411, #0d0c0a) !important;
+  color: #f6efe6 !important;
+  border-color: #3a2e27 !important;
+}
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] h2,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] > div,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] span,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] p {
+  color: #f6efe6 !important;
+}
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] .text-muted {
+  color: #aa9b90 !important;
+}
+
+/* Gallery: product cards must grow with their content; descriptions and prices
+   may never be clipped by a fixed-height legacy wrapper. */
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* Shared theme hygiene: no legacy volume marker should survive in any public
+   theme, including nested preview/hero compositions. */
+.menu-public-shell .editorial-kicker [class*="vol"],
+.menu-public-shell [data-legacy-volume-marker="true"] {
+  display: none !important;
+}
