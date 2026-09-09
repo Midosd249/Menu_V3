@@ -12,17 +12,17 @@
 - **INFERRED:** the reported pinned appearance is a stale/legacy presentation-layer interaction rather than an intentional Gallery interaction pattern.
 - **PROPOSED:** make the Gallery hero a strict normal-flow, non-sticky surface and remove visual treatments that can create a fixed-canvas impression. Keep the existing Gallery identity, logo, language control, and valid contact actions.
 
-## Implemented contract
-- Gallery `header` must use normal document flow: `position: relative !important`, `top/inset: auto`, and no transform.
-- The cover media layer remains absolutely positioned **inside the header only**, so it scrolls with the hero rather than the viewport.
-- `background-attachment` is explicitly `scroll` for Gallery.
-- Hero height is bounded to a compact mobile-first range so the catalogue appears promptly.
-- Header controls remain reachable and visually consistent with the existing public action system.
-- No fixed/sticky customer-action behavior is changed.
-- No other theme is modified.
+## Implementation
+- Scoped a Gallery-only scroll-safety layer to `.gallery-canva-reference`.
+- Forces the hero header into normal flow and clears viewport-positioning properties.
+- Keeps the cover layer absolute only within the hero.
+- Forces `background-attachment: scroll` and removes transform-based viewport pinning.
+- Constrains the mobile hero to a compact range so menu content appears promptly.
+- Leaves fixed customer action controls unchanged.
 
 ## Preservation
-- Essential, Editorial, Noir, Heritage/Taste, and all existing Gallery catalogue/Quick Add behavior remain untouched.
+- Essential, Editorial, Noir, Heritage/Taste, and existing Gallery catalogue/Quick Add behavior are untouched.
+- `PublicMenuView` remains the single live Gallery renderer.
 - No theme registry, renderer mapping, data, auth, order, or deployment behavior changes.
 
 ## Verification plan
@@ -33,4 +33,4 @@
 ## Evidence labels
 - `VERIFIED`: repository structure and screenshot evidence.
 - `INFERRED`: stale/legacy presentation interaction as the likely cause.
-- `PROPOSED`: exact visual bounds until browser evidence confirms final pixels.
+- `PROPOSED`: final visual bounds until browser evidence confirms final pixels.
