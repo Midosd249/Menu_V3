@@ -1,24 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
+import { Activity, Archive, BarChart3, Building2, CheckCircle2, ClipboardList, Clock3, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Phone, RefreshCw, Search, Settings, ShieldCheck, Store, Users, Wallet, Wrench, XCircle } from "lucide-react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Activity, BarChart3, Building2, ClipboardList, ExternalLink, LayoutDashboard, RefreshCw, Search, Settings, ShieldCheck, Store, Users, Wallet, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getAdminDashboard, LEAD_STATUSES, type AdminDashboard, type LeadStatus } from "@/lib/menu/admin";
-import { getPlatformDashboard, updatePlatformTenantStatus, type PlatformDashboard, type PlatformTenant } from "@/lib/menu/platform";
+import { archivePlatformOrder, getPlatformDashboard, getPlatformOrders, updatePlatformOrderStatus, updatePlatformTenantStatus, type PlatformDashboard, type PlatformOrder, type PlatformTenant } from "@/lib/menu/platform";
 import { cn } from "@/lib/utils";
+import type { OrderStatus } from "@/lib/menu/orders";
 
 export const Route = createFileRoute("/admin")({ component: PlatformAdminPage });
 
-type Tab = "overview" | "tenants" | "clients" | "branches" | "leads" | "projects" | "requests" | "subscriptions" | "analytics" | "activity" | "system";
+type Tab = "overview" | "tenants" | "orders" | "clients" | "branches" | "leads" | "projects" | "requests" | "subscriptions" | "analytics" | "activity" | "system";
 const LABELS: Record<LeadStatus, string> = { new: "جديد", contacted: "تم التواصل", qualified: "مؤهل", converted: "تم التحويل", lost: "مغلق" };
+const ORDER_LABELS: Record<OrderStatus, string> = { new: "جديد", confirmed: "مؤكد", preparing: "قيد التحضير", ready: "جاهز", completed: "مكتمل", cancelled: "ملغى" };
 const emptyPlatform = (): PlatformDashboard => ({ tenants: [], branches: [], members: [], projects: [], serviceRequests: [], activity: [], analytics: { visits: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, orders: 0, completedOrders: 0 }, tenantCount: 0, activeTenantCount: 0, publishedTenantCount: 0, branchCount: 0, productCount: 0, orderCount: 0, openOrderCount: 0, leadCount: 0, newLeadCount: 0, menuEventCount: 0, activeSubscriptionCount: 0, trialSubscriptionCount: 0 });
 const emptyLeads = (): AdminDashboard => ({ total: 0, newCount: 0, contactedCount: 0, qualifiedCount: 0, convertedCount: 0, lostCount: 0, leads: [] });
 function fmt(v: string) { try { return new Intl.DateTimeFormat("ar-SA", { dateStyle: "medium", timeStyle: "short" }).format(new Date(v)); } catch { return v; } }
+function phoneHref(value: string) { const digits = value.replace(/[^0-9+]/g, ""); return digits ? `tel:${digits}` : ""; }
+function whatsappHref(value: string) { const digits = value.replace(/[^0-9]/g, ""); return digits ? `https://wa.me/${digits}` : ""; }
 
 const NAV: Array<{ id: Tab; label: string; icon: typeof LayoutDashboard }> = [
   { id: "overview", label: "الرئيسية", icon: LayoutDashboard },
   { id: "tenants", label: "المطاعم", icon: Store },
+  { id: "orders", label: "الطلبات", icon: PackageCheck },
   { id: "clients", label: "العملاء والحسابات", icon: Users },
   { id: "branches", label: "الفروع", icon: Building2 },
   { id: "leads", label: "العملاء المحتملون", icon: ClipboardList },
@@ -35,11 +40,16 @@ function PlatformAdminPage() {
   const { user, isPending } = useCurrentUserState();
   const [tab, setTab] = useState<Tab>("overview");
   const [platform, setPlatform] = useState<PlatformDashboard>(emptyPlatform);
+  const [orders, setOrders] = useState<PlatformOrder[]>([]);
+  const [orderStatus, setOrderStatus] = useState<OrderStatus | "all">("all");
+  const [orderQuery, setOrderQuery] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState<PlatformOrder | null>(null);
   const [leads, setLeads] = useState<AdminDashboard>(emptyLeads);
   const [leadStatus, setLeadStatus] = useState<LeadStatus | "all">("all");
   const [leadQuery, setLeadQuery] = useState("");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState<string | null>(null);
 
@@ -48,6 +58,16 @@ function PlatformAdminPage() {
   const filteredMembers = useMemo(() => filterRows(platform.members, query, (m) => [m.tenantName, m.name, m.email, m.role]), [platform.members, query]);
   const filteredProjects = useMemo(() => filterRows(platform.projects, query, (p) => [p.businessName, p.city, p.contactName, p.contactPhone, p.status]), [platform.projects, query]);
   const filteredRequests = useMemo(() => filterRows(platform.serviceRequests, query, (r) => [r.businessName, r.city, r.contactName, r.contactPhone, r.serviceType, r.status]), [platform.serviceRequests, query]);
+
+  async function loadOrders() {
+    setOrdersLoading(true);
+    try {
+      const result = await getPlatformOrders({ data: { status: orderStatus === "all" ? undefined : orderStatus, q: orderQuery.trim() || undefined } });
+      if (!result.ok) setError(result.error);
+      else { setOrders(result.data); setSelectedOrder((current) => current && result.data.some((x) => x.id === current.id) ? result.data.find((x) => x.id === current.id) ?? current : result.data[0] ?? null); }
+    } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحميل الطلبات"); }
+    finally { setOrdersLoading(false); }
+  }
 
   async function load() {
     setLoading(true); setError("");
@@ -74,6 +94,12 @@ function PlatformAdminPage() {
     return () => window.clearTimeout(timer);
   }, [leadStatus, leadQuery]);
 
+  useEffect(() => {
+    if (isPending || !user || tab !== "orders") return;
+    const timer = window.setTimeout(() => void loadOrders(), 180);
+    return () => window.clearTimeout(timer);
+  }, [tab, orderStatus, orderQuery]);
+
   async function toggle(t: PlatformTenant) {
     setSaving(t.id);
     const r = await updatePlatformTenantStatus({ data: { tenantId: t.id, isActive: !t.isActive } });
@@ -82,23 +108,41 @@ function PlatformAdminPage() {
     setSaving(null);
   }
 
+  async function changeOrderStatus(id: string, status: OrderStatus) {
+    setSaving(id);
+    const result = await updatePlatformOrderStatus({ data: { id, status } });
+    if (!result.ok) setError(result.error);
+    else { setOrders((current) => current.map((order) => order.id === id ? result.data : order)); setSelectedOrder(result.data); setPlatform((current) => ({ ...current, openOrderCount: current.openOrderCount + (isOpenOrder(result.data.status) ? 1 : 0) - (selectedOrder && isOpenOrder(selectedOrder.status) ? 1 : 0) })); }
+    setSaving(null);
+  }
+
+  async function archiveOrder(order: PlatformOrder) {
+    if (!window.confirm(`إزالة الطلب #${order.orderNumber} من لوحة التشغيل؟\nسيتم أرشفته وليس حذف سجله التاريخي.`)) return;
+    setSaving(order.id);
+    const result = await archivePlatformOrder({ data: { id: order.id } });
+    if (!result.ok) setError(result.error);
+    else { setOrders((current) => current.filter((x) => x.id !== order.id)); setSelectedOrder((current) => current?.id === order.id ? null : current); setPlatform((current) => ({ ...current, orderCount: Math.max(0, current.orderCount - 1), openOrderCount: isOpenOrder(order.status) ? Math.max(0, current.openOrderCount - 1) : current.openOrderCount })); }
+    setSaving(null);
+  }
+
   if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات مالك المنصة...</div>;
   const activeNav = NAV.find((item) => item.id === tab);
   return <main className="mx-auto grid max-w-[1500px] gap-5 py-4 lg:py-8">
     <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div><div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5" /> Platform Owner Control Center</div><h1 className="font-display text-3xl font-semibold sm:text-4xl">مركز تحكم Menu V3</h1><p className="mt-2 max-w-4xl text-sm leading-6 text-ink-soft">إدارة المنصة بالكامل من مساحة مستقلة عن تشغيل المطاعم: العملاء، المطاعم، الفروع، المشاريع، الخدمات، العملاء المحتملون، الاشتراكات، التحليلات، النشاط، والأمان.</p></div>
-      <Button variant="outline" onClick={() => void load()} disabled={loading}><RefreshCw className={cn("size-4", loading && "animate-spin")} /> تحديث البيانات</Button>
+      <div><div className="mb-2 inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5" /> Platform Owner Control Center</div><h1 className="font-display text-3xl font-semibold sm:text-4xl">مركز تحكم Menu V3</h1><p className="mt-2 max-w-4xl text-sm leading-6 text-ink-soft">إدارة المنصة بالكامل من مساحة مستقلة عن تشغيل المطاعم: المطاعم، الطلبات، العملاء، الفروع، المشاريع، الخدمات، العملاء المحتملون، الاشتراكات، التحليلات، النشاط، والأمان.</p></div>
+      <Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }} disabled={loading || ordersLoading}><RefreshCw className={cn("size-4", (loading || ordersLoading) && "animate-spin")} /> تحديث البيانات</Button>
     </header>
 
     <div className="grid gap-5 lg:grid-cols-[230px_minmax(0,1fr)]">
-      <aside className="h-fit rounded-2xl border border-line bg-paper p-2 lg:sticky lg:top-4"><p className="px-3 py-3 text-xs font-semibold text-muted">إدارة المنصة</p><nav className="grid gap-1">{NAV.map((item) => { const Icon = item.icon; return <button key={item.id} type="button" onClick={() => { setTab(item.id); setQuery(""); }} className={cn("flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm text-start", tab === item.id ? "bg-ink text-paper" : "text-ink-soft hover:bg-sand/50")}><Icon className="size-4 shrink-0" />{item.label}</button>; })}</nav></aside>
+      <aside className="h-fit rounded-2xl border border-line bg-paper p-2 lg:sticky lg:top-4"><p className="px-3 py-3 text-xs font-semibold text-muted">إدارة المنصة</p><nav className="grid gap-1">{NAV.map((item) => { const Icon = item.icon; return <button key={item.id} type="button" onClick={() => { setTab(item.id); setQuery(""); }} className={cn("flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm text-start", tab === item.id ? "bg-ink text-paper" : "text-ink-soft hover:bg-sand/50")}><Icon className="size-4 shrink-0" />{item.label}{item.id === "orders" && platform.openOrderCount > 0 ? <span className="ms-auto rounded-full bg-paper px-2 py-0.5 text-[11px] text-ink">{platform.openOrderCount}</span> : null}</button>; })}</nav></aside>
 
       <section className="min-w-0 grid gap-4">
         {error ? <div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm">{error}</div> : null}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8"><Metric label="المطاعم" value={platform.tenantCount} /><Metric label="النشطة" value={platform.activeTenantCount} /><Metric label="المنشورة" value={platform.publishedTenantCount} /><Metric label="الفروع" value={platform.branchCount} /><Metric label="الأصناف" value={platform.productCount} /><Metric label="الطلبات" value={platform.orderCount} /><Metric label="المفتوحة" value={platform.openOrderCount} /><Metric label="Leads جديدة" value={platform.newLeadCount} /></div>
-        {tab !== "overview" && tab !== "system" && <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} />}
+        {tab !== "overview" && tab !== "system" && tab !== "orders" && <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} />}
         {tab === "overview" ? <Overview platform={platform} leads={leads} onTab={setTab} /> : null}
         {tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}
+        {tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}
         {tab === "clients" ? <Clients rows={filteredMembers} /> : null}
         {tab === "branches" ? <Branches rows={filteredBranches} /> : null}
         {tab === "leads" ? <Leads leads={leads} status={leadStatus} query={leadQuery} setStatus={setLeadStatus} setQuery={setLeadQuery} /> : null}
@@ -113,6 +157,7 @@ function PlatformAdminPage() {
   </main>;
 }
 
+function isOpenOrder(status: OrderStatus) { return status === "confirmed" || status === "preparing" || status === "ready"; }
 function filterRows<T>(rows: T[], q: string, fields: (row: T) => string[]) { const needle = q.trim().toLowerCase(); return needle ? rows.filter((row) => fields(row).some((value) => value.toLowerCase().includes(needle))) : rows; }
 function Toolbar({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) { return <label className="relative block rounded-2xl border border-line bg-paper p-3"><Search className="pointer-events-none absolute start-6 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></label>; }
 function Metric({ label, value }: { label: string; value: number }) { return <div className="grid gap-1 rounded-2xl border border-line bg-paper p-4"><span className="text-xs text-muted">{label}</span><strong className="text-2xl">{value.toLocaleString("ar-SA")}</strong></div>; }
@@ -120,6 +165,7 @@ function Empty({ text }: { text: string }) { return <div className="rounded-2xl 
 
 function Overview({ platform, leads, onTab }: { platform: PlatformDashboard; leads: AdminDashboard; onTab: (tab: Tab) => void }) { return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
   <Panel title="المطاعم والعملاء" icon={<Store className="size-5" />} text={`${platform.tenantCount} مطعم · ${platform.activeTenantCount} نشط · ${platform.publishedTenantCount} منشور`} action="إدارة المطاعم" onClick={() => onTab("tenants")} />
+  <Panel title="الطلبات" icon={<PackageCheck className="size-5" />} text={`${platform.openOrderCount} مفتوح الآن · ${platform.orderCount} طلبًا غير مؤرشف`} action="فتح الطلبات" onClick={() => onTab("orders")} />
   <Panel title="الحسابات والفريق" icon={<Users className="size-5" />} text={`${platform.members.length} عضوية نشطة/مسجلة في البيانات الحالية`} action="عرض الحسابات" onClick={() => onTab("clients")} />
   <Panel title="الفروع" icon={<Building2 className="size-5" />} text={`${platform.branchCount} فرع مرتبط بالمطاعم`} action="إدارة الفروع" onClick={() => onTab("branches")} />
   <Panel title="العملاء المحتملون" icon={<ClipboardList className="size-5" />} text={`${leads.newCount} جديد · ${leads.qualifiedCount} مؤهل · ${leads.convertedCount} محوّل`} action="فتح CRM" onClick={() => onTab("leads")} />
@@ -133,15 +179,35 @@ function Panel({ title, text, action, icon, onClick }: { title: string; text: st
 
 function Tenants({ rows, saving, onToggle }: { rows: PlatformTenant[]; saving: string | null; onToggle: (t: PlatformTenant) => Promise<void> }) { return <div className="overflow-x-auto rounded-2xl border border-line bg-paper"><table className="w-full min-w-[1050px] text-sm"><thead className="bg-sand/40 text-xs text-muted"><tr>{["المطعم","المالك","الموقع","الفروع","الأصناف","الطلبات","الأعضاء","الخطة","الحالة","إجراء"].map((x) => <th key={x} className="p-4 text-start">{x}</th>)}</tr></thead><tbody>{rows.map((t) => <tr key={t.id} className="border-t border-line"><td className="p-4"><b>{t.nameAr || t.nameEn}</b><div className="text-xs text-muted">/{t.slug}</div></td><td className="p-4"><div>{t.ownerName || "—"}</div><div className="text-xs text-muted">{t.ownerEmail || t.ownerUserId}</div></td><td className="p-4">{t.city || "—"} · {t.country}</td><td className="p-4">{t.branchCount}</td><td className="p-4">{t.productCount}</td><td className="p-4">{t.orderCount}</td><td className="p-4">{t.memberCount}</td><td className="p-4 uppercase">{t.planCode}</td><td className="p-4">{t.isActive ? "نشط" : "موقوف"}{t.isPublished ? " · منشور" : " · مسودة"}</td><td className="p-4"><div className="flex gap-2"><button type="button" disabled={saving === t.id} onClick={() => void onToggle(t)} className="rounded-md border border-line px-3 py-2 text-xs">{saving === t.id ? "جارٍ..." : t.isActive ? "إيقاف" : "تفعيل"}</button>{t.isPublished ? <a href={`/m/${t.slug}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border border-line px-3 py-2 text-xs"><ExternalLink className="size-3" />المنيو</a> : null}</div></td></tr>)}{!rows.length ? <tr><td colSpan={10}><Empty text="لا توجد مطاعم مطابقة." /></td></tr> : null}</tbody></table></div>; }
 
+function Orders({ rows, selected, loading, status, query, setStatus, setQuery, saving, onStatus, onArchive, onSelect }: { rows: PlatformOrder[]; selected: PlatformOrder | null; loading: boolean; status: OrderStatus | "all"; query: string; setStatus: (v: OrderStatus | "all") => void; setQuery: (v: string) => void; saving: string | null; onStatus: (id: string, status: OrderStatus) => Promise<void>; onArchive: (order: PlatformOrder) => Promise<void>; onSelect: (order: PlatformOrder) => void }) {
+  return <div className="grid gap-4 rounded-3xl border border-line bg-sand/20 p-3 md:p-4 lg:grid-cols-[1.05fr_.95fr]">
+    <div className="grid content-start gap-3"><div className="grid gap-2 md:grid-cols-[1fr_190px]"><label className="relative"><Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="اسم العميل أو الجوال أو المطعم أو رقم الطلب" /></label><select value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | "all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{Object.entries(ORDER_LABELS).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></div>
+      {loading && !rows.length ? <Empty text="جار تحميل الطلبات…" /> : !rows.length ? <Empty text="لا توجد طلبات مطابقة." /> : <div className="grid gap-2">{rows.map((order) => <article key={order.id} className={cn("grid gap-3 rounded-2xl border bg-paper p-4", selected?.id === order.id ? "border-ink bg-sand/40" : "border-line")}><button type="button" onClick={() => onSelect(order)} className="grid gap-2 text-start"><div className="flex items-start justify-between gap-3"><div><strong>#{order.orderNumber} · {order.customerName || "عميل"}</strong><p className="mt-1 text-xs text-muted">{order.restaurantName} · {order.branchName}</p></div><Badge status={order.status} /></div><div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted"><span>{order.itemCount} عناصر · {order.total.toFixed(2)} {order.currency}</span><span>{fmt(order.createdAt)}</span></div></button><div className="flex flex-wrap gap-2">{order.customerPhone ? <a href={phoneHref(order.customerPhone)} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-line px-2.5 text-xs" aria-label={`الاتصال بالعميل ${order.customerName || ""}`}><Phone className="size-3.5" />اتصال</a> : null}{order.customerPhone ? <a href={whatsappHref(order.customerPhone)} target="_blank" rel="noreferrer" className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-line px-2.5 text-xs" aria-label={`مراسلة العميل ${order.customerName || ""} عبر واتساب`}><MessageCircle className="size-3.5" />WhatsApp</a> : null}{order.customerEmail ? <a href={`mailto:${order.customerEmail}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-line px-2.5 text-xs" aria-label={`إرسال بريد إلى ${order.customerName || "العميل"}`}><Mail className="size-3.5" />بريد</a> : null}</div></article>)}</div>}
+    </div>
+    <OrderDetail order={selected} saving={saving} onStatus={onStatus} onArchive={onArchive} />
+  </div>;
+}
+function Badge({ status }: { status: OrderStatus }) { return <span className="rounded-full bg-sand px-2.5 py-1 text-xs">{ORDER_LABELS[status]}</span>; }
+function OrderDetail({ order, saving, onStatus, onArchive }: { order: PlatformOrder | null; saving: string | null; onStatus: (id: string, status: OrderStatus) => Promise<void>; onArchive: (order: PlatformOrder) => Promise<void> }) {
+  if (!order) return <Empty text="اختر طلبًا من القائمة لعرض التفاصيل وإدارة حالته." />;
+  const currentSaving = saving === order.id;
+  return <aside className="grid content-start gap-5 rounded-2xl border border-line bg-paper p-5 lg:sticky lg:top-5 lg:h-fit">
+    <div className="flex items-start justify-between gap-3"><div><p className="text-xs text-muted">طلب #{order.orderNumber}</p><h2 className="mt-1 text-2xl font-semibold">{order.customerName || "عميل"}</h2><p className="mt-1 text-sm text-muted">{order.restaurantName} · {order.branchName}</p></div><Badge status={order.status} /></div>
+    <div className="flex flex-wrap gap-2">{order.customerPhone ? <a href={phoneHref(order.customerPhone)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Phone className="size-4" />اتصال</a> : null}{order.customerPhone ? <a href={whatsappHref(order.customerPhone)} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm"><MessageCircle className="size-4" />WhatsApp</a> : null}{order.customerEmail ? <a href={`mailto:${order.customerEmail}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Mail className="size-4" />البريد</a> : null}</div>
+    <div className="grid gap-2 text-sm"><p><span className="text-muted">الجوال:</span> {order.customerPhone || "—"}</p>{order.customerEmail ? <p className="break-all"><span className="text-muted">البريد:</span> {order.customerEmail}</p> : null}<p><span className="text-muted">المصدر:</span> {order.source}</p><p><span className="text-muted">الإجمالي:</span> {order.total.toFixed(2)} {order.currency}</p>{order.notes ? <p><span className="text-muted">ملاحظات الطلب:</span> {order.notes}</p> : null}</div>
+    <div className="grid gap-2">{order.items.map((item) => <div key={item.id} className="grid gap-1 rounded-xl bg-sand/40 px-3 py-2 text-sm"><div className="flex justify-between gap-3"><span>{item.quantity} × {item.productNameAr}</span><span>{item.lineTotal.toFixed(2)}</span></div>{item.selectedOptions.length ? <p className="text-xs text-muted">{item.selectedOptions.map((option) => option.type === "note" ? `ملاحظة: ${option.nameAr}` : option.nameAr).join("، ")}</p> : null}</div>)}</div>
+    <div className="grid grid-cols-2 gap-2">{(["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as OrderStatus[]).map((next) => <Button key={next} variant={next === order.status ? "default" : "outline"} disabled={currentSaving || next === order.status} onClick={() => void onStatus(order.id, next)}>{next === "completed" ? <CheckCircle2 className="size-4" /> : next === "cancelled" ? <XCircle className="size-4" /> : next === "ready" ? <PackageCheck className="size-4" /> : next === "preparing" ? <Clock3 className="size-4" /> : null}{ORDER_LABELS[next]}</Button>)}</div>
+    <Button variant="outline" disabled={currentSaving} onClick={() => void onArchive(order)}><Archive className="size-4" />إزالة من لوحة التشغيل</Button>
+    <p className="text-xs leading-5 text-muted">الإزالة هنا أرشفة آمنة وليست حذفًا نهائيًا؛ يحافظ النظام على سجل الطلب وعناصره وتاريخ حالاته.</p>
+  </aside>;
+}
+
 function Clients({ rows }: { rows: PlatformDashboard["members"] }) { return <div className="overflow-x-auto rounded-2xl border border-line bg-paper"><table className="w-full min-w-[850px] text-sm"><thead className="bg-sand/40 text-xs text-muted"><tr>{["العميل/المطعم","الحساب","الدور","تاريخ الإضافة"].map((x) => <th key={x} className="p-4 text-start">{x}</th>)}</tr></thead><tbody>{rows.map((m) => <tr key={`${m.tenantId}-${m.userId}`} className="border-t border-line"><td className="p-4 font-medium">{m.tenantName}</td><td className="p-4"><div>{m.name || "بدون اسم"}</div><div className="text-xs text-muted">{m.email || m.userId}</div></td><td className="p-4">{m.role}</td><td className="p-4">{fmt(m.createdAt)}</td></tr>)}{!rows.length ? <tr><td colSpan={4}><Empty text="لا توجد حسابات." /></td></tr> : null}</tbody></table></div>; }
 function Branches({ rows }: { rows: PlatformDashboard["branches"] }) { return <div className="grid gap-3">{rows.map((b) => <article key={b.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"><div><b>{b.nameAr || b.nameEn}</b><p className="text-sm text-muted">{b.tenantName} · {b.city || "—"}</p></div><span className="rounded-full bg-sand px-3 py-1 text-xs">{b.isActive ? "نشط" : "موقوف"}</span></div><p className="mt-2 text-xs text-muted">{b.phone || "لا يوجد هاتف"}</p></article>)}{!rows.length ? <Empty text="لا توجد فروع." /> : null}</div>; }
-
 function Leads({ leads, status, query, setStatus, setQuery }: { leads: AdminDashboard; status: LeadStatus | "all"; query: string; setStatus: (v: LeadStatus | "all") => void; setQuery: (v: string) => void }) { return <div className="grid gap-4"><div className="grid gap-3 rounded-2xl border border-line bg-paper p-3 md:grid-cols-[1fr_220px]"><label className="relative"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="ابحث باسم النشاط أو المسؤول أو المدينة" /></label><select value={status} onChange={(e) => setStatus(e.target.value as LeadStatus | "all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{LEAD_STATUSES.map((s) => <option key={s} value={s}>{LABELS[s]}</option>)}</select></div><div className="grid gap-2">{leads.leads.map((l) => <article key={l.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between"><div><b>{l.businessName}</b><p className="text-sm text-muted">{l.contactName} · {l.city || "—"} · {l.contactPhone}</p></div><span className="rounded-full bg-sand px-2.5 py-1 text-xs">{LABELS[l.status]}</span></div><div className="mt-2 text-xs text-muted">{fmt(l.createdAt)}{l.details ? ` · ${l.details}` : ""}</div></article>)}{!leads.leads.length ? <Empty text="لا توجد نتائج." /> : null}</div></div>; }
-
 function Projects({ rows }: { rows: PlatformDashboard["projects"] }) { return <div className="grid gap-3">{rows.map((p) => <article key={p.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-2 md:flex-row md:justify-between"><div><b>{p.businessName || "مشروع بدون اسم"}</b><p className="text-sm text-muted">{p.contactName || "—"} · {p.contactPhone || "—"} · {p.city || "—"}</p></div><Status text={p.status} /></div><p className="mt-2 text-xs text-muted">{fmt(p.createdAt)}</p></article>)}{!rows.length ? <Empty text="لا توجد مشاريع." /> : null}</div>; }
 function Requests({ rows }: { rows: PlatformDashboard["serviceRequests"] }) { return <div className="grid gap-3">{rows.map((r) => <article key={r.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-2 md:flex-row md:justify-between"><div><b>{r.businessName}</b><p className="text-sm text-muted">{r.serviceType || "خدمة"} · {r.contactName} · {r.contactPhone}</p></div><Status text={r.status} /></div><p className="mt-2 text-xs text-muted">{r.city || "—"} · {fmt(r.createdAt)}</p></article>)}{!rows.length ? <Empty text="لا توجد طلبات خدمات." /> : null}</div>; }
 function Status({ text }: { text: string }) { return <span className="rounded-full bg-sand px-3 py-1 text-xs">{text || "—"}</span>; }
-
 function Subscriptions({ platform }: { platform: PlatformDashboard }) { const byPlan = platform.tenants.reduce<Record<string, number>>((acc, t) => { acc[t.planCode] = (acc[t.planCode] ?? 0) + 1; return acc; }, {}); return <div className="grid gap-4 md:grid-cols-3"><Panel title="نشطة" text={`${platform.activeSubscriptionCount} اشتراكًا نشطًا`} action="مراجعة المطاعم" icon={<Wallet className="size-5" />} onClick={() => window.location.assign("/admin")} /><Panel title="تجريبية" text={`${platform.trialSubscriptionCount} اشتراكًا تجريبيًا`} action="مراجعة الخطط" icon={<Wallet className="size-5" />} onClick={() => undefined} /><article className="rounded-2xl border border-line bg-paper p-5"><h2 className="font-semibold">توزيع الخطط</h2><div className="mt-4 grid gap-2">{Object.entries(byPlan).map(([plan, count]) => <div key={plan} className="flex justify-between rounded-xl border border-line px-3 py-2 text-sm"><span>{plan}</span><b>{count}</b></div>)}{!Object.keys(byPlan).length ? <p className="text-sm text-muted">لا توجد بيانات خطط.</p> : null}</div></article></div>; }
 function Analytics({ platform }: { platform: PlatformDashboard }) { const a = platform.analytics; return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"><Metric label="زيارات المنيو" value={a.visits} /><Metric label="مشاهدات الأصناف" value={a.productViews} /><Metric label="مسح QR" value={a.qrScans} /><Metric label="نقرات WhatsApp" value={a.whatsappClicks} /><Metric label="كل الطلبات" value={a.orders} /><Metric label="الطلبات المكتملة" value={a.completedOrders} /></div>; }
 function ActivityView({ rows }: { rows: PlatformDashboard["activity"] }) { return <div className="grid gap-2">{rows.map((e) => <article key={e.id} className="rounded-2xl border border-line bg-paper p-4"><div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between"><div><b>{e.tenantName}</b><p className="text-sm text-muted">طلب #{e.orderNumber} · {e.fromStatus || "—"} → {e.toStatus}</p></div><span className="text-xs text-muted">{fmt(e.createdAt)}</span></div><p className="mt-2 text-xs text-muted">Actor: {e.actorUserId || "system"}</p></article>)}{!rows.length ? <Empty text="لا توجد أحداث نشاط بعد." /> : null}</div>; }
