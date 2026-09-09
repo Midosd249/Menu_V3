@@ -29,9 +29,18 @@ function WhatsAppIcon() {
 
 function DishMedia({ product, className = "" }: { product: Product; className?: string }) {
   const [failed, setFailed] = useState(false);
-  if (!product.imageUrl || failed) return <div className={cn("grid place-items-center bg-sand text-xs text-muted", className)} aria-hidden="true">Menu</div>;
   const eager = typeof document !== "undefined" && document.documentElement.dataset.menuTheme === "editorial";
-  return <img src={product.imageUrl} alt="" loading={eager ? "eager" : "lazy"} decoding="async" fetchPriority={eager ? "high" : "low"} className={cn("object-cover", className)} onError={() => setFailed(true)} />;
+
+  useEffect(() => {
+    if (!eager || !product.imageUrl) return;
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.src = product.imageUrl;
+    return () => { preload.onload = null; preload.onerror = null; };
+  }, [eager, product.imageUrl]);
+
+  if (!product.imageUrl || failed) return <div className={cn("grid place-items-center bg-sand text-xs text-muted", className)} aria-hidden="true">Menu</div>;
+  return <img src={product.imageUrl} alt="" loading="lazy" decoding="async" fetchPriority="low" className={cn("object-cover", className)} onError={() => setFailed(true)} />;
 }
 
 function useModalAccessibility(open: boolean, close: () => void, dialogRef: React.RefObject<HTMLElement | null>, initialFocusRef?: React.RefObject<HTMLElement | null>) {
