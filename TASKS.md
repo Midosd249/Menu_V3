@@ -102,6 +102,19 @@
 ### Gallery Latest Refinement — COMPLETED / VERIFIED
 - VERIFIED: Gallery now presents one image-led featured item at a time with responsive media geometry.
 
+## Current Active Task
+
+### Platform Admin Operations Center — IN_PROGRESS
+- VERIFIED: `/admin` previously exposed order counts/activity but had no dedicated operational order-management workspace.
+- VERIFIED: `/studio/orders` already had tenant-scoped order operations and status transitions.
+- IMPLEMENTED ON BRANCH: `الطلبات` workspace in `/admin` with search, status filter, order details, phone/WhatsApp/email contact actions, status updates, and reversible archive.
+- IMPLEMENTED ON BRANCH: `migrations/20260909001000_order_archive_operations.sql` adds `orders.archived_at` and an active-order index.
+- IMPLEMENTED ON BRANCH: archived orders are excluded from owner operational order queries.
+- IMPLEMENTED ON BRANCH: `tests/admin-operations.test.mjs` protects authorization, contact-action, archive, and filtering contracts.
+- SECURITY: platform order operations call the existing server-side `requirePlatformAdmin`; no client privilege is trusted.
+- DATA SAFETY: "إزالة من لوحة التشغيل" is soft-archive, not hard deletion; order items and status events remain preserved.
+- Audit: `docs/audits/2026-09-09-admin-operations-audit.md`.
+
 ## Open Follow-ups — Not Current Task
 
 ### P1-H1 — package manifest / lockfile reconciliation
@@ -137,17 +150,15 @@
 - OPEN: GitHub `main` branch protection.
 
 ## Exact Next TODO
-### W16 — Human Device & Manual Accessibility Gate
-1. Test current Production on real Android.
-2. Test iOS when a supported device is available.
-3. Cover small/standard/large mobile widths where practical.
-4. Check Arabic RTL, English LTR, and mixed-direction content.
-5. Check long names, varied SAR prices, missing/mixed images, sparse/dense categories, and sold-out states where applicable.
-6. Check product details, Quick Add, Item Notes, Cart open/closed, ordering flow, sticky/floating controls, safe areas, and scrolling.
-7. Perform manual screen-reader/focus checks where supported.
-8. Verify QR-camera scanning.
-9. Record reproducible defects with device/browser/viewport/evidence/severity/root-cause hypothesis.
-10. Do not reopen completed themes or architecture unless a defect is reproduced.
+### Admin Operations Center — verification and release
+1. Inspect branch CI quality gate.
+2. Fix only reproducible failures caused by this task.
+3. Review final diff and security/data boundaries.
+4. Open one coherent PR to `main` after quality passes.
+5. Merge only with green CI evidence.
+6. Verify the resulting Production deployment separately.
+7. Perform real-device/admin smoke verification when available.
+8. Return to W16 physical-device verification.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
