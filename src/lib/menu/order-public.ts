@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
-import { orderFingerprint, orderRateKey } from "./order-security.server";
 import type { FnResult } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -41,6 +40,34 @@ type PreparedItem = {
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
+const normalizePhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
+
+const stableDigest = (value: string) => {
+  let left = 2166136261;
+  let right = 2654435761;
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    left = Math.imul(left ^ code, 16777619);
+    right = Math.imul(right ^ (code + index), 2246822519);
+  }
+  return `${(left >>> 0).toString(16).padStart(8, "0")}${(right >>> 0).toString(16).padStart(8, "0")}`;
+};
+
+const orderRateKey = (tenantId: string, branchId: string, phone: string) =>
+  stableDigest(`${tenantId}:${branchId}:${normalizePhone(phone)}`);
+
+const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
+  stableDigest(JSON.stringify({
+    tenantId,
+    branchId,
+    slug: data.slug,
+    source: data.source,
+    customerName: data.customerName,
+    customerPhone: normalizePhone(data.customerPhone),
+    customerEmail: data.customerEmail || "",
+    notes: data.notes || "",
+    items: data.items,
+  }));
 
 export const submitPublicOrder = createServerFn({ method: "POST" })
   .validator(submitOrderSchema)
