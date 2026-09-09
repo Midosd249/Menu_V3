@@ -28,7 +28,7 @@ test("theme recovery layer retains only the persistent cart safe-area contract",
 });
 
 test("Taste retains its intentional local Quick Add without reviving the retired shared selector", () => {
-  assert.match(retirement, /html\[data-menu-theme=\"heritage\"\] \.taste-page \.taste-product > button\.absolute/);
-  assert.doesNotMatch(retirement, /html\[data-menu-theme=\"(?:essential|editorial|noir|gallery)\"\][^\n]*\.public-menu-quick-add/);
-  assert.match(retirement, /html\[data-menu-theme=\"heritage\"\] \.taste-page \.taste-hero-copy > h1\s*\{[\s\S]*?display:\s*none/);
+  assert.match(retirement, /html\[data-menu-theme="heritage"\] \.taste-page \.taste-product > button\.absolute/);
+  assert.doesNotMatch(retirement, /html\[data-menu-theme="(?:essential|editorial|noir|gallery)"\][^\n]*\.public-menu-quick-add/);
+  assert.match(retirement, /html\[data-menu-theme="heritage"\] \.taste-page \.taste-hero-copy > h1\s*\{[\s\S]*?display:\s*none/);
 });
