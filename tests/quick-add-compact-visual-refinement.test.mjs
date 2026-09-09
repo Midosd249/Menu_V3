@@ -8,18 +8,19 @@ const contemporary = fs.readFileSync("src/components/templates/contemporary-rest
 
 test("Quick Add is retired from the shared public-menu surface", () => {
   assert.match(refinement, /\.public-menu-quick-add\s*\{[\s\S]*display:\s*none\s*!important;/);
-  assert.doesNotMatch(refinement, /position:\s*absolute/);
-  assert.doesNotMatch(refinement, /background:\s*var\(--menu-accent/);
-  assert.doesNotMatch(refinement, /border-radius:\s*999/);
+  const sharedBlock = refinement.match(/\.public-menu-quick-add\s*\{([\s\S]*?)\}/)?.[1] ?? "";
+  assert.doesNotMatch(sharedBlock, /position:\s*absolute/);
+  assert.doesNotMatch(sharedBlock, /background:\s*var\(--menu-accent/);
+  assert.doesNotMatch(sharedBlock, /border-radius:\s*999/);
 });
 
-test("retirement applies explicitly to every active public theme", () => {
-  for (const theme of ["essential", "editorial", "noir", "heritage", "gallery"]) {
-    assert.match(refinement, new RegExp(`html\\[data-menu-theme=\\"${theme}\\"\\] \\.public-menu-quick-add`));
-  }
+test("retirement is global while Taste keeps its explicitly local Quick Add", () => {
+  assert.match(refinement, /\.public-menu-quick-add\s*\{[\s\S]*display:\s*none\s*!important;/);
+  assert.match(refinement, /html\[data-menu-theme="heritage"\] \.taste-page \.taste-product > button\.absolute/);
+  assert.doesNotMatch(refinement, /html\[data-menu-theme="(?:essential|editorial|noir|gallery)"\][^\n]*\.public-menu-quick-add/);
 });
 
-test("existing public renderers no longer receive a visible Quick Add presentation layer", () => {
+test("existing public renderers no longer receive a visible shared Quick Add presentation layer", () => {
   assert.match(publicMenu, /public-menu-quick-add/);
   assert.match(contemporary, /public-menu-quick-add/);
   assert.match(refinement, /display:\s*none\s*!important/);
