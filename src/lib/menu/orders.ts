@@ -89,15 +89,16 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
             (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
             coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
           from orders o join scope s on s.tenant_id = o.tenant_id join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
-          where (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
+          where o.archived_at is null
+            and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
             and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q})
         )
         select
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id) as total,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.status = 'new') as new_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.status in ('confirmed','preparing','ready')) as active_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.status = 'completed') as completed_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.status = 'cancelled') as cancelled_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null) as total,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'new') as new_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status in ('confirmed','preparing','ready')) as active_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'completed') as completed_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'cancelled') as cancelled_count,
           coalesce((select jsonb_agg(to_jsonb(x) order by x.created_at desc) from (select * from filtered order by created_at desc limit 100) x), '[]'::jsonb) as orders
       `;
       const row = rows[0];
@@ -117,10 +118,10 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const currentRows = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} limit 1`;
+      const currentRows = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} and archived_at is null limit 1`;
       if (!currentRows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
       const fromStatus = currentRows[0].status;
-      const rows = await sql<Record<string, unknown>>`update orders set status = ${data.status}, updated_at = now() where id = ${data.id} returning *`;
+      const rows = await sql<Record<string, unknown>>`update orders set status = ${data.status}, updated_at = now() where id = ${data.id} and archived_at is null returning *`;
       if (!rows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
       if (fromStatus !== data.status) await sql`insert into order_status_events (id, order_id, from_status, to_status, actor_user_id) values (${newId()}, ${data.id}, ${fromStatus}, ${data.status}, ${context.userId})`;
       const detail = await sql<Record<string, unknown>>`
@@ -128,7 +129,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
           (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
           coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
         from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
-        where o.id = ${data.id} limit 1
+        where o.id = ${data.id} and o.archived_at is null limit 1
       `;
       return detail[0] ? { ok: true, data: mapOrder(detail[0]) } : { ok: false, code: "not_found", error: "الطلب غير موجود" };
     } catch (err) {
