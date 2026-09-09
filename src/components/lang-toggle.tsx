@@ -5,19 +5,14 @@ import { cn } from "@/lib/utils";
 export function LangToggle({ className, englishAvailable = true, disabled = false }: { className?: string; englishAvailable?: boolean; disabled?: boolean }) {
   const { lang, setLang } = useLang();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
   const search = useRouterState({ select: (state) => state.location.search });
-  const isPublicMenu = pathname === "/m" || pathname.startsWith("/m/");
   const englishDisabled = disabled || !englishAvailable;
 
   const changeLang = (next: "ar" | "en") => {
     if (next === "en" && englishDisabled) return;
-    if (isPublicMenu) {
-      const currentSearch = search as Record<string, unknown>;
-      void navigate({ search: { ...currentSearch, lang: next === "en" ? "en" : undefined } as never });
-      return;
-    }
     setLang(next);
+    const currentSearch = search as Record<string, unknown>;
+    void navigate({ search: { ...currentSearch, lang: next === "en" ? "en" : undefined } as never, replace: true });
   };
 
   return (
