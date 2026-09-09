@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { MenuThemeController } from "@/components/menu-theme-controller";
-import { PublicMenuView } from "@/components/public-menu";
-import { TasteTemplate } from "@/components/templates/taste";
-import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
+import { ThemeRenderer } from "@/components/theme-renderer";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { getOwnerPreviewMenu } from "@/lib/menu/owner";
-import { getThemeFamily, isThemeKey, type ThemeKey } from "@/lib/theme";
+import { isThemeKey, type ThemeKey } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/preview")({ component: PreviewPage });
@@ -30,6 +28,5 @@ function PreviewPage() {
   if (state.status === "error") return <ErrorState message={state.message} />;
   const activeTheme = previewTheme ?? state.menu.tenant.themeKey;
   const previewMenu = activeTheme === state.menu.tenant.themeKey ? state.menu : { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
-  const family = getThemeFamily(activeTheme);
-  return <><MenuThemeController theme={activeTheme} preview />{activeTheme === "heritage" ? <TasteTemplate menu={previewMenu} preview /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={previewMenu} preview /> : <PublicMenuView menu={previewMenu} preview />}</>;
+  return <><MenuThemeController theme={activeTheme} preview /><ThemeRenderer menu={previewMenu} preview /></>;
 }
