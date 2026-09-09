@@ -45,6 +45,13 @@ test("public menu keeps an always-available cart entry point and shared quick ac
   assert.match(source, /branch\.phone/);
 });
 
+test("public menu promotes Editorial media loading without changing other themes", async () => {
+  const source = await readFile("src/components/public-menu.tsx", "utf8");
+  assert.match(source, /document\.documentElement\.dataset\.menuTheme === "editorial"/);
+  assert.match(source, /loading=\{eager \? "eager" : "lazy"\}/);
+  assert.match(source, /fetchPriority=\{eager \? "high" : "low"\}/);
+});
+
 test("preview menu cards keep a time-based visible final state", async () => {
   const styles = await readFile("src/styles.css", "utf8");
   assert.doesNotMatch(styles, /animation-timeline:\s*(view|scroll)\(/, "preview content must not depend on scroll-driven animation progress");
