@@ -5,6 +5,7 @@ import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { useStudio } from "@/lib/menu/studio";
 import { MENU_THEMES } from "@/lib/theme";
+import { getPublicOrigin } from "@/lib/menu/seo-discovery";
 
 export const Route = createFileRoute("/studio/qr")({ component: QrPage });
 
@@ -23,7 +24,7 @@ function QrPage() {
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
-    setOrigin(window.location.origin);
+    setOrigin(getPublicOrigin() || window.location.origin);
   }, []);
 
   return (
