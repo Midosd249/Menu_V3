@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
@@ -41,26 +40,29 @@ type PreparedItem = {
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
-
 const normalizePhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
 
-const fingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
-  createHash("sha256")
-    .update(JSON.stringify({
-      tenantId,
-      branchId,
-      slug: data.slug,
-      source: data.source,
-      customerName: data.customerName,
-      customerPhone: normalizePhone(data.customerPhone),
-      customerEmail: data.customerEmail || "",
-      notes: data.notes || "",
-      items: data.items,
-    }))
-    .digest("hex");
+async function sha256Hex(value: string): Promise<string> {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+const fingerprint = async (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
+  sha256Hex(JSON.stringify({
+    tenantId,
+    branchId,
+    slug: data.slug,
+    source: data.source,
+    customerName: data.customerName,
+    customerPhone: normalizePhone(data.customerPhone),
+    customerEmail: data.customerEmail || "",
+    notes: data.notes || "",
+    items: data.items,
+  }));
 
 const rateKey = (tenantId: string, branchId: string, phone: string) =>
-  createHash("sha256").update(`${tenantId}:${branchId}:${normalizePhone(phone)}`).digest("hex");
+  sha256Hex(`${tenantId}:${branchId}:${normalizePhone(phone)}`);
 
 export const submitPublicOrder = createServerFn({ method: "POST" })
   .validator(submitOrderSchema)
@@ -83,10 +85,11 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const branchId = branchRows[0]?.id;
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
 
+      const clientToken = await rateKey(String(tenant.id), String(branchId), data.customerPhone);
       const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
       const rateRows = await sql<{ request_count: number }>`
         insert into public_order_rate_limits (tenant_id, branch_id, client_token, window_start, request_count)
-        values (${tenant.id}, ${branchId}, ${rateKey(String(tenant.id), String(branchId), data.customerPhone)}, ${rateWindow}, 1)
+        values (${tenant.id}, ${branchId}, ${clientToken}, ${rateWindow}, 1)
         on conflict (tenant_id, branch_id, client_token, window_start)
         do update set request_count = public_order_rate_limits.request_count + 1, updated_at = now()
         returning request_count
@@ -95,11 +98,11 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         return { ok: false, code: "unavailable", error: "تم تجاوز عدد الطلبات المسموح به مؤقتاً. حاول مرة أخرى بعد قليل." };
       }
 
-      const idempotencyKey = fingerprint(data, String(tenant.id), String(branchId));
+      const idempotencyKey = await fingerprint(data, String(tenant.id), String(branchId));
       const existing = await sql<{ order_id: string | null; order_number: number | null; total: number | null; currency: string | null; created_at: string }>`
         select order_id, order_number, total, currency, created_at
         from public_order_idempotency
-        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${rateKey(String(tenant.id), String(branchId), data.customerPhone)} and idempotency_key = ${idempotencyKey}
+        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
         limit 1
       `;
       if (existing[0]) {
@@ -112,7 +115,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         }
         await sql`
           delete from public_order_idempotency
-          where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${rateKey(String(tenant.id), String(branchId), data.customerPhone)} and idempotency_key = ${idempotencyKey}
+          where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
         `;
       }
 
@@ -211,7 +214,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
 
       const reservation = await sql<{ client_token: string }>`
         insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
-        values (${tenant.id}, ${branchId}, ${rateKey(String(tenant.id), String(branchId), data.customerPhone)}, ${idempotencyKey})
+        values (${tenant.id}, ${branchId}, ${clientToken}, ${idempotencyKey})
         on conflict (tenant_id, branch_id, client_token, idempotency_key) do nothing
         returning client_token
       `;
@@ -243,7 +246,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       await sql`
         update public_order_idempotency
         set order_id = ${order.id}, order_number = ${order.order_number}, total = ${subtotal}, currency = ${tenant.currency || "SAR"}
-        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${rateKey(String(tenant.id), String(branchId), data.customerPhone)} and idempotency_key = ${idempotencyKey}
+        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
       `;
       return { ok: true, data: { orderId: String(order.id), orderNumber: Number(order.order_number), total: subtotal, currency: tenant.currency || "SAR" } };
     } catch (err) {
