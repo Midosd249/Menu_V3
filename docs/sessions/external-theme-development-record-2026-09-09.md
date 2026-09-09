@@ -40,5 +40,10 @@ The theme work may be inspired by references and restaurant-market direction, bu
 - **UNKNOWN:** Physical-device rendering and manual screen-reader output remain unobserved in the connector environment.
 - **UNKNOWN:** The external chat itself is not a repository source and cannot be cited as evidence beyond the repository artifacts it produced.
 
+## Current session integration
+- **VERIFIED:** The marketing-home branch consumes the canonical `MENU_THEMES` registry and its real preview image data for the theme gallery instead of introducing a parallel theme catalog.
+- **VERIFIED:** The branch preserves the existing `/themes/preview` route as the full preview destination.
+- **VERIFIED:** The current repair to `src/routes/index.tsx` only corrected the lead-details serialization delimiter from an invalid literal line break to `\n`; it did not alter theme behavior.
+
 ## Next continuity action
 Keep these commits and the five-theme system protected while completing the current marketing-home milestone. Do not reopen completed theme implementation unless new browser/device evidence reproduces a defect.
