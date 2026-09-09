@@ -6,7 +6,7 @@ Audit the public QR rendering and Design Studio theme preview surfaces together,
 ## Evidence labels
 - VERIFIED — confirmed directly from repository source or CI evidence.
 - INFERRED — derived from verified source relationships.
-- PROPOSED — recommendation not yet runtime-proven.
+- PROPOSED — recommendation not yet proven.
 - UNKNOWN — runtime evidence unavailable.
 - BLOCKED — verification prevented by an external/environment constraint.
 
@@ -52,9 +52,15 @@ Canonical catalog currently contains exactly five themes:
 ## Verification
 - Source inspection: VERIFIED.
 - Canonical renderer inspection: VERIFIED.
-- Studio Preview regression test updated: VERIFIED in repository source.
-- Full local command execution: BLOCKED because the current execution environment cannot resolve `github.com`; CI is the authoritative executable verification path for this repository.
+- Studio Preview regression test: VERIFIED by Quality run **1153**.
+- Typecheck: VERIFIED by Quality run **1153**.
+- Full automated test suite: VERIFIED by Quality run **1153**.
+- Lint: VERIFIED by Quality run **1153**.
+- Production build: VERIFIED by Quality run **1153**.
+- Playwright runtime and Chromium: VERIFIED by Quality run **1153**.
+- Browser template QA — all five themes: VERIFIED by Quality run **1153**.
+- Local command execution: BLOCKED because the current execution environment cannot resolve `github.com`; CI provided executable repository evidence.
 - Physical Android/QR visual verification: UNKNOWN until the new build is deployed and scanned.
 
 ## Exact next action
-After CI passes, deploy the latest `main` through the normal release-only workflow and visually compare `/studio/preview?theme=gallery` and `/studio/preview?theme=noir` against their public/QR equivalents on a real Android viewport. Do not change theme styling unless runtime evidence identifies a remaining discrepancy.
+Use the latest `main` commit for the normal release-only deployment when production validation is desired. Then compare `/studio/preview?theme=gallery` and `/studio/preview?theme=noir` against their public/QR equivalents on a real Android viewport. Do not change theme styling unless runtime evidence identifies a remaining discrepancy.
