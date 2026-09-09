@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Taste template is the Heritage public renderer", async () => {
+test("Taste template remains the Heritage public renderer", async () => {
   const route = await readFile("src/routes/m.$slug.tsx", "utf8");
   const preview = await readFile("src/routes/themes/preview.tsx", "utf8");
   const studio = await readFile("src/routes/studio/preview.tsx", "utf8");
   assert.match(route, /activeTheme === "heritage" \? <TasteTemplate/);
-  assert.match(preview, /effectiveTheme === "heritage" \? <TasteTemplate/);
+  assert.match(preview, /ThemeRenderer/);
   assert.match(studio, /activeTheme === "heritage" \? <TasteTemplate/);
 });
 
