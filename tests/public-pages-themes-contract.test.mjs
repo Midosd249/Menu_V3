@@ -46,5 +46,5 @@ test("new-customer request flow remains on the existing lead contract", () => {
   assert.match(home, /contactPhone/);
   assert.match(home, /NEW CUSTOMER REQUEST|طلب عميل جديد/);
   assert.match(home, /referenceId/);
-  assert.match(home, /result\.data\.referenceId/);
+  assert.match(home, /result\.data\.id/);
 });
