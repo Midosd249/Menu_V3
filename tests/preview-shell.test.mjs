@@ -8,13 +8,18 @@ const routes = [
 ];
 
 test("preview routes do not create a second menu shell", async () => {
-  for (const path of routes) {
-    const source = await readFile(path, "utf8");
-    assert.equal(source.includes('className="menu-public-shell"'), false, `${path} must not wrap the menu in a nested shell`);
-    assert.match(source, /<MenuThemeController\s/);
-    assert.match(source, /<PublicMenuView\s/);
-    assert.match(source, /<ContemporaryRestaurantTemplate\s/);
-  }
+  const studio = await readFile(routes[0], "utf8");
+  assert.equal(studio.includes('className="menu-public-shell"'), false);
+  assert.match(studio, /<MenuThemeController\s/);
+  assert.match(studio, /<PublicMenuView\s/);
+  assert.match(studio, /<TasteTemplate\s/);
+  assert.match(studio, /<ContemporaryRestaurantTemplate\s/);
+
+  const themes = await readFile(routes[1], "utf8");
+  assert.equal(themes.includes('className="menu-public-shell"'), false);
+  assert.match(themes, /<MenuThemeController\s/);
+  assert.match(themes, /<ThemeRenderer\s/);
+  assert.doesNotMatch(themes, /<ContemporaryRestaurantTemplate\s/);
 });
 
 test("published public routes do not add a route-level presentation shell", async () => {
@@ -104,7 +109,8 @@ test("language switching preserves route search state and makes missing English 
   const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
   assert.match(toggle, /currentSearch[\s\S]*lang:\s*next\s*===\s*"en"/);
   assert.match(toggle, /englishAvailable\s*=\s*true/);
-  assert.match(toggle, /disabled=\{!englishAvailable\}/);
+  assert.match(toggle, /englishDisabled\s*=\s*disabled\s*\|\|\s*!englishAvailable/);
+  assert.match(toggle, /disabled=\{englishDisabled\}/);
   const route = await readFile("src/routes/m.$slug.tsx", "utf8");
   assert.match(route, /lang:\s*z\.enum\(\["ar",\s*"en"\]\)\.optional\(\)/);
   assert.match(route, /resolvePublicMenuLocale/);
