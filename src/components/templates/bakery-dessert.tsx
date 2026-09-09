@@ -4,10 +4,9 @@ import { PublicMenuView } from "@/components/public-menu";
 /**
  * Gallery public template.
  *
- * PublicMenuView is the single owner of the live Gallery composition and all
- * public-menu behavior. Keeping one renderer here prevents a second static
- * hero/header from becoming pinned above the real menu on mobile and in QR
- * previews.
+ * PublicMenuView remains the single owner of live Gallery content and behavior.
+ * Gallery-specific presentation is scoped here so Taste/Heritage and the
+ * other themes remain untouched.
  */
 export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
   return (
@@ -16,45 +15,173 @@ export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
       style={{ width: "100%", maxWidth: "100%", marginInline: 0 }}
     >
       <style>{`
+        /* Gallery hero/header: Taste reference, normal document flow. */
         .gallery-canva-reference .menu-public-shell > header {
           position: relative !important;
           inset: auto !important;
-          top: auto !important;
-          right: auto !important;
-          bottom: auto !important;
-          left: auto !important;
           transform: none !important;
           background-attachment: scroll !important;
-          z-index: auto !important;
+          overflow: hidden !important;
+          min-height: 0 !important;
+          background: var(--gallery-surface, #fffdf9) !important;
+          color: var(--gallery-ink, #24201d) !important;
+          border-bottom: 1px solid rgb(36 32 29 / .12) !important;
+          box-shadow: 0 8px 24px rgb(36 32 29 / .055) !important;
+          z-index: 1 !important;
         }
         .gallery-canva-reference .menu-public-shell > header > div:first-child {
           position: absolute !important;
           inset: 0 !important;
+          opacity: .18 !important;
           z-index: 0 !important;
         }
         .gallery-canva-reference .menu-public-shell > header > div.relative {
           position: relative !important;
           z-index: 1 !important;
-          min-height: clamp(18rem, 54svh, 28rem);
+          display: grid !important;
+          gap: .75rem !important;
+          min-height: 0 !important;
+          padding: .7rem clamp(1rem, 4vw, 1.5rem) .9rem !important;
         }
-        .gallery-canva-reference .menu-public-shell > header img {
-          max-height: none;
+        /* Taste-style top rail: logo/identity + one compact control cluster. */
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: .75rem !important;
+          min-width: 0 !important;
+          margin: 0 !important;
         }
-        .gallery-canva-reference .menu-public-shell > header > div.relative > div:last-child {
-          flex-wrap: wrap;
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:first-child {
+          display: flex !important;
+          align-items: center !important;
+          gap: .65rem !important;
+          min-width: 0 !important;
         }
-        .gallery-canva-reference .menu-public-shell > header a,
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:first-child img,
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:first-child > div:first-child {
+          width: 2.8rem !important;
+          height: 2.8rem !important;
+          flex: 0 0 2.8rem !important;
+          border-radius: 999px !important;
+          object-fit: cover !important;
+          border: 1px solid rgb(36 32 29 / .14) !important;
+          box-shadow: 0 4px 14px rgb(36 32 29 / .08) !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header h1 {
+          max-width: 15ch !important;
+          margin: 0 !important;
+          color: var(--gallery-ink, #24201d) !important;
+          font-size: clamp(1.2rem, 5vw, 1.7rem) !important;
+          line-height: 1.25 !important;
+          font-weight: 800 !important;
+          letter-spacing: -.02em !important;
+          text-wrap: balance !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header p {
+          max-width: 34ch !important;
+          color: var(--gallery-ink-soft, #514942) !important;
+          line-height: 1.5 !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:last-child {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-end !important;
+          flex-wrap: wrap !important;
+          gap: .35rem !important;
+          flex: 0 0 auto !important;
+        }
         .gallery-canva-reference .menu-public-shell > header button {
-          -webkit-tap-highlight-color: transparent;
+          display: inline-grid !important;
+          place-items: center !important;
+          min-width: 2.55rem !important;
+          min-height: 2.55rem !important;
+          border: 1px solid rgb(36 32 29 / .13) !important;
+          border-radius: 999px !important;
+          background: rgb(255 253 249 / .94) !important;
+          color: var(--gallery-ink, #24201d) !important;
+          box-shadow: 0 3px 10px rgb(36 32 29 / .045) !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header button:hover,
+        .gallery-canva-reference .menu-public-shell > header button:focus-visible {
+          background: #ebe5dc !important;
+          transform: none !important;
+        }
+        /* Status/branch metadata sits below the rail, not as floating pills. */
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:nth-child(2) {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          flex-wrap: wrap !important;
+          gap: .4rem !important;
+          margin: 0 !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:nth-child(2) span {
+          min-height: 1.9rem !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          padding-inline: .65rem !important;
+          border: 1px solid rgb(36 32 29 / .12) !important;
+          border-radius: 999px !important;
+          background: rgb(255 253 249 / .8) !important;
+          color: var(--gallery-ink-soft, #514942) !important;
+        }
+        /* Keep valid public actions grouped instead of forming a left-side stack. */
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:last-child {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          flex-wrap: wrap !important;
+          gap: .35rem !important;
+          margin: 0 !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:last-child a {
+          min-height: 2.5rem !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: .35rem !important;
+          border: 1px solid rgb(36 32 29 / .12) !important;
+          border-radius: 999px !important;
+          background: rgb(255 253 249 / .94) !important;
+          color: var(--gallery-ink, #24201d) !important;
+          padding-inline: .75rem !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header > div.relative > div:last-child a:first-child {
+          background: var(--gallery-ink, #24201d) !important;
+          border-color: var(--gallery-ink, #24201d) !important;
+          color: var(--gallery-paper, #fffdf9) !important;
+        }
+        .gallery-canva-reference .menu-public-shell > header::after {
+          content: "" !important;
+          position: absolute !important;
+          inset-inline: 0 !important;
+          inset-block-end: 0 !important;
+          height: .14rem !important;
+          background: linear-gradient(90deg, transparent, var(--gallery-accent, #9a5a3a), transparent) !important;
+          opacity: .7 !important;
+          pointer-events: none !important;
         }
         @media (max-width: 520px) {
           .gallery-canva-reference .menu-public-shell > header > div.relative {
-            min-height: clamp(17rem, 48svh, 23rem);
+            padding: .65rem .85rem .8rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child {
+            gap: .45rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:first-child img,
+          .gallery-canva-reference .menu-public-shell > header > div.relative > div:first-child > div:first-child > div:first-child {
+            width: 2.65rem !important;
+            height: 2.65rem !important;
+            flex-basis: 2.65rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > header h1 { font-size: 1.15rem !important; }
+          .gallery-canva-reference .menu-public-shell > header button {
+            min-width: 2.4rem !important;
+            min-height: 2.4rem !important;
           }
         }
         @media (prefers-reduced-motion: reduce) {
           .gallery-canva-reference .menu-public-shell > header * {
-            scroll-behavior: auto !important;
             transition: none !important;
             animation: none !important;
           }
