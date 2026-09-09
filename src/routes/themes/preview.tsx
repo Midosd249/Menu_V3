@@ -5,6 +5,8 @@ import { MenuThemeController } from "@/components/menu-theme-controller";
 import { ThemeRenderer } from "@/components/theme-renderer";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { getOwnerPreviewMenu } from "@/lib/menu/owner";
 import { getPublicMenu } from "@/lib/menu/public";
 import { getTheme, isThemeKey, type ThemeKey } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
@@ -19,15 +21,18 @@ function readPreviewTheme(): ThemeKey | undefined {
 
 function ThemePreviewPage() {
   const { lang } = useLang();
+  const { user, isPending } = useCurrentUserState();
   const [theme, setTheme] = useState<ThemeKey | undefined>(() => readPreviewTheme());
   const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string } | { status: "ok"; menu: PublicMenu }>({ status: "loading" });
   useEffect(() => {
     setTheme(readPreviewTheme());
-    getPublicMenu({ data: { slug: "nafas" } }).then((result) => {
+    if (isPending) return;
+    const request = user ? getOwnerPreviewMenu({ data: {} }) : getPublicMenu({ data: { slug: "nafas" } });
+    request.then((result) => {
       if (!result.ok) setState({ status: "error", message: result.error }); else setState({ status: "ok", menu: result.data });
     }).catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المعاينة" }));
-  }, []);
-  if (state.status === "loading") return <LoadingState />;
+  }, [user, isPending]);
+  if (isPending || state.status === "loading") return <LoadingState />;
   if (state.status === "error") return <ErrorState message={state.message} />;
   const effectiveTheme = theme ?? state.menu.tenant.themeKey;
   const definition = getTheme(effectiveTheme);
