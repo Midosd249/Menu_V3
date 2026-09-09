@@ -40,6 +40,34 @@ type PreparedItem = {
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
+const normalizePhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
+
+const stableDigest = (value: string) => {
+  let left = 2166136261;
+  let right = 2654435761;
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    left = Math.imul(left ^ code, 16777619);
+    right = Math.imul(right ^ (code + index), 2246822519);
+  }
+  return `${(left >>> 0).toString(16).padStart(8, "0")}${(right >>> 0).toString(16).padStart(8, "0")}`;
+};
+
+const orderRateKey = (tenantId: string, branchId: string, phone: string) =>
+  stableDigest(`${tenantId}:${branchId}:${normalizePhone(phone)}`);
+
+const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
+  stableDigest(JSON.stringify({
+    tenantId,
+    branchId,
+    slug: data.slug,
+    source: data.source,
+    customerName: data.customerName,
+    customerPhone: normalizePhone(data.customerPhone),
+    customerEmail: data.customerEmail || "",
+    notes: data.notes || "",
+    items: data.items,
+  }));
 
 export const submitPublicOrder = createServerFn({ method: "POST" })
   .validator(submitOrderSchema)
@@ -61,6 +89,40 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       `;
       const branchId = branchRows[0]?.id;
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
+
+      const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
+      const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
+      const rateRows = await sql<{ request_count: number }>`
+        insert into public_order_rate_limits (tenant_id, branch_id, client_token, window_start, request_count)
+        values (${tenant.id}, ${branchId}, ${clientToken}, ${rateWindow}, 1)
+        on conflict (tenant_id, branch_id, client_token, window_start)
+        do update set request_count = public_order_rate_limits.request_count + 1, updated_at = now()
+        returning request_count
+      `;
+      if (Number(rateRows[0]?.request_count ?? 0) > 6) {
+        return { ok: false, code: "unavailable", error: "تم تجاوز عدد الطلبات المسموح به مؤقتاً. حاول مرة أخرى بعد قليل." };
+      }
+
+      const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId));
+      const existing = await sql<{ order_id: string | null; order_number: number | null; total: number | null; currency: string | null; created_at: string }>`
+        select order_id, order_number, total, currency, created_at
+        from public_order_idempotency
+        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
+        limit 1
+      `;
+      if (existing[0]) {
+        const ageMs = Date.now() - new Date(existing[0].created_at).getTime();
+        if (ageMs < 10 * 60 * 1000 && existing[0].order_id) {
+          return { ok: true, data: { orderId: String(existing[0].order_id), orderNumber: Number(existing[0].order_number), total: Number(existing[0].total), currency: existing[0].currency || tenant.currency || "SAR" } };
+        }
+        if (ageMs < 10 * 60 * 1000) {
+          return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
+        }
+        await sql`
+          delete from public_order_idempotency
+          where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
+        `;
+      }
 
       const productIds = [...new Set(data.items.map((item) => item.productId))];
       const products = await sql<ProductRow>`
@@ -155,6 +217,14 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         selected_options: item.selectedOptions,
       })));
 
+      const reservation = await sql<{ client_token: string }>`
+        insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
+        values (${tenant.id}, ${branchId}, ${clientToken}, ${idempotencyKey})
+        on conflict (tenant_id, branch_id, client_token, idempotency_key) do nothing
+        returning client_token
+      `;
+      if (!reservation[0]) return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
+
       const created = await sql<{ id: string; order_number: number }>`
         with new_order as (
           insert into orders (id, tenant_id, branch_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
@@ -178,6 +248,11 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
 
       const order = created[0];
       if (!order) return { ok: false, code: "unavailable", error: "تعذر إنشاء الطلب" };
+      await sql`
+        update public_order_idempotency
+        set order_id = ${order.id}, order_number = ${order.order_number}, total = ${subtotal}, currency = ${tenant.currency || "SAR"}
+        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
+      `;
       return { ok: true, data: { orderId: String(order.id), orderNumber: Number(order.order_number), total: subtotal, currency: tenant.currency || "SAR" } };
     } catch (err) {
       console.error("submitPublicOrder failed", err);
