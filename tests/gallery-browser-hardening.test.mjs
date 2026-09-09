@@ -2,14 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Gallery uses the supplied Canva reference composition", async () => {
+test("Gallery keeps the Canva reference shell without duplicating the live public menu", async () => {
   const template = await readFile("src/components/templates/bakery-dessert.tsx", "utf8");
   const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
   assert.match(template, /gallery-public-frame/);
-  assert.match(template, /gallery-canva-hero/);
-  assert.match(template, /gallery-canva-hero-title/);
-  assert.match(template, /gallery-canva-hero-button/);
+  assert.match(template, /gallery-canva-reference/);
+  assert.match(template, /gallery-canva-menu/);
   assert.match(template, /PublicMenuView/);
   assert.match(styles, /--gallery-ink:#17140f/);
   assert.match(styles, /--gallery-cream:#f7f0e4/);
@@ -22,7 +21,7 @@ test("Gallery keeps all shared ordering behavior behind the visual shell", async
 
   assert.match(template, /PublicMenuView menu=\{menu\}/);
   assert.match(template, /id="menu"/);
-  assert.match(template, /ArrowDown/);
+  assert.doesNotMatch(template, /ArrowDown/);
 });
 
 test("Gallery uses Canva mobile-first one-column cards and responsive grids", async () => {
@@ -34,11 +33,12 @@ test("Gallery uses Canva mobile-first one-column cards and responsive grids", as
   assert.match(styles, /aspect-ratio:16\/10/);
 });
 
-test("Gallery preserves Quick Add and product-options controls", async () => {
+test("Gallery keeps explicit Quick Add/options selectors isolated from its card shell", async () => {
   const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
   assert.match(styles, /public-menu-quick-add/);
   assert.match(styles, /public-menu-options-action/);
+  assert.match(styles, /:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)/);
 });
 
 test("Gallery parity stylesheet is loaded after base Gallery layers", async () => {
