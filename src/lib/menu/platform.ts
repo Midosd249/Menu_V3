@@ -4,6 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { requirePlatformAdmin } from "@/lib/auth/platform-admin.server";
 import { getSql } from "@/lib/db";
 import type { FnResult } from "./types";
+import type { OrderStatus } from "./orders";
 
 export type PlatformTenant = {
   id: string;
@@ -79,6 +80,37 @@ export type PlatformActivity = {
   createdAt: string;
 };
 
+export type PlatformOrderItem = {
+  id: string;
+  productNameAr: string;
+  productNameEn: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+  selectedOptions: Array<{ type: "variant" | "modifier" | "note"; nameAr: string; nameEn: string; priceDelta: number }>;
+};
+
+export type PlatformOrder = {
+  id: string;
+  orderNumber: number;
+  tenantId: string;
+  restaurantName: string;
+  branchName: string;
+  status: OrderStatus;
+  source: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  notes: string;
+  currency: string;
+  subtotal: number;
+  total: number;
+  itemCount: number;
+  items: PlatformOrderItem[];
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type PlatformAnalytics = {
   visits: number;
   productViews: number;
@@ -132,6 +164,45 @@ function num(value: unknown): number {
   return Number(value ?? 0);
 }
 
+function mapPlatformOrder(row: Record<string, unknown>): PlatformOrder {
+  const rawItems = Array.isArray(row.items) ? row.items : [];
+  return {
+    id: String(row.id), orderNumber: num(row.order_number), tenantId: String(row.tenant_id),
+    restaurantName: String(row.restaurant_name ?? ""), branchName: String(row.branch_name ?? "كل الفروع"),
+    status: row.status as OrderStatus, source: String(row.source ?? "web"),
+    customerName: String(row.customer_name ?? ""), customerPhone: String(row.customer_phone ?? ""),
+    customerEmail: String(row.customer_email ?? ""), notes: String(row.notes ?? ""),
+    currency: String(row.currency ?? "SAR"), subtotal: num(row.subtotal), total: num(row.total), itemCount: num(row.item_count),
+    items: rawItems.map((item) => {
+      const value = item as Record<string, unknown>;
+      const selectedOptions = Array.isArray(value.selected_options) ? value.selected_options : [];
+      return {
+        id: String(value.id), productNameAr: String(value.product_name_ar ?? ""), productNameEn: String(value.product_name_en ?? ""),
+        quantity: num(value.quantity), unitPrice: num(value.unit_price), lineTotal: num(value.line_total),
+        selectedOptions: selectedOptions.flatMap((option): PlatformOrderItem["selectedOptions"] => {
+          if (!option || typeof option !== "object") return [];
+          const x = option as Record<string, unknown>;
+          const type = x.type === "variant" || x.type === "modifier" || x.type === "note" ? x.type : null;
+          return type ? [{ type, nameAr: String(x.nameAr ?? ""), nameEn: String(x.nameEn ?? ""), priceDelta: num(x.priceDelta) }] : [];
+        }),
+      };
+    }),
+    createdAt: iso(row.created_at), updatedAt: iso(row.updated_at ?? row.created_at),
+  };
+}
+
+async function getPlatformOrderDetail(sql: Awaited<ReturnType<typeof getSql>>, orderId: string) {
+  const rows = await sql<Record<string, unknown>>`
+    select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
+      (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
+      coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
+    from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
+    where o.id = ${orderId} and o.archived_at is null
+    limit 1
+  `;
+  return rows[0] ? mapPlatformOrder(rows[0]) : null;
+}
+
 export const getPlatformDashboard = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<FnResult<PlatformDashboard>> => {
@@ -145,7 +216,7 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
             t.slug, t.name_ar, t.name_en, t.city, t.country, t.is_published, t.is_active, t.created_at,
             (select count(*)::int from branches b where b.tenant_id = t.id) as branch_count,
             (select count(*)::int from products p where p.tenant_id = t.id) as product_count,
-            (select count(*)::int from orders o where o.tenant_id = t.id) as order_count,
+            (select count(*)::int from orders o where o.tenant_id = t.id and o.archived_at is null) as order_count,
             (select count(*)::int from tenant_members tm where tm.tenant_id = t.id) as member_count,
             coalesce((select sp.code from tenant_subscriptions ts join subscription_plans sp on sp.id = ts.plan_id where ts.tenant_id = t.id limit 1), 'free') as plan_code
           from tenants t left join "user" u on u.id = t.owner_user_id
@@ -178,6 +249,7 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
           select e.id, e.order_id, o.order_number, t.name_ar as tenant_name,
             coalesce(e.from_status, '') as from_status, e.to_status, coalesce(e.actor_user_id, '') as actor_user_id, e.created_at
           from order_status_events e join orders o on o.id = e.order_id join tenants t on t.id = o.tenant_id
+          where o.archived_at is null
           order by e.created_at desc limit 100
         `,
         sql<Record<string, number>>`
@@ -187,8 +259,8 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
             (select count(*)::int from tenants where is_published) as published_tenant_count,
             (select count(*)::int from branches) as branch_count,
             (select count(*)::int from products) as product_count,
-            (select count(*)::int from orders) as order_count,
-            (select count(*)::int from orders where status in ('new','confirmed','preparing','ready')) as open_order_count,
+            (select count(*)::int from orders where archived_at is null) as order_count,
+            (select count(*)::int from orders where archived_at is null and status in ('new','confirmed','preparing','ready')) as open_order_count,
             (select count(*)::int from leads) as lead_count,
             (select count(*)::int from leads where status = 'new') as new_lead_count,
             (select count(*)::int from menu_events) as menu_event_count,
@@ -201,8 +273,8 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
             (select count(*)::int from menu_events where event_type = 'product_view') as product_views,
             (select count(*)::int from menu_events where event_type = 'qr_scan') as qr_scans,
             (select count(*)::int from menu_events where event_type = 'whatsapp') as whatsapp_clicks,
-            (select count(*)::int from orders) as orders,
-            (select count(*)::int from orders where status = 'completed') as completed_orders
+            (select count(*)::int from orders where archived_at is null) as orders,
+            (select count(*)::int from orders where archived_at is null and status = 'completed') as completed_orders
         `,
       ]);
       const c = counts[0] ?? {};
@@ -210,12 +282,7 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
       return {
         ok: true,
         data: {
-          tenants: tenants.map((t) => ({
-            id: String(t.id), ownerUserId: String(t.owner_user_id), ownerName: String(t.owner_name ?? ''), ownerEmail: String(t.owner_email ?? ''),
-            slug: String(t.slug), nameAr: String(t.name_ar ?? ''), nameEn: String(t.name_en ?? ''), city: String(t.city ?? ''), country: String(t.country ?? ''),
-            isPublished: Boolean(t.is_published), isActive: Boolean(t.is_active), createdAt: iso(t.created_at), branchCount: num(t.branch_count),
-            productCount: num(t.product_count), orderCount: num(t.order_count), memberCount: num(t.member_count), planCode: String(t.plan_code ?? 'free'),
-          })),
+          tenants: tenants.map((t) => ({ id: String(t.id), ownerUserId: String(t.owner_user_id), ownerName: String(t.owner_name ?? ''), ownerEmail: String(t.owner_email ?? ''), slug: String(t.slug), nameAr: String(t.name_ar ?? ''), nameEn: String(t.name_en ?? ''), city: String(t.city ?? ''), country: String(t.country ?? ''), isPublished: Boolean(t.is_published), isActive: Boolean(t.is_active), createdAt: iso(t.created_at), branchCount: num(t.branch_count), productCount: num(t.product_count), orderCount: num(t.order_count), memberCount: num(t.member_count), planCode: String(t.plan_code ?? 'free') })),
           branches: branches.map((b) => ({ id: String(b.id), tenantId: String(b.tenant_id), tenantName: String(b.tenant_name ?? ''), nameAr: String(b.name_ar ?? ''), nameEn: String(b.name_en ?? ''), city: String(b.city ?? ''), phone: String(b.phone ?? ''), isActive: Boolean(b.is_active) })),
           members: members.map((m) => ({ tenantId: String(m.tenant_id), tenantName: String(m.tenant_name ?? ''), userId: String(m.user_id), name: String(m.name ?? ''), email: String(m.email ?? ''), role: String(m.role ?? ''), createdAt: iso(m.created_at) })),
           projects: projects.map((p) => ({ id: String(p.id), tenantId: String(p.tenant_id ?? ''), businessName: String(p.business_name ?? ''), status: String(p.status ?? ''), contactName: String(p.contact_name ?? ''), contactPhone: String(p.contact_phone ?? ''), city: String(p.city ?? ''), createdAt: iso(p.created_at) })),
@@ -228,6 +295,75 @@ export const getPlatformDashboard = createServerFn({ method: "GET" })
     } catch (error) {
       console.error("getPlatformDashboard failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تحميل بيانات منصة Menu V3" };
+    }
+  });
+
+const orderStatusSchema = z.enum(["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const);
+
+export const getPlatformOrders = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator(z.object({ status: orderStatusSchema.optional(), q: z.string().trim().max(120).optional() }))
+  .handler(async ({ context, data }): Promise<FnResult<PlatformOrder[]>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const q = data.q ? `%${data.q.toLowerCase()}%` : null;
+      const rows = await sql<Record<string, unknown>>`
+        with filtered as (
+          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
+            (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
+            coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
+          from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
+          where o.archived_at is null
+            and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
+            and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q} or cast(o.order_number as text) like ${q})
+        )
+        select * from filtered order by created_at desc limit 200
+      `;
+      return { ok: true, data: rows.map(mapPlatformOrder) };
+    } catch (error) {
+      console.error("getPlatformOrders failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحميل طلبات المنصة" };
+    }
+  });
+
+export const updatePlatformOrderStatus = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ id: z.string().min(1).max(100), status: orderStatusSchema }))
+  .handler(async ({ context, data }): Promise<FnResult<PlatformOrder>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const current = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} and archived_at is null limit 1`;
+      if (!current[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
+      const fromStatus = current[0].status;
+      const rows = await sql<Record<string, unknown>>`update orders set status = ${data.status}, updated_at = now() where id = ${data.id} and archived_at is null returning *`;
+      if (!rows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
+      if (fromStatus !== data.status) await sql`insert into order_status_events (id, order_id, from_status, to_status, actor_user_id) values (${crypto.randomUUID()}, ${data.id}, ${fromStatus}, ${data.status}, ${context.userId})`;
+      const detail = await getPlatformOrderDetail(sql, data.id);
+      return detail ? { ok: true, data: detail } : { ok: false, code: "not_found", error: "الطلب غير موجود" };
+    } catch (error) {
+      console.error("updatePlatformOrderStatus failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحديث حالة الطلب" };
+    }
+  });
+
+export const archivePlatformOrder = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ id: z.string().min(1).max(100) }))
+  .handler(async ({ context, data }): Promise<FnResult<{ id: string; archivedAt: string }>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const rows = await sql<{ id: string; archived_at: string }>`update orders set archived_at = now(), updated_at = now() where id = ${data.id} and archived_at is null returning id, archived_at`;
+      if (!rows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود أو تمت أرشفته مسبقًا" };
+      return { ok: true, data: { id: String(rows[0].id), archivedAt: iso(rows[0].archived_at) } };
+    } catch (error) {
+      console.error("archivePlatformOrder failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر إزالة الطلب من لوحة التشغيل" };
     }
   });
 
