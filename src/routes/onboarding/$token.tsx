@@ -41,7 +41,8 @@ function OnboardingPage() {
     setError("");
     const result = await activateLeadOnboarding({ data: { token } });
     if (result.ok) {
-      setDone({ slug: result.data.slug, menuUrl: result.data.menuUrl });
+      const menuUrl = `${window.location.origin}${result.data.menuUrl}`;
+      setDone({ slug: result.data.slug, menuUrl });
       await refresh();
     } else {
       setError(result.error);
