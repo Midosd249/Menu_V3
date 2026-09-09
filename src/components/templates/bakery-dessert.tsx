@@ -4,10 +4,11 @@ import { useLang } from "@/lib/lang";
 import { LangToggle } from "@/components/lang-toggle";
 
 /**
- * Bakery & Dessert presentation shell.
+ * Gallery presentation shell.
  *
- * Keeps the existing public-menu ordering/data contracts intact while giving
- * bakery and dessert brands a dedicated, image-led visual hierarchy.
+ * The public-menu data, ordering, cart, search, filtering, Quick Add and
+ * option/note flows remain owned by the shared renderer. This shell only
+ * establishes the approved Mazaq/Taste visual hierarchy around it.
  */
 export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
   const { lang } = useLang();
@@ -16,33 +17,40 @@ export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
   const tagline = lang === "ar" ? tenant.taglineAr || tenant.taglineEn : tenant.taglineEn || tenant.taglineAr;
 
   return (
-    <div className="gallery-public-frame min-h-dvh bg-[#fffaf5] text-[#2b211c]">
-      <header className="gallery-brand-header mx-auto max-w-3xl px-5 pb-2 pt-5">
-        <div className="overflow-hidden rounded-[2rem] border border-[#eadfd5] bg-[#f6eadf] shadow-sm">
-          <div className="gallery-brand-row flex items-start justify-between gap-4 px-5 py-5">
+    <div className="gallery-public-frame min-h-dvh bg-[#241b14] text-[#f4e7d3]">
+      <header
+        className="gallery-brand-header gallery-hero mx-auto max-w-3xl px-3 pb-2 pt-3"
+        style={
+          tenant.coverUrl
+            ? { backgroundImage: `linear-gradient(180deg, rgba(36,27,20,.08), rgba(36,27,20,.82)), url(${tenant.coverUrl})` }
+            : undefined
+        }
+      >
+        <div className="overflow-hidden rounded-[1.1rem] border-0 bg-[#3a2a20] shadow-2xl">
+          <div className="gallery-brand-row flex items-start justify-between gap-4 px-4 py-4">
             <div className="gallery-brand-copy flex min-w-0 items-center gap-3">
               {tenant.logoUrl ? (
-                <img src={tenant.logoUrl} alt="" className="gallery-brand-logo size-14 rounded-2xl object-cover" />
+                <img src={tenant.logoUrl} alt="" className="gallery-brand-logo size-11 shrink-0 rounded-xl object-cover" />
               ) : (
-                <div className="gallery-brand-logo grid size-14 shrink-0 place-items-center rounded-2xl bg-[#2b211c] text-xl font-bold text-white">
+                <div className="gallery-brand-logo grid size-11 shrink-0 place-items-center rounded-xl bg-[#2a2018] text-lg font-bold text-[#f4e7d3]">
                   {name.slice(0, 1)}
                 </div>
               )}
               <div className="min-w-0">
-                <p className="gallery-brand-kicker text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6f60]">
-                  {lang === "ar" ? "مخبوزات وحلويات" : "Bakery & Dessert"}
+                <p className="gallery-brand-kicker text-[10px] font-semibold uppercase tracking-[0.16em]">
+                  {lang === "ar" ? "تجربة مذاق" : "Mazaq Experience"}
                 </p>
-                <h1 className="gallery-brand-name truncate font-display text-2xl font-bold">{name}</h1>
+                <h1 className="gallery-brand-name truncate font-display font-bold">{name}</h1>
               </div>
             </div>
             <div className="gallery-brand-language shrink-0">
               <LangToggle />
             </div>
           </div>
-          {tagline ? <p className="gallery-brand-tagline px-5 pb-5 text-sm leading-6 text-[#705e53]">{tagline}</p> : null}
+          {tagline ? <p className="gallery-brand-tagline px-4 pb-4 leading-6">{tagline}</p> : null}
         </div>
       </header>
-      <div className="mx-auto max-w-3xl px-5 pb-6 pt-2">
+      <div className="mx-auto max-w-3xl px-3 pb-6 pt-2">
         <PublicMenuView menu={menu} />
       </div>
     </div>
