@@ -11,9 +11,10 @@ test("preview routes do not create a second menu shell", async () => {
   const studio = await readFile(routes[0], "utf8");
   assert.equal(studio.includes('className="menu-public-shell"'), false);
   assert.match(studio, /<MenuThemeController\s/);
-  assert.match(studio, /<PublicMenuView\s/);
-  assert.match(studio, /<TasteTemplate\s/);
-  assert.match(studio, /<ContemporaryRestaurantTemplate\s/);
+  assert.match(studio, /<ThemeRenderer\s/);
+  assert.doesNotMatch(studio, /<TasteTemplate\s/);
+  assert.doesNotMatch(studio, /<ContemporaryRestaurantTemplate\s/);
+  assert.doesNotMatch(studio, /<PublicMenuView\s/);
 
   const themes = await readFile(routes[1], "utf8");
   assert.equal(themes.includes('className="menu-public-shell"'), false);
@@ -64,7 +65,7 @@ test("Essential refinement has deterministic light canvas, safe-area clearance, 
   assert.match(styles, /html\[data-menu-theme="essential"\]\s*\{[\s\S]*color-scheme:\s*light;/);
   assert.match(styles, /html\[data-menu-theme="essential"\]\s+body\s*\{[\s\S]*background:\s*#f7f3eb;/);
   assert.match(styles, /padding-bottom:\s*calc\(8\.25rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
-  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)\)/);
+  assert.match(styles, /bottom:\s*max\(0\.75rem, env\(safe-area-inset-bottom, 0px\)/);
   assert.match(styles, /\.menu-public-shell > nav\.fixed[\s\S]*z-index:\s*40/);
   assert.doesNotMatch(styles, /z-index:\s*9999/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
