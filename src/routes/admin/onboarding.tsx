@@ -49,7 +49,7 @@ function AdminOnboardingPage() {
     if (!selected || busy) return;
     setBusy(true); setError("");
     const result = await approveLead({ data: { leadId: selected.id } });
-    if (result.ok) { setRegistrationUrl(result.data.registrationUrl); setOnboarding(result.data); }
+    if (result.ok) { const url = `${window.location.origin}${result.data.registrationUrl}`; setRegistrationUrl(url); setOnboarding(result.data); }
     else setError(result.error);
     setBusy(false);
     if (result.ok) void load();
