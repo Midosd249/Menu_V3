@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
+import { orderFingerprint, orderRateKey } from "./order-security.server";
 import type { FnResult } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -40,29 +41,6 @@ type PreparedItem = {
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
-const normalizePhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
-
-async function sha256Hex(value: string): Promise<string> {
-  const bytes = new TextEncoder().encode(value);
-  const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
-}
-
-const fingerprint = async (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
-  sha256Hex(JSON.stringify({
-    tenantId,
-    branchId,
-    slug: data.slug,
-    source: data.source,
-    customerName: data.customerName,
-    customerPhone: normalizePhone(data.customerPhone),
-    customerEmail: data.customerEmail || "",
-    notes: data.notes || "",
-    items: data.items,
-  }));
-
-const rateKey = (tenantId: string, branchId: string, phone: string) =>
-  sha256Hex(`${tenantId}:${branchId}:${normalizePhone(phone)}`);
 
 export const submitPublicOrder = createServerFn({ method: "POST" })
   .validator(submitOrderSchema)
@@ -85,7 +63,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const branchId = branchRows[0]?.id;
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
 
-      const clientToken = await rateKey(String(tenant.id), String(branchId), data.customerPhone);
+      const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
       const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
       const rateRows = await sql<{ request_count: number }>`
         insert into public_order_rate_limits (tenant_id, branch_id, client_token, window_start, request_count)
@@ -98,7 +76,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         return { ok: false, code: "unavailable", error: "تم تجاوز عدد الطلبات المسموح به مؤقتاً. حاول مرة أخرى بعد قليل." };
       }
 
-      const idempotencyKey = await fingerprint(data, String(tenant.id), String(branchId));
+      const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId));
       const existing = await sql<{ order_id: string | null; order_number: number | null; total: number | null; currency: string | null; created_at: string }>`
         select order_id, order_number, total, currency, created_at
         from public_order_idempotency
