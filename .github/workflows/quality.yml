@@ -34,6 +34,9 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      # performance-audit.mjs imports Playwright directly; keep it CI-local rather than adding browser tooling to the app runtime.
+      - name: Install Playwright runtime
+        run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Browser template QA — all themes
