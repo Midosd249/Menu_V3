@@ -50,6 +50,7 @@
 5. Noir's shared opening-hours panel uses the generic light `bg-sand` presentation and required a Noir-specific dark treatment to avoid white-background/white-text combinations.
 6. Gallery product cards required an explicit full-height/stable content rule so long card content cannot be clipped by a stretched grid row.
 7. The legacy Editorial `VOL. 03 — THE TABLE` pseudo-element was still active in the refinement layer and was removed.
+8. Editorial media retains the repository's lazy-loading contract, while an Editorial-only client prefetch warms product image URLs so below-the-fold media can render without requiring a user interaction.
 
 ## Remediation implemented
 - Added `src/theme-w16-mobile-qr-hardening.css`.
@@ -57,7 +58,17 @@
 - Added a stable `.menu-lang-toggle` hook in `src/components/lang-toggle.tsx` and an Essential white halo treatment.
 - Updated `src/routes/studio/qr.tsx` to use `getPublicOrigin()` with browser-origin fallback.
 - Removed the active Editorial `VOL. 03 — THE TABLE` label from `src/theme-refinements.css`.
+- Added safe-area/focus clearance for the public fixed action bar.
+- Added Editorial Arabic word-boundary protection.
+- Added Noir opening-hours contrast/background correction.
+- Added Gallery full-height/content visibility correction.
+- Added Editorial-only image prefetch while preserving `loading="lazy"` and `fetchPriority="low"` on the actual image element.
 - Added regression contracts to `tests/preview-shell.test.mjs`.
+
+## Verification history
+- An intermediate CI run failed only because the new Editorial image eager-loading implementation conflicted with two pre-existing repository contracts requiring `loading="lazy"` for public dish media.
+- That implementation was corrected to use client prefetch while retaining the original lazy-loading contract.
+- A new CI run was triggered automatically for the corrected branch head; final conclusion is pending at the time this record was written.
 
 ## Protected behavior
 - Quick Add
