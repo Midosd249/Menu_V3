@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
+const securitySource = await readFile("src/lib/menu/order-security.server.ts", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
 const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_security_definer_rpc_grants.sql", "utf8");
 
@@ -14,10 +15,13 @@ test("public orders enforce a bounded database-backed rate limit", () => {
   assert.match(abuseMigration, /primary key \(tenant_id, branch_id, client_token, window_start\)/);
 });
 
-test("public orders have deterministic replay protection without Node-only imports", () => {
-  assert.doesNotMatch(orderSource, /from \"node:crypto\"/);
-  assert.match(orderSource, /crypto\.subtle\.digest/);
-  assert.match(orderSource, /idempotencyKey/);
+test("public order hashing is isolated from the browser bundle", () => {
+  assert.doesNotMatch(orderSource, /node:crypto/);
+  assert.doesNotMatch(orderSource, /crypto\.subtle\.digest/);
+  assert.match(orderSource, /orderFingerprint/);
+  assert.match(orderSource, /orderRateKey/);
+  assert.match(securitySource, /node:crypto/);
+  assert.match(securitySource, /createHash\("sha256"\)/);
   assert.match(orderSource, /public_order_idempotency/);
   assert.match(orderSource, /on conflict \(tenant_id, branch_id, client_token, idempotency_key\) do nothing/);
 });
