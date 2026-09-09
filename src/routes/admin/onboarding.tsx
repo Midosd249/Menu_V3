@@ -1,87 +1,110 @@
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Copy, ExternalLink, Link2, QrCode, RefreshCw, RotateCcw, Search, ShieldCheck, XCircle } from "lucide-react";
+import { CheckCircle2, Copy, ExternalLink, Mail, MessageCircle, Phone, RefreshCw, Search, ShieldCheck, UserCheck, XCircle } from "lucide-react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { LangToggle } from "@/components/lang-toggle";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getAdminDashboard, LEAD_STATUSES, type AdminDashboard, type AdminLead, type LeadStatus } from "@/lib/menu/admin";
-import { approveLead, getLeadOnboardingStatus, revokeLeadOnboarding, type LeadOnboardingStatus } from "@/lib/menu/platform-onboarding";
+import { useLang } from "@/lib/lang";
+import { getPlatformCustomerRequests, updatePlatformCustomerRequest, type PlatformCustomerRequest } from "@/lib/menu/platform-customers";
 
 export const Route = createFileRoute("/admin/onboarding")({ component: AdminOnboardingPage });
 
-const LABELS: Record<LeadStatus, string> = { new: "جديد", contacted: "تم التواصل", qualified: "مؤهل", converted: "تم التحويل", lost: "مغلق" };
-const ONBOARDING_LABELS = { pending: "بانتظار التسجيل", used: "تم التسجيل", revoked: "ملغى", expired: "منتهي", none: "لم يُعتمد" } as const;
+type Status = PlatformCustomerRequest["status"] | "all";
+const labels = {
+  ar: { pending: "بانتظار الاعتماد", approved: "معتمد", rejected: "مرفوض", all: "كل العملاء", title: "طلبات العملاء الجدد", subtitle: "مساحة تشغيلية مستقلة لطلبات انضمام المطاعم. راجع البيانات، تواصل مع العميل، ثم اعتمد أو ارفض الطلب دون خلطها مع طلبات الطعام.", refresh: "تحديث", search: "ابحث باسم المطعم، المدينة، الجوال أو البريد", empty: "لا توجد طلبات عملاء مطابقة.", details: "تفاصيل العميل", business: "المطعم", city: "المدينة", phone: "الجوال", email: "البريد", submitted: "تاريخ الطلب", status: "الحالة", notes: "ملاحظات الإدارة", notesPlaceholder: "أضف ملاحظة داخلية…", approve: "اعتماد العميل", reject: "رفض الطلب", approved: "تم اعتماد العميل", rejected: "تم رفض الطلب", menu: "فتح المنيو", copy: "نسخ الرابط", copied: "تم النسخ", call: "اتصال", whatsapp: "WhatsApp", emailAction: "بريد", overview: "ملخص", pendingCount: "بانتظار الاعتماد", approvedCount: "معتمد", rejectedCount: "مرفوض", active: "الحساب نشط", published: "المنيو منشور", draft: "المنيو غير منشور" },
+  en: { pending: "Pending approval", approved: "Approved", rejected: "Rejected", all: "All customers", title: "New Customer Requests", subtitle: "A dedicated operating workspace for restaurant onboarding. Review, contact, approve, or reject customers without mixing them with food orders.", refresh: "Refresh", search: "Search restaurant, city, phone, or email", empty: "No matching customer requests.", details: "Customer details", business: "Restaurant", city: "City", phone: "Phone", email: "Email", submitted: "Submitted", status: "Status", notes: "Admin notes", notesPlaceholder: "Add an internal note…", approve: "Approve customer", reject: "Reject request", approved: "Customer approved", rejected: "Request rejected", menu: "Open menu", copy: "Copy link", copied: "Copied", call: "Call", whatsapp: "WhatsApp", emailAction: "Email", overview: "Overview", pendingCount: "Pending", approvedCount: "Approved", rejectedCount: "Rejected", active: "Account active", published: "Menu published", draft: "Menu not published" },
+} as const;
 
 function AdminOnboardingPage() {
   const navigate = useNavigate();
+  const { lang } = useLang();
+  const copy = labels[lang];
   const { user, isPending } = useCurrentUserState();
-  const [dashboard, setDashboard] = useState<AdminDashboard>({ total: 0, newCount: 0, contactedCount: 0, qualifiedCount: 0, convertedCount: 0, lostCount: 0, leads: [] });
+  const [rows, setRows] = useState<PlatformCustomerRequest[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [status, setStatus] = useState<Status>("all");
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<LeadStatus | "all">("all");
-  const [selected, setSelected] = useState<AdminLead | null>(null);
-  const [onboarding, setOnboarding] = useState<LeadOnboardingStatus | null>(null);
-  const [registrationUrl, setRegistrationUrl] = useState("");
-  const [qr, setQr] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
 
-  async function load() {
+  const load = async () => {
     if (!user) return;
-    setBusy(true); setError("");
-    const result = await getAdminDashboard({ data: { status: status === "all" ? undefined : status, q: query.trim() || undefined } });
-    if (result.ok) { setDashboard(result.data); setSelected((current) => current && result.data.leads.some((x) => x.id === current.id) ? result.data.leads.find((x) => x.id === current.id) ?? current : result.data.leads[0] ?? null); }
-    else setError(result.error);
-    setBusy(false);
-  }
-
-  async function loadSelected(lead: AdminLead | null) {
-    setSelected(lead); setRegistrationUrl(""); setQr("");
-    if (!lead) { setOnboarding(null); return; }
-    const result = await getLeadOnboardingStatus({ data: { leadId: lead.id } });
-    if (result.ok) setOnboarding(result.data); else setError(result.error);
-  }
+    setLoading(true); setError("");
+    const result = await getPlatformCustomerRequests({ data: { status: status === "all" ? undefined : status, q: query.trim() || undefined } });
+    if (!result.ok) setError(result.error);
+    else {
+      setRows(result.data);
+      setSelectedId((current) => current && result.data.some((row) => row.id === current) ? current : result.data[0]?.id ?? null);
+      const selected = result.data.find((row) => row.id === selectedId) ?? result.data[0];
+      setNotes(selected?.adminNotes ?? "");
+    }
+    setLoading(false);
+  };
 
   useEffect(() => { if (isPending) return; if (!user) { void navigate({ to: "/login", search: { redirect: "/admin/onboarding" } as never, replace: true }); return; } void load(); }, [isPending, user]);
-  useEffect(() => { if (!isPending && user) { const timer = window.setTimeout(() => void load(), 220); return () => window.clearTimeout(timer); } }, [query, status]);
-  useEffect(() => { if (!registrationUrl) return; let cancelled = false; void import("qrcode").then((QR) => QR.toDataURL(registrationUrl, { width: 640, margin: 2, color: { dark: "#171411", light: "#ffffff" } }).then((data) => { if (!cancelled) setQr(data); })); return () => { cancelled = true; }; }, [registrationUrl]);
+  useEffect(() => { if (!isPending && user) { const timer = window.setTimeout(() => void load(), 250); return () => window.clearTimeout(timer); } }, [status, query]);
 
-  async function approve() {
-    if (!selected || busy) return;
-    setBusy(true); setError("");
-    const result = await approveLead({ data: { leadId: selected.id } });
-    if (result.ok) { const url = `${window.location.origin}${result.data.registrationUrl}`; setRegistrationUrl(url); setOnboarding(result.data); }
-    else setError(result.error);
-    setBusy(false);
-    if (result.ok) void load();
+  const selected = useMemo(() => rows.find((row) => row.id === selectedId) ?? null, [rows, selectedId]);
+  const counts = useMemo(() => ({ pending: rows.filter((r) => r.status === "pending").length, approved: rows.filter((r) => r.status === "approved").length, rejected: rows.filter((r) => r.status === "rejected").length }), [rows]);
+
+  useEffect(() => { setNotes(selected?.adminNotes ?? ""); setCopied(false); }, [selected?.id]);
+
+  async function setCustomerStatus(next: "approved" | "rejected") {
+    if (!selected || saving) return;
+    setSaving(true); setError("");
+    const result = await updatePlatformCustomerRequest({ data: { id: selected.id, status: next, adminNotes: notes } });
+    if (!result.ok) setError(result.error);
+    else setRows((current) => current.map((row) => row.id === result.data.id ? result.data : row));
+    setSaving(false);
   }
 
-  async function revoke() {
-    if (!selected || busy) return;
-    if (!window.confirm("إلغاء رابط التسجيل الحالي؟")) return;
-    setBusy(true); const result = await revokeLeadOnboarding({ data: { leadId: selected.id } });
-    if (result.ok) { setOnboarding(result.data); setRegistrationUrl(""); setQr(""); } else setError(result.error);
-    setBusy(false);
+  async function copyMenu() {
+    if (!selected) return;
+    await navigator.clipboard.writeText(`${window.location.origin}${selected.menuUrl}`);
+    setCopied(true); window.setTimeout(() => setCopied(false), 1600);
   }
 
-  const counts = useMemo(() => ({ new: dashboard.newCount, contacted: dashboard.contactedCount, qualified: dashboard.qualifiedCount, converted: dashboard.convertedCount }), [dashboard]);
-  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جارٍ التحقق من صلاحيات مالك المنصة…</div>;
+  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">{lang === "ar" ? "جارٍ التحقق من صلاحيات مالك المنصة…" : "Checking platform-owner access…"}</div>;
 
-  return <main className="mx-auto grid max-w-[1450px] gap-5 py-4 lg:py-8" dir="rtl">
-    <header className="flex flex-col gap-4 rounded-3xl border border-line bg-paper p-5 md:flex-row md:items-end md:justify-between"><div><div className="inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5" /> Platform Owner · Customer Onboarding</div><h1 className="mt-3 font-display text-3xl font-semibold">مركز اعتماد العملاء الجدد</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-muted">استقبل طلب المطعم، راجعه، تواصل معه، اعتمده، وأرسل له رابط تسجيل مخصص. بعد التسجيل تُنشأ مساحة المطعم تلقائيًا ويظهر رابط المنيو وQR.</p></div><div className="flex gap-2"><Button variant="outline" onClick={() => void navigate({ to: "/admin" })}>العودة للإدارة</Button><Button variant="outline" disabled={busy} onClick={() => void load()}><RefreshCw className={busy ? "size-4 animate-spin" : "size-4"} /> تحديث</Button></div></header>
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4"><Metric label="جديد" value={counts.new} /><Metric label="تم التواصل" value={counts.contacted} /><Metric label="مؤهل" value={counts.qualified} /><Metric label="تم التحويل" value={counts.converted} /></div>
-    {error ? <div className="rounded-xl border border-bad/30 bg-bad/5 px-4 py-3 text-sm text-bad">{error}</div> : null}
-    <section className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-      <div className="grid content-start gap-3 rounded-3xl border border-line bg-sand/20 p-3"><div className="grid gap-2 md:grid-cols-[1fr_180px]"><label className="relative"><Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="اسم المطعم، المسؤول، الجوال، البريد، المدينة" /></label><select value={status} onChange={(e) => setStatus(e.target.value as LeadStatus | "all")} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">كل الحالات</option>{LEAD_STATUSES.map((s) => <option key={s} value={s}>{LABELS[s]}</option>)}</select></div><div className="grid gap-2">{dashboard.leads.map((lead) => <button key={lead.id} type="button" onClick={() => void loadSelected(lead)} className={`grid gap-2 rounded-2xl border bg-paper p-4 text-start ${selected?.id === lead.id ? "border-ink bg-sand/40" : "border-line"}`}><div className="flex items-start justify-between gap-3"><div><strong>{lead.businessName}</strong><p className="mt-1 text-xs text-muted">{lead.contactName} · {lead.city || "—"}</p></div><span className="rounded-full bg-sand px-2.5 py-1 text-xs">{LABELS[lead.status]}</span></div><div className="flex flex-wrap gap-2 text-xs text-muted"><span>{lead.contactPhone}</span>{lead.contactEmail ? <span>{lead.contactEmail}</span> : null}<span>{new Date(lead.createdAt).toLocaleDateString("ar-SA")}</span></div></button>)}{!dashboard.leads.length ? <div className="p-8 text-center text-sm text-muted">لا توجد طلبات مطابقة.</div> : null}</div></div>
-      <LeadDetail lead={selected} onboarding={onboarding} registrationUrl={registrationUrl} qr={qr} busy={busy} onApprove={approve} onRevoke={revoke} />
+  return <main className="mx-auto grid max-w-[1500px] gap-5 py-4 lg:py-8" dir={lang === "ar" ? "rtl" : "ltr"}>
+    <header className="rounded-3xl border border-line bg-paper p-5 md:p-7">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div><div className="inline-flex items-center gap-2 rounded-full border border-line bg-sand/50 px-3 py-1 text-xs text-muted"><ShieldCheck className="size-3.5" /> Menu V3 · Platform Owner</div><h1 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">{copy.title}</h1><p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{copy.subtitle}</p></div>
+        <div className="flex flex-wrap items-center gap-2"><LangToggle /><Button variant="outline" onClick={() => void navigate({ to: "/admin" })}>{lang === "ar" ? "لوحة المنصة" : "Platform admin"}</Button><Button variant="outline" disabled={loading} onClick={() => void load()}><RefreshCw className={loading ? "size-4 animate-spin" : "size-4"} />{copy.refresh}</Button></div>
+      </div>
+    </header>
+
+    <section className="grid grid-cols-3 gap-3 md:grid-cols-4">
+      <Metric label={copy.pendingCount} value={counts.pending} active={status === "pending"} onClick={() => setStatus("pending")} />
+      <Metric label={copy.approvedCount} value={counts.approved} active={status === "approved"} onClick={() => setStatus("approved")} />
+      <Metric label={copy.rejectedCount} value={counts.rejected} active={status === "rejected"} onClick={() => setStatus("rejected")} />
+      <Metric label={copy.overview} value={rows.length} active={status === "all"} onClick={() => setStatus("all")} className="hidden md:grid" />
+    </section>
+
+    {error ? <div className="rounded-2xl border border-bad/30 bg-bad/5 px-4 py-3 text-sm text-bad" role="alert">{error}</div> : null}
+
+    <section className="grid min-h-[620px] gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,.95fr)]">
+      <div className="grid content-start gap-3 rounded-3xl border border-line bg-sand/20 p-3">
+        <div className="grid gap-2 md:grid-cols-[1fr_180px]"><label className="relative"><Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={copy.search} /></label><select value={status} onChange={(e) => setStatus(e.target.value as Status)} className="h-10 rounded-md border border-line bg-paper px-3 text-sm"><option value="all">{copy.all}</option><option value="pending">{copy.pending}</option><option value="approved">{copy.approved}</option><option value="rejected">{copy.rejected}</option></select></div>
+        <div className="grid gap-2">{rows.map((row) => <button key={row.id} type="button" onClick={() => setSelectedId(row.id)} className={`grid gap-3 rounded-2xl border p-4 text-start transition ${selectedId === row.id ? "border-ink bg-paper shadow-sm" : "border-line bg-paper/70 hover:bg-paper"}`}><div className="flex items-start justify-between gap-3"><div className="min-w-0"><strong className="block truncate">{row.businessName}</strong><span className="mt-1 block text-xs text-muted">{row.city || "—"} · {row.email || row.phone || "—"}</span></div><StatusPill status={row.status} lang={lang} /></div><div className="flex flex-wrap gap-2 text-xs text-muted"><span>{new Date(row.submittedAt).toLocaleDateString(lang === "ar" ? "ar-SA" : "en-US")}</span>{row.isPublished ? <span>• {copy.published}</span> : <span>• {copy.draft}</span>}</div></button>)}{!rows.length ? <div className="grid min-h-72 place-items-center p-8 text-center text-sm text-muted">{copy.empty}</div> : null}</div>
+      </div>
+
+      {selected ? <aside className="grid content-start gap-5 rounded-3xl border border-line bg-paper p-5 lg:sticky lg:top-5 lg:h-fit">
+        <div className="flex items-start justify-between gap-4"><div><p className="text-xs text-muted">{copy.details}</p><h2 className="mt-1 font-display text-2xl font-semibold">{selected.businessName}</h2><p className="mt-1 text-sm text-muted">{selected.businessNameEn || selected.city || "—"}</p></div><StatusPill status={selected.status} lang={lang} /></div>
+        <div className="grid gap-2 rounded-2xl border border-line bg-sand/20 p-4 text-sm"><Info label={copy.business} value={selected.businessName} /><Info label={copy.city} value={selected.city || "—"} /><Info label={copy.phone} value={selected.phone || "—"} dir="ltr" /><Info label={copy.email} value={selected.email || "—"} dir="ltr" /><Info label={copy.submitted} value={new Date(selected.submittedAt).toLocaleString(lang === "ar" ? "ar-SA" : "en-US")} /></div>
+        <div className="flex flex-wrap gap-2">{selected.phone ? <a href={`tel:${selected.phone.replace(/[^0-9+]/g, "")}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Phone className="size-4" />{copy.call}</a> : null}{selected.phone ? <a href={`https://wa.me/${selected.phone.replace(/[^0-9]/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><MessageCircle className="size-4" />{copy.whatsapp}</a> : null}{selected.email ? <a href={`mailto:${selected.email}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Mail className="size-4" />{copy.emailAction}</a> : null}</div>
+        <div className="grid gap-3 rounded-2xl border border-line p-4"><div className="flex items-center gap-2 text-sm font-semibold"><UserCheck className="size-4" />{copy.status}</div><div className="grid grid-cols-2 gap-2"><div className="rounded-xl bg-sand/40 p-3"><span className="block text-xs text-muted">{copy.active}</span><strong className="text-sm">{selected.isActive ? "✓" : "—"}</strong></div><div className="rounded-xl bg-sand/40 p-3"><span className="block text-xs text-muted">{selected.isPublished ? copy.published : copy.draft}</span><strong className="text-sm">{selected.isPublished ? "✓" : "—"}</strong></div></div><div className="flex flex-wrap gap-2"><a href={selected.menuUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm"><ExternalLink className="size-4" />{copy.menu}</a><Button variant="outline" type="button" onClick={() => void copyMenu()}><Copy className="size-4" />{copied ? copy.copied : copy.copy}</Button></div></div>
+        <div className="grid gap-2"><label className="text-sm font-medium">{copy.notes}</label><textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={copy.notesPlaceholder} className="min-h-24 rounded-xl border border-line bg-paper p-3 text-sm leading-6 outline-none focus:ring-2 focus:ring-ink/20" /></div>
+        {selected.status === "pending" ? <div className="grid gap-2 sm:grid-cols-2"><Button disabled={saving} onClick={() => void setCustomerStatus("approved")}><CheckCircle2 className="size-4" />{saving ? "…" : copy.approve}</Button><Button variant="outline" disabled={saving} onClick={() => void setCustomerStatus("rejected")}><XCircle className="size-4" />{copy.reject}</Button></div> : <div className="rounded-xl bg-sand/40 p-3 text-sm">{selected.status === "approved" ? copy.approved : copy.rejected}</div>}
+      </aside> : <div className="grid min-h-80 place-items-center rounded-3xl border border-dashed border-line bg-paper p-8 text-sm text-muted">{copy.empty}</div>}
     </section>
   </main>;
 }
 
-function LeadDetail({ lead, onboarding, registrationUrl, qr, busy, onApprove, onRevoke }: { lead: AdminLead | null; onboarding: LeadOnboardingStatus | null; registrationUrl: string; qr: string; busy: boolean; onApprove: () => Promise<void>; onRevoke: () => Promise<void> }) {
-  if (!lead) return <div className="grid min-h-80 place-items-center rounded-3xl border border-dashed border-line bg-paper p-8 text-sm text-muted">اختر طلبًا لبدء المراجعة.</div>;
-  const tel = lead.contactPhone ? `tel:${lead.contactPhone.replace(/[^0-9+]/g, "")}` : "";
-  const wa = lead.contactPhone ? `https://wa.me/${lead.contactPhone.replace(/[^0-9]/g, "")}` : "";
-  return <aside className="grid content-start gap-5 rounded-3xl border border-line bg-paper p-5 lg:sticky lg:top-5 lg:h-fit"><div><p className="text-xs text-muted">طلب عميل جديد</p><h2 className="mt-1 text-2xl font-semibold">{lead.businessName}</h2><p className="mt-1 text-sm text-muted">{lead.contactName} · {lead.city || "—"}</p></div><div className="grid gap-2 text-sm"><div className="flex justify-between gap-3"><span className="text-muted">الجوال</span><span dir="ltr">{lead.contactPhone}</span></div><div className="flex justify-between gap-3"><span className="text-muted">البريد</span><span className="break-all" dir="ltr">{lead.contactEmail || "—"}</span></div><div className="flex justify-between gap-3"><span className="text-muted">المصدر</span><span>{lead.source}</span></div>{lead.details ? <div className="rounded-xl bg-sand/50 p-3 leading-6"><span className="text-muted">التفاصيل:</span><br />{lead.details}</div> : null}</div><div className="flex flex-wrap gap-2">{tel ? <a href={tel} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm">اتصال</a> : null}{wa ? <a href={wa} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm">WhatsApp</a> : null}{lead.contactEmail ? <a href={`mailto:${lead.contactEmail}`} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm">بريد</a> : null}</div><div className="rounded-2xl border border-line p-4"><div className="flex items-center justify-between gap-3"><div><p className="text-xs text-muted">حالة التسجيل</p><strong>{onboarding ? ONBOARDING_LABELS[onboarding.status] : "جارٍ التحميل…"}</strong></div>{onboarding?.status === "used" ? <CheckCircle2 className="size-5" /> : onboarding?.status === "revoked" || onboarding?.status === "expired" ? <XCircle className="size-5" /> : <Link2 className="size-5" />}</div>{onboarding?.status === "used" && onboarding.menuUrl ? <a href={onboarding.menuUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 text-sm underline"><ExternalLink className="size-4" />معاينة المنيو</a> : null}{onboarding?.status === "pending" ? <p className="mt-2 text-xs leading-5 text-muted">الرابط الحالي صالح لمدة 7 أيام. لإصدار رابط جديد، ألغِ الحالي ثم أنشئ واحدًا جديدًا.</p> : null}</div>{lead.status !== "converted" ? <div className="grid gap-2 sm:grid-cols-2"><Button disabled={busy || onboarding?.status === "pending"} onClick={() => void onApprove()}><Link2 className="size-4" />{onboarding?.status === "revoked" || onboarding?.status === "expired" ? "إنشاء رابط جديد" : "اعتماد وإنشاء رابط"}</Button>{onboarding?.status === "pending" ? <Button variant="outline" disabled={busy} onClick={() => void onRevoke()}><RotateCcw className="size-4" />إلغاء الرابط</Button> : null}</div> : null}{registrationUrl ? <div className="grid gap-3 rounded-2xl border border-line bg-white p-4"><div className="flex items-center gap-2 text-sm font-semibold"><QrCode className="size-4" />رابط التسجيل</div><div className="flex gap-2"><Input readOnly value={registrationUrl} /><Button variant="outline" type="button" onClick={() => void navigator.clipboard.writeText(registrationUrl)} aria-label="نسخ رابط التسجيل"><Copy className="size-4" /></Button></div>{qr ? <img src={qr} alt="QR لرابط تسجيل العميل" className="mx-auto w-52 rounded-xl" /> : null}<p className="text-xs leading-5 text-muted">أرسل الرابط أو QR للعميل. بعد التسجيل تُنشأ مساحة المطعم تلقائيًا.</p></div> : null}</aside>;
-}
-
-function Metric({ label, value }: { label: string; value: number }) { return <div className="grid gap-1 rounded-2xl border border-line bg-paper p-4"><span className="text-xs text-muted">{label}</span><strong className="text-2xl">{value.toLocaleString("ar-SA")}</strong></div>; }
+function Metric({ label, value, active, onClick, className = "" }: { label: string; value: number; active: boolean; onClick: () => void; className?: string }) { return <button type="button" onClick={onClick} className={`grid gap-1 rounded-2xl border p-4 text-start ${active ? "border-ink bg-ink text-paper" : "border-line bg-paper"} ${className}`}><span className={`text-xs ${active ? "text-paper/70" : "text-muted"}`}>{label}</span><strong className="text-2xl">{value.toLocaleString()}</strong></button>; }
+function StatusPill({ status, lang }: { status: PlatformCustomerRequest["status"]; lang: "ar" | "en" }) { const label = status === "pending" ? labels[lang].pending : status === "approved" ? labels[lang].approved : labels[lang].rejected; return <span className="shrink-0 rounded-full bg-sand px-2.5 py-1 text-xs font-medium">{label}</span>; }
+function Info({ label, value, dir }: { label: string; value: string; dir?: "ltr" | "rtl" }) { return <div className="flex justify-between gap-4"><span className="text-muted">{label}</span><span className="max-w-[65%] break-words text-end" dir={dir}>{value}</span></div>; }
