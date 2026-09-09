@@ -14,10 +14,6 @@ function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
 }
 
-function appOrigin() {
-  return "https://menu-v3-kohl.vercel.app";
-}
-
 async function assertAdmin(userId: string): Promise<FnResult<true>> {
   try {
     await requirePlatformAdmin(userId);
@@ -48,7 +44,7 @@ function mapStatus(row: Record<string, unknown> | undefined, leadId: string): Le
   const approvedAt = row.approved_at ? new Date(String(row.approved_at)).toISOString() : null;
   const status = row.used_at ? "used" : row.revoked_at ? "revoked" : expiresAt && new Date(expiresAt) <= new Date() ? "expired" : "pending";
   const slug = row.tenant_slug ? String(row.tenant_slug) : null;
-  return { leadId, status, expiresAt, approvedAt, usedAt, tenantId: row.tenant_id ? String(row.tenant_id) : null, tenantSlug: slug, registrationUrl: null, menuUrl: slug ? `${appOrigin()}/m/${slug}/main?src=onboarding` : null };
+  return { leadId, status, expiresAt, approvedAt, usedAt, tenantId: row.tenant_id ? String(row.tenant_id) : null, tenantSlug: slug, registrationUrl: null, menuUrl: slug ? `/m/${slug}/main?src=onboarding` : null };
 }
 
 export const getLeadOnboardingStatus = createServerFn({ method: "GET" })
@@ -85,7 +81,7 @@ export const approveLead = createServerFn({ method: "POST" })
       await sql`insert into lead_onboarding (id, lead_id, token_hash, expires_at, approved_at, created_by) values (${newId()}, ${data.leadId}, ${hashToken(token)}, ${expiresAt}, now(), ${context.userId})`;
       await sql`update leads set status = 'qualified', updated_at = now() where id = ${data.leadId}`;
       const status = mapStatus({ expires_at: expiresAt, approved_at: new Date().toISOString() }, data.leadId);
-      const registrationUrl = `${appOrigin()}/onboarding/${token}`;
+      const registrationUrl = `/onboarding/${token}`;
       return { ok: true, data: { ...status, token, registrationUrl } };
     } catch (err) {
       console.error("approveLead failed", err);
@@ -135,7 +131,7 @@ export const activateLeadOnboarding = createServerFn({ method: "POST" })
       for (const day of [0, 1, 2, 3, 4, 5, 6]) await sql`insert into branch_hours (branch_id, weekday, opens_at, closes_at, is_closed) values (${branchId}, ${day}, ${day === 5 ? "13:00" : "07:00"}, '00:00', false)`;
       await sql`update lead_onboarding set used_at = now(), tenant_id = ${tenantId} where id = ${String(onboarding.id)} and used_at is null and revoked_at is null`;
       await sql`update leads set status = 'converted', updated_at = now() where id = ${String(onboarding.lead_id)}`;
-      return { ok: true, data: { tenantId, slug, menuUrl: `${appOrigin()}/m/${slug}/main?src=onboarding` } };
+      return { ok: true, data: { tenantId, slug, menuUrl: `/m/${slug}/main?src=onboarding` } };
     } catch (err) {
       console.error("activateLeadOnboarding failed", err);
       return { ok: false, code: "unavailable", error: "تعذر إكمال إنشاء مساحة المطعم" };
