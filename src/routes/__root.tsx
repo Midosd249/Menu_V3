@@ -23,6 +23,7 @@ import publicThemeQualityRecoveryCss from "../theme-public-quality-recovery.css?
 import menuPreviewLayerCss from "../menu-preview-layer.css?url";
 import quickAddCompactRefinementCss from "../quick-add-compact-refinement.css?url";
 import priceConsistencyCss from "../theme-price-consistency.css?url";
+import galleryCanvaParityCss from "../theme-gallery-canva-parity.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -62,8 +63,9 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: menuPreviewLayerCss },
       { rel: "stylesheet", href: quickAddCompactRefinementCss },
       { rel: "stylesheet", href: priceConsistencyCss },
-      /* Taste must be the final Heritage layer so no historical Heritage CSS can visually override it. */
+      /* Taste/Heritage historical layers are preserved; Gallery parity is deliberately loaded last for Gallery only. */
       { rel: "stylesheet", href: heritageThemeCss },
+      { rel: "stylesheet", href: galleryCanvaParityCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
