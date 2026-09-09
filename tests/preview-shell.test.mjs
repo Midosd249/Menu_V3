@@ -126,3 +126,33 @@ test("theme testing access remains server-time-bound while the production catalo
   assert.match(registry, /isPremiumTheme\(_key: ThemeKey\): boolean/);
   assert.match(registry, /return false/);
 });
+
+test("W16 hardening keeps mobile content above the fixed action area and safe-area", async () => {
+  const styles = await readFile("src/theme-w16-mobile-qr-hardening.css", "utf8");
+  assert.match(styles, /main\s*\{[\s\S]*padding-bottom:\s*calc\(8rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
+  assert.match(styles, /nav\.fixed\s*\{[\s\S]*z-index:\s*40/);
+  assert.match(styles, /scroll-margin-bottom:\s*calc\(6rem \+ env\(safe-area-inset-bottom, 0px\)/);
+});
+
+test("W16 hardening protects Arabic word boundaries, Noir hours contrast, and Gallery card height", async () => {
+  const styles = await readFile("src/theme-w16-mobile-qr-hardening.css", "utf8");
+  assert.match(styles, /word-break:\s*normal/);
+  assert.match(styles, /hyphens:\s*none/);
+  assert.match(styles, /data-menu-theme="noir"[\s\S]*hours-heading[\s\S]*#171411/);
+  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > button[\s\S]*height:\s*100%/);
+  assert.match(styles, /overflow:\s*visible/);
+});
+
+test("W16 QR generation uses the configured production public origin and a stable language-control hook", async () => {
+  const qr = await readFile("src/routes/studio/qr.tsx", "utf8");
+  const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
+  assert.match(qr, /getPublicOrigin/);
+  assert.match(qr, /setOrigin\(getPublicOrigin\(\) \|\| window\.location\.origin\)/);
+  assert.match(qr, /menuUrl\(origin, snapshot\.tenant\.slug, b\.slug\)/);
+  assert.match(toggle, /menu-lang-toggle/);
+});
+
+test("W16 removes the legacy Editorial volume label from the active refinement layer", async () => {
+  const styles = await readFile("src/theme-refinements.css", "utf8");
+  assert.doesNotMatch(styles, /VOL\.\s*03\s*[—-]\s*THE TABLE/);
+});
