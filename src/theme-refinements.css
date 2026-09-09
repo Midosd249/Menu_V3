@@ -22,7 +22,7 @@ html[data-menu-theme="editorial"] .menu-public-shell header {
   box-shadow: none;
 }
 html[data-menu-theme="editorial"] .menu-public-shell header::after {
-  content: "VOL. 03 — THE TABLE";
+  content: "";
   inset-inline-start: 1rem;
   inset-inline-end: auto;
   top: 1.25rem;
