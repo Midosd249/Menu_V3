@@ -126,7 +126,7 @@ export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
           background: rgb(255 253 249 / .8) !important;
           color: var(--gallery-ink-soft, #514942) !important;
         }
-        /* Keep valid public actions grouped instead of forming a left-side stack. */
+        /* Valid customer actions stay grouped and aligned with the header. */
         .gallery-canva-reference .menu-public-shell > header > div.relative > div:last-child {
           display: flex !important;
           align-items: center !important;
@@ -151,15 +151,53 @@ export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
           border-color: var(--gallery-ink, #24201d) !important;
           color: var(--gallery-paper, #fffdf9) !important;
         }
-        .gallery-canva-reference .menu-public-shell > header::after {
-          content: "" !important;
-          position: absolute !important;
-          inset-inline: 0 !important;
-          inset-block-end: 0 !important;
-          height: .14rem !important;
-          background: linear-gradient(90deg, transparent, var(--gallery-accent, #9a5a3a), transparent) !important;
-          opacity: .7 !important;
-          pointer-events: none !important;
+        /* Taste-style floating dock: cart is primary, phone/map/WhatsApp remain secondary. */
+        .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar {
+          inset-inline: .75rem !important;
+          inset-block-end: .75rem !important;
+          width: min(calc(100% - 1.5rem), 32rem) !important;
+          max-width: 32rem !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: .45rem !important;
+          padding: .45rem !important;
+          border: 1px solid rgb(255 253 249 / .18) !important;
+          border-radius: 1.25rem !important;
+          background: rgb(23 20 17 / .96) !important;
+          box-shadow: 0 14px 36px rgb(0 0 0 / .2) !important;
+          backdrop-filter: blur(16px) saturate(110%) !important;
+        }
+        .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > button {
+          order: 10 !important;
+          flex: 1 1 auto !important;
+          min-width: 0 !important;
+          min-height: 3rem !important;
+          border: 0 !important;
+          border-radius: 1rem !important;
+          background: var(--gallery-accent, #9a5a3a) !important;
+          color: #fffdf9 !important;
+          box-shadow: none !important;
+          font-weight: 750 !important;
+        }
+        .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > a {
+          order: 1 !important;
+          width: 2.85rem !important;
+          height: 2.85rem !important;
+          min-width: 2.85rem !important;
+          min-height: 2.85rem !important;
+          display: grid !important;
+          place-items: center !important;
+          flex: 0 0 2.85rem !important;
+          border: 1px solid rgb(255 253 249 / .25) !important;
+          border-radius: 999px !important;
+          background: transparent !important;
+          color: #fffdf9 !important;
+          padding: 0 !important;
+        }
+        .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > a:hover,
+        .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > a:focus-visible {
+          background: rgb(255 253 249 / .1) !important;
+          transform: none !important;
         }
         @media (max-width: 520px) {
           .gallery-canva-reference .menu-public-shell > header > div.relative {
@@ -178,6 +216,23 @@ export function BakeryDessertTemplate({ menu }: { menu: PublicMenu }) {
           .gallery-canva-reference .menu-public-shell > header button {
             min-width: 2.4rem !important;
             min-height: 2.4rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar {
+            inset-inline: .6rem !important;
+            inset-block-end: .6rem !important;
+            width: calc(100% - 1.2rem) !important;
+            padding: .4rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > a {
+            width: 2.65rem !important;
+            height: 2.65rem !important;
+            min-width: 2.65rem !important;
+            min-height: 2.65rem !important;
+            flex-basis: 2.65rem !important;
+          }
+          .gallery-canva-reference .menu-public-shell > .public-menu-bottom-bar > button {
+            min-height: 2.8rem !important;
+            border-radius: .9rem !important;
           }
         }
         @media (prefers-reduced-motion: reduce) {
