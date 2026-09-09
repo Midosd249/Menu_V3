@@ -6,9 +6,12 @@ test("Taste template remains the Heritage public renderer", async () => {
   const route = await readFile("src/routes/m.$slug.tsx", "utf8");
   const preview = await readFile("src/routes/themes/preview.tsx", "utf8");
   const studio = await readFile("src/routes/studio/preview.tsx", "utf8");
+  const renderer = await readFile("src/components/theme-renderer.tsx", "utf8");
   assert.match(route, /activeTheme === "heritage" \? <TasteTemplate/);
   assert.match(preview, /ThemeRenderer/);
-  assert.match(studio, /activeTheme === "heritage" \? <TasteTemplate/);
+  assert.match(studio, /<ThemeRenderer\s/);
+  assert.doesNotMatch(studio, /<TasteTemplate\s/);
+  assert.match(renderer, /theme === "heritage"\) return <TasteTemplate/);
 });
 
 test("Taste template preserves the supplied menu information architecture", async () => {
