@@ -5,7 +5,7 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Current verified implementation head before this documentation reconciliation: `a7b9fce63257a38eb80ac36a4ab0fb00d2e188ed`.
+- Current verified implementation head before this feature: `a7b9fce63257a38eb80ac36a4ab0fb00d2e188ed`.
 - Current verified Production deployment serves the same commit.
 - Premium Theme System — DONE / VERIFIED / MERGED.
 - Essential, Editorial, Noir, Heritage, and Gallery — protected.
@@ -14,6 +14,7 @@
 - P1 Production/Continuity Hardening — DONE for implemented scope; release-hygiene follow-ups remain.
 - P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
 - W16 QA, Browser/Device, and Release — IN_PROGRESS / HUMAN-DEVICE-VERIFICATION-REMAINING.
+- Current active atomic task: Platform Admin Operations Center.
 
 ## Canonical Backend Identity
 - VERIFIED: Supabase project ref `ublxptcqefujkbeepylc`.
@@ -60,6 +61,33 @@ Workstreams W0–W17 remain historical roadmap context. Completed implementation
 - Quick Add, Item Notes, Cart, canonical public rendering, and customer action surfaces remain protected.
 - Do not create a sixth theme as a substitute for product/design strategy.
 
+## Active Atomic Task — Platform Admin Operations Center
+### Objective
+Turn `/admin` into a practical platform-owner operations workspace, especially for incoming orders, without weakening tenant isolation or destroying historical data.
+
+### Required scope
+1. Dedicated `الطلبات` navigation entry and overview entry point.
+2. Cross-tenant order search by restaurant, customer, phone, and order number.
+3. Status filtering and server-authorized status transitions.
+4. Order detail view with items, options, notes, source, totals, restaurant, and branch.
+5. Contact actions only when verified customer data exists: phone, WhatsApp, email.
+6. Safe removal from the operational board through reversible archive, not hard delete.
+7. Archived orders excluded from operational order views for both platform and restaurant owner surfaces.
+8. Open-order count/badge stays consistent with archived state and status changes.
+9. Regression coverage for auth boundary, archive semantics, contact actions, and operational filtering.
+
+### Safety rules
+- All platform order operations require `requirePlatformAdmin` server-side authorization.
+- Never trust client-supplied tenant, role, or privilege.
+- Do not hard-delete order history.
+- Preserve order items and status events.
+- Do not modify Quick Add, Item Notes, Cart, pricing, checkout/order validation, or theme behavior.
+
+### Evidence
+- Audit: `docs/audits/2026-09-09-admin-operations-audit.md`.
+- Regression: `tests/admin-operations.test.mjs`.
+- Migration: `migrations/20260909001000_order_archive_operations.sql`.
+
 ## W16 — Human Device & Manual Accessibility Gate
 ### Objective
 Close the remaining direct-observation gap against the current Production build without reopening completed implementation.
@@ -95,7 +123,7 @@ Close the remaining direct-observation gap against the current Production build 
 ## P2-H1 — Small Analytics UX Improvement
 - INFERRED: Local Visibility readiness is currently hidden when analytics has no events because the analytics content is gated by `hasData`.
 - PROPOSED: expose the readiness check independently from analytics event availability.
-- This is a separate atomic UX task and is not part of continuity reconciliation.
+- This is a separate atomic UX task.
 
 ## Release-Only Vercel Policy
 Normal release path:
@@ -106,7 +134,7 @@ Normal release path:
 - Do not intentionally trigger repeated Preview/Production deployments.
 - CI success is not deployment evidence.
 - `DEPLOYED` requires direct Vercel evidence.
-- Current Production is already verified against `a7b9fce...`; do not redeploy for this documentation task.
+- Do not redeploy until the current release batch is fully verified.
 
 ## Research Governance
 - Repository evidence is primary.
@@ -116,8 +144,15 @@ Normal release path:
 - Record material research and audits persistently.
 
 ## Exact Next TODO
-### W16 — Human Device & Manual Accessibility Gate
-The single next task is the physical-device/manual accessibility gate described above. Do not start P1-H1, P1-H2, or P2-H1 automatically until W16 is completed or explicitly reprioritized by the owner.
+### Admin Operations Center — verification and release
+1. Inspect the branch CI quality gate.
+2. Fix only reproducible failures caused by this atomic task.
+3. Review the final diff and security/data boundaries.
+4. Create one coherent PR to `main` after quality passes.
+5. Merge only with green CI evidence.
+6. Verify the resulting single Production deployment separately.
+7. Perform real-device/admin smoke verification when available.
+8. Return to W16 physical-device verification.
 
 ## Continuity Rule
 At the end of every atomic task:
