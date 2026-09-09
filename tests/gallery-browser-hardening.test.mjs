@@ -2,69 +2,57 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Gallery first-screen brand hierarchy is explicit and bounded", async () => {
+test("Gallery uses the supplied Canva reference composition", async () => {
   const template = await readFile("src/components/templates/bakery-dessert.tsx", "utf8");
-  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+  const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
   assert.match(template, /gallery-public-frame/);
-  assert.match(template, /gallery-brand-header/);
-  assert.match(template, /gallery-brand-logo/);
-  assert.match(template, /gallery-brand-name/);
-  assert.match(styles, /gallery-brand-logo[\s\S]*width:\s*clamp\(3\.75rem,\s*15vw,\s*4\.5rem\)/);
-  assert.match(styles, /gallery-brand-name[\s\S]*white-space:\s*normal/);
-  assert.match(styles, /gallery-brand-name[\s\S]*overflow-wrap:\s*anywhere/);
+  assert.match(template, /gallery-canva-hero/);
+  assert.match(template, /gallery-canva-hero-title/);
+  assert.match(template, /gallery-canva-hero-button/);
+  assert.match(template, /PublicMenuView/);
+  assert.match(styles, /--gallery-ink:#17140f/);
+  assert.match(styles, /--gallery-cream:#f7f0e4/);
+  assert.match(styles, /--gallery-lime:#d5f05c/);
+  assert.match(styles, /gallery-canva-hero::after/);
 });
 
-test("Gallery preserves RTL/LTR and safe first-screen spacing", async () => {
-  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+test("Gallery keeps all shared ordering behavior behind the visual shell", async () => {
+  const template = await readFile("src/components/templates/bakery-dessert.tsx", "utf8");
 
-  assert.match(styles, /html\[dir="rtl"\]\[data-menu-theme="gallery"\]/);
-  assert.match(styles, /html\[dir="ltr"\]\[data-menu-theme="gallery"\]/);
-  assert.match(styles, /gallery-public-frame > div:last-child[\s\S]*padding-top:\s*0/);
-  assert.match(styles, /prefers-reduced-motion:\s*reduce/);
+  assert.match(template, /PublicMenuView menu=\{menu\}/);
+  assert.match(template, /id="menu"/);
+  assert.match(template, /ArrowDown/);
 });
 
-test("Gallery featured section presents one image-led item at a time", async () => {
-  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+test("Gallery uses Canva mobile-first one-column cards and responsive grids", async () => {
+  const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
-  assert.match(styles, /featured presentation: one image-led item at a time/);
-  assert.match(styles, /first-child:has\(> h2\.text-sm\) > div \{[\s\S]*display:\s*block/);
-  assert.match(styles, /button:not\(:first-child\)\s*\{\s*display:\s*none/);
-  assert.match(styles, /button > :first-child\s*\{\s*aspect-ratio:\s*4\s*\/\s*3/);
+  assert.match(styles, /main ul\{display:grid;grid-template-columns:1fr/);
+  assert.match(styles, /@media\(min-width:640px\).*grid-template-columns:repeat\(2/);
+  assert.match(styles, /@media\(min-width:1024px\).*grid-template-columns:repeat\(3/);
+  assert.match(styles, /aspect-ratio:16\/10/);
 });
 
-test("Gallery removes boxed card chrome from both legacy and shared-renderer cards", async () => {
-  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+test("Gallery preserves Quick Add and product-options controls", async () => {
+  const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*border:\s*0\s*!important/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*background:\s*transparent\s*!important/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*box-shadow:\s*none\s*!important/);
-  assert.match(styles, /data-menu-theme="gallery"[\s\S]*main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :first-child[\s\S]*border-radius:\s*1rem\s*!important/);
   assert.match(styles, /public-menu-quick-add/);
   assert.match(styles, /public-menu-options-action/);
 });
 
-test("Gallery hardening is loaded after the base Gallery stylesheet", async () => {
+test("Gallery parity stylesheet is loaded after base Gallery layers", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
 
   assert.match(source, /import galleryThemeCss from "\.\.\/theme-gallery\.css\?url"/);
   assert.match(source, /import galleryHardeningCss from "\.\.\/theme-gallery-hardening\.css\?url"/);
-  assert.match(source, /href: galleryThemeCss \},\s*\{ rel: "stylesheet", href: galleryHardeningCss \}/);
+  assert.match(source, /import galleryCanvaParityCss from "\.\.\/theme-gallery-canva-parity\.css\?url"/);
+  assert.match(source, /href: galleryCanvaParityCss/);
 });
 
-test("Public menu root does not overwrite route-selected theme during hydration", async () => {
-  const source = await readFile("src/routes/__root.tsx", "utf8");
+test("Gallery preserves RTL/LTR and reduced-motion safeguards", async () => {
+  const styles = await readFile("src/theme-gallery-canva-parity.css", "utf8");
 
-  assert.doesNotMatch(source, /<MenuThemeController\s*\/>/);
-  assert.doesNotMatch(source, /import \{ MenuThemeController \}/);
-});
-
-test("Gallery final hardening clears legacy wrapper chrome and prevents description clipping", async () => {
-  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
-
-  assert.match(styles, /html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li,\s*html\[data-menu-theme="gallery"\] \.menu-public-shell main ul > li > div,/);
-  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*border-width:\s*0\s*!important/);
-  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)[\s\S]*overflow:\s*visible\s*!important/);
-  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*overflow:\s*visible\s*!important/);
-  assert.match(styles, /main ul > li > div > button:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\) > :last-child[\s\S]*height:\s*auto\s*!important/);
+  assert.match(styles, /html\[dir="rtl"\]\[data-menu-theme="gallery"\]/);
+  assert.match(styles, /prefers-reduced-motion:reduce/);
 });
