@@ -20,7 +20,7 @@ Preserve continuity for theme work completed through an external chat/session so
 
 ## Heritage / Taste continuity
 - **VERIFIED:** The current theme registry identifies `heritage` with Arabic name `مذاق` and English name `Taste`.
-- **INFERRED:** This is the repository implementation corresponding to the previously discussed Taste/Mذاق visual direction. The exact external-chat conversation wording or any visual decisions not represented in Git are not available as authoritative evidence here.
+- **INFERRED:** This is the repository implementation corresponding to the previously discussed Taste/مذاق visual direction. The exact external-chat conversation wording or any visual decisions not represented in Git are not available as authoritative evidence here.
 - **UNKNOWN:** Any external-chat changes that were never committed or otherwise represented in the repository cannot be reconstructed from Git alone.
 
 ## Operational rule for future sessions
@@ -36,14 +36,31 @@ The repository remains the source of truth. If an external chat produces success
 ## Non-copy / design boundary
 The theme work may be inspired by references and restaurant-market direction, but proprietary screenshots, branding, text, assets, or source code must not be copied. Theme presentation must remain scoped to the existing renderer and theme registry architecture.
 
+## Current milestone integration
+- **VERIFIED:** The marketing-home branch consumes the canonical `MENU_THEMES` registry and its real preview image data for the theme gallery instead of introducing a parallel theme catalog.
+- **VERIFIED:** The branch preserves the existing `/themes/preview` route as the full preview destination.
+- **VERIFIED:** The marketing lead flow calls the existing `submitLead` contract and displays a stable short reference derived from the returned lead id.
+- **VERIFIED:** Plan and theme selection are carried into the customer request details without changing the theme registry or theme renderer contracts.
+- **VERIFIED:** Theme-specific test contracts were reconciled to the current centralized renderer architecture rather than reverting completed theme work.
+- **VERIFIED:** The Taste/Heritage local Quick Add behavior remains protected while the retired shared Quick Add selector remains hidden.
+- **VERIFIED:** Gallery, Editorial, Noir, Essential, and Heritage/Taste regression contracts all pass in the current quality gate.
+
+## Quality-gate evidence
+- **VERIFIED:** Quality run `1136` completed successfully on 2026-09-09.
+- **VERIFIED:** Route generation passed.
+- **VERIFIED:** Typecheck passed.
+- **VERIFIED:** All `181` repository tests passed.
+- **VERIFIED:** Lint passed with existing warnings only and zero errors.
+- **VERIFIED:** Production build passed, including PGlite asset/migration checks.
+- **VERIFIED:** Playwright runtime and Chromium installation passed.
+- **VERIFIED:** Browser Template QA — all themes passed.
+- **VERIFIED:** Browser performance baseline step and preview shutdown passed.
+- **VERIFIED:** CI required a CI-local Playwright runtime install because `performance-audit.mjs` imports Playwright directly while the application package intentionally does not expose Playwright as a runtime dependency. The workflow now installs `playwright@1.63.0` with `--no-save --no-package-lock` before browser QA.
+
 ## Verification gap
 - **UNKNOWN:** Physical-device rendering and manual screen-reader output remain unobserved in the connector environment.
 - **UNKNOWN:** The external chat itself is not a repository source and cannot be cited as evidence beyond the repository artifacts it produced.
-
-## Current session integration
-- **VERIFIED:** The marketing-home branch consumes the canonical `MENU_THEMES` registry and its real preview image data for the theme gallery instead of introducing a parallel theme catalog.
-- **VERIFIED:** The branch preserves the existing `/themes/preview` route as the full preview destination.
-- **VERIFIED:** The current repair to `src/routes/index.tsx` only corrected the lead-details serialization delimiter from an invalid literal line break to `\n`; it did not alter theme behavior.
+- **UNKNOWN:** Vercel Production deployment has not been intentionally triggered as part of this milestone.
 
 ## Next continuity action
-Keep these commits and the five-theme system protected while completing the current marketing-home milestone. Do not reopen completed theme implementation unless new browser/device evidence reproduces a defect.
+Keep the five-theme system, the Taste/Heritage modifications, the Gallery Canva parity work, and the centralized ThemeRenderer architecture protected. Do not reopen completed theme implementation unless new browser/device evidence reproduces a defect. Treat Quality run `1136` as the current verified baseline for the marketing-home branch.
