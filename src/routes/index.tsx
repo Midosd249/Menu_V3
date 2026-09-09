@@ -20,13 +20,11 @@ const FEATURES = [
   { icon: Globe2, ar: "عربي وإنجليزي", en: "Arabic & English", bodyAr: "RTL/LTR مصمم من الأساس، وليس إضافة لاحقة.", bodyEn: "Intentional RTL/LTR support from the foundation." },
   { icon: Sparkles, ar: "تحديث سريع", en: "Fast updates", bodyAr: "حدّث السعر أو الصنف وانشر دون إعادة طباعة المنيو.", bodyEn: "Update a price or product without reprinting the menu." },
 ] as const;
-
 const STEPS = [
   { n: "01", icon: Store, ar: "أنشئ حسابك", en: "Create your account", bodyAr: "أضف اسم المطعم وأساسيات الهوية.", bodyEn: "Add your restaurant name and core brand details." },
   { n: "02", icon: Layers3, ar: "أضف المنيو والفروع", en: "Add menu & branches", bodyAr: "رتّب الأصناف والأسعار والفروع.", bodyEn: "Organize products, prices, and branches." },
   { n: "03", icon: ScanLine, ar: "شارك QR والرابط", en: "Share QR & link", bodyAr: "ضع التجربة أمام ضيوفك خلال دقائق.", bodyEn: "Put the experience in front of guests in minutes." },
 ] as const;
-
 const FAQS = [
   { qAr: "هل أحتاج خبرة تقنية؟", qEn: "Do I need technical experience?", aAr: "لا. صُممت المنصة لإدارة المنيو من واجهة واضحة دون كتابة كود.", aEn: "No. Restaurant teams can manage the menu through a clear interface without writing code." },
   { qAr: "هل يدعم العربية والإنجليزية؟", qEn: "Does it support Arabic and English?", aAr: "نعم. Menu V3 عربي أولاً مع دعم الإنجليزية وRTL/LTR.", aEn: "Yes. Menu V3 is Arabic-first with English and RTL/LTR support." },
@@ -41,7 +39,6 @@ function Home() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeKey | "">("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const plan = params.get("plan");
@@ -51,88 +48,39 @@ function Home() {
     if (theme) setSelectedTheme(theme);
     if (validPlan || theme) window.setTimeout(() => document.getElementById("request-service")?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
   }, []);
-
   function choose(plan = "", theme: ThemeKey | "" = "") {
-    setSelectedPlan(plan);
-    setSelectedTheme(theme);
-    setMobileOpen(false);
+    setSelectedPlan(plan); setSelectedTheme(theme); setMobileOpen(false);
     window.requestAnimationFrame(() => document.getElementById("request-service")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus("sending");
+    event.preventDefault(); setStatus("sending");
     const form = new FormData(event.currentTarget);
     const details = [selectedPlan ? `Plan: ${selectedPlan}` : "", selectedTheme ? `Theme: ${selectedTheme}` : "", String(form.get("details") ?? "").trim()].filter(Boolean).join("\n");
     try {
       const result = await submitLead({ data: {
-        businessName: String(form.get("businessName") ?? ""),
-        city: String(form.get("city") ?? "").trim() || undefined,
-        contactName: String(form.get("contactName") ?? ""),
-        contactPhone: String(form.get("contactPhone") ?? ""),
-        contactEmail: String(form.get("contactEmail") ?? "").trim(),
-        details: details || undefined,
+        businessName: String(form.get("businessName") ?? ""), city: String(form.get("city") ?? "").trim() || undefined,
+        contactName: String(form.get("contactName") ?? ""), contactPhone: String(form.get("contactPhone") ?? ""),
+        contactEmail: String(form.get("contactEmail") ?? "").trim(), details: details || undefined,
       } });
       if (!result.ok) throw new Error(result.error);
-      setStatus("success");
-      event.currentTarget.reset();
-    } catch {
-      setStatus("error");
-    }
+      setStatus("success"); event.currentTarget.reset();
+    } catch { setStatus("error"); }
   }
-
   const navItems = [
-    ["#features", lang === "ar" ? "المميزات" : "Features"],
-    ["#themes", lang === "ar" ? "التصاميم" : "Themes"],
-    ["#how", lang === "ar" ? "كيف تعمل" : "How it works"],
-    ["#pricing", lang === "ar" ? "الباقات" : "Pricing"],
-    ["#faq", lang === "ar" ? "الأسئلة الشائعة" : "FAQ"],
+    ["#features", lang === "ar" ? "المميزات" : "Features"], ["#themes", lang === "ar" ? "التصاميم" : "Themes"],
+    ["#how", lang === "ar" ? "كيف تعمل" : "How it works"], ["#pricing", lang === "ar" ? "الباقات" : "Pricing"], ["#faq", lang === "ar" ? "الأسئلة الشائعة" : "FAQ"],
   ] as const;
   const themeCards = useMemo(() => MENU_THEMES.map((theme) => ({ ...theme })), []);
-
   return (
     <main className="menuq-home min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link to="/" className="font-semibold tracking-tight">Menu V3</Link>
-          <nav className="hidden items-center gap-6 md:flex">
-            {navItems.map(([href, label]) => <a key={href} href={href} className="text-sm text-muted-foreground transition hover:text-foreground">{label}</a>)}
-          </nav>
-          <div className="flex items-center gap-2">
-            <LangToggle />
-            <SignedOut><Button asChild size="sm"><Link to="/auth/sign-in">{lang === "ar" ? "دخول" : "Sign in"}</Link></Button></SignedOut>
-            <SignedIn><Button asChild size="sm"><Link to="/studio">{lang === "ar" ? "الاستوديو" : "Studio"}</Link></Button></SignedIn>
-            <button type="button" aria-label={lang === "ar" ? "فتح القائمة" : "Open menu"} className="rounded-md p-2 md:hidden" onClick={() => setMobileOpen((value) => !value)}>{mobileOpen ? <X size={20} /> : <Menu size={20} />}</button>
-          </div>
-        </div>
-        {mobileOpen && <nav className="border-t px-4 py-3 md:hidden">{navItems.map(([href, label]) => <a key={href} href={href} onClick={() => setMobileOpen(false)} className="block py-2 text-sm">{label}</a>)}</nav>}
-      </header>
-
-      <section className="relative overflow-hidden px-4 pb-20 pt-16 sm:px-6 sm:pt-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_.95fr]">
-          <div className="max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium"><Sparkles size={14} />{lang === "ar" ? "منيو رقمي عربي أولاً" : "Arabic-first digital menus"}</div>
-            <h1 className="menuq-display text-5xl sm:text-6xl lg:text-7xl">{lang === "ar" ? "حوّل منيو مطعمك إلى تجربة تستحق الزيارة." : "Turn your restaurant menu into an experience worth visiting."}</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">{lang === "ar" ? "Menu V3 يمنح المطاعم والكافيهات منيو سريعاً، أنيقاً، ثنائي اللغة، ومصمماً للجوال من أول لمسة." : "Menu V3 gives restaurants and cafés a fast, elegant, bilingual menu designed mobile-first from the first tap."}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button size="lg" onClick={() => choose()}>{lang === "ar" ? "ابدأ طلبك" : "Start your request"}<ArrowUpLeft className="ms-2" size={18} /></Button><Button asChild size="lg" variant="outline"><Link to="/themes/preview">{lang === "ar" ? "شاهد التصاميم" : "Explore themes"}<ExternalLink className="ms-2" size={17} /></Link></Button></div>
-            <div className="mt-8 grid max-w-xl grid-cols-3 gap-4 text-sm"><div><strong className="block text-xl">5</strong><span className="text-muted-foreground">{lang === "ar" ? "تصاميم" : "Themes"}</span></div><div><strong className="block text-xl">RTL</strong><span className="text-muted-foreground">{lang === "ar" ? "من الأساس" : "Native"}</span></div><div><strong className="block text-xl">QR</strong><span className="text-muted-foreground">{lang === "ar" ? "ومشاركة" : "& sharing"}</span></div></div>
-          </div>
-          <div className="menuq-hero-preview mx-auto w-full max-w-xl"><div className="menuq-phone mx-auto max-w-sm"><div className="menuq-phone-screen p-5"><div className="flex items-center justify-between text-xs text-muted-foreground"><span>Menu V3</span><span>● Open</span></div><div className="mt-12"><p className="text-xs uppercase tracking-[.22em] text-muted-foreground">Restaurant</p><h2 className="mt-2 text-4xl font-semibold">Taste your story.</h2><p className="mt-3 text-sm text-muted-foreground">{lang === "ar" ? "قائمة مختارة بعناية" : "A carefully curated menu"}</p></div><div className="mt-10 grid grid-cols-2 gap-3"><div className="menuq-food gold aspect-square rounded-2xl" /><div className="menuq-food green aspect-square rounded-2xl" /></div></div></div></div>
-        </div>
-      </section>
-
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur"><div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6"><Link to="/" className="font-semibold tracking-tight">Menu V3</Link><nav className="hidden items-center gap-6 md:flex">{navItems.map(([href, label]) => <a key={href} href={href} className="text-sm text-muted-foreground transition hover:text-foreground">{label}</a>)}</nav><div className="flex items-center gap-2"><LangToggle /><SignedOut><Button asChild size="sm"><Link to="/login">{lang === "ar" ? "دخول" : "Sign in"}</Link></Button></SignedOut><SignedIn><Button asChild size="sm"><Link to="/studio">{lang === "ar" ? "الاستوديو" : "Studio"}</Link></Button></SignedIn><button type="button" aria-label={lang === "ar" ? "فتح القائمة" : "Open menu"} className="rounded-md p-2 md:hidden" onClick={() => setMobileOpen((value) => !value)}>{mobileOpen ? <X size={20} /> : <Menu size={20} />}</button></div></div>{mobileOpen && <nav className="border-t px-4 py-3 md:hidden">{navItems.map(([href, label]) => <a key={href} href={href} onClick={() => setMobileOpen(false)} className="block py-2 text-sm">{label}</a>)}</nav>}</header>
+      <section className="relative overflow-hidden px-4 pb-20 pt-16 sm:px-6 sm:pt-24"><div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_.95fr]"><div className="max-w-3xl"><div className="mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium"><Sparkles size={14} />{lang === "ar" ? "منيو رقمي عربي أولاً" : "Arabic-first digital menus"}</div><h1 className="menuq-display text-5xl sm:text-6xl lg:text-7xl">{lang === "ar" ? "حوّل منيو مطعمك إلى تجربة تستحق الزيارة." : "Turn your restaurant menu into an experience worth visiting."}</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">{lang === "ar" ? "Menu V3 يمنح المطاعم والكافيهات منيو سريعاً، أنيقاً، ثنائي اللغة، ومصمماً للجوال من أول لمسة." : "Menu V3 gives restaurants and cafés a fast, elegant, bilingual menu designed mobile-first from the first tap."}</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button size="lg" onClick={() => choose()}>{lang === "ar" ? "ابدأ طلبك" : "Start your request"}<ArrowUpLeft className="ms-2" size={18} /></Button><Button asChild size="lg" variant="outline"><Link to="/themes/preview">{lang === "ar" ? "شاهد التصاميم" : "Explore themes"}<ExternalLink className="ms-2" size={17} /></Link></Button></div><div className="mt-8 grid max-w-xl grid-cols-3 gap-4 text-sm"><div><strong className="block text-xl">5</strong><span className="text-muted-foreground">{lang === "ar" ? "تصاميم" : "Themes"}</span></div><div><strong className="block text-xl">RTL</strong><span className="text-muted-foreground">{lang === "ar" ? "من الأساس" : "Native"}</span></div><div><strong className="block text-xl">QR</strong><span className="text-muted-foreground">{lang === "ar" ? "ومشاركة" : "& sharing"}</span></div></div></div><div className="menuq-hero-preview mx-auto w-full max-w-xl"><div className="menuq-phone mx-auto max-w-sm"><div className="menuq-phone-screen p-5"><div className="flex items-center justify-between text-xs text-muted-foreground"><span>Menu V3</span><span>● Open</span></div><div className="mt-12"><p className="text-xs uppercase tracking-[.22em] text-muted-foreground">Restaurant</p><h2 className="mt-2 text-4xl font-semibold">Taste your story.</h2><p className="mt-3 text-sm text-muted-foreground">{lang === "ar" ? "قائمة مختارة بعناية" : "A carefully curated menu"}</p></div><div className="mt-10 grid grid-cols-2 gap-3"><div className="menuq-food gold aspect-square rounded-2xl" /><div className="menuq-food green aspect-square rounded-2xl" /></div></div></div></div></div></section>
       <section id="features" className="border-y bg-muted/30 px-4 py-20 sm:px-6"><div className="mx-auto max-w-7xl"><p className="menuq-eyebrow">{lang === "ar" ? "مصمم للمطاعم" : "BUILT FOR RESTAURANTS"}</p><h2 className="menuq-section-title mt-3">{lang === "ar" ? "كل ما يحتاجه المنيو الحديث، في تجربة واحدة." : "Everything a modern menu needs, in one experience."}</h2><div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{FEATURES.map(({ icon: Icon, ar, en, bodyAr, bodyEn }) => <article key={en} className="menuq-card"><Icon size={22} /><h3 className="mt-5 text-lg font-semibold">{lang === "ar" ? ar : en}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{lang === "ar" ? bodyAr : bodyEn}</p></article>)}</div></div></section>
-
       <section id="themes" className="px-4 py-20 sm:px-6"><div className="mx-auto max-w-7xl"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="menuq-eyebrow">{lang === "ar" ? "هوية قبل القالب" : "IDENTITY BEFORE TEMPLATE"}</p><h2 className="menuq-section-title mt-3">{lang === "ar" ? "اختر الأسلوب الذي يشبه مطعمك." : "Choose the style that fits your restaurant."}</h2></div><Button asChild variant="outline"><Link to="/themes/preview">{lang === "ar" ? "معاينة كاملة" : "Full preview"}</Link></Button></div><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{themeCards.map((theme) => <article key={theme.key} className="menuq-card overflow-hidden p-0"><div className="aspect-[4/3] overflow-hidden bg-muted"><img src={theme.preview.image} alt="" className="h-full w-full object-cover transition duration-500 hover:scale-105" loading="lazy" /></div><div className="p-5"><div className="flex items-center justify-between gap-3"><h3 className="text-xl font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h3><span className="text-xs text-muted-foreground">{theme.key}</span></div><p className="mt-2 text-sm leading-6 text-muted-foreground">{lang === "ar" ? theme.promise.ar : theme.promise.en}</p><Button className="mt-5 w-full" variant={selectedTheme === theme.key ? "default" : "outline"} onClick={() => choose("", theme.key)}>{selectedTheme === theme.key ? (lang === "ar" ? "التصميم مختار" : "Theme selected") : (lang === "ar" ? "اختر التصميم" : "Choose theme")}</Button></div></article>)}</div></div></section>
-
       <section id="how" className="bg-foreground px-4 py-20 text-background sm:px-6"><div className="mx-auto max-w-7xl"><h2 className="max-w-2xl text-3xl font-semibold sm:text-4xl">{lang === "ar" ? "من الفكرة إلى QR خلال خطوات واضحة." : "From idea to QR in three clear steps."}</h2><div className="mt-10 grid gap-4 md:grid-cols-3">{STEPS.map(({ n, icon: Icon, ar, en, bodyAr, bodyEn }) => <article key={n} className="rounded-2xl border border-background/15 p-6"><div className="flex items-center justify-between"><span className="text-sm opacity-60">{n}</span><Icon size={22} /></div><h3 className="mt-12 text-xl font-semibold">{lang === "ar" ? ar : en}</h3><p className="mt-2 text-sm leading-6 opacity-70">{lang === "ar" ? bodyAr : bodyEn}</p></article>)}</div></div></section>
-
       <section id="pricing" className="px-4 py-20 sm:px-6"><div className="mx-auto max-w-7xl"><p className="menuq-eyebrow">{lang === "ar" ? "باقات واضحة" : "SIMPLE PLANS"}</p><h2 className="menuq-section-title mt-3">{lang === "ar" ? "ابدأ بما يناسب حجم عملك." : "Start with the plan that fits your business."}</h2><div className="mt-10 grid gap-5 md:grid-cols-3">{COMMERCIAL_PLANS.map((plan) => <article key={plan.code} className={`menuq-card ${plan.recommended ? "ring-2 ring-foreground" : ""}`}><div className="flex items-center justify-between gap-3"><h3 className="text-xl font-semibold">{lang === "ar" ? plan.nameAr : plan.nameEn}</h3>{plan.recommended && <span className="rounded-full border px-2 py-1 text-[10px]">{lang === "ar" ? "موصى به" : "Recommended"}</span>}</div><div className="mt-5 text-4xl font-semibold">{plan.monthlyPriceSar}<span className="text-sm font-normal text-muted-foreground"> {lang === "ar" ? "ريال / شهر" : "SAR / month"}</span></div><ul className="mt-6 space-y-3 text-sm"><li className="flex gap-2"><Check size={17} />{lang === "ar" ? `${plan.maxBranches} فرع` : `${plan.maxBranches} branch${plan.maxBranches === 1 ? "" : "es"}`}</li><li className="flex gap-2"><Check size={17} />{lang === "ar" ? `${plan.maxProducts.toLocaleString("ar-SA")} صنف` : `${plan.maxProducts.toLocaleString("en-US")} products`}</li><li className="flex gap-2"><Check size={17} />{lang === "ar" ? `${plan.maxTeamMembers} أعضاء فريق` : `${plan.maxTeamMembers} team members`}</li></ul><Button className="mt-7 w-full" onClick={() => choose(plan.code)}>{selectedPlan === plan.code ? (lang === "ar" ? "الباقة مختارة" : "Plan selected") : (lang === "ar" ? "اختر الباقة" : "Choose plan")}</Button></article>)}</div><div className="menuq-card mt-8"><p className="font-medium">{lang === "ar" ? "يشمل نظام المنيو" : "Menu system highlights"}</p><div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{COMMERCIAL_FEATURES[lang].map((feature) => <div key={feature} className="flex gap-2 text-sm text-muted-foreground"><Check size={16} className="shrink-0" />{feature}</div>)}</div></div></div></section>
-
       <section id="request-service" className="border-y bg-muted/30 px-4 py-20 sm:px-6"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><p className="menuq-eyebrow">{lang === "ar" ? "طلب عميل جديد" : "NEW CUSTOMER REQUEST"}</p><h2 className="menuq-section-title mt-3">{lang === "ar" ? "أرسل تفاصيل مطعمك وسنبدأ من هناك." : "Share your restaurant details and start from there."}</h2><p className="mt-4 leading-7 text-muted-foreground">{lang === "ar" ? "اختر الباقة والتصميم قبل الإرسال، وسيتم حفظهما ضمن الطلب." : "Choose a plan and theme before submitting; they are included with the request."}</p><div className="mt-6 flex flex-wrap gap-2 text-xs">{selectedPlan && <span className="rounded-full border px-3 py-1">Plan: {selectedPlan}</span>}{selectedTheme && <span className="rounded-full border px-3 py-1">Theme: {selectedTheme}</span>}</div></div><form onSubmit={handleSubmit} className="menuq-card"><div className="grid gap-5 sm:grid-cols-2"><label className="text-sm sm:col-span-2">{lang === "ar" ? "اسم المطعم" : "Business name"}<input name="businessName" required minLength={2} maxLength={120} className="mt-2 w-full rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label><label className="text-sm">{lang === "ar" ? "المدينة" : "City"}<input name="city" maxLength={80} className="mt-2 w-full rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label><label className="text-sm">{lang === "ar" ? "اسم جهة التواصل" : "Contact name"}<input name="contactName" required minLength={2} maxLength={80} className="mt-2 w-full rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label><label className="text-sm">{lang === "ar" ? "رقم الجوال" : "Phone"}<input name="contactPhone" required minLength={8} maxLength={30} inputMode="tel" className="mt-2 w-full rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label><label className="text-sm">{lang === "ar" ? "البريد الإلكتروني" : "Email"}<input name="contactEmail" type="email" maxLength={160} className="mt-2 w-full rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label><label className="text-sm sm:col-span-2">{lang === "ar" ? "ملاحظات" : "Details"}<textarea name="details" rows={4} maxLength={1000} className="mt-2 w-full resize-y rounded-xl border bg-background px-4 py-3 outline-none focus:ring-2" /></label></div><Button type="submit" disabled={status === "sending"} size="lg" className="mt-6 w-full">{status === "sending" ? (lang === "ar" ? "جارٍ الإرسال..." : "Sending...") : (lang === "ar" ? "إرسال الطلب" : "Submit request")}</Button>{status === "success" && <p role="status" className="mt-4 text-sm">{lang === "ar" ? "تم إرسال الطلب بنجاح." : "Your request was submitted successfully."}</p>}{status === "error" && <p role="alert" className="mt-4 text-sm">{lang === "ar" ? "تعذر إرسال الطلب. حاول مرة أخرى." : "The request could not be submitted. Please try again."}</p>}</form></div></section>
-
       <section id="faq" className="px-4 py-20 sm:px-6"><div className="mx-auto max-w-4xl"><p className="menuq-eyebrow">FAQ</p><h2 className="menuq-section-title mt-3">{lang === "ar" ? "أسئلة قبل البدء." : "Questions before you start."}</h2><div className="mt-8 divide-y rounded-2xl border">{FAQS.map(({ qAr, qEn, aAr, aEn }) => <details key={qEn} className="group p-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium"><span>{lang === "ar" ? qAr : qEn}</span><span>⌄</span></summary><p className="mt-3 text-sm leading-7 text-muted-foreground">{lang === "ar" ? aAr : aEn}</p></details>)}</div></div></section>
-
       <footer className="border-t px-4 py-10 sm:px-6"><div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><span className="font-medium text-foreground">Menu V3</span><span>{lang === "ar" ? "منيو رقمي عربي أولاً للمطاعم والكافيهات." : "Arabic-first digital menus for restaurants and cafés."}</span><div className="flex gap-4"><Link to="/themes/preview" className="hover:text-foreground">{lang === "ar" ? "التصاميم" : "Themes"}</Link><Link to="/pricing" className="hover:text-foreground">{lang === "ar" ? "الأسعار" : "Pricing"}</Link></div></div></footer>
     </main>
   );
