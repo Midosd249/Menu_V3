@@ -16,9 +16,9 @@ const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"]
 test("homepage exposes canonical pricing and plan selection", () => {
   assert.match(home, /COMMERCIAL_PLANS\.map/);
   assert.match(home, /id="pricing"/);
-  assert.match(home, /Choose this plan|اختيار هذه الباقة/);
-  assert.match(home, /LeadForm selectedPlan/);
-  assert.match(home, /Selected plan:/);
+  assert.match(home, /Choose plan|اختر الباقة/);
+  assert.match(home, /selectedPlan/);
+  assert.match(home, /Plan: \{selectedPlan\}/);
   for (const plan of expectedPlans) assert.match(catalog, new RegExp(`code: "${plan}"`));
   assert.match(catalog, /monthlyPriceSar: 0/);
   assert.match(catalog, /monthlyPriceSar: 99/);
@@ -32,12 +32,11 @@ test("homepage exposes all protected themes without a premium gate", () => {
   for (const theme of expectedThemes) assert.match(registry, new RegExp(`key: "${theme}"`));
 });
 
-test("theme preview remains connected to the real Menu V3 renderer", () => {
+test("theme preview remains connected to the canonical Menu V3 renderer", () => {
   assert.match(preview, /MenuThemeController/);
-  assert.match(preview, /PublicMenuView/);
-  assert.match(preview, /ContemporaryRestaurantTemplate/);
+  assert.match(preview, /ThemeRenderer/);
+  assert.match(preview, /getTheme/);
   assert.match(preview, /isThemeKey/);
-  assert.match(preview, /getThemeFamily/);
   assert.doesNotMatch(preview, /theme-preview\.html/);
 });
 
@@ -45,6 +44,7 @@ test("new-customer request flow remains on the existing lead contract", () => {
   assert.match(home, /submitLead\(/);
   assert.match(home, /businessName/);
   assert.match(home, /contactPhone/);
-  assert.match(home, /New customer request|طلب عميل جديد/);
+  assert.match(home, /NEW CUSTOMER REQUEST|طلب عميل جديد/);
   assert.match(home, /referenceId/);
+  assert.match(home, /result\.data\.id/);
 });

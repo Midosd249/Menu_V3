@@ -8,14 +8,14 @@ const quickAdd = fs.readFileSync("src/lib/menu/quick-add.ts", "utf8");
 const retirement = fs.readFileSync("src/quick-add-compact-refinement.css", "utf8");
 const themeRecovery = fs.readFileSync("src/theme-public-quality-recovery.css", "utf8");
 
-test("Quick Add is retired without removing existing cart/order infrastructure", () => {
+test("Quick Add shared control is retired without removing existing cart/order infrastructure", () => {
   assert.match(publicMenu, /setCartOpen\(true\)/);
   assert.match(publicMenu, /public-menu-bottom-bar/);
   assert.match(contemporary, /setCartOpen\(true\)/);
-  assert.match(retirement, /display:\s*none\s*!important/);
+  assert.match(retirement, /\.public-menu-quick-add\s*\{[\s\S]*?display:\s*none\s*!important/);
 });
 
-test("legacy Quick Add eligibility logic remains isolated and cannot render the retired control", () => {
+test("legacy Quick Add eligibility logic remains isolated and cannot render the retired shared control", () => {
   assert.match(quickAdd, /product\.isAvailable/);
   assert.match(quickAdd, /Number\.isFinite\(product\.price\)/);
   assert.match(quickAdd, /requires-options/);
@@ -27,8 +27,8 @@ test("theme recovery layer retains only the persistent cart safe-area contract",
   assert.match(themeRecovery, /env\(safe-area-inset-bottom\)/);
 });
 
-test("retired Quick Add cannot become visible through theme-specific selectors", () => {
-  for (const theme of ["essential", "editorial", "noir", "heritage", "gallery"]) {
-    assert.match(retirement, new RegExp(`html\\[data-menu-theme=\\"${theme}\\"\\] \\.public-menu-quick-add`));
-  }
+test("Taste retains its intentional local Quick Add without reviving the retired shared selector", () => {
+  assert.match(retirement, /html\[data-menu-theme="heritage"\] \.taste-page \.taste-product > button\.absolute/);
+  assert.doesNotMatch(retirement, /html\[data-menu-theme="(?:essential|editorial|noir|gallery)"\][^\n]*\.public-menu-quick-add/);
+  assert.match(retirement, /html\[data-menu-theme="heritage"\] \.taste-page \.taste-hero-copy > h1\s*\{[\s\S]*?display:\s*none/);
 });
