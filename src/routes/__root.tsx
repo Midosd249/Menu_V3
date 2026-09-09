@@ -25,6 +25,7 @@ import quickAddCompactRefinementCss from "../quick-add-compact-refinement.css?ur
 import priceConsistencyCss from "../theme-price-consistency.css?url";
 import galleryCanvaParityCss from "../theme-gallery-canva-parity.css?url";
 import w16MobileQrHardeningCss from "../theme-w16-mobile-qr-hardening.css?url";
+import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -64,10 +65,10 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: menuPreviewLayerCss },
       { rel: "stylesheet", href: quickAddCompactRefinementCss },
       { rel: "stylesheet", href: priceConsistencyCss },
-      /* Taste/Heritage historical layers are preserved; Gallery parity is deliberately loaded last for Gallery only. */
       { rel: "stylesheet", href: heritageThemeCss },
       { rel: "stylesheet", href: galleryCanvaParityCss },
       { rel: "stylesheet", href: w16MobileQrHardeningCss },
+      { rel: "stylesheet", href: finalThemeVisualHardeningCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
