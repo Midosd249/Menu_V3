@@ -22,7 +22,7 @@ test("P2 local visibility uses only verified tenant and branch fields", () => {
 
 test("P2 local visibility remains visible when analytics has no events", () => {
   assert.match(analytics, /!hasData \? \(\s*<\>\s*<p className=.*noDataYet/);
-  assert.match(analytics, /<VisibilityReadiness studio=\{studio\} analytics=\{analytics\} lang=\{lang\} \/>/);
+  assert.ok(analytics.includes("<VisibilityReadiness studio={studio} analytics={analytics} lang={lang} />"));
 });
 
 test("P2 experimentation surface is hypothesis-led and does not claim measured significance", () => {
