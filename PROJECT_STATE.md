@@ -96,11 +96,15 @@
 5. Run real-device Production QA after a successful release deployment.
 6. Update continuity records and close P2-H2 only after direct evidence.
 
-## Permanent Execution Order
-1. Resolve P2-H2 deployment blocker and reconcile Production identity.
-2. Handle only reproducible defects as separate atomic tasks.
-3. Consider further growth/UX improvements only from new evidence.
-4. Use the release-only Vercel workflow for every intentional release batch.
+## Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
+- VERIFIED: PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
+- VERIFIED: the Platform Owner overview and CRM entry points now use a native `/admin/onboarding` link instead of imperative navigation.
+- VERIFIED: `/admin/onboarding` exposes the existing server-authorized contact/approval workflow and now includes an explicit `رفض الطلب` action backed by the existing `lost` lead status.
+- VERIFIED: no database, auth, RLS, tenant isolation, dependency, or Manus theme infrastructure was changed.
+- VERIFIED: quality run `34530262325` passed route generation, typecheck, 202 tests, lint, production build, Playwright runtime installation, Chromium installation, all-theme browser QA, performance artifact handling, and cleanup.
+- VERIFIED: the failing intermediate quality run was caused only by a regression-test assertion mistake; the test was corrected and the final quality run passed.
+- VERIFIED: Vercel status for the merged application commit is pending while the deployment is being processed.
+- STATUS: `PUSHED` / implementation verified; Production deployment must remain separate until direct Vercel evidence is available.
 
 ## Continuity Rule
 At the end of every atomic task:
