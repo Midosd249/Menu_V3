@@ -7,6 +7,8 @@ const server = readFileSync("src/lib/menu/platform-onboarding.ts", "utf8");
 const migration = readFileSync("migrations/20260909230000_lead_onboarding.sql", "utf8");
 const publicOnboarding = readFileSync("src/routes/onboarding/$token.tsx", "utf8");
 const rootAdmin = readFileSync("src/routes/admin.tsx", "utf8");
+const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
+const adminAccess = readFileSync("src/lib/menu/admin.ts", "utf8");
 
 test("platform onboarding workspace exposes the owner workflow", () => {
   assert.match(rootAdmin, /admin\/onboarding/);
@@ -39,4 +41,12 @@ test("customer onboarding creates a restaurant workspace and menu URL", () => {
   assert.match(publicOnboarding, /activateLeadOnboarding/);
   assert.match(publicOnboarding, /فتح الاستوديو/);
   assert.match(publicOnboarding, /QR للمنيو/);
+});
+
+test("platform owners leave studio for the dedicated admin workspace", () => {
+  assert.match(adminAccess, /getPlatformAdminAccess/);
+  assert.match(studio, /getPlatformAdminAccess/);
+  assert.match(studio, /state\.isPlatformAdmin/);
+  assert.match(studio, /Navigate to=\"\/admin\"/);
+  assert.match(studio, /Navigate to=\"\/onboarding\"/);
 });
