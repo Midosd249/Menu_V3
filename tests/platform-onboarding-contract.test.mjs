@@ -22,13 +22,14 @@ test("platform onboarding workspace exposes the owner workflow", () => {
   assert.match(admin, /getAdminDashboard/);
 });
 
-test("platform owner overview surfaces lead contact and approval controls", () => {
+test("platform owner overview opens the approval center with a native link", () => {
   assert.match(rootAdmin, /التواصل واعتماد الطلبات/);
+  assert.match(rootAdmin, /href=\"\/admin\/onboarding\"/);
   assert.match(rootAdmin, /فتح مركز الاعتماد/);
   assert.match(rootAdmin, /phoneHref\(lead\.contactPhone\)/);
   assert.match(rootAdmin, /whatsappHref\(lead\.contactPhone\)/);
   assert.match(rootAdmin, /mailto:\$\{lead\.contactEmail\}/);
-  assert.match(rootAdmin, /window\.location\.assign\("\/admin\/onboarding"\)/);
+  assert.doesNotMatch(rootAdmin, /window\.location\.assign\("\/admin\/onboarding"\)/);
 });
 
 test("lead onboarding is server-authorized and token based", () => {
