@@ -35,6 +35,15 @@ test("platform owner approval entry point opens the working controls inside the 
   assert.match(rootAdmin, /تفاصيل الطلب/);
 });
 
+test("platform admin lead approval renders the returned registration URL with copy and open actions", () => {
+  assert.match(rootAdmin, /const \[registrationUrl, setRegistrationUrl\] = useState\(""\)/);
+  assert.match(rootAdmin, /setRegistrationUrl\(result\.data\.registrationUrl\)/);
+  assert.match(rootAdmin, /window\.location\.origin\}\$\{registrationUrl\}/);
+  assert.match(rootAdmin, /نسخ الرابط/);
+  assert.match(rootAdmin, /فتح الرابط/);
+  assert.match(rootAdmin, /الرابط صالح لمدة 7 أيام ويُستخدم مرة واحدة/);
+});
+
 test("lead onboarding is server-authorized and token based", () => {
   assert.match(server, /requirePlatformAdmin/);
   assert.match(server, /createHash\("sha256"\)/);
