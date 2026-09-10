@@ -78,6 +78,16 @@
 - VERIFIED: final `main` quality run `34534791703` passed route generation, typecheck, tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance handling, and cleanup.
 - VERIFIED: GitHub Vercel status for the latest `main` commit is `success`.
 
+## Closed Task Evidence — Registration Link Rendering — CLOSED / VERIFIED
+- VERIFIED: PR #73 merged to `main` as `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+- VERIFIED: `approveLead` already returned `registrationUrl`; the `/admin` lead UI was discarding it and showing only a generic success message.
+- VERIFIED: the fix stores the returned URL in local UI state and renders it immediately after successful approval.
+- VERIFIED: the UI provides `نسخ الرابط` and `فتح الرابط` actions.
+- VERIFIED: the UI explains that the existing registration token is valid for 7 days and single-use.
+- VERIFIED: the secret token remains non-persistent; no database schema or authorization boundary changed.
+- VERIFIED: GitHub Quality run `34539814074` passed all configured stages.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for the same `main` commit.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -93,18 +103,24 @@
 - All specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
 
 ## UNKNOWN / BLOCKED Register
-- UNKNOWN: direct Vercel Production deployment metadata is not independently available from the connected repository integration response.
-- UNKNOWN/BLOCKED: some physical-device/accessibility observations remain unavailable in the connector environment.
+- UNKNOWN: some physical-device/accessibility observations remain unavailable in the connector environment.
 - No current GitHub branch-protection blocker remains.
 
 ## Exact Next TODO
-### Real-device verification of the Platform Owner approval controls
-1. Open the latest deployed `main` as Platform Owner.
-2. Press `اعتماد العملاء الجدد` or `فتح مركز الاعتماد`.
-3. Confirm the view changes to the lead-control surface instead of the overview.
-4. Select one real lead and verify all decision controls are visible.
-5. If appropriate, perform one controlled approval and verify the registration-link result.
-6. Record the direct-device result and stop.
+### Real-device verification of the Platform Owner approval and onboarding flow
+1. Open the latest Production application as Platform Owner.
+2. Open `اعتماد العملاء الجدد`.
+3. Select one real lead that has not already consumed its onboarding link.
+4. Perform one controlled approval.
+5. Verify the registration URL appears immediately with `نسخ الرابط` and `فتح الرابط`.
+6. Open the generated URL in a separate browser context and verify the customer onboarding screen.
+7. Record the direct-device result and stop.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
+
+## 2026-09-11 — Registration Link Rendering Session
+- Scope: fix only the missing registration-link result after lead approval in the existing Platform Owner control surface.
+- Root cause: `approveLead` returned the one-time registration URL but `src/routes/admin.tsx` discarded it.
+- Fix: render the returned URL immediately, with copy/open actions and the existing validity warning.
+- Verification: PR #73, Quality run `34539814074`, Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh`.
