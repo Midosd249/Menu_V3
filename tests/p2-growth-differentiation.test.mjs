@@ -21,7 +21,7 @@ test("P2 local visibility uses only verified tenant and branch fields", () => {
 });
 
 test("P2 local visibility remains visible when analytics has no events", () => {
-  assert.match(analytics, /!hasData \? \(\s*<\>\s*<p className=.*noDataYet/);
+  assert.match(analytics, /!hasData \? \(\s*<>\s*<p className=.*noDataYet/);
   assert.ok(analytics.includes("<VisibilityReadiness studio={studio} analytics={analytics} lang={lang} />"));
 });
 
