@@ -221,7 +221,7 @@ function Leads({ leads, status, query, setStatus, setQuery }: { leads: AdminDash
     try {
       const result = await approveLead({ data: { leadId: selected.id } });
       if (!result.ok) setMessage(result.error);
-      else setMessage(`تم الاعتماد. رابط التسجيل: ${result.data.registrationUrl}`);
+      else setMessage("تم الاعتماد وإنشاء رابط التسجيل. انسخه من رسالة النجاح عند ظهور الرابط.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "تعذر اعتماد العميل"); }
     finally { setSaving(false); }
   }
