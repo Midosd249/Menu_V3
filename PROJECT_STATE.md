@@ -95,8 +95,8 @@
 ### Next atomic task — Real-device verification of the completed Platform Owner approval flow
 1. Open the latest Production application as Platform Owner.
 2. Open `اعتماد العملاء الجدد` / the approval controls.
-3. Select one real lead.
-4. Perform one controlled approval only if the lead is suitable for testing.
+3. Select one real lead that has not already consumed its onboarding link.
+4. Perform one controlled approval.
 5. Verify that the generated registration URL is visible, copyable, and opens the public onboarding route.
 6. Verify the client onboarding handoff and record the result.
 7. Stop.
@@ -117,3 +117,15 @@ At the end of every atomic task:
 - VERIFIED: the change is limited to `src/routes/admin.tsx` plus focused regression coverage in `tests/platform-onboarding-contract.test.mjs`.
 - VERIFIED: no database schema, authentication, RLS, tenant isolation, dependency, theme, or Manus-derived infrastructure changed.
 - VERIFIED: Production build completed and Vercel Production is `READY` for `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+
+## 2026-09-11 — Onboarding Creation Recovery
+- VERIFIED: Production Vercel runtime logs showed `createRestaurant failed` with PostgreSQL error `23505`, duplicate key on `tenants_owner_user_id_uidx`.
+- VERIFIED: the affected authenticated user had one existing tenant owned by that user and zero active `tenant_members` rows, proving a partially-created/orphaned onboarding state.
+- VERIFIED: the live `menu_v3` schema contains the owner uniqueness index and the canonical `tenant_owner` access-role contract.
+- FIXED IN BRANCH: `src/lib/menu/onboarding-recovery.ts` repairs an orphaned owner membership using only authenticated server context and `tenants.owner_user_id`.
+- FIXED IN BRANCH: `src/routes/onboarding.tsx` performs recovery before creation and retries once after a failed creation; it also reconciles the canonical `tenant_owner` role.
+- FIXED IN BRANCH: onboarding wording is now business-neutral (`منشأتك`, `اسم المنشأة`) so cafes and other menu-based businesses are not incorrectly presented as restaurants.
+- VERIFIED: no dependency, auth, RLS, tenant-isolation, theme, ordering, analytics, approval-center, or Manus infrastructure was changed.
+- STATUS: `IMPLEMENTATION_IN_PROGRESS`; PR #75 is awaiting the GitHub `quality` gate before merge.
+- DEPLOYMENT: `DEPLOYMENT_BLOCKED` for this branch by Vercel's current rate-limit status; no deployment retry was attempted.
+- EXACT NEXT TASK: after quality passes, merge PR #75, verify the resulting `main` quality/deployment evidence, then perform one controlled real onboarding attempt using the existing affected account to confirm recovery.

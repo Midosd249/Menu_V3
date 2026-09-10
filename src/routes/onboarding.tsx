@@ -9,6 +9,7 @@ import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { createRestaurant, getMyStudio, saveBranch, seedStarterItems, updateTenant } from "@/lib/menu/owner";
+import { ensureOwnerMembership } from "@/lib/menu/onboarding-recovery";
 import { slugify } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({ component: Onboarding });
@@ -85,7 +86,15 @@ function Onboarding() {
     setError("");
     setOk(false);
     try {
-      const created = await createRestaurant({
+      // Recover a tenant that may have been created before its membership was
+      // persisted. This is strictly derived from the authenticated user on the server.
+      const recovered = await ensureOwnerMembership();
+      if (!recovered.ok) {
+        setError(recovered.error);
+        return;
+      }
+
+      let created = await createRestaurant({
         data: {
           nameAr: form.nameAr.trim(),
           nameEn: form.nameEn.trim() || undefined,
@@ -97,16 +106,42 @@ function Onboarding() {
           whatsapp: form.whatsapp.trim() || undefined,
         },
       });
+
       if (!created.ok) {
-        // A second tab/request can race the first onboarding request. The database
-        // owner uniqueness guard makes one request authoritative; reconcile here
-        // by reading the trusted server-side membership before showing an error.
+        // If a prior request created the tenant before the membership write, repair
+        // the server-side membership and retry once instead of surfacing a duplicate-owner error.
+        const repaired = await ensureOwnerMembership();
+        if (repaired.ok && repaired.data.repaired) {
+          created = await createRestaurant({
+            data: {
+              nameAr: form.nameAr.trim(),
+              nameEn: form.nameEn.trim() || undefined,
+              slug: (form.slug.trim() || slugify(form.nameEn || form.nameAr)) || undefined,
+              city: form.city.trim() || undefined,
+              branchNameAr: form.branchNameAr.trim(),
+              branchNameEn: form.branchNameEn.trim() || undefined,
+              addressAr: form.addressAr.trim() || undefined,
+              whatsapp: form.whatsapp.trim() || undefined,
+            },
+          });
+        }
+      }
+
+      if (!created.ok) {
         const existing = await getMyStudio();
         if (existing.ok && "tenant" in existing.data && existing.data.tenant) {
           await navigate({ to: "/studio", replace: true });
           return;
         }
         setError(created.error);
+        return;
+      }
+
+      // Ensure newly-created owners receive the canonical authorization role as well
+      // as the legacy-compatible owner role used by the existing studio layer.
+      const ownerRole = await ensureOwnerMembership();
+      if (!ownerRole.ok) {
+        setError(ownerRole.error);
         return;
       }
 
@@ -174,7 +209,7 @@ function Onboarding() {
         <LangToggle />
       </div>
       <div>
-        <h1 className="font-display text-2xl font-semibold">{t(copy.onboarding.title, lang)}</h1>
+        <h1 className="font-display text-2xl font-semibold">{lang === "ar" ? "جهّز منيو منشأتك" : "Set up your business menu"}</h1>
         <p className="mt-1 text-sm text-muted">
           {step + 1} / 3 · {t([copy.onboarding.step1, copy.onboarding.step2, copy.onboarding.step3][step], lang)}
         </p>
@@ -187,10 +222,10 @@ function Onboarding() {
 
       {step === 0 ? (
         <div className="grid gap-3">
-          <Field label={t(copy.onboarding.restaurantAr, lang)}>
+          <Field label={lang === "ar" ? "اسم المنشأة بالعربية" : "Business name in Arabic"}>
             <Input value={form.nameAr} onChange={(e) => set("nameAr", e.target.value)} required />
           </Field>
-          <Field label={t(copy.onboarding.restaurantEn, lang)}>
+          <Field label={lang === "ar" ? "اسم المنشأة بالإنجليزية (اختياري)" : "Business name in English (optional)"}>
             <Input value={form.nameEn} onChange={(e) => set("nameEn", e.target.value)} />
           </Field>
           <Field label={t(copy.studio.city, lang)}>

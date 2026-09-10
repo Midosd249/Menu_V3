@@ -88,6 +88,18 @@
 - VERIFIED: GitHub Quality run `34539814074` passed all configured stages.
 - VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for the same `main` commit.
 
+## Closed Task Evidence — Onboarding Creation Recovery — IN PROGRESS
+- VERIFIED: production Vercel runtime logs showed repeated `createRestaurant failed` errors with PostgreSQL error `23505` on `tenants_owner_user_id_uidx`.
+- VERIFIED: direct Supabase inspection showed the affected owner had one existing tenant and zero active memberships, proving an interrupted/orphaned onboarding state.
+- VERIFIED: the owner uniqueness constraint is intentionally present and must not be weakened.
+- IMPLEMENTED: `src/lib/menu/onboarding-recovery.ts` restores the owner membership and canonical `tenant_owner` access role from authenticated server context.
+- IMPLEMENTED: `src/routes/onboarding.tsx` recovers before creation and retries once after a failed creation.
+- IMPLEMENTED: onboarding wording is business-neutral so cafes and other menu-based businesses are not incorrectly presented as restaurants.
+- IMPLEMENTED: focused regression coverage exists in `tests/onboarding-recovery.test.mjs`.
+- VERIFIED: no dependency, auth, RLS, tenant isolation, theme, ordering, analytics, approval-center, or Manus infrastructure was changed.
+- IN PROGRESS: PR #75 quality run `34542725711`; typecheck, tests, lint, and production build passed, while Playwright runtime/browser stages were still running at the latest check.
+- DEPLOYMENT_BLOCKED: Vercel status for the branch reports `Deployment rate limited — retry in 24 hours`; no deployment retry was attempted.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -104,23 +116,23 @@
 
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN: some physical-device/accessibility observations remain unavailable in the connector environment.
-- No current GitHub branch-protection blocker remains.
+- BLOCKED: Vercel deployment creation for new branch commits is currently rate-limited; do not retry until the limit clears or a verified account-level resolution is available.
 
 ## Exact Next TODO
-### Real-device verification of the Platform Owner approval and onboarding flow
-1. Open the latest Production application as Platform Owner.
-2. Open `اعتماد العملاء الجدد`.
-3. Select one real lead that has not already consumed its onboarding link.
-4. Perform one controlled approval.
-5. Verify the registration URL appears immediately with `نسخ الرابط` and `فتح الرابط`.
-6. Open the generated URL in a separate browser context and verify the customer onboarding screen.
-7. Record the direct-device result and stop.
+### Complete verification and release of onboarding creation recovery
+1. Wait for PR #75 GitHub `quality` to complete.
+2. If the quality gate passes, review the final diff and merge PR #75 to `main`.
+3. Verify `main` CI and Vercel status separately.
+4. Do not retry Vercel deployment while the current rate limit is active.
+5. On the next available Production deployment, run one controlled onboarding attempt using the existing affected account and verify recovery, Studio access, and menu creation.
+6. Stop.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
 
-## 2026-09-11 — Registration Link Rendering Session
-- Scope: fix only the missing registration-link result after lead approval in the existing Platform Owner control surface.
-- Root cause: `approveLead` returned the one-time registration URL but `src/routes/admin.tsx` discarded it.
-- Fix: render the returned URL immediately, with copy/open actions and the existing validity warning.
-- Verification: PR #73, Quality run `34539814074`, Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh`.
+## 2026-09-11 — Onboarding Creation Recovery Session
+- Scope: fix only the production onboarding creation failure and make onboarding wording suitable for non-restaurant menu businesses.
+- Root cause: a previous onboarding request left a tenant row without an active owner membership; the next request only checked active membership and attempted a duplicate owner insert, correctly rejected by `tenants_owner_user_id_uidx`.
+- Fix: authenticated server-side recovery restores the membership and canonical owner access role; onboarding retries once after recovery.
+- Verification evidence: Vercel runtime logs, live Supabase schema/constraint inspection, focused regression test, and PR #75 quality run in progress.
+- Deployment status: `DEPLOYMENT_BLOCKED` by Vercel rate limiting; no deployment retry performed.

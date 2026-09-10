@@ -85,22 +85,45 @@ Normal release path:
 - CI success is not deployment evidence.
 - `DEPLOYED` requires direct Vercel evidence.
 
+## Current Atomic Task — Onboarding Creation Recovery
+### Objective
+Fix the production onboarding failure shown on the final onboarding step, recover the existing orphaned tenant state, and make onboarding language suitable for restaurants, cafes, and other menu-based businesses.
+
+### Root cause — VERIFIED
+Production Vercel runtime logs show `createRestaurant failed` with PostgreSQL error `23505` on `tenants_owner_user_id_uidx`. Direct live Supabase inspection confirmed the affected authenticated owner had one tenant but zero active `tenant_members` rows. The application only checked active membership, so a previously-created tenant was treated as absent and the next request attempted a duplicate tenant insert.
+
+### Implementation — IN PROGRESS
+- Added `src/lib/menu/onboarding-recovery.ts` with server-authorized ownership recovery based only on `context.userId` and `tenants.owner_user_id`.
+- Updated `src/routes/onboarding.tsx` to recover before creation, retry once after a failed creation, and reconcile the canonical `tenant_owner` authorization role.
+- Changed onboarding wording from restaurant-specific language to business-neutral language without changing public menu architecture.
+- Added `tests/onboarding-recovery.test.mjs` regression coverage.
+
+### Security boundary
+- Recovery does not accept client-supplied tenant IDs or roles.
+- Existing authentication and tenant isolation remain in force.
+- No secrets, tokens, RLS policies, dependencies, or unrelated product infrastructure were changed.
+
+### Verification boundary
+- VERIFIED: production runtime error evidence and live database schema/constraints.
+- VERIFIED: branch diff is limited to the recovery helper, onboarding route, focused regression test, and continuity documentation.
+- IN PROGRESS: GitHub Quality run `34542725711` is running on PR #75. Route generation, typecheck, tests, lint, and production build have already passed; Playwright runtime/browser stages are still running.
+- DEPLOYMENT_BLOCKED: Vercel reports `Deployment rate limited — retry in 24 hours` for the branch. No deployment retry was attempted.
+
 ## Exact Next TODO
-### Real-device verification of the completed Platform Owner approval and onboarding flow
-1. Open the latest Production application as Platform Owner.
-2. Open `اعتماد العملاء الجدد`.
-3. Select one real lead that has not already consumed its onboarding link.
-4. Perform one controlled approval.
-5. Verify the registration URL appears immediately with `نسخ الرابط` and `فتح الرابط`.
-6. Open the generated URL in a separate browser context and verify the customer onboarding screen.
-7. Record the direct-device result and stop.
+### Complete verification and release of onboarding creation recovery
+1. Wait for PR #75 GitHub `quality` to complete.
+2. If the quality gate passes, review the final diff and merge PR #75 to `main`.
+3. Verify the resulting `main` CI status and Vercel status separately.
+4. Because Vercel is currently rate-limited, do not retry deployment; record the exact production deployment blocker.
+5. On the next available Production deployment, run one controlled onboarding attempt using a suitable unused registration flow and verify recovery, Studio access, and menu creation.
+6. Stop.
 
 ## Continuity Rule
-At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
+At the end of each atomic task, reconcile current Git head, CI evidence, and deployment evidence; update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update material audit/research/project-memory records; record exactly one next task; and stop.
 
-## 2026-09-11 Decision Record
-- VERIFIED: the reported defect was a presentation/state-handling gap, not a missing onboarding backend.
-- DECISION: preserve the existing server-authorized token generation and display the returned secret only in the immediate approval result.
-- DECISION: do not make tokens recoverable from stored lead data; this preserves the existing one-time secret design.
-- VERIFIED: GitHub Quality run `34539814074` passed all configured stages for PR #73.
-- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for `main` commit `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+## 2026-09-11 Decision Record — Onboarding Creation Recovery
+- VERIFIED: this is an interrupted-onboarding data-state defect, not a missing restaurant-creation backend.
+- VERIFIED: the database owner uniqueness index is functioning correctly by preventing duplicate tenant ownership.
+- DECISION: recover the server-owned tenant membership instead of weakening or removing the uniqueness constraint.
+- DECISION: preserve the existing tenant/menu architecture and make onboarding terminology business-neutral rather than introducing a separate product model.
+- VERIFIED: no dependency, auth, RLS, tenant isolation, theme, ordering, analytics, approval-center, or Manus infrastructure was changed.
