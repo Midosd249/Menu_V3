@@ -68,15 +68,15 @@
 - VERIFIED: no deployment side effect was created by the failed deployment-tool invocation.
 - Decision: do not claim `DEPLOYED`; Production identity remains UNKNOWN and the task is `DEPLOYMENT_BLOCKED`.
 
-## Closed Task Evidence — Platform Approval Center — CLOSED / VERIFIED
-- VERIFIED: PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
-- VERIFIED: overview and CRM approval-center entry points use native `/admin/onboarding` links.
-- VERIFIED: the approval workspace retains server-side `requirePlatformAdmin` authorization and existing secure onboarding token generation.
-- VERIFIED: the approval workspace now exposes explicit contact, approve/create-link, reject, revoke-link, copy-link, and open-link controls.
-- VERIFIED: rejection uses the existing `lost` lead status; no new database status or schema was introduced.
-- VERIFIED: regression coverage protects the native entry link and rejection action.
-- VERIFIED: quality run `34530262325` passed route generation, typecheck, 202 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance handling, and cleanup.
-- VERIFIED: no database schema, auth, RLS, tenant isolation, dependency, Manus theme, or unrelated admin feature was changed.
+## Closed Task Evidence — Platform Approval Center — UPDATED / VERIFIED
+- VERIFIED: PR #71 merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
+- VERIFIED: the reported failure was the approval entry returning to the overview where only the lead list/contact actions were visible.
+- VERIFIED: the deterministic fix keeps the Platform Owner inside `/admin` and switches directly to the existing `leads` control surface.
+- VERIFIED: selected lead details now expose restaurant, city, contact name, phone, email, status, submitted date, notes, Call, WhatsApp, Email, `تم التواصل`, `رفض الطلب`, `حفظ الملاحظات`, and `اعتماد وإنشاء رابط التسجيل`.
+- VERIFIED: approval uses the existing server-authorized `approveLead` operation; rejection uses the existing `lost` lead status through `updateLead`.
+- VERIFIED: no database, auth, RLS, tenant isolation, dependency, theme, or Manus infrastructure was changed.
+- VERIFIED: final `main` quality run `34534791703` passed route generation, typecheck, tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: GitHub Vercel status for the latest `main` commit is `success`.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
@@ -93,18 +93,18 @@
 - All specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
 
 ## UNKNOWN / BLOCKED Register
-- BLOCKED: Vercel Production deployment reconciliation is blocked by the observed `build-rate-limit` failure and unavailable direct deployment metadata in the connected Vercel scope.
+- UNKNOWN: direct Vercel Production deployment metadata is not independently available from the connected repository integration response.
 - UNKNOWN/BLOCKED: some physical-device/accessibility observations remain unavailable in the connector environment.
 - No current GitHub branch-protection blocker remains.
 
 ## Exact Next TODO
-### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
-1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against the latest `main` application state after PR #69.
-3. If aligned, record `DEPLOYED` and do not redeploy.
-4. If not aligned, perform one authorized release deployment through the release-only workflow.
-5. Run real-device Production QA after a successful release deployment.
-6. Close P2-H2 only after direct Production evidence.
+### Real-device verification of the Platform Owner approval controls
+1. Open the latest deployed `main` as Platform Owner.
+2. Press `اعتماد العملاء الجدد` or `فتح مركز الاعتماد`.
+3. Confirm the view changes to the lead-control surface instead of the overview.
+4. Select one real lead and verify all decision controls are visible.
+5. If appropriate, perform one controlled approval and verify the registration-link result.
+6. Record the direct-device result and stop.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
