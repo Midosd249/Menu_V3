@@ -5,7 +5,7 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Current verified implementation head: `65314826bdb652c541d66071ea9d2401067f35d2`.
+- Current verified implementation head: `41f2d2cee93f76427f5022ce725db5aa88048dc9`.
 - Premium Theme System — DONE / VERIFIED / MERGED.
 - Essential, Editorial, Noir, Heritage, and Gallery — protected.
 - Permanent visual/functional/research quality workflow — DONE / VERIFIED.
@@ -76,18 +76,27 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 ### Objective
 Protect `main` with required quality checks and the minimum appropriate branch protection/ruleset configuration without changing application code.
 
+### Direct verification
+- VERIFIED: `main` currently reports `protected: false`.
+- VERIFIED: required status checks are off.
+- VERIFIED: repository rulesets collection is empty (`[]`).
+- VERIFIED: the relevant quality check is named `quality`.
+- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write; the required endpoint returned HTTP 403 because administration access is not exposed by the managed connection.
+
 ### Required scope
-1. Inspect current `main` protection/ruleset state.
-2. Enable the minimum required protection/status checks when authorized access permits.
-3. Verify the resulting state directly.
-4. Record the exact rules/check names and evidence.
-5. Do not alter application behavior, dependencies, themes, auth, database, or deployment configuration.
+1. Owner enables the minimum required protection/status checks for `main`.
+2. Require the existing `quality` status check before merging.
+3. Require pull requests before merging.
+4. Do not allow force-pushes or branch deletion.
+5. Re-read and directly verify the resulting state.
+6. Record exact rules and evidence.
+7. Do not alter application behavior, dependencies, themes, auth, database, or deployment configuration.
 
 ### Acceptance criteria
-- `main` protection/ruleset state is directly verified.
-- Required quality checks are enforced according to the repository policy.
+- `main` protection/ruleset state is directly verified after owner configuration.
+- The existing `quality` check is required for changes entering `main`.
 - No unrelated repository or application changes are introduced.
-- Owner-action limitations are recorded precisely if configuration access is unavailable.
+- Any owner-access limitation is recorded precisely rather than inferred around.
 
 ## P2-H1 — Small Analytics UX Improvement
 - INFERRED: Local Visibility readiness is currently hidden when analytics has no events because the analytics content is gated by `hasData`.
@@ -106,11 +115,12 @@ Normal release path:
 
 ## Exact Next TODO
 ### P1-H2 — GitHub main branch protection
-1. Inspect current protection/ruleset state for `main`.
-2. Enable required checks/protection if the available authorized capability supports configuration.
-3. Verify the resulting state directly.
-4. Document exact rules and evidence.
-5. Do not start P2-H1 automatically.
+1. Owner enables the documented minimum protection/ruleset for `main`.
+2. Re-read the protection/ruleset state directly.
+3. Confirm `quality` is required and force-push/delete protections are active.
+4. Record the verified result.
+5. Close P1-H2 only after direct verification.
+6. Do not start P2-H1 automatically.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
