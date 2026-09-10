@@ -9,6 +9,7 @@ const publicOnboarding = readFileSync("src/routes/onboarding/$token.tsx", "utf8"
 const rootAdmin = readFileSync("src/routes/admin.tsx", "utf8");
 const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
 const adminAccess = readFileSync("src/lib/menu/admin.ts", "utf8");
+const publicHome = readFileSync("src/routes/index.tsx", "utf8");
 
 
 test("platform onboarding workspace exposes the owner workflow", () => {
@@ -51,4 +52,11 @@ test("platform owners leave studio for the dedicated admin workspace", () => {
   assert.match(studio, /state\.isPlatformAdmin/);
   assert.match(studio, /Navigate to=.*admin/);
   assert.match(studio, /Navigate to=.*onboarding/);
+});
+
+test("public lead form keeps the form reference across the async submit", () => {
+  assert.match(publicHome, /const formElement = event\.currentTarget/);
+  assert.match(publicHome, /new FormData\(formElement\)/);
+  assert.match(publicHome, /formElement\.reset\(\)/);
+  assert.doesNotMatch(publicHome, /setStatus\("success"\); event\.currentTarget\.reset\(\)/);
 });
