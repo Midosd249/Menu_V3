@@ -13,7 +13,7 @@ const publicHome = readFileSync("src/routes/index.tsx", "utf8");
 
 
 test("platform onboarding workspace exposes the owner workflow", () => {
-  assert.match(rootAdmin, /admin\/onboarding/);
+  assert.match(rootAdmin, /اعتماد العملاء الجدد/);
   assert.match(admin, /اعتماد وإنشاء رابط التسجيل|Approve & create registration link/);
   assert.match(admin, /اتصال/);
   assert.match(admin, /WhatsApp/);
@@ -22,14 +22,17 @@ test("platform onboarding workspace exposes the owner workflow", () => {
   assert.match(admin, /getAdminDashboard/);
 });
 
-test("platform owner overview opens the approval center with a native link", () => {
+test("platform owner approval entry point opens the working controls inside the existing admin center", () => {
   assert.match(rootAdmin, /التواصل واعتماد الطلبات/);
-  assert.match(rootAdmin, /href="\/admin\/onboarding"/);
-  assert.match(rootAdmin, /فتح مركز الاعتماد/);
-  assert.match(rootAdmin, /phoneHref\(lead\.contactPhone\)/);
-  assert.match(rootAdmin, /whatsappHref\(lead\.contactPhone\)/);
-  assert.match(rootAdmin, /mailto:\$\{lead\.contactEmail\}/);
-  assert.doesNotMatch(rootAdmin, /window\.location\.assign\("\/admin\/onboarding"\)/);
+  assert.match(rootAdmin, /onClick=\{\(\) => setTab\("leads"\)\}/);
+  assert.match(rootAdmin, /onApproval=\{\(\) => setTab\("leads"\)\}/);
+  assert.doesNotMatch(rootAdmin, /href="\/admin\/onboarding"/);
+  assert.match(rootAdmin, /approveLead/);
+  assert.match(rootAdmin, /اعتماد وإنشاء رابط التسجيل/);
+  assert.match(rootAdmin, /رفض الطلب/);
+  assert.match(rootAdmin, /تم التواصل/);
+  assert.match(rootAdmin, /حفظ الملاحظات/);
+  assert.match(rootAdmin, /تفاصيل الطلب/);
 });
 
 test("lead onboarding is server-authorized and token based", () => {
