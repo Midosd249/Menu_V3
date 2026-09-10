@@ -70,3 +70,10 @@ test("public lead form keeps the form reference across the async submit", () => 
   assert.match(publicHome, /formElement\.reset\(\)/);
   assert.doesNotMatch(publicHome, /setStatus\("success"\); event\.currentTarget\.reset\(\)/);
 });
+
+test("approval center exposes an explicit rejection action backed by the existing lead status model", () => {
+  assert.match(admin, /reject: "رفض الطلب"/);
+  assert.match(admin, /onClick=\{\(\) => void save\("lost"\)\}/);
+  assert.match(admin, /LEAD_STATUSES = \["new", "contacted", "qualified", "converted", "lost"\]/);
+  assert.match(server, /status = \$\{data\.status\}/);
+});
