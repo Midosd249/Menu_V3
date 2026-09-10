@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import { Navigate, useRouterState } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { getPlatformAdminAccess } from "./admin";
 import { getMyStudio } from "./owner";
 import type { FnErr, FnResult, StudioSnapshot } from "./types";
 import { LoadingState, ErrorState } from "@/components/state-panel";
@@ -49,7 +50,7 @@ export function StudioGate({ children }: { children: ReactNode }) {
   const [state, setState] = useState<
     | { status: "loading" }
     | { status: "error"; error: FnErr }
-    | { status: "empty" }
+    | { status: "empty"; isPlatformAdmin: boolean }
     | { status: "ok"; snapshot: StudioSnapshot }
   >({ status: "loading" });
   const load = useCallback(async () => {
@@ -57,7 +58,12 @@ export function StudioGate({ children }: { children: ReactNode }) {
     try {
       const result = await getMyStudio();
       if (!result.ok) { setState({ status: "error", error: result }); return; }
-      if (!("tenant" in result.data) || result.data.tenant == null) { setState({ status: "empty" }); return; }
+      if (!("tenant" in result.data) || result.data.tenant == null) {
+        const adminAccess = await getPlatformAdminAccess();
+        if (!adminAccess.ok) { setState({ status: "error", error: adminAccess }); return; }
+        setState({ status: "empty", isPlatformAdmin: adminAccess.data.isAdmin });
+        return;
+      }
       setState({ status: "ok", snapshot: result.data as StudioSnapshot });
     } catch (err) {
       setState({ status: "error", error: { ok: false, code: "unavailable", error: err instanceof Error ? err.message : "تعذر تحميل الاستوديو" } });
@@ -71,7 +77,8 @@ export function StudioGate({ children }: { children: ReactNode }) {
   if (state.status === "error") return <ErrorState message={state.error.error} onRetry={() => void load()} />;
   if (state.status === "empty") {
     if (path.startsWith("/onboarding")) return <>{children}</>;
-    return <Navigate to="/onboarding" />;
+    if (state.isPlatformAdmin) return <Navigate to="/admin" replace />;
+    return <Navigate to="/onboarding" replace />;
   }
   return <Ctx.Provider value={{ snapshot: state.snapshot, reload: load, setSnapshot: (next) => setState({ status: "ok", snapshot: next }) }}>{children}</Ctx.Provider>;
 }
