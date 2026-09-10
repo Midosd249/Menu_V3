@@ -55,7 +55,8 @@ function Home() {
   }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setStatus("sending"); setReferenceId("");
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const details = [selectedPlan ? `Plan: ${selectedPlan}` : "", selectedTheme ? `Theme: ${selectedTheme}` : "", String(form.get("details") ?? "").trim()].filter(Boolean).join("\n");
     try {
       const result = await submitLead({ data: {
@@ -65,7 +66,7 @@ function Home() {
       } });
       if (!result.ok) throw new Error(result.error);
       setReferenceId(result.data.id.slice(0, 8).toUpperCase());
-      setStatus("success"); event.currentTarget.reset();
+      setStatus("success"); formElement.reset();
     } catch { setStatus("error"); }
   }
   const navItems = [
