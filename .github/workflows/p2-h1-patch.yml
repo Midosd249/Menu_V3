@@ -1,0 +1,62 @@
+name: P2-H1 Patch
+
+on:
+  push:
+    branches:
+      - feat/p2-h1-analytics-no-data
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[p2-h1-patched]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply focused P2-H1 patch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/routes/studio/analytics.tsx')
+          text = path.read_text()
+          old = '''      {!hasData ? <p className="rounded-xl border border-line px-4 py-10 text-center text-sm text-muted">{t(copy.state.noDataYet, lang)}</p> : null}
+      {hasData ? (
+        <>
+          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">'''
+          new = '''      {!hasData ? (
+        <>
+          <p className="rounded-xl border border-line px-4 py-10 text-center text-sm text-muted">{t(copy.state.noDataYet, lang)}</p>
+          <VisibilityReadiness studio={studio} analytics={analytics} lang={lang} />
+        </>
+      ) : null}
+      {hasData ? (
+        <>
+          <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">'''
+          if old not in text:
+              raise SystemExit('analytics.tsx expected no-data block not found')
+          text = text.replace(old, new, 1)
+          path.write_text(text)
+
+          test_path = Path('tests/p2-growth-differentiation.test.mjs')
+          test = test_path.read_text()
+          marker = '''test("P2 experimentation surface is hypothesis-led and does not claim measured significance", () => {'''
+          addition = '''test("P2 local visibility remains visible when analytics has no events", () => {
+  assert.match(analytics, /!hasData \? \(\\s*<\\>\\s*<p className=.*noDataYet/);
+  assert.match(analytics, /<VisibilityReadiness studio=\{studio\} analytics=\{analytics\} lang=\{lang\} \/>/);
+});
+
+'''
+          if marker not in test:
+              raise SystemExit('test insertion marker not found')
+          test_path.write_text(test.replace(marker, addition + marker, 1))
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/routes/studio/analytics.tsx tests/p2-growth-differentiation.test.mjs
+          git commit -m "feat: keep visibility readiness visible without analytics data [p2-h1-patched]"
+          git push
