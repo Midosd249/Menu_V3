@@ -13,7 +13,7 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 - Canonical infrastructure reference: `docs/project-infrastructure.md`.
 
-## Current Verified Position — 2026-09-10
+## Current Verified Position — 2026-09-11
 - VERIFIED: P0 Public Order Hardening is completed and protected.
 - VERIFIED: P1-H1 package manifest / lockfile reconciliation is CLOSED on `main`.
 - VERIFIED: P1-H2 `main-protection` ruleset is active and directly verified.
@@ -21,16 +21,15 @@
 - VERIFIED: W16 owner-accepted direct-device results remain accepted and are not being reopened.
 - VERIFIED: Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
 - VERIFIED: Quick Add, Item Notes, Cart, canonical public rendering, authentication/authorization, tenant/branch isolation, and customer action surfaces remain protected.
-- VERIFIED: P2-H1 is implemented on PR #59 with a two-file application/test diff and no database/auth/theme/dependency changes.
-- VERIFIED: P2-H1 quality run `34454958196` passed route generation, typecheck, 198 tests, lint, production build, Playwright runtime installation, all-theme browser QA, performance artifact handling, and cleanup.
-- VERIFIED: P2-H1 preserves the canonical `getOwnerAnalytics` source and the existing populated analytics path; it only makes `VisibilityReadiness` visible alongside the no-data message when analytics events are absent.
-- VERIFIED: the latest Platform Owner approval-control fix is merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
-- VERIFIED: the latest `main` quality run `34534791703` passed route generation, typecheck, tests, lint, production build, Playwright installation, Chromium installation, all-theme browser QA, performance handling, and cleanup.
-- VERIFIED: GitHub Vercel status for the latest `main` commit is `success`.
+- VERIFIED: the Platform Owner approval controls remain server-authorized and use the existing lead status model.
+- VERIFIED: the registration-link rendering defect is fixed on `main` as `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+- VERIFIED: GitHub Quality run `34539814074` passed all configured stages, including route generation, typecheck, tests, lint, production build, Playwright/Chromium, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` and targets `production` for the same `main` commit.
+- VERIFIED: Production `/admin` serves the updated `admin` bundle containing the registration URL rendering, copy, and open actions.
 
 ## Manus Continuity Protection
 - VERIFIED: `docs/project-memory/manus-engineering-lessons.md` records durable lessons from Manus execution, including security trust-boundary rules, targeted theme verification, structural layering diagnosis, CI-vs-local evidence separation, and Preview-vs-Production deployment distinction.
-- VERIFIED: P1-H1, P1-H2, P2-H1, and the Platform Owner approval-control fix did not modify Manus-derived theme/security/product infrastructure.
+- VERIFIED: P1-H1, P1-H2, P2-H1, Platform Owner approval-control work, and the registration-link fix did not modify Manus-derived theme/security/product infrastructure.
 - RULE: future tasks must inspect Manus lessons and current Git evidence before touching related areas; no completed Manus work is to be repeated without a proven defect.
 
 ## Completed Milestones — Protected
@@ -76,32 +75,31 @@
 - Evidence: PR #59 and quality run `34454958196`.
 
 ### Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
-- VERIFIED: the reported defect was reproduced at the UI level: the approval entry returned to the existing Platform Owner page where only the lead list and contact controls were visible.
-- VERIFIED: the existing `/admin/onboarding` source contains the full approval workflow, but the deployed user path was not reliably reaching that workspace.
-- VERIFIED: the robust fix uses the existing `/admin` Platform Owner route as the deterministic approval entry and opens the `leads` control surface in-place.
-- VERIFIED: the existing server-authorized `approveLead` operation is used for `اعتماد وإنشاء رابط التسجيل`.
-- VERIFIED: the existing `updateLead` operation is used for `تم التواصل`, `رفض الطلب`, and saving notes; rejection maps to the existing `lost` status model.
-- VERIFIED: the control surface displays restaurant, city, contact name, phone, email, status, submitted date, notes, Call, WhatsApp, Email, Approve & create registration link, Contacted, Reject, and Save Notes.
-- VERIFIED: no database schema, authentication, RLS, tenant isolation, dependency, or Manus-derived infrastructure was changed.
-- VERIFIED: PR #71 merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
-- VERIFIED: final `main` quality run `34534791703` passed all configured quality stages.
-- VERIFIED: GitHub Vercel status for `d11455f5d9a69b12bed4ba7804353065dccfaa2b` is `success`.
-- STATUS: `VERIFIED` / merged / Vercel integration successful.
+- VERIFIED: the approval entry now opens the existing `leads` control surface inside the Platform Owner route.
+- VERIFIED: the selected lead exposes request details and the existing server-authorized decision controls.
+- VERIFIED: the selected lead now renders the one-time registration URL returned by `approveLead` immediately after successful approval.
+- VERIFIED: the rendered URL has `نسخ الرابط` and `فتح الرابط` actions and explains the existing 7-day/single-use behavior.
+- VERIFIED: the secret token is not persisted to the lead record by this UI change.
+- VERIFIED: PR #73 merged to `main` as `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+- VERIFIED: Quality run `34539814074` passed all configured quality stages.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for the same `main` commit.
+- STATUS: `VERIFIED` / merged / deployed.
 
 ## Current Release / Deployment State
-- VERIFIED: latest `main` is `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
-- VERIFIED: GitHub Vercel integration reports `success` for that commit.
-- UNKNOWN: direct Vercel Production deployment metadata is not independently available from the repository integration response.
-- RULE: do not claim Production = main solely from CI or a public HTTP response when direct deployment metadata is unavailable.
+- VERIFIED: latest `main` is `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` and targets `production`.
+- VERIFIED: Production aliases include `menu-v3-kohl.vercel.app` and `menu-v3-midosd2s-projects.vercel.app`.
+- VERIFIED: production `/admin` returns HTTP 200 and its shipped admin bundle contains the new registration-link UI.
 
 ## Exact Current TODO
-### Next atomic task — Real-device verification of the Platform Owner approval flow
-1. Open the latest deployed application as Platform Owner.
-2. Click `فتح مركز الاعتماد`.
-3. Verify the page switches to the lead-control surface instead of returning to the overview.
-4. Select one lead and verify the full control set is visible.
-5. If a real lead is available, execute only one controlled approval and verify the registration-link result.
-6. Record the direct-device result and stop.
+### Next atomic task — Real-device verification of the completed Platform Owner approval flow
+1. Open the latest Production application as Platform Owner.
+2. Open `اعتماد العملاء الجدد` / the approval controls.
+3. Select one real lead.
+4. Perform one controlled approval only if the lead is suitable for testing.
+5. Verify that the generated registration URL is visible, copyable, and opens the public onboarding route.
+6. Verify the client onboarding handoff and record the result.
+7. Stop.
 
 ## Continuity Rule
 At the end of every atomic task:
@@ -112,3 +110,10 @@ At the end of every atomic task:
 5. update the audit/research/project-memory record when material;
 6. record one exact next task;
 7. stop.
+
+## 2026-09-11 — Registration Link Rendering Fix
+- VERIFIED: root cause was UI state loss: `approveLead` already returned `registrationUrl`, but the `/admin` `Leads` component discarded the returned field and displayed only a generic success message.
+- VERIFIED: the fix stores the returned URL in component state and renders it immediately with copy/open actions.
+- VERIFIED: the change is limited to `src/routes/admin.tsx` plus focused regression coverage in `tests/platform-onboarding-contract.test.mjs`.
+- VERIFIED: no database schema, authentication, RLS, tenant isolation, dependency, theme, or Manus-derived infrastructure changed.
+- VERIFIED: Production build completed and Vercel Production is `READY` for `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
