@@ -24,6 +24,14 @@ test("platform admin UI provides customer contact and safe archive controls", ()
   assert.match(admin, /أرشفة آمنة/);
 });
 
+test("subscription summary does not expose a fake navigation action", () => {
+  const start = admin.indexOf("function Subscriptions");
+  const end = admin.indexOf("function Analytics", start);
+  const subscriptions = start >= 0 && end > start ? admin.slice(start, end) : "";
+  assert.match(subscriptions, /توزيع الخطط/);
+  assert.doesNotMatch(subscriptions, /window\.location\.assign|onClick=/);
+});
+
 test("owner operations do not surface archived orders", () => {
   assert.match(orders, /where o\.archived_at is null/);
   assert.match(orders, /o\.archived_at is null and o\.status = 'new'/);
