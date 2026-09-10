@@ -1,6 +1,6 @@
 import type { PublicMenu } from "./types";
 
-export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-kohl.vercel.app";
+export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-midosd2s-projects.vercel.app";
 
 function clean(value: string): string {
   return value.replace(/\s+/g, " ").trim();
