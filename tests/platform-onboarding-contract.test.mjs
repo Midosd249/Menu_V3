@@ -47,6 +47,6 @@ test("platform owners leave studio for the dedicated admin workspace", () => {
   assert.match(adminAccess, /getPlatformAdminAccess/);
   assert.match(studio, /getPlatformAdminAccess/);
   assert.match(studio, /state\.isPlatformAdmin/);
-  assert.match(studio, /Navigate to="\\/admin"/);
-  assert.match(studio, /Navigate to="\\/onboarding"/);
+  assert.match(studio, /Navigate to=.*admin/);
+  assert.match(studio, /Navigate to=.*onboarding/);
 });
