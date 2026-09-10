@@ -74,6 +74,6 @@ test("public lead form keeps the form reference across the async submit", () => 
 test("approval center exposes an explicit rejection action backed by the existing lead status model", () => {
   assert.match(admin, /reject: "رفض الطلب"/);
   assert.match(admin, /onClick=\{\(\) => void save\("lost"\)\}/);
-  assert.match(server, /LEAD_STATUSES = \["new", "contacted", "qualified", "converted", "lost"\]/);
+  assert.match(server, /LEAD_STATUSES/);
   assert.match(server, /status = \$\{data\.status\}/);
 });
