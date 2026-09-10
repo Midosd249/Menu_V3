@@ -28,7 +28,7 @@ test("platform owner overview surfaces lead contact and approval controls", () =
   assert.match(rootAdmin, /phoneHref\(lead\.contactPhone\)/);
   assert.match(rootAdmin, /whatsappHref\(lead\.contactPhone\)/);
   assert.match(rootAdmin, /mailto:\$\{lead\.contactEmail\}/);
-  assert.match(rootAdmin, /navigate\(\{ to: "\/admin\/onboarding" \}\)/);
+  assert.match(rootAdmin, /window\.location\.assign\("\/admin\/onboarding"\)/);
 });
 
 test("lead onboarding is server-authorized and token based", () => {
