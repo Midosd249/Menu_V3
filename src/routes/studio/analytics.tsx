@@ -59,7 +59,12 @@ function AnalyticsContent({ analytics, studio, lang }: { analytics: OwnerAnalyti
   const hasData = analytics.visits > 0 || analytics.productViews > 0 || analytics.qrScans > 0;
   return (
     <>
-      {!hasData ? <p className="rounded-xl border border-line px-4 py-10 text-center text-sm text-muted">{t(copy.state.noDataYet, lang)}</p> : null}
+      {!hasData ? (
+        <>
+          <p className="rounded-xl border border-line px-4 py-10 text-center text-sm text-muted">{t(copy.state.noDataYet, lang)}</p>
+          <VisibilityReadiness studio={studio} analytics={analytics} lang={lang} />
+        </>
+      ) : null}
       {hasData ? (
         <>
           <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
