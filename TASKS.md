@@ -89,7 +89,10 @@
 ### P1-H2 — GitHub main branch protection — OPEN / OWNER ACTION
 - Objective: enforce the required quality gate and minimum appropriate branch protection on `main`.
 - Scope: repository settings only; no application code, dependency, theme, auth, database, or product behavior changes.
-- Current connector capability: protection/ruleset state can be inspected, but repository protection configuration may require owner-side action.
+- VERIFIED: `main` currently reports `protected: false`; required status checks are off; repository rulesets collection is empty (`[]`).
+- VERIFIED: the relevant GitHub Actions check is named `quality`.
+- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write because the required administration endpoint is not exposed by the managed connection.
+- OWNER ACTION: configure the minimum protection in GitHub repository settings, then re-read and verify it directly.
 - Acceptance: exact protection/ruleset state and required checks are directly verified and documented.
 
 ## Closed Task Evidence — P1-H1
@@ -122,16 +125,17 @@
 
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN/BLOCKED: some physical-device/accessibility observations remain unavailable in the connector environment.
-- UNKNOWN: current Production deployment identity for the post-P1-H1 `main` commit until direct Vercel evidence is inspected.
-- OPEN: GitHub `main` branch protection.
+- UNKNOWN: current Production deployment identity for the post-P1-H1 `main` documentation commits until direct Vercel evidence is inspected.
+- BLOCKED: GitHub `main` branch protection configuration through the current managed connector.
 
 ## Exact Next TODO
 ### P1-H2 — GitHub main branch protection
-1. Inspect current `main` protection/ruleset state.
-2. Enable required checks/protection if the available authorized capability supports configuration.
-3. Verify the resulting state directly.
-4. Document exact rules and evidence.
-5. Do not start P2-H1 automatically.
+1. Owner enables the documented minimum protection/ruleset for `main`.
+2. Re-read the protection/ruleset state directly.
+3. Confirm `quality` is required and force-push/delete protections are active.
+4. Record the verified result.
+5. Close P1-H2 only after direct verification.
+6. Do not start P2-H1 automatically.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
