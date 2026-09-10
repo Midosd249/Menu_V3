@@ -15,7 +15,7 @@
 - P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
 - W16 owner-accepted results — CLOSED FOR CURRENT EXECUTION.
 - P2-H1 analytics no-data UX — CLOSED / VERIFIED on PR #59.
-- Current active atomic task: P2-H2 production deployment identity reconciliation — `DEPLOYMENT_BLOCKED`.
+- Platform Approval Center defect — CLOSED / VERIFIED on PR #71.
 
 ## Canonical Backend Identity
 - VERIFIED: Supabase project ref `ublxptcqefujkbeepylc`.
@@ -51,31 +51,6 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 - VERIFIED: no second analytics event source was introduced.
 - VERIFIED: `tests/p2-growth-differentiation.test.mjs` protects the P2 contracts.
 
-## P1-H1 Closure Record
-- VERIFIED: npm regenerated `package-lock.json` in GitHub Actions from the current `package.json`.
-- VERIFIED: `npm ci --ignore-scripts --dry-run` passed before the generated lockfile was committed.
-- VERIFIED: PR #57 was merged to `main` as `65314826bdb652c541d66071ea9d2401067f35d2`.
-- VERIFIED: final PR diff contained only `package-lock.json`; the temporary reconciliation workflow was removed before merge.
-- VERIFIED: final quality gate passed install, route tree generation, typecheck, tests, lint, build, Playwright browser QA, performance baseline, and cleanup.
-
-## P1-H2 Closure Record
-- VERIFIED: GitHub ruleset `main-protection` is active (ruleset ID `22744795`).
-- VERIFIED: target is the repository default branch (`main`).
-- VERIFIED: deletion protection and non-fast-forward protection are active.
-- VERIFIED: Pull Requests are required; required approval count is `0`.
-- VERIFIED: required status check `quality` is enforced with strict/up-to-date policy.
-- VERIFIED: bypass actor list is empty.
-- VERIFIED: no deployment, signed-commit, code-owner, or extra-review requirement was added.
-
-## P2-H1 Closure Record
-- VERIFIED: PR #59 changes only `src/routes/studio/analytics.tsx` and `tests/p2-growth-differentiation.test.mjs`.
-- VERIFIED: the no-data state now keeps the existing empty-state message and renders `VisibilityReadiness` alongside it.
-- VERIFIED: the populated analytics path is unchanged.
-- VERIFIED: focused regression coverage protects the zero-event visibility behavior.
-- VERIFIED: quality run `34454958196` passed route generation, typecheck, 198 tests, lint, production build, Playwright runtime/browser QA for all themes, performance handling, and cleanup.
-- VERIFIED: temporary patch automation was removed after applying the exact two-file change; it is not part of the PR diff.
-- VERIFIED: no database, authorization, tenant isolation, dependency, theme, or Vercel configuration was changed.
-
 ## Protected Completed Work
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -83,54 +58,25 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 - Do not create a sixth theme as a substitute for product/design strategy.
 - Do not repeat Manus-completed work unless a current reproducible defect is proven.
 
-## W16 — Human Device & Manual Accessibility Gate
-- OWNER-ACCEPTED: the latest direct-device results are accepted for the current milestone.
-- Do not reopen completed theme/architecture work without reproducible defect evidence.
-- Remaining unsupported/unknown observations are not silently converted into implementation failures.
-
-## P2-H2 — Production Deployment Identity Reconciliation
-### Objective
-Determine whether the latest verified `main` state is already deployed to Vercel Production, using direct deployment evidence only and without triggering an unnecessary deployment.
-
-### Verified boundary
-- `main` application commit under reconciliation: `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
-- GitHub `Vercel` status for that commit is `failure` with a target containing `upgradeToPro=build-rate-limit`.
-- Public Vercel menu URLs return HTTP 200, but this is not accepted as deployment identity evidence.
-- Connected Vercel deployment-management access returns HTTP 403 for the project/team scope.
-- Status: `DEPLOYMENT_BLOCKED`.
-
-### Acceptance criteria
-- Direct Vercel evidence identifies the Production deployment commit and status.
-- The deployment commit is compared with the verified `main` commit after PR #59 merge.
-- If already aligned, no deployment is triggered.
-- If not aligned, perform one authorized release deployment only after the blocker is resolved.
-- Continuity records distinguish implementation, CI, and Production evidence.
-
 ## Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
 ### Objective
-Make the Platform Owner approval-center entry point deterministic and expose the missing explicit request decision control without redesigning the existing onboarding system.
+Fix the user-reported behavior where `فتح مركز الاعتماد` returned to the Platform Owner overview and exposed only contact controls instead of request decision controls.
 
 ### Root cause
-- The overview and CRM entry points depended on imperative navigation from a button, while the user needed a deterministic route into the existing `/admin/onboarding` workspace.
-- The approval workspace already had contact and approval infrastructure but did not expose an explicit `Reject request` action even though `lost` is already part of the lead status model.
+- The existing `/admin/onboarding` source contained the intended approval workspace, but the user-facing entry was not reliably reaching that workspace in the deployed flow.
+- The actual requirement was not merely contact visibility; the Platform Owner needed a deterministic working control surface for selecting a lead and approving, rejecting, marking contacted, saving notes, and creating the registration link.
 
 ### Implemented
-- `src/routes/admin.tsx`: replaced the approval-center buttons with native `/admin/onboarding` links.
-- `src/routes/admin/onboarding.tsx`: added the explicit `رفض الطلب` action using the existing `save("lost")` path; preserved server authorization and onboarding token flow.
-- `tests/platform-onboarding-contract.test.mjs`: added regression coverage for native navigation and explicit rejection.
+- `src/routes/admin.tsx`: approval entry buttons now switch directly to the existing `leads` control surface inside the Platform Owner route instead of depending on the failing approval-center navigation path.
+- The lead control surface now exposes the selected request details and the existing server-authorized `approveLead` operation for `اعتماد وإنشاء رابط التسجيل`.
+- The same surface exposes `تم التواصل`, `رفض الطلب`, `حفظ الملاحظات`, Call, WhatsApp, Email, and request details.
+- `tests/platform-onboarding-contract.test.mjs`: regression coverage protects the deterministic entry point and the explicit decision controls.
+- No database, auth, RLS, tenant isolation, dependency, theme, or Manus infrastructure was changed.
 
 ### Verification
-- Quality run `34530262325`: SUCCESS.
-- Route generation: PASS.
-- Typecheck: PASS.
-- Tests: PASS — 202/202.
-- Lint: PASS.
-- Production build: PASS.
-- Playwright runtime and Chromium: PASS.
-- Browser template QA — all themes: PASS.
-- Performance artifact handling: PASS.
-- Cleanup: PASS.
-- PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
+- PR #71 merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
+- Final `main` quality run `34534791703` passed route generation, typecheck, tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance handling, and cleanup.
+- GitHub Vercel status for the latest `main` commit is `success`.
 
 ## Release-Only Vercel Policy
 Normal release path:
@@ -143,13 +89,14 @@ Normal release path:
 - `DEPLOYED` requires direct Vercel evidence.
 
 ## Exact Next TODO
-### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
-1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against the latest `main` application state after PR #69.
-3. If aligned, record `DEPLOYED` and do not redeploy.
-4. If not aligned, perform one authorized release deployment through the release-only workflow.
-5. Run real-device Production QA after a successful release deployment.
-6. Close P2-H2 only after direct Production evidence.
+### Real-device verification of Platform Owner approval controls
+1. Open the latest deployed `main` as Platform Owner.
+2. Press `اعتماد العملاء الجدد` or `فتح مركز الاعتماد`.
+3. Confirm the view changes to the lead-control surface rather than the overview.
+4. Select one real lead.
+5. Confirm the details and all decision controls are visible.
+6. If appropriate, perform one controlled approval and verify the registration-link result.
+7. Record the direct-device result and stop.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
