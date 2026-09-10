@@ -140,12 +140,12 @@ function PlatformAdminPage() {
         {error ? <div className="rounded-xl border border-line bg-sand/60 px-4 py-3 text-sm">{error}</div> : null}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8"><Metric label="المطاعم" value={platform.tenantCount} /><Metric label="النشطة" value={platform.activeTenantCount} /><Metric label="المنشورة" value={platform.publishedTenantCount} /><Metric label="الفروع" value={platform.branchCount} /><Metric label="الأصناف" value={platform.productCount} /><Metric label="الطلبات" value={platform.orderCount} /><Metric label="المفتوحة" value={platform.openOrderCount} /><Metric label="Leads جديدة" value={platform.newLeadCount} /></div>
         {tab !== "overview" && tab !== "system" && tab !== "orders" && <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} />}
-        {tab === "overview" ? <Overview platform={platform} leads={leads} onTab={setTab} onOpen={() => void navigate({ to: "/admin/onboarding" })} /> : null}
+        {tab === "overview" ? <Overview platform={platform} leads={leads} onTab={setTab} onOpen={() => window.location.assign("/admin/onboarding")} /> : null}
         {tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}
         {tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}
         {tab === "clients" ? <Clients rows={filteredMembers} /> : null}
         {tab === "branches" ? <Branches rows={filteredBranches} /> : null}
-        {tab === "leads" ? <Leads leads={leads} status={leadStatus} query={leadQuery} setStatus={setLeadStatus} setQuery={setLeadQuery} onOpen={() => void navigate({ to: "/admin/onboarding" })} /> : null}
+        {tab === "leads" ? <Leads leads={leads} status={leadStatus} query={leadQuery} setStatus={setLeadStatus} setQuery={setLeadQuery} onOpen={() => window.location.assign("/admin/onboarding")} /> : null}
         {tab === "projects" ? <Projects rows={filteredProjects} /> : null}
         {tab === "requests" ? <Requests rows={filteredRequests} /> : null}
         {tab === "subscriptions" ? <Subscriptions platform={platform} /> : null}
