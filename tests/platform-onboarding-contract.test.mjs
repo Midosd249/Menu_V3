@@ -24,7 +24,7 @@ test("platform onboarding workspace exposes the owner workflow", () => {
 
 test("platform owner overview opens the approval center with a native link", () => {
   assert.match(rootAdmin, /التواصل واعتماد الطلبات/);
-  assert.match(rootAdmin, /href=\"\/admin\/onboarding\"/);
+  assert.match(rootAdmin, /href="\/admin\/onboarding"/);
   assert.match(rootAdmin, /فتح مركز الاعتماد/);
   assert.match(rootAdmin, /phoneHref\(lead\.contactPhone\)/);
   assert.match(rootAdmin, /whatsappHref\(lead\.contactPhone\)/);
