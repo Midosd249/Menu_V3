@@ -24,6 +24,8 @@
 - VERIFIED: P2-H1 is implemented on PR #59 with a two-file application/test diff and no database/auth/theme/dependency changes.
 - VERIFIED: P2-H1 quality run `34454958196` passed route generation, typecheck, 198 tests, lint, production build, Playwright runtime installation, all-theme browser QA, performance artifact handling, and cleanup.
 - VERIFIED: P2-H1 preserves the canonical `getOwnerAnalytics` source and the existing populated analytics path; it only makes `VisibilityReadiness` visible alongside the no-data message when analytics events are absent.
+- VERIFIED: P2-H2 production deployment identity reconciliation is currently `DEPLOYMENT_BLOCKED`; GitHub reports the `Vercel` status for the latest application commit as `failure` with a Vercel `build-rate-limit` target.
+- VERIFIED: the latest `main` documentation closure commit is `32aaae291634fba6219d18d10e9d47c136bb4587`; the application change remains at ancestor `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
 
 ## Manus Continuity Protection
 - VERIFIED: `docs/project-memory/manus-engineering-lessons.md` records durable lessons from Manus execution, including security trust-boundary rules, targeted theme verification, structural layering diagnosis, CI-vs-local evidence separation, and Preview-vs-Production deployment distinction.
@@ -72,26 +74,30 @@
 - VERIFIED: no Google ranking, retention, revenue attribution, conversion, or statistical-significance claims were introduced.
 - Evidence: PR #59 and quality run `34454958196`.
 
-### P2-H2 — Production deployment identity reconciliation — TODO
-- UNKNOWN: current Production deployment identity for the latest `main` state until direct Vercel evidence is inspected.
-- Do not trigger a deployment merely to create evidence.
+### P2-H2 — Production deployment identity reconciliation — DEPLOYMENT BLOCKED
+- VERIFIED: `main` application commit under reconciliation is `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+- VERIFIED: GitHub `Vercel` status for that commit is `failure` and its target contains `upgradeToPro=build-rate-limit`.
+- UNKNOWN: direct Production deployment commit identity because the connected Vercel deployment-management scope returns HTTP 403.
+- RULE: do not claim `DEPLOYED` from public HTTP 200, CI, or Preview evidence.
+- RULE: do not repeatedly trigger Vercel deployments to create evidence.
 
 ## Current Release / Deployment State
-- VERIFIED: P2-H1 is a small application/test change only and has no requested Vercel deployment.
-- UNKNOWN: latest Production deployment identity for the eventual merged P2-H1 state until direct Vercel evidence is inspected.
-- Do not claim `DEPLOYED` from CI or Preview evidence.
-- Do not intentionally trigger repeated Vercel deployments.
+- VERIFIED: P2-H1 implementation and CI are complete.
+- VERIFIED: GitHub Vercel integration is currently blocked by a build-rate-limit gate for the reconciled application commit.
+- UNKNOWN: exact Production deployment commit identity until direct Vercel deployment metadata becomes accessible.
+- STATUS: `DEPLOYMENT_BLOCKED`.
 
 ## Exact Current TODO
-### P2-H2 — Production deployment identity reconciliation
-1. Inspect existing Vercel deployment evidence for the latest `main` state.
-2. Match the production deployment commit to the verified `main` commit without triggering a new deployment.
-3. Record `DEPLOYED`, `DEPLOYMENT_BLOCKED`, or `UNKNOWN` with direct evidence.
-4. If a deployment is already correct, do not redeploy.
-5. Update continuity records and stop.
+### P2-H2 — Resolve deployment blocker and reconcile Production identity
+1. Resolve the Vercel build-rate-limit / deployment-access blocker.
+2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+3. If aligned, record `DEPLOYED` and do not redeploy.
+4. If not aligned, perform one authorized release deployment through the release-only workflow.
+5. Run real-device Production QA after a successful release deployment.
+6. Update continuity records and close P2-H2 only after direct evidence.
 
 ## Permanent Execution Order
-1. Handle P2-H2 deployment identity reconciliation as the next atomic task.
+1. Resolve P2-H2 deployment blocker and reconcile Production identity.
 2. Handle only reproducible defects as separate atomic tasks.
 3. Consider further growth/UX improvements only from new evidence.
 4. Use the release-only Vercel workflow for every intentional release batch.
