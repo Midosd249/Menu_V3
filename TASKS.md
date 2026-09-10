@@ -7,13 +7,13 @@
 - VERIFIED: server-side product, availability, variant, modifier, quantity, note, tenant, and price validation remains authoritative.
 - Evidence: `docs/sessions/2026-09-09-p0-p1-final-verification.md`.
 
-### P1 — Production/Continuity Hardening — CLOSED / VERIFIED for implemented scope
+### P1 — Production/Continuity Hardening — CLOSED / VERIFIED
 - VERIFIED: P0/P1 security and continuity work is present on the current main line.
 - VERIFIED: deployment identity is directly verified separately from CI.
 - CLOSED: package manifest / lockfile reconciliation for deterministic `npm ci` installation.
-- OPEN FOLLOW-UP: GitHub `main` branch protection / required status checks.
+- CLOSED: GitHub `main` branch protection / required status checks.
 - No speculative dependency upgrade is authorized.
-- Evidence: PR #57, GitHub Actions run `34451068766`, and `docs/audits/2026-09-09-continuity-reconciliation.md`.
+- Evidence: PR #57, GitHub Actions run `34451068766`, and the `main-protection` ruleset verified on 2026-09-10.
 
 ### P2 — Growth & Differentiation — CLOSED / VERIFIED / DEPLOYED
 - VERIFIED: advanced analytics storytelling is implemented from the canonical owner analytics source.
@@ -86,14 +86,12 @@
 
 ## Current Active Task
 
-### P1-H2 — GitHub main branch protection — OPEN / OWNER ACTION
-- Objective: enforce the required quality gate and minimum appropriate branch protection on `main`.
-- Scope: repository settings only; no application code, dependency, theme, auth, database, or product behavior changes.
-- VERIFIED: `main` currently reports `protected: false`; required status checks are off; repository rulesets collection is empty (`[]`).
-- VERIFIED: the relevant GitHub Actions check is named `quality`.
-- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write because the required administration endpoint is not exposed by the managed connection.
-- OWNER ACTION: configure the minimum protection in GitHub repository settings, then re-read and verify it directly.
-- Acceptance: exact protection/ruleset state and required checks are directly verified and documented.
+### P2-H1 — Analytics no-data UX — TODO
+- Objective: expose Local Visibility readiness independently from analytics event availability.
+- Scope: one small owner-analytics UX change; preserve the canonical analytics event source and current tenant/branch authorization boundaries.
+- INFERRED: current Local Visibility readiness is hidden when analytics has no events because the content is gated by `hasData`.
+- Acceptance: readiness remains visible and honest with zero analytics events, while populated analytics behavior remains unchanged.
+- Do not invent metrics, ranking claims, retention, revenue attribution, or statistical significance.
 
 ## Closed Task Evidence — P1-H1
 - VERIFIED: npm regenerated `package-lock.json` from the current `package.json` in GitHub Actions.
@@ -102,12 +100,22 @@
 - VERIFIED: final PR diff contained only `package-lock.json`; temporary reconciliation workflow was removed before merge.
 - VERIFIED: final quality run passed install, route tree generation, typecheck, tests, lint, build, Playwright browser QA, performance baseline, and cleanup.
 
+## Closed Task Evidence — P1-H2
+- VERIFIED: repository ruleset `main-protection` is active.
+- VERIFIED: target is the repository default branch (`main`).
+- VERIFIED: deletion protection is active.
+- VERIFIED: non-fast-forward updates are blocked, which prevents force-pushes.
+- VERIFIED: pull requests are required before merging; required approval count is 0.
+- VERIFIED: required status check `quality` is enforced with strict/up-to-date status policy.
+- VERIFIED: no bypass actors are configured.
+- VERIFIED: no deployment, signed-commit, code-owner, or extra-review requirement was added.
+- Evidence: ruleset ID `22744795`, directly read from GitHub on 2026-09-10.
+
 ## Open Follow-ups — Not Current Task
 
-### P2-H1 — Analytics no-data UX
-- INFERRED: Local Visibility readiness is hidden when analytics has no events because the current analytics content is gated by `hasData`.
-- PROPOSED: expose Local Visibility readiness independently from analytics event availability.
-- This must remain a separate atomic UX task.
+### P2-H2 — Production deployment identity reconciliation
+- UNKNOWN: current Production deployment identity for the latest documentation-only `main` state until direct Vercel evidence is inspected.
+- This must remain separate from application implementation and must not trigger an unnecessary deployment.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
@@ -125,17 +133,18 @@
 
 ## UNKNOWN / BLOCKED Register
 - UNKNOWN/BLOCKED: some physical-device/accessibility observations remain unavailable in the connector environment.
-- UNKNOWN: current Production deployment identity for the post-P1-H1 `main` documentation commits until direct Vercel evidence is inspected.
-- BLOCKED: GitHub `main` branch protection configuration through the current managed connector.
+- UNKNOWN: current Production deployment identity for the latest documentation-only `main` state until direct Vercel evidence is inspected.
+- No current GitHub branch-protection blocker remains.
 
 ## Exact Next TODO
-### P1-H2 — GitHub main branch protection
-1. Owner enables the documented minimum protection/ruleset for `main`.
-2. Re-read the protection/ruleset state directly.
-3. Confirm `quality` is required and force-push/delete protections are active.
-4. Record the verified result.
-5. Close P1-H2 only after direct verification.
-6. Do not start P2-H1 automatically.
+### P2-H1 — Analytics no-data UX
+1. Read current owner analytics source and relevant tests.
+2. Confirm the `hasData` gating path and tenant/branch authorization boundary.
+3. Implement the smallest UX change that keeps Local Visibility readiness visible with no analytics events.
+4. Add/update focused regression coverage.
+5. Run applicable tests, typecheck, lint, build, and targeted browser/manual checks.
+6. Review diff and update continuity records.
+7. Stop after P2-H1.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
