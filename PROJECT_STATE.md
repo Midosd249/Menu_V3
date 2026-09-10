@@ -24,12 +24,13 @@
 - VERIFIED: P2-H1 is implemented on PR #59 with a two-file application/test diff and no database/auth/theme/dependency changes.
 - VERIFIED: P2-H1 quality run `34454958196` passed route generation, typecheck, 198 tests, lint, production build, Playwright runtime installation, all-theme browser QA, performance artifact handling, and cleanup.
 - VERIFIED: P2-H1 preserves the canonical `getOwnerAnalytics` source and the existing populated analytics path; it only makes `VisibilityReadiness` visible alongside the no-data message when analytics events are absent.
-- VERIFIED: P2-H2 production deployment identity reconciliation is currently `DEPLOYMENT_BLOCKED`; GitHub reports the `Vercel` status for the latest application commit as `failure` with a Vercel `build-rate-limit` target.
-- VERIFIED: the latest `main` documentation closure commit is `32aaae291634fba6219d18d10e9d47c136bb4587`; the application change remains at ancestor `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+- VERIFIED: the latest Platform Owner approval-control fix is merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
+- VERIFIED: the latest `main` quality run `34534791703` passed route generation, typecheck, tests, lint, production build, Playwright installation, Chromium installation, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: GitHub Vercel status for the latest `main` commit is `success`.
 
 ## Manus Continuity Protection
 - VERIFIED: `docs/project-memory/manus-engineering-lessons.md` records durable lessons from Manus execution, including security trust-boundary rules, targeted theme verification, structural layering diagnosis, CI-vs-local evidence separation, and Preview-vs-Production deployment distinction.
-- VERIFIED: P1-H1, P1-H2, and P2-H1 did not modify Manus-derived theme/security/product infrastructure.
+- VERIFIED: P1-H1, P1-H2, P2-H1, and the Platform Owner approval-control fix did not modify Manus-derived theme/security/product infrastructure.
 - RULE: future tasks must inspect Manus lessons and current Git evidence before touching related areas; no completed Manus work is to be repeated without a proven defect.
 
 ## Completed Milestones — Protected
@@ -74,37 +75,33 @@
 - VERIFIED: no Google ranking, retention, revenue attribution, conversion, or statistical-significance claims were introduced.
 - Evidence: PR #59 and quality run `34454958196`.
 
-### P2-H2 — Production deployment identity reconciliation — DEPLOYMENT BLOCKED
-- VERIFIED: `main` application commit under reconciliation is `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
-- VERIFIED: GitHub `Vercel` status for that commit is `failure` and its target contains `upgradeToPro=build-rate-limit`.
-- UNKNOWN: direct Production deployment commit identity because the connected Vercel deployment-management scope returns HTTP 403.
-- RULE: do not claim `DEPLOYED` from public HTTP 200, CI, or Preview evidence.
-- RULE: do not repeatedly trigger Vercel deployments to create evidence.
+### Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
+- VERIFIED: the reported defect was reproduced at the UI level: the approval entry returned to the existing Platform Owner page where only the lead list and contact controls were visible.
+- VERIFIED: the existing `/admin/onboarding` source contains the full approval workflow, but the deployed user path was not reliably reaching that workspace.
+- VERIFIED: the robust fix uses the existing `/admin` Platform Owner route as the deterministic approval entry and opens the `leads` control surface in-place.
+- VERIFIED: the existing server-authorized `approveLead` operation is used for `اعتماد وإنشاء رابط التسجيل`.
+- VERIFIED: the existing `updateLead` operation is used for `تم التواصل`, `رفض الطلب`, and saving notes; rejection maps to the existing `lost` status model.
+- VERIFIED: the control surface displays restaurant, city, contact name, phone, email, status, submitted date, notes, Call, WhatsApp, Email, Approve & create registration link, Contacted, Reject, and Save Notes.
+- VERIFIED: no database schema, authentication, RLS, tenant isolation, dependency, or Manus-derived infrastructure was changed.
+- VERIFIED: PR #71 merged to `main` as `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
+- VERIFIED: final `main` quality run `34534791703` passed all configured quality stages.
+- VERIFIED: GitHub Vercel status for `d11455f5d9a69b12bed4ba7804353065dccfaa2b` is `success`.
+- STATUS: `VERIFIED` / merged / Vercel integration successful.
 
 ## Current Release / Deployment State
-- VERIFIED: P2-H1 implementation and CI are complete.
-- VERIFIED: GitHub Vercel integration is currently blocked by a build-rate-limit gate for the reconciled application commit.
-- UNKNOWN: exact Production deployment commit identity until direct Vercel deployment metadata becomes accessible.
-- STATUS: `DEPLOYMENT_BLOCKED`.
+- VERIFIED: latest `main` is `d11455f5d9a69b12bed4ba7804353065dccfaa2b`.
+- VERIFIED: GitHub Vercel integration reports `success` for that commit.
+- UNKNOWN: direct Vercel Production deployment metadata is not independently available from the repository integration response.
+- RULE: do not claim Production = main solely from CI or a public HTTP response when direct deployment metadata is unavailable.
 
 ## Exact Current TODO
-### P2-H2 — Resolve deployment blocker and reconcile Production identity
-1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
-3. If aligned, record `DEPLOYED` and do not redeploy.
-4. If not aligned, perform one authorized release deployment through the release-only workflow.
-5. Run real-device Production QA after a successful release deployment.
-6. Update continuity records and close P2-H2 only after direct evidence.
-
-## Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
-- VERIFIED: PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
-- VERIFIED: the Platform Owner overview and CRM entry points now use a native `/admin/onboarding` link instead of imperative navigation.
-- VERIFIED: `/admin/onboarding` exposes the existing server-authorized contact/approval workflow and now includes an explicit `رفض الطلب` action backed by the existing `lost` lead status.
-- VERIFIED: no database, auth, RLS, tenant isolation, dependency, or Manus theme infrastructure was changed.
-- VERIFIED: quality run `34530262325` passed route generation, typecheck, 202 tests, lint, production build, Playwright runtime installation, Chromium installation, all-theme browser QA, performance artifact handling, and cleanup.
-- VERIFIED: the failing intermediate quality run was caused only by a regression-test assertion mistake; the test was corrected and the final quality run passed.
-- VERIFIED: Vercel status for the merged application commit is pending while the deployment is being processed.
-- STATUS: `PUSHED` / implementation verified; Production deployment must remain separate until direct Vercel evidence is available.
+### Next atomic task — Real-device verification of the Platform Owner approval flow
+1. Open the latest deployed application as Platform Owner.
+2. Click `فتح مركز الاعتماد`.
+3. Verify the page switches to the lead-control surface instead of returning to the overview.
+4. Select one lead and verify the full control set is visible.
+5. If a real lead is available, execute only one controlled approval and verify the registration-link result.
+6. Record the direct-device result and stop.
 
 ## Continuity Rule
 At the end of every atomic task:
