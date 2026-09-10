@@ -8,10 +8,12 @@ This document records durable engineering lessons extracted from Manus execution
 
 - PR: #56 — `fix(admin): remove non-functional subscription actions`
 - Head branch: `platform-admin-editorial-noir-review`
-- Head commit: `5ba67421e4b516935319b62fa74fcea0ea1bc72b`
+- Recorded task commit: `5ba67421e4b516935319b62fa74fcea0ea1bc72b`
+- Current documentation commit: `a349fc18bc99fcdbe47a01c5ec91eb228ddcbfe9`
 - Base commit: `4b62c5e6ec62b59c4b374d17211153cb50b4f16e`
-- Changed files: `src/routes/admin.tsx`, `tests/admin-operations.test.mjs`
-- CI workflow `Menu V3 Quality` completed successfully for the head commit.
+- Functional changed files: `src/routes/admin.tsx`, `tests/admin-operations.test.mjs`
+- This learning document was added as a separate documentation commit on the same PR branch.
+- CI workflow `Menu V3 Quality` completed successfully for the functional task commit.
 - CI executed and passed: install, route-tree generation, typecheck, tests, lint, production build, Playwright runtime/browser QA for all themes, and performance-baseline upload.
 - Editorial and Noir required no source changes because no new concrete defect was proven during the targeted review.
 
@@ -83,7 +85,7 @@ This document records durable engineering lessons extracted from Manus execution
 
 ### Lesson 5 — Local blockers and CI evidence must be kept separate
 
-The Manus execution reported local `typecheck` and `check:auth` blockers. Subsequent direct GitHub Actions evidence for the pushed head commit showed the repository quality workflow passing typecheck, tests, lint, production build, and browser QA.
+The Manus execution reported local `typecheck` and `check:auth` blockers. Direct GitHub Actions evidence for the functional task commit subsequently showed the repository quality workflow passing typecheck, tests, lint, production build, and browser QA.
 
 **Lesson:** a local environment blocker is not proof that the repository or CI is broken. Record the exact environment limitation and then inspect authoritative CI evidence before escalating.
 
