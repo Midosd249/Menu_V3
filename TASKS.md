@@ -68,6 +68,16 @@
 - VERIFIED: no deployment side effect was created by the failed deployment-tool invocation.
 - Decision: do not claim `DEPLOYED`; Production identity remains UNKNOWN and the task is `DEPLOYMENT_BLOCKED`.
 
+## Closed Task Evidence — Approval Center Navigation
+### Platform Owner Approval Center — CLOSED / VERIFIED / MERGED
+- VERIFIED: the observed defect was isolated to the Platform Owner approval-center entry points in `src/routes/admin.tsx`.
+- VERIFIED: the approval destination is `/admin/onboarding`, and the existing onboarding workspace was preserved unchanged.
+- VERIFIED: the two owner entry points now use native hard navigation to `/admin/onboarding`, preventing the observed same-page behavior from the client-router transition.
+- VERIFIED: focused regression coverage in `tests/platform-onboarding-contract.test.mjs` protects the navigation behavior.
+- VERIFIED: PR #68 merged to `main` as `23792a466ebdbbbf00cb00f5d3978cf89e4fdcee` after the repository `quality` check completed successfully.
+- VERIFIED: quality run `34506821061` passed route generation, typecheck, tests, lint, production build, Playwright runtime installation, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: no database, auth, RLS, tenant isolation, theme, dependency, or Manus-owned implementation was changed.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -90,7 +100,7 @@
 ## Exact Next TODO
 ### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
 1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+2. Re-check the existing Production deployment identity against the latest `main` commit `23792a466ebdbbbf00cb00f5d3978cf89e4fdcee`.
 3. If already aligned, record `DEPLOYED` and do not redeploy.
 4. If not aligned, perform one authorized release deployment through the release-only workflow.
 5. Run real-device Production QA after a successful release deployment.
