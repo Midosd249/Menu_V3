@@ -33,7 +33,7 @@ export function StudioShell() {
   const { user } = useCurrentUserState();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const tenant = snapshot.tenant; const role = snapshot.role; const [moreOpen, setMoreOpen] = useState(false);
-  const isPlatformOwner = user?.email?.toLowerCase() === PLATFORM_OWNER_EMAIL;
+  const isPlatformOwner = user?.primaryEmail?.toLowerCase() === PLATFORM_OWNER_EMAIL;
   const publicHref = `/m/${tenant.slug}${snapshot.branches[0] ? `/${snapshot.branches[0].slug}` : ""}`;
   const visibleNav = NAV.filter((item) => { if (!item.permission) return true; if (item.permission === "team.write") return canManageTeam(role); if (item.permission === "settings.write") return canWriteSettings(role); return false; });
   const platformAdminLink = <Link to="/admin" className="inline-flex items-center gap-2 text-sm text-ink-soft"><ShieldCheck className="size-4" />{lang === "ar" ? "إدارة المنصة" : "Platform Admin"}</Link>;
