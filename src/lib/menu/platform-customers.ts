@@ -7,133 +7,17 @@ import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
 
 const statusSchema = z.enum(["pending", "approved", "rejected"]);
+export type PlatformCustomerRequest = { id: string; tenantId: string; ownerUserId: string; businessName: string; businessNameEn: string; city: string; phone: string; email: string; status: z.infer<typeof statusSchema>; submittedAt: string; reviewedAt: string | null; adminNotes: string; menuUrl: string; isPublished: boolean; isActive: boolean };
 
-export type PlatformCustomerRequest = {
-  id: string;
-  tenantId: string;
-  ownerUserId: string;
-  businessName: string;
-  businessNameEn: string;
-  city: string;
-  phone: string;
-  email: string;
-  status: z.infer<typeof statusSchema>;
-  submittedAt: string;
-  reviewedAt: string | null;
-  adminNotes: string;
-  menuUrl: string;
-  isPublished: boolean;
-  isActive: boolean;
-};
+async function assertAdmin(userId: string): Promise<FnResult<true>> { try { await requirePlatformAdmin(userId); return { ok: true, data: true }; } catch (error) { if (error instanceof Error && error.message === "PLATFORM_ADMIN_REQUIRED") return { ok: false, code: "forbidden", error: "هذه الصفحة مخصصة لمالك المنصة" }; console.error("platform customer admin check failed", error); return { ok: false, code: "unavailable", error: "تعذر التحقق من صلاحيات الإدارة" }; } }
+function mapRow(row: Record<string, unknown>): PlatformCustomerRequest { const slug=String(row.slug??""); return { id:String(row.id),tenantId:String(row.tenant_id),ownerUserId:String(row.owner_user_id),businessName:String(row.name_ar??""),businessNameEn:String(row.name_en??""),city:String(row.city??""),phone:String(row.whatsapp??""),email:String(row.email??""),status:statusSchema.parse(row.status),submittedAt:new Date(String(row.submitted_at)).toISOString(),reviewedAt:row.reviewed_at?new Date(String(row.reviewed_at)).toISOString():null,adminNotes:String(row.admin_notes??""),menuUrl:`/m/${slug}/main?src=platform-admin`,isPublished:Boolean(row.is_published),isActive:Boolean(row.is_active)}; }
+async function loadRequest(sql: Awaited<ReturnType<typeof getSql>>, id: string) { const rows=await sql<Record<string,unknown>>`select cr.*,t.slug,t.name_ar,t.name_en,t.city,t.whatsapp,t.is_published,t.is_active,u.email from customer_requests cr join tenants t on t.id=cr.tenant_id left join "user" u on u.id=cr.owner_user_id where cr.id=${id} limit 1`; return rows[0]?mapRow(rows[0]):null; }
 
-async function assertAdmin(userId: string): Promise<FnResult<true>> {
-  try {
-    await requirePlatformAdmin(userId);
-    return { ok: true, data: true };
-  } catch (error) {
-    if (error instanceof Error && error.message === "PLATFORM_ADMIN_REQUIRED") {
-      return { ok: false, code: "forbidden", error: "هذه الصفحة مخصصة لمالك المنصة" };
-    }
-    console.error("platform customer admin check failed", error);
-    return { ok: false, code: "unavailable", error: "تعذر التحقق من صلاحيات الإدارة" };
-  }
-}
+export const getPlatformCustomerRequests=createServerFn({method:"GET"}).middleware([authMiddleware]).validator(z.object({status:statusSchema.optional(),q:z.string().trim().max(120).optional()})).handler(async({context,data}):Promise<FnResult<PlatformCustomerRequest[]>>=>{const permission=await assertAdmin(context.userId);if(!permission.ok)return permission;try{const sql=await getSql();const status=data.status??null;const q=data.q?.trim()||null;const rows=await sql<Record<string,unknown>>`select cr.*,t.slug,t.name_ar,t.name_en,t.city,t.whatsapp,t.is_published,t.is_active,u.email from customer_requests cr join tenants t on t.id=cr.tenant_id left join "user" u on u.id=cr.owner_user_id where (${status}::text is null or cr.status=${status}) and (${q}::text is null or t.name_ar ilike '%'||${q}||'%' or t.name_en ilike '%'||${q}||'%' or t.city ilike '%'||${q}||'%' or t.whatsapp ilike '%'||${q}||'%' or u.email ilike '%'||${q}||'%') order by case cr.status when 'pending' then 0 when 'approved' then 1 else 2 end,cr.submitted_at desc`;return{ok:true,data:rows.map(mapRow)};}catch(error){console.error("getPlatformCustomerRequests failed",error);return{ok:false,code:"unavailable",error:"تعذر تحميل طلبات العملاء الجدد"};}});
 
-function mapRow(row: Record<string, unknown>): PlatformCustomerRequest {
-  const slug = String(row.slug ?? "");
-  return {
-    id: String(row.id),
-    tenantId: String(row.tenant_id),
-    ownerUserId: String(row.owner_user_id),
-    businessName: String(row.name_ar ?? ""),
-    businessNameEn: String(row.name_en ?? ""),
-    city: String(row.city ?? ""),
-    phone: String(row.whatsapp ?? ""),
-    email: String(row.email ?? ""),
-    status: statusSchema.parse(row.status),
-    submittedAt: new Date(String(row.submitted_at)).toISOString(),
-    reviewedAt: row.reviewed_at ? new Date(String(row.reviewed_at)).toISOString() : null,
-    adminNotes: String(row.admin_notes ?? ""),
-    menuUrl: `/m/${slug}/main?src=platform-admin`,
-    isPublished: Boolean(row.is_published),
-    isActive: Boolean(row.is_active),
-  };
-}
+export const updatePlatformCustomerRequest=createServerFn({method:"POST"}).middleware([authMiddleware]).validator(z.object({id:z.string().min(1).max(100),status:statusSchema,adminNotes:z.string().trim().max(1000).optional()})).handler(async({context,data}):Promise<FnResult<PlatformCustomerRequest>>=>{const permission=await assertAdmin(context.userId);if(!permission.ok)return permission;try{const sql=await getSql();const existing=await sql<{tenant_id:string;owner_user_id:string}>`select tenant_id,owner_user_id from customer_requests where id=${data.id} limit 1`;const request=existing[0];if(!request)return{ok:false,code:"not_found",error:"طلب العميل غير موجود"};
+await sql`update customer_requests set status=${data.status},reviewed_at=now(),reviewed_by=${context.userId},admin_notes=coalesce(${data.adminNotes??null},admin_notes),updated_at=now() where id=${data.id}`;
+if(data.status==="approved"){await sql`update tenants set is_active=true,is_published=true,updated_at=now() where id=${request.tenant_id}`;await sql`insert into tenant_members(tenant_id,user_id,role) values(${request.tenant_id},${request.owner_user_id},'owner') on conflict(tenant_id,user_id) do update set role='owner',is_active=true,updated_at=now()`;}
+const detail=await loadRequest(sql,data.id);if(!detail)return{ok:false,code:"unavailable",error:"تعذر تأكيد حالة طلب العميل"};return{ok:true,data:detail};}catch(error){console.error("updatePlatformCustomerRequest failed",error);return{ok:false,code:"unavailable",error:"تعذر تحديث حالة العميل"};}});
 
-export const getPlatformCustomerRequests = createServerFn({ method: "GET" })
-  .middleware([authMiddleware])
-  .validator(z.object({ status: statusSchema.optional(), q: z.string().trim().max(120).optional() }))
-  .handler(async ({ context, data }): Promise<FnResult<PlatformCustomerRequest[]>> => {
-    const permission = await assertAdmin(context.userId);
-    if (!permission.ok) return permission;
-    try {
-      const sql = await getSql();
-      const status = data.status ?? null;
-      const q = data.q?.trim() || null;
-      const rows = await sql<Record<string, unknown>>`
-        select cr.*, t.slug, t.name_ar, t.name_en, t.city, t.whatsapp, t.is_published, t.is_active,
-               u.email
-        from customer_requests cr
-        join tenants t on t.id = cr.tenant_id
-        left join "user" u on u.id = cr.owner_user_id
-        where (${status}::text is null or cr.status = ${status})
-          and (
-            ${q}::text is null
-            or t.name_ar ilike '%' || ${q} || '%'
-            or t.name_en ilike '%' || ${q} || '%'
-            or t.city ilike '%' || ${q} || '%'
-            or t.whatsapp ilike '%' || ${q} || '%'
-            or u.email ilike '%' || ${q} || '%'
-          )
-        order by case cr.status when 'pending' then 0 when 'approved' then 1 else 2 end, cr.submitted_at desc
-      `;
-      return { ok: true, data: rows.map(mapRow) };
-    } catch (error) {
-      console.error("getPlatformCustomerRequests failed", error);
-      return { ok: false, code: "unavailable", error: "تعذر تحميل طلبات العملاء الجدد" };
-    }
-  });
-
-export const updatePlatformCustomerRequest = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
-  .validator(z.object({ id: z.string().min(1).max(100), status: statusSchema, adminNotes: z.string().trim().max(1000).optional() }))
-  .handler(async ({ context, data }): Promise<FnResult<PlatformCustomerRequest>> => {
-    const permission = await assertAdmin(context.userId);
-    if (!permission.ok) return permission;
-    try {
-      const sql = await getSql();
-      const rows = await sql<Record<string, unknown>>`
-        update customer_requests
-        set status = ${data.status},
-            reviewed_at = now(),
-            reviewed_by = ${context.userId},
-            admin_notes = coalesce(${data.adminNotes ?? null}, admin_notes),
-            updated_at = now()
-        where id = ${data.id}
-        returning id, tenant_id, owner_user_id, status, submitted_at, reviewed_at, admin_notes
-      `;
-      if (!rows[0]) return { ok: false, code: "not_found", error: "طلب العميل غير موجود" };
-      const detail = await sql<Record<string, unknown>>`
-        select cr.*, t.slug, t.name_ar, t.name_en, t.city, t.whatsapp, t.is_published, t.is_active,
-               u.email
-        from customer_requests cr
-        join tenants t on t.id = cr.tenant_id
-        left join "user" u on u.id = cr.owner_user_id
-        where cr.id = ${data.id}
-        limit 1
-      `;
-      return { ok: true, data: mapRow(detail[0]) };
-    } catch (error) {
-      console.error("updatePlatformCustomerRequest failed", error);
-      return { ok: false, code: "unavailable", error: "تعذر تحديث حالة العميل" };
-    }
-  });
-
-export const createCustomerRequestForTenant = async (tenantId: string, ownerUserId: string) => {
-  const sql = await getSql();
-  await sql`
-    insert into customer_requests (id, tenant_id, owner_user_id, status)
-    values (${newId()}, ${tenantId}, ${ownerUserId}, 'pending')
-    on conflict (tenant_id) do nothing
-  `;
-};
+export const createCustomerRequestForTenant=async(tenantId:string,ownerUserId:string)=>{const sql=await getSql();await sql`insert into customer_requests(id,tenant_id,owner_user_id,status) values(${newId()},${tenantId},${ownerUserId},'pending') on conflict(tenant_id) do nothing`;};

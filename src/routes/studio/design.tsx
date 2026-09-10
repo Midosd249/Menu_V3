@@ -28,7 +28,7 @@ function DesignPage() {
     setBusy(true);
     setMessage("");
     try {
-      const result = await saveTenantTheme({ data: { themeKey: selected } });
+      const result = await saveTenantTheme({ data: { tenantId: snapshot.tenant.id, themeKey: selected } });
       if (!result.ok) {
         setMessage(result.error);
         return;
