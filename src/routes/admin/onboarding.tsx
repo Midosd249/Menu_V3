@@ -37,6 +37,7 @@ const labels = {
     notesPlaceholder: "ملاحظة داخلية…",
     save: "حفظ",
     approve: "اعتماد وإنشاء رابط التسجيل",
+    reject: "رفض الطلب",
     revoke: "إلغاء رابط التسجيل",
     call: "اتصال",
     whatsapp: "WhatsApp",
@@ -74,6 +75,7 @@ const labels = {
     notesPlaceholder: "Internal note…",
     save: "Save",
     approve: "Approve & create registration link",
+    reject: "Reject request",
     revoke: "Revoke registration link",
     call: "Call",
     whatsapp: "WhatsApp",
@@ -252,7 +254,7 @@ function AdminOnboardingPage() {
         <div className="flex flex-wrap gap-2">{selected.contactPhone ? <a href={`tel:${selected.contactPhone.replace(/[^0-9+]/g, "")}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Phone className="size-4" />{copy.call}</a> : null}{selected.contactPhone ? <a href={`https://wa.me/${selected.contactPhone.replace(/[^0-9]/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><MessageCircle className="size-4" />{copy.whatsapp}</a> : null}{selected.contactEmail ? <a href={`mailto:${selected.contactEmail}`} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"><Mail className="size-4" />{copy.emailAction}</a> : null}</div>
         <div className="grid gap-3 rounded-2xl border border-line p-4"><div className="flex items-center gap-2 text-sm font-semibold"><UserCheck className="size-4" />{copy.onboarding}</div><p className="text-sm leading-6 text-muted">{onboarding?.status === "pending" && !registrationUrl ? copy.pendingLink : onboarding?.status === "none" ? copy.noLink : onboarding?.status === "revoked" ? copy.revoked : onboarding?.status === "expired" ? copy.revoked : copy.approved}</p>{registrationUrl ? <div className="rounded-xl bg-sand/40 p-3 text-xs break-all" dir="ltr">{window.location.origin}{registrationUrl}</div> : null}<div className="flex flex-wrap gap-2">{registrationUrl ? <><Button type="button" onClick={() => void copyRegistrationUrl()}><Copy className="size-4" />{copied ? copy.copied : copy.copy}</Button><a href={registrationUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm"><ExternalLink className="size-4" />{copy.open}</a></> : null}{onboarding?.status === "pending" && !registrationUrl ? <Button variant="outline" type="button" disabled={saving} onClick={() => void revoke()}><XCircle className="size-4" />{copy.revoke}</Button> : null}</div></div>
         <div className="grid gap-2"><label className="text-sm font-medium">{copy.notes}</label><textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={copy.notesPlaceholder} className="min-h-24 rounded-xl border border-line bg-paper p-3 text-sm leading-6 outline-none focus:ring-2 focus:ring-ink/20" /><div className="flex justify-end"><Button variant="outline" disabled={saving} onClick={() => void save()}>{copy.save}</Button></div></div>
-        <div className="grid gap-2 sm:grid-cols-2"><Button disabled={saving || selected.status === "converted"} onClick={() => void approve()}><CheckCircle2 className="size-4" />{saving ? "…" : copy.approve}</Button><Button variant="outline" disabled={saving} onClick={() => void save("contacted")}><UserCheck className="size-4" />{copy.contacted}</Button></div>
+        <div className="grid gap-2 sm:grid-cols-3"><Button disabled={saving || selected.status === "converted" || selected.status === "lost"} onClick={() => void approve()}><CheckCircle2 className="size-4" />{saving ? "…" : copy.approve}</Button><Button variant="outline" disabled={saving || selected.status === "lost" || selected.status === "converted"} onClick={() => void save("contacted")}><UserCheck className="size-4" />{copy.contacted}</Button><Button variant="outline" disabled={saving || selected.status === "lost" || selected.status === "converted"} onClick={() => void save("lost")}><XCircle className="size-4" />{copy.reject}</Button></div>
       </aside> : <div className="grid min-h-80 place-items-center rounded-3xl border border-dashed border-line bg-paper p-8 text-sm text-muted">{copy.empty}</div>}
     </section>
   </main>;
