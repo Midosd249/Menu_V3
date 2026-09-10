@@ -59,12 +59,14 @@
 - VERIFIED: pull requests are required and `quality` is required with strict/up-to-date policy.
 - VERIFIED: bypass list is empty.
 
-## Current Active Task
-
-### P2-H2 — Production deployment identity reconciliation — TODO
-- Objective: determine whether the latest verified `main` state is already deployed to Vercel Production.
-- Scope: inspect existing Vercel evidence only; do not trigger a deployment merely to create evidence.
-- Acceptance: direct Production deployment evidence identifies the commit and status; implementation, CI, and Production states remain explicitly separated.
+## Closed Task Evidence — P2-H2 Verification Boundary
+### P2-H2 — Production deployment identity reconciliation — DEPLOYMENT BLOCKED
+- VERIFIED: PR #59 is merged and its application commit is `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+- VERIFIED: GitHub `Vercel` status for that commit is `failure` with a target containing `upgradeToPro=build-rate-limit`.
+- VERIFIED: public Vercel menu URLs return HTTP 200, but HTTP 200 is not accepted as deployment identity evidence.
+- VERIFIED: connected Vercel deployment-management access returns HTTP 403 for the project/team scope.
+- VERIFIED: no deployment side effect was created by the failed deployment-tool invocation.
+- Decision: do not claim `DEPLOYED`; Production identity remains UNKNOWN and the task is `DEPLOYMENT_BLOCKED`.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
@@ -81,18 +83,18 @@
 - All specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
 
 ## UNKNOWN / BLOCKED Register
-- UNKNOWN: current Production deployment identity for the latest merged `main` state until direct Vercel evidence is inspected.
+- BLOCKED: Vercel Production deployment reconciliation is blocked by the observed `build-rate-limit` failure and unavailable direct deployment metadata in the connected Vercel scope.
 - UNKNOWN/BLOCKED: some physical-device/accessibility observations remain unavailable in the connector environment.
 - No current GitHub branch-protection blocker remains.
 
 ## Exact Next TODO
-### P2-H2 — Production deployment identity reconciliation
-1. Verify PR #59 is merged and record the resulting `main` commit.
-2. Inspect existing Vercel Production deployment evidence.
-3. Match Production deployment commit to `main`.
-4. Do not redeploy if already aligned.
-5. If not aligned, stop at `DEPLOYMENT_BLOCKED` unless explicit release authorization is provided.
-6. Update continuity records and stop.
+### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
+1. Resolve the Vercel build-rate-limit / deployment-access blocker.
+2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+3. If already aligned, record `DEPLOYED` and do not redeploy.
+4. If not aligned, perform one authorized release deployment through the release-only workflow.
+5. Run real-device Production QA after a successful release deployment.
+6. Close P2-H2 only after direct Production evidence.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.

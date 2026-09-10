@@ -15,7 +15,7 @@
 - P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
 - W16 owner-accepted results — CLOSED FOR CURRENT EXECUTION.
 - P2-H1 analytics no-data UX — CLOSED / VERIFIED on PR #59.
-- Current active atomic task: P2-H2 production deployment identity reconciliation.
+- Current active atomic task: P2-H2 production deployment identity reconciliation — `DEPLOYMENT_BLOCKED`.
 
 ## Canonical Backend Identity
 - VERIFIED: Supabase project ref `ublxptcqefujkbeepylc`.
@@ -92,11 +92,18 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 ### Objective
 Determine whether the latest verified `main` state is already deployed to Vercel Production, using direct deployment evidence only and without triggering an unnecessary deployment.
 
+### Verified boundary
+- `main` application commit under reconciliation: `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+- GitHub `Vercel` status for that commit is `failure` with a target containing `upgradeToPro=build-rate-limit`.
+- Public Vercel menu URLs return HTTP 200, but this is not accepted as deployment identity evidence.
+- Connected Vercel deployment-management access returns HTTP 403 for the project/team scope.
+- Status: `DEPLOYMENT_BLOCKED`.
+
 ### Acceptance criteria
 - Direct Vercel evidence identifies the Production deployment commit and status.
 - The deployment commit is compared with the verified `main` commit after PR #59 merge.
 - If already aligned, no deployment is triggered.
-- If not aligned, mark `DEPLOYMENT_BLOCKED` or obtain explicit release authorization before any deployment side effect.
+- If not aligned, perform one authorized release deployment only after the blocker is resolved.
 - Continuity records distinguish implementation, CI, and Production evidence.
 
 ## Release-Only Vercel Policy
@@ -110,13 +117,13 @@ Normal release path:
 - `DEPLOYED` requires direct Vercel evidence.
 
 ## Exact Next TODO
-### P2-H2 — Production deployment identity reconciliation
-1. Verify PR #59 is merged and record the resulting `main` commit.
-2. Inspect existing Vercel Production deployment evidence.
-3. Match Production deployment commit to `main`.
-4. Do not redeploy if already aligned.
-5. If not aligned, stop at `DEPLOYMENT_BLOCKED` unless explicit release authorization is provided.
-6. Update continuity records and stop.
+### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
+1. Resolve the Vercel build-rate-limit / deployment-access blocker.
+2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
+3. If already aligned, record `DEPLOYED` and do not redeploy.
+4. If not aligned, perform one authorized release deployment through the release-only workflow.
+5. Run real-device Production QA after a successful release deployment.
+6. Close P2-H2 only after direct Production evidence.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
