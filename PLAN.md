@@ -106,6 +106,32 @@ Determine whether the latest verified `main` state is already deployed to Vercel
 - If not aligned, perform one authorized release deployment only after the blocker is resolved.
 - Continuity records distinguish implementation, CI, and Production evidence.
 
+## Current Atomic Defect — Platform Approval Center — CLOSED / VERIFIED
+### Objective
+Make the Platform Owner approval-center entry point deterministic and expose the missing explicit request decision control without redesigning the existing onboarding system.
+
+### Root cause
+- The overview and CRM entry points depended on imperative navigation from a button, while the user needed a deterministic route into the existing `/admin/onboarding` workspace.
+- The approval workspace already had contact and approval infrastructure but did not expose an explicit `Reject request` action even though `lost` is already part of the lead status model.
+
+### Implemented
+- `src/routes/admin.tsx`: replaced the approval-center buttons with native `/admin/onboarding` links.
+- `src/routes/admin/onboarding.tsx`: added the explicit `رفض الطلب` action using the existing `save("lost")` path; preserved server authorization and onboarding token flow.
+- `tests/platform-onboarding-contract.test.mjs`: added regression coverage for native navigation and explicit rejection.
+
+### Verification
+- Quality run `34530262325`: SUCCESS.
+- Route generation: PASS.
+- Typecheck: PASS.
+- Tests: PASS — 202/202.
+- Lint: PASS.
+- Production build: PASS.
+- Playwright runtime and Chromium: PASS.
+- Browser template QA — all themes: PASS.
+- Performance artifact handling: PASS.
+- Cleanup: PASS.
+- PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
+
 ## Release-Only Vercel Policy
 Normal release path:
 
@@ -119,8 +145,8 @@ Normal release path:
 ## Exact Next TODO
 ### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
 1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
-3. If already aligned, record `DEPLOYED` and do not redeploy.
+2. Re-check the existing Production deployment identity against the latest `main` application state after PR #69.
+3. If aligned, record `DEPLOYED` and do not redeploy.
 4. If not aligned, perform one authorized release deployment through the release-only workflow.
 5. Run real-device Production QA after a successful release deployment.
 6. Close P2-H2 only after direct Production evidence.

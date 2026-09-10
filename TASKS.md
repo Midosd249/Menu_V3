@@ -68,6 +68,16 @@
 - VERIFIED: no deployment side effect was created by the failed deployment-tool invocation.
 - Decision: do not claim `DEPLOYED`; Production identity remains UNKNOWN and the task is `DEPLOYMENT_BLOCKED`.
 
+## Closed Task Evidence — Platform Approval Center — CLOSED / VERIFIED
+- VERIFIED: PR #69 merged to `main` as `6ee127cd8f25bfc0cc2efb6ad8e2ab7c622a9323`.
+- VERIFIED: overview and CRM approval-center entry points use native `/admin/onboarding` links.
+- VERIFIED: the approval workspace retains server-side `requirePlatformAdmin` authorization and existing secure onboarding token generation.
+- VERIFIED: the approval workspace now exposes explicit contact, approve/create-link, reject, revoke-link, copy-link, and open-link controls.
+- VERIFIED: rejection uses the existing `lost` lead status; no new database status or schema was introduced.
+- VERIFIED: regression coverage protects the native entry link and rejection action.
+- VERIFIED: quality run `34530262325` passed route generation, typecheck, 202 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: no database schema, auth, RLS, tenant isolation, dependency, Manus theme, or unrelated admin feature was changed.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -90,8 +100,8 @@
 ## Exact Next TODO
 ### P2-H2 — Resolve Vercel deployment blocker and reconcile Production identity
 1. Resolve the Vercel build-rate-limit / deployment-access blocker.
-2. Re-check the existing Production deployment identity against `356b7b68d8765a96fc623098b1f9da062a7c3abd`.
-3. If already aligned, record `DEPLOYED` and do not redeploy.
+2. Re-check the existing Production deployment identity against the latest `main` application state after PR #69.
+3. If aligned, record `DEPLOYED` and do not redeploy.
 4. If not aligned, perform one authorized release deployment through the release-only workflow.
 5. Run real-device Production QA after a successful release deployment.
 6. Close P2-H2 only after direct Production evidence.
