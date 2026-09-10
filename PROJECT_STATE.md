@@ -5,7 +5,7 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Current verified implementation head on `main`: `65314826bdb652c541d66071ea9d2401067f35d2` — `fix(p1-h1): reconcile package manifest and lockfile`.
+- Current verified implementation head on `main`: `3505282c02e67d5c31121a00774f0a54206bd7a1` — `docs(session): record p1-h2 branch protection verification boundary`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Canonical Backend Identity
@@ -29,7 +29,7 @@
 
 ## Manus Continuity Protection
 - VERIFIED: `docs/project-memory/manus-engineering-lessons.md` records durable lessons from Manus execution, including the Platform Admin/Editorial/Noir review, security trust-boundary rules, targeted theme verification, structural layering diagnosis, CI-vs-local evidence separation, and Preview-vs-Production deployment distinction.
-- VERIFIED: P1-H1 was implemented without changing the Manus-derived product/UI/security work.
+- VERIFIED: P1-H1 and P1-H2 verification work did not change the Manus-derived product/UI/security work.
 - RULE: future tasks must inspect Manus lessons and current Git evidence before touching related areas; no completed Manus work is to be repeated without a proven defect.
 
 ## Completed Milestones — Protected
@@ -52,13 +52,16 @@
 - W16 — OWNER-ACCEPTED / CLOSED FOR CURRENT EXECUTION; no implementation reopen without reproducible defect evidence.
 - W17 Public Pages & Themes Integration — W17-Q recovery COMPLETED / MERGED.
 - P0 Public Order Hardening — COMPLETED / VERIFIED.
-- P1 Production/Continuity Hardening — COMPLETED for implemented scope; P1-H2 remains open.
+- P1 Production/Continuity Hardening — COMPLETED for implemented scope; P1-H2 remains open pending owner-side repository setting.
 - P2 Growth & Differentiation — COMPLETED / VERIFIED / DEPLOYED.
 
 ## Release Hygiene Follow-ups
 ### P1-H2 — main branch protection
-- OPEN / OWNER ACTION: enable required status checks and branch protection for `main`.
-- Current connector can inspect protection state but cannot configure the repository protection setting.
+- VERIFIED: current `main` branch reports `protected: false` and required status checks are off.
+- VERIFIED: repository rulesets collection is empty (`[]`).
+- VERIFIED: the repository's relevant GitHub Actions quality check is `quality`.
+- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write; its administration endpoint access is unavailable to the managed connection.
+- OWNER ACTION REQUIRED: enable the minimum release-safe protection for `main` and require the existing `quality` check.
 - Acceptance: required quality checks are enforced for changes entering `main`, and the resulting protection/ruleset state is directly verified.
 
 ### P2-H1 — Analytics no-data UX
@@ -68,17 +71,17 @@
 
 ## Current Release / Deployment State
 - VERIFIED: P1-H1 is merged to `main`.
-- UNKNOWN: Production deployment identity for the new `main` commit `65314826...` until direct Vercel Production evidence is inspected.
+- UNKNOWN: Production deployment identity for the current post-P1-H1 documentation head until direct Vercel Production evidence is inspected.
 - Do not claim `DEPLOYED` from CI or Preview evidence.
 - Do not intentionally trigger repeated Vercel deployments.
 
 ## Exact Current TODO
 ### P1-H2 — GitHub main branch protection
-1. Inspect current `main` protection/ruleset state.
-2. Enable the minimum required protection/status checks if owner-authorized access permits.
-3. Verify the resulting state directly.
-4. Document the exact rules and evidence.
-5. Run/review applicable quality evidence if repository settings require a validation push.
+1. Owner enables protection/ruleset for `main` using the GitHub repository settings.
+2. Require the existing `quality` status check before merging.
+3. Do not allow force-pushes or branch deletion.
+4. Re-read the protection/ruleset state directly after the owner action.
+5. Verify and document the resulting exact rules.
 6. Stop after P1-H2; do not start P2-H1 automatically.
 
 ## Permanent Execution Order
