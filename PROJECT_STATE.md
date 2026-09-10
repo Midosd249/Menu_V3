@@ -5,7 +5,7 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Current verified implementation head on `main`: `3505282c02e67d5c31121a00774f0a54206bd7a1` — `docs(session): record p1-h2 branch protection verification boundary`.
+- Current verified implementation head on `main`: `ccf1cc76d11bfb95eac8dc0971730d62979803fc` — `docs(tasks): record p1-h2 protection verification boundary`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Canonical Backend Identity
@@ -22,6 +22,9 @@
 - VERIFIED: PR #57 was merged to `main` with merge result SHA `65314826bdb652c541d66071ea9d2401067f35d2`.
 - VERIFIED: the final P1-H1 PR changed only `package-lock.json`; the temporary reconciliation workflow was removed before merge.
 - VERIFIED: the P1-H1 PR quality gate passed: install, route-tree generation, typecheck, tests, lint, production build, Playwright runtime/browser QA for all themes, performance baseline, and cleanup.
+- VERIFIED: P1-H2 `main-protection` ruleset is active and directly verified.
+- VERIFIED: P1-H2 requires Pull Requests, requires the `quality` status check with strict/up-to-date policy, blocks deletion and non-fast-forward updates, and has no bypass actors.
+- VERIFIED: no P1-H2 application code, dependency, theme, auth, database, or product behavior changes were introduced.
 - VERIFIED: P2 Growth & Differentiation remains completed and protected.
 - VERIFIED: W16 owner-accepted direct-device results remain accepted and are not being reopened.
 - VERIFIED: Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
@@ -52,42 +55,47 @@
 - W16 — OWNER-ACCEPTED / CLOSED FOR CURRENT EXECUTION; no implementation reopen without reproducible defect evidence.
 - W17 Public Pages & Themes Integration — W17-Q recovery COMPLETED / MERGED.
 - P0 Public Order Hardening — COMPLETED / VERIFIED.
-- P1 Production/Continuity Hardening — COMPLETED for implemented scope; P1-H2 remains open pending owner-side repository setting.
+- P1 Production/Continuity Hardening — COMPLETED / VERIFIED for implemented scope, including P1-H1 and P1-H2.
 - P2 Growth & Differentiation — COMPLETED / VERIFIED / DEPLOYED.
 
 ## Release Hygiene Follow-ups
-### P1-H2 — main branch protection
-- VERIFIED: current `main` branch reports `protected: false` and required status checks are off.
-- VERIFIED: repository rulesets collection is empty (`[]`).
-- VERIFIED: the repository's relevant GitHub Actions quality check is `quality`.
-- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write; its administration endpoint access is unavailable to the managed connection.
-- OWNER ACTION REQUIRED: enable the minimum release-safe protection for `main` and require the existing `quality` check.
-- Acceptance: required quality checks are enforced for changes entering `main`, and the resulting protection/ruleset state is directly verified.
+### P1-H2 — main branch protection — CLOSED / VERIFIED
+- VERIFIED: GitHub repository ruleset `main-protection` is active.
+- VERIFIED: ruleset targets the repository default branch (`main`).
+- VERIFIED: deletion protection is active.
+- VERIFIED: non-fast-forward updates are blocked, preventing force-pushes.
+- VERIFIED: Pull Requests are required before merging with required approval count `0`.
+- VERIFIED: required status check `quality` is enforced with strict/up-to-date status policy.
+- VERIFIED: bypass actor list is empty.
+- VERIFIED: no deployment, signed-commit, code-owner, or extra-review requirement was added.
+- Evidence: ruleset ID `22744795`, directly read from GitHub on 2026-09-10.
 
 ### P2-H1 — Analytics no-data UX
 - INFERRED: Local Visibility readiness is currently hidden when analytics has no events because the content is gated by `hasData`.
 - PROPOSED: expose Local Visibility readiness independently from analytics event availability.
-- This remains a separate atomic product/UX task and is not part of P1-H2.
+- This is the next atomic product/UX task.
 
 ## Current Release / Deployment State
 - VERIFIED: P1-H1 is merged to `main`.
-- UNKNOWN: Production deployment identity for the current post-P1-H1 documentation head until direct Vercel Production evidence is inspected.
+- VERIFIED: P1-H2 changes are repository governance only and are not an application deployment.
+- UNKNOWN: Production deployment identity for the latest documentation-only `main` state until direct Vercel evidence is inspected.
 - Do not claim `DEPLOYED` from CI or Preview evidence.
 - Do not intentionally trigger repeated Vercel deployments.
 
 ## Exact Current TODO
-### P1-H2 — GitHub main branch protection
-1. Owner enables protection/ruleset for `main` using the GitHub repository settings.
-2. Require the existing `quality` status check before merging.
-3. Do not allow force-pushes or branch deletion.
-4. Re-read the protection/ruleset state directly after the owner action.
-5. Verify and document the resulting exact rules.
-6. Stop after P1-H2; do not start P2-H1 automatically.
+### P2-H1 — Analytics no-data UX
+1. Read the current owner analytics source and relevant tests.
+2. Confirm the `hasData` gating path and tenant/branch authorization boundary.
+3. Implement the smallest UX change that keeps Local Visibility readiness visible with no analytics events.
+4. Add/update focused regression coverage.
+5. Run applicable tests, typecheck, lint, build, and targeted browser/manual checks.
+6. Review diff and update continuity records.
+7. Stop after P2-H1.
 
 ## Permanent Execution Order
-1. Close P1-H2 main branch protection.
+1. Handle P2-H1 as the next atomic UX task.
 2. Handle only reproducible defects as separate atomic tasks.
-3. Consider P2-H1 or other growth/UX improvements only from new evidence.
+3. Consider further growth/UX improvements only from new evidence.
 4. Use the release-only Vercel workflow for every release batch.
 
 ## Continuity Rule
