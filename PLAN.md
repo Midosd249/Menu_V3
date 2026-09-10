@@ -5,16 +5,17 @@
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
-- Current verified implementation head: `41f2d2cee93f76427f5022ce725db5aa88048dc9`.
+- Current verified implementation head before this documentation batch: `ccf1cc76d11bfb95eac8dc0971730d62979803fc`.
 - Premium Theme System — DONE / VERIFIED / MERGED.
 - Essential, Editorial, Noir, Heritage, and Gallery — protected.
 - Permanent visual/functional/research quality workflow — DONE / VERIFIED.
 - P0 Public Order Hardening — DONE / VERIFIED.
-- P1 Production/Continuity Hardening — DONE for implemented scope.
+- P1 Production/Continuity Hardening — DONE / VERIFIED for implemented scope.
 - P1-H1 package manifest / lockfile reconciliation — CLOSED / VERIFIED.
+- P1-H2 main branch protection — CLOSED / VERIFIED.
 - P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
 - W16 owner-accepted results — CLOSED FOR CURRENT EXECUTION.
-- Current active atomic task: P1-H2 main branch protection.
+- Current active atomic task: P2-H1 analytics no-data UX.
 
 ## Canonical Backend Identity
 - VERIFIED: Supabase project ref `ublxptcqefujkbeepylc`.
@@ -40,7 +41,7 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 ### P1 — Production/Continuity Hardening
 - VERIFIED: continuity, release, security, and deployment evidence was reconciled against repository/platform state.
 - CLOSED: package manifest / lockfile reconciliation for deterministic `npm ci` installation.
-- OPEN: `main` branch protection / required status checks.
+- CLOSED: `main` branch protection / required status checks.
 - No speculative dependency upgrade is authorized.
 
 ### P2 — Growth & Differentiation — COMPLETED / VERIFIED / DEPLOYED
@@ -60,6 +61,18 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 - VERIFIED: no product/UI/auth/security/theme implementation was changed by P1-H1.
 - Evidence: PR #57 and GitHub Actions run `34451068766` for the reconciliation branch.
 
+## P1-H2 Closure Record
+- VERIFIED: GitHub ruleset `main-protection` is active (ruleset ID `22744795`).
+- VERIFIED: target is the repository default branch (`main`).
+- VERIFIED: deletion protection is active.
+- VERIFIED: non-fast-forward updates are blocked, preventing force-pushes.
+- VERIFIED: Pull Requests are required before merging; required approval count is `0`.
+- VERIFIED: required status check `quality` is enforced with strict/up-to-date policy.
+- VERIFIED: bypass actor list is empty.
+- VERIFIED: no deployment, signed-commit, code-owner, or extra-review requirement was added.
+- VERIFIED: this task changed repository governance only; no application code, dependency, theme, auth, database, or product behavior was changed.
+- Evidence: direct GitHub ruleset reads on 2026-09-10.
+
 ## Protected Completed Work
 - Essential, Editorial, Noir, Heritage, and Gallery implementation milestones are protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -72,36 +85,32 @@ Build Menu V3 as a distinctive `Premium Arabic-first Restaurant Presence Platfor
 - Do not reopen completed theme/architecture work without reproducible defect evidence.
 - Remaining unsupported/unknown observations are not silently converted into implementation failures.
 
-## P1-H2 — Main Branch Protection
+## P2-H1 — Analytics No-Data UX
 ### Objective
-Protect `main` with required quality checks and the minimum appropriate branch protection/ruleset configuration without changing application code.
+Expose Local Visibility readiness independently from analytics event availability while preserving the canonical analytics source and all tenant/branch authorization boundaries.
 
-### Direct verification
-- VERIFIED: `main` currently reports `protected: false`.
-- VERIFIED: required status checks are off.
-- VERIFIED: repository rulesets collection is empty (`[]`).
-- VERIFIED: the relevant quality check is named `quality`.
-- BLOCKED: the installed GitHub connector cannot perform the administration-level branch-protection write; the required endpoint returned HTTP 403 because administration access is not exposed by the managed connection.
+### Current evidence
+- INFERRED: current Local Visibility readiness is hidden when analytics has no events because the analytics content is gated by `hasData`.
+- PROPOSED: decouple the readiness presentation from the analytics-event presence gate without inventing metrics or claims.
 
 ### Required scope
-1. Owner enables the minimum required protection/status checks for `main`.
-2. Require the existing `quality` status check before merging.
-3. Require pull requests before merging.
-4. Do not allow force-pushes or branch deletion.
-5. Re-read and directly verify the resulting state.
-6. Record exact rules and evidence.
-7. Do not alter application behavior, dependencies, themes, auth, database, or deployment configuration.
+1. Inspect the current owner analytics source and focused tests.
+2. Confirm the `hasData` gate and its authorization boundary.
+3. Implement the smallest compatible UX change.
+4. Add/update focused regression coverage for zero-event and populated states.
+5. Run applicable tests, typecheck, lint, build, and targeted browser/manual checks.
+6. Review the final diff and update continuity.
 
 ### Acceptance criteria
-- `main` protection/ruleset state is directly verified after owner configuration.
-- The existing `quality` check is required for changes entering `main`.
-- No unrelated repository or application changes are introduced.
-- Any owner-access limitation is recorded precisely rather than inferred around.
+- Local Visibility readiness remains visible and honest when there are zero analytics events.
+- Populated analytics behavior remains unchanged.
+- No second analytics event source is introduced.
+- No Google ranking, retention, revenue attribution, conversion, or statistical-significance claims are invented.
+- Tenant/branch authorization remains fail-closed and unchanged.
 
-## P2-H1 — Small Analytics UX Improvement
-- INFERRED: Local Visibility readiness is currently hidden when analytics has no events because the analytics content is gated by `hasData`.
-- PROPOSED: expose the readiness check independently from analytics event availability.
-- This is a separate atomic UX task and is not part of P1-H2.
+## P2-H2 — Production deployment identity reconciliation
+- UNKNOWN: current Production deployment identity for the latest documentation-only `main` state until direct Vercel evidence is inspected.
+- Do not trigger a deployment merely to satisfy documentation; inspect existing Vercel evidence first when relevant.
 
 ## Release-Only Vercel Policy
 Normal release path:
@@ -114,13 +123,14 @@ Normal release path:
 - `DEPLOYED` requires direct Vercel evidence.
 
 ## Exact Next TODO
-### P1-H2 — GitHub main branch protection
-1. Owner enables the documented minimum protection/ruleset for `main`.
-2. Re-read the protection/ruleset state directly.
-3. Confirm `quality` is required and force-push/delete protections are active.
-4. Record the verified result.
-5. Close P1-H2 only after direct verification.
-6. Do not start P2-H1 automatically.
+### P2-H1 — Analytics no-data UX
+1. Read the current owner analytics source and focused tests.
+2. Confirm the `hasData` gating path and tenant/branch authorization boundary.
+3. Implement the smallest compatible UX change.
+4. Add/update focused regression coverage.
+5. Run applicable tests, typecheck, lint, build, and targeted browser/manual checks.
+6. Review diff and update `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, and the session log.
+7. Stop after P2-H1.
 
 ## Continuity Rule
 At the end of each atomic task, reconcile current Git/CI/deployment evidence, update continuity and material audit/research/memory records, record exactly one next task, and stop.
