@@ -13,8 +13,8 @@ test("platform onboarding workspace exposes the owner workflow", () => {
   assert.match(admin, /اعتماد وإنشاء رابط|اعتماد العملاء الجدد/);
   assert.match(admin, /اتصال/);
   assert.match(admin, /WhatsApp/);
-  assert.match(admin, /رابط التسجيل/);
-  assert.match(admin, /QR/);
+  assert.match(admin, /فتح المنيو/);
+  assert.match(admin, /نسخ الرابط/);
 });
 
 test("lead onboarding is server-authorized and token based", () => {
@@ -23,6 +23,8 @@ test("lead onboarding is server-authorized and token based", () => {
   assert.match(server, /randomBytes\(32\)/);
   assert.match(server, /expires_at/);
   assert.match(server, /activateLeadOnboarding/);
+  assert.match(server, /registrationUrl/);
+  assert.match(server, /\/onboarding\/\$\{token\}/);
 });
 
 test("lead onboarding schema keeps the token secret and preserves the lead tenant link", () => {
