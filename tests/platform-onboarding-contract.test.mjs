@@ -10,13 +10,15 @@ const rootAdmin = readFileSync("src/routes/admin.tsx", "utf8");
 const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
 const adminAccess = readFileSync("src/lib/menu/admin.ts", "utf8");
 
+
 test("platform onboarding workspace exposes the owner workflow", () => {
   assert.match(rootAdmin, /admin\/onboarding/);
-  assert.match(admin, /اعتماد وإنشاء رابط|اعتماد العملاء الجدد/);
+  assert.match(admin, /اعتماد وإنشاء رابط التسجيل|Approve & create registration link/);
   assert.match(admin, /اتصال/);
   assert.match(admin, /WhatsApp/);
-  assert.match(admin, /فتح المنيو/);
-  assert.match(admin, /نسخ الرابط/);
+  assert.match(admin, /نسخ رابط التسجيل/);
+  assert.match(admin, /updateLead/);
+  assert.match(admin, /getAdminDashboard/);
 });
 
 test("lead onboarding is server-authorized and token based", () => {
