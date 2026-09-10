@@ -1,6 +1,6 @@
 import type { PublicMenu } from "./types";
 
-export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-kohl.vercel.app";
+export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-midosd2s-projects.vercel.app";
 
 function clean(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -78,16 +78,6 @@ export function buildPublicMenuSitemapEntries(
       ? [{ hreflang: "ar" as const, href: branchPathAr }, { hreflang: "en" as const, href: branchPathEn }]
       : undefined;
     entries.push({ loc: branchPathAr, alternates });
-    if (hasEnglish) entries.push({ loc: branchPathEn, alternates });
   }
   return entries;
-}
-
-export function getTenantPublicMenuSeoRow(menu: PublicMenu) {
-  return {
-    slug: menu.tenant.slug,
-    branchSlug: menu.branch.slug,
-    nameEn: menu.tenant.nameEn,
-    branchNameEn: menu.branch.nameEn,
-  };
 }
