@@ -3,21 +3,120 @@
  * Scope: public-menu mobile presentation and the five canonical themes.
  * No business logic, data, auth, or ordering behavior is changed.
  */
-html[data-menu-theme] .menu-public-shell { min-width: 0; overflow-x: clip; }
-html[data-menu-theme] .menu-public-shell main { min-width: 0; padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px)); }
-html[data-menu-theme] .menu-public-shell > nav.fixed { z-index: 40; padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)); }
-html[data-menu-theme] .menu-public-shell > div.fixed { padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)); }
+
+/* Shared mobile interaction safety */
+html[data-menu-theme] .menu-public-shell {
+  min-width: 0;
+  overflow-x: clip;
+}
+html[data-menu-theme] .menu-public-shell main {
+  min-width: 0;
+  padding-bottom: calc(8rem + env(safe-area-inset-bottom, 0px));
+}
+html[data-menu-theme] .menu-public-shell > nav.fixed {
+  z-index: 40;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+html[data-menu-theme] .menu-public-shell > div.fixed {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Dynamic Arabic/English content must wrap at word boundaries before ever
+ * breaking an individual Arabic word into isolated glyphs. */
 html[data-menu-theme] .menu-public-shell h1,
 html[data-menu-theme] .menu-public-shell h2,
 html[data-menu-theme] .menu-public-shell h3,
 html[data-menu-theme] .menu-public-shell h4,
 html[data-menu-theme] .menu-public-shell p,
 html[data-menu-theme] .menu-public-shell button,
-html[data-menu-theme] .menu-public-shell a { min-width: 0; overflow-wrap: break-word; word-break: normal; hyphens: none; }
+html[data-menu-theme] .menu-public-shell a {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
 
-html[data-menu-theme="essential"] .menu-lang-toggle { outline: 3px solid rgb(255 255 255 / 0.92); outline-offset: 2px; box-shadow: 0 3px 16px rgb(0 0 0 / 0.12); }
+/* ESSENTIAL — keep the language control visibly separated from the light
+ * header artwork on real phones. */
+html[data-menu-theme="essential"] .menu-lang-toggle {
+  outline: 3px solid rgb(255 255 255 / 0.92);
+  outline-offset: 2px;
+  box-shadow: 0 3px 16px rgb(0 0 0 / 0.12);
+}
 
-/* Editorial: preserve whole Arabic words and give the content column real width. */
+/* EDITORIAL — do not constrain Arabic product names to a character count;
+ * the previous 14ch cap could split words such as "بالجبن" across lines. */
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h4 {
+  max-width: none;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: pretty;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child {
+  min-width: 0;
+  overflow: visible;
+}
+html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
+  contain: layout;
+}
+
+/* NOIR — opening-hours surface stays on the cinematic dark canvas. */
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] {
+  background: linear-gradient(145deg, #171411, #0d0c0a) !important;
+  border-color: rgb(216 167 111 / 0.18) !important;
+  color: #f3eee6;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.35);
+}
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] h2,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] > div,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] > div > span,
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] > div > bdi {
+  color: #f3eee6;
+}
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] .text-muted {
+  color: rgb(243 238 230 / 0.68) !important;
+}
+html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] svg {
+  color: #d8a76f;
+}
+
+/* GALLERY — every catalogue card owns its full content height so long
+ * descriptions cannot be clipped by a stretched grid row. */
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li,
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
+  min-height: 0;
+  height: 100%;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: visible;
+  align-self: stretch;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :first-child {
+  overflow: hidden;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child {
+  min-height: 0;
+  overflow: visible;
+  align-content: start;
+}
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last-child > :nth-child(2) {
+  display: block;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Shared focus clearance: the fixed customer-action area must not become a
+ * visual trap for keyboard/switch access. */
+html[data-menu-theme] .menu-public-shell :focus-visible {
+  scroll-margin-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* FINAL W16 correction — the active shared-renderer Editorial cards use
+ * `li > div > button`, not the older direct-button structure. Give the
+ * information column full width and prevent Arabic word fragmentation. */
 html[data-menu-theme="editorial"] .menu-public-shell main ul > li > div > button {
   grid-template-columns: minmax(0, 1fr) !important;
   min-width: 0 !important;
@@ -56,7 +155,8 @@ html[data-menu-theme="editorial"] .menu-public-shell main ul > li > div > button
   line-height: 1.55;
 }
 
-/* Noir: the opening-hours surface and the page canvas must use the selected dark theme tokens. */
+/* FINAL W16 Noir canvas guard — later shared styles must not turn the page or
+ * hours block into a light surface. */
 html[data-menu-theme="noir"],
 html[data-menu-theme="noir"] body,
 html[data-menu-theme="noir"] .menu-public-shell {
@@ -68,17 +168,17 @@ html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-h
   background-image: linear-gradient(145deg, color-mix(in oklab, var(--menu-surface, #171411) 92%, #000), var(--menu-background, #0d0c0a)) !important;
   border-color: color-mix(in oklab, var(--menu-accent, #d8a76f) 25%, transparent) !important;
   color: var(--menu-foreground, #f3eee6) !important;
-  box-shadow: 0 18px 50px rgb(0 0 0 / .35);
 }
 html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] * { color: inherit; }
 html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] .text-muted { color: rgb(243 238 230 / .68) !important; }
 html[data-menu-theme="noir"] .menu-public-shell section[aria-labelledby="hours-heading"] svg { color: var(--menu-accent, #d8a76f) !important; }
 
-/* Gallery: cards must grow with their content rather than clipping the final text row. */
+/* FINAL W16 Gallery height guard for the current shared renderer. */
 html[data-menu-theme="gallery"] .menu-public-shell main ul > li,
 html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div,
-html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button { min-height: 0; height: auto; }
+html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button {
+  min-height: 0;
+  height: auto;
+}
 html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button > :last-child { min-height: 0; overflow: visible; }
 html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button > :last-child > * { min-width: 0; overflow-wrap: break-word; word-break: normal; }
-
-html[data-menu-theme] .menu-public-shell :focus-visible { scroll-margin-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }
