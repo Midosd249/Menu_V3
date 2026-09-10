@@ -12,7 +12,7 @@ const themeSchema = z.string().trim().min(1).max(40);
 
 export const saveTenantTheme = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .validator(z.object({ themeKey: themeSchema }))
+  .validator(z.object({ tenantId: z.string().min(1).max(100), themeKey: themeSchema }))
   .handler(async ({ context, data }): Promise<FnResult<{ themeKey: ThemeKey }>> => {
     const themeKey = normalizeThemeKey(data.themeKey);
     if (!themeKey) return { ok: false, code: "invalid", error: "القالب غير صالح" };
@@ -20,8 +20,11 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
       const sql = await getSql();
       const members = await sql<{ tenant_id: string; role: "owner" | "admin" }>`
         select tenant_id, role from tenant_members
-        where user_id = ${context.userId} and role in ('owner', 'admin')
-        order by created_at limit 1
+        where user_id = ${context.userId}
+          and tenant_id = ${data.tenantId}
+          and is_active = true
+          and role in ('owner', 'admin')
+        limit 1
       `;
       const member = members[0];
       if (!member) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية تغيير التصميم" };
@@ -32,8 +35,12 @@ export const saveTenantTheme = createServerFn({ method: "POST" })
       }
 
       const rows = await sql<{ theme_key: string; slug: string }>`
-        update tenants set theme_key = ${themeKey}, updated_at = now()
-        where id = ${member.tenant_id} returning theme_key, slug
+        update tenants
+        set theme_key = ${themeKey},
+            public_content_version = public_content_version + 1,
+            updated_at = now()
+        where id = ${member.tenant_id}
+        returning theme_key, slug
       `;
       const saved = normalizeThemeKey(rows[0]?.theme_key);
       const slug = rows[0]?.slug;
