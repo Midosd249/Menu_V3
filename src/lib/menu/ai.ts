@@ -4,7 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import type { Role } from "./types";
 
-const operationSchema = z.enum(["description", "english", "category", "tags", "allergens"]);
+const operationSchema = z.enum(["description", "english", "category", "tags", "allergens", "price"]);
 const inputSchema = z.object({
   operation: operationSchema,
   nameAr: z.string().trim().min(1).max(120),
@@ -43,7 +43,8 @@ type AiResult =
   | { operation: "english"; nameEn: string; descriptionEn: string }
   | { operation: "category"; categoryId: string | null; categoryNameAr: string; categoryNameEn: string }
   | { operation: "tags"; tags: string[] }
-  | { operation: "allergens"; allergens: string[]; disclaimerAr: string; disclaimerEn: string };
+  | { operation: "allergens"; allergens: string[]; disclaimerAr: string; disclaimerEn: string }
+  | { operation: "price"; price: number | null; cleanedNameAr: string };
 
 function canWriteMenu(role: Role) {
   return role === "owner" || role === "admin" || role === "editor";
@@ -69,6 +70,10 @@ function schemaFor(operation: z.infer<typeof operationSchema>): JsonSchema {
   if (operation === "tags") return jsonSchema("menu_tags", {
     tags: { type: "array", items: { type: "string", minLength: 1, maxLength: 40 }, maxItems: 8 },
   }, ["tags"]);
+  if (operation === "price") return jsonSchema("menu_price", {
+    price: { type: ["number", "null"], minimum: 0 },
+    cleanedNameAr: { type: "string", minLength: 1, maxLength: 120 },
+  }, ["price", "cleanedNameAr"]);
   return jsonSchema("menu_allergens", {
     allergens: { type: "array", items: { type: "string", minLength: 1, maxLength: 40 }, maxItems: 12 },
     disclaimerAr: { type: "string", minLength: 1, maxLength: 240 },
@@ -81,6 +86,7 @@ function buildPrompt(data: z.infer<typeof inputSchema>, categories: CategoryOpti
   if (data.operation === "english") return `Create a faithful polished English menu name and description. Preserve the Arabic meaning and do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. ${common}`;
   if (data.operation === "category") return `Choose the best matching existing category only. Never invent a category; return null if none is reasonable. ${common}\nCategories:\n${categories.map((c) => `${c.id} | ${c.nameAr} | ${c.nameEn}`).join("\n")}`;
   if (data.operation === "tags") return `Suggest up to 8 concise tags directly supported by the product name or descriptions. Do not invent ingredients, dietary claims, allergens, cooking methods, or certifications. Avoid duplicates. ${common}`;
+  if (data.operation === "price") return `Extract a product price from the Arabic product name field when a numeric price is explicitly present, such as "كبسة دجاج 20" or "كبسة دجاج - 20 ريال". The number must be interpreted as the price only when it is clearly presented as a price. Do not invent or estimate a price. Return null if no explicit price is present. Also return the cleaned Arabic product name with the explicit price marker removed. Do not change any other words. ${common}`;
   return `Suggest potential food allergens using ONLY explicit evidence in the product name and existing Arabic/English descriptions. Do not infer hidden ingredients from cuisine type, common recipes, restaurant knowledge, or assumptions. Absence of a mention is not proof of absence. If evidence is insufficient, return an empty allergens array. Use common Arabic allergen names. This is for owner review, not a food-safety guarantee. ${common}`;
 }
 async function callMercury(prompt: string, responseFormat: JsonSchema) {
@@ -131,6 +137,11 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         return { ok: true, data: { operation: "category", categoryId: p.categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
       }
       if (data.operation === "tags" && Array.isArray(p.tags) && p.tags.every((v) => typeof v === "string")) return { ok: true, data: { operation: "tags", tags: [...new Set(p.tags.map((v) => v.trim()).filter(Boolean))].slice(0, 8) } };
+      if (data.operation === "price" && (typeof p.price === "number" || p.price === null) && typeof p.cleanedNameAr === "string") {
+        const price = p.price == null ? null : Number(p.price);
+        if (price !== null && (!Number.isFinite(price) || price < 0)) return { ok: false, code: "ai_invalid", error: "السعر المقترح غير صالح" };
+        return { ok: true, data: { operation: "price", price, cleanedNameAr: p.cleanedNameAr.trim() } };
+      }
       if (data.operation === "allergens" && Array.isArray(p.allergens) && p.allergens.every((v) => typeof v === "string") && typeof p.disclaimerAr === "string" && typeof p.disclaimerEn === "string") {
         return { ok: true, data: { operation: "allergens", allergens: [...new Set(p.allergens.map((v) => v.trim()).filter(Boolean))].slice(0, 12), disclaimerAr: p.disclaimerAr.trim(), disclaimerEn: p.disclaimerEn.trim() } };
       }
