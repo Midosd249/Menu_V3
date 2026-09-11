@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Star } from "lucide-react";
+import { Plus, Sparkles, Star } from "lucide-react";
 import { Flash, Sheet } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { compressImageFile } from "@/lib/menu/image";
 import { copy, t } from "@/lib/menu/i18n";
+import { generateMenuAi } from "@/lib/menu/ai";
 import { deleteCategory, deleteProduct, saveCategory, saveProduct, toggleProduct } from "@/lib/menu/owner";
 import { useStudio, useStudioFlash } from "@/lib/menu/studio";
 import type { Product } from "@/lib/menu/types";
@@ -28,6 +29,8 @@ type ProductDraft = {
   isAvailable: boolean;
   isFeatured: boolean;
 };
+
+type AiOperation = "description" | "english" | "category" | "tags";
 
 function emptyDraft(categoryId: string | null): ProductDraft {
   return {
@@ -72,6 +75,8 @@ function MenuStudio() {
   const [catDraft, setCatDraft] = useState<{ id?: string; nameAr: string; nameEn: string } | null>(null);
   const [pendingDelete, setPendingDelete] = useState<{ type: "product" | "category"; id: string } | null>(null);
   const [imageBusy, setImageBusy] = useState(false);
+  const [aiBusy, setAiBusy] = useState<AiOperation | null>(null);
+  const [aiTags, setAiTags] = useState<string[]>([]);
 
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -128,6 +133,65 @@ function MenuStudio() {
       setImageBusy(false);
     }
   }
+
+  async function runAi(operation: AiOperation) {
+    if (!draft || aiBusy) return;
+    if (!draft.nameAr.trim()) {
+      flash.setError(lang === "ar" ? "اكتب اسم المنتج أولاً" : "Enter the product name first");
+      return;
+    }
+
+    setAiBusy(operation);
+    setAiTags([]);
+    flash.setError("");
+    try {
+      const result = await generateMenuAi({
+        data: {
+          operation,
+          nameAr: draft.nameAr.trim(),
+          nameEn: draft.nameEn.trim() || undefined,
+          descriptionAr: draft.descriptionAr.trim() || undefined,
+          descriptionEn: draft.descriptionEn.trim() || undefined,
+          categoryId: draft.categoryId,
+          categoryOptions: snapshot.categories.map((category) => ({
+            id: category.id,
+            nameAr: category.nameAr,
+            nameEn: category.nameEn,
+          })),
+        },
+      });
+
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+
+      if (result.data.operation === "description") {
+        setDraft((current) => (current ? { ...current, descriptionAr: result.data.descriptionAr } : current));
+      } else if (result.data.operation === "english") {
+        setDraft((current) =>
+          current
+            ? { ...current, nameEn: result.data.nameEn, descriptionEn: result.data.descriptionEn }
+            : current,
+        );
+      } else if (result.data.operation === "category") {
+        setDraft((current) => (current ? { ...current, categoryId: result.data.categoryId } : current));
+      } else {
+        setAiTags(result.data.tags);
+      }
+    } catch (err) {
+      flash.setError(err instanceof Error ? err.message : t(copy.state.error, lang));
+    } finally {
+      setAiBusy(null);
+    }
+  }
+
+  const aiLabel = (operation: AiOperation) => {
+    if (operation === "description") return lang === "ar" ? "وصف عربي" : "Arabic description";
+    if (operation === "english") return lang === "ar" ? "إنشاء الإنجليزية" : "Generate English";
+    if (operation === "category") return lang === "ar" ? "اقتراح التصنيف" : "Suggest category";
+    return lang === "ar" ? "اقتراح الوسوم" : "Suggest tags";
+  };
 
   return (
     <div className="mx-auto grid max-w-4xl gap-6">
@@ -245,6 +309,45 @@ function MenuStudio() {
             <Field label={t(copy.studio.nameAr, lang)}>
               <Input value={draft.nameAr} onChange={(e) => setDraft({ ...draft, nameAr: e.target.value })} />
             </Field>
+
+            <div className="rounded-xl border border-line bg-sand/50 p-3">
+              <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+                <Sparkles className="size-4 text-accent" />
+                <span>{lang === "ar" ? "مساعد الذكاء الاصطناعي" : "AI Assist"}</span>
+              </div>
+              <p className="mb-3 text-xs text-muted">
+                {lang === "ar"
+                  ? "اختر إجراءً واحدًا. سيقترح الذكاء الاصطناعي النتيجة دون حفظها تلقائيًا."
+                  : "Choose an action. AI suggestions are applied to the draft only and are never saved automatically."}
+              </p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {(["description", "english", "category", "tags"] as AiOperation[]).map((operation) => (
+                  <Button
+                    key={operation}
+                    type="button"
+                    variant="outline"
+                    disabled={aiBusy !== null}
+                    onClick={() => void runAi(operation)}
+                  >
+                    <Sparkles className="size-4" />
+                    {aiBusy === operation ? t(copy.state.loading, lang) : aiLabel(operation)}
+                  </Button>
+                ))}
+              </div>
+              {aiTags.length > 0 ? (
+                <div className="mt-3 rounded-lg border border-line bg-paper p-3">
+                  <p className="mb-2 text-xs font-medium">{lang === "ar" ? "الوسوم المقترحة" : "Suggested tags"}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {aiTags.map((tag) => (
+                      <span key={tag} className="rounded-full bg-sand px-2.5 py-1 text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
             <Field label={t(copy.studio.nameEn, lang)}>
               <Input value={draft.nameEn} onChange={(e) => setDraft({ ...draft, nameEn: e.target.value })} />
             </Field>
@@ -298,7 +401,7 @@ function MenuStudio() {
             </label>
             <Flash error={flash.error} ok={flash.ok} />
             <div className="flex flex-wrap gap-2">
-              <Button type="button" disabled={flash.busy} onClick={() => void saveItem()}>
+              <Button type="button" disabled={flash.busy || aiBusy !== null} onClick={() => void saveItem()}>
                 {flash.busy ? t(copy.state.loading, lang) : t(copy.studio.save, lang)}
               </Button>
               {draft.id ? (
