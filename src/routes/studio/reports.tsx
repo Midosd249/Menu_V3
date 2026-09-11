@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Mail, Printer, RefreshCw, Share2, Sparkles } from "lucide-react";
+import { Check, Copy, MessageCircle, Printer, RefreshCw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
-import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getOwnerAnalytics, getMyStudio } from "@/lib/menu/owner";
 import { buildMenuReport, reportToText, type MenuReport } from "@/lib/menu/reports";
+import { generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/reports")({ component: ReportsPage });
@@ -15,10 +15,10 @@ type State = { status: "loading" } | { status: "error"; message: string } | { st
 
 function ReportsPage() {
   const { lang } = useLang();
-  const { user } = useCurrentUserState();
   const [days, setDays] = useState<7 | 30>(7);
   const [state, setState] = useState<State>({ status: "loading" });
   const [refreshing, setRefreshing] = useState(false);
+  const [waState, setWaState] = useState<{ status: "idle" | "loading" | "ready" | "error"; message?: string }>({ status: "idle" });
 
   const load = () => {
     setRefreshing(true);
@@ -27,6 +27,7 @@ function ReportsPage() {
         if (!analytics.ok) return setState({ status: "error", message: analytics.error });
         if (!studio.ok || !studio.data || !("tenant" in studio.data) || !studio.data.tenant) return setState({ status: "error", message: lang === "ar" ? "تعذر تحميل بيانات المنشأة" : "Unable to load business data" });
         setState({ status: "ready", report: buildMenuReport(studio.data as StudioSnapshot, analytics.data as OwnerAnalytics) });
+        setWaState({ status: "idle" });
       })
       .catch((error: unknown) => setState({ status: "error", message: error instanceof Error ? error.message : (lang === "ar" ? "تعذر إنشاء التقرير" : "Unable to create report") }))
       .finally(() => setRefreshing(false));
@@ -35,31 +36,34 @@ function ReportsPage() {
   useEffect(() => { load(); }, [days]);
 
   const text = useMemo(() => state.status === "ready" ? reportToText(state.report, lang) : "", [state, lang]);
-  const email = () => {
-    if (state.status !== "ready") return;
-    const subject = encodeURIComponent(lang === "ar" ? `تقرير Menu V3 — ${state.report.tenantNameAr}` : `Menu V3 Report — ${state.report.tenantNameEn || state.report.tenantNameAr}`);
-    const recipient = user?.primaryEmail?.trim() ?? "";
-    window.location.href = `mailto:${encodeURIComponent(recipient)}?subject=${subject}&body=${encodeURIComponent(text)}`;
-  };
   const print = () => window.print();
-  const share = async () => {
-    if (typeof navigator.share !== "function") return;
-    await navigator.share({ title: lang === "ar" ? "تقرير Menu V3" : "Menu V3 Report", text });
+  const shareWhatsApp = async () => {
+    if (state.status !== "ready") return;
+    setWaState({ status: "loading" });
+    const result = await generateWhatsAppReportMessage({ data: { reportText: text, lang } });
+    if (!result.ok) {
+      setWaState({ status: "error", message: result.error });
+      return;
+    }
+    try { await navigator.clipboard?.writeText(result.data.message); } catch { /* opening WhatsApp still works */ }
+    const url = `https://wa.me/?text=${encodeURIComponent(result.data.message)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    setWaState({ status: "ready", message: result.data.message });
   };
 
   return <div className="mx-auto grid max-w-5xl gap-6">
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between print:hidden">
-      <div><div className="flex items-center gap-2 text-accent"><Sparkles className="size-4" /><span className="text-xs font-semibold uppercase tracking-[.18em]">{lang === "ar" ? "تقارير Menu V3" : "Menu V3 Reports"}</span></div><h1 className="mt-2 font-display text-3xl font-semibold">{lang === "ar" ? "التقرير الذكي" : "Smart report"}</h1><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "ملخص عملي من بيانات القائمة والتحليلات المتاحة، جاهز للطباعة أو الحفظ كـ PDF أو الإرسال عبر بريدك." : "A practical summary from available menu and analytics data, ready to print, save as PDF, or send from your email client."}</p></div>
+      <div><div className="flex items-center gap-2 text-accent"><Sparkles className="size-4" /><span className="text-xs font-semibold uppercase tracking-[.18em]">{lang === "ar" ? "من التحليلات" : "From Analytics"}</span></div><h1 className="mt-2 font-display text-3xl font-semibold">{lang === "ar" ? "إنشاء تقرير احترافي" : "Create professional report"}</h1><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "حوّل أرقام التحليلات إلى ملخص واضح وجاهز للطباعة أو المشاركة عبر واتساب." : "Turn analytics into a clear summary ready to print or share through WhatsApp."}</p></div>
       <div className="flex gap-2"><Button type="button" size="sm" variant={days === 7 ? "solid" : "outline"} onClick={() => setDays(7)}>7 {lang === "ar" ? "أيام" : "days"}</Button><Button type="button" size="sm" variant={days === 30 ? "solid" : "outline"} onClick={() => setDays(30)}>30 {lang === "ar" ? "يومًا" : "days"}</Button></div>
     </header>
 
     {state.status === "loading" ? <LoadingState /> : null}
     {state.status === "error" ? <ErrorState message={state.message} /> : null}
-    {state.status === "ready" ? <ReportContent report={state.report} lang={lang} text={text} onPrint={print} onEmail={email} onShare={share} onRefresh={load} refreshing={refreshing} /> : null}
+    {state.status === "ready" ? <ReportContent report={state.report} lang={lang} text={text} onPrint={print} onWhatsApp={shareWhatsApp} onRefresh={load} refreshing={refreshing} waState={waState} /> : null}
   </div>;
 }
 
-function ReportContent({ report, lang, text, onPrint, onEmail, onShare, onRefresh, refreshing }: { report: MenuReport; lang: "ar" | "en"; text: string; onPrint: () => void; onEmail: () => void; onShare: () => void; onRefresh: () => void; refreshing: boolean }) {
+function ReportContent({ report, lang, text, onPrint, onWhatsApp, onRefresh, refreshing, waState }: { report: MenuReport; lang: "ar" | "en"; text: string; onPrint: () => void; onWhatsApp: () => void; onRefresh: () => void; refreshing: boolean; waState: { status: "idle" | "loading" | "ready" | "error"; message?: string } }) {
   const name = lang === "ar" ? report.tenantNameAr : report.tenantNameEn || report.tenantNameAr;
   const top = report.advisor.actions.slice(0, 3);
   return <>
@@ -80,7 +84,12 @@ function ReportContent({ report, lang, text, onPrint, onEmail, onShare, onRefres
       <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "أهم 3 توصيات" : "Top 3 recommendations"}</p><h2 className="mt-1 font-display text-2xl font-semibold">{lang === "ar" ? "ما الذي يستحق اهتمامك؟" : "What deserves attention?"}</h2></div>
       {top.length ? <div className="grid gap-3">{top.map((item, index) => <article key={item.key} className="rounded-2xl border border-line bg-paper p-4"><div className="flex gap-3"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-xs font-semibold text-paper">{index + 1}</span><div><h3 className="font-medium">{lang === "ar" ? item.titleAr : item.titleEn}</h3><p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? item.reasonAr : item.reasonEn}</p></div></div></article>)}</div> : <p className="text-sm text-muted">{lang === "ar" ? "لا توجد توصيات قابلة للتنفيذ حاليًا." : "There are no actionable recommendations right now."}</p>}
     </section>
-    <section className="flex flex-wrap gap-2 print:hidden"><Button type="button" onClick={onPrint}><Printer className="size-4" />{lang === "ar" ? "طباعة / حفظ PDF" : "Print / Save PDF"}</Button><Button type="button" variant="outline" onClick={onEmail}><Mail className="size-4" />{lang === "ar" ? "إرسال بالبريد" : "Email"}</Button>{typeof navigator !== "undefined" && typeof navigator.share === "function" ? <Button type="button" variant="outline" onClick={onShare}><Share2 className="size-4" />{lang === "ar" ? "مشاركة" : "Share"}</Button> : null}<Button type="button" variant="ghost" onClick={onRefresh} disabled={refreshing}><RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />{lang === "ar" ? "تحديث" : "Refresh"}</Button></section>
+    <section className="grid gap-3 rounded-3xl border border-line bg-paper p-5 print:hidden">
+      <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "المشاركة" : "Sharing"}</p><h2 className="mt-1 font-semibold">{lang === "ar" ? "جاهز للإرسال لصاحب المطعم" : "Ready to share with the owner"}</h2><p className="mt-1 text-sm text-muted">{lang === "ar" ? "سيُنشئ Menu V3 رسالة واتساب قصيرة مبنية فقط على بيانات هذا التقرير، ثم يفتح واتساب لتختار المستلم." : "Menu V3 will create a concise WhatsApp message using only this report, then open WhatsApp so you can choose the recipient."}</p></div>
+      <div className="flex flex-wrap gap-2"><Button type="button" onClick={onWhatsApp} disabled={waState.status === "loading"}><MessageCircle className="size-4" />{waState.status === "loading" ? (lang === "ar" ? "جاري إنشاء الرسالة…" : "Generating…") : (lang === "ar" ? "إنشاء رسالة واتساب" : "Generate WhatsApp message")}</Button><Button type="button" variant="outline" onClick={onPrint}><Printer className="size-4" />{lang === "ar" ? "طباعة / حفظ PDF" : "Print / Save PDF"}</Button><Button type="button" variant="ghost" onClick={onRefresh} disabled={refreshing}><RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />{lang === "ar" ? "تحديث" : "Refresh"}</Button></div>
+      {waState.status === "ready" && waState.message ? <div className="rounded-xl bg-sand/50 p-3"><div className="flex items-center gap-2 text-sm font-medium"><Check className="size-4 text-good" />{lang === "ar" ? "تم إنشاء الرسالة وفتح واتساب" : "Message generated and WhatsApp opened"}</div><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{waState.message}</p><button type="button" className="mt-2 inline-flex items-center gap-2 text-xs font-medium" onClick={() => navigator.clipboard?.writeText(waState.message || "")}><Copy className="size-3.5" />{lang === "ar" ? "نسخ الرسالة" : "Copy message"}</button></div> : null}
+      {waState.status === "error" ? <p className="rounded-xl border border-line p-3 text-sm">{waState.message}</p> : null}
+    </section>
     <details className="rounded-2xl border border-line p-4 print:hidden"><summary className="cursor-pointer text-sm font-medium">{lang === "ar" ? "عرض نص التقرير" : "View report text"}</summary><pre className="mt-4 whitespace-pre-wrap text-xs leading-6 text-muted">{text}</pre></details>
     <p className="text-center text-xs leading-5 text-muted print:text-black/60">{lang === "ar" ? "التقرير مبني على بيانات الحساب المتاحة فقط. لا يتضمن وعودًا بالمبيعات أو التحويل، ولا يمثل شهادة امتثال قانونية." : "This report uses only available account data. It makes no sales or conversion promises and is not a legal compliance certificate."}</p>
   </>;
