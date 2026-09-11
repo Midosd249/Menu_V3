@@ -15,6 +15,7 @@ const NAV: readonly NavItem[] = [
   { to: "/studio", icon: LayoutDashboard, label: copy.nav.overview, exact: true },
   { to: "/studio/menu", icon: UtensilsCrossed, label: copy.nav.menu },
   { to: "/studio/intelligence", icon: Sparkles, label: { ar: "ذكاء القائمة", en: "Menu Intelligence" } },
+  { to: "/studio/saudi-readiness", icon: ShieldCheck, label: { ar: "جاهزية القائمة السعودية", en: "Saudi Menu Readiness" } },
   { to: "/studio/options", icon: SlidersHorizontal, label: { ar: "خيارات الأصناف", en: "Item options" } },
   { to: "/studio/branches", icon: Building2, label: copy.nav.branches, permission: "settings.write" },
   { to: "/studio/brand", icon: Palette, label: copy.nav.brand, permission: "settings.write" },
