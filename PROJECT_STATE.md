@@ -82,24 +82,21 @@
 - VERIFIED: the secret token is not persisted to the lead record by this UI change.
 - VERIFIED: PR #73 merged to `main` as `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
 - VERIFIED: Quality run `34539814074` passed all configured quality stages.
-- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for the same `main` commit.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` and targets `production` for the same `main` commit.
 - STATUS: `VERIFIED` / merged / deployed.
 
 ## Current Release / Deployment State
-- VERIFIED: latest `main` is `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
-- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` and targets `production`.
+- VERIFIED: latest verified historical `main` state in this continuity snapshot is `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
+- VERIFIED: Vercel Production deployment `dpl_AsU4MDSBLvqz19T4ToRDhuesinRh` is `READY` for that historical commit.
 - VERIFIED: Production aliases include `menu-v3-kohl.vercel.app` and `menu-v3-midosd2s-projects.vercel.app`.
-- VERIFIED: production `/admin` returns HTTP 200 and its shipped admin bundle contains the new registration-link UI.
 
 ## Exact Current TODO
-### Next atomic task — Real-device verification of the completed Platform Owner approval flow
-1. Open the latest Production application as Platform Owner.
-2. Open `اعتماد العملاء الجدد` / the approval controls.
-3. Select one real lead that has not already consumed its onboarding link.
-4. Perform one controlled approval.
-5. Verify that the generated registration URL is visible, copyable, and opens the public onboarding route.
-6. Verify the client onboarding handoff and record the result.
-7. Stop.
+### Complete verification and release of the current V5 report center
+1. Wait for PR #81 GitHub `quality` to complete.
+2. If the quality gate passes, review the final diff and merge PR #81 to `main`.
+3. Verify the resulting `main` CI and Vercel status separately.
+4. On the next available Production deployment, run one controlled report-center check: open the report, switch 7/30 days, print/save PDF, and verify email handoff without exposing secrets.
+5. Stop.
 
 ## Continuity Rule
 At the end of every atomic task:
@@ -111,21 +108,11 @@ At the end of every atomic task:
 6. record one exact next task;
 7. stop.
 
-## 2026-09-11 — Registration Link Rendering Fix
-- VERIFIED: root cause was UI state loss: `approveLead` already returned `registrationUrl`, but the `/admin` `Leads` component discarded the returned field and displayed only a generic success message.
-- VERIFIED: the fix stores the returned URL in component state and renders it immediately with copy/open actions.
-- VERIFIED: the change is limited to `src/routes/admin.tsx` plus focused regression coverage in `tests/platform-onboarding-contract.test.mjs`.
-- VERIFIED: no database schema, authentication, RLS, tenant isolation, dependency, theme, or Manus-derived infrastructure changed.
-- VERIFIED: Production build completed and Vercel Production is `READY` for `66a4985e2a13c4d77a86ebfd8fa8ce8a6c1fa33f`.
-
-## 2026-09-11 — Onboarding Creation Recovery
-- VERIFIED: Production Vercel runtime logs showed `createRestaurant failed` with PostgreSQL error `23505`, duplicate key on `tenants_owner_user_id_uidx`.
-- VERIFIED: the affected authenticated user had one existing tenant owned by that user and zero active `tenant_members` rows, proving a partially-created/orphaned onboarding state.
-- VERIFIED: the live `menu_v3` schema contains the owner uniqueness index and the canonical `tenant_owner` access-role contract.
-- FIXED IN BRANCH: `src/lib/menu/onboarding-recovery.ts` repairs an orphaned owner membership using only authenticated server context and `tenants.owner_user_id`.
-- FIXED IN BRANCH: `src/routes/onboarding.tsx` performs recovery before creation and retries once after a failed creation; it also reconciles the canonical `tenant_owner` role.
-- FIXED IN BRANCH: onboarding wording is now business-neutral (`منشأتك`, `اسم المنشأة`) so cafes and other menu-based businesses are not incorrectly presented as restaurants.
-- VERIFIED: no dependency, auth, RLS, tenant-isolation, theme, ordering, analytics, approval-center, or Manus infrastructure was changed.
-- STATUS: `IMPLEMENTATION_IN_PROGRESS`; PR #75 is awaiting the GitHub `quality` gate before merge.
-- DEPLOYMENT: `DEPLOYMENT_BLOCKED` for this branch by Vercel's current rate-limit status; no deployment retry was attempted.
-- EXACT NEXT TASK: after quality passes, merge PR #75, verify the resulting `main` quality/deployment evidence, then perform one controlled real onboarding attempt using the existing affected account to confirm recovery.
+## 2026-09-11 — Menu Intelligence V5 Report Center
+- IMPLEMENTED: `src/lib/menu/reports.ts` builds a deterministic localized report from the canonical owner analytics, existing Menu Intelligence, and Growth Advisor.
+- IMPLEMENTED: `src/routes/studio/reports.tsx` provides 7/30-day reports, print/save-to-PDF, email handoff, Web Share when supported, and a responsive Arabic/English report surface.
+- IMPLEMENTED: Studio navigation exposes Reports on desktop and mobile.
+- VERIFIED: no new AI provider, API key, database migration, automatic outbound messaging, auth/RLS, tenant isolation, ordering, pricing, or customer-action contract was introduced.
+- VERIFIED: report wording avoids fabricated sales/revenue/conversion claims and does not present the report as a legal compliance certificate.
+- STATUS: `IMPLEMENTATION_IN_PROGRESS` pending GitHub Quality and merge.
+- DEPLOYMENT: no feature-branch Vercel deployment requested; release-only policy applies.
