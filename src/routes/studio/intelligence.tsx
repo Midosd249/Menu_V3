@@ -6,6 +6,7 @@ import { ErrorState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getOwnerAnalytics } from "@/lib/menu/owner";
 import { useStudio } from "@/lib/menu/studio";
+import { buildMenuGrowthAdvisor, type MenuGrowthAdvisor } from "@/lib/menu/growth-advisor";
 import { buildMenuIntelligence, type MenuIntelligence } from "@/lib/menu/intelligence";
 import type { OwnerAnalytics } from "@/lib/menu/types";
 
@@ -33,9 +34,13 @@ function IntelligencePage() {
     if (analytics.status !== "ready") return null;
     return buildMenuIntelligence(snapshot, analytics.data);
   }, [analytics, snapshot]);
+  const advisor = useMemo<MenuGrowthAdvisor | null>(() => {
+    if (analytics.status !== "ready") return null;
+    return buildMenuGrowthAdvisor(snapshot, analytics.data);
+  }, [analytics, snapshot]);
 
   if (analytics.status === "error") return <div className="mx-auto max-w-5xl"><ErrorState message={analytics.message} /></div>;
-  if (!intelligence) return <div className="mx-auto grid max-w-5xl gap-4"><div className="h-40 animate-pulse rounded-3xl border border-line bg-sand/30" /><div className="h-60 animate-pulse rounded-3xl border border-line bg-sand/30" /></div>;
+  if (!intelligence || !advisor) return <div className="mx-auto grid max-w-5xl gap-4"><div className="h-40 animate-pulse rounded-3xl border border-line bg-sand/30" /><div className="h-60 animate-pulse rounded-3xl border border-line bg-sand/30" /></div>;
 
   const title = lang === "ar" ? "ذكاء القائمة" : "Menu Intelligence";
   const headline = lang === "ar" ? intelligence.headlineAr : intelligence.headlineEn;
@@ -71,6 +76,11 @@ function IntelligencePage() {
         {intelligence.leadingCategory ? <p className="text-sm text-muted">{lang === "ar" ? `التصنيف الأكثر مشاهدة: ${intelligence.leadingCategory.nameAr}` : `Top category: ${intelligence.leadingCategory.nameEn || intelligence.leadingCategory.nameAr}`}</p> : null}
         <p className="text-xs leading-5 text-muted">{lang === "ar" ? "هذه إشارة اتجاهية وليست وعدًا بالمبيعات أو التحويل." : "This is a directional signal, not a sales or conversion claim."}</p>
       </article>
+    </section>
+
+    <section className="grid gap-4 rounded-3xl border border-line bg-paper p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "الأولوية التالية" : "Next priority"}</p><h2 className="mt-1 font-display text-2xl font-semibold">{lang === "ar" ? "خطوات النمو المقترحة" : "Recommended growth actions"}</h2><p className="mt-1 text-sm text-muted">{lang === "ar" ? advisor.summaryAr : advisor.summaryEn}</p></div><Sparkles className="size-5 text-accent" aria-hidden="true" /></div>
+      {advisor.actions.length === 0 ? <div className="flex items-center gap-3 rounded-2xl border border-line bg-sand/20 p-5 text-sm"><CheckCircle2 className="size-5 text-good" /><span>{lang === "ar" ? "لا توجد خطوة واضحة أعلى أولوية الآن." : "There is no clear higher-priority action right now."}</span></div> : <div className="grid gap-3 md:grid-cols-2">{advisor.actions.map((action, index) => <article key={action.key} className="grid gap-4 rounded-2xl border border-line bg-sand/20 p-4"><div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2"><span className="grid size-7 place-items-center rounded-full bg-ink text-xs font-semibold text-paper">{index + 1}</span><span className={`rounded-full px-2.5 py-1 text-xs font-medium ${action.priority === "high" ? "bg-warn/15 text-warn" : action.priority === "medium" ? "bg-accent/10 text-accent" : "bg-sand text-muted"}`}>{action.priority === "high" ? (lang === "ar" ? "عالية" : "High") : action.priority === "medium" ? (lang === "ar" ? "متوسطة" : "Medium") : (lang === "ar" ? "منخفضة" : "Low")}</span></div><ArrowUpLeft className="size-4 text-muted" aria-hidden="true" /></div><div><h3 className="font-medium">{lang === "ar" ? action.titleAr : action.titleEn}</h3><p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? action.reasonAr : action.reasonEn}</p></div><div className="flex items-center justify-between gap-3"><span className="text-xs font-medium text-muted">{lang === "ar" ? action.metricAr : action.metricEn}</span><Button asChild size="sm"><Link to={action.href}>{lang === "ar" ? "تنفيذ" : "Open"}</Link></Button></div></article>)}</div>}
     </section>
 
     <section className="grid gap-4 rounded-3xl border border-line p-6">
