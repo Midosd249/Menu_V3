@@ -33,6 +33,23 @@ const responseSchema = z.object({
   productIds: z.array(z.string().trim().min(1).max(80)).max(5),
 });
 
+type MenuProductRow = {
+  tenant_id: string;
+  id: string;
+  name_ar: string;
+  name_en: string;
+  description_ar: string;
+  description_en: string;
+  price: number;
+  currency: string;
+  allergens: string;
+  dietary_labels: string[] | null;
+  category_id: string | null;
+  category_ar: string;
+  category_en: string;
+  is_available: boolean;
+};
+
 type MenuProduct = {
   id: string;
   nameAr: string;
@@ -54,7 +71,7 @@ function clean(value: unknown, max: number) {
 
 async function loadGuestCatalog(slug: string, branchSlug?: string) {
   const sql = await getSql();
-  const rows = await sql<Array<{ tenant_id: string; id: string; name_ar: string; name_en: string; description_ar: string; description_en: string; price: number; currency: string; allergens: string; dietary_labels: string[] | null; category_id: string | null; category_ar: string; category_en: string; is_available: boolean }>>`;
+  const rows = await sql<MenuProductRow>`
     select
       t.id as tenant_id,
       p.id, p.name_ar, p.name_en, p.description_ar, p.description_en, p.price, p.currency,
@@ -74,7 +91,21 @@ async function loadGuestCatalog(slug: string, branchSlug?: string) {
     order by p.sort_order, p.created_at
     limit 250
   `;
-  return { sql, tenantId: rows[0]?.tenant_id ?? null, products: rows as MenuProduct[] };
+  const products: MenuProduct[] = rows.map((row) => ({
+    id: String(row.id),
+    nameAr: String(row.name_ar),
+    nameEn: String(row.name_en ?? ""),
+    descriptionAr: String(row.description_ar ?? ""),
+    descriptionEn: String(row.description_en ?? ""),
+    price: Number(row.price),
+    currency: String(row.currency ?? "SAR"),
+    allergens: String(row.allergens ?? ""),
+    dietaryLabels: Array.isArray(row.dietary_labels) ? row.dietary_labels.map(String) : [],
+    categoryAr: String(row.category_ar ?? ""),
+    categoryEn: String(row.category_en ?? ""),
+    isAvailable: Boolean(row.is_available),
+  }));
+  return { sql, tenantId: rows[0]?.tenant_id ?? null, products };
 }
 
 function buildCatalog(products: MenuProduct[]) {
@@ -89,7 +120,7 @@ function buildCatalog(products: MenuProduct[]) {
     `DESC_EN=${clean(p.descriptionEn, 240)}`,
     `PRICE=${p.price} ${clean(p.currency, 12)}`,
     `ALLERGENS=${clean(p.allergens, 180) || "غير مذكورة"}`,
-    `DIETARY=${clean((p.dietaryLabels ?? []).join(", "), 120) || "غير مذكورة"}`,
+    `DIETARY=${clean(p.dietaryLabels.join(", "), 120) || "غير مذكورة"}`,
   ].join(" | ")).join("\n");
 }
 
@@ -123,7 +154,7 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
         temperature: 0.2,
         systemPrompt: "You are a grounded restaurant menu assistant. The supplied published menu is the only source of truth. You are read-only. Never guess. Never execute transactions. Never claim facts that are not explicitly present in the supplied catalog. The restaurant owner and database remain authoritative.",
       });
-      if (!result.ok) return result;
+      if (!result.ok) return { ok: false, code: "unavailable", error: result.error };
 
       const productIds = result.data.productIds.filter((id) => allowedIds.has(id));
       return { ok: true, data: { answerAr: result.data.answerAr, answerEn: result.data.answerEn, productIds } };
