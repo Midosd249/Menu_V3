@@ -1,4 +1,5 @@
 import { PublicMenuView } from "@/components/public-menu";
+import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
 import { TasteTemplate } from "@/components/templates/taste";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
@@ -24,11 +25,18 @@ export function ThemeRenderer({ menu, preview = false }: Props) {
   const theme = menu.tenant.themeKey as ThemeKey;
   const family = getThemeFamily(theme);
 
-  if (theme === "heritage") return <TasteTemplate menu={menu} preview={preview} />;
-  if (family === "contemporary-restaurant") return <ContemporaryRestaurantTemplate menu={menu} preview={preview} />;
-  if (family === "bakery-dessert") return <BakeryDessertTemplate menu={menu} />;
-  if (family === "fine-dining-hospitality") return <FineDiningHospitalityTemplate menu={menu} preview={preview} />;
-  if (family === "small-menu") return <SmallMenuTemplate menu={menu} preview={preview} />;
+  let content;
+  if (theme === "heritage") content = <TasteTemplate menu={menu} preview={preview} />;
+  else if (family === "contemporary-restaurant") content = <ContemporaryRestaurantTemplate menu={menu} preview={preview} />;
+  else if (family === "bakery-dessert") content = <BakeryDessertTemplate menu={menu} />;
+  else if (family === "fine-dining-hospitality") content = <FineDiningHospitalityTemplate menu={menu} preview={preview} />;
+  else if (family === "small-menu") content = <SmallMenuTemplate menu={menu} preview={preview} />;
+  else content = <PublicMenuView menu={menu} preview={preview} />;
 
-  return <PublicMenuView menu={menu} preview={preview} />;
+  return (
+    <>
+      {content}
+      {!preview && <GuestMenuAssistant menu={menu} />}
+    </>
+  );
 }
