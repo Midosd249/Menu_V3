@@ -29,7 +29,7 @@ type ProviderFailure = {
 };
 
 const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro"];
-const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai", "xkiro"];
+const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai"];
 
 export const AI_PROVIDER_DEFAULTS = {
   mercury: "mercury-2.5",
@@ -37,7 +37,7 @@ export const AI_PROVIDER_DEFAULTS = {
   zai: "glm-4.7-flash",
   zaiVision: "glm-4.6v-flash",
   openrouter: "google/gemma-4-31b-it:free",
-  xkiro: "stealth/ox-alpha",
+  xkiro: "minimax/minimax-m3:free",
 } as const;
 
 function env(name: string) {
@@ -59,9 +59,16 @@ export function getProviderOrder(capability: AiCapability): AiProvider[] {
   const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro";
   if (validProvider && (capability === "structured" || forced !== "mercury")) return [forced];
   if (forced && forced !== "auto") return capability === "structured" ? DEFAULT_STRUCTURED_ORDER : DEFAULT_MULTIMODAL_ORDER;
-  return capability === "structured"
+
+  const configuredOrder = capability === "structured"
     ? parseOrder(process.env.AI_PROVIDER_ORDER, DEFAULT_STRUCTURED_ORDER)
     : parseOrder(process.env.AI_MULTIMODAL_PROVIDER_ORDER, DEFAULT_MULTIMODAL_ORDER);
+
+  if (capability === "structured") return configuredOrder;
+
+  // xKiro vision is intentionally opt-in until a vision model is explicitly configured.
+  // The verified xKiro free default is text-only, so it must never receive an image/PDF silently.
+  return configuredOrder.filter((provider) => provider !== "xkiro" || Boolean(env("XKIRO_VISION_MODEL")));
 }
 
 export function getProviderModel(provider: AiProvider, capability: AiCapability): string {
@@ -73,7 +80,9 @@ export function getProviderModel(provider: AiProvider, capability: AiCapability)
       : env("ZAI_VISION_MODEL") || AI_PROVIDER_DEFAULTS.zaiVision;
   }
   if (provider === "openrouter") return env("OPENROUTER_MODEL") || AI_PROVIDER_DEFAULTS.openrouter;
-  return env("XKIRO_MODEL") || AI_PROVIDER_DEFAULTS.xkiro;
+  return capability === "structured"
+    ? env("XKIRO_MODEL") || AI_PROVIDER_DEFAULTS.xkiro
+    : env("XKIRO_VISION_MODEL");
 }
 
 function getProviderKeys(provider: AiProvider): string[] {
@@ -156,6 +165,10 @@ async function callOpenAiCompatible(
       : provider === "openrouter"
         ? "https://openrouter.ai/api/v1"
         : "https://api.xkiro.com/v1";
+
+  if (!model) {
+    return { ok: false, code: "ai_not_configured", error: `Provider ${provider} has no configured model for ${capability}`, provider, model: "" };
+  }
 
   const userContent = multimodal
     ? [
@@ -320,8 +333,6 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
         lastFailure = result;
         continue;
       }
-
-      if (capability === "pdf" && provider === "xkiro") continue;
 
       const result = await callOpenAiCompatible(provider, genericArgs, key, args);
       if (result.ok) return result;

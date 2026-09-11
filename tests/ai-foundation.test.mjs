@@ -33,7 +33,8 @@ for (const expected of [
   "glm-4.7-flash",
   "glm-4.6v-flash",
   "google/gemma-4-31b-it:free",
-  "stealth/ox-alpha",
+  "minimax/minimax-m3:free",
+  "XKIRO_VISION_MODEL",
   "callStructuredProvider",
   "callMultimodalProvider",
 ]) {
@@ -56,9 +57,10 @@ test("structured routing has an automatic fallback order and supports forced pro
   assert.match(providers, /for \(const key of keys\)/);
 });
 
-test("multimodal document extraction uses provider fallback instead of a hard-coded OpenAI dependency", () => {
+test("multimodal routing excludes unverified xKiro vision by default", () => {
+  assert.match(providers, /DEFAULT_MULTIMODAL_ORDER: AiProvider\[\] = \["gemini", "openrouter", "zai"\]/);
+  assert.match(providers, /provider !== "xkiro" \|\| Boolean\(env\("XKIRO_VISION_MODEL"\)\)/);
   assert.match(documentAdapter, /callMultimodalProvider/);
-  assert.match(providers, /AI_MULTIMODAL_PROVIDER_ORDER/);
   assert.match(providers, /application\/pdf/);
   assert.match(providers, /image_url/);
   assert.match(providers, /file_data/);
