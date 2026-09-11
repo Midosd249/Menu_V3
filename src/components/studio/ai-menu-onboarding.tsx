@@ -15,11 +15,19 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
   const [error, setError] = useState("");
   const [ok, setOk] = useState(false);
 
+  async function requestDraft() {
+    return generateMenuOnboardingDraft({ data: { sourceText: text, sourceType: "text" } });
+  }
+
   async function analyze() {
     if (!text.trim()) return;
     setBusy(true); setError(""); setOk(false);
     try {
-      const result = await generateMenuOnboardingDraft({ data: { sourceText: text, sourceType: "text" } });
+      let result = await requestDraft();
+      if (!result.ok) {
+        await new Promise((resolve) => window.setTimeout(resolve, 450));
+        result = await requestDraft();
+      }
       if (!result.ok) { setError(result.error); return; }
       onRows(result.data.rows); setOk(true);
     } catch (e) { setError(e instanceof Error ? e.message : "AI request failed"); }
@@ -38,7 +46,11 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
     reader.onload = async () => {
       setBusy(true);
       try {
-        const result = await extractMenuDocument({ data: { mimeType: file.type as "application/pdf" | "image/jpeg" | "image/png" | "image/webp", dataUrl: String(reader.result) } });
+        let result = await extractMenuDocument({ data: { mimeType: file.type as "application/pdf" | "image/jpeg" | "image/png" | "image/webp", dataUrl: String(reader.result) } });
+        if (!result.ok) {
+          await new Promise((resolve) => window.setTimeout(resolve, 450));
+          result = await extractMenuDocument({ data: { mimeType: file.type as "application/pdf" | "image/jpeg" | "image/png" | "image/webp", dataUrl: String(reader.result) } });
+        }
         if (!result.ok) { setError(result.error); return; }
         setText(result.data.text);
       } catch (e) { setError(e instanceof Error ? e.message : "File extraction failed"); }
@@ -48,7 +60,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
   }
 
   return <section className="grid gap-4 rounded-2xl border border-line bg-sand/20 p-4">
-    <div><h2 className="font-display text-lg font-semibold">{lang === "ar" ? "استقبال القائمة بالذكاء الاصطناعي" : "AI Menu Onboarding"}</h2><p className="mt-1 text-sm text-muted">{lang === "ar" ? "ألصق النص أو ارفع صورة/PDF. سيُنشئ النظام مسودة للمراجعة فقط." : "Paste text or upload an image/PDF. AI creates a review-only draft."}</p></div>
+    <div><h2 className="font-display text-lg font-semibold">{lang === "ar" ? "إدخال القائمة بذكاء" : "Smart menu import"}</h2><p className="mt-1 text-sm text-muted">{lang === "ar" ? "ألصق النص أو ارفع صورة/PDF. سيُنشئ النظام مسودة للمراجعة فقط، ثم تختار أنت ما يُحفظ." : "Paste text or upload an image/PDF. The system creates a review draft, then you choose what gets saved."}</p></div>
     <textarea className="min-h-36 w-full rounded-xl border border-line bg-background p-3 text-sm" value={text} onChange={e => setText(e.target.value)} placeholder={lang === "ar" ? "الصق قائمة الطعام هنا..." : "Paste the menu here..."} />
     <div className="flex flex-wrap gap-2">
       <label className="inline-flex h-11 cursor-pointer items-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground">{lang === "ar" ? "رفع صورة أو PDF" : "Upload image or PDF"}<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp,.txt" className="sr-only" onChange={e => upload(e.target.files?.[0] ?? null)} /></label>
@@ -56,6 +68,10 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
       {fileName ? <span className="self-center text-xs text-muted">{fileName}</span> : null}
     </div>
     <Flash error={error} ok={ok} />
-    <p className="text-xs text-muted">{lang === "ar" ? "استخراج الصور وPDF يحتاج OPENAI_API_KEY على الخادم؛ Mercury يبقى محرك بناء المسودة المنظمة." : "Image/PDF extraction requires OPENAI_API_KEY on the server; Mercury remains the structured drafting engine."}</p>
+    <div className="rounded-xl border border-line bg-paper/70 p-3 text-xs leading-6 text-muted">
+      {lang === "ar"
+        ? "الخطوات: ارفع القائمة ← راجع المسودة ← احفظ المكتمل وتخطَّ ما ينقصه بيانات أساسية ← أكمل التحسينات من صفحة القائمة. لا تحتاج لمعرفة أي إعدادات تقنية."
+        : "Steps: upload the menu → review the draft → save what is complete and skip rows missing essential data → finish improvements from the Menu page. No technical setup is needed."}
+    </div>
   </section>;
 }

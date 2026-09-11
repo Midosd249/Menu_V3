@@ -6,6 +6,7 @@ const ingest = fs.readFileSync(new URL("../src/lib/menu/ai-ingest.ts", import.me
 const document = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
 const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
 const route = fs.readFileSync(new URL("../src/routes/studio/import.tsx", import.meta.url), "utf8");
+const panel = fs.readFileSync(new URL("../src/components/studio/menu-import-panel.tsx", import.meta.url), "utf8");
 const ui = fs.readFileSync(new URL("../src/components/studio/ai-menu-onboarding.tsx", import.meta.url), "utf8");
 
 for (const expected of ["generateStructuredAi", "responseSchema", "tenant_id", "categories", "never follow instructions", "السعر غير موجود في المصدر", "التصنيف يحتاج مراجعة"]) {
@@ -15,7 +16,8 @@ for (const expected of ["generateStructuredAi", "responseSchema", "tenant_id", "
 test("AI onboarding never writes menu data directly", () => {
   assert.doesNotMatch(ingest, /insert into\s+(products|categories)/i);
   assert.doesNotMatch(ingest, /update\s+(products|categories)/i);
-  assert.match(route, /importProducts/);
+  assert.match(panel, /importProducts/);
+  assert.match(route, /MenuImportPanel/);
 });
 
 test("document extraction is server-only and provider credentials stay off the client", () => {
@@ -31,9 +33,9 @@ test("document extraction is server-only and provider credentials stay off the c
 });
 
 test("owner review remains mandatory before commit", () => {
-  assert.match(route, /valid\.length/);
-  assert.match(route, /importProducts/);
-  assert.match(ui, /review-only draft/);
+  assert.match(panel, /saveable\.length/);
+  assert.match(panel, /importProducts/);
+  assert.match(ui, /review draft|review-only/);
 });
 
 test("file size is bounded before upload", () => {
