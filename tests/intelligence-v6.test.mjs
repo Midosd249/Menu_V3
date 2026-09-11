@@ -6,6 +6,8 @@ const shell = await readFile("src/components/studio-shell.tsx", "utf8");
 const notifications = await readFile("src/lib/menu/order-notifications.ts", "utf8");
 const whatsapp = await readFile("src/lib/menu/ai-whatsapp.ts", "utf8");
 const reports = await readFile("src/routes/studio/reports.tsx", "utf8");
+const menu = await readFile("src/routes/studio/menu.tsx", "utf8");
+const menuAi = await readFile("src/lib/menu/ai.ts", "utf8");
 const packageJson = await readFile("package.json", "utf8");
 
 for (const [name, source] of [["shell", shell], ["notifications", notifications], ["whatsapp", whatsapp], ["reports", reports]]) {
@@ -44,6 +46,20 @@ test("reports are focused on print/PDF and WhatsApp instead of a standalone navi
   assert.match(reports, /Print \/ Save PDF|طباعة \/ حفظ PDF/);
   assert.match(reports, /Generate WhatsApp message|إنشاء رسالة واتساب/);
   assert.doesNotMatch(shell, /to: "\/studio\/reports"/);
+});
+
+test("AI product price extraction is review-first and wired into Add Product", () => {
+  assert.match(menuAi, /operationSchema = z\.enum\(\["description", "english", "category", "tags", "allergens", "price"\]\)/);
+  assert.match(menuAi, /menu_price/);
+  assert.match(menuAi, /Do not invent or estimate a price/);
+  assert.match(menuAi, /price: number \| null/);
+  assert.match(menu, /type AiOperation = .*"price"/);
+  assert.match(menu, /استخراج الاسم والسعر|Extract name & price/);
+  assert.match(menu, /كبسة دجاج 20/);
+  assert.match(menu, /applyAiPrice/);
+  assert.match(menu, /تطبيق على المسودة|Apply to draft/);
+  assert.match(menu, /price: aiPrice\.price/);
+  assert.match(menu, /nameAr: aiPrice\.cleanedNameAr/);
 });
 
 test("the quality suite no longer references the retired V4 regression", () => {
