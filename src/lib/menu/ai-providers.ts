@@ -56,10 +56,9 @@ function parseOrder(value: string | undefined, fallback: AiProvider[]) {
 
 export function getProviderOrder(capability: AiCapability): AiProvider[] {
   const forced = env("AI_PROVIDER").toLowerCase();
-  if (forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro") {
-    return [forced];
-  }
-  if (forced && forced !== "auto") return DEFAULT_STRUCTURED_ORDER;
+  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro";
+  if (validProvider && (capability === "structured" || forced !== "mercury")) return [forced];
+  if (forced && forced !== "auto") return capability === "structured" ? DEFAULT_STRUCTURED_ORDER : DEFAULT_MULTIMODAL_ORDER;
   return capability === "structured"
     ? parseOrder(process.env.AI_PROVIDER_ORDER, DEFAULT_STRUCTURED_ORDER)
     : parseOrder(process.env.AI_MULTIMODAL_PROVIDER_ORDER, DEFAULT_MULTIMODAL_ORDER);
@@ -135,13 +134,21 @@ function normalizeGeminiText(payload: unknown): string | null {
   return text || null;
 }
 
+function getGeminiSchema(responseFormat: JsonSchema) {
+  const nested = responseFormat.schema;
+  return nested && typeof nested === "object" ? nested : responseFormat;
+}
+
 async function callOpenAiCompatible(
   provider: Exclude<AiProvider, "gemini">,
   args: ProviderCallArgs,
   key: string,
   multimodal?: MultimodalCallArgs,
 ): Promise<ProviderSuccess | ProviderFailure> {
-  const model = getProviderModel(provider, multimodal ? (multimodal.mimeType === "application/pdf" ? "pdf" : "image") : "structured");
+  const capability: AiCapability = multimodal
+    ? multimodal.mimeType === "application/pdf" ? "pdf" : "image"
+    : "structured";
+  const model = getProviderModel(provider, capability);
   const baseUrl = provider === "mercury"
     ? "https://api.inceptionlabs.ai/v1"
     : provider === "zai"
@@ -169,7 +176,6 @@ async function callOpenAiCompatible(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${key}`,
-        ...(provider === "openrouter" ? { "HTTP-Referer": "https://menu-v3-kohl.vercel.app", "X-Title": "Menu V3" } : {}),
       },
       body: JSON.stringify({
         model,
@@ -180,9 +186,12 @@ async function callOpenAiCompatible(
           },
           { role: "user", content: userContent },
         ],
-        temperature: args.temperature,
+        ...(multimodal ? {} : {
+          temperature: args.temperature,
+          response_format: responseFormat,
+          ...(provider === "mercury" ? { reasoning_effort: "low" } : {}),
+        }),
         max_tokens: Math.max(64, Math.min(2_000, Math.floor(args.maxTokens))),
-        ...(multimodal ? {} : { response_format: responseFormat }),
       }),
       signal: AbortSignal.timeout(60_000),
     });
@@ -219,7 +228,7 @@ async function callGemini(args: ProviderCallArgs, key: string, multimodal?: Mult
         contents: [{ role: "user", parts }],
         generationConfig: {
           maxOutputTokens: Math.max(64, Math.min(2_000, Math.floor(args.maxTokens))),
-          ...(multimodal ? {} : { responseMimeType: "application/json", responseSchema: args.responseFormat }),
+          ...(multimodal ? {} : { responseMimeType: "application/json", responseSchema: getGeminiSchema(args.responseFormat) }),
         },
       }),
       signal: AbortSignal.timeout(60_000),
