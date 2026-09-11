@@ -22,8 +22,10 @@ for (const expected of [
   });
 }
 
-test("category suggestions are constrained to supplied category IDs", () => {
-  assert.ok(source.includes("data.categoryOptions.find"));
+test("category suggestions use tenant-owned server categories", () => {
+  assert.ok(source.includes("from categories"));
+  assert.ok(source.includes("tenant_id = ${member.tenant_id}"));
+  assert.ok(source.includes("serverCategories.find"));
   assert.ok(source.includes("!selected"));
 });
 
