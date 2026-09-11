@@ -166,18 +166,24 @@ function MenuStudio() {
         return;
       }
 
-      if (result.data.operation === "description") {
-        setDraft((current) => (current ? { ...current, descriptionAr: result.data.descriptionAr } : current));
-      } else if (result.data.operation === "english") {
-        setDraft((current) =>
-          current
-            ? { ...current, nameEn: result.data.nameEn, descriptionEn: result.data.descriptionEn }
-            : current,
-        );
-      } else if (result.data.operation === "category") {
-        setDraft((current) => (current ? { ...current, categoryId: result.data.categoryId } : current));
-      } else {
-        setAiTags(result.data.tags);
+      const aiResult = result.data;
+      switch (aiResult.operation) {
+        case "description":
+          setDraft((current) => (current ? { ...current, descriptionAr: aiResult.descriptionAr } : current));
+          break;
+        case "english":
+          setDraft((current) =>
+            current
+              ? { ...current, nameEn: aiResult.nameEn, descriptionEn: aiResult.descriptionEn }
+              : current,
+          );
+          break;
+        case "category":
+          setDraft((current) => (current ? { ...current, categoryId: aiResult.categoryId } : current));
+          break;
+        case "tags":
+          setAiTags(aiResult.tags);
+          break;
       }
     } catch (err) {
       flash.setError(err instanceof Error ? err.message : t(copy.state.error, lang));
