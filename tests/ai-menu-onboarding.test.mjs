@@ -4,6 +4,7 @@ import test from "node:test";
 
 const ingest = fs.readFileSync(new URL("../src/lib/menu/ai-ingest.ts", import.meta.url), "utf8");
 const document = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
+const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
 const route = fs.readFileSync(new URL("../src/routes/studio/import.tsx", import.meta.url), "utf8");
 const ui = fs.readFileSync(new URL("../src/components/studio/ai-menu-onboarding.tsx", import.meta.url), "utf8");
 
@@ -17,13 +18,16 @@ test("AI onboarding never writes menu data directly", () => {
   assert.match(route, /importProducts/);
 });
 
-test("document extraction is server-only and secrets stay off the client", () => {
+test("document extraction is server-only and provider credentials stay off the client", () => {
   assert.match(document, /authMiddleware/);
-  assert.match(document, /process\.env\.OPENAI_API_KEY/);
-  assert.doesNotMatch(ui, /process\.env\.OPENAI_API_KEY/);
+  assert.match(providers, /GOOGLE_GEMINI_API_KEY/);
+  assert.match(providers, /OPENROUTER_API_KEY/);
+  assert.match(providers, /ZAI_API_KEY/);
+  assert.match(providers, /XKIRO_API_KEY/);
+  assert.doesNotMatch(ui, /process\.env\.[A-Z0-9_]+/);
   assert.match(document, /application\/pdf/);
-  assert.match(document, /input_image/);
-  assert.match(document, /input_file/);
+  assert.match(providers, /image_url/);
+  assert.match(providers, /file_data/);
 });
 
 test("owner review remains mandatory before commit", () => {
