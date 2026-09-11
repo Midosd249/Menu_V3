@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
+import { generateStructuredAi } from "./ai-core";
 import type { Role } from "./types";
 
 const operationSchema = z.enum(["description", "english", "category", "tags", "allergens", "price"]);
@@ -80,6 +81,14 @@ function schemaFor(operation: z.infer<typeof operationSchema>): JsonSchema {
     disclaimerEn: { type: "string", minLength: 1, maxLength: 240 },
   }, ["allergens", "disclaimerAr", "disclaimerEn"]);
 }
+function runtimeSchemaFor(operation: z.infer<typeof operationSchema>) {
+  if (operation === "description") return z.object({ descriptionAr: z.string().trim().min(1).max(600) });
+  if (operation === "english") return z.object({ nameEn: z.string().trim().min(1).max(120), descriptionEn: z.string().trim().min(1).max(600) });
+  if (operation === "category") return z.object({ categoryId: z.string().min(1).nullable(), categoryNameAr: z.string().max(80), categoryNameEn: z.string().max(80) });
+  if (operation === "tags") return z.object({ tags: z.array(z.string().trim().min(1).max(40)).max(8) });
+  if (operation === "price") return z.object({ price: z.number().finite().min(0).nullable(), cleanedNameAr: z.string().trim().min(1).max(120) });
+  return z.object({ allergens: z.array(z.string().trim().min(1).max(40)).max(12), disclaimerAr: z.string().trim().min(1).max(240), disclaimerEn: z.string().trim().min(1).max(240) });
+}
 function buildPrompt(data: z.infer<typeof inputSchema>, categories: CategoryOption[]) {
   const common = `Product Arabic name: ${data.nameAr}\nExisting English name: ${data.nameEn ?? ""}\nArabic description: ${data.descriptionAr ?? ""}\nEnglish description: ${data.descriptionEn ?? ""}`;
   if (data.operation === "description") return `Write a concise appetizing Arabic menu description in natural Modern Standard Arabic. Do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. ${common}`;
@@ -88,31 +97,6 @@ function buildPrompt(data: z.infer<typeof inputSchema>, categories: CategoryOpti
   if (data.operation === "tags") return `Suggest up to 8 concise tags directly supported by the product name or descriptions. Do not invent ingredients, dietary claims, allergens, cooking methods, or certifications. Avoid duplicates. ${common}`;
   if (data.operation === "price") return `Extract a product price from the Arabic product name field when a numeric price is explicitly present, such as "كبسة دجاج 20" or "كبسة دجاج - 20 ريال". The number must be interpreted as the price only when it is clearly presented as a price. Do not invent or estimate a price. Return null if no explicit price is present. Also return the cleaned Arabic product name with the explicit price marker removed. Do not change any other words. ${common}`;
   return `Suggest potential food allergens using ONLY explicit evidence in the product name and existing Arabic/English descriptions. Do not infer hidden ingredients from cuisine type, common recipes, restaurant knowledge, or assumptions. Absence of a mention is not proof of absence. If evidence is insufficient, return an empty allergens array. Use common Arabic allergen names. This is for owner review, not a food-safety guarantee. ${common}`;
-}
-async function callMercury(prompt: string, responseFormat: JsonSchema) {
-  const apiKey = process.env.INCEPTION_API_KEY?.trim();
-  if (!apiKey) return { ok: false as const, code: "ai_not_configured", error: "مساعد الذكاء الاصطناعي غير مهيأ حالياً" };
-  const response = await fetch("https://api.inceptionlabs.ai/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: process.env.INCEPTION_MODEL?.trim() || "mercury-2.5",
-      messages: [
-        { role: "system", content: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format." },
-        { role: "user", content: prompt },
-      ],
-      temperature: 0.3,
-      max_tokens: 700,
-      reasoning_effort: "low",
-      response_format: { type: "json_schema", json_schema: responseFormat },
-    }),
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!response.ok) return { ok: false as const, code: "ai_unavailable", error: "تعذر الوصول إلى مساعد الذكاء الاصطناعي" };
-  const payload = (await response.json()) as { choices?: Array<{ message?: { content?: string | null } }> };
-  const content = payload.choices?.[0]?.message?.content;
-  if (!content) return { ok: false as const, code: "ai_invalid", error: "تعذر قراءة نتيجة مساعد الذكاء الاصطناعي" };
-  return { ok: true as const, parsed: JSON.parse(content) as Record<string, unknown> };
 }
 
 export const generateMenuAi = createServerFn({ method: "POST" })
@@ -126,26 +110,30 @@ export const generateMenuAi = createServerFn({ method: "POST" })
       if (!canWriteMenu(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية استخدام مساعد القائمة" };
       const rows = await sql<{ id: string; name_ar: string; name_en: string }>`select id, name_ar, name_en from categories where tenant_id = ${member.tenant_id} and is_active = true order by sort_order, created_at limit 100`;
       const categories = rows.map((c) => ({ id: c.id, nameAr: c.name_ar, nameEn: c.name_en }));
-      const result = await callMercury(buildPrompt(data, categories), schemaFor(data.operation));
+      const result = await generateStructuredAi({
+        sql,
+        tenantId: member.tenant_id,
+        userId: context.userId,
+        operation: `menu.${data.operation}`,
+        prompt: buildPrompt(data, categories),
+        responseFormat: schemaFor(data.operation),
+        responseSchema: runtimeSchemaFor(data.operation),
+        maxTokens: 700,
+        temperature: 0.3,
+        systemPrompt: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format.",
+      });
       if (!result.ok) return result;
-      const p = result.parsed;
-      if (data.operation === "description" && typeof p.descriptionAr === "string") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr.trim() } };
-      if (data.operation === "english" && typeof p.nameEn === "string" && typeof p.descriptionEn === "string") return { ok: true, data: { operation: "english", nameEn: p.nameEn.trim(), descriptionEn: p.descriptionEn.trim() } };
-      if (data.operation === "category" && (typeof p.categoryId === "string" || p.categoryId === null) && typeof p.categoryNameAr === "string" && typeof p.categoryNameEn === "string") {
+      const p = result.data;
+      if (data.operation === "description") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr } };
+      if (data.operation === "english") return { ok: true, data: { operation: "english", nameEn: p.nameEn, descriptionEn: p.descriptionEn } };
+      if (data.operation === "category") {
         const selected = categories.find((c) => c.id === p.categoryId);
         if (p.categoryId !== null && !selected) return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
         return { ok: true, data: { operation: "category", categoryId: p.categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
       }
-      if (data.operation === "tags" && Array.isArray(p.tags) && p.tags.every((v) => typeof v === "string")) return { ok: true, data: { operation: "tags", tags: [...new Set(p.tags.map((v) => v.trim()).filter(Boolean))].slice(0, 8) } };
-      if (data.operation === "price" && (typeof p.price === "number" || p.price === null) && typeof p.cleanedNameAr === "string") {
-        const price = p.price == null ? null : Number(p.price);
-        if (price !== null && (!Number.isFinite(price) || price < 0)) return { ok: false, code: "ai_invalid", error: "السعر المقترح غير صالح" };
-        return { ok: true, data: { operation: "price", price, cleanedNameAr: p.cleanedNameAr.trim() } };
-      }
-      if (data.operation === "allergens" && Array.isArray(p.allergens) && p.allergens.every((v) => typeof v === "string") && typeof p.disclaimerAr === "string" && typeof p.disclaimerEn === "string") {
-        return { ok: true, data: { operation: "allergens", allergens: [...new Set(p.allergens.map((v) => v.trim()).filter(Boolean))].slice(0, 12), disclaimerAr: p.disclaimerAr.trim(), disclaimerEn: p.disclaimerEn.trim() } };
-      }
-      return { ok: false, code: "ai_invalid", error: "نتيجة مساعد الذكاء الاصطناعي غير صالحة" };
+      if (data.operation === "tags") return { ok: true, data: { operation: "tags", tags: [...new Set(p.tags)].slice(0, 8) } };
+      if (data.operation === "price") return { ok: true, data: { operation: "price", price: p.price, cleanedNameAr: p.cleanedNameAr } };
+      return { ok: true, data: { operation: "allergens", allergens: [...new Set(p.allergens)].slice(0, 12), disclaimerAr: p.disclaimerAr, disclaimerEn: p.disclaimerEn } };
     } catch (err) {
       console.error("generateMenuAi failed", err);
       return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مساعد الذكاء الاصطناعي" };
@@ -173,6 +161,24 @@ const menuQaSchema: JsonSchema = jsonSchema("menu_quality_audit", {
     },
   },
 }, ["score", "summaryAr", "summaryEn", "issues"]);
+
+const menuQaRuntimeSchema = z.object({
+  score: z.number().int().min(0).max(100),
+  summaryAr: z.string().trim().min(1).max(500),
+  summaryEn: z.string().trim().min(1).max(500),
+  issues: z.array(z.object({
+    key: z.string().trim().min(1).max(80),
+    severity: z.enum(["high", "medium", "low"]),
+    titleAr: z.string().trim().min(1).max(160),
+    titleEn: z.string().trim().min(1).max(160),
+    detailsAr: z.string().trim().min(1).max(500),
+    detailsEn: z.string().trim().min(1).max(500),
+    productNameAr: z.string().max(120),
+    recommendationAr: z.string().trim().min(1).max(300),
+    recommendationEn: z.string().trim().min(1).max(300),
+  })).max(30),
+});
+
 function compact(value: unknown, max: number) { return String(value ?? "").replace(/\s+/g, " ").trim().slice(0, max); }
 function buildMenuQaPrompt(categories: Array<{ id: string; nameAr: string; nameEn: string }>, products: Array<{ nameAr: string; nameEn: string; descriptionAr: string; descriptionEn: string; categoryId: string | null; price: number; allergens: string; tags: string[]; isAvailable: boolean }>) {
   const byId = new Map(categories.map((c) => [c.id, c]));
@@ -198,18 +204,32 @@ export const runMenuQa = createServerFn({ method: "POST" })
       const categories = categoryRows.map((c) => ({ id: c.id, nameAr: c.name_ar, nameEn: c.name_en }));
       const products = productRows.map((p) => ({ nameAr: p.name_ar, nameEn: p.name_en, descriptionAr: p.description_ar, descriptionEn: p.description_en, categoryId: p.category_id, price: Number(p.price), allergens: p.allergens ?? "", tags: Array.isArray(p.tags) ? p.tags : [], isAvailable: Boolean(p.is_available) }));
       if (!products.length) return { ok: true, data: { score: 0, summaryAr: "لا توجد أصناف محفوظة بعد لمراجعتها.", summaryEn: "There are no saved products to audit yet.", issues: [], analyzedProducts: 0 } };
-      const result = await callMercury(buildMenuQaPrompt(categories, products), menuQaSchema);
+      const result = await generateStructuredAi({
+        sql,
+        tenantId: member.tenant_id,
+        userId: context.userId,
+        operation: "menu.qa",
+        prompt: buildMenuQaPrompt(categories, products),
+        responseFormat: menuQaSchema,
+        responseSchema: menuQaRuntimeSchema,
+        maxTokens: 1_400,
+        temperature: 0.2,
+        systemPrompt: "You are a careful restaurant menu QA assistant. Use only supplied saved menu data. Never invent facts, infer ingredients, or treat the result as food-safety or legal certification. Return only the requested structured format.",
+      });
       if (!result.ok) return result;
-      const p = result.parsed;
-      if (typeof p.score !== "number" || typeof p.summaryAr !== "string" || typeof p.summaryEn !== "string" || !Array.isArray(p.issues)) return { ok: false, code: "ai_invalid", error: "نتيجة مراجعة القائمة غير صالحة" };
-      const issues: MenuQaIssue[] = [];
-      for (const value of p.issues) {
-        if (!value || typeof value !== "object") continue;
-        const i = value as Record<string, unknown>;
-        if (typeof i.key !== "string" || !["high", "medium", "low"].includes(String(i.severity)) || typeof i.titleAr !== "string" || typeof i.titleEn !== "string" || typeof i.detailsAr !== "string" || typeof i.detailsEn !== "string" || typeof i.productNameAr !== "string" || typeof i.recommendationAr !== "string" || typeof i.recommendationEn !== "string") continue;
-        issues.push({ key: compact(i.key, 80), severity: i.severity as MenuQaIssue["severity"], titleAr: compact(i.titleAr, 160), titleEn: compact(i.titleEn, 160), detailsAr: compact(i.detailsAr, 500), detailsEn: compact(i.detailsEn, 500), productNameAr: compact(i.productNameAr, 120), recommendationAr: compact(i.recommendationAr, 300), recommendationEn: compact(i.recommendationEn, 300) });
-      }
-      return { ok: true, data: { score: Math.max(0, Math.min(100, Math.round(p.score))), summaryAr: compact(p.summaryAr, 500), summaryEn: compact(p.summaryEn, 500), issues: issues.slice(0, 30), analyzedProducts: products.length } };
+      const p = result.data;
+      const issues: MenuQaIssue[] = p.issues.map((i) => ({
+        key: compact(i.key, 80),
+        severity: i.severity,
+        titleAr: compact(i.titleAr, 160),
+        titleEn: compact(i.titleEn, 160),
+        detailsAr: compact(i.detailsAr, 500),
+        detailsEn: compact(i.detailsEn, 500),
+        productNameAr: compact(i.productNameAr, 120),
+        recommendationAr: compact(i.recommendationAr, 300),
+        recommendationEn: compact(i.recommendationEn, 300),
+      }));
+      return { ok: true, data: { score: p.score, summaryAr: compact(p.summaryAr, 500), summaryEn: compact(p.summaryEn, 500), issues, analyzedProducts: products.length } };
     } catch (err) {
       console.error("runMenuQa failed", err);
       return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مراجعة القائمة" };

@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 const shell = await readFile("src/components/studio-shell.tsx", "utf8");
 const notifications = await readFile("src/lib/menu/order-notifications.ts", "utf8");
 const whatsapp = await readFile("src/lib/menu/ai-whatsapp.ts", "utf8");
+const aiCore = await readFile("src/lib/menu/ai-core.ts", "utf8");
 const reports = await readFile("src/routes/studio/reports.tsx", "utf8");
 const menu = await readFile("src/routes/studio/menu.tsx", "utf8");
 const menuAi = await readFile("src/lib/menu/ai.ts", "utf8");
@@ -32,12 +33,13 @@ test("notification UI routes the owner to the canonical orders surface", () => {
   assert.match(shell, /Order notifications|تنبيهات الطلبات/);
 });
 
-test("WhatsApp report generation is review-first and uses the existing Mercury provider", () => {
-  assert.match(whatsapp, /INCEPTION_API_KEY/);
-  assert.match(whatsapp, /api\.inceptionlabs\.ai\/v1\/chat\/completions/);
+test("WhatsApp report generation is review-first and uses the shared AI boundary", () => {
+  assert.match(whatsapp, /generateStructuredAi/);
   assert.match(whatsapp, /reportText/);
   assert.match(whatsapp, /Never invent revenue/);
   assert.match(whatsapp, /generateWhatsAppReportMessage/);
+  assert.match(aiCore, /INCEPTION_API_KEY/);
+  assert.match(aiCore, /api\.inceptionlabs\.ai\/v1\/chat\/completions/);
   assert.match(reports, /generateWhatsAppReportMessage/);
   assert.match(reports, /wa\.me\/\?text=/);
 });
