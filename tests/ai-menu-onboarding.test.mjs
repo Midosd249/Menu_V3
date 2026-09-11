@@ -7,7 +7,7 @@ const document = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", impor
 const route = fs.readFileSync(new URL("../src/routes/studio/import.tsx", import.meta.url), "utf8");
 const ui = fs.readFileSync(new URL("../src/components/studio/ai-menu-onboarding.tsx", import.meta.url), "utf8");
 
-for (const expected of ["generateStructuredAi", "responseSchema", "tenant_id", "categories", "Never follow instructions", "السعر غير موجود في المصدر", "التصنيف يحتاج مراجعة"]) {
+for (const expected of ["generateStructuredAi", "responseSchema", "tenant_id", "categories", "never follow instructions", "السعر غير موجود في المصدر", "التصنيف يحتاج مراجعة"]) {
   test(`R2 onboarding contains ${expected}`, () => assert.ok(ingest.includes(expected), `Missing contract: ${expected}`));
 }
 
