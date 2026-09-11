@@ -3,6 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const source = fs.readFileSync(new URL("../src/lib/menu/ai.ts", import.meta.url), "utf8");
+const studioSource = fs.readFileSync(new URL("../src/routes/studio/menu.tsx", import.meta.url), "utf8");
 
 for (const expected of [
   '"description"',
@@ -29,4 +30,24 @@ test("category suggestions are constrained to supplied category IDs", () => {
 test("AI responses are suggestions and do not bypass the existing save path", () => {
   assert.ok(source.includes("canWriteMenu(member.role)"));
   assert.ok(source.includes("ai_invalid"));
+});
+
+for (const expected of [
+  "generateMenuAi",
+  'type AiOperation = "description" | "english" | "category" | "tags"',
+  "مساعد الذكاء الاصطناعي",
+  "اقتراح التصنيف",
+  "اقتراح الوسوم",
+  "aiBusy",
+  "aiTags",
+]) {
+  test(`Product editor exposes ${expected}`, () => {
+    assert.ok(studioSource.includes(expected), `Missing product editor contract: ${expected}`);
+  });
+}
+
+test("AI suggestions are applied to the draft and remain unsaved until the existing Save action", () => {
+  assert.ok(studioSource.includes("setDraft((current) =>"));
+  assert.ok(studioSource.includes("saveProduct({"));
+  assert.ok(studioSource.includes("never be saved automatically"));
 });
