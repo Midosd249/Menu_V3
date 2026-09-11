@@ -11,6 +11,7 @@ for (const expected of [
   '"category"',
   '"tags"',
   '"allergens"',
+  '"price"',
   "INCEPTION_API_KEY",
   "api.inceptionlabs.ai/v1/chat/completions",
   "response_format",
@@ -26,7 +27,7 @@ for (const expected of [
 test("category suggestions use tenant-owned server categories", () => {
   assert.ok(source.includes("from categories"));
   assert.ok(source.includes("tenant_id = ${member.tenant_id}"));
-  assert.ok(source.includes("serverCategories.find"));
+  assert.ok(source.includes("categories.find"));
   assert.ok(source.includes("!selected"));
 });
 
@@ -35,6 +36,15 @@ test("allergen suggestions fail closed when evidence is insufficient", () => {
   assert.ok(source.includes("return an empty allergens array"));
   assert.ok(source.includes("disclaimerAr"));
   assert.ok(source.includes("allergens: string[]"));
+});
+
+test("explicit product price extraction never invents a price", () => {
+  assert.ok(source.includes('operationSchema = z.enum(["description", "english", "category", "tags", "allergens", "price"])'));
+  assert.ok(source.includes('"menu_price"'));
+  assert.ok(source.includes("return null if no explicit price is present"));
+  assert.ok(source.includes("price: number | null"));
+  assert.ok(source.includes("cleanedNameAr"));
+  assert.ok(source.includes("price !== null && (!Number.isFinite(price) || price < 0)"));
 });
 
 test("menu QA reads the authenticated tenant's saved menu server-side", () => {
