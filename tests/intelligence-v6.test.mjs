@@ -22,16 +22,28 @@ test("owner order notifications use authenticated tenant-scoped server data", ()
   assert.match(notifications, /authMiddleware/);
   assert.match(notifications, /context\.userId/);
   assert.match(notifications, /tenant_members/);
+  assert.match(notifications, /tenantId: z\.string/);
+  assert.match(notifications, /o\.tenant_id = \$\{data\.tenantId\}/);
   assert.match(notifications, /orders/);
   assert.match(notifications, /status = 'new'/);
-  assert.match(shell, /getOrderNotificationSummary/);
+  assert.match(shell, /getOrderNotificationSummary\(\{ data: \{ tenantId: tenant\.id \} \}\)/);
   assert.match(shell, /20_000/);
+});
+
+test("notification activity identifies the business and branch", () => {
+  assert.match(notifications, /restaurantName/);
+  assert.match(notifications, /branchName/);
+  assert.match(shell, /نشاط الطلبات|Order activity/);
+  assert.match(shell, /latestNewOrder\.restaurantName/);
+  assert.match(shell, /latestNewOrder\.branchName/);
+  assert.match(shell, /orderAlert\.restaurantName/);
+  assert.match(shell, /orderAlert\.branchName/);
 });
 
 test("notification UI routes the owner to the canonical orders surface", () => {
   assert.match(shell, /to="\/studio\/orders"/);
   assert.match(shell, /Review order|مراجعة الطلب/);
-  assert.match(shell, /Order notifications|تنبيهات الطلبات/);
+  assert.match(shell, /Order activity and notifications|نشاط وتنبيهات الطلبات/);
 });
 
 test("WhatsApp report generation is review-first and uses the shared AI boundary", () => {
