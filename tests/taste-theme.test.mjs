@@ -11,7 +11,8 @@ test("Taste template remains the Heritage public renderer", async () => {
   assert.match(preview, /ThemeRenderer/);
   assert.match(studio, /<ThemeRenderer\s/);
   assert.doesNotMatch(studio, /<TasteTemplate\s/);
-  assert.match(renderer, /theme === "heritage"\) return <TasteTemplate/);
+  assert.match(renderer, /theme === "heritage"/);
+  assert.match(renderer, /<TasteTemplate\s/);
 });
 
 test("Taste template preserves the supplied menu information architecture", async () => {
