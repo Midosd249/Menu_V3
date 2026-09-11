@@ -74,13 +74,14 @@ test("rate limiting remains server-side and tenant/user scoped", () => {
 });
 
 test("AI credentials remain server-only and never enter browser globals", () => {
-  assert.match(providers, /process\.env\.GOOGLE_GEMINI_API_KEY/);
-  assert.match(providers, /process\.env\.OPENROUTER_API_KEY/);
-  assert.match(providers, /process\.env\.XKIRO_API_KEY/);
+  for (const secretName of ["GOOGLE_GEMINI_API_KEY", "ZAI_API_KEY", "OPENROUTER_API_KEY", "XKIRO_API_KEY", "INCEPTION_API_KEY"]) {
+    assert.match(providers, new RegExp(secretName));
+  }
   assert.doesNotMatch(core, /window\./);
   assert.doesNotMatch(core, /document\./);
   assert.doesNotMatch(documentAdapter, /window\./);
   assert.doesNotMatch(documentAdapter, /document\./);
+  assert.doesNotMatch(menuAi, /process\.env\.[A-Z0-9_]+/);
 });
 
 test("prompt injection is treated as untrusted user data", () => {
