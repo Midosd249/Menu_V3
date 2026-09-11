@@ -30,8 +30,9 @@ type ProductDraft = {
   isFeatured: boolean;
 };
 
-type AiOperation = "description" | "english" | "category" | "tags" | "allergens";
+type AiOperation = "description" | "english" | "category" | "tags" | "allergens" | "price";
 type AiAllergens = { allergens: string[]; disclaimerAr: string; disclaimerEn: string };
+type AiPrice = { price: number | null; cleanedNameAr: string };
 
 function emptyDraft(categoryId: string | null): ProductDraft {
   return {
@@ -79,6 +80,7 @@ function MenuStudio() {
   const [aiBusy, setAiBusy] = useState<AiOperation | null>(null);
   const [aiTags, setAiTags] = useState<string[]>([]);
   const [aiAllergens, setAiAllergens] = useState<AiAllergens | null>(null);
+  const [aiPrice, setAiPrice] = useState<AiPrice | null>(null);
   const [menuQaBusy, setMenuQaBusy] = useState(false);
   const [menuQa, setMenuQa] = useState<MenuQaResult | null>(null);
 
@@ -148,6 +150,7 @@ function MenuStudio() {
     setAiBusy(operation);
     setAiTags([]);
     setAiAllergens(null);
+    setAiPrice(null);
     flash.setError("");
     try {
       const result = await generateMenuAi({
@@ -196,12 +199,24 @@ function MenuStudio() {
             disclaimerEn: aiResult.disclaimerEn,
           });
           break;
+        case "price":
+          setAiPrice({ price: aiResult.price, cleanedNameAr: aiResult.cleanedNameAr });
+          break;
       }
     } catch (err) {
       flash.setError(err instanceof Error ? err.message : t(copy.state.error, lang));
     } finally {
       setAiBusy(null);
     }
+  }
+
+  function applyAiPrice() {
+    if (!draft || !aiPrice) return;
+    setDraft({
+      ...draft,
+      nameAr: aiPrice.cleanedNameAr || draft.nameAr,
+      price: aiPrice.price == null ? draft.price : String(aiPrice.price),
+    });
   }
 
   function applyAiAllergens() {
@@ -238,6 +253,7 @@ function MenuStudio() {
     if (operation === "english") return lang === "ar" ? "إنشاء الإنجليزية" : "Generate English";
     if (operation === "category") return lang === "ar" ? "اقتراح التصنيف" : "Suggest category";
     if (operation === "tags") return lang === "ar" ? "اقتراح الوسوم" : "Suggest tags";
+    if (operation === "price") return lang === "ar" ? "استخراج الاسم والسعر" : "Extract name & price";
     return lang === "ar" ? "اقتراح الحساسية" : "Suggest allergens";
   };
 
@@ -378,11 +394,11 @@ function MenuStudio() {
               </div>
               <p className="mb-3 text-xs text-muted">
                 {lang === "ar"
-                  ? "اختر إجراءً واحدًا. سيقترح الذكاء الاصطناعي النتيجة دون حفظها تلقائيًا."
-                  : "Choose an action. AI suggestions are applied to the draft only and are never saved automatically."}
+                  ? "يمكنك كتابة الاسم مع السعر، مثل: كبسة دجاج 20. سيقترح الذكاء الاصطناعي النتيجة داخل المسودة فقط دون حفظ تلقائي."
+                  : "You can enter the name with a price, for example: كبسة دجاج 20. AI applies suggestions to the draft only and never saves automatically."}
               </p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {(["description", "english", "category", "tags", "allergens"] as AiOperation[]).map((operation) => (
+                {(["description", "english", "category", "tags", "allergens", "price"] as AiOperation[]).map((operation) => (
                   <Button
                     key={operation}
                     type="button"
@@ -395,6 +411,18 @@ function MenuStudio() {
                   </Button>
                 ))}
               </div>
+              {aiPrice ? (
+                <div className="mt-3 rounded-lg border border-line bg-paper p-3">
+                  <p className="text-xs font-medium">{lang === "ar" ? "الاسم والسعر المستخرجان" : "Extracted name and price"}</p>
+                  <div className="mt-2 grid gap-1 text-sm">
+                    <p>{lang === "ar" ? "الاسم:" : "Name:"} <span className="font-medium">{aiPrice.cleanedNameAr}</span></p>
+                    <p>{lang === "ar" ? "السعر:" : "Price:"} <span className="font-medium">{aiPrice.price == null ? (lang === "ar" ? "غير موجود" : "Not found") : formatSar(aiPrice.price, lang)}</span></p>
+                  </div>
+                  <Button type="button" size="sm" className="mt-3" disabled={aiPrice.price == null && aiPrice.cleanedNameAr === draft.nameAr} onClick={applyAiPrice}>
+                    {lang === "ar" ? "تطبيق على المسودة" : "Apply to draft"}
+                  </Button>
+                </div>
+              ) : null}
               {aiTags.length > 0 ? (
                 <div className="mt-3 rounded-lg border border-line bg-paper p-3">
                   <p className="mb-2 text-xs font-medium">{lang === "ar" ? "الوسوم المقترحة" : "Suggested tags"}</p>

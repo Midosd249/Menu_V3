@@ -14,14 +14,15 @@ test("V5 report builder is deterministic and uses canonical intelligence inputs"
   assert.doesNotMatch(report, /revenue|conversionRate|salesTotal/i);
 });
 
-test("V5 report exposes safe export paths without a new provider dependency", () => {
+test("V6 report keeps safe print and WhatsApp export without a new provider dependency", () => {
   assert.match(route, /Print \/ Save PDF|طباعة \/ حفظ PDF/);
-  assert.match(route, /mailto:/);
-  assert.match(route, /navigator\.share/);
-  assert.doesNotMatch(route, /fetch\(|supabase|resend|smtp|api[_-]?key/i);
+  assert.match(route, /Generate WhatsApp message|إنشاء رسالة واتساب/);
+  assert.match(route, /wa\.me\/\?text=/);
+  assert.doesNotMatch(route, /mailto:|navigator\.share|fetch\(|supabase|resend|smtp|api[_-]?key/i);
 });
 
-test("V5 report is reachable from desktop and mobile Studio navigation", () => {
-  assert.match(shell, /\/studio\/reports/);
-  assert.match(shell, /FileText/);
+test("V6 keeps reports out of Studio navigation while retaining the route for the analytics workflow", () => {
+  assert.doesNotMatch(shell, /\/studio\/reports/);
+  assert.doesNotMatch(shell, /FileText/);
+  assert.match(shell, /\/studio\/analytics/);
 });
