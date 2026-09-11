@@ -117,7 +117,7 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         operation: `menu.${data.operation}`,
         prompt: buildPrompt(data, categories),
         responseFormat: schemaFor(data.operation),
-        responseSchema: runtimeSchemaFor(data.operation),
+        responseSchema: runtimeSchemaFor(data.operation) as z.ZodTypeAny,
         maxTokens: 700,
         temperature: 0.3,
         systemPrompt: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format.",
