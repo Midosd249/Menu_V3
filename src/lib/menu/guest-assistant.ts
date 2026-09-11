@@ -54,8 +54,9 @@ function clean(value: unknown, max: number) {
 
 async function loadGuestCatalog(slug: string, branchSlug?: string) {
   const sql = await getSql();
-  const rows = await sql<Array<{ id: string; name_ar: string; name_en: string; description_ar: string; description_en: string; price: number; currency: string; allergens: string; dietary_labels: string[] | null; category_id: string | null; category_ar: string; category_en: string; is_available: boolean }>>`;
+  const rows = await sql<Array<{ tenant_id: string; id: string; name_ar: string; name_en: string; description_ar: string; description_en: string; price: number; currency: string; allergens: string; dietary_labels: string[] | null; category_id: string | null; category_ar: string; category_en: string; is_available: boolean }>>`;
     select
+      t.id as tenant_id,
       p.id, p.name_ar, p.name_en, p.description_ar, p.description_en, p.price, p.currency,
       p.allergens, p.dietary_labels, p.category_id, p.is_available,
       coalesce(c.name_ar, '') as category_ar,
@@ -73,7 +74,7 @@ async function loadGuestCatalog(slug: string, branchSlug?: string) {
     order by p.sort_order, p.created_at
     limit 250
   `;
-  return { sql, products: rows as MenuProduct[] };
+  return { sql, tenantId: rows[0]?.tenant_id ?? null, products: rows as MenuProduct[] };
 }
 
 function buildCatalog(products: MenuProduct[]) {
@@ -96,14 +97,14 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
   .validator(inputSchema)
   .handler(async ({ data }): Promise<FnResult<{ answerAr: string; answerEn: string; productIds: string[] }>> => {
     try {
-      const { sql, products } = await loadGuestCatalog(data.slug, data.branchSlug);
-      if (!products.length) return { ok: false, code: "not_found", error: "لا توجد أصناف متاحة حالياً" };
+      const { sql, tenantId, products } = await loadGuestCatalog(data.slug, data.branchSlug);
+      if (!tenantId || !products.length) return { ok: false, code: "not_found", error: "لا توجد أصناف متاحة حالياً" };
 
       const allowedIds = new Set(products.map((p) => p.id));
       const catalog = buildCatalog(products).slice(0, 32_000);
       const result = await generateStructuredAi({
         sql,
-        tenantId: data.slug,
+        tenantId,
         userId: `guest:${data.sessionId}`,
         operation: "guest.menu_assistant",
         prompt: [
@@ -125,14 +126,7 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
       if (!result.ok) return result;
 
       const productIds = result.data.productIds.filter((id) => allowedIds.has(id));
-      return {
-        ok: true,
-        data: {
-          answerAr: result.data.answerAr,
-          answerEn: result.data.answerEn,
-          productIds,
-        },
-      };
+      return { ok: true, data: { answerAr: result.data.answerAr, answerEn: result.data.answerEn, productIds } };
     } catch (error) {
       console.error("askGuestMenuAssistant failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تشغيل مساعد القائمة حالياً" };
