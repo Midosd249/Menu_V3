@@ -2,7 +2,7 @@
 
 ## Status
 
-`VERIFIED` — implemented on the release branch `feat/ai-provider-routing-and-multimodal-fallback` and subject to the normal GitHub quality gate before merge.
+`VERIFIED` — implemented on the release branch `feat/ai-provider-routing-and-multimodal-fallback` and corrected on `fix/ai-xkiro-model-routing` before the final quality gate.
 
 ## Purpose
 
@@ -16,7 +16,9 @@ Default order:
 2. Google Gemini 3.5 Flash-Lite
 3. Z.AI GLM-4.7 Flash
 4. OpenRouter `google/gemma-4-31b-it:free`
-5. xKiro `stealth/ox-alpha`
+5. xKiro `minimax/minimax-m3:free`
+
+xKiro's free-tier MiniMax M3 is a text/reasoning fallback. xKiro model IDs use the `vendor/model` format and are resolved through its OpenAI-compatible gateway.
 
 The order is configurable with `AI_PROVIDER_ORDER`. A single provider can be forced with `AI_PROVIDER`, although `auto` is the default behavior.
 
@@ -27,7 +29,8 @@ For menu images and PDFs:
 1. Google Gemini 3.5 Flash-Lite
 2. OpenRouter `google/gemma-4-31b-it:free`
 3. Z.AI GLM-4.6V-Flash
-4. xKiro `stealth/ox-alpha`
+
+xKiro is intentionally **not** a default image/PDF provider because its verified free default is text-only. A future xKiro vision model may be enabled safely by setting `XKIRO_VISION_MODEL`; the router will then include xKiro in the multimodal fallback order without silently sending images to a text-only model.
 
 The order is configurable with `AI_MULTIMODAL_PROVIDER_ORDER`.
 
@@ -50,7 +53,8 @@ Secrets are server-only and must never be committed or exposed to browser code.
 - `OPENROUTER_API_KEY`
 - `OPENROUTER_MODEL` — optional; defaults to `google/gemma-4-31b-it:free`
 - `XKIRO_API_KEY`
-- `XKIRO_MODEL` — optional; defaults to `stealth/ox-alpha`
+- `XKIRO_MODEL` — optional; defaults to `minimax/minimax-m3:free`
+- `XKIRO_VISION_MODEL` — optional; when set, xKiro becomes eligible for image/PDF fallback
 - `AI_PROVIDER` — optional; defaults to `auto`
 - `AI_PROVIDER_ORDER` — optional structured-provider override
 - `AI_MULTIMODAL_PROVIDER_ORDER` — optional image/PDF-provider override
