@@ -49,7 +49,8 @@ export const generateWhatsAppReportMessage = createServerFn({ method: "POST" })
         temperature: 0.35,
         systemPrompt: "You write concise professional WhatsApp messages for restaurant owners. Use only the supplied report facts. Never invent revenue, sales, conversion, customer sentiment, causes, percentages, guarantees, or business outcomes. Keep the message easy to scan on a phone. Do not mention AI. Do not add a subject line. Return only the message in the requested language and structured format.",
       });
-      return result.ok ? { ok: true, data: { message: result.data.message } } : result;
+      if (result.ok) return { ok: true, data: { message: result.data.message } };
+      return { ok: false, code: "unavailable", error: result.error };
     } catch (error) {
       console.error("generateWhatsAppReportMessage failed", error);
       return { ok: false, code: "unavailable", error: "تعذر إنشاء رسالة واتساب" };
