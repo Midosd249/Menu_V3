@@ -123,17 +123,22 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         systemPrompt: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format.",
       });
       if (!result.ok) return result;
-      const p = result.data as Record<string, any>;
-      if (data.operation === "description") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr } };
-      if (data.operation === "english") return { ok: true, data: { operation: "english", nameEn: p.nameEn, descriptionEn: p.descriptionEn } };
+      const p = result.data as Record<string, unknown>;
+      if (data.operation === "description") return { ok: true, data: { operation: "description", descriptionAr: String(p.descriptionAr) } };
+      if (data.operation === "english") return { ok: true, data: { operation: "english", nameEn: String(p.nameEn), descriptionEn: String(p.descriptionEn) } };
       if (data.operation === "category") {
-        const selected = categories.find((c) => c.id === p.categoryId);
-        if (p.categoryId !== null && !selected) return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
-        return { ok: true, data: { operation: "category", categoryId: p.categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
+        const categoryId = typeof p.categoryId === "string" ? p.categoryId : null;
+        const selected = categories.find((c) => c.id === categoryId);
+        if (categoryId !== null && !selected) return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
+        return { ok: true, data: { operation: "category", categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
       }
-      if (data.operation === "tags") return { ok: true, data: { operation: "tags", tags: [...new Set<string>(p.tags)].slice(0, 8) } };
-      if (data.operation === "price") return { ok: true, data: { operation: "price", price: p.price, cleanedNameAr: p.cleanedNameAr } };
-      return { ok: true, data: { operation: "allergens", allergens: [...new Set<string>(p.allergens)].slice(0, 12), disclaimerAr: p.disclaimerAr, disclaimerEn: p.disclaimerEn } };
+      if (data.operation === "tags") {
+        const tags = Array.isArray(p.tags) ? p.tags.filter((tag): tag is string => typeof tag === "string") : [];
+        return { ok: true, data: { operation: "tags", tags: [...new Set(tags)].slice(0, 8) } };
+      }
+      if (data.operation === "price") return { ok: true, data: { operation: "price", price: typeof p.price === "number" ? p.price : null, cleanedNameAr: String(p.cleanedNameAr) } };
+      const allergens = Array.isArray(p.allergens) ? p.allergens.filter((item): item is string => typeof item === "string") : [];
+      return { ok: true, data: { operation: "allergens", allergens: [...new Set(allergens)].slice(0, 12), disclaimerAr: String(p.disclaimerAr), disclaimerEn: String(p.disclaimerEn) } };
     } catch (err) {
       console.error("generateMenuAi failed", err);
       return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مساعد الذكاء الاصطناعي" };
@@ -217,8 +222,8 @@ export const runMenuQa = createServerFn({ method: "POST" })
         systemPrompt: "You are a careful restaurant menu QA assistant. Use only supplied saved menu data. Never invent facts, infer ingredients, or treat the result as food-safety or legal certification. Return only the requested structured format.",
       });
       if (!result.ok) return result;
-      const p = result.data;
-      const issues: MenuQaIssue[] = p.issues.map((i: any) => ({
+      const p = result.data as z.infer<typeof menuQaRuntimeSchema>;
+      const issues: MenuQaIssue[] = p.issues.map((i) => ({
         key: compact(i.key, 80),
         severity: i.severity,
         titleAr: compact(i.titleAr, 160),
