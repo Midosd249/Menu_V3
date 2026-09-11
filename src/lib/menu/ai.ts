@@ -123,7 +123,7 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         systemPrompt: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format.",
       });
       if (!result.ok) return result;
-      const p = result.data as AiResult;
+      const p = result.data as Record<string, any>;
       if (data.operation === "description") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr } };
       if (data.operation === "english") return { ok: true, data: { operation: "english", nameEn: p.nameEn, descriptionEn: p.descriptionEn } };
       if (data.operation === "category") {
