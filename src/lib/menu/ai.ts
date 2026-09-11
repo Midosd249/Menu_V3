@@ -17,6 +17,7 @@ const inputSchema = z.object({
 });
 
 type Member = { tenant_id: string; role: Role };
+type CategoryOption = { id: string; nameAr: string; nameEn: string };
 
 type AiResult =
   | { operation: "description"; descriptionAr: string }
@@ -94,8 +95,8 @@ function schemaFor(operation: z.infer<typeof operationSchema>) {
   };
 }
 
-function buildPrompt(data: z.infer<typeof inputSchema>) {
-  const categories = data.categoryOptions
+function buildPrompt(data: z.infer<typeof inputSchema>, categoryOptions: CategoryOption[]) {
+  const categories = categoryOptions
     .map((category) => `${category.id} | ${category.nameAr} | ${category.nameEn}`)
     .join("\n");
 
@@ -126,6 +127,19 @@ export const generateMenuAi = createServerFn({ method: "POST" })
       if (!member) return { ok: false, code: "not_found", error: "لا يوجد حساب مطعم نشط" };
       if (!canWriteMenu(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية استخدام مساعد القائمة" };
 
+      const categoryRows = await sql<{ id: string; name_ar: string; name_en: string }>`
+        select id, name_ar, name_en
+        from categories
+        where tenant_id = ${member.tenant_id} and is_active = true
+        order by sort_order, created_at
+        limit 100
+      `;
+      const serverCategories: CategoryOption[] = categoryRows.map((category) => ({
+        id: category.id,
+        nameAr: category.name_ar,
+        nameEn: category.name_en,
+      }));
+
       const response = await fetch("https://api.inceptionlabs.ai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -140,7 +154,7 @@ export const generateMenuAi = createServerFn({ method: "POST" })
               content:
                 "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner remains the final approver. Respond only in the requested structured format.",
             },
-            { role: "user", content: buildPrompt(data) },
+            { role: "user", content: buildPrompt(data, serverCategories) },
           ],
           temperature: 0.3,
           max_tokens: 700,
@@ -177,7 +191,7 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         typeof parsed.categoryNameAr === "string" &&
         typeof parsed.categoryNameEn === "string"
       ) {
-        const selected = data.categoryOptions.find((category) => category.id === parsed.categoryId);
+        const selected = serverCategories.find((category) => category.id === parsed.categoryId);
         if (parsed.categoryId !== null && !selected) {
           return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
         }
