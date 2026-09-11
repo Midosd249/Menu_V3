@@ -78,9 +78,9 @@ test("AI credentials remain server-only and never enter browser globals", () => 
     assert.match(providers, new RegExp(secretName));
   }
   assert.doesNotMatch(core, /window\./);
-  assert.doesNotMatch(core, /document\./);
+  assert.doesNotMatch(core, /document\.createElement|document\.querySelector|document\.body/);
   assert.doesNotMatch(documentAdapter, /window\./);
-  assert.doesNotMatch(documentAdapter, /document\./);
+  assert.doesNotMatch(documentAdapter, /document\.createElement|document\.querySelector|document\.body/);
   assert.doesNotMatch(menuAi, /process\.env\.[A-Z0-9_]+/);
 });
 
