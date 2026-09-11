@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { BarChart3, Building2, QrCode, Settings, LayoutDashboard, Palette, Upload, UtensilsCrossed, SlidersHorizontal, ExternalLink, Ellipsis, Users, ShieldCheck } from "lucide-react";
+import { BarChart3, Building2, QrCode, Settings, LayoutDashboard, Palette, Upload, UtensilsCrossed, SlidersHorizontal, ExternalLink, Ellipsis, Users, ShieldCheck, Sparkles } from "lucide-react";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
@@ -14,6 +14,7 @@ type NavItem = { to: string; icon: typeof LayoutDashboard; label: { ar: string; 
 const NAV: readonly NavItem[] = [
   { to: "/studio", icon: LayoutDashboard, label: copy.nav.overview, exact: true },
   { to: "/studio/menu", icon: UtensilsCrossed, label: copy.nav.menu },
+  { to: "/studio/intelligence", icon: Sparkles, label: { ar: "ذكاء القائمة", en: "Menu Intelligence" } },
   { to: "/studio/options", icon: SlidersHorizontal, label: { ar: "خيارات الأصناف", en: "Item options" } },
   { to: "/studio/branches", icon: Building2, label: copy.nav.branches, permission: "settings.write" },
   { to: "/studio/brand", icon: Palette, label: copy.nav.brand, permission: "settings.write" },
