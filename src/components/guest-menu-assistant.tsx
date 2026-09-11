@@ -59,7 +59,7 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
         variant="solid"
         aria-label={lang === "ar" ? "اسأل عن القائمة" : "Ask about the menu"}
         onClick={() => { setOpen(true); setError(""); }}
-        className="fixed bottom-4 start-4 z-40 min-h-11 rounded-full px-4 shadow-lg"
+        className="fixed bottom-[calc(6.5rem+env(safe-area-inset-bottom))] left-4 z-40 min-h-11 rounded-full px-4 shadow-lg sm:bottom-6"
       >
         <Sparkles aria-hidden="true" />
         {lang === "ar" ? "اسأل عن القائمة" : "Ask the menu"}
