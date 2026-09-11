@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, Sparkles, Star } from "lucide-react";
 import { Flash, Sheet } from "@/components/state-panel";
@@ -7,7 +7,7 @@ import { Field, Input, Textarea } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { compressImageFile } from "@/lib/menu/image";
 import { copy, t } from "@/lib/menu/i18n";
-import { generateMenuAi } from "@/lib/menu/ai";
+import { generateMenuAi, runMenuQa, type MenuQaResult } from "@/lib/menu/ai";
 import { deleteCategory, deleteProduct, saveCategory, saveProduct, toggleProduct } from "@/lib/menu/owner";
 import { useStudio, useStudioFlash } from "@/lib/menu/studio";
 import type { Product } from "@/lib/menu/types";
@@ -30,7 +30,8 @@ type ProductDraft = {
   isFeatured: boolean;
 };
 
-type AiOperation = "description" | "english" | "category" | "tags";
+type AiOperation = "description" | "english" | "category" | "tags" | "allergens";
+type AiAllergens = { allergens: string[]; disclaimerAr: string; disclaimerEn: string };
 
 function emptyDraft(categoryId: string | null): ProductDraft {
   return {
@@ -77,6 +78,9 @@ function MenuStudio() {
   const [imageBusy, setImageBusy] = useState(false);
   const [aiBusy, setAiBusy] = useState<AiOperation | null>(null);
   const [aiTags, setAiTags] = useState<string[]>([]);
+  const [aiAllergens, setAiAllergens] = useState<AiAllergens | null>(null);
+  const [menuQaBusy, setMenuQaBusy] = useState(false);
+  const [menuQa, setMenuQa] = useState<MenuQaResult | null>(null);
 
   const products = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -143,6 +147,7 @@ function MenuStudio() {
 
     setAiBusy(operation);
     setAiTags([]);
+    setAiAllergens(null);
     flash.setError("");
     try {
       const result = await generateMenuAi({
@@ -184,6 +189,13 @@ function MenuStudio() {
         case "tags":
           setAiTags(aiResult.tags);
           break;
+        case "allergens":
+          setAiAllergens({
+            allergens: aiResult.allergens,
+            disclaimerAr: aiResult.disclaimerAr,
+            disclaimerEn: aiResult.disclaimerEn,
+          });
+          break;
       }
     } catch (err) {
       flash.setError(err instanceof Error ? err.message : t(copy.state.error, lang));
@@ -192,11 +204,46 @@ function MenuStudio() {
     }
   }
 
+  function applyAiAllergens() {
+    if (!draft || !aiAllergens?.allergens.length) return;
+    const existing = draft.allergens
+      .split(/[،,;]+/)
+      .map((value) => value.trim())
+      .filter(Boolean);
+    const merged = [...new Set([...existing, ...aiAllergens.allergens])];
+    setDraft({ ...draft, allergens: merged.join("، ") });
+  }
+
+  async function reviewMenu() {
+    if (menuQaBusy) return;
+    setMenuQaBusy(true);
+    setMenuQa(null);
+    flash.setError("");
+    try {
+      const result = await runMenuQa();
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+      setMenuQa(result.data);
+    } catch (err) {
+      flash.setError(err instanceof Error ? err.message : t(copy.state.error, lang));
+    } finally {
+      setMenuQaBusy(false);
+    }
+  }
+
   const aiLabel = (operation: AiOperation) => {
     if (operation === "description") return lang === "ar" ? "وصف عربي" : "Arabic description";
     if (operation === "english") return lang === "ar" ? "إنشاء الإنجليزية" : "Generate English";
     if (operation === "category") return lang === "ar" ? "اقتراح التصنيف" : "Suggest category";
-    return lang === "ar" ? "اقتراح الوسوم" : "Suggest tags";
+    if (operation === "tags") return lang === "ar" ? "اقتراح الوسوم" : "Suggest tags";
+    return lang === "ar" ? "اقتراح الحساسية" : "Suggest allergens";
+  };
+
+  const severityLabel = (severity: MenuQaResult["issues"][number]["severity"]) => {
+    if (lang === "en") return severity === "high" ? "High" : severity === "medium" ? "Medium" : "Low";
+    return severity === "high" ? "عالية" : severity === "medium" ? "متوسطة" : "منخفضة";
   };
 
   return (
@@ -210,6 +257,14 @@ function MenuStudio() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" disabled={menuQaBusy} onClick={() => void reviewMenu()}>
+            <Sparkles className="size-4" />
+            {menuQaBusy
+              ? t(copy.state.loading, lang)
+              : lang === "ar"
+                ? "مراجعة القائمة بالذكاء الاصطناعي"
+                : "AI menu QA"}
+          </Button>
           <Button type="button" variant="outline" onClick={() => setCatDraft({ nameAr: "", nameEn: "" })}>
             {t(copy.studio.addCategory, lang)}
           </Button>
@@ -327,7 +382,7 @@ function MenuStudio() {
                   : "Choose an action. AI suggestions are applied to the draft only and are never saved automatically."}
               </p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {(["description", "english", "category", "tags"] as AiOperation[]).map((operation) => (
+                {(["description", "english", "category", "tags", "allergens"] as AiOperation[]).map((operation) => (
                   <Button
                     key={operation}
                     type="button"
@@ -350,6 +405,30 @@ function MenuStudio() {
                       </span>
                     ))}
                   </div>
+                </div>
+              ) : null}
+              {aiAllergens ? (
+                <div className="mt-3 rounded-lg border border-line bg-paper p-3">
+                  <p className="mb-2 text-xs font-medium">{lang === "ar" ? "الحساسية المحتملة" : "Potential allergens"}</p>
+                  {aiAllergens.allergens.length > 0 ? (
+                    <>
+                      <div className="flex flex-wrap gap-2">
+                        {aiAllergens.allergens.map((allergen) => (
+                          <span key={allergen} className="rounded-full bg-sand px-2.5 py-1 text-xs">
+                            {allergen}
+                          </span>
+                        ))}
+                      </div>
+                      <Button type="button" size="sm" className="mt-3" onClick={applyAiAllergens}>
+                        {lang === "ar" ? "إضافة إلى حقل الحساسية" : "Apply to allergen field"}
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="text-xs text-muted">
+                      {lang === "ar" ? "لا توجد معلومات صريحة كافية لاقتراح حساسية. لا يعني ذلك عدم وجود حساسية." : "There is not enough explicit information to suggest allergens. This does not mean the product is allergen-free."}
+                    </p>
+                  )}
+                  <p className="mt-3 text-[11px] leading-5 text-muted">{lang === "ar" ? aiAllergens.disclaimerAr : aiAllergens.disclaimerEn}</p>
                 </div>
               ) : null}
             </div>
@@ -473,6 +552,56 @@ function MenuStudio() {
             <Button type="button" variant="outline" onClick={() => setPendingDelete(null)}>
               {t(copy.studio.cancel, lang)}
             </Button>
+          </div>
+        </Sheet>
+      ) : null}
+
+      {menuQa ? (
+        <Sheet
+          title={lang === "ar" ? "مراجعة جودة القائمة" : "Menu quality audit"}
+          onClose={() => setMenuQa(null)}
+        >
+          <div className="grid gap-4">
+            <div className="rounded-xl border border-line bg-sand/50 p-4">
+              <div className="flex items-end justify-between gap-3">
+                <div>
+                  <p className="text-xs text-muted">{lang === "ar" ? "درجة الجودة" : "Quality score"}</p>
+                  <p className="font-display text-4xl font-semibold">{menuQa.score}<span className="text-base text-muted">/100</span></p>
+                </div>
+                <p className="text-xs text-muted">
+                  {menuQa.analyzedProducts} {lang === "ar" ? "صنفاً تم تحليله" : "products analyzed"}
+                </p>
+              </div>
+              <p className="mt-3 text-sm leading-6">{lang === "ar" ? menuQa.summaryAr : menuQa.summaryEn}</p>
+            </div>
+
+            {menuQa.issues.length === 0 ? (
+              <div className="rounded-xl border border-line p-4 text-sm">
+                {lang === "ar" ? "لم تُكتشف مشكلات تستحق العرض في هذه المراجعة." : "No issues worth surfacing were found in this audit."}
+              </div>
+            ) : (
+              <div className="grid gap-3">
+                {menuQa.issues.map((issue, index) => (
+                  <article key={`${issue.key}-${index}`} className="rounded-xl border border-line p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h2 className="font-medium">{lang === "ar" ? issue.titleAr : issue.titleEn}</h2>
+                      <span className="rounded-full bg-sand px-2.5 py-1 text-[11px]">{severityLabel(issue.severity)}</span>
+                    </div>
+                    {issue.productNameAr ? <p className="mt-1 text-xs text-accent">{issue.productNameAr}</p> : null}
+                    <p className="mt-2 text-sm leading-6">{lang === "ar" ? issue.detailsAr : issue.detailsEn}</p>
+                    <p className="mt-2 text-xs leading-5 text-muted">
+                      <span className="font-medium text-ink">{lang === "ar" ? "الإجراء المقترح: " : "Recommended action: "}</span>
+                      {lang === "ar" ? issue.recommendationAr : issue.recommendationEn}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            )}
+            <p className="text-[11px] leading-5 text-muted">
+              {lang === "ar"
+                ? "هذه مراجعة جودة محتوى مبنية على بيانات القائمة المحفوظة. لا تُعد اعتماداً غذائياً أو شهادة خلو من مسببات الحساسية."
+                : "This is a content-quality review of the saved menu data. It is not a food-safety certification or allergen-free guarantee."}
+            </p>
           </div>
         </Sheet>
       ) : null}

@@ -4,8 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import type { Role } from "./types";
 
-const operationSchema = z.enum(["description", "english", "category", "tags"]);
-
+const operationSchema = z.enum(["description", "english", "category", "tags", "allergens"]);
 const inputSchema = z.object({
   operation: operationSchema,
   nameAr: z.string().trim().min(1).max(120),
@@ -18,200 +17,190 @@ const inputSchema = z.object({
 
 type Member = { tenant_id: string; role: Role };
 type CategoryOption = { id: string; nameAr: string; nameEn: string };
+type JsonSchema = Record<string, unknown>;
+
+export type MenuQaIssue = {
+  key: string;
+  severity: "high" | "medium" | "low";
+  titleAr: string;
+  titleEn: string;
+  detailsAr: string;
+  detailsEn: string;
+  productNameAr: string;
+  recommendationAr: string;
+  recommendationEn: string;
+};
+export type MenuQaResult = {
+  score: number;
+  summaryAr: string;
+  summaryEn: string;
+  issues: MenuQaIssue[];
+  analyzedProducts: number;
+};
 
 type AiResult =
   | { operation: "description"; descriptionAr: string }
   | { operation: "english"; nameEn: string; descriptionEn: string }
   | { operation: "category"; categoryId: string | null; categoryNameAr: string; categoryNameEn: string }
-  | { operation: "tags"; tags: string[] };
+  | { operation: "tags"; tags: string[] }
+  | { operation: "allergens"; allergens: string[]; disclaimerAr: string; disclaimerEn: string };
 
 function canWriteMenu(role: Role) {
   return role === "owner" || role === "admin" || role === "editor";
 }
-
 async function getMember(sql: Awaited<ReturnType<typeof getSql>>, userId: string) {
-  const rows = await sql<Member>`
-    select tenant_id, role from tenant_members
-    where user_id = ${userId} and is_active = true
-    order by created_at
-    limit 1
-  `;
+  const rows = await sql<Member>`select tenant_id, role from tenant_members where user_id = ${userId} and is_active = true order by created_at limit 1`;
   return rows[0] ?? null;
 }
-
-function schemaFor(operation: z.infer<typeof operationSchema>) {
-  if (operation === "description") {
-    return {
-      name: "menu_description",
-      strict: true,
-      schema: {
-        type: "object",
-        properties: { descriptionAr: { type: "string", minLength: 1, maxLength: 600 } },
-        required: ["descriptionAr"],
-        additionalProperties: false,
-      },
-    };
-  }
-  if (operation === "english") {
-    return {
-      name: "menu_english",
-      strict: true,
-      schema: {
-        type: "object",
-        properties: {
-          nameEn: { type: "string", minLength: 1, maxLength: 120 },
-          descriptionEn: { type: "string", minLength: 1, maxLength: 600 },
-        },
-        required: ["nameEn", "descriptionEn"],
-        additionalProperties: false,
-      },
-    };
-  }
-  if (operation === "category") {
-    return {
-      name: "menu_category",
-      strict: true,
-      schema: {
-        type: "object",
-        properties: {
-          categoryId: { type: ["string", "null"] },
-          categoryNameAr: { type: "string", maxLength: 80 },
-          categoryNameEn: { type: "string", maxLength: 80 },
-        },
-        required: ["categoryId", "categoryNameAr", "categoryNameEn"],
-        additionalProperties: false,
-      },
-    };
-  }
-  return {
-    name: "menu_tags",
-    strict: true,
-    schema: {
-      type: "object",
-      properties: { tags: { type: "array", items: { type: "string", minLength: 1, maxLength: 40 }, maxItems: 8 } },
-      required: ["tags"],
-      additionalProperties: false,
-    },
-  };
+function jsonSchema(name: string, properties: Record<string, unknown>, required: string[]): JsonSchema {
+  return { name, strict: true, schema: { type: "object", properties, required, additionalProperties: false } };
 }
-
-function buildPrompt(data: z.infer<typeof inputSchema>, categoryOptions: CategoryOption[]) {
-  const categories = categoryOptions
-    .map((category) => `${category.id} | ${category.nameAr} | ${category.nameEn}`)
-    .join("\n");
-
-  const common = `\nProduct Arabic name: ${data.nameAr}\nExisting English name: ${data.nameEn ?? ""}\nArabic description: ${data.descriptionAr ?? ""}\nEnglish description: ${data.descriptionEn ?? ""}\n`;
-
-  if (data.operation === "description") {
-    return `Write a concise, appetizing Arabic menu description for the product below. Use natural Saudi Arabic menu language in Modern Standard Arabic, not slang. Do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. Return only the requested structured field. ${common}`;
-  }
-  if (data.operation === "english") {
-    return `Create a faithful English menu name and description for the product below. Preserve the meaning of the Arabic content. Do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. Use polished restaurant English. Return only the requested structured fields. ${common}`;
-  }
-  if (data.operation === "category") {
-    return `Choose the best matching category for this product from the supplied existing categories only. Never invent a category. If none is a reasonable match, return null. ${common}\nExisting categories:\n${categories}`;
-  }
-  return `Suggest up to 8 concise menu tags for this product. Use tags that are directly supported by the product name or existing descriptions. Do not invent ingredients, dietary claims, allergens, cooking methods, or certifications. Avoid duplicates. ${common}`;
+function schemaFor(operation: z.infer<typeof operationSchema>): JsonSchema {
+  if (operation === "description") return jsonSchema("menu_description", { descriptionAr: { type: "string", minLength: 1, maxLength: 600 } }, ["descriptionAr"]);
+  if (operation === "english") return jsonSchema("menu_english", {
+    nameEn: { type: "string", minLength: 1, maxLength: 120 },
+    descriptionEn: { type: "string", minLength: 1, maxLength: 600 },
+  }, ["nameEn", "descriptionEn"]);
+  if (operation === "category") return jsonSchema("menu_category", {
+    categoryId: { type: ["string", "null"] },
+    categoryNameAr: { type: "string", maxLength: 80 },
+    categoryNameEn: { type: "string", maxLength: 80 },
+  }, ["categoryId", "categoryNameAr", "categoryNameEn"]);
+  if (operation === "tags") return jsonSchema("menu_tags", {
+    tags: { type: "array", items: { type: "string", minLength: 1, maxLength: 40 }, maxItems: 8 },
+  }, ["tags"]);
+  return jsonSchema("menu_allergens", {
+    allergens: { type: "array", items: { type: "string", minLength: 1, maxLength: 40 }, maxItems: 12 },
+    disclaimerAr: { type: "string", minLength: 1, maxLength: 240 },
+    disclaimerEn: { type: "string", minLength: 1, maxLength: 240 },
+  }, ["allergens", "disclaimerAr", "disclaimerEn"]);
+}
+function buildPrompt(data: z.infer<typeof inputSchema>, categories: CategoryOption[]) {
+  const common = `Product Arabic name: ${data.nameAr}\nExisting English name: ${data.nameEn ?? ""}\nArabic description: ${data.descriptionAr ?? ""}\nEnglish description: ${data.descriptionEn ?? ""}`;
+  if (data.operation === "description") return `Write a concise appetizing Arabic menu description in natural Modern Standard Arabic. Do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. ${common}`;
+  if (data.operation === "english") return `Create a faithful polished English menu name and description. Preserve the Arabic meaning and do not invent ingredients, allergens, health claims, origin, cooking method, portion size, or prices. ${common}`;
+  if (data.operation === "category") return `Choose the best matching existing category only. Never invent a category; return null if none is reasonable. ${common}\nCategories:\n${categories.map((c) => `${c.id} | ${c.nameAr} | ${c.nameEn}`).join("\n")}`;
+  if (data.operation === "tags") return `Suggest up to 8 concise tags directly supported by the product name or descriptions. Do not invent ingredients, dietary claims, allergens, cooking methods, or certifications. Avoid duplicates. ${common}`;
+  return `Suggest potential food allergens using ONLY explicit evidence in the product name and existing Arabic/English descriptions. Do not infer hidden ingredients from cuisine type, common recipes, restaurant knowledge, or assumptions. Absence of a mention is not proof of absence. If evidence is insufficient, return an empty allergens array. Use common Arabic allergen names. This is for owner review, not a food-safety guarantee. ${common}`;
+}
+async function callMercury(prompt: string, responseFormat: JsonSchema) {
+  const apiKey = process.env.INCEPTION_API_KEY?.trim();
+  if (!apiKey) return { ok: false as const, code: "ai_not_configured", error: "مساعد الذكاء الاصطناعي غير مهيأ حالياً" };
+  const response = await fetch("https://api.inceptionlabs.ai/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: process.env.INCEPTION_MODEL?.trim() || "mercury-2.5",
+      messages: [
+        { role: "system", content: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format." },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.3,
+      max_tokens: 700,
+      reasoning_effort: "low",
+      response_format: { type: "json_schema", json_schema: responseFormat },
+    }),
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!response.ok) return { ok: false as const, code: "ai_unavailable", error: "تعذر الوصول إلى مساعد الذكاء الاصطناعي" };
+  const payload = (await response.json()) as { choices?: Array<{ message?: { content?: string | null } }> };
+  const content = payload.choices?.[0]?.message?.content;
+  if (!content) return { ok: false as const, code: "ai_invalid", error: "تعذر قراءة نتيجة مساعد الذكاء الاصطناعي" };
+  return { ok: true as const, parsed: JSON.parse(content) as Record<string, unknown> };
 }
 
 export const generateMenuAi = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator(inputSchema)
   .handler(async ({ context, data }): Promise<{ ok: true; data: AiResult } | { ok: false; code: string; error: string }> => {
-    const apiKey = process.env.INCEPTION_API_KEY?.trim();
-    if (!apiKey) return { ok: false, code: "ai_not_configured", error: "مساعد الذكاء الاصطناعي غير مهيأ حالياً" };
-
     try {
       const sql = await getSql();
       const member = await getMember(sql, context.userId);
       if (!member) return { ok: false, code: "not_found", error: "لا يوجد حساب مطعم نشط" };
       if (!canWriteMenu(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية استخدام مساعد القائمة" };
-
-      const categoryRows = await sql<{ id: string; name_ar: string; name_en: string }>`
-        select id, name_ar, name_en
-        from categories
-        where tenant_id = ${member.tenant_id} and is_active = true
-        order by sort_order, created_at
-        limit 100
-      `;
-      const serverCategories: CategoryOption[] = categoryRows.map((category) => ({
-        id: category.id,
-        nameAr: category.name_ar,
-        nameEn: category.name_en,
-      }));
-
-      const response = await fetch("https://api.inceptionlabs.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: process.env.INCEPTION_MODEL?.trim() || "mercury-2.5",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner remains the final approver. Respond only in the requested structured format.",
-            },
-            { role: "user", content: buildPrompt(data, serverCategories) },
-          ],
-          temperature: 0.3,
-          max_tokens: 700,
-          reasoning_effort: "low",
-          response_format: { type: "json_schema", json_schema: schemaFor(data.operation) },
-        }),
-        signal: AbortSignal.timeout(20_000),
-      });
-
-      if (!response.ok) {
-        console.error("generateMenuAi upstream error", response.status);
-        return { ok: false, code: "ai_unavailable", error: "تعذر الوصول إلى مساعد الذكاء الاصطناعي" };
+      const rows = await sql<{ id: string; name_ar: string; name_en: string }>`select id, name_ar, name_en from categories where tenant_id = ${member.tenant_id} and is_active = true order by sort_order, created_at limit 100`;
+      const categories = rows.map((c) => ({ id: c.id, nameAr: c.name_ar, nameEn: c.name_en }));
+      const result = await callMercury(buildPrompt(data, categories), schemaFor(data.operation));
+      if (!result.ok) return result;
+      const p = result.parsed;
+      if (data.operation === "description" && typeof p.descriptionAr === "string") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr.trim() } };
+      if (data.operation === "english" && typeof p.nameEn === "string" && typeof p.descriptionEn === "string") return { ok: true, data: { operation: "english", nameEn: p.nameEn.trim(), descriptionEn: p.descriptionEn.trim() } };
+      if (data.operation === "category" && (typeof p.categoryId === "string" || p.categoryId === null) && typeof p.categoryNameAr === "string" && typeof p.categoryNameEn === "string") {
+        const selected = categories.find((c) => c.id === p.categoryId);
+        if (p.categoryId !== null && !selected) return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
+        return { ok: true, data: { operation: "category", categoryId: p.categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
       }
-
-      const payload = (await response.json()) as {
-        choices?: Array<{ message?: { content?: string | null } }>;
-      };
-      const content = payload.choices?.[0]?.message?.content;
-      if (!content) return { ok: false, code: "ai_invalid", error: "تعذر قراءة نتيجة مساعد الذكاء الاصطناعي" };
-
-      const parsed = JSON.parse(content) as Record<string, unknown>;
-      if (data.operation === "description" && typeof parsed.descriptionAr === "string") {
-        return { ok: true, data: { operation: "description", descriptionAr: parsed.descriptionAr.trim() } };
+      if (data.operation === "tags" && Array.isArray(p.tags) && p.tags.every((v) => typeof v === "string")) return { ok: true, data: { operation: "tags", tags: [...new Set(p.tags.map((v) => v.trim()).filter(Boolean))].slice(0, 8) } };
+      if (data.operation === "allergens" && Array.isArray(p.allergens) && p.allergens.every((v) => typeof v === "string") && typeof p.disclaimerAr === "string" && typeof p.disclaimerEn === "string") {
+        return { ok: true, data: { operation: "allergens", allergens: [...new Set(p.allergens.map((v) => v.trim()).filter(Boolean))].slice(0, 12), disclaimerAr: p.disclaimerAr.trim(), disclaimerEn: p.disclaimerEn.trim() } };
       }
-      if (data.operation === "english" && typeof parsed.nameEn === "string" && typeof parsed.descriptionEn === "string") {
-        return {
-          ok: true,
-          data: { operation: "english", nameEn: parsed.nameEn.trim(), descriptionEn: parsed.descriptionEn.trim() },
-        };
-      }
-      if (
-        data.operation === "category" &&
-        (typeof parsed.categoryId === "string" || parsed.categoryId === null) &&
-        typeof parsed.categoryNameAr === "string" &&
-        typeof parsed.categoryNameEn === "string"
-      ) {
-        const selected = serverCategories.find((category) => category.id === parsed.categoryId);
-        if (parsed.categoryId !== null && !selected) {
-          return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
-        }
-        return {
-          ok: true,
-          data: {
-            operation: "category",
-            categoryId: parsed.categoryId,
-            categoryNameAr: selected?.nameAr ?? "",
-            categoryNameEn: selected?.nameEn ?? "",
-          },
-        };
-      }
-      if (data.operation === "tags" && Array.isArray(parsed.tags) && parsed.tags.every((tag) => typeof tag === "string")) {
-        return { ok: true, data: { operation: "tags", tags: [...new Set(parsed.tags.map((tag) => tag.trim()).filter(Boolean))].slice(0, 8) } };
-      }
-
       return { ok: false, code: "ai_invalid", error: "نتيجة مساعد الذكاء الاصطناعي غير صالحة" };
     } catch (err) {
       console.error("generateMenuAi failed", err);
       return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مساعد الذكاء الاصطناعي" };
+    }
+  });
+
+const menuQaSchema: JsonSchema = jsonSchema("menu_quality_audit", {
+  score: { type: "integer", minimum: 0, maximum: 100 },
+  summaryAr: { type: "string", minLength: 1, maxLength: 500 },
+  summaryEn: { type: "string", minLength: 1, maxLength: 500 },
+  issues: {
+    type: "array", maxItems: 30,
+    items: {
+      type: "object",
+      properties: {
+        key: { type: "string", minLength: 1, maxLength: 80 },
+        severity: { type: "string", enum: ["high", "medium", "low"] },
+        titleAr: { type: "string", minLength: 1, maxLength: 160 }, titleEn: { type: "string", minLength: 1, maxLength: 160 },
+        detailsAr: { type: "string", minLength: 1, maxLength: 500 }, detailsEn: { type: "string", minLength: 1, maxLength: 500 },
+        productNameAr: { type: "string", maxLength: 120 },
+        recommendationAr: { type: "string", minLength: 1, maxLength: 300 }, recommendationEn: { type: "string", minLength: 1, maxLength: 300 },
+      },
+      required: ["key", "severity", "titleAr", "titleEn", "detailsAr", "detailsEn", "productNameAr", "recommendationAr", "recommendationEn"],
+      additionalProperties: false,
+    },
+  },
+}, ["score", "summaryAr", "summaryEn", "issues"]);
+function compact(value: unknown, max: number) { return String(value ?? "").replace(/\s+/g, " ").trim().slice(0, max); }
+function buildMenuQaPrompt(categories: Array<{ id: string; nameAr: string; nameEn: string }>, products: Array<{ nameAr: string; nameEn: string; descriptionAr: string; descriptionEn: string; categoryId: string | null; price: number; allergens: string; tags: string[]; isAvailable: boolean }>) {
+  const byId = new Map(categories.map((c) => [c.id, c]));
+  const catalog = products.map((p, i) => {
+    const c = p.categoryId ? byId.get(p.categoryId) : undefined;
+    return [`#${i + 1}`, `AR=${compact(p.nameAr, 100)}`, `EN=${compact(p.nameEn, 100)}`, `CAT=${compact(c?.nameAr, 70)}`, `DESC_AR=${compact(p.descriptionAr, 220)}`, `DESC_EN=${compact(p.descriptionEn, 220)}`, `PRICE=${p.price}`, `ALLERGENS=${compact(p.allergens, 160)}`, `TAGS=${compact(p.tags.join(", "), 140)}`, `AVAILABLE=${p.isAvailable ? "yes" : "no"}`].join(" | ");
+  }).join("\n");
+  return `Audit the saved restaurant menu for the owner's review. Analyze every supplied product. Do not invent facts, infer ingredients, or treat this as food-safety certification. Check missing Arabic/English names, missing/weak descriptions, translation mismatches, duplicates, missing categories, clear category mismatch, inconsistent naming, repetitive copy, missing allergen information only when the menu text explicitly supports an ingredient, unsupported tags, availability/price anomalies, and overall consistency. If evidence is insufficient, report missing information rather than a fact. Score: 90-100 excellent, 75-89 good, 60-74 needs attention, below 60 significant work. Prioritize high-impact issues and group repeated patterns. Arabic-first recommendations plus English equivalents.\n\nCategories (${categories.length}): ${categories.map((c) => `${c.nameAr} / ${c.nameEn}`).join(" | ")}\nProducts (${products.length}):\n${catalog}`;
+}
+
+export const runMenuQa = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }): Promise<{ ok: true; data: MenuQaResult } | { ok: false; code: string; error: string }> => {
+    try {
+      const sql = await getSql();
+      const member = await getMember(sql, context.userId);
+      if (!member) return { ok: false, code: "not_found", error: "لا يوجد حساب مطعم نشط" };
+      if (!canWriteMenu(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية مراجعة القائمة" };
+      const [categoryRows, productRows] = await Promise.all([
+        sql<{ id: string; name_ar: string; name_en: string }>`select id, name_ar, name_en from categories where tenant_id = ${member.tenant_id} and is_active = true order by sort_order, created_at limit 100`,
+        sql<{ name_ar: string; name_en: string; description_ar: string; description_en: string; category_id: string | null; price: number; allergens: string; tags: string[] | null; is_available: boolean }>`select name_ar, name_en, description_ar, description_en, category_id, price, allergens, tags, is_available from products where tenant_id = ${member.tenant_id} order by sort_order, created_at limit 500`,
+      ]);
+      const categories = categoryRows.map((c) => ({ id: c.id, nameAr: c.name_ar, nameEn: c.name_en }));
+      const products = productRows.map((p) => ({ nameAr: p.name_ar, nameEn: p.name_en, descriptionAr: p.description_ar, descriptionEn: p.description_en, categoryId: p.category_id, price: Number(p.price), allergens: p.allergens ?? "", tags: Array.isArray(p.tags) ? p.tags : [], isAvailable: Boolean(p.is_available) }));
+      if (!products.length) return { ok: true, data: { score: 0, summaryAr: "لا توجد أصناف محفوظة بعد لمراجعتها.", summaryEn: "There are no saved products to audit yet.", issues: [], analyzedProducts: 0 } };
+      const result = await callMercury(buildMenuQaPrompt(categories, products), menuQaSchema);
+      if (!result.ok) return result;
+      const p = result.parsed;
+      if (typeof p.score !== "number" || typeof p.summaryAr !== "string" || typeof p.summaryEn !== "string" || !Array.isArray(p.issues)) return { ok: false, code: "ai_invalid", error: "نتيجة مراجعة القائمة غير صالحة" };
+      const issues: MenuQaIssue[] = [];
+      for (const value of p.issues) {
+        if (!value || typeof value !== "object") continue;
+        const i = value as Record<string, unknown>;
+        if (typeof i.key !== "string" || !["high", "medium", "low"].includes(String(i.severity)) || typeof i.titleAr !== "string" || typeof i.titleEn !== "string" || typeof i.detailsAr !== "string" || typeof i.detailsEn !== "string" || typeof i.productNameAr !== "string" || typeof i.recommendationAr !== "string" || typeof i.recommendationEn !== "string") continue;
+        issues.push({ key: compact(i.key, 80), severity: i.severity as MenuQaIssue["severity"], titleAr: compact(i.titleAr, 160), titleEn: compact(i.titleEn, 160), detailsAr: compact(i.detailsAr, 500), detailsEn: compact(i.detailsEn, 500), productNameAr: compact(i.productNameAr, 120), recommendationAr: compact(i.recommendationAr, 300), recommendationEn: compact(i.recommendationEn, 300) });
+      }
+      return { ok: true, data: { score: Math.max(0, Math.min(100, Math.round(p.score))), summaryAr: compact(p.summaryAr, 500), summaryEn: compact(p.summaryEn, 500), issues: issues.slice(0, 30), analyzedProducts: products.length } };
+    } catch (err) {
+      console.error("runMenuQa failed", err);
+      return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مراجعة القائمة" };
     }
   });
