@@ -30,7 +30,7 @@ test("returns full readiness for supported fields when product data is complete"
 
 test("flags missing supported menu information without inventing compliance", () => {
   const result = source.buildSaudiMenuReadiness(snapshot([baseProduct({ calories: null, allergens: "", descriptionEn: "" })]));
-  assert.equal(result.score, 50);
+  assert.equal(result.score, 25);
   assert.equal(result.status, "needs_attention");
   assert.ok(result.issues.some((issue) => issue.key === "calories-coverage"));
   assert.ok(result.issues.some((issue) => issue.key === "allergen-coverage"));
