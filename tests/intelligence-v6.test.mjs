@@ -41,7 +41,8 @@ test("WhatsApp report generation is review-first and uses the shared AI boundary
   assert.match(whatsapp, /generateWhatsAppReportMessage/);
   assert.match(aiCore, /callStructuredProvider/);
   assert.match(providers, /INCEPTION_API_KEY/);
-  assert.match(providers, /api\.inceptionlabs\.ai\/v1\/chat\/completions/);
+  assert.match(providers, /api\.inceptionlabs\.ai\/v1/);
+  assert.match(providers, /fetch\(`\$\{baseUrl\}\/chat\/completions`/);
   assert.match(reports, /generateWhatsAppReportMessage/);
   assert.match(reports, /wa\.me\/\?text=/);
 });
