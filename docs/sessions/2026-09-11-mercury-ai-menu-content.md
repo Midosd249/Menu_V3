@@ -14,22 +14,27 @@ Start Phase 1 of the Mercury AI integration in Menu V3: add AI Assist to the Add
 - Added `src/lib/menu/ai.ts` with authenticated server-side Mercury API calls.
 - Added structured-output schemas for description, English content, category, and tags.
 - Added `tests/mercury-ai-menu-content.test.mjs` for the integration contract.
+- Integrated `generateMenuAi` into the existing `src/routes/studio/menu.tsx` Add Product/Edit Product Sheet.
+- Added an Arabic-first `AI Assist` panel with four actions: Arabic description, English content, category suggestion, and tag suggestion.
+- AI suggestions modify only the in-memory product draft; the existing `saveProduct` path remains the only save path.
+- Suggested tags are displayed as temporary chips and are not persisted because the existing Product model has no tags field.
 - The API key is read only from `INCEPTION_API_KEY` on the server; optional model override uses `INCEPTION_MODEL` and defaults to `mercury-2.5`.
 
 ## Integration Status
-- `IMPLEMENTATION_IN_PROGRESS`.
-- A feature branch `feat/mercury-ai-menu-content` was created from the current `main`.
-- The existing `src/routes/studio/menu.tsx` still requires the UI integration commit. The GitHub connector available in this session requires the current blob SHA for replacement of an existing file, but that SHA is not exposed by the available fetch response for this large file. The existing file was therefore intentionally not replaced with an inferred copy.
+- `IMPLEMENTATION_IN_PROGRESS` pending quality-gate execution.
+- Feature branch: `feat/mercury-ai-menu-content`.
+- UI integration was completed without replacing the existing Studio menu workflow.
 
 ## Security
 - API credentials remain server-side.
 - The endpoint authenticates through the existing `authMiddleware`.
 - The tenant is derived from authenticated server context.
 - No client-supplied tenant, role, price, or product identity is trusted by the AI endpoint.
+- Category selection is validated against the server-supplied existing category IDs.
 
 ## Verification
-- Focused static contract test added but not executed in this environment.
-- Full repository lint/typecheck/build/E2E/visual QA has not been run for this partial implementation.
+- Focused static contract test updated to cover both the server AI layer and Add Product UI wiring.
+- Tests, lint, typecheck, build, E2E, and browser/visual QA remain to be executed in a local repository environment or CI.
 
 ## Exact Next Action
-Integrate the `generateMenuAi` server function into the existing Add Product Sheet without replacing or regressing the current Studio menu UI, then run the focused test and the repository quality gates before considering merge or deployment.
+Run the focused Mercury test and then the applicable repository quality gates. If those pass, perform local browser/visual QA of the Add Product Sheet in Arabic and English before any merge/release decision.
