@@ -123,7 +123,7 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         systemPrompt: "You are a careful restaurant menu content assistant. Never invent facts. The restaurant owner is the final approver. Respond only in the requested structured format.",
       });
       if (!result.ok) return result;
-      const p = result.data;
+      const p = result.data as AiResult;
       if (data.operation === "description") return { ok: true, data: { operation: "description", descriptionAr: p.descriptionAr } };
       if (data.operation === "english") return { ok: true, data: { operation: "english", nameEn: p.nameEn, descriptionEn: p.descriptionEn } };
       if (data.operation === "category") {
@@ -131,9 +131,9 @@ export const generateMenuAi = createServerFn({ method: "POST" })
         if (p.categoryId !== null && !selected) return { ok: false, code: "ai_invalid", error: "أعاد مساعد الذكاء الاصطناعي تصنيفاً غير صالح" };
         return { ok: true, data: { operation: "category", categoryId: p.categoryId, categoryNameAr: selected?.nameAr ?? "", categoryNameEn: selected?.nameEn ?? "" } };
       }
-      if (data.operation === "tags") return { ok: true, data: { operation: "tags", tags: [...new Set(p.tags)].slice(0, 8) } };
+      if (data.operation === "tags") return { ok: true, data: { operation: "tags", tags: [...new Set<string>(p.tags)].slice(0, 8) } };
       if (data.operation === "price") return { ok: true, data: { operation: "price", price: p.price, cleanedNameAr: p.cleanedNameAr } };
-      return { ok: true, data: { operation: "allergens", allergens: [...new Set(p.allergens)].slice(0, 12), disclaimerAr: p.disclaimerAr, disclaimerEn: p.disclaimerEn } };
+      return { ok: true, data: { operation: "allergens", allergens: [...new Set<string>(p.allergens)].slice(0, 12), disclaimerAr: p.disclaimerAr, disclaimerEn: p.disclaimerEn } };
     } catch (err) {
       console.error("generateMenuAi failed", err);
       return { ok: false, code: "ai_unavailable", error: "تعذر تشغيل مساعد الذكاء الاصطناعي" };
@@ -218,7 +218,7 @@ export const runMenuQa = createServerFn({ method: "POST" })
       });
       if (!result.ok) return result;
       const p = result.data;
-      const issues: MenuQaIssue[] = p.issues.map((i) => ({
+      const issues: MenuQaIssue[] = p.issues.map((i: any) => ({
         key: compact(i.key, 80),
         severity: i.severity,
         titleAr: compact(i.titleAr, 160),
