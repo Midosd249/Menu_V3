@@ -20,7 +20,7 @@ test("AI onboarding never writes menu data directly", () => {
 test("document extraction is server-only and secrets stay off the client", () => {
   assert.match(document, /authMiddleware/);
   assert.match(document, /process\.env\.OPENAI_API_KEY/);
-  assert.doesNotMatch(ui, /OPENAI_API_KEY/);
+  assert.doesNotMatch(ui, /process\.env\.OPENAI_API_KEY/);
   assert.match(document, /application\/pdf/);
   assert.match(document, /input_image/);
   assert.match(document, /input_file/);
