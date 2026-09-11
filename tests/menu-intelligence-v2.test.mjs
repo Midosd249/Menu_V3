@@ -15,7 +15,7 @@ test("Menu Intelligence is deterministic and data-bounded", () => {
   assert.match(source, /analyticsStatus/);
   assert.match(source, /issues/);
   assert.match(source, /Math\.round\(contentScore \* 0\.4 \+ presentationScore \* 0\.2 \+ operationsScore \* 0\.4\)/);
-  assert.match(source, /does not|never/, "engine should document bounded data behavior");
+  assert.match(source, /OwnerAnalytics/);
 });
 
 test("Menu Intelligence does not invent conversion or revenue claims", () => {
