@@ -95,7 +95,7 @@ async function callMercury(args: {
   }
 }
 
-export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T>): Promise<{ ok: true; data: z.output<T> } | AiFailure> {
+export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T>): Promise<{ ok: true; data: any } | AiFailure> {
   try {
     if (!(await consumeRateLimit(args.sql, args.tenantId, args.userId))) {
       return { ok: false, code: "ai_rate_limited", error: "تم تجاوز حد استخدام مساعد الذكاء الاصطناعي مؤقتاً. حاول لاحقاً." };
