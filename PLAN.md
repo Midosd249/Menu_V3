@@ -127,3 +127,21 @@ At the end of each atomic task, reconcile current Git head, CI evidence, and dep
 - DECISION: recover the server-owned tenant membership instead of weakening or removing the uniqueness constraint.
 - DECISION: preserve the existing tenant/menu architecture and make onboarding terminology business-neutral rather than introducing a separate product model.
 - VERIFIED: no dependency, auth, RLS, tenant isolation, theme, ordering, analytics, approval-center, or Manus infrastructure was changed.
+
+## 2026-09-11 — AI Provider Routing Milestone
+- VERIFIED: PR #89 implements a replaceable server-side AI provider boundary and preserves the existing Menu Intelligence architecture.
+- VERIFIED: structured AI fallback order is Inception/Mercury → Gemini → Z.AI → OpenRouter → xKiro.
+- VERIFIED: multimodal image/PDF fallback order is Gemini → OpenRouter → Z.AI → xKiro.
+- VERIFIED: five configured Inception keys are supported as a rotating key pool; no secret values are stored in Git.
+- VERIFIED: image/PDF extraction no longer requires a hard-coded OpenAI credential.
+- VERIFIED: schema validation, tenant/user rate limiting, prompt-injection safeguards, and human-review boundaries remain intact.
+- VERIFIED: GitHub Quality run `34632139918` passed all stages through all-theme browser QA.
+- STATUS: `READY_TO_PUSH` on the milestone branch.
+
+## Exact Next Task — AI Provider Routing Release
+1. Review PR #89 final diff against `main`.
+2. Merge PR #89 as one coherent release batch.
+3. Verify the resulting `main` commit and GitHub Quality independently.
+4. Do not intentionally trigger Vercel while the current deployment rate-limit condition remains.
+5. On the next permitted production deployment, run one controlled structured-AI smoke test and one non-sensitive image/PDF ingestion test.
+6. Stop; do not automatically start another AI milestone.

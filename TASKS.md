@@ -132,7 +132,19 @@ At the end of each atomic task, reconcile current Git/CI/deployment evidence, up
 
 ## 2026-09-11 — Onboarding Creation Recovery Session
 - Scope: fix only the production onboarding creation failure and make onboarding wording suitable for non-restaurant menu businesses.
-- Root cause: a previous onboarding request left a tenant row without an active owner membership; the next request only checked active membership and attempted a duplicate owner insert, correctly rejected by `tenants_owner_user_id_uidx`.
+- Root cause: a previous onboarding request left a tenant row without an active owner membership; the next request only checked active membership and attempted a duplicate tenant insert, correctly rejected by `tenants_owner_user_id_uidx`.
 - Fix: authenticated server-side recovery restores the membership and canonical owner access role; onboarding retries once after recovery.
 - Verification evidence: Vercel runtime logs, live Supabase schema/constraint inspection, focused regression test, and PR #75 quality run in progress.
 - Deployment status: `DEPLOYMENT_BLOCKED` by Vercel rate limiting; no deployment retry performed.
+
+## 2026-09-11 — AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED
+- VERIFIED: PR #89 branch `feat/ai-provider-routing-and-multimodal-fallback` adds the shared provider router without rebuilding existing AI features.
+- VERIFIED: Inception key pool supports the five configured keys and an optional sixth without storing values in Git.
+- VERIFIED: structured fallback covers Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
+- VERIFIED: image/PDF extraction uses multimodal fallback rather than a hard-coded OpenAI credential.
+- VERIFIED: 254 tests, typecheck, lint, production build, Playwright runtime/Chromium, and all-theme browser QA passed in Quality run `34632139918`.
+- VERIFIED: no production deployment was intentionally triggered.
+- STATUS: branch implementation is `VERIFIED_LOCALLY` by CI evidence and `READY_TO_PUSH` to `main` via PR #89.
+
+## Exact Next Task
+Merge PR #89 to `main` as the single coherent AI provider-routing release batch, verify the new `main` commit and CI, and stop. Production deployment remains a separate controlled action subject to the existing Vercel release condition.

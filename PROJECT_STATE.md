@@ -116,3 +116,20 @@ At the end of every atomic task:
 - VERIFIED: report wording avoids fabricated sales/revenue/conversion claims and does not present the report as a legal compliance certificate.
 - STATUS: `IMPLEMENTATION_IN_PROGRESS` pending GitHub Quality and merge.
 - DEPLOYMENT: no feature-branch Vercel deployment requested; release-only policy applies.
+
+## 2026-09-11 — AI Provider Routing & Multimodal Fallback
+- VERIFIED: PR #89 branch `feat/ai-provider-routing-and-multimodal-fallback` adds a replaceable server-side AI provider boundary without changing the database source-of-truth model.
+- VERIFIED: structured routing supports Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro with configurable order and Inception key rotation.
+- VERIFIED: image/PDF menu extraction no longer requires a hard-coded OpenAI credential; multimodal routing defaults to Gemini → OpenRouter → Z.AI → xKiro.
+- VERIFIED: AI output remains schema-validated; existing tenant/user rate limiting and prompt-injection safeguards remain in force.
+- VERIFIED: GitHub Quality run `34632139918` passed all configured stages, including route generation, typecheck, 254 tests, lint, production build, Playwright/Chromium, all-theme browser QA, performance handling, and cleanup.
+- VERIFIED: no Vercel production deployment was intentionally triggered for this milestone.
+- STATUS: `READY_TO_PUSH` on the milestone branch; production status for this new code is `UNKNOWN` until a controlled release.
+
+## Current Exact Next Task — AI Provider Routing Release
+1. Review PR #89 final diff against `main`.
+2. Merge PR #89 once the branch remains quality-green.
+3. Verify the resulting `main` commit and GitHub quality separately.
+4. Do not intentionally trigger a Vercel deployment while the existing release condition/rate limit blocks it.
+5. On the next permitted production deployment, perform one controlled authenticated AI smoke test for structured output and one image/PDF ingestion test using non-sensitive sample content.
+6. Stop; do not start another AI milestone automatically.
