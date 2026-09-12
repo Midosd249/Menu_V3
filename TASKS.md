@@ -110,6 +110,18 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - R6 merge commit: `16bd37e51870740df547bb5840a0237fe3657f0a`.
 - Production outcome remains UNKNOWN until real traffic accumulates.
 
+## Theme Interaction Hardening — CLOSED / VERIFIED / MERGED
+### PR #119 — Gallery + Noir
+- PR #119 merged as `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- Gallery assistant dialog hides only the Gallery floating bottom action dock while open and restores it on close.
+- Gallery assistant state is exposed structurally with `data-public-menu-assistant-dialog="true"`; no duplicate controls or global z-index escalation were introduced.
+- Noir no longer traps shared dialogs inside `.menu-public-shell > * { position: relative; z-index: 1; }`.
+- Noir preserves intentional header/main/footer content layers while ProductSheet and Assistant can stack correctly.
+- Noir shared dialogs use existing semantic surface/content/border tokens so item-option labels remain readable.
+- Focused Gallery and Noir structural regression tests were added.
+- Full repository quality gates passed before merge, including Typecheck, Tests, Lint, Production Build, Playwright/Chromium, all-theme Browser QA, and performance baseline.
+- No ordering, pricing, availability, tenant/branch isolation, auth, AI grounding, provider routing, cart, or database behavior was changed.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -117,9 +129,11 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: current `main` SHA is `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- VERIFIED: current `main` SHA is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: R6 GitHub Quality run `1408` passed all required steps before merge.
-- BLOCKED: Vercel deployment for R6 is blocked by the account free daily deployment limit (`api-deployments-free-per-day`).
+- VERIFIED: PR #119 passed the repository Quality Gate before merge and is merged to `main`.
+- VERIFIED: latest known Production deployment is READY for `887077710808aeae448ccf3d00b027adea165c77`.
+- BLOCKED: Vercel deployment for `42b67382...` is blocked by the account free daily deployment limit (`api-deployments-free-per-day`).
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
 ## Exact Next Task
@@ -130,6 +144,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 4. Decide keep control, keep treatment, or end the experiment.
 5. Do not claim statistical significance without sufficient data.
 6. Do not start a second experiment before this review.
+7. Before treating the Gallery/Noir fix as released, clear the current Vercel deployment limit, perform one production deployment of `42b67382...`, then complete real-device QA for Gallery and Noir.
 
 ## Working Rules
 - `main` is source of truth.
