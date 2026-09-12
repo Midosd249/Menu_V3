@@ -6,13 +6,16 @@ import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getOwnerAnalytics, getMyStudio } from "@/lib/menu/owner";
 import { buildMenuReport, reportToText, type MenuReport } from "@/lib/menu/reports";
-import { generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
+import { buildWhatsAppShareUrl, generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
+
+// The share contract intentionally remains WhatsApp click-to-chat: https://wa.me/?text=
+// Recipient selection is always left to the owner inside WhatsApp.
 
 export const Route = createFileRoute("/studio/reports")({ component: ReportsPage });
 
 type State = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; report: MenuReport };
-type WhatsAppState = { status: "idle" | "loading" | "ready" | "error"; message?: string };
+type WhatsAppState = { status: "idle" | "loading" | "ready" | "error"; message?: string; copied?: boolean; opened?: boolean };
 
 function ReportsPage() {
   const { lang } = useLang();
@@ -41,17 +44,36 @@ function ReportsPage() {
   const text = useMemo(() => state.status === "ready" ? reportToText(state.report, lang) : "", [state, lang]);
   const print = () => window.print();
 
+  const copyMessage = async (message: string) => {
+    try {
+      await navigator.clipboard.writeText(message);
+      setWaState((current) => ({ ...current, copied: true }));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const shareWhatsApp = async () => {
-    if (state.status !== "ready") return;
+    if (state.status !== "ready" || waState.status === "loading") return;
     setWaState({ status: "loading" });
     const result = await generateWhatsAppReportMessage({ data: { reportText: text, lang } });
     if (!result.ok) {
       setWaState({ status: "error", message: result.error });
       return;
     }
-    try { await navigator.clipboard?.writeText(result.data.message); } catch { /* clipboard is optional */ }
-    window.open(`https://wa.me/?text=${encodeURIComponent(result.data.message)}`, "_blank", "noopener,noreferrer");
-    setWaState({ status: "ready", message: result.data.message });
+
+    const message = result.data.message;
+    const shareUrl = buildWhatsAppShareUrl(message);
+    const copied = await copyMessage(message);
+    let opened = false;
+    try {
+      const popup = window.open(shareUrl, "_blank", "noopener,noreferrer");
+      opened = popup !== null;
+    } catch {
+      opened = false;
+    }
+    setWaState({ status: "ready", message, copied, opened });
   };
 
   return <div className="mx-auto grid max-w-5xl gap-6 pb-10">
@@ -66,14 +88,18 @@ function ReportsPage() {
 
     {state.status === "loading" ? <LoadingState /> : null}
     {state.status === "error" ? <ErrorState message={state.message} /> : null}
-    {state.status === "ready" ? <ReportContent report={state.report} lang={lang} text={text} onPrint={print} onWhatsApp={shareWhatsApp} onRefresh={load} refreshing={refreshing} waState={waState} /> : null}
+    {state.status === "ready" ? <ReportContent report={state.report} lang={lang} text={text} onPrint={print} onWhatsApp={shareWhatsApp} onCopy={copyMessage} onRefresh={load} refreshing={refreshing} waState={waState} /> : null}
   </div>;
 }
 
-function ReportContent({ report, lang, text, onPrint, onWhatsApp, onRefresh, refreshing, waState }: { report: MenuReport; lang: "ar" | "en"; text: string; onPrint: () => void; onWhatsApp: () => void; onRefresh: () => void; refreshing: boolean; waState: WhatsAppState }) {
+function ReportContent({ report, lang, text, onPrint, onWhatsApp, onCopy, onRefresh, refreshing, waState }: { report: MenuReport; lang: "ar" | "en"; text: string; onPrint: () => void; onWhatsApp: () => void; onCopy: (message: string) => Promise<boolean>; onRefresh: () => void; refreshing: boolean; waState: WhatsAppState }) {
   const name = lang === "ar" ? report.tenantNameAr : report.tenantNameEn || report.tenantNameAr;
   const insights = report.advisor.insights.slice(0, 4);
   const actions = report.advisor.actions.slice(0, 6);
+  const handleCopy = async () => {
+    if (!waState.message) return;
+    await onCopy(waState.message);
+  };
   return <>
     <section className="overflow-hidden rounded-3xl border border-line bg-ink p-6 text-paper shadow-sm md:p-8 print:border-black print:bg-white print:text-black">
       <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
@@ -106,20 +132,17 @@ function ReportContent({ report, lang, text, onPrint, onWhatsApp, onRefresh, ref
     </section>
 
     <section className="grid gap-4 rounded-3xl border border-line bg-paper p-5 print:hidden">
-      <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "المشاركة" : "Sharing"}</p><h2 className="mt-1 font-semibold">{lang === "ar" ? "راجع التقرير ثم شاركه" : "Review, then share"}</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "يمكنك طباعة التقرير أو إنشاء رسالة واتساب مختصرة مبنية على نفس البيانات. اختيار المستلم يتم في واتساب." : "Print the report or create a concise WhatsApp message based on the same data. You choose the recipient in WhatsApp."}</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "المشاركة" : "Sharing"}</p><h2 className="mt-1 font-semibold">{lang === "ar" ? "واتساب — راجع ثم شارك" : "WhatsApp — review, then share"}</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "أنشئ رسالة مختصرة مبنية على التقرير نفسه. ستظهر الرسالة للمراجعة أولًا، ويمكنك نسخها أو فتح واتساب واختيار المستلم بنفسك." : "Create a concise message from the same report. Review it first, then copy it or open WhatsApp and choose the recipient yourself."}</p></div>
       <div className="flex flex-wrap gap-2"><Button type="button" onClick={onWhatsApp} disabled={waState.status === "loading"}><MessageCircle className="size-4" />{waState.status === "loading" ? (lang === "ar" ? "جاري إنشاء الرسالة…" : "Generating…") : (lang === "ar" ? "إنشاء رسالة واتساب" : "Generate WhatsApp message")}</Button><Button type="button" variant="outline" onClick={onPrint}><Printer className="size-4" />{lang === "ar" ? "طباعة / حفظ PDF" : "Print / Save PDF"}</Button><Button type="button" variant="ghost" onClick={onRefresh} disabled={refreshing}><RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />{lang === "ar" ? "تحديث" : "Refresh"}</Button></div>
-      {waState.status === "ready" && waState.message ? <div className="rounded-xl bg-sand/50 p-3"><div className="flex items-center gap-2 text-sm font-medium"><Check className="size-4 text-good" />{lang === "ar" ? "تم إنشاء الرسالة وفتح واتساب" : "Message generated and WhatsApp opened"}</div><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-muted">{waState.message}</p><button type="button" className="mt-2 inline-flex items-center gap-2 text-xs font-medium" onClick={() => navigator.clipboard?.writeText(waState.message || "")}><Copy className="size-3.5" />{lang === "ar" ? "نسخ الرسالة" : "Copy message"}</button></div> : null}
-      {waState.status === "error" ? <p className="rounded-xl border border-line p-3 text-sm">{waState.message}</p> : null}
+      {waState.status === "ready" && waState.message ? <div className="grid gap-3 rounded-2xl border border-line bg-sand/40 p-4"><div className="flex flex-wrap items-center gap-2"><div className="flex items-center gap-2 text-sm font-medium"><Check className="size-4 text-good" />{waState.opened ? (lang === "ar" ? "تم فتح واتساب" : "WhatsApp opened") : (lang === "ar" ? "الرسالة جاهزة" : "Message ready")}</div>{waState.copied ? <span className="text-xs text-muted">{lang === "ar" ? "· تم نسخ الرسالة" : "· Message copied"}</span> : null}</div><p className="max-h-56 overflow-auto whitespace-pre-wrap rounded-xl border border-line bg-paper p-3 text-sm leading-6 text-muted">{waState.message}</p><div className="flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" onClick={handleCopy}><Copy className="size-4" />{waState.copied ? (lang === "ar" ? "تم النسخ" : "Copied") : (lang === "ar" ? "نسخ الرسالة" : "Copy message")}</Button><Button type="button" size="sm" onClick={onWhatsApp}><MessageCircle className="size-4" />{lang === "ar" ? "فتح واتساب مجددًا" : "Open WhatsApp again"}</Button></div></div> : null}
+      {waState.status === "error" ? <p className="rounded-xl border border-danger/30 bg-danger/5 p-3 text-sm leading-6 text-danger">{waState.message}</p> : null}
     </section>
-
-    <details className="rounded-2xl border border-line p-4 print:hidden"><summary className="cursor-pointer text-sm font-medium">{lang === "ar" ? "عرض النص الكامل للتقرير" : "View full report text"}</summary><pre className="mt-4 max-h-96 overflow-auto whitespace-pre-wrap break-words text-xs leading-6 text-muted">{text}</pre></details>
-    <p className="text-center text-xs leading-5 text-muted print:text-black/60">{lang === "ar" ? "التقرير مبني على البيانات المسجلة والمتاحة فقط. لا يتضمن وعودًا بالمبيعات أو الأرباح أو التحويل، ولا يمثل شهادة امتثال قانونية." : "This report uses only recorded, available data. It makes no sales, profit, or conversion promises and is not a legal compliance certificate."}</p>
   </>;
 }
 
-function Score({ label, value }: { label: string; value: number }) { return <div className="rounded-2xl border border-paper/15 bg-paper/10 p-3 print:border-black/15 print:bg-transparent"><div className="flex items-center justify-between gap-3 text-xs text-paper/70 print:text-black/60"><span>{label}</span><strong className="tabular text-paper print:text-black">{value}</strong></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-paper/10 print:bg-black/10"><div className="h-full rounded-full bg-paper/70 print:bg-black/60" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} /></div></div>; }
-function Metric({ label, value }: { label: string; value: number }) { return <div className="min-w-0 rounded-2xl border border-line bg-paper p-4"><p className="truncate text-xs text-muted">{label}</p><p className="mt-2 font-display text-2xl font-semibold tabular">{value}</p></div>; }
-function Finding({ label, value }: { label: string; value: number }) { return <div className="min-w-0 rounded-xl bg-sand/35 p-3"><span className="block truncate text-xs text-muted">{label}</span><strong className="mt-1 block tabular">{value}</strong></div>; }
-function Priority({ priority, lang }: { priority: "high" | "medium" | "low"; lang: "ar" | "en" }) { const label = priority === "high" ? (lang === "ar" ? "عالية" : "High") : priority === "medium" ? (lang === "ar" ? "متوسطة" : "Medium") : (lang === "ar" ? "منخفضة" : "Low"); return <span className="shrink-0 rounded-full border border-line px-2 py-0.5 text-[10px] font-medium text-muted">{label}</span>; }
-function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-5 text-sm leading-6 text-muted">{text}</div>; }
-function formatDate(value: string, lang: "ar" | "en") { try { return new Intl.DateTimeFormat(lang === "ar" ? "ar-SA" : "en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); } catch { return value; } }
+function Score({ label, value }: { label: string; value: number }) { return <div className="rounded-2xl border border-paper/10 bg-paper/10 p-3 print:border-black/10 print:bg-transparent"><div className="flex items-center justify-between gap-3 text-xs text-paper/70 print:text-black/60"><span>{label}</span><span className="font-semibold tabular">{value}</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-paper/10 print:bg-black/10"><div className="h-full rounded-full bg-paper print:bg-black" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} /></div></div>; }
+function Metric({ label, value }: { label: string; value: number }) { return <div className="rounded-2xl border border-line bg-paper p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl font-semibold tabular">{value}</p></div>; }
+function Finding({ label, value }: { label: string; value: number }) { return <div className="min-w-0 rounded-2xl border border-line p-3"><p className="text-xs leading-5 text-muted">{label}</p><p className="mt-1 font-display text-xl font-semibold tabular">{value}</p></div>; }
+function Priority({ priority, lang }: { priority: "high" | "medium" | "low"; lang: "ar" | "en" }) { const label = priority === "high" ? (lang === "ar" ? "أولوية عالية" : "High") : priority === "medium" ? (lang === "ar" ? "متوسطة" : "Medium") : (lang === "ar" ? "منخفضة" : "Low"); return <span className="shrink-0 rounded-full border border-line px-2 py-0.5 text-[11px] text-muted">{label}</span>; }
+function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-5 text-sm text-muted">{text}</div>; }
+function formatDate(value: string, lang: "ar" | "en") { try { return new Intl.DateTimeFormat(lang === "ar" ? "ar-SA" : "en-SA", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); } catch { return value; } }
