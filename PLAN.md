@@ -7,10 +7,9 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: latest main commit is `fix(themes): polish Gallery assistant and Noir item modal`.
-- VERIFIED: Guest Assistant public-route and launcher hardening is present in main.
-- VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main.
+- VERIFIED: `main` is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: latest main commit is `docs: reconcile continuity with current main`.
+- VERIFIED: latest theme-hardening commit preceding the continuity merge contains Guest Assistant public-route/launcher hardening plus Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening.
 - VERIFIED: focused Gallery/Noir regression coverage is present.
 
 ## Completed Strategic Milestones
@@ -32,6 +31,7 @@
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
 - Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
+- Continuity reconciliation — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -94,7 +94,8 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: latest code is merged to `main` at `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: latest continuity reconciliation is merged to `main` at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
 - BLOCKED: latest Vercel production deployment must be verified separately because the account has a deployment/build-rate limit condition.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
