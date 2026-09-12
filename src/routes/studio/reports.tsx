@@ -6,7 +6,7 @@ import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getOwnerAnalytics, getMyStudio } from "@/lib/menu/owner";
 import { buildMenuReport, reportToText, type MenuReport } from "@/lib/menu/reports";
-import { generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
+import { buildWhatsAppShareUrl, generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/reports")({ component: ReportsPage });
@@ -61,7 +61,7 @@ function ReportsPage() {
     }
 
     const message = result.data.message;
-    const shareUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const shareUrl = buildWhatsAppShareUrl(message);
     const copied = await copyMessage(message);
     let opened = false;
     try {
@@ -129,7 +129,7 @@ function ReportContent({ report, lang, text, onPrint, onWhatsApp, onCopy, onRefr
     </section>
 
     <section className="grid gap-4 rounded-3xl border border-line bg-paper p-5 print:hidden">
-      <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "المشاركة" : "Sharing"}</p><h2 className="mt-1 font-semibold">{lang === "ar" ? "راجع التقرير ثم شاركه" : "Review, then share"}</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "أنشئ رسالة واتساب مختصرة مبنية على التقرير نفسه، ثم راجعها وانسخها أو افتح واتساب لإرسالها إلى المستلم الذي تختاره." : "Create a concise WhatsApp message from the same report, then review it, copy it, or open WhatsApp to choose the recipient."}</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "المشاركة" : "Sharing"}</p><h2 className="mt-1 font-semibold">{lang === "ar" ? "واتساب — راجع ثم شارك" : "WhatsApp — review, then share"}</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-muted">{lang === "ar" ? "أنشئ رسالة مختصرة مبنية على التقرير نفسه. ستظهر الرسالة للمراجعة أولًا، ويمكنك نسخها أو فتح واتساب واختيار المستلم بنفسك." : "Create a concise message from the same report. Review it first, then copy it or open WhatsApp and choose the recipient yourself."}</p></div>
       <div className="flex flex-wrap gap-2"><Button type="button" onClick={onWhatsApp} disabled={waState.status === "loading"}><MessageCircle className="size-4" />{waState.status === "loading" ? (lang === "ar" ? "جاري إنشاء الرسالة…" : "Generating…") : (lang === "ar" ? "إنشاء رسالة واتساب" : "Generate WhatsApp message")}</Button><Button type="button" variant="outline" onClick={onPrint}><Printer className="size-4" />{lang === "ar" ? "طباعة / حفظ PDF" : "Print / Save PDF"}</Button><Button type="button" variant="ghost" onClick={onRefresh} disabled={refreshing}><RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />{lang === "ar" ? "تحديث" : "Refresh"}</Button></div>
       {waState.status === "ready" && waState.message ? <div className="grid gap-3 rounded-2xl border border-line bg-sand/40 p-4"><div className="flex flex-wrap items-center gap-2"><div className="flex items-center gap-2 text-sm font-medium"><Check className="size-4 text-good" />{waState.opened ? (lang === "ar" ? "تم فتح واتساب" : "WhatsApp opened") : (lang === "ar" ? "الرسالة جاهزة" : "Message ready")}</div>{waState.copied ? <span className="text-xs text-muted">{lang === "ar" ? "· تم نسخ الرسالة" : "· Message copied"}</span> : null}</div><p className="max-h-56 overflow-auto whitespace-pre-wrap rounded-xl border border-line bg-paper p-3 text-sm leading-6 text-muted">{waState.message}</p><div className="flex flex-wrap gap-2"><Button type="button" size="sm" variant="outline" onClick={handleCopy}><Copy className="size-4" />{waState.copied ? (lang === "ar" ? "تم النسخ" : "Copied") : (lang === "ar" ? "نسخ الرسالة" : "Copy message")}</Button><Button type="button" size="sm" onClick={onWhatsApp}><MessageCircle className="size-4" />{lang === "ar" ? "فتح واتساب مجددًا" : "Open WhatsApp again"}</Button></div></div> : null}
       {waState.status === "error" ? <p className="rounded-xl border border-danger/30 bg-danger/5 p-3 text-sm leading-6 text-danger">{waState.message}</p> : null}
