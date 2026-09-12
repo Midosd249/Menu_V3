@@ -11,7 +11,7 @@ const overview = fs.readFileSync("src/routes/studio/index.tsx", "utf8");
 
 test("Menu Health defines an explainable deterministic contract", () => {
   assert.match(types, /HealthDimension/);
-  for (const key of ["publishing", "content", "translation", "visual", "organization", "commercial", "availability"]) assert.match(health, new RegExp(`\\"${key}\\"`));
+  for (const key of ["publishing", "content", "translation", "visual", "organization", "commercial", "availability"]) assert.ok(health.includes(`dim("${key}"`));
   assert.match(health, /Number\.isFinite\(p\.price\)/);
   assert.doesNotMatch(health, /price.*===.*0|price.*<=.*0/);
 });
@@ -20,7 +20,7 @@ test("Menu Health treats optional presentation fields as quality signals", () =>
   assert.match(health, /imageUrl/);
   assert.match(health, /descriptionAr/);
   assert.match(health, /descriptionEn/);
-  assert.match(health, /severity: \"low\"/);
+  assert.match(health, /severity: "low"/);
 });
 
 test("Menu Intelligence consumes canonical health instead of a second score", () => {
