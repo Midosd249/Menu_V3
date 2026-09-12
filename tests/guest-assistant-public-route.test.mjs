@@ -11,3 +11,12 @@ test("published menu loader renders the guest assistant outside theme previews",
   assert.match(branchRoute, /<MenuLoader /);
   assert.doesNotMatch(route, /previewTheme\s*\?\s*<GuestMenuAssistant/);
 });
+
+test("guest assistant launcher remains above the public menu action dock", async () => {
+  const source = await readFile("src/components/guest-menu-assistant.tsx", "utf8");
+
+  assert.match(source, /data-public-menu-assistant-launcher="true"/);
+  assert.match(source, /bottom-\[calc\(7rem\+env\(safe-area-inset-bottom\)\)\]/);
+  assert.match(source, /start-4 z-\[45\]/);
+  assert.match(source, /aria-label=\{lang === "ar" \? "اسأل عن القائمة" : "Ask about the menu"\}/);
+});
