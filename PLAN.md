@@ -21,6 +21,7 @@
 - Menu Intelligence V5 Report Center — CLOSED / VERIFIED / MERGED.
 - R2.7 WhatsApp Report Sharing — CLOSED / VERIFIED / MERGED.
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
+- Gallery/Noir theme interaction hardening — CLOSED / VERIFIED / MERGED as `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -82,7 +83,7 @@ Implemented:
 - Nullable `experiment_key` and `experiment_variant` columns on the existing `menu_events` stream, with a validation constraint and index.
 - Treatment changes only the existing WhatsApp action presentation.
 - Owner-preview/preview mode does not activate or record the experiment.
-- Existing four-event analytics stream remains canonical; no second event source was created.
+- Existing analytics stream remains canonical; no second event source was created.
 
 Measurement contract:
 - Primary metric: WhatsApp-click sessions / exposed sessions.
@@ -93,6 +94,21 @@ Measurement contract:
 - Rollback if a clear product-exploration regression or rendering/accessibility defect appears.
 
 R6 is complete as an experiment activation/measurement milestone. The production outcome is intentionally UNKNOWN until real traffic accumulates.
+
+## Theme Interaction Hardening — CLOSED / VERIFIED
+
+PR #119 was merged into `main` as `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+
+Verified scope:
+- Gallery assistant modal hides only the Gallery floating bottom action dock while open and restores it on close.
+- Gallery uses a structural assistant-dialog state attribute rather than global z-index escalation or duplicate controls.
+- Noir removes the blanket public-shell child stacking context that trapped ProductSheet below the assistant.
+- Noir preserves intentional header/main/footer layers while allowing shared dialogs to stack correctly.
+- Noir dialogs use existing semantic surface/content/border tokens so item-option text remains readable.
+- Focused Gallery and Noir regression tests were added.
+- Full repository quality gates passed before merge.
+
+No ordering, pricing, availability, tenant/branch isolation, auth, AI grounding, provider routing, cart, or database behavior was changed.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -109,10 +125,12 @@ Normal path:
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
 ## Current Verified Main
-- VERIFIED: current `main` SHA is `16bd37e51870740df547bb5840a0237fe3657f0a`.
-- VERIFIED: R6 is merged at that SHA.
-- VERIFIED: GitHub Quality run `1408` passed all required quality steps for the R6 head before merge.
-- BLOCKED: Vercel production deployment for R6 is blocked by the account free daily deployment limit (`api-deployments-free-per-day`).
+- VERIFIED: current `main` SHA is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: R6 is merged at `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- VERIFIED: Gallery/Noir theme hardening is merged at `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: GitHub Quality passed for PR #119 before merge.
+- VERIFIED: latest known Production deployment is READY for `887077710808aeae448ccf3d00b027adea165c77`.
+- BLOCKED: Vercel has not deployed `42b67382...` because the PR deployment hit `api-deployments-free-per-day`.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
@@ -132,4 +150,6 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 ## Exact Next Task
 ### R7 — Post-Experiment Evidence Review / Controlled Optimization
 
-Wait for real R6 exposure to accumulate, then inspect the canonical `menu_events` experiment fields and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start another experiment before this review.
+Wait for real R6 exposure to accumulate, then inspect the canonical `menu_events` experiment fields and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start a second experiment before this review.
+
+Release prerequisite: once the Vercel free daily deployment limit clears, perform exactly one production deployment for the already-merged `42b67382...` theme hardening batch, then real-device QA for Gallery and Noir. Do not create deployment churn while the limit is active.
