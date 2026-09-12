@@ -7,7 +7,8 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b` after continuity synchronization.
+- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: this is the post-merge continuity synchronization commit whose parent was `8bce889eda8605c73173e390139e54393024b03b`.
 - VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: latest theme-hardening commit preceding the continuity merge contains Guest Assistant public-route/launcher hardening plus Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening.
 - VERIFIED: focused Gallery/Noir regression coverage is present.
@@ -80,12 +81,13 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Directional interpretation only; no statistical significance claim.
 
 ## R7 — Initial Evidence Review
-STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
+STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
-- VERIFIED: current canonical `menu_v3.menu_events` contains `whatsapp-cta-v1` exposure only for `prominent`.
-- VERIFIED: current observed exposure is 1 distinct `prominent` session and 0 observed `control` sessions.
-- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: the experiment is far below the declared collection threshold of 50 exposed sessions per variant.
+- VERIFIED: canonical table is `menu_v3.menu_events`.
+- VERIFIED: current observed exposure is 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: current `control` has 0 WhatsApp-click sessions and 0 product-view sessions.
+- VERIFIED: current `prominent` has 0 WhatsApp-click sessions and 1 product-view session.
+- INFERRED: Control is at 2% of the 50-session target and Prominent is at 4% of the 50-session target.
 - DECISION: no treatment decision is justified; continue real exposure and re-review after meaningful accumulation.
 
 ## AI Infrastructure
@@ -95,6 +97,15 @@ STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
 - VERIFIED: schema validation, rate limiting, prompt-injection safeguards, and human-review boundaries.
 - VERIFIED: server-only credentials.
 
+## Production / Commercial Readiness
+STATUS: IN_PROGRESS — REPOSITORY-READY; EXTERNAL EVIDENCE REMAINING
+
+- VERIFIED: the temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production; no removal is justified solely by the current all-free theme catalog.
+- VERIFIED: the repository quality workflow covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
+- VERIFIED: current `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- UNKNOWN: direct Vercel Production environment-variable values are not readable through the current GitHub connector and must not be inferred from repository state.
+- UNKNOWN: physical real-device Production QA is not available through the current connector environment.
+
 ## Release-Only Vercel Policy
 Normal path:
 
@@ -103,11 +114,10 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: continuity synchronization is merged to `main` at `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: the preceding canonical main was `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
-- BLOCKED: latest Vercel production deployment must be verified separately because the account has a deployment/build-rate limit condition.
-- UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
+- VERIFIED: continuity synchronization is represented by current `main` commit `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: the current GitHub quality workflow is configured for push/PR quality gates.
+- UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
+- UNKNOWN: direct physical-device Production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
 ```text
@@ -117,12 +127,19 @@ Live Menu
 → Owner Intelligence
 → Growth Extensions
 → Experiments
+→ Production / Commercial Readiness
 ```
 
 ## Exact Next Task
-### R7 — Continue Real Exposure / Controlled Optimization Review
+### Production / Commercial Readiness — External Verification Gate
 
-Keep `whatsapp-cta-v1` running for eligible real traffic. Re-read canonical `menu_events` after exposure accumulates, compare control and prominent against the declared primary and guardrail metrics, and make a directional decision only when the evidence is sufficient. Do not start another experiment before this review.
+Complete only the remaining evidence-dependent work:
+1. verify Vercel Production environment/configuration against the canonical Supabase target;
+2. perform available authenticated/browser/QR/theme/order/RTL Production QA;
+3. perform real-device QA when a real device/browser session is available;
+4. record direct evidence and close the readiness milestone when all applicable checks pass.
+
+R7 remains active independently and does not block this task.
 
 ## Continuity Rule
 At the end of every atomic task:
