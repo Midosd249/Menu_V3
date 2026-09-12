@@ -13,7 +13,7 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current `main` SHA is `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- VERIFIED: current `main` SHA is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: R2.7 WhatsApp Report Sharing is merged and protected.
 - VERIFIED: R4.1 Verified Owner Signals is merged and protected.
 - VERIFIED: R4.2 Intelligence Action Center is merged and protected.
@@ -23,10 +23,12 @@
 - VERIFIED: R5 Growth Extensions is merged and protected.
 - VERIFIED: R6 bounded WhatsApp CTA experiment is merged as `16bd37e51870740df547bb5840a0237fe3657f0a`.
 - VERIFIED: R6 assigns `control` / `prominent` deterministically from the existing anonymous session id, persists the server-derived variant on the existing `menu_events` stream, and limits participation to published menus with configured WhatsApp.
-- VERIFIED: R6 treatment changes only the existing WhatsApp action presentation; no new customer action or autonomous outbound behavior was introduced.
 - VERIFIED: R6 measurement contract is WhatsApp-click sessions / exposed sessions, with product-view sessions / exposed sessions as guardrail and 50 exposed sessions per variant as the collection threshold.
 - VERIFIED: R6 does not claim statistical significance; results are directional only.
-- VERIFIED: GitHub Quality run `1408` passed all repository quality steps.
+- VERIFIED: PR #119 `fix(themes): polish Gallery assistant and Noir item modal` merged as `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: PR #119 removed the Gallery assistant/bottom-dock overlap, removed the Noir blanket child stacking context, and restored Noir dialog surface/content contrast.
+- VERIFIED: PR #119 added structural regression coverage for Gallery and Noir.
+- VERIFIED: GitHub main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a` is signed/verified.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -44,6 +46,7 @@
 - Menu Intelligence V5 Report Center — CLOSED / VERIFIED / MERGED.
 - R2.7 WhatsApp Report Sharing — CLOSED / VERIFIED / MERGED.
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
+- Gallery/Noir theme interaction hardening — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -116,6 +119,18 @@ STATUS: CLOSED / VERIFIED
 - Decision output is directional only; no statistical significance is claimed.
 - Rollback: remove the treatment if a clear product-exploration regression or rendering/accessibility defect appears.
 
+## Theme Interaction Hardening — 2026-09-12
+STATUS: CLOSED / VERIFIED / MERGED
+
+- VERIFIED: Gallery assistant dialog now hides only the Gallery floating bottom action dock while the dialog is open and restores the dock unchanged after close.
+- VERIFIED: Gallery uses the assistant's structural `data-public-menu-assistant-dialog="true"` state; no duplicated control or global z-index escalation was introduced.
+- VERIFIED: Noir no longer applies the blanket `.menu-public-shell > * { position: relative; z-index: 1; }` stacking context.
+- VERIFIED: Noir preserves intentional header/main/footer layering while allowing shared ProductSheet/Assistant modal siblings to stack correctly.
+- VERIFIED: Noir shared dialogs use existing semantic surface/content/border tokens, preventing light `bg-paper` surfaces from producing unreadable light text.
+- VERIFIED: focused regression tests cover Gallery assistant/dock layering and Noir modal stacking/surface contrast.
+- VERIFIED: PR #119 merged to `main` as `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: the repository Quality Gate passed before merge, including Typecheck, Tests, Lint, Production Build, Playwright/Chromium, all-theme Browser QA, and performance baseline.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing supports Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -127,8 +142,11 @@ STATUS: CLOSED / VERIFIED
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
 - VERIFIED: R6 GitHub Quality run `1408` passed Typecheck, Tests, Lint, Production build, Playwright runtime/Chromium, all-theme Browser Template QA, performance upload, and preview shutdown.
-- BLOCKED: Vercel remains blocked by the account deployment/build-rate limit. The PR received the direct Vercel bot error: `Resource is limited - try again in 24 hours (more than 100, code: "api-deployments-free-per-day")`.
-- UNKNOWN: direct physical-device production QA remains unavailable through the current connector environment.
+- VERIFIED: PR #119 merged to `main` and `main` now points to `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: latest known Production deployment remains `dpl_Ar9gZkRBUHtrT84phwZ4oUUuJJ1f`, READY, for main commit `887077710808aeae448ccf3d00b027adea165c77`.
+- BLOCKED: Vercel has not deployed `42b67382...`; the PR #119 Vercel bot reported `Resource is limited - try again in 24 hours (more than 100, code: "api-deployments-free-per-day")` at `2026-09-12T17:53:16Z`.
+- VERIFIED: two PR #119 preview deployments were READY, but they were created from earlier head commits and are not production deployment evidence for `42b67382...`.
+- UNKNOWN: direct physical-device production QA for the new Gallery/Noir fixes remains unavailable through the current connector environment.
 
 ## Current Strategic Direction
 Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
@@ -149,8 +167,10 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 
 After the R6 experiment has accumulated real production exposure, inspect the experiment data and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start another experiment before this review.
 
+Before release of any subsequent change, first clear the current Vercel deployment limit and perform one controlled production deployment for the already-merged `42b67382...` theme hardening batch. Do not create preview/redeploy churn while the limit is active.
+
 ## UNKNOWN / BLOCKED
-- BLOCKED: Vercel production deployment for R6 because the account is over the free daily deployment limit.
+- BLOCKED: production deployment of `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a` because the Vercel Hobby deployment quota is exhausted.
 - UNKNOWN: direct physical-device observations are not available through the current connector environment.
 - UNKNOWN: the R6 production sample size and directional outcome cannot be verified until experiment events accumulate in production.
 
@@ -164,15 +184,16 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-12 — R6
-- VERIFIED: started from current `main` `109c5a2683c6538458dc357b1dcd71ffb7631b80` after reconciling stale continuity SHA references.
-- VERIFIED: inspected W15 experimentation contract and current `menu_events` event recorder; production A/B variants were previously not ready because the schema had no experiment fields.
-- VERIFIED: selected one bounded CTA hierarchy experiment using the existing WhatsApp action and existing anonymous session id.
-- VERIFIED: implemented deterministic server-derived assignment and nullable experiment fields without replacing the canonical event stream.
-- VERIFIED: GitHub Quality run `1408` passed all quality steps after correcting one pre-existing source-contract assertion for the expanded tenant lookup.
-- BLOCKED: Vercel deployment is blocked by `api-deployments-free-per-day`; no deployment retry was performed.
-- VERIFIED: merged R6 as `16bd37e51870740df547bb5840a0237fe3657f0a`.
-- Exact next task: R7 Post-Experiment Evidence Review / Controlled Optimization.
+## Session Log — 2026-09-12 — Theme Interaction Hardening
+- VERIFIED: current `main` is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: PR #119 addressed the exact Gallery and Noir defects reported from real mobile screenshots.
+- VERIFIED: Gallery assistant open state is now exposed structurally so the theme can hide only its floating dock during the modal.
+- VERIFIED: Noir ProductSheet/Assistant stacking was corrected by removing the blanket direct-child stacking context and preserving only intentional content layers.
+- VERIFIED: Noir dialog surfaces/content now use semantic theme tokens for readable contrast.
+- VERIFIED: focused regression tests and the full repository quality gate passed before merge.
+- VERIFIED: main merge completed.
+- BLOCKED: Vercel production deployment of `42b67382...` remains blocked by the free daily deployment quota; no retry churn was performed.
+- Exact next task: clear the deployment limit, perform one production deployment for `42b67382...`, then perform real-device Gallery/Noir QA; after that continue with R7 evidence review.
 
 ## Evidence Labels
 `VERIFIED` = direct repository/tool/test/platform evidence.
