@@ -111,7 +111,15 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center p-3 sm:items-center sm:p-6" role="presentation">
           <button className="absolute inset-0 cursor-default bg-black/40" aria-label={lang === "ar" ? "إغلاق" : "Close"} onClick={() => setOpen(false)} />
-          <section ref={dialogRef} tabIndex={-1} className="relative flex max-h-[82dvh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="guest-menu-assistant-title">
+          <section
+            ref={dialogRef}
+            tabIndex={-1}
+            data-public-menu-assistant-dialog="true"
+            className="relative flex max-h-[82dvh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="guest-menu-assistant-title"
+          >
             <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
               <div className="flex items-center gap-3">
                 <span className="grid size-10 place-items-center rounded-full bg-sand text-ink"><Bot aria-hidden="true" /></span>
