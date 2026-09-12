@@ -100,8 +100,9 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
         aria-label={lang === "ar" ? "اسأل عن القائمة" : "Ask about the menu"}
         aria-haspopup="dialog"
         aria-expanded={open}
+        data-public-menu-assistant-launcher="true"
         onClick={() => { setOpen(true); setError(""); }}
-        className="fixed bottom-[calc(6.5rem+env(safe-area-inset-bottom))] left-4 z-40 min-h-11 rounded-full px-4 shadow-lg sm:bottom-6"
+        className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom))] start-4 z-[45] min-h-11 rounded-full px-4 shadow-lg sm:bottom-6"
       >
         <Sparkles aria-hidden="true" />
         {lang === "ar" ? "اسأل عن القائمة" : "Ask the menu"}
