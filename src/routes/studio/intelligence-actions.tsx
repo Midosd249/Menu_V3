@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getOwnerAnalytics } from "@/lib/menu/owner";
+import { buildIntelligenceDataQuality, type IntelligenceDataQuality } from "@/lib/menu/intelligence-data-quality";
 import { useStudio } from "@/lib/menu/studio";
 import { buildMenuGrowthAdvisor, type MenuGrowthAdvisor } from "@/lib/menu/growth-advisor";
 import type { OwnerAnalytics } from "@/lib/menu/types";
@@ -36,13 +37,20 @@ function IntelligenceActionsPage() {
     return buildMenuGrowthAdvisor(snapshot, state.data);
   }, [snapshot, state]);
 
-  if (state.status === "loading" || !advisor) return <div className="mx-auto max-w-5xl"><LoadingState /></div>;
+  const evidenceQuality = useMemo<IntelligenceDataQuality | null>(() => {
+    if (state.status !== "ready") return null;
+    return buildIntelligenceDataQuality(state.data, new Date());
+  }, [state]);
+
+  if (state.status === "loading" || !advisor || !evidenceQuality) return <div className="mx-auto max-w-5xl"><LoadingState /></div>;
   if (state.status === "error") return <div className="mx-auto max-w-5xl"><ErrorState message={state.message} /></div>;
 
   const isAr = lang === "ar";
   const actions = advisor.actions;
   const highCount = actions.filter((action) => action.priority === "high").length;
   const mediumCount = actions.filter((action) => action.priority === "medium").length;
+  const qualityLabel = evidenceQuality.status === "fresh" ? (isAr ? "البيانات حديثة" : "Evidence is fresh") : evidenceQuality.status === "stale" ? (isAr ? "البيانات قديمة" : "Evidence is stale") : (isAr ? "بيانات غير كافية" : "Insufficient evidence");
+  const qualityClass = evidenceQuality.status === "fresh" ? "bg-good/10 text-good" : evidenceQuality.status === "stale" ? "bg-warning/10 text-warning" : "bg-sand text-muted";
 
   return (
     <div className="mx-auto grid max-w-5xl gap-6">
@@ -59,6 +67,22 @@ function IntelligenceActionsPage() {
           </Button>
         </div>
       </header>
+
+      <section className="rounded-3xl border border-line bg-paper p-5" aria-label={isAr ? "جودة الأدلة" : "Evidence quality"}>
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{isAr ? "جودة الدليل" : "Evidence quality"}</p>
+            <p className="mt-1 text-sm text-muted">{isAr ? evidenceQuality.messageAr : evidenceQuality.messageEn}</p>
+          </div>
+          <span className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${qualityClass}`}>{qualityLabel}</span>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
+          <span>{isAr ? "نافذة التحليل" : "Analysis window"}: {evidenceQuality.rangeDays} {isAr ? "أيام" : "days"}</span>
+          <span>{isAr ? "الأيام المرصودة" : "Observed days"}: {evidenceQuality.observedDays}</span>
+          {evidenceQuality.latestObservedDay ? <span>{isAr ? "آخر يوم" : "Latest day"}: {evidenceQuality.latestObservedDay}</span> : null}
+        </div>
+        {evidenceQuality.status !== "fresh" ? <p className="mt-3 text-xs leading-5 text-muted">{isAr ? "راجع حداثة البيانات قبل اتخاذ قرار جديد. التحديث يعيد تحميل الدليل من المصدر الحالي." : "Review evidence freshness before taking a new decision. Refresh reloads evidence from the current source."}</p> : null}
+      </section>
 
       <section className="grid grid-cols-3 gap-3" aria-label={isAr ? "ملخص الأولويات" : "Priority summary"}>
         <SummaryCard label={isAr ? "كل الإجراءات" : "All actions"} value={actions.length} />
