@@ -69,6 +69,31 @@ Implemented:
 
 R5 is complete and protected. Do not reopen without a reproducible regression.
 
+## R6 — Experiments
+STATUS: CLOSED / VERIFIED
+
+### Selected experiment
+`whatsapp-cta-v1` is the first bounded experiment. It tests whether making the existing WhatsApp action slightly more visually prominent increases WhatsApp-intent sessions without reducing product exploration.
+
+Implemented:
+- Stable `control` / `prominent` assignment derived from the existing anonymous session id.
+- Server-side derivation of the recorded variant; the client cannot select the stored variant.
+- Participation only for published menus with configured WhatsApp.
+- Nullable `experiment_key` and `experiment_variant` columns on the existing `menu_events` stream, with a validation constraint and index.
+- Treatment changes only the existing WhatsApp action presentation.
+- Owner-preview/preview mode does not activate or record the experiment.
+- Existing four-event analytics stream remains canonical; no second event source was created.
+
+Measurement contract:
+- Primary metric: WhatsApp-click sessions / exposed sessions.
+- Guardrail: product-view sessions / exposed sessions.
+- Exposure: distinct session ids with recorded `visit` events for the experiment.
+- Minimum collection target: 50 exposed sessions per variant.
+- Decision is directional only; no statistical significance is claimed.
+- Rollback if a clear product-exploration regression or rendering/accessibility defect appears.
+
+R6 is complete as an experiment activation/measurement milestone. The production outcome is intentionally UNKNOWN until real traffic accumulates.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing: Inception/Mercury → Gemini → Z.AI → OpenRouter → xKiro, configurable by server environment.
@@ -84,9 +109,10 @@ Normal path:
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
 ## Current Verified Main
-- VERIFIED: current `main` SHA is `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
-- VERIFIED: R5 is merged at that SHA.
-- UNKNOWN: Vercel production completion for the new R5 merge commit is pending at this continuity checkpoint.
+- VERIFIED: current `main` SHA is `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- VERIFIED: R6 is merged at that SHA.
+- VERIFIED: GitHub Quality run `1408` passed all required quality steps for the R6 head before merge.
+- BLOCKED: Vercel production deployment for R6 is blocked by the account free daily deployment limit (`api-deployments-free-per-day`).
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
@@ -103,17 +129,7 @@ Live Menu
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
-## R6 — Experiments
-STATUS: DISCOVERY / NOT IMPLEMENTED
+## Exact Next Task
+### R7 — Post-Experiment Evidence Review / Controlled Optimization
 
-Objective: use the existing experimentation framework and verified analytics to run one bounded, hypothesis-led experiment with an outcome that the current event model can actually observe. Do not claim statistical significance unless the available data supports it.
-
-Required discovery before editing:
-1. Inspect the current experimentation implementation and event model.
-2. Identify one owner-controllable variable already supported by the product.
-3. Define the observable outcome and the exact data limitation.
-4. Select one bounded experiment without introducing fake significance or new infrastructure unless necessary.
-5. Preserve R2/R3/R4/R5, themes, orders, import, provider infrastructure, security, tenant isolation, and release controls.
-
-## Exact Next Action
-Perform R6 discovery on current `main @ 1e2364cde7c9ecc0b40538f2cf606179d24646d9`, then choose exactly one bounded experiment based on verified existing data and product capability. Do not implement before discovery identifies the target.
+Wait for real R6 exposure to accumulate, then inspect the canonical `menu_events` experiment fields and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start another experiment before this review.
