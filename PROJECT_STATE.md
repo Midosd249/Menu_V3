@@ -12,8 +12,9 @@
 - VERIFIED: canonical database schema `menu_v3`.
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
-## Current Verified Position — 2026-09-12
-- VERIFIED: current canonical `main` is `8bce889eda8605c73173e390139e54393024b03b` after the continuity synchronization merge.
+## Current Verified Position — 2026-09-13
+- VERIFIED: current canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: this commit is the continuity synchronization follow-up whose parent was `8bce889eda8605c73173e390139e54393024b03b`.
 - VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
 - VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
@@ -107,15 +108,26 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Collection threshold: 50 exposed sessions per variant.
 - Decision output is directional only; no statistical significance is claimed.
 
-## R7 — Initial Post-Experiment Evidence Review
-STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
+## R7 — Post-Experiment Evidence Review
+STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
-- VERIFIED: canonical `menu_v3.menu_events` currently contains R6 exposure for `whatsapp-cta-v1` only in the `prominent` variant.
-- VERIFIED: current observed exposure is 1 distinct exposed session for `prominent` and 0 observed exposed sessions for `control`.
-- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: the experiment has not reached the declared collection threshold of 50 exposed sessions per variant and cannot support a keep-treatment, keep-control, or end-experiment decision.
-- DECISION: no treatment decision is made from the current sample; continue real exposure and re-review after meaningful accumulation.
-- VERIFIED: no statistical significance claim is made.
+- VERIFIED: canonical table is `menu_v3.menu_events`.
+- VERIFIED: current observed exposure is 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: current `control` has 0 WhatsApp-click sessions and 0 product-view sessions.
+- VERIFIED: current `prominent` has 0 WhatsApp-click sessions and 1 product-view session.
+- INFERRED: Control is at 2% of the 50-session target and Prominent is at 4% of the 50-session target.
+- DECISION: no treatment decision is justified; continue eligible real exposure and re-review when meaningful accumulation occurs.
+- VERIFIED: no synthetic traffic is used and no statistical significance claim is made.
+
+## Production / Commercial Readiness
+STATUS: IN_PROGRESS — REPOSITORY-READY; EXTERNAL EVIDENCE REMAINING
+
+- VERIFIED: the temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production; no removal is justified solely by the current all-free theme catalog.
+- VERIFIED: the repository contains the release-only Vercel workflow and the quality gate covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
+- VERIFIED: current `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- UNKNOWN: direct Vercel Production environment-variable values are not readable through the current GitHub connector and must not be inferred from repository state.
+- UNKNOWN: physical real-device Production QA is not available through the current connector environment.
+- PROPOSED: treat the repository-side readiness work as complete and perform the remaining external verification in the next authorized Vercel/device QA session.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -127,8 +139,9 @@ STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- BLOCKED: Vercel production deployment state for the latest application release must be verified separately because the account has a deployment/build-rate limit condition.
-- UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
+- VERIFIED: GitHub `main` is currently `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
+- UNKNOWN: direct physical-device Production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
 Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
@@ -140,14 +153,21 @@ Live Menu
 → Owner Intelligence
 → Growth Extensions
 → Experiments
+→ Production / Commercial Readiness
 ```
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## Exact Next Task
-### R7 — Continue Real Exposure / Controlled Optimization Review
+### Production / Commercial Readiness — External Verification Gate
 
-Keep `whatsapp-cta-v1` running for eligible real traffic. Re-read canonical `menu_events` after exposure accumulates, compare control and prominent against the declared primary and guardrail metrics, and make a directional decision only when the evidence is sufficient. Do not start another experiment before this review.
+Complete only the remaining evidence-dependent work:
+1. verify Vercel Production environment/configuration against the canonical Supabase target;
+2. perform available authenticated/browser/QR/theme/order/RTL Production QA;
+3. perform real-device QA when a real device/browser session is available;
+4. record direct evidence and close the readiness milestone when all applicable checks pass.
+
+R7 remains active independently and does not block this task.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
@@ -159,12 +179,12 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-12 — Post-Merge Continuity Synchronization
-- VERIFIED: continuity synchronization PR merged into `main` at `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: preceding canonical main was `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Supabase canonical `menu_v3.menu_events` currently shows 1 exposed `prominent` session, 0 observed `control` exposure, 0 prominent WhatsApp-click sessions, and 1 prominent product-view session for `whatsapp-cta-v1`.
-- DECISION: R7 remains open because the declared 50-exposed-sessions-per-variant threshold is not met.
-- BLOCKED: Vercel deployment state remains separate from Git state.
+## Session Log — 2026-09-13 — Production Readiness Continuation
+- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: `menu_v3` is the canonical schema and `menu_v3.menu_events` is the canonical experiment event table.
+- VERIFIED: R7 remains non-blocking with current exposure 1 `control` / 2 `prominent` distinct sessions.
+- VERIFIED: repository-side production readiness controls and quality workflow are present.
+- UNKNOWN: direct Vercel Production environment values and physical-device QA remain external evidence items.
 
 ## Evidence Labels
 `VERIFIED` = direct repository/tool/test/platform evidence.

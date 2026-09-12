@@ -59,10 +59,23 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 
 ## R7 — Initial Evidence Review
 
-- VERIFIED: current canonical `menu_v3.menu_events` has 1 exposed `prominent` session and 0 observed `control` exposed sessions for `whatsapp-cta-v1`.
-- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: evidence is insufficient for the declared 50-exposed-sessions-per-variant decision threshold.
+- VERIFIED: canonical table is `menu_v3.menu_events`.
+- VERIFIED: current observed exposure is 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: current `control` has 0 WhatsApp-click sessions and 0 product-view sessions.
+- VERIFIED: current `prominent` has 0 WhatsApp-click sessions and 1 product-view session.
+- INFERRED: Control is at 2% of the 50-session target and Prominent is at 4% of the 50-session target.
 - DECISION: do not select a winner or end the experiment; continue eligible real exposure.
+- R7 is a NON-BLOCKING monitoring lane and does not stop independent development work.
+
+## Production / Commercial Readiness — IN PROGRESS
+
+- VERIFIED: temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production.
+- VERIFIED: current all-free theme catalog means the override does not currently grant an otherwise unavailable premium theme.
+- VERIFIED: no code removal is justified solely by this review.
+- VERIFIED: GitHub quality workflow covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
+- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- UNKNOWN: direct Vercel Production environment-variable values cannot be inspected through the current GitHub connector.
+- UNKNOWN: physical real-device Production QA is unavailable through the current connector environment.
 
 ## Gallery + Noir Theme Hardening — CLOSED / VERIFIED / MERGED
 
@@ -70,7 +83,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Noir no longer traps shared dialogs inside the content stacking context.
 - Noir dialog surface, text, and border tokens are hardened for readability.
 - Focused regression coverage protects both fixes.
-- Canonical main after continuity synchronization: `8bce889eda8605c73173e390139e54393024b03b`.
+- Canonical main: `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
 
 ## Protected Scope
 
@@ -80,21 +93,21 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: continuity synchronization was merged after the preceding canonical main `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
-- BLOCKED: Vercel production state must be verified separately; do not infer deployment from GitHub main.
+- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: continuity synchronization follow-up is the current main commit.
+- VERIFIED: the quality workflow remains configured for both `main` pushes and pull requests.
+- UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
 ## Exact Next Task
-### R7 — Continue Real Exposure / Controlled Optimization Review
+### Production / Commercial Readiness — External Verification Gate
 
-1. Keep `whatsapp-cta-v1` active for eligible real traffic.
-2. Re-read canonical `menu_events` after exposure accumulates.
-3. Compare control vs prominent using the declared primary and guardrail metrics.
-4. Decide keep control, keep treatment, or end the experiment only when the evidence is sufficient.
-5. Do not claim statistical significance without sufficient data.
-6. Do not start a second experiment before this review.
+1. Verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`.
+2. Perform available authenticated/browser/QR/theme/order/RTL Production QA without overstating unavailable device evidence.
+3. Perform real-device QA when a real device/browser session is available.
+4. Record direct evidence and close the readiness milestone when all applicable checks pass.
+
+R7 remains active independently and does not block this task.
 
 ## Working Rules
 - `main` is source of truth.
