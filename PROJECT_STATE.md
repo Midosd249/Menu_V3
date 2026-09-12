@@ -13,7 +13,7 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current canonical `main` after continuity reconciliation is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this documentation-only follow-up branch.
+- VERIFIED: current canonical `main` is `8bce889eda8605c73173e390139e54393024b03b` after the continuity synchronization merge.
 - VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
 - VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
@@ -159,9 +159,9 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-12 — R7 Initial Evidence Review
-- VERIFIED: Quality Run 1420 succeeded for the pre-merge continuity reconciliation commit.
-- VERIFIED: current canonical `main` before this follow-up documentation branch is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+## Session Log — 2026-09-12 — Post-Merge Continuity Synchronization
+- VERIFIED: continuity synchronization PR merged into `main` at `8bce889eda8605c73173e390139e54393024b03b`.
+- VERIFIED: preceding canonical main was `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
 - VERIFIED: Supabase canonical `menu_v3.menu_events` currently shows 1 exposed `prominent` session, 0 observed `control` exposure, 0 prominent WhatsApp-click sessions, and 1 prominent product-view session for `whatsapp-cta-v1`.
 - DECISION: R7 remains open because the declared 50-exposed-sessions-per-variant threshold is not met.
 - BLOCKED: Vercel deployment state remains separate from Git state.
