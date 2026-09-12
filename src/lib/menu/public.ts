@@ -4,6 +4,7 @@ import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import { mapBranch, mapCategory, mapHour, mapProduct, mapPublicTenant } from "./map";
 import { DEMO_MENU } from "./demo";
+import { ACTIVE_EXPERIMENT, getExperimentVariant } from "./experiment";
 import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOptions, ProductVariant, PublicMenu } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -155,7 +156,7 @@ export const recordPublicEvent = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<FnResult<{ recorded: boolean }>> => {
     try {
       const sql = await getSql();
-      const tenants = await sql`select id from tenants where slug = ${data.slug} and is_active = true and is_published = true limit 1`;
+      const tenants = await sql<{ id: string; whatsapp: string }>`select id, whatsapp from tenants where slug = ${data.slug} and is_active = true and is_published = true limit 1`;
       const tenantId = tenants[0]?.id as string | undefined;
       if (!tenantId) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
       let branchId: string | null = null;
@@ -172,8 +173,10 @@ export const recordPublicEvent = createServerFn({ method: "POST" })
         const recent = await sql`select id from menu_events where tenant_id = ${tenantId} and session_id = ${data.sessionId} and event_type = ${data.eventType} and created_at > now() - interval '30 minutes' limit 1`;
         if (recent[0]) return { ok: true, data: { recorded: false } };
       }
+      const experimentKey = tenants[0]?.whatsapp?.trim() ? ACTIVE_EXPERIMENT : null;
+      const experimentVariant = experimentKey ? getExperimentVariant(data.sessionId) : null;
       const eventType: EventType = data.eventType;
-      await sql`insert into menu_events (id, tenant_id, branch_id, product_id, event_type, lang, session_id) values (${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${eventType}, ${data.lang ?? null}, ${data.sessionId})`;
+      await sql`insert into menu_events (id, tenant_id, branch_id, product_id, event_type, lang, session_id, experiment_key, experiment_variant) values (${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${eventType}, ${data.lang ?? null}, ${data.sessionId}, ${experimentKey}, ${experimentVariant})`;
       return { ok: true, data: { recorded: true } };
     } catch (err) {
       console.error("recordPublicEvent failed", err);
