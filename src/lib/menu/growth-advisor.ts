@@ -223,6 +223,14 @@ export function buildMenuGrowthAdvisor(snapshot: StudioSnapshot, analytics: Owne
     });
   }
 
+  if (analytics && analytics.uniqueSessions === 0 && analytics.visits === 0 && analytics.productViews === 0 && analytics.qrScans === 0 && analytics.whatsappClicks === 0 && tenant.isPublished) {
+    add(actions, {
+      key: "distribution", priority: "high", titleAr: "ابدأ توزيع القائمة", titleEn: "Start distributing the menu",
+      reasonAr: "القائمة منشورة لكن لا توجد أحداث دخول أو تفاعل مسجلة بعد؛ شارك رابط القائمة أو QR وابدأ جمع بيانات فعلية.", reasonEn: "The menu is published but no entry or interaction events are recorded yet; share the menu link or QR to start collecting real activity.",
+      metricAr: "الزيارات: 0 · مسح QR: 0 · نقرات واتساب: 0", metricEn: "Visits: 0 · QR scans: 0 · WhatsApp clicks: 0", href: "/studio/brand",
+    });
+  }
+
   const summaryAr = insights.length > 0
     ? `${insights.length} إشارة مؤكدة من بيانات القائمة. ${insights[0].interpretationAr}`
     : actions.length === 0
