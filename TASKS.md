@@ -54,14 +54,14 @@ R2.6 Professional Analytics Reports   DONE
 R2.7 WhatsApp Report Sharing          DONE
 ```
 
-## R4 — Owner Intelligence
+## R4 — Owner Intelligence — CLOSED / VERIFIED
 
 ```text
 R4.1 Verified Owner Signals           DONE / VERIFIED
 R4.2 Intelligence Action Center       DONE / VERIFIED
 R4.3 Action Center Follow-through     DONE / VERIFIED
 R4.4 Intelligence Data Quality        DONE / VERIFIED
-R4.5 Owner Decision Loop              NEXT
+R4.5 Owner Decision Loop              DONE / VERIFIED
 ```
 
 ### R4.4 — Intelligence Data Quality — CLOSED / VERIFIED
@@ -73,6 +73,17 @@ R4.5 Owner Decision Loop              NEXT
 - R4.4 merge commit: `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
 - GitHub Quality passed before merge.
 
+### R4.5 — Owner Decision Loop — CLOSED / VERIFIED
+- Existing Owner Intelligence Action Center consumes deterministic evidence quality.
+- Fresh/stale/insufficient evidence state and freshness context are visible in Arabic and English.
+- Recommendations remain grounded in verified analytics and owner-reviewed actions.
+- Existing refresh is the re-check mechanism.
+- No autonomous production mutation, new provider, dependency, migration, or duplicate dashboard was introduced.
+- Focused regression coverage was added.
+- GitHub Quality passed before merge.
+- Merge commit: `08565c47550df828450c76c8ce27fb6c373b04fd`.
+- Vercel reported deployment completion for the merge commit.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -80,25 +91,22 @@ R4.5 Owner Decision Loop              NEXT
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: current `main` SHA is `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
-- VERIFIED: R4.4 GitHub Quality passed before merge.
-- UNKNOWN: current Production deployment identity for this exact SHA until directly rechecked.
+- VERIFIED: current `main` SHA is `08565c47550df828450c76c8ce27fb6c373b04fd`.
+- VERIFIED: R4.5 GitHub Quality passed before merge.
+- VERIFIED: Vercel status for the current main SHA reports `Deployment has completed`.
+- UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
-## UNKNOWN / BLOCKED
-- UNKNOWN: direct physical-device observations are not available through the current connector environment.
-- UNKNOWN: current account-level Vercel Usage/Billing limits unless separately inspected.
-- UNKNOWN: Production deployment identity for current main until directly rechecked.
+## R5 — Growth Extensions
+STATUS: DISCOVERY / NOT IMPLEMENTED
 
-## Exact Next TODO — R4.5 Owner Decision Loop
-1. Reuse existing Owner Intelligence surfaces; do not create a duplicate dashboard.
-2. Consume the deterministic R4.4 evidence-quality contract in the current Action Center.
-3. Show fresh/stale/insufficient evidence state and latest observed date beside actionable intelligence.
-4. Make each recommendation traceable from verified evidence to reason to owner action.
-5. Use existing refresh as the re-check mechanism after owner-approved changes.
-6. Preserve read-only intelligence and all tenant/branch/auth/RLS/security boundaries.
-7. Add focused regression coverage for evidence state and decision-loop behavior.
-8. Run relevant quality, browser/accessibility, performance, and security/data checks.
-9. Merge only as one coherent quality-gated batch.
+### Exact Next TODO
+1. Inspect current growth, analytics, experimentation, local-visibility, conversion, onboarding, and public-menu capabilities.
+2. Map real available data sources and measurable outcomes.
+3. Identify customer/owner friction that is not already solved by R2/R3/R4.
+4. Select exactly one evidence-backed, non-duplicative atomic improvement.
+5. Define acceptance criteria and verification plan before editing.
+6. Preserve all security, tenant/branch, pricing, availability, allergen, ordering, AI-provider, and release boundaries.
+7. Use the release-only Vercel workflow; no Vercel development loop.
 
 ## Working Rules
 - `main` is source of truth.
