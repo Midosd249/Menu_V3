@@ -7,8 +7,8 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: latest main commit is `docs: reconcile continuity with current main`.
+- VERIFIED: canonical main after continuity reconciliation is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this follow-up documentation branch.
+- VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: latest theme-hardening commit preceding the continuity merge contains Guest Assistant public-route/launcher hardening plus Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening.
 - VERIFIED: focused Gallery/Noir regression coverage is present.
 
@@ -79,6 +79,15 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Collection target: 50 exposed sessions per variant.
 - Directional interpretation only; no statistical significance claim.
 
+## R7 — Initial Evidence Review
+STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
+
+- VERIFIED: current canonical `menu_v3.menu_events` contains `whatsapp-cta-v1` exposure only for `prominent`.
+- VERIFIED: current observed exposure is 1 distinct `prominent` session and 0 observed `control` sessions.
+- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
+- INFERRED: the experiment is far below the declared collection threshold of 50 exposed sessions per variant.
+- DECISION: no treatment decision is justified; continue real exposure and re-review after meaningful accumulation.
+
 ## AI Infrastructure
 - VERIFIED: server-side provider abstraction.
 - VERIFIED: structured routing for Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -94,7 +103,7 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: latest continuity reconciliation is merged to `main` at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: continuity reconciliation is merged to `main` at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this documentation follow-up.
 - VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
 - BLOCKED: latest Vercel production deployment must be verified separately because the account has a deployment/build-rate limit condition.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
@@ -110,9 +119,9 @@ Live Menu
 ```
 
 ## Exact Next Task
-### R7 — Post-Experiment Evidence Review / Controlled Optimization
+### R7 — Continue Real Exposure / Controlled Optimization Review
 
-After real R6 exposure accumulates, inspect canonical `menu_events` experiment fields and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start a second experiment before this review.
+Keep `whatsapp-cta-v1` running for eligible real traffic. Re-read canonical `menu_events` after exposure accumulates, compare control and prominent against the declared primary and guardrail metrics, and make a directional decision only when the evidence is sufficient. Do not start another experiment before this review.
 
 ## Continuity Rule
 At the end of every atomic task:
