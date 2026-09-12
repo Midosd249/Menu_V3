@@ -13,8 +13,8 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current `main` SHA is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: latest main commit is `docs: reconcile continuity with current main`.
+- VERIFIED: current canonical `main` after continuity reconciliation is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this documentation-only follow-up branch.
+- VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
 - VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
 - VERIFIED: the latest theme fix has focused regression coverage for Gallery and Noir.
@@ -41,6 +41,7 @@
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
 - Grounded Guest Menu Assistant — DONE / VERIFIED, including public-route rendering and accessibility hardening.
 - Gallery + Noir theme hardening — DONE / VERIFIED / MERGED.
+- Continuity reconciliation — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -106,6 +107,16 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Collection threshold: 50 exposed sessions per variant.
 - Decision output is directional only; no statistical significance is claimed.
 
+## R7 — Initial Post-Experiment Evidence Review
+STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
+
+- VERIFIED: canonical `menu_v3.menu_events` currently contains R6 exposure for `whatsapp-cta-v1` only in the `prominent` variant.
+- VERIFIED: current observed exposure is 1 distinct exposed session for `prominent` and 0 observed exposed sessions for `control`.
+- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
+- INFERRED: the experiment has not reached the declared collection threshold of 50 exposed sessions per variant and cannot support a keep-treatment, keep-control, or end-experiment decision.
+- DECISION: no treatment decision is made from the current sample; continue real exposure and re-review after meaningful accumulation.
+- VERIFIED: no statistical significance claim is made.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing supports Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -116,8 +127,7 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- VERIFIED: latest main continuity reconciliation is in GitHub at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- BLOCKED: Vercel production deployment for the latest release batch remains subject to the account deployment/build-rate limit; direct Vercel deployment evidence must be checked before claiming production state.
+- BLOCKED: Vercel production deployment state for the latest application release must be verified separately because the account has a deployment/build-rate limit condition.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
@@ -135,9 +145,9 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## Exact Next Task
-### R7 — Post-Experiment Evidence Review / Controlled Optimization
+### R7 — Continue Real Exposure / Controlled Optimization Review
 
-After real R6 exposure accumulates, inspect the canonical `menu_events` experiment fields and determine whether the evidence supports keeping control, keeping treatment, or ending the experiment. Do not claim statistical significance without sufficient data. Do not start another experiment before this review.
+Keep `whatsapp-cta-v1` running for eligible real traffic. Re-read canonical `menu_events` after exposure accumulates, compare control and prominent against the declared primary and guardrail metrics, and make a directional decision only when the evidence is sufficient. Do not start another experiment before this review.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
@@ -149,12 +159,12 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-12 — Canonical SHA Sync
-- VERIFIED: `main` moved from `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a` to `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` through the continuity reconciliation merge.
-- VERIFIED: Quality Run 1420 completed successfully for the reconciliation commit before merge.
-- VERIFIED: this file is being synchronized to the canonical post-merge SHA so future sessions do not inherit the pre-merge SHA.
+## Session Log — 2026-09-12 — R7 Initial Evidence Review
+- VERIFIED: Quality Run 1420 succeeded for the pre-merge continuity reconciliation commit.
+- VERIFIED: current canonical `main` before this follow-up documentation branch is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: Supabase canonical `menu_v3.menu_events` currently shows 1 exposed `prominent` session, 0 observed `control` exposure, 0 prominent WhatsApp-click sessions, and 1 prominent product-view session for `whatsapp-cta-v1`.
+- DECISION: R7 remains open because the declared 50-exposed-sessions-per-variant threshold is not met.
 - BLOCKED: Vercel deployment state remains separate from Git state.
-- Exact next task: R7 Post-Experiment Evidence Review / Controlled Optimization.
 
 ## Evidence Labels
 `VERIFIED` = direct repository/tool/test/platform evidence.
