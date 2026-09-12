@@ -13,10 +13,10 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current `main` SHA is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: latest main commit is `fix(themes): polish Gallery assistant and Noir item modal`.
+- VERIFIED: current `main` SHA is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: latest main commit is `docs: reconcile continuity with current main`.
 - VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
-- VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
 - VERIFIED: the latest theme fix has focused regression coverage for Gallery and Noir.
 - VERIFIED: R2.7 WhatsApp Report Sharing, R4.1–R4.5 Owner Intelligence, R5 Growth Extensions, and R6 bounded WhatsApp CTA experiment remain in repository history and are protected.
 - VERIFIED: R6 assigns `control` / `prominent` deterministically from the existing anonymous session id, persists the server-derived variant on the existing `menu_events` stream, and limits participation to published menus with configured WhatsApp.
@@ -116,7 +116,7 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- VERIFIED: latest main theme fix is in GitHub at `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: latest main continuity reconciliation is in GitHub at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
 - BLOCKED: Vercel production deployment for the latest release batch remains subject to the account deployment/build-rate limit; direct Vercel deployment evidence must be checked before claiming production state.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
@@ -149,12 +149,11 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-12 — Continuity Reconciliation
-- VERIFIED: current `main` was reconciled against Git history and is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: prior continuity files were stale at `16bd37e51870740df547bb5840a0237fe3657f0a`; they did not include the later Guest Assistant and Gallery/Noir fixes.
-- VERIFIED: the later commits are part of the current main history and are now reflected in this continuity record.
-- VERIFIED: R6 remains the active experiment state; its outcome is not claimed until real exposure is available.
-- BLOCKED: Vercel deployment state must remain separate from Git state and must not be inferred from `main` alone.
+## Session Log — 2026-09-12 — Canonical SHA Sync
+- VERIFIED: `main` moved from `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a` to `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` through the continuity reconciliation merge.
+- VERIFIED: Quality Run 1420 completed successfully for the reconciliation commit before merge.
+- VERIFIED: this file is being synchronized to the canonical post-merge SHA so future sessions do not inherit the pre-merge SHA.
+- BLOCKED: Vercel deployment state remains separate from Git state.
 - Exact next task: R7 Post-Experiment Evidence Review / Controlled Optimization.
 
 ## Evidence Labels
