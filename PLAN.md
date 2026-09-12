@@ -43,6 +43,23 @@ R2.7 WhatsApp Report Sharing
 
 All seven are complete and protected. Do not reopen without a current reproducible regression.
 
+## R3 — Guest Experience Hardening
+STATUS: CLOSED / VERIFIED / MERGED
+
+### Completed
+- Audited the existing grounded Guest Assistant and public-menu integration.
+- Preserved read-only grounding, actual catalog/product-ID validation, tenant/branch boundaries, and existing customer ordering behavior.
+- Hardened the existing Guest Assistant dialog with Escape handling, keyboard focus containment, focus restoration, body scroll locking, and assistive-technology dialog semantics.
+- Added focused regression coverage.
+- Updated the shared UI Button contract with forwarded refs required for correct focus management.
+- PR #103 merged to `main` as `45e20a8b760ec4ec4571a8839b5194b33cbd4b61`.
+- GitHub Quality for the R3 PR head passed: run `34675215594`.
+- No theme, order, auth, RLS, tenant-isolation, provider, database, or deployment configuration changes were introduced.
+
+### Release constraint
+- Vercel is currently blocked by the account build-rate quota. This blocks deployment attempts, not engineering progress.
+- Do not retry or redeploy merely to clear the status. Continue repository/CI work and use one production deployment when the quota permits.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing: Inception/Mercury → Gemini → Z.AI → OpenRouter → xKiro, configurable by server environment.
@@ -57,41 +74,35 @@ Normal path:
 
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
-## Current Verified Release
-- VERIFIED: `main` SHA `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- VERIFIED: GitHub Quality run `34673634043` passed.
-- VERIFIED: Supabase check passed.
-- VERIFIED: Vercel status for this exact SHA is `success` with `Deployment has completed`.
-- STATUS: `DEPLOYED`.
+## Current Verified Repository Position
+- VERIFIED: `main` SHA `45e20a8b760ec4ec4571a8839b5194b33cbd4b61`.
+- VERIFIED: commit is the signed merge commit for R3 Guest Experience Hardening.
+- VERIFIED: R3 PR Quality run `34675215594` passed before merge.
+- BLOCKED: Vercel deployment for the new main SHA is not established because the current Vercel account/build quota rejects deployment attempts.
+- The last separately verified production deployment remains the prior successful release SHA until a new Vercel deployment is directly evidenced.
 
-## Current Atomic Task — R3 Guest Experience Hardening
+## R4 — Owner Intelligence
+STATUS: NEXT / DISCOVERY
+
 ### Objective
-Harden the existing grounded Guest Assistant and public-menu customer journey without rebuilding completed systems.
+Extend the existing owner intelligence surfaces into a decision-support layer using only verified menu and analytics data. R4 must not become a generic chatbot or an autonomous operator.
 
-### Scope
-1. Inspect current public-menu rendering and the Guest Assistant integration on `main`.
-2. Verify actual menu grounding, product-ID validation, and read-only boundaries.
-3. Audit Arabic RTL, English LTR, mixed-direction content, mobile layout, search, category navigation, product details, availability, and supported customer actions.
-4. Test realistic long/short names, SAR price lengths, missing/varied images, one/many products, available/unavailable items, and empty/loading/error states supported by the current architecture.
-5. Fix only reproducible defects with minimal reversible changes.
-6. Run relevant typecheck, tests, lint, build, Playwright/browser, accessibility, performance, and security/data checks available in the repository.
-7. Prepare one coherent release batch only after verification.
+### Guardrails
+- Existing Analytics and Menu Intelligence remain the canonical owner surfaces; do not create a parallel dashboard without verified architectural need.
+- Database-backed and server-verified data is the source of truth.
+- AI may explain, summarize, prioritize, and draft recommendations; it may not invent metrics or silently mutate production data.
+- No autonomous price, allergen, availability, tenant, branch, payment, or financial decisions.
+- Recommendations must distinguish observed facts from interpretation and proposed action.
+- Zero-data states must remain explicit rather than producing fabricated percentages or trends.
 
-### Security boundaries
-- Guest Assistant remains read-only.
-- It cannot mutate production DB, create orders, decide prices, decide allergens, or bypass tenant/branch isolation.
-- Existing authentication, authorization, RLS, ordering, pricing, and customer-action contracts remain protected.
-
-### Acceptance criteria
-- Existing Guest Assistant remains functional and grounded.
-- No regression to public menu themes or customer actions.
-- Arabic/English/RTL/LTR behavior is deterministic.
-- No fabricated product or allergen claims.
-- All relevant quality gates pass.
-- Final diff contains only R3 work and required continuity evidence.
-
-## Research
-Research level: Focused when external evidence materially improves a customer-journey decision; repository-first always. For market-specific or browser/platform questions, use official/primary sources and record material findings.
+### Discovery sequence
+1. Inspect current Analytics, Menu Intelligence, Growth Advisor, reports, and relevant server contracts on `main`.
+2. Map existing verified facts, insights, recommendations, and available owner actions.
+3. Identify duplicated or fragmented owner UX before adding anything.
+4. Select one atomic R4 capability with a measurable acceptance contract.
+5. Implement only the smallest safe extension.
+6. Run repository, CI, browser/accessibility, and security/data checks relevant to that capability.
+7. Keep deployment deferred until the single release batch is ready and Vercel quota permits it.
 
 ## Exact Next Action
-Start R3 discovery/audit from current `main`; do not change code until the existing public journey and Guest Assistant implementation are inspected and acceptance gaps are identified.
+Start R4 discovery from `main` at `45e20a8b760ec4ec4571a8839b5194b33cbd4b61`; inspect the existing owner-intelligence surfaces and server contracts before editing code. Do not reopen R2 or rebuild R3.
