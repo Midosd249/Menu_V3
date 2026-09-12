@@ -90,9 +90,25 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Routed to existing `/studio/brand`; no duplicate dashboard or route.
 - Preserved the existing unpublished-menu `publish-menu` action and prevented duplicate distribution guidance.
 - Added regression coverage for published zero-activity and unpublished cases.
-- GitHub Quality run `1401` passed before merge.
 - R5 merge commit: `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
 - No new metric, conversion claim, migration, dependency, AI provider, autonomous messaging, or production mutation was introduced.
+
+## R6 — Experiments — CLOSED / VERIFIED
+- Selected `whatsapp-cta-v1` as one bounded experiment against the existing shared WhatsApp action.
+- Hypothesis: stronger visual prominence may increase WhatsApp-intent sessions without reducing product exploration.
+- Added stable `control` / `prominent` assignment from the existing anonymous session id.
+- Server derives the recorded variant; the client does not choose it.
+- Participation is limited to published menus with configured WhatsApp.
+- Added nullable `experiment_key` and `experiment_variant` to `menu_events` with a validation constraint and index.
+- Treatment is limited to the existing WhatsApp action presentation (`font-semibold shadow-sm`).
+- Preview/owner-preview does not activate the treatment or record experiment clicks.
+- Primary metric: WhatsApp-click sessions / exposed sessions.
+- Guardrail: product-view sessions / exposed sessions.
+- Collection threshold: 50 exposed sessions per variant.
+- Directional results only; no statistical significance is claimed.
+- GitHub Quality run `1408` passed all required steps before merge.
+- R6 merge commit: `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- Production outcome remains UNKNOWN until real traffic accumulates.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
@@ -101,21 +117,19 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: current `main` SHA is `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
-- VERIFIED: R5 GitHub Quality passed before merge.
-- UNKNOWN: Vercel status for the new R5 merge commit was pending at the continuity checkpoint; verify separately before claiming deployment.
+- VERIFIED: current `main` SHA is `16bd37e51870740df547bb5840a0237fe3657f0a`.
+- VERIFIED: R6 GitHub Quality run `1408` passed all required steps before merge.
+- BLOCKED: Vercel deployment for R6 is blocked by the account free daily deployment limit (`api-deployments-free-per-day`).
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
-## R6 — Experiments
-STATUS: DISCOVERY / NOT IMPLEMENTED
-
-### Exact Next TODO
-1. Inspect current experimentation implementation and event model.
-2. Identify one owner-controllable variable already supported by the product.
-3. Define an observable outcome and explicit data limitations.
-4. Select exactly one bounded experiment; do not invent statistical significance.
-5. Preserve all security, tenant/branch, pricing, availability, allergen, ordering, AI-provider, and release boundaries.
-6. Use the release-only Vercel workflow; no Vercel development loop.
+## Exact Next Task
+### R7 — Post-Experiment Evidence Review / Controlled Optimization
+1. Allow real R6 exposure to accumulate.
+2. Read the canonical `menu_events` experiment fields.
+3. Compare control vs prominent using the declared primary and guardrail metrics.
+4. Decide keep control, keep treatment, or end the experiment.
+5. Do not claim statistical significance without sufficient data.
+6. Do not start a second experiment before this review.
 
 ## Working Rules
 - `main` is source of truth.
