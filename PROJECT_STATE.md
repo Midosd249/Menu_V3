@@ -13,16 +13,18 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current `main` SHA is `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- VERIFIED: PR #75 Onboarding Creation Recovery is merged as `32d46be53f099069c20923afeb83ef1f8a48d1cc`; Quality passed.
-- VERIFIED: PR #81 Menu Intelligence V5 Report Center is merged as `b9ff93e1bf599e249fda67dd684a0eabe0f33c26`.
-- VERIFIED: PR #89 AI Provider Routing & Multimodal Fallback is merged as `da2885ff970d46bd1f679b6b31d53b8f973ff8a0`.
-- VERIFIED: R2.7 WhatsApp Report Sharing is merged into current `main` as `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- VERIFIED: current `main` GitHub Quality run is `34673634043` and concluded `success`.
-- VERIFIED: current `main` Supabase check concluded `success`.
-- VERIFIED: current `main` Vercel status is `success` with `Deployment has completed`.
-- VERIFIED: the Vercel status is attached directly to current `main` SHA `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- STATUS: `DEPLOYED` for current main, based on direct GitHub Vercel deployment status evidence.
+- VERIFIED: current `main` SHA is `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
+- VERIFIED: R2.7 WhatsApp Report Sharing is merged and protected.
+- VERIFIED: R4.1 Verified Owner Signals is merged and protected.
+- VERIFIED: R4.2 Intelligence Action Center is merged and protected.
+- VERIFIED: R4.3 Action Center Follow-through is merged and protected.
+- VERIFIED: R4.4 Intelligence Data Quality Foundation is merged as `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
+- VERIFIED: R4.4 GitHub Quality passed before merge.
+- VERIFIED: R4.4 adds deterministic `fresh` / `stale` / `insufficient` evidence-quality status from existing OwnerAnalytics data only.
+- VERIFIED: invalid observation dates are ignored and duplicate observed dates count once.
+- VERIFIED: R4.4 introduced no database mutation, AI provider, dependency, or new UI surface.
+- VERIFIED: Vercel reported success for the relevant development commit; no new production deployment is being claimed from this continuity update.
+- STATUS: `VERIFIED_LOCALLY` / merged to `main`; production deployment identity for the current main SHA remains UNKNOWN unless directly rechecked.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -61,6 +63,23 @@ Protected R2 principles:
 - Reports use canonical verified analytics.
 - WhatsApp sharing is owner-reviewed; no autonomous outbound messaging was introduced.
 
+## R4 — Owner Intelligence
+STATUS: IN_PROGRESS
+
+```text
+R4.1 Verified Owner Signals           DONE / VERIFIED
+R4.2 Intelligence Action Center       DONE / VERIFIED
+R4.3 Action Center Follow-through     DONE / VERIFIED
+R4.4 Intelligence Data Quality        DONE / VERIFIED
+R4.5 Owner Decision Loop              NEXT
+```
+
+R4.4 protected contract:
+- Evidence quality is deterministic and derived from existing analytics.
+- `fresh`, `stale`, and `insufficient` are explicit states.
+- No synthetic observations are created.
+- AI remains explanatory/recommendation-only and is never the source of truth.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing supports Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -70,8 +89,9 @@ Protected R2 principles:
 
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
-- VERIFIED: current `main` has GitHub Quality success and Vercel deployment success.
-- No additional deployment should be triggered merely for development iteration.
+- VERIFIED: development must not use Vercel as the iteration loop.
+- UNKNOWN: current production deployment identity for `main` SHA `8fd3f580cee9d740ffa323588f15215b8e7764e1` unless directly rechecked.
+- Do not trigger a deployment merely to develop or verify R4.5.
 
 ## Current Strategic Direction
 Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
@@ -87,20 +107,24 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## Exact Next Task
-### R3 — Guest Experience Hardening
+### R4.5 — Owner Decision Loop
 
-1. Audit the existing grounded Guest Assistant and current public-menu customer journey on `main`.
-2. Verify Arabic RTL, English LTR, mixed-direction content, mobile responsiveness, search/category discovery, availability, product details, and supported customer actions.
-3. Verify the assistant remains grounded in actual menu data and cannot mutate production data, create orders, decide prices, or invent allergen facts.
-4. Identify only reproducible gaps and implement the smallest safe fixes.
-5. Run applicable quality/browser/accessibility/performance gates locally and through GitHub.
-6. Release only as one coherent batch; do not use Vercel as the development loop.
+1. Reuse the existing `/studio/intelligence` and `/studio/intelligence-actions` surfaces; do not create a duplicate intelligence dashboard.
+2. Consume the deterministic R4.4 data-quality contract in the existing Owner Intelligence flow.
+3. Show evidence status and freshness context beside actionable insights.
+4. Make each recommendation explainable: verified evidence → reason → owner action → existing product flow.
+5. Add a re-check path through the existing refresh mechanism so the owner can verify the evidence after making an approved change.
+6. Preserve read-only intelligence boundaries and all tenant/branch/auth/RLS protections.
+7. Add focused regression coverage for fresh/stale/insufficient states and action-loop behavior.
+8. Run applicable typecheck, tests, lint, build, browser/accessibility/security checks available in the repository.
+9. Release only after one coherent quality-gated batch.
 
-Do not rebuild the Guest Assistant. Do not reopen themes, Orders, Notifications, Import, Provider Infrastructure, or completed security work unless a current reproducible regression is proven.
+Do not reopen R2, R3, Themes, Orders, Notifications, Import, AI Provider Infrastructure, Platform Admin security, or Subscription protection without a current reproducible regression.
 
 ## UNKNOWN / BLOCKED
-- UNKNOWN: physical-device observations not directly available through the current connector environment.
-- UNKNOWN: account-level Vercel Usage/Billing limits unless separately inspected; current commit nevertheless has successful Vercel deployment status.
+- UNKNOWN: direct physical-device observations are not available through the current connector environment.
+- UNKNOWN: current account-level Vercel Usage/Billing limits unless separately inspected.
+- UNKNOWN: current production deployment identity for `main` SHA `8fd3f580cee9d740ffa323588f15215b8e7764e1` until directly checked.
 
 ## Continuity Rule
 At the end of every atomic task:
