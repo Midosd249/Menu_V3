@@ -15,15 +15,16 @@ type PublicActionLinksProps = {
   className?: string;
 };
 
-const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagram: Instagram };
+const ICONS = { whatsapp: MessageCircle, location: MapPin, Phone: Phone, instagram: Instagram };
 
 export function PublicActionLinks({ tenant, branch, lang, preview = false, className }: PublicActionLinksProps) {
   const actions = getPublicActions(tenant, branch, lang);
   const [experimentVariant, setExperimentVariant] = useState<ExperimentVariant>("control");
 
   useEffect(() => {
+    if (preview) return;
     setExperimentVariant(getExperimentVariant(getGuestSessionId()));
-  }, []);
+  }, [preview]);
 
   if (!actions.length) return null;
   const sessionId = getGuestSessionId();
@@ -31,14 +32,14 @@ export function PublicActionLinks({ tenant, branch, lang, preview = false, class
   return (
     <nav aria-label={lang === "ar" ? "تواصل ومعلومات الفرع" : "Contact and branch information"} className={cn("flex flex-wrap items-center gap-2", className)}>
       {actions.map((action) => {
-        const Icon = ICONS[action.key];
-        const isExperimentTreatment = action.key === "whatsapp" && experimentVariant === "prominent";
+        const Icon = ICONS[action.key === "phone" ? "Phone" : action.key];
+        const isExperimentTreatment = !preview && action.key === "whatsapp" && experimentVariant === "prominent";
         return (
           <a
             key={action.key}
             data-action-key={action.key}
-            data-experiment={action.key === "whatsapp" ? ACTIVE_EXPERIMENT : undefined}
-            data-experiment-variant={action.key === "whatsapp" ? experimentVariant : undefined}
+            data-experiment={!preview && action.key === "whatsapp" ? ACTIVE_EXPERIMENT : undefined}
+            data-experiment-variant={!preview && action.key === "whatsapp" ? experimentVariant : undefined}
             href={action.href}
             target={action.external ? "_blank" : undefined}
             rel={action.external ? "noopener noreferrer" : undefined}
