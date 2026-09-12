@@ -53,6 +53,22 @@ R4 protected principle:
 
 The Owner Intelligence layer remains deterministic at the data boundary. AI may explain or prepare recommendations, but it cannot become the source of truth or autonomously mutate production data.
 
+## R5 — Growth Extensions
+STATUS: CLOSED / VERIFIED
+
+### Completed R5 improvement
+R5 discovery inspected the existing growth advisor, canonical OwnerAnalytics data, public-menu distribution signals, local-visibility readiness, and existing owner flows. The selected non-duplicative opportunity was the gap between a published menu with no recorded activity and the absence of a concrete owner action.
+
+Implemented:
+- Deterministic `distribution` action for published zero-activity menus.
+- Evidence is limited to existing visits, sessions, product views, QR scans, and WhatsApp clicks.
+- Owner is routed through the existing `/studio/brand` flow.
+- Existing unpublished-menu action remains separate and prevents duplicate guidance.
+- Regression tests cover published and unpublished cases.
+- No new metrics, conversion claims, dependencies, migrations, providers, autonomous messaging, or duplicate UI were introduced.
+
+R5 is complete and protected. Do not reopen without a reproducible regression.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing: Inception/Mercury → Gemini → Z.AI → OpenRouter → xKiro, configurable by server environment.
@@ -68,9 +84,9 @@ Normal path:
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
 ## Current Verified Main
-- VERIFIED: current `main` SHA is `08565c47550df828450c76c8ce27fb6c373b04fd`.
-- VERIFIED: R4.5 is merged at that SHA.
-- VERIFIED: GitHub Vercel status for that SHA reports `Deployment has completed`.
+- VERIFIED: current `main` SHA is `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
+- VERIFIED: R5 is merged at that SHA.
+- UNKNOWN: Vercel production completion for the new R5 merge commit is pending at this continuity checkpoint.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
 ## Current Strategic Direction
@@ -82,24 +98,22 @@ Live Menu
 → Menu Intelligence
 → Owner Intelligence
 → Growth Extensions
+→ Experiments
 ```
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
-## R5 — Growth Extensions
+## R6 — Experiments
 STATUS: DISCOVERY / NOT IMPLEMENTED
 
-Objective: identify the highest-value growth improvement already supported by real product data and current architecture, then implement one atomic improvement without duplicating existing capabilities.
+Objective: use the existing experimentation framework and verified analytics to run one bounded, hypothesis-led experiment with an outcome that the current event model can actually observe. Do not claim statistical significance unless the available data supports it.
 
 Required discovery before editing:
-1. Inspect current growth, analytics, experimentation, local-visibility, conversion, onboarding, and public-menu capabilities.
-2. Map existing data sources and identify what is actually measurable today.
-3. Identify customer/owner friction that can be addressed without inventing metrics.
-4. Select one evidence-backed atomic improvement with clear acceptance criteria.
-5. Preserve R2/R3/R4, themes, orders, import, provider infrastructure, security, tenant isolation, and release controls.
-
-## Research
-Research level for the next task: Focused by default; escalate to Deep only if external market/customer evidence materially changes the decision. Repository-first remains mandatory.
+1. Inspect the current experimentation implementation and event model.
+2. Identify one owner-controllable variable already supported by the product.
+3. Define the observable outcome and the exact data limitation.
+4. Select one bounded experiment without introducing fake significance or new infrastructure unless necessary.
+5. Preserve R2/R3/R4/R5, themes, orders, import, provider infrastructure, security, tenant isolation, and release controls.
 
 ## Exact Next Action
-Perform R5 discovery on current `main @ 08565c47550df828450c76c8ce27fb6c373b04fd`, then choose exactly one atomic growth improvement based on verified evidence. Do not implement before the discovery identifies a non-duplicative target.
+Perform R6 discovery on current `main @ 1e2364cde7c9ecc0b40538f2cf606179d24646d9`, then choose exactly one bounded experiment based on verified existing data and product capability. Do not implement before discovery identifies the target.

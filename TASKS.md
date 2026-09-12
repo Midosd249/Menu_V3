@@ -84,6 +84,16 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Merge commit: `08565c47550df828450c76c8ce27fb6c373b04fd`.
 - Vercel reported deployment completion for the merge commit.
 
+## R5 — Growth Extensions — CLOSED / VERIFIED
+- Selected target from current-main discovery: convert the existing zero-activity baseline into an explicit owner distribution action when the menu is already published.
+- Added deterministic `distribution` action using only `OwnerAnalytics` entry/interaction fields and verified publication state.
+- Routed to existing `/studio/brand`; no duplicate dashboard or route.
+- Preserved the existing unpublished-menu `publish-menu` action and prevented duplicate distribution guidance.
+- Added regression coverage for published zero-activity and unpublished cases.
+- GitHub Quality run `1401` passed before merge.
+- R5 merge commit: `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
+- No new metric, conversion claim, migration, dependency, AI provider, autonomous messaging, or production mutation was introduced.
+
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
 - Shared public-menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls remain protected.
@@ -91,22 +101,21 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: current `main` SHA is `08565c47550df828450c76c8ce27fb6c373b04fd`.
-- VERIFIED: R4.5 GitHub Quality passed before merge.
-- VERIFIED: Vercel status for the current main SHA reports `Deployment has completed`.
+- VERIFIED: current `main` SHA is `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
+- VERIFIED: R5 GitHub Quality passed before merge.
+- UNKNOWN: Vercel status for the new R5 merge commit was pending at the continuity checkpoint; verify separately before claiming deployment.
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
-## R5 — Growth Extensions
+## R6 — Experiments
 STATUS: DISCOVERY / NOT IMPLEMENTED
 
 ### Exact Next TODO
-1. Inspect current growth, analytics, experimentation, local-visibility, conversion, onboarding, and public-menu capabilities.
-2. Map real available data sources and measurable outcomes.
-3. Identify customer/owner friction that is not already solved by R2/R3/R4.
-4. Select exactly one evidence-backed, non-duplicative atomic improvement.
-5. Define acceptance criteria and verification plan before editing.
-6. Preserve all security, tenant/branch, pricing, availability, allergen, ordering, AI-provider, and release boundaries.
-7. Use the release-only Vercel workflow; no Vercel development loop.
+1. Inspect current experimentation implementation and event model.
+2. Identify one owner-controllable variable already supported by the product.
+3. Define an observable outcome and explicit data limitations.
+4. Select exactly one bounded experiment; do not invent statistical significance.
+5. Preserve all security, tenant/branch, pricing, availability, allergen, ordering, AI-provider, and release boundaries.
+6. Use the release-only Vercel workflow; no Vercel development loop.
 
 ## Working Rules
 - `main` is source of truth.

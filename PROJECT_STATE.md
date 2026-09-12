@@ -13,18 +13,18 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-12
-- VERIFIED: current `main` SHA is `08565c47550df828450c76c8ce27fb6c373b04fd`.
+- VERIFIED: current `main` SHA is `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
 - VERIFIED: R2.7 WhatsApp Report Sharing is merged and protected.
 - VERIFIED: R4.1 Verified Owner Signals is merged and protected.
 - VERIFIED: R4.2 Intelligence Action Center is merged and protected.
 - VERIFIED: R4.3 Action Center Follow-through is merged and protected.
 - VERIFIED: R4.4 Intelligence Data Quality Foundation is merged and protected.
-- VERIFIED: R4.5 Owner Decision Loop is merged as `08565c47550df828450c76c8ce27fb6c373b04fd`.
-- VERIFIED: R4.5 consumes deterministic evidence quality in the existing Owner Intelligence Action Center, surfaces freshness context, and uses the existing refresh path as the re-check mechanism.
-- VERIFIED: R4.5 introduced no autonomous production mutation, new AI provider, dependency, database migration, or duplicate intelligence dashboard.
-- VERIFIED: GitHub Quality passed for R4.5 before merge.
-- VERIFIED: Vercel reported `Deployment has completed` for the current main SHA.
-- STATUS: `DEPLOYED` for the current main SHA based on direct GitHub Vercel status evidence; real-device QA remains UNKNOWN in this connector environment.
+- VERIFIED: R4.5 Owner Decision Loop is merged and protected.
+- VERIFIED: R5 Growth Extensions is merged as `1e2364cde7c9ecc0b40538f2cf606179d24646d9`.
+- VERIFIED: R5 adds deterministic distribution guidance for a published menu with zero recorded entry/interaction events, using existing analytics and publication state only.
+- VERIFIED: R5 introduced no new metric, autonomous outbound messaging, AI provider, dependency, database migration, or duplicate dashboard.
+- VERIFIED: GitHub Quality passed for R5 before merge.
+- UNKNOWN: Vercel status for the new R5 merge commit is still pending at the time of this continuity update.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -81,6 +81,18 @@ R4 protected contract:
 - Refresh/re-check reuses the existing analytics flow.
 - AI remains explanatory/recommendation-only and is never the source of truth.
 
+## R5 — Growth Extensions
+STATUS: CLOSED / VERIFIED
+
+### Completed R5 improvement
+- VERIFIED: current advisor now surfaces a `distribution` action when a menu is published but the selected analytics window contains zero visits, sessions, product views, QR scans, and WhatsApp clicks.
+- VERIFIED: the action uses only existing `OwnerAnalytics` fields and verified `tenant.isPublished` state.
+- VERIFIED: the owner is routed to the existing `/studio/brand` flow; no duplicate route or dashboard was created.
+- VERIFIED: unpublished menus keep the existing `publish-menu` action and do not receive a duplicate distribution action.
+- VERIFIED: regression coverage covers both published zero-activity and unpublished cases.
+- VERIFIED: R5 is a growth action, not a fabricated conversion metric; it asks the owner to distribute the existing menu and then collect real activity.
+- VERIFIED: no autonomous messaging or external side effect was introduced.
+
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
 - VERIFIED: structured routing supports Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -91,8 +103,9 @@ R4 protected contract:
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- VERIFIED: current main SHA `08565c47550df828450c76c8ce27fb6c373b04fd` has a successful Vercel deployment status.
+- VERIFIED: R5 GitHub Quality passed before merge.
 - UNKNOWN: direct physical-device observations remain unavailable through the current connector environment.
+- UNKNOWN: Vercel deployment status for `1e2364cde7c9ecc0b40538f2cf606179d24646d9` is pending at this continuity checkpoint.
 
 ## Current Strategic Direction
 Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
@@ -108,13 +121,14 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## Exact Next Task
-### R5 — Growth Extensions Discovery / Evidence-First Prioritization
+### R6 — Experiments Discovery / Evidence-First Prioritization
 
-Before implementing a new feature, inspect current `main` for existing growth, analytics, experimentation, local-visibility, and conversion capabilities. Select one atomic, evidence-backed improvement with measurable value and no duplication. Do not reopen completed R2/R3/R4 work without a reproducible regression.
+Before implementing a new feature, inspect current `main` for existing experimentation, analytics, growth, public-menu conversion, and owner workflows. Select one atomic, evidence-backed experiment or growth improvement with a measurable outcome that the current data model can actually observe. Do not invent statistical significance or reopen completed R2/R3/R4/R5 work without a reproducible regression.
 
 ## UNKNOWN / BLOCKED
 - UNKNOWN: direct physical-device observations are not available through the current connector environment.
 - UNKNOWN: current account-level Vercel Usage/Billing limits unless separately inspected.
+- UNKNOWN: Vercel production completion for the new R5 merge commit at the time this file was updated.
 
 ## Continuity Rule
 At the end of every atomic task:
