@@ -1,6 +1,20 @@
 import type { OwnerAnalytics, Product, StudioSnapshot } from "./types";
+import { buildGrowthMetrics, type GrowthMetrics } from "./growth";
 
 export type AdvisorPriority = "high" | "medium" | "low";
+export type VerifiedAnalyticsInsight = {
+  key: string;
+  priority: AdvisorPriority;
+  titleAr: string;
+  titleEn: string;
+  evidenceAr: string;
+  evidenceEn: string;
+  interpretationAr: string;
+  interpretationEn: string;
+  recommendationAr: string;
+  recommendationEn: string;
+};
+
 export type AdvisorAction = {
   key: string;
   priority: AdvisorPriority;
@@ -16,6 +30,7 @@ export type AdvisorAction = {
 export type MenuGrowthAdvisor = {
   summaryAr: string;
   summaryEn: string;
+  insights: VerifiedAnalyticsInsight[];
   actions: AdvisorAction[];
 };
 
@@ -23,8 +38,114 @@ function add(actions: AdvisorAction[], action: AdvisorAction) {
   if (!actions.some((item) => item.key === action.key)) actions.push(action);
 }
 
+function addInsight(insights: VerifiedAnalyticsInsight[], insight: VerifiedAnalyticsInsight) {
+  if (!insights.some((item) => item.key === insight.key)) insights.push(insight);
+}
+
+function buildVerifiedAnalyticsInsights(analytics: OwnerAnalytics | null): VerifiedAnalyticsInsight[] {
+  if (!analytics) return [];
+
+  const insights: VerifiedAnalyticsInsight[] = [];
+  const metrics: GrowthMetrics = buildGrowthMetrics(analytics);
+
+  if (analytics.uniqueSessions === 0 && analytics.visits === 0 && analytics.productViews === 0) {
+    addInsight(insights, {
+      key: "analytics-baseline",
+      priority: "medium",
+      titleAr: "البيانات ما زالت في مرحلة خط الأساس",
+      titleEn: "Analytics is still at baseline",
+      evidenceAr: "لا توجد جلسات أو زيارات أو مشاهدات منتجات مسجلة في الفترة المحددة.",
+      evidenceEn: "No sessions, visits, or product views are recorded in the selected period.",
+      interpretationAr: "لا توجد عينة تشغيلية كافية لاستخلاص اتجاه أداء موثوق بعد.",
+      interpretationEn: "There is not enough observed activity yet to establish a reliable performance direction.",
+      recommendationAr: "شارك القائمة وابدأ بجمع بيانات فعلية قبل تقييم الأداء.",
+      recommendationEn: "Share the menu and collect observed activity before evaluating performance.",
+    });
+    return insights;
+  }
+
+  if (analytics.visits > 0 && analytics.productViews === 0) {
+    addInsight(insights, {
+      key: "discovery-gap",
+      priority: "high",
+      titleAr: "الزيارة موجودة لكن تفاعل الأصناف غير مسجل",
+      titleEn: "Visits are present but product interest is not",
+      evidenceAr: `${analytics.visits} زيارة و0 مشاهدة منتج في الفترة المحددة.`,
+      evidenceEn: `${analytics.visits} visits and 0 product views in the selected period.`,
+      interpretationAr: "هذه إشارة إلى ضعف في الانتقال من دخول القائمة إلى استكشاف الأصناف، وليست نسبة تحويل.",
+      interpretationEn: "This is a signal about movement from menu entry to product exploration, not a conversion rate.",
+      recommendationAr: "راجع وضوح التصنيفات، الأصناف البارزة، ونقاط الدخول إلى المحتوى.",
+      recommendationEn: "Review category clarity, featured items, and entry points into product content.",
+    });
+  }
+
+  if (analytics.productViews > 0 && analytics.uniqueSessions > 0) {
+    addInsight(insights, {
+      key: "browse-depth",
+      priority: metrics.averageViewsPerSession >= 2 ? "low" : "medium",
+      titleAr: "عمق التصفح أصبح إشارة قابلة للمتابعة",
+      titleEn: "Browse depth is now a trackable signal",
+      evidenceAr: `${analytics.productViews} مشاهدة منتج عبر ${analytics.uniqueSessions} جلسة، بمتوسط ${metrics.averageViewsPerSession.toFixed(1)} مشاهدة لكل جلسة.`,
+      evidenceEn: `${analytics.productViews} product views across ${analytics.uniqueSessions} sessions, averaging ${metrics.averageViewsPerSession.toFixed(1)} views per session.`,
+      interpretationAr: "هذا يصف كثافة التصفح المسجلة فقط ولا يثبت نية شراء أو رضا العميل.",
+      interpretationEn: "This describes recorded browsing depth only; it does not establish purchase intent or customer satisfaction.",
+      recommendationAr: "راقب هذا المؤشر مع تغييرات القائمة بدل الحكم عليه منفردًا.",
+      recommendationEn: "Monitor this signal alongside menu changes rather than judging it in isolation.",
+    });
+  }
+
+  if (analytics.qrScans > 0) {
+    addInsight(insights, {
+      key: "qr-distribution",
+      priority: analytics.visits === 0 ? "high" : "low",
+      titleAr: "إشارة QR متاحة للمتابعة",
+      titleEn: "QR distribution signal is available",
+      evidenceAr: `${analytics.qrScans} عملية مسح QR و${analytics.visits} زيارة مسجلة في الفترة المحددة.`,
+      evidenceEn: `${analytics.qrScans} QR scans and ${analytics.visits} recorded visits in the selected period.`,
+      interpretationAr: "النسبة هنا علاقة بين أحداث مسجلة وليست قياسًا لمستخدمين فريدين أو لحملات تسويقية.",
+      interpretationEn: "This is a relationship between recorded events, not a unique-user or campaign performance measure.",
+      recommendationAr: "استخدمها لمقارنة نشاط نقاط الدخول إلى القائمة مع الوقت.",
+      recommendationEn: "Use it to compare menu-entry activity over time.",
+    });
+  }
+
+  if (analytics.uniqueSessions > 0 && analytics.whatsappClicks > 0) {
+    addInsight(insights, {
+      key: "whatsapp-intent",
+      priority: "low",
+      titleAr: "إشارة نية تواصل مسجلة",
+      titleEn: "Recorded contact-intent signal",
+      evidenceAr: `${analytics.whatsappClicks} نقرة واتساب عبر ${analytics.uniqueSessions} جلسة.`,
+      evidenceEn: `${analytics.whatsappClicks} WhatsApp clicks across ${analytics.uniqueSessions} sessions.`,
+      interpretationAr: "نقرات واتساب مؤشر على تفاعل عالي النية، لكنها لا تثبت إتمام طلب أو عملية بيع.",
+      interpretationEn: "WhatsApp clicks indicate high-intent interaction, but do not prove an order or sale.",
+      recommendationAr: "حافظ على وضوح إجراء التواصل وراقب التغير في هذا المؤشر مع الوقت.",
+      recommendationEn: "Keep the contact action clear and monitor how this signal changes over time.",
+    });
+  }
+
+  if (analytics.topProducts.length > 0) {
+    const top = analytics.topProducts[0];
+    addInsight(insights, {
+      key: "leading-product",
+      priority: "low",
+      titleAr: "يوجد صنف متصدر في المشاهدات",
+      titleEn: "A product is leading in recorded views",
+      evidenceAr: `${top.nameAr} سجل ${top.count} مشاهدة في الفترة المحددة.`,
+      evidenceEn: `${top.nameEn || top.nameAr} recorded ${top.count} views in the selected period.`,
+      interpretationAr: "هذا ترتيب للمشاهدات المسجلة فقط، وليس حكمًا على الربحية أو الشعبية خارج البيانات.",
+      interpretationEn: "This ranks recorded views only; it is not a profitability or popularity claim beyond the observed data.",
+      recommendationAr: "راجع اكتمال هذا الصنف وجودة عرضه أولًا إذا كان هدفك تحسين محتوى القائمة.",
+      recommendationEn: "Review this item's completeness and presentation first if your goal is to improve menu content.",
+    });
+  }
+
+  return insights.sort((a, b) => ({ high: 0, medium: 1, low: 2 }[a.priority] - { high: 0, medium: 1, low: 2 }[b.priority])).slice(0, 4);
+}
+
 export function buildMenuGrowthAdvisor(snapshot: StudioSnapshot, analytics: OwnerAnalytics | null): MenuGrowthAdvisor {
   const actions: AdvisorAction[] = [];
+  const insights = buildVerifiedAnalyticsInsights(analytics);
   const { products, categories, branches, tenant } = snapshot;
   const available = products.filter((product) => product.isAvailable);
 
@@ -102,14 +223,18 @@ export function buildMenuGrowthAdvisor(snapshot: StudioSnapshot, analytics: Owne
     });
   }
 
-  const summaryAr = actions.length === 0
-    ? "لا توجد أولوية واضحة الآن. استمر في مراقبة بيانات القائمة وحسّن الأصناف عند ظهور إشارة جديدة."
-    : `لديك ${actions.length} خطوة عملية مرتبة حسب الأولوية. ابدأ بأول خطوة ثم أعد الفحص.`;
-  const summaryEn = actions.length === 0
-    ? "There is no clear priority right now. Keep monitoring menu data and improve items as new signals appear."
-    : `${actions.length} practical actions are prioritized for you. Start with the first one, then recheck.`;
+  const summaryAr = insights.length > 0
+    ? `${insights.length} إشارة مؤكدة من بيانات القائمة. ${insights[0].interpretationAr}`
+    : actions.length === 0
+      ? "لا توجد أولوية واضحة الآن. استمر في مراقبة بيانات القائمة وحسّن الأصناف عند ظهور إشارة جديدة."
+      : `لديك ${actions.length} خطوة عملية مرتبة حسب الأولوية. ابدأ بأول خطوة ثم أعد الفحص.`;
+  const summaryEn = insights.length > 0
+    ? `${insights.length} verified signals from menu analytics. ${insights[0].interpretationEn}`
+    : actions.length === 0
+      ? "There is no clear priority right now. Keep monitoring menu data and improve items as new signals appear."
+      : `${actions.length} practical actions are prioritized for you. Start with the first one, then recheck.`;
 
   const rank: Record<AdvisorPriority, number> = { high: 0, medium: 1, low: 2 };
   actions.sort((a, b) => rank[a.priority] - rank[b.priority]);
-  return { summaryAr, summaryEn, actions: actions.slice(0, 6) };
+  return { summaryAr, summaryEn, insights, actions: actions.slice(0, 6) };
 }
