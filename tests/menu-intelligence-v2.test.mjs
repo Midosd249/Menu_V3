@@ -42,10 +42,10 @@ test("Menu Intelligence keeps the canonical health score", () => {
   assert.doesNotMatch(source, /function percentage/);
 });
 
-test("Owner intelligence remains a grounded surface", () => {
-  assert.match(route, /Priority & fixes/);
-  assert.match(route, /Problem center/);
-  assert.match(route, /\"/studio/menu\"/);
+test("Existing owner intelligence UX remains grounded", () => {
+  assert.match(route, /What needs your attention|ماذا يحتاج انتباهك/);
+  assert.match(route, /Recommended growth actions|خطوات النمو المقترحة/);
+  assert.match(route, /Open menu editor|فتح محرر القائمة/);
   assert.match(route, /not a sales or conversion claim|available analytics events/);
 });
 
