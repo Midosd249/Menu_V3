@@ -9,6 +9,9 @@ import { buildMenuReport, reportToText, type MenuReport } from "@/lib/menu/repor
 import { buildWhatsAppShareUrl, generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
+// The share contract intentionally remains WhatsApp click-to-chat: https://wa.me/?text=
+// Recipient selection is always left to the owner inside WhatsApp.
+
 export const Route = createFileRoute("/studio/reports")({ component: ReportsPage });
 
 type State = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; report: MenuReport };
