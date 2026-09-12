@@ -48,6 +48,6 @@ test("public visit and QR events retain the 30-minute duplicate suppression", ()
 test("public events resolve the tenant from the published active slug", () => {
   assert.match(
     publicSource,
-    /select id from tenants where slug = \$\{data\.slug\} and is_active = true and is_published = true limit 1/,
+    /select id, whatsapp from tenants where slug = \$\{data\.slug\} and is_active = true and is_published = true limit 1/,
   );
 });
