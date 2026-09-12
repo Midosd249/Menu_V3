@@ -38,20 +38,20 @@ R2.7 WhatsApp Report Sharing          DONE
 All seven are complete and protected. Do not reopen without a current reproducible regression.
 
 ## R4 — Owner Intelligence
-STATUS: IN_PROGRESS
+STATUS: CLOSED / VERIFIED
 
 ```text
 R4.1 Verified Owner Signals           DONE / VERIFIED
 R4.2 Intelligence Action Center       DONE / VERIFIED
 R4.3 Action Center Follow-through     DONE / VERIFIED
 R4.4 Intelligence Data Quality        DONE / VERIFIED
-R4.5 Owner Decision Loop              NEXT
+R4.5 Owner Decision Loop              DONE / VERIFIED
 ```
 
-R4 principle:
+R4 protected principle:
 **verified evidence → evidence quality → insight → priority → owner action → re-check**
 
-The Owner Intelligence layer must remain deterministic at the data boundary. AI may explain or prepare recommendations, but it cannot become the source of truth or autonomously mutate production data.
+The Owner Intelligence layer remains deterministic at the data boundary. AI may explain or prepare recommendations, but it cannot become the source of truth or autonomously mutate production data.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -68,37 +68,38 @@ Normal path:
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
 ## Current Verified Main
-- VERIFIED: current `main` SHA is `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
-- VERIFIED: R4.4 was merged at that SHA.
-- UNKNOWN: production deployment identity for that exact SHA until directly rechecked.
+- VERIFIED: current `main` SHA is `08565c47550df828450c76c8ce27fb6c373b04fd`.
+- VERIFIED: R4.5 is merged at that SHA.
+- VERIFIED: GitHub Vercel status for that SHA reports `Deployment has completed`.
+- UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
 
-## Current Atomic Task — R4.5 Owner Decision Loop
-### Objective
-Connect the existing Owner Intelligence Action Center to the deterministic R4.4 evidence-quality contract and close the decision loop without creating a duplicate dashboard or autonomous action system.
+## Current Strategic Direction
+Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
 
-### Scope
-1. Reuse existing `/studio/intelligence` and `/studio/intelligence-actions` surfaces.
-2. Consume `buildIntelligenceDataQuality` from the existing analytics evidence.
-3. Show fresh/stale/insufficient evidence state and latest observed date beside relevant intelligence.
-4. Make recommendations traceable from verified evidence to reason to existing owner action.
-5. Use the existing refresh flow as the re-check mechanism after owner-approved changes.
-6. Preserve all authentication, authorization, tenant/branch isolation, RLS, pricing, availability, allergen, and order boundaries.
-7. Add focused regression coverage for evidence status and decision-loop behavior.
-8. Run relevant typecheck, tests, lint, build, browser/accessibility/security/data checks available in the repository.
-9. Release only after one coherent quality-gated batch.
+```text
+Live Menu
+→ Guest Experience
+→ Menu Intelligence
+→ Owner Intelligence
+→ Growth Extensions
+```
 
-### Acceptance criteria
-- No duplicate Intelligence dashboard is introduced.
-- Every displayed evidence state is deterministic and derived from existing data.
-- Fresh/stale/insufficient states are understandable in Arabic and English.
-- Recommendations remain owner-reviewed and do not mutate production automatically.
-- Refresh/re-check uses the existing analytics flow.
-- Existing R2/R3/theme/order/import/provider/security behavior is unchanged.
-- Relevant quality gates pass.
-- Continuity documents are reconciled at completion.
+Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
+
+## R5 — Growth Extensions
+STATUS: DISCOVERY / NOT IMPLEMENTED
+
+Objective: identify the highest-value growth improvement already supported by real product data and current architecture, then implement one atomic improvement without duplicating existing capabilities.
+
+Required discovery before editing:
+1. Inspect current growth, analytics, experimentation, local-visibility, conversion, onboarding, and public-menu capabilities.
+2. Map existing data sources and identify what is actually measurable today.
+3. Identify customer/owner friction that can be addressed without inventing metrics.
+4. Select one evidence-backed atomic improvement with clear acceptance criteria.
+5. Preserve R2/R3/R4, themes, orders, import, provider infrastructure, security, tenant isolation, and release controls.
 
 ## Research
-Research level: Focused; repository-first. Use external sources only when they materially improve a customer or platform decision and record material findings.
+Research level for the next task: Focused by default; escalate to Deep only if external market/customer evidence materially changes the decision. Repository-first remains mandatory.
 
 ## Exact Next Action
-Implement R4.5 from `main @ 8fd3f580cee9d740ffa323588f15215b8e7764e1` on the dedicated feature branch. Do not reopen completed milestones.
+Perform R5 discovery on current `main @ 08565c47550df828450c76c8ce27fb6c373b04fd`, then choose exactly one atomic growth improvement based on verified evidence. Do not implement before the discovery identifies a non-duplicative target.
