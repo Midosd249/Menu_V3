@@ -46,3 +46,18 @@ test("zero-data analytics produces a baseline insight instead of a fake trend", 
   assert.equal(empty.insights[0]?.key, "analytics-baseline");
   assert.match(empty.insights[0]?.recommendationAr ?? "", /شارك القائمة/);
 });
+
+test("published zero-activity menus receive a distribution action", () => {
+  const empty = buildMenuGrowthAdvisor(snapshot, { ...analytics, visits: 0, uniqueSessions: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, topProducts: [], byCategory: [] });
+  const action = empty.actions.find((item) => item.key === "distribution");
+  assert.ok(action);
+  assert.equal(action?.priority, "high");
+  assert.equal(action?.href, "/studio/brand");
+  assert.match(action?.metricEn ?? "", /Visits: 0/);
+});
+
+test("unpublished menus do not add a duplicate distribution action", () => {
+  const unpublished = buildMenuGrowthAdvisor({ ...snapshot, tenant: { ...snapshot.tenant, isPublished: false } }, { ...analytics, visits: 0, uniqueSessions: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, topProducts: [], byCategory: [] });
+  assert.ok(unpublished.actions.some((item) => item.key === "publish-menu"));
+  assert.equal(unpublished.actions.some((item) => item.key === "distribution"), false);
+});
