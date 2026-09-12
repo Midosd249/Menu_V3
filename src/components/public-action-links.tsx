@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { getGuestSessionId } from "@/lib/menu/session";
-import { ACTIVE_EXPERIMENT, getExperimentVariant } from "@/lib/menu/experiment";
+import { ACTIVE_EXPERIMENT, getExperimentVariant, type ExperimentVariant } from "@/lib/menu/experiment";
 import { getPublicActions } from "@/lib/menu/public-actions";
 import type { Branch, Lang, PublicTenant } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
@@ -18,9 +19,14 @@ const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagr
 
 export function PublicActionLinks({ tenant, branch, lang, preview = false, className }: PublicActionLinksProps) {
   const actions = getPublicActions(tenant, branch, lang);
+  const [experimentVariant, setExperimentVariant] = useState<ExperimentVariant>("control");
+
+  useEffect(() => {
+    setExperimentVariant(getExperimentVariant(getGuestSessionId()));
+  }, []);
+
   if (!actions.length) return null;
   const sessionId = getGuestSessionId();
-  const experimentVariant = getExperimentVariant(sessionId);
 
   return (
     <nav aria-label={lang === "ar" ? "تواصل ومعلومات الفرع" : "Contact and branch information"} className={cn("flex flex-wrap items-center gap-2", className)}>
