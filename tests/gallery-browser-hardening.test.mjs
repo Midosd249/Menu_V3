@@ -56,3 +56,12 @@ test("Gallery preserves RTL/LTR and reduced-motion safeguards", async () => {
   assert.match(styles, /html\[dir="rtl"\]\[data-menu-theme="gallery"\]/);
   assert.match(styles, /prefers-reduced-motion:reduce/);
 });
+
+test("Gallery removes only its floating dock while the assistant dialog is open", async () => {
+  const styles = await readFile("src/theme-gallery-hardening.css", "utf8");
+  const assistant = await readFile("src/components/guest-menu-assistant.tsx", "utf8");
+
+  assert.match(assistant, /data-public-menu-assistant-dialog="true"/);
+  assert.match(styles, /gallery-public-frame \.menu-public-shell:has\(\[data-public-menu-assistant-dialog="true"\]\) > \.public-menu-bottom-bar/);
+  assert.match(styles, /display:\s*none\s*!important/);
+});

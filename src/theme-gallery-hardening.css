@@ -254,3 +254,10 @@ html[data-menu-theme="gallery"] .menu-public-shell main ul > li > div > button:n
     transition-duration: 0.01ms !important;
   }
 }
+
+/* The Gallery floating dock is useful during browsing, but it must not sit
+   above a modal assistant. Hide it only while the assistant is open so the
+   dialog remains visually complete and the dock returns unchanged on close. */
+html[data-menu-theme="gallery"] .gallery-public-frame .menu-public-shell:has([data-public-menu-assistant-dialog="true"]) > .public-menu-bottom-bar {
+  display: none !important;
+}

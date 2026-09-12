@@ -34,3 +34,12 @@ test("Noir hardening is loaded after the existing Noir refinement layers", async
   assert.match(source, /import noirHardeningCss from "\.\.\/theme-noir-hardening\.css\?url"/);
   assert.match(source, /href: noirThemeCss \},\s*\{ rel: "stylesheet", href: themeRefinementsCss \},\s*\{ rel: "stylesheet", href: themeRefinementsV2Css \},\s*\{ rel: "stylesheet", href: noirHardeningCss \}/);
 });
+
+test("Noir does not trap shared modals inside the public content stacking context", async () => {
+  const styles = await readFile("src/theme-refinements-v2.css", "utf8");
+
+  assert.doesNotMatch(styles, /\.menu-public-shell > \* \{ position: relative; z-index: 1; \}/);
+  assert.match(styles, /\.menu-public-shell > header,\s*html\[data-menu-theme="noir"\] \.menu-public-shell > main,\s*html\[data-menu-theme="noir"\] \.menu-public-shell > footer/);
+  assert.match(styles, /\.menu-public-shell \[role="dialog"\][\s\S]*background: var\(--color-surface-primary\) !important/);
+  assert.match(styles, /\.menu-public-shell \[role="dialog"\] \.text-ink[\s\S]*color: var\(--color-content-primary\) !important/);
+});
