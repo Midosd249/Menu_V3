@@ -32,7 +32,6 @@
 - No fabricated revenue/conversion/compliance claims were introduced.
 
 ### R2.7 — WhatsApp Report Sharing — CLOSED / VERIFIED / MERGED
-- Current `main` SHA: `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
 - Owner reviews generated report text before copying/opening WhatsApp.
 - Safe click-to-chat is used; no autonomous outbound messaging was introduced.
 - Restaurant WhatsApp use-case research is recorded in `docs/research/2026-09-12-whatsapp-restaurant-use-cases.md`.
@@ -43,17 +42,25 @@
 - Current multimodal routing supports Gemini, OpenRouter, Z.AI, and xKiro.
 - Server-only credentials, schema validation, tenant/user rate limiting, prompt-injection safeguards, and human-review boundaries remain protected.
 
-## R2 — Menu Intelligence Product Layer — CLOSED / VERIFIED
-
+### R2 — Menu Intelligence Product Layer — CLOSED / VERIFIED
 ```text
 R2.1 Menu Health / Completeness       DONE
 R2.2 Problem Detection                DONE
 R2.3 Priority + Actionable Fixes      DONE
-R2.4 Owner Menu Intelligence UX       DONE
-R2.5 Verified Analytics Intelligence  DONE
-R2.6 Professional Analytics Reports   DONE
-R2.7 WhatsApp Report Sharing          DONE
+R2.4 Owner Menu Intelligence UX      DONE
+R2.5 Verified Analytics Intelligence DONE
+R2.6 Professional Analytics Reports  DONE
+R2.7 WhatsApp Report Sharing         DONE
 ```
+
+### R3 — Guest Experience Hardening — CLOSED / VERIFIED / MERGED
+- PR #103 merged as `45e20a8b760ec4ec4571a8839b5194b33cbd4b61`.
+- Existing grounded Guest Assistant remains read-only and catalog-grounded.
+- Dialog accessibility was hardened with Escape handling, focus containment/restoration, body scroll locking, and assistive-technology semantics.
+- Focused regression contracts were added.
+- Shared Button refs were forwarded to support correct focus restoration.
+- GitHub Quality run `34675215594` passed before merge.
+- No theme, order, auth, RLS, tenant-isolation, provider, database, or deployment configuration changes were introduced.
 
 ## Protected Scope
 - Essential, Editorial, Noir, Heritage/Taste, and Gallery remain protected.
@@ -62,24 +69,24 @@ R2.7 WhatsApp Report Sharing          DONE
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: `main` SHA `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- VERIFIED: GitHub Quality run `34673634043` passed.
-- VERIFIED: Supabase check passed.
-- VERIFIED: Vercel status for the same SHA is `success` / `Deployment has completed`.
-- STATUS: `DEPLOYED`.
+- VERIFIED: `main` SHA `45e20a8b760ec4ec4571a8839b5194b33cbd4b61`.
+- VERIFIED: R3 PR Quality run `34675215594` passed.
+- VERIFIED: the R3 merge commit is on `main`.
+- BLOCKED: Vercel deployment of the R3 merge is not established because the account build-rate quota rejects deployment attempts.
+- VERIFIED: the prior production release remains separately evidenced at its previously recorded successful SHA until a new production deployment is directly confirmed.
 
 ## UNKNOWN / BLOCKED
 - UNKNOWN: direct physical-device observations are not available through the current connector environment.
-- UNKNOWN: current account-level Vercel Usage/Billing limits unless separately inspected.
+- BLOCKED: new Vercel deployment while the account build-rate quota is exhausted.
 
-## Exact Next TODO — R3 Guest Experience Hardening
-1. Audit the current public-menu customer journey and grounded Guest Assistant on `main`.
-2. Verify Arabic RTL, English LTR, mixed-direction content, mobile/responsive behavior, search/category discovery, product details, availability, and supported customer actions.
-3. Verify grounding and read-only/security boundaries.
-4. Identify only reproducible defects and implement the smallest safe fixes.
-5. Run relevant quality, browser, accessibility, performance, and security/data checks.
-6. Prepare one coherent release batch; do not use Vercel as the development loop.
-7. Stop at R3 atomic boundary.
+## Exact Next TODO — R4 Owner Intelligence Discovery
+1. Inspect the existing Analytics, Menu Intelligence, Growth Advisor, reports, and relevant server contracts on `main`.
+2. Map verified facts, insights, recommendations, and owner actions already present.
+3. Identify duplicated or fragmented owner UX before adding anything.
+4. Select one atomic R4 capability with an explicit acceptance contract.
+5. Implement only the smallest safe extension.
+6. Run relevant quality, browser, accessibility, performance, and security/data checks.
+7. Keep deployment deferred until the single coherent release batch is ready and Vercel quota permits it.
 
 ## Working Rules
 - `main` is source of truth.
