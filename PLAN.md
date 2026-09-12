@@ -26,22 +26,32 @@
 STATUS: CLOSED / VERIFIED
 
 ```text
-R2.1 Menu Health / Completeness
-↓
-R2.2 Problem Detection
-↓
-R2.3 Priority + Actionable Fixes
-↓
-R2.4 Owner Menu Intelligence UX
-↓
-R2.5 Verified Analytics Intelligence
-↓
-R2.6 Professional Analytics Reports
-↓
-R2.7 WhatsApp Report Sharing
+R2.1 Menu Health / Completeness       DONE
+R2.2 Problem Detection                DONE
+R2.3 Priority + Actionable Fixes      DONE
+R2.4 Owner Menu Intelligence UX       DONE
+R2.5 Verified Analytics Intelligence  DONE
+R2.6 Professional Analytics Reports   DONE
+R2.7 WhatsApp Report Sharing          DONE
 ```
 
 All seven are complete and protected. Do not reopen without a current reproducible regression.
+
+## R4 — Owner Intelligence
+STATUS: IN_PROGRESS
+
+```text
+R4.1 Verified Owner Signals           DONE / VERIFIED
+R4.2 Intelligence Action Center       DONE / VERIFIED
+R4.3 Action Center Follow-through     DONE / VERIFIED
+R4.4 Intelligence Data Quality        DONE / VERIFIED
+R4.5 Owner Decision Loop              NEXT
+```
+
+R4 principle:
+**verified evidence → evidence quality → insight → priority → owner action → re-check**
+
+The Owner Intelligence layer must remain deterministic at the data boundary. AI may explain or prepare recommendations, but it cannot become the source of truth or autonomously mutate production data.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -57,41 +67,38 @@ Normal path:
 
 Do not use Vercel for ordinary development or visual iteration. CI success and HTTP 200 are not deployment identity evidence. Do not randomly retry deployments or Redeploy.
 
-## Current Verified Release
-- VERIFIED: `main` SHA `3c1c08e3b19d19332b11d37d781736f4cdd4a3e2`.
-- VERIFIED: GitHub Quality run `34673634043` passed.
-- VERIFIED: Supabase check passed.
-- VERIFIED: Vercel status for this exact SHA is `success` with `Deployment has completed`.
-- STATUS: `DEPLOYED`.
+## Current Verified Main
+- VERIFIED: current `main` SHA is `8fd3f580cee9d740ffa323588f15215b8e7764e1`.
+- VERIFIED: R4.4 was merged at that SHA.
+- UNKNOWN: production deployment identity for that exact SHA until directly rechecked.
 
-## Current Atomic Task — R3 Guest Experience Hardening
+## Current Atomic Task — R4.5 Owner Decision Loop
 ### Objective
-Harden the existing grounded Guest Assistant and public-menu customer journey without rebuilding completed systems.
+Connect the existing Owner Intelligence Action Center to the deterministic R4.4 evidence-quality contract and close the decision loop without creating a duplicate dashboard or autonomous action system.
 
 ### Scope
-1. Inspect current public-menu rendering and the Guest Assistant integration on `main`.
-2. Verify actual menu grounding, product-ID validation, and read-only boundaries.
-3. Audit Arabic RTL, English LTR, mixed-direction content, mobile layout, search, category navigation, product details, availability, and supported customer actions.
-4. Test realistic long/short names, SAR price lengths, missing/varied images, one/many products, available/unavailable items, and empty/loading/error states supported by the current architecture.
-5. Fix only reproducible defects with minimal reversible changes.
-6. Run relevant typecheck, tests, lint, build, Playwright/browser, accessibility, performance, and security/data checks available in the repository.
-7. Prepare one coherent release batch only after verification.
-
-### Security boundaries
-- Guest Assistant remains read-only.
-- It cannot mutate production DB, create orders, decide prices, decide allergens, or bypass tenant/branch isolation.
-- Existing authentication, authorization, RLS, ordering, pricing, and customer-action contracts remain protected.
+1. Reuse existing `/studio/intelligence` and `/studio/intelligence-actions` surfaces.
+2. Consume `buildIntelligenceDataQuality` from the existing analytics evidence.
+3. Show fresh/stale/insufficient evidence state and latest observed date beside relevant intelligence.
+4. Make recommendations traceable from verified evidence to reason to existing owner action.
+5. Use the existing refresh flow as the re-check mechanism after owner-approved changes.
+6. Preserve all authentication, authorization, tenant/branch isolation, RLS, pricing, availability, allergen, and order boundaries.
+7. Add focused regression coverage for evidence status and decision-loop behavior.
+8. Run relevant typecheck, tests, lint, build, browser/accessibility/security/data checks available in the repository.
+9. Release only after one coherent quality-gated batch.
 
 ### Acceptance criteria
-- Existing Guest Assistant remains functional and grounded.
-- No regression to public menu themes or customer actions.
-- Arabic/English/RTL/LTR behavior is deterministic.
-- No fabricated product or allergen claims.
-- All relevant quality gates pass.
-- Final diff contains only R3 work and required continuity evidence.
+- No duplicate Intelligence dashboard is introduced.
+- Every displayed evidence state is deterministic and derived from existing data.
+- Fresh/stale/insufficient states are understandable in Arabic and English.
+- Recommendations remain owner-reviewed and do not mutate production automatically.
+- Refresh/re-check uses the existing analytics flow.
+- Existing R2/R3/theme/order/import/provider/security behavior is unchanged.
+- Relevant quality gates pass.
+- Continuity documents are reconciled at completion.
 
 ## Research
-Research level: Focused when external evidence materially improves a customer-journey decision; repository-first always. For market-specific or browser/platform questions, use official/primary sources and record material findings.
+Research level: Focused; repository-first. Use external sources only when they materially improve a customer or platform decision and record material findings.
 
 ## Exact Next Action
-Start R3 discovery/audit from current `main`; do not change code until the existing public journey and Guest Assistant implementation are inspected and acceptance gaps are identified.
+Implement R4.5 from `main @ 8fd3f580cee9d740ffa323588f15215b8e7764e1` on the dedicated feature branch. Do not reopen completed milestones.
