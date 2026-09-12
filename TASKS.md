@@ -12,6 +12,7 @@
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
 - Gallery + Noir Theme Hardening — CLOSED / VERIFIED / MERGED.
+- Continuity reconciliation — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer — CLOSED / VERIFIED
 
@@ -62,7 +63,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Noir no longer traps shared dialogs inside the content stacking context.
 - Noir dialog surface, text, and border tokens are hardened for readability.
 - Focused regression coverage protects both fixes.
-- Latest main: `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- Canonical main after continuity reconciliation: `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
 
 ## Protected Scope
 
@@ -72,8 +73,9 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: current `main` SHA is `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: latest main includes Guest Assistant public-route/launcher hardening and Gallery/Noir theme hardening.
+- VERIFIED: current `main` SHA is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: Quality Run 1420 completed successfully for the pre-merge continuity reconciliation commit.
+- VERIFIED: latest main contains the continuity reconciliation merge on top of the previously verified application state.
 - BLOCKED: Vercel production state must be verified separately; do not infer deployment from GitHub main.
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
