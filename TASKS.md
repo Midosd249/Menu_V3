@@ -70,7 +70,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Noir no longer traps shared dialogs inside the content stacking context.
 - Noir dialog surface, text, and border tokens are hardened for readability.
 - Focused regression coverage protects both fixes.
-- Canonical main after continuity reconciliation: `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this documentation follow-up.
+- Canonical main after continuity synchronization: `8bce889eda8605c73173e390139e54393024b03b`.
 
 ## Protected Scope
 
@@ -80,9 +80,9 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` before this documentation follow-up is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Quality Run 1420 completed successfully for the pre-merge continuity reconciliation commit.
-- VERIFIED: latest main contains the continuity reconciliation merge on top of the previously verified application state.
+- VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b`.
+- VERIFIED: continuity synchronization was merged after the preceding canonical main `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
+- VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
 - BLOCKED: Vercel production state must be verified separately; do not infer deployment from GitHub main.
 - UNKNOWN: direct physical-device production QA is not available through the current connector environment.
 
