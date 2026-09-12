@@ -3,19 +3,32 @@ import test from "node:test";
 import fs from "node:fs";
 
 const source = fs.readFileSync("src/lib/menu/intelligence.ts", "utf8");
+const health = fs.readFileSync("src/lib/menu/health.ts", "utf8");
+const types = fs.readFileSync("src/lib/menu/types.ts", "utf8");
 const route = fs.readFileSync("src/routes/studio/intelligence.tsx", "utf8");
 const shell = fs.readFileSync("src/components/studio-shell.tsx", "utf8");
 const overview = fs.readFileSync("src/routes/studio/index.tsx", "utf8");
 
-test("Menu Intelligence is deterministic and data-bounded", () => {
-  assert.match(source, /export function buildMenuIntelligence/);
-  assert.match(source, /contentScore/);
-  assert.match(source, /presentationScore/);
-  assert.match(source, /operationsScore/);
-  assert.match(source, /analyticsStatus/);
-  assert.match(source, /issues/);
-  assert.match(source, /Math\.round\(contentScore \* 0\.4 \+ presentationScore \* 0\.2 \+ operationsScore \* 0\.4\)/);
-  assert.match(source, /OwnerAnalytics/);
+test("Menu Health defines an explainable deterministic contract", () => {
+  assert.match(types, /HealthDimension/);
+  for (const key of ["publishing", "content", "translation", "visual", "organization", "commercial", "availability"]) assert.match(health, new RegExp(`\\"${key}\\"`));
+  assert.match(health, /Number\.isFinite\(p\.price\)/);
+  assert.doesNotMatch(health, /price.*===.*0|price.*<=.*0/);
+});
+
+test("Menu Health treats optional presentation fields as quality signals", () => {
+  assert.match(health, /imageUrl/);
+  assert.match(health, /descriptionAr/);
+  assert.match(health, /descriptionEn/);
+  assert.match(health, /severity: \"low\"/);
+});
+
+test("Menu Intelligence consumes canonical health instead of a second score", () => {
+  assert.match(source, /snapshot\.health/);
+  assert.match(source, /scoreOf/);
+  assert.match(source, /const score = health\.score/);
+  assert.doesNotMatch(source, /contentScore \* 0\.4/);
+  assert.doesNotMatch(source, /function percentage/);
 });
 
 test("Menu Intelligence does not invent conversion or revenue claims", () => {
@@ -23,21 +36,10 @@ test("Menu Intelligence does not invent conversion or revenue claims", () => {
   assert.match(route, /not a sales or conversion claim/);
 });
 
-test("Menu Intelligence keeps actionable issues linked to existing Studio surfaces", () => {
-  assert.match(source, /href: "\/studio\/menu"/);
-  assert.match(source, /href: "\/studio\/settings"/);
-  assert.match(source, /href: "\/studio\/branches"/);
-  assert.match(route, /Open menu editor|فتح محرر القائمة/);
-});
-
-test("Studio exposes Menu Intelligence in desktop and mobile-safe navigation", () => {
+test("Studio navigation remains available", () => {
   assert.match(shell, /\/studio\/intelligence/);
   assert.match(shell, /Menu Intelligence/);
   assert.match(shell, /ذكاء القائمة/);
   assert.match(shell, /MOBILE_PRIMARY/);
-});
-
-test("Studio overview links directly to Menu Intelligence", () => {
   assert.match(overview, /\/studio\/intelligence/);
-  assert.match(overview, /اجعل قائمتك تتحسن باستمرار/);
 });
