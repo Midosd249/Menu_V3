@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical main after continuity reconciliation is `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this follow-up documentation branch.
+- VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b` after continuity synchronization.
 - VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
 - VERIFIED: latest theme-hardening commit preceding the continuity merge contains Guest Assistant public-route/launcher hardening plus Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening.
 - VERIFIED: focused Gallery/Noir regression coverage is present.
@@ -103,7 +103,8 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: continuity reconciliation is merged to `main` at `df72b5b9efa3df19f84c7e7f92057b1cc250bccd` before this documentation follow-up.
+- VERIFIED: continuity synchronization is merged to `main` at `8bce889eda8605c73173e390139e54393024b03b`.
+- VERIFIED: the preceding canonical main was `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
 - VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
 - BLOCKED: latest Vercel production deployment must be verified separately because the account has a deployment/build-rate limit condition.
 - UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
