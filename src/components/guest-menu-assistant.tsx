@@ -1,5 +1,5 @@
 import { Bot, LoaderCircle, Send, Sparkles, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { askGuestMenuAssistant } from "@/lib/menu/guest-assistant";
 import { getGuestSessionId } from "@/lib/menu/session";
 import { useLang } from "@/lib/lang";
@@ -18,9 +18,48 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
   const [answer, setAnswer] = useState<{ ar: string; en: string; productIds: string[] } | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const dialogRef = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const products = useMemo(() => new Map(menu.products.map((p) => [p.id, p])), [menu.products]);
   const visibleAnswer = lang === "ar" ? answer?.ar : answer?.en;
+
+  useEffect(() => {
+    if (!open) return;
+    const previousActive = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const frame = requestAnimationFrame(() => closeRef.current?.focus());
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>("button:not(:disabled),textarea:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),[tabindex]:not([tabindex='-1'])"));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      (previousActive ?? triggerRef.current)?.focus();
+    };
+  }, [open]);
 
   async function ask(value = question) {
     const trimmed = value.trim();
@@ -54,10 +93,13 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
   return (
     <>
       <Button
+        ref={triggerRef}
         type="button"
         size="default"
         variant="solid"
         aria-label={lang === "ar" ? "اسأل عن القائمة" : "Ask about the menu"}
+        aria-haspopup="dialog"
+        aria-expanded={open}
         onClick={() => { setOpen(true); setError(""); }}
         className="fixed bottom-[calc(6.5rem+env(safe-area-inset-bottom))] left-4 z-40 min-h-11 rounded-full px-4 shadow-lg sm:bottom-6"
       >
@@ -66,18 +108,18 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
       </Button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center p-3 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={lang === "ar" ? "مساعد القائمة" : "Menu assistant"}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-3 sm:items-center sm:p-6" role="presentation">
           <button className="absolute inset-0 cursor-default bg-black/40" aria-label={lang === "ar" ? "إغلاق" : "Close"} onClick={() => setOpen(false)} />
-          <section className="relative flex max-h-[82dvh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl">
+          <section ref={dialogRef} tabIndex={-1} className="relative flex max-h-[82dvh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="guest-menu-assistant-title">
             <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
               <div className="flex items-center gap-3">
                 <span className="grid size-10 place-items-center rounded-full bg-sand text-ink"><Bot aria-hidden="true" /></span>
                 <div>
-                  <h2 className="font-semibold text-ink">{lang === "ar" ? "مساعد القائمة" : "Menu assistant"}</h2>
+                  <h2 id="guest-menu-assistant-title" className="font-semibold text-ink">{lang === "ar" ? "مساعد القائمة" : "Menu assistant"}</h2>
                   <p className="text-xs text-muted">{lang === "ar" ? "إجابات مبنية على الأصناف المتاحة فقط" : "Answers grounded in available menu items"}</p>
                 </div>
               </div>
-              <Button type="button" size="icon" variant="ghost" aria-label={lang === "ar" ? "إغلاق المساعد" : "Close assistant"} onClick={() => setOpen(false)}><X aria-hidden="true" /></Button>
+              <Button ref={closeRef} type="button" size="icon" variant="ghost" aria-label={lang === "ar" ? "إغلاق المساعد" : "Close assistant"} onClick={() => setOpen(false)}><X aria-hidden="true" /></Button>
             </header>
 
             <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4" aria-live="polite">
@@ -92,7 +134,7 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
 
               {answer && (
                 <div className="space-y-3">
-                  <div className="rounded-2xl bg-sand px-4 py-3 text-sm leading-6 text-ink">{visibleAnswer}</div>
+                  <div className="rounded-2xl bg-sand px-4 py-3 text-sm leading-6 text-ink" dir="auto">{visibleAnswer}</div>
                   {answer.productIds.length > 0 && (
                     <div className="space-y-2">
                       <p className="text-xs font-medium text-muted">{lang === "ar" ? "أصناف مرتبطة بالإجابة" : "Related menu items"}</p>
@@ -100,7 +142,7 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
                         {answer.productIds.map((id) => {
                           const product = products.get(id);
                           if (!product) return null;
-                          return <div key={id} className="flex items-center justify-between gap-3 rounded-xl border border-line px-3 py-2 text-sm"><span className="truncate text-ink">{lang === "ar" ? product.nameAr : product.nameEn || product.nameAr}</span><span className="shrink-0 font-semibold text-ink">{product.price} {product.currency}</span></div>;
+                          return <div key={id} className="flex items-center justify-between gap-3 rounded-xl border border-line px-3 py-2 text-sm"><span dir="auto" className="min-w-0 truncate text-ink">{lang === "ar" ? product.nameAr : product.nameEn || product.nameAr}</span><span className="shrink-0 font-semibold text-ink"><bdi dir="ltr">{product.price} {product.currency}</bdi></span></div>;
                         })}
                       </div>
                     </div>
@@ -108,7 +150,7 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
                 </div>
               )}
 
-              {loading && <div className="flex items-center gap-2 rounded-2xl bg-sand px-4 py-3 text-sm text-muted"><LoaderCircle className="animate-spin" aria-hidden="true" />{lang === "ar" ? "أتحقق من القائمة..." : "Checking the menu..."}</div>}
+              {loading && <div className="flex items-center gap-2 rounded-2xl bg-sand px-4 py-3 text-sm text-muted" role="status"><LoaderCircle className="animate-spin" aria-hidden="true" />{lang === "ar" ? "أتحقق من القائمة..." : "Checking the menu..."}</div>}
               {error && <div role="alert" className="rounded-2xl border border-bad/30 bg-bad/10 px-4 py-3 text-sm leading-6 text-bad">{error}</div>}
             </div>
 

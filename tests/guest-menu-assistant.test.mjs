@@ -39,6 +39,17 @@ test("customer UI is Arabic-first, mobile-safe, and does not expose provider det
   assert.ok(!ui.includes("API_KEY"));
 });
 
+test("assistant dialog has keyboard, focus, and scroll-lock safeguards", () => {
+  assert.ok(ui.includes("aria-haspopup=\"dialog\""));
+  assert.ok(ui.includes("aria-expanded={open}"));
+  assert.ok(ui.includes("role=\"dialog\" aria-modal=\"true\""));
+  assert.ok(ui.includes("aria-labelledby=\"guest-menu-assistant-title\""));
+  assert.ok(ui.includes('event.key === "Escape"'));
+  assert.ok(ui.includes('event.key !== "Tab"'));
+  assert.ok(ui.includes('document.body.style.overflow = "hidden"'));
+  assert.ok(ui.includes("previousActive ?? triggerRef.current"));
+});
+
 test("assistant is added once through the canonical theme renderer and not to previews", () => {
   assert.ok(renderer.includes("<GuestMenuAssistant menu={menu} />"));
   assert.ok(renderer.includes("{!preview && <GuestMenuAssistant menu={menu} />}") );
