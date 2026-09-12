@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildIntelligenceDataQuality } from "./intelligence-data-quality";
+import { buildIntelligenceDataQuality } from "./intelligence-data-quality.ts";
 import type { OwnerAnalytics } from "./types";
 
 const analytics: OwnerAnalytics = {
