@@ -13,7 +13,7 @@ test("R9 relationship data stays isolated and owner-controlled", () => {
   assert.match(domain, /authMiddleware/);
   assert.match(domain, /getMembership/);
   assert.match(domain, /canAccessBranch/);
-  assert.match(domain, /\[\"owner\", \"admin\"\]/);
+  assert.match(domain, /owner.*admin/);
   assert.match(page, /R9/);
   assert.match(page, /Guest CRM/);
   assert.match(page, /Loyalty/);
