@@ -12,7 +12,8 @@ import type { OwnerAnalytics } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/")({ component: Overview });
 
-type Capability = { to: string; ar: string; en: string; detailAr: string; detailEn: string };
+type StudioCapabilityRoute = "/studio/menu" | "/studio/import" | "/studio/options" | "/studio/design" | "/studio/brand" | "/studio/preview" | "/studio/qr" | "/studio/branches" | "/studio/intelligence" | "/studio/intelligence-actions" | "/studio/analytics" | "/studio/reports" | "/studio/growth" | "/studio/guests" | "/studio/orders" | "/studio/team" | "/studio/settings";
+type Capability = { to: StudioCapabilityRoute; ar: string; en: string; detailAr: string; detailEn: string };
 type CapabilityGroup = { ar: string; en: string; items: Capability[] };
 
 const CAPABILITY_GROUPS: CapabilityGroup[] = [
