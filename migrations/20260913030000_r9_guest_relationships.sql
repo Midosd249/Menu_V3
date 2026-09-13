@@ -75,7 +75,25 @@ alter table guest_campaigns enable row level security;
 alter table guest_feedback enable row level security;
 
 -- Server-side application authorization is the access boundary for these tables.
-revoke all on table guest_loyalty_accounts from anon, authenticated, public;
-revoke all on table guest_loyalty_ledger from anon, authenticated, public;
-revoke all on table guest_campaigns from anon, authenticated, public;
-revoke all on table guest_feedback from anon, authenticated, public;
+-- Supabase provides anon/authenticated roles; local PGlite does not. Keep the
+-- migration portable by revoking only when each role exists.
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke all on table guest_loyalty_accounts from anon';
+    execute 'revoke all on table guest_loyalty_ledger from anon';
+    execute 'revoke all on table guest_campaigns from anon';
+    execute 'revoke all on table guest_feedback from anon';
+  end if;
+  if exists (select 1 from pg_roles where rolname = 'authenticated') then
+    execute 'revoke all on table guest_loyalty_accounts from authenticated';
+    execute 'revoke all on table guest_loyalty_ledger from authenticated';
+    execute 'revoke all on table guest_campaigns from authenticated';
+    execute 'revoke all on table guest_feedback from authenticated';
+  end if;
+end
+$$;
+revoke all on table guest_loyalty_accounts from public;
+revoke all on table guest_loyalty_ledger from public;
+revoke all on table guest_campaigns from public;
+revoke all on table guest_feedback from public;
