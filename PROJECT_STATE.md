@@ -13,9 +13,9 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-13
-- VERIFIED: current canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- VERIFIED: this commit is the continuity synchronization follow-up whose parent was `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
+- VERIFIED: current canonical `main` is `c115d60c02e0e4a4165e69c0982ff73e1b097027`.
+- VERIFIED: R8 implementation was merged as PR #128 at `8a355f5c0f14ac123e79707483ad58b27e427c64`, followed by the required continuity documentation merge PR #130 at the current main commit.
+- VERIFIED: the preceding application baseline was `f4111f86738a098122a7e536ae35a0ea97ed03fd`.
 - VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
 - VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
 - VERIFIED: the latest theme fix has focused regression coverage for Gallery and Noir.
@@ -43,6 +43,9 @@
 - Grounded Guest Menu Assistant — DONE / VERIFIED, including public-route rendering and accessibility hardening.
 - Gallery + Noir theme hardening — DONE / VERIFIED / MERGED.
 - Continuity reconciliation — CLOSED / VERIFIED / MERGED.
+- R8.1 Action Loop — CLOSED / VERIFIED / MERGED.
+- R8.2 Evidence-based Recommendations — CLOSED / VERIFIED / MERGED.
+- R8.3 Experiment Expansion — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -119,15 +122,28 @@ STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 - DECISION: no treatment decision is justified; continue eligible real exposure and re-review when meaningful accumulation occurs.
 - VERIFIED: no synthetic traffic is used and no statistical significance claim is made.
 
-## Production / Commercial Readiness
-STATUS: IN_PROGRESS — REPOSITORY-READY; EXTERNAL EVIDENCE REMAINING
+## R8 — Closed-Loop Menu Growth Engine
+STATUS: CLOSED / VERIFIED / MERGED
 
-- VERIFIED: the temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production; no removal is justified solely by the current all-free theme catalog.
-- VERIFIED: the repository contains the release-only Vercel workflow and the quality gate covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
-- VERIFIED: current `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: `/studio/growth` provides a unified owner-facing Observe → Act → Measure surface.
+- VERIFIED: deterministic recommendations use existing `StudioSnapshot` and `OwnerAnalytics` only.
+- VERIFIED: thin traffic is explicitly treated as insufficient evidence.
+- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation was introduced.
+- VERIFIED: experiment catalogue includes active `whatsapp-cta-v1` and design-ready `featured-item-order` / `category-entry` opportunities.
+- VERIFIED: future experiments remain inactive until baseline, isolated change, metric, guardrail, and owner-approved activation are established.
+- VERIFIED: `src/lib/menu/growth-engine.test.ts` is included in the repository `test` script.
+- VERIFIED: no database/schema, authentication, authorization, tenant/branch isolation, subscription, pricing, ordering, or R6/R7 semantics were changed.
+- VERIFIED: GitHub Actions run 1437 passed route generation, typecheck, tests, lint, production build, Playwright installation, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: PR #128 merged to `main` as `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+
+## Production / Commercial Readiness
+STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
+
+- VERIFIED: repository-side R8 implementation and CI quality gates are complete.
+- VERIFIED: R8 Preview deployment reached Ready; this is not Production evidence.
 - UNKNOWN: direct Vercel Production environment-variable values are not readable through the current GitHub connector and must not be inferred from repository state.
+- UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA is not available through the current connector environment.
-- PROPOSED: treat the repository-side readiness work as complete and perform the remaining external verification in the next authorized Vercel/device QA session.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -139,7 +155,7 @@ STATUS: IN_PROGRESS — REPOSITORY-READY; EXTERNAL EVIDENCE REMAINING
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- VERIFIED: GitHub `main` is currently `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: GitHub `main` is currently `c115d60c02e0e4a4165e69c0982ff73e1b097027`.
 - UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
 - UNKNOWN: direct physical-device Production QA is unavailable through the current connector environment.
 
@@ -179,12 +195,15 @@ At the end of every atomic task:
 6. record exactly one next task;
 7. stop.
 
-## Session Log — 2026-09-13 — Production Readiness Continuation
-- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- VERIFIED: `menu_v3` is the canonical schema and `menu_v3.menu_events` is the canonical experiment event table.
-- VERIFIED: R7 remains non-blocking with current exposure 1 `control` / 2 `prominent` distinct sessions.
-- VERIFIED: repository-side production readiness controls and quality workflow are present.
-- UNKNOWN: direct Vercel Production environment values and physical-device QA remain external evidence items.
+## Session Log — 2026-09-13 — R8 Closure
+- VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, and R8.3 Experiment Expansion are merged.
+- VERIFIED: application merge commit is `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: continuity documentation merge commit is `c115d60c02e0e4a4165e69c0982ff73e1b097027`.
+- VERIFIED: R8 quality run 1437 passed all configured stages before application merge.
+- VERIFIED: main quality run 1438 also passed all configured stages after application merge.
+- VERIFIED: documentation continuity PR #130 quality run 1439 passed all configured stages before merge.
+- VERIFIED: no database/schema or protected security/ordering semantics were changed.
+- UNKNOWN: current Vercel Production deployment state and physical-device QA remain external evidence items.
 
 ## Evidence Labels
 `VERIFIED` = direct repository/tool/test/platform evidence.
