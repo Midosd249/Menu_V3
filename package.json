@@ -15,7 +15,7 @@
     "performance:audit": "node scripts/performance-audit.mjs",
     "typecheck": "tsc --noEmit",
     "check:auth": "node scripts/check-auth-invariant.mjs",
-    "test": "node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/permissions.test.ts src/lib/auth/authorization.server.test.ts src/lib/auth/platform-admin.server.test.ts src/lib/menu/safe.test.ts src/lib/menu/subscriptions.test.ts src/lib/menu/commercial.test.ts src/lib/menu/growth.test.ts src/lib/menu/growth-engine.test.ts src/lib/menu/seo.test.ts src/lib/menu/seo-discovery.test.ts src/lib/menu/analytics-integrity.test.ts src/lib/menu/intelligence-data-quality.test.ts src/lib/theme/registry.test.ts src/lib/theme/testing-access.test.ts src/components/public-action-links.test.ts tests/team-invitations.test.mjs tests/preview-shell.test.mjs tests/public-pages-themes-contract.test.mjs tests/public-menu-resilience.test.mjs tests/editorial-browser-hardening.test.mjs tests/noir-browser-hardening.test.mjs tests/heritage-browser-hardening.test.mjs tests/gallery-browser-hardening.test.mjs tests/public-theme-quality-recovery.test.mjs tests/global-quick-add-cart-refinement.test.mjs tests/quick-add-compact-visual-refinement.test.mjs tests/taste-theme.test.mjs tests/public-order-hardening.test.mjs tests/admin-operations.test.mjs tests/platform-onboarding-contract.test.mjs tests/menu-intelligence-v5.test.mjs tests/intelligence-v6.test.mjs tests/ai-foundation.test.mjs tests/ai-menu-onboarding.test.mjs scripts/quality-workflow.test.mjs scripts/pglite-asset.test.mjs scripts/migration-schema.test.mjs scripts/db-migration.test.mjs scripts/typography-contract.test.mjs scripts/color-contract.test.mjs scripts/image-art-direction-contract.test.mjs scripts/motion-contract.test.mjs scripts/accessibility-contract.test.mjs scripts/security-boundary.test.mjs",
+    "test": "node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/permissions.test.ts src/lib/auth/authorization.server.test.ts src/lib/auth/platform-admin.server.test.ts src/lib/menu/safe.test.ts src/lib/menu/subscriptions.test.ts src/lib/menu/commercial.test.ts src/lib/menu/growth.test.ts src/lib/menu/growth-engine.test.ts src/lib/menu/seo.test.ts src/lib/menu/seo-discovery.test.ts src/lib/menu/analytics-integrity.test.ts src/lib/menu/intelligence-data-quality.test.ts src/lib/theme/registry.test.ts src/lib/theme/testing-access.test.ts src/components/public-action-links.test.ts tests/team-invitations.test.mjs tests/preview-shell.test.mjs tests/public-pages-themes-contract.test.mjs tests/public-menu-resilience.test.mjs tests/editorial-browser-hardening.test.mjs tests/noir-browser-hardening.test.mjs tests/heritage-browser-hardening.test.mjs tests/gallery-browser-hardening.test.mjs tests/public-theme-quality-recovery.test.mjs tests/global-quick-add-cart-refinement.test.mjs tests/quick-add-compact-visual-refinement.test.mjs tests/taste-theme.test.mjs tests/public-order-hardening.test.mjs tests/admin-operations.test.mjs tests/platform-onboarding-contract.test.mjs tests/menu-intelligence-v5.test.mjs tests/intelligence-v6.test.mjs tests/ai-foundation.test.mjs tests/ai-menu-onboarding.test.mjs tests/r9-guest-relationships.test.mjs scripts/quality-workflow.test.mjs scripts/pglite-asset.test.mjs scripts/migration-schema.test.mjs scripts/db-migration.test.mjs scripts/typography-contract.test.mjs scripts/color-contract.test.mjs scripts/image-art-direction-contract.test.mjs scripts/motion-contract.test.mjs scripts/accessibility-contract.test.mjs scripts/security-boundary.test.mjs",
     "test:platform": "node --test 'scripts/**/*.test.mjs'",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -31,13 +31,13 @@
     "@radix-ui/react-progress": "^1.1.12",
     "@radix-ui/react-radio-group": "^1.3.3",
     "@radix-ui/react-separator": "^1.1.12",
+    "@radix-ui/react-slider": "^1.3.3",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-router": "^1.170.0",
     "@tanstack/react-start": "^1.168.0",
     "@tanstack/router-plugin": "^1.168.0",
-    "@radix-ui/react-slider": "^1.3.3",
     "@tailwindcss/vite": "^4.3.0",
     "better-auth": "~1.6.30",
     "class-variance-authority": "^0.7.1",
@@ -55,8 +55,7 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.1.12",
     "tw-animate-css": "^1.3.0",
-    "vaul": "^1.1.2",
-    "zustand": "^5.0.0"
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
