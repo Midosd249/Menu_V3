@@ -12,8 +12,7 @@ import type { OwnerAnalytics } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/")({ component: Overview });
 
-type StudioCapabilityRoute = "/studio/menu" | "/studio/import" | "/studio/options" | "/studio/design" | "/studio/brand" | "/studio/preview" | "/studio/qr" | "/studio/branches" | "/studio/intelligence" | "/studio/intelligence-actions" | "/studio/analytics" | "/studio/reports" | "/studio/growth" | "/studio/guests" | "/studio/orders" | "/studio/team" | "/studio/settings";
-type Capability = { to: StudioCapabilityRoute; ar: string; en: string; detailAr: string; detailEn: string };
+type Capability = { to: string; ar: string; en: string; detailAr: string; detailEn: string };
 type CapabilityGroup = { ar: string; en: string; items: Capability[] };
 
 const CAPABILITY_GROUPS: CapabilityGroup[] = [
@@ -93,7 +92,7 @@ function Overview() {
       <div className="grid gap-4 md:grid-cols-2">
         {CAPABILITY_GROUPS.map((group) => <section key={group.en} className="rounded-2xl border border-line bg-sand/20 p-4" aria-label={lang === "ar" ? group.ar : group.en}>
           <div className="mb-3"><h3 className="font-semibold">{lang === "ar" ? group.ar : group.en}</h3><p className="mt-1 text-xs text-muted">{lang === "ar" ? "قدرات موجودة ومحمية" : "Existing protected capabilities"}</p></div>
-          <div className="grid gap-2">{group.items.map((item) => <Link key={item.to} to={item.to} className="group rounded-xl border border-line bg-paper p-3 transition hover:-translate-y-0.5 hover:bg-sand"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="font-medium">{lang === "ar" ? item.ar : item.en}</p><p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? item.detailAr : item.detailEn}</p></div><ArrowUpLeft className="mt-0.5 size-4 shrink-0 text-muted transition group-hover:text-ink" aria-hidden="true" /></div></Link>)}</div>
+          <div className="grid gap-2">{group.items.map((item) => <a key={item.to} href={item.to} className="group rounded-xl border border-line bg-paper p-3 transition hover:-translate-y-0.5 hover:bg-sand"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="font-medium">{lang === "ar" ? item.ar : item.en}</p><p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? item.detailAr : item.detailEn}</p></div><ArrowUpLeft className="mt-0.5 size-4 shrink-0 text-muted transition group-hover:text-ink" aria-hidden="true" /></div></a>)}</div>
         </section>)}
       </div>
     </section>
