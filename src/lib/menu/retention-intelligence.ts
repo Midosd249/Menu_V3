@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { canAccessBranch, getMembership } from "@/lib/auth/authorization.server";
 import { getSql } from "@/lib/db";
 import type { FnResult } from "./types";
 
@@ -19,15 +20,23 @@ export const getRetentionOverview = createServerFn({ method: "GET" })
   .handler(async ({ context, data }): Promise<FnResult<RetentionOverview>> => {
     try {
       const sql = await getSql();
-      const members = await sql<{ tenant_id: string; role: string }>`
-        select tenant_id, role from tenant_members
-        where user_id = ${context.userId} and is_active = true
-        order by created_at limit 1
-      `;
-      const member = members[0];
-      if (!member || !["owner", "admin", "manager"].includes(member.role)) {
+      const membership = await getMembership(sql, context.userId);
+      if (!membership || !["owner", "admin", "manager"].includes(membership.role)) {
         return { ok: false, code: "forbidden", error: "ليست لديك صلاحية عرض تحليلات الاحتفاظ" };
       }
+
+      const branchId = data.branchId ?? null;
+      if (branchId) {
+        if (!(await canAccessBranch(sql, membership, branchId))) {
+          return { ok: false, code: "forbidden", error: "ليست لديك صلاحية عرض هذا الفرع" };
+        }
+      } else if (membership.role === "manager") {
+        const branchScope = membership.branchScope ?? [];
+        if (branchScope.length === 0) {
+          return { ok: false, code: "forbidden", error: "يجب تحديد فرع مصرح به لعرض تحليلات الاحتفاظ" };
+        }
+      }
+
       const rows = await sql<{
         total_orders: number;
         repeat_orders: number;
@@ -38,9 +47,15 @@ export const getRetentionOverview = createServerFn({ method: "GET" })
         with scoped as (
           select id, customer_phone, created_at, total
           from orders
-          where tenant_id = ${member.tenant_id}
+          where tenant_id = ${membership.tenantId}
             and status <> 'cancelled'
-            and (${data.branchId ?? null}::text is null or branch_id = ${data.branchId ?? null})
+            and (
+              ${branchId}::text is not null and branch_id = ${branchId}::text
+              or ${branchId}::text is null and (
+                ${membership.role}::text in ('owner', 'admin')
+                or branch_id = any(${membership.branchScope ?? []}::text[])
+              )
+            )
             and coalesce(customer_phone, '') <> ''
         ), repeaters as (
           select customer_phone from scoped group by customer_phone having count(*) > 1
