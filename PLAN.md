@@ -7,11 +7,10 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- VERIFIED: this is the post-merge continuity synchronization commit whose parent was `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: latest theme-hardening commit preceding the continuity merge contains Guest Assistant public-route/launcher hardening plus Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening.
-- VERIFIED: focused Gallery/Noir regression coverage is present.
+- VERIFIED: canonical `main` is `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: R8 was merged by squash from PR #128 after GitHub Actions quality run 1437 passed on the final branch head.
+- VERIFIED: the preceding application baseline was `f4111f86738a098122a7e536ae35a0ea97ed03fd`.
+- VERIFIED: latest theme-hardening work and focused Gallery/Noir regression coverage remain protected.
 
 ## Completed Strategic Milestones
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -29,6 +28,9 @@
 - R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
 - R5 Growth Extensions — CLOSED / VERIFIED.
 - R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for activation/measurement implementation; outcome pending real exposure.
+- R8.1 Action Loop — CLOSED / VERIFIED / MERGED.
+- R8.2 Evidence-based Recommendations — CLOSED / VERIFIED / MERGED.
+- R8.3 Experiment Expansion — CLOSED / VERIFIED / MERGED.
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
 - Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
@@ -90,6 +92,20 @@ STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 - INFERRED: Control is at 2% of the 50-session target and Prominent is at 4% of the 50-session target.
 - DECISION: no treatment decision is justified; continue real exposure and re-review after meaningful accumulation.
 
+## R8 — Closed-Loop Menu Growth Engine
+STATUS: CLOSED / VERIFIED / MERGED
+
+- VERIFIED: `/studio/growth` provides a unified owner surface for Observe → Act → Measure.
+- VERIFIED: deterministic recommendations use existing `StudioSnapshot` and `OwnerAnalytics` only.
+- VERIFIED: thin traffic is explicitly treated as insufficient evidence.
+- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation was introduced.
+- VERIFIED: experiment catalogue includes the active `whatsapp-cta-v1` plus `featured-item-order` and `category-entry` as design-ready opportunities.
+- VERIFIED: future experiments remain inactive until baseline, isolated change, metric, guardrail, and owner-approved activation are established.
+- VERIFIED: focused R8 engine tests are included in the repository `test` script.
+- VERIFIED: no database/schema, authentication, authorization, tenant/branch isolation, subscription, pricing, ordering, or R6/R7 semantics were changed.
+- VERIFIED: GitHub Actions run 1437 passed route generation, typecheck, tests, lint, production build, Playwright installation, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: PR #128 merged to `main` as `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+
 ## AI Infrastructure
 - VERIFIED: server-side provider abstraction.
 - VERIFIED: structured routing for Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
@@ -98,12 +114,12 @@ STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 - VERIFIED: server-only credentials.
 
 ## Production / Commercial Readiness
-STATUS: IN_PROGRESS — REPOSITORY-READY; EXTERNAL EVIDENCE REMAINING
+STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
 
-- VERIFIED: the temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production; no removal is justified solely by the current all-free theme catalog.
-- VERIFIED: the repository quality workflow covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
-- VERIFIED: current `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- UNKNOWN: direct Vercel Production environment-variable values are not readable through the current GitHub connector and must not be inferred from repository state.
+- VERIFIED: repository-side R8 implementation and CI quality gates are complete.
+- VERIFIED: a Vercel Preview deployment for the R8 branch reached Ready, but this is not production evidence.
+- UNKNOWN: direct current Vercel Production environment-variable values are not readable through the current GitHub connector.
+- UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA is not available through the current connector environment.
 
 ## Release-Only Vercel Policy
@@ -114,10 +130,11 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: continuity synchronization is represented by current `main` commit `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- VERIFIED: the current GitHub quality workflow is configured for push/PR quality gates.
-- UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
-- UNKNOWN: direct physical-device Production QA is unavailable through the current connector environment.
+- VERIFIED: `main` is `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: R8 quality run 1437 passed before merge.
+- VERIFIED: PR #128 is merged.
+- UNKNOWN: direct current Vercel Production deployment state and environment configuration.
+- UNKNOWN: physical real-device Production QA.
 
 ## Current Strategic Direction
 ```text
@@ -140,6 +157,12 @@ Complete only the remaining evidence-dependent work:
 4. record direct evidence and close the readiness milestone when all applicable checks pass.
 
 R7 remains active independently and does not block this task.
+
+## Session Log — 2026-09-13 — R8 Closure
+- VERIFIED: R8.1, R8.2, and R8.3 are merged into `main` at `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: GitHub Actions run 1437 passed all configured quality stages.
+- VERIFIED: no schema or protected security/ordering changes were introduced.
+- UNKNOWN: production deployment and physical-device evidence remain external.
 
 ## Continuity Rule
 At the end of every atomic task:
