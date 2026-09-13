@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { AlertTriangle, ArrowUpLeft, Palette, ShoppingBag, Sparkles } from "lucide-react";
 import { ErrorState } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
