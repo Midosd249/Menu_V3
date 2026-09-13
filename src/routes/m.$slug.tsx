@@ -4,6 +4,7 @@ import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
 import { PublicMenuView } from "@/components/public-menu";
+import { PublicUpsellPanel } from "@/components/public-upsell-panel";
 import { TasteTemplate } from "@/components/templates/taste";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { SpecialtyCafeTemplate } from "@/components/templates/specialty-cafe";
@@ -111,5 +112,5 @@ export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: 
   const activeTheme = previewTheme ?? state.menu.tenant.themeKey;
   const family = getThemeFamily(activeTheme);
   const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
-  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{activeTheme === "heritage" ? <TasteTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}<GuestMenuAssistant menu={themedMenu} /></>;
+  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{activeTheme === "heritage" ? <TasteTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} /> : family === "contemporary-restaurant" ? <ContemporaryRestaurantTemplate menu={themedMenu} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}<PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;
 }
