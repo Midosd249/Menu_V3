@@ -14,22 +14,29 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OwnerRouteImport } from './routes/owner'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as StudioRouteImport } from './routes/studio'
-import { Route as ThemesRouteImport } from './routes/themes'
+import { Route as AdminOnboardingRouteImport } from './routes/admin/onboarding'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MSlugRouteImport } from './routes/m.$slug'
+import { Route as OnboardingTokenRouteImport } from './routes/onboarding/$token'
 import { Route as StudioIndexRouteImport } from './routes/studio/index'
 import { Route as StudioAnalyticsRouteImport } from './routes/studio/analytics'
 import { Route as StudioBranchesRouteImport } from './routes/studio/branches'
 import { Route as StudioBrandRouteImport } from './routes/studio/brand'
 import { Route as StudioDesignRouteImport } from './routes/studio/design'
 import { Route as StudioImportRouteImport } from './routes/studio/import'
+import { Route as StudioIntelligenceRouteImport } from './routes/studio/intelligence'
+import { Route as StudioIntelligenceActionsRouteImport } from './routes/studio/intelligence-actions'
 import { Route as StudioMenuRouteImport } from './routes/studio/menu'
 import { Route as StudioOptionsRouteImport } from './routes/studio/options'
+import { Route as StudioOrdersRouteImport } from './routes/studio/orders'
 import { Route as StudioPreviewRouteImport } from './routes/studio/preview'
 import { Route as StudioQrRouteImport } from './routes/studio/qr'
+import { Route as StudioReportsRouteImport } from './routes/studio/reports'
 import { Route as StudioSettingsRouteImport } from './routes/studio/settings'
 import { Route as StudioTeamRouteImport } from './routes/studio/team'
+import { Route as ThemesIndexRouteImport } from './routes/themes/index'
 import { Route as ThemesPreviewRouteImport } from './routes/themes/preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MSlugBranchRouteImport } from './routes/m.$slug.$branch'
@@ -59,15 +66,20 @@ const OwnerRoute = OwnerRouteImport.update({
   path: '/owner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ThemesRoute = ThemesRouteImport.update({
-  id: '/themes',
-  path: '/themes',
-  getParentRoute: () => rootRouteImport,
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
 } as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
@@ -78,6 +90,11 @@ const MSlugRoute = MSlugRouteImport.update({
   id: '/m/$slug',
   path: '/m/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
 } as any)
 const StudioIndexRoute = StudioIndexRouteImport.update({
   id: '/',
@@ -109,6 +126,17 @@ const StudioImportRoute = StudioImportRouteImport.update({
   path: '/import',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
 const StudioMenuRoute = StudioMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -117,6 +145,11 @@ const StudioMenuRoute = StudioMenuRouteImport.update({
 const StudioOptionsRoute = StudioOptionsRouteImport.update({
   id: '/options',
   path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => StudioRoute,
 } as any)
 const StudioPreviewRoute = StudioPreviewRouteImport.update({
@@ -129,6 +162,11 @@ const StudioQrRoute = StudioQrRouteImport.update({
   path: '/qr',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
 const StudioSettingsRoute = StudioSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -139,10 +177,15 @@ const StudioTeamRoute = StudioTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => StudioRoute,
 } as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
-  id: '/preview',
-  path: '/preview',
-  getParentRoute: () => ThemesRoute,
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -157,79 +200,100 @@ const MSlugBranchRoute = MSlugBranchRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
   '/studio': typeof StudioRouteWithChildren
-  '/themes': typeof ThemesRouteWithChildren
+  '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
   '/studio/menu': typeof StudioMenuRoute
   '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio/team': typeof StudioTeamRoute
   '/themes/preview': typeof ThemesPreviewRoute
   '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
-  '/themes': typeof ThemesRouteWithChildren
+  '/pricing': typeof PricingRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
   '/studio/menu': typeof StudioMenuRoute
   '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio/team': typeof StudioTeamRoute
   '/themes/preview': typeof ThemesPreviewRoute
   '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
   '/studio': typeof StudioRouteWithChildren
-  '/themes': typeof ThemesRouteWithChildren
+  '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
   '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
   '/studio/menu': typeof StudioMenuRoute
   '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
   '/studio/preview': typeof StudioPreviewRoute
   '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
   '/studio/settings': typeof StudioSettingsRoute
   '/studio/team': typeof StudioTeamRoute
   '/themes/preview': typeof ThemesPreviewRoute
   '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
 }
@@ -241,23 +305,30 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/owner'
+    | '/pricing'
     | '/studio'
-    | '/themes'
+    | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
+    | '/onboarding/$token'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
     | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
     | '/studio/menu'
     | '/studio/options'
+    | '/studio/orders'
     | '/studio/preview'
     | '/studio/qr'
+    | '/studio/reports'
     | '/studio/settings'
     | '/studio/team'
     | '/themes/preview'
     | '/studio/'
+    | '/themes/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
   fileRoutesByTo: FileRoutesByTo
@@ -267,22 +338,29 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/owner'
-    | '/themes'
+    | '/pricing'
+    | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
+    | '/onboarding/$token'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
     | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
     | '/studio/menu'
     | '/studio/options'
+    | '/studio/orders'
     | '/studio/preview'
     | '/studio/qr'
+    | '/studio/reports'
     | '/studio/settings'
     | '/studio/team'
     | '/themes/preview'
     | '/studio'
+    | '/themes'
     | '/api/auth/$'
     | '/m/$slug/$branch'
   id:
@@ -292,37 +370,46 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/owner'
+    | '/pricing'
     | '/studio'
-    | '/themes'
+    | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
+    | '/onboarding/$token'
     | '/studio/analytics'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
     | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
     | '/studio/menu'
     | '/studio/options'
+    | '/studio/orders'
     | '/studio/preview'
     | '/studio/qr'
+    | '/studio/reports'
     | '/studio/settings'
     | '/studio/team'
     | '/themes/preview'
     | '/studio/'
+    | '/themes/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
-  OnboardingRoute: typeof OnboardingRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
   OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
   StudioRoute: typeof StudioRouteWithChildren
-  ThemesRoute: typeof ThemesRouteWithChildren
   InviteTokenRoute: typeof InviteTokenRoute
   MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -363,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/studio': {
       id: '/studio'
       path: '/studio'
@@ -370,12 +464,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/themes': {
-      id: '/themes'
-      path: '/themes'
-      fullPath: '/themes'
-      preLoaderRoute: typeof ThemesRouteImport
-      parentRoute: typeof rootRouteImport
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/invite/$token': {
       id: '/invite/$token'
@@ -390,6 +484,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/m/$slug'
       preLoaderRoute: typeof MSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
     }
     '/studio/': {
       id: '/studio/'
@@ -433,6 +534,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioImportRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
     '/studio/menu': {
       id: '/studio/menu'
       path: '/menu'
@@ -445,6 +560,13 @@ declare module '@tanstack/react-router' {
       path: '/options'
       fullPath: '/studio/options'
       preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
       parentRoute: typeof StudioRoute
     }
     '/studio/preview': {
@@ -461,6 +583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioQrRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
     '/studio/settings': {
       id: '/studio/settings'
       path: '/settings'
@@ -475,12 +604,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioTeamRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/themes/preview': {
       id: '/themes/preview'
-      path: '/preview'
+      path: '/themes/preview'
       fullPath: '/themes/preview'
       preLoaderRoute: typeof ThemesPreviewRouteImport
-      parentRoute: typeof ThemesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -499,16 +635,42 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminOnboardingRoute: AdminOnboardingRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
 interface StudioRouteChildren {
   StudioAnalyticsRoute: typeof StudioAnalyticsRoute
   StudioBranchesRoute: typeof StudioBranchesRoute
   StudioBrandRoute: typeof StudioBrandRoute
   StudioDesignRoute: typeof StudioDesignRoute
   StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
   StudioMenuRoute: typeof StudioMenuRoute
   StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
   StudioPreviewRoute: typeof StudioPreviewRoute
   StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
   StudioSettingsRoute: typeof StudioSettingsRoute
   StudioTeamRoute: typeof StudioTeamRoute
   StudioIndexRoute: typeof StudioIndexRoute
@@ -520,10 +682,14 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioBrandRoute: StudioBrandRoute,
   StudioDesignRoute: StudioDesignRoute,
   StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
   StudioMenuRoute: StudioMenuRoute,
   StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
   StudioPreviewRoute: StudioPreviewRoute,
   StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
   StudioSettingsRoute: StudioSettingsRoute,
   StudioTeamRoute: StudioTeamRoute,
   StudioIndexRoute: StudioIndexRoute,
@@ -531,17 +697,6 @@ const StudioRouteChildren: StudioRouteChildren = {
 
 const StudioRouteWithChildren =
   StudioRoute._addFileChildren(StudioRouteChildren)
-
-interface ThemesRouteChildren {
-  ThemesPreviewRoute: typeof ThemesPreviewRoute
-}
-
-const ThemesRouteChildren: ThemesRouteChildren = {
-  ThemesPreviewRoute: ThemesPreviewRoute,
-}
-
-const ThemesRouteWithChildren =
-  ThemesRoute._addFileChildren(ThemesRouteChildren)
 
 interface MSlugRouteChildren {
   MSlugBranchRoute: typeof MSlugBranchRoute
@@ -555,14 +710,16 @@ const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
-  OnboardingRoute: OnboardingRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
   OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
   StudioRoute: StudioRouteWithChildren,
-  ThemesRoute: ThemesRouteWithChildren,
   InviteTokenRoute: InviteTokenRoute,
   MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

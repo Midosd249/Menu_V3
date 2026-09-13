@@ -144,6 +144,15 @@ Live Menu
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
+## Saudi Food Disclosure Extension — 2026-09-13
+- IN_PROGRESS: focused Saudi food disclosure extension implemented locally and applied to canonical `menu_v3.products`.
+- VERIFIED: existing calories and free-text allergen behavior preserved.
+- VERIFIED: nullable sodium and caffeine fields with explicit caffeine basis (`per_100ml` / `per_cup`) are available to the owner editor and public item details.
+- VERIFIED: high-salt state is derived from stored sodium at or above 2,000 mg; no client-controlled flag or fabricated value is used.
+- UNKNOWN: exact technical-regulation presentation details, controlled allergen taxonomy, and physical-activity calorie-burn formula remain unverified and are not implemented.
+- BLOCKED: TypeScript quality gate remains blocked by pre-existing route/type-generation errors outside the changed Product fields.
+- NOT DEPLOYED: release-only workflow remains pending local/CI verification and a coherent release batch.
+
 ## Exact Next Task
 ### R7 — Continue Real Exposure / Controlled Optimization Review
 

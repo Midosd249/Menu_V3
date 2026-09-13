@@ -79,6 +79,15 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
+## Saudi Food Disclosure Extension — 2026-09-13
+
+- IMPLEMENTED LOCALLY: nullable sodium and caffeine fields with explicit caffeine basis, owner entry/review, public display, and derived high-salt warning.
+- VERIFIED: canonical `menu_v3.products` migration applied successfully.
+- PRESERVED: calories, existing allergen text, AI review boundaries, tenant scoping, and protected menu/theme behavior.
+- UNKNOWN: final technical-regulation presentation details, controlled allergen categories, and physical-activity calculation formula.
+- BLOCKED: full TypeScript gate has pre-existing route/type-generation errors unrelated to the changed Product fields.
+- NOT DEPLOYED: release-only workflow has not been started.
+
 ## Current Release Evidence
 - VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b`.
 - VERIFIED: continuity synchronization was merged after the preceding canonical main `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.

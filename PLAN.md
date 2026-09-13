@@ -119,6 +119,15 @@ Live Menu
 → Experiments
 ```
 
+## Saudi Food Disclosure Extension — 2026-09-13
+
+- STATUS: `IMPLEMENTATION_IN_PROGRESS` / locally changed, not deployed.
+- VERIFIED: official SFDA announcements were reviewed for caffeine disclosure, high-salt labeling, and physical-activity calorie-burn labeling.
+- IMPLEMENTED: nullable sodium and caffeine fields, explicit caffeine basis, owner entry/review, public disclosure, and derived high-salt warning.
+- PRESERVED: existing calories, allergen text, themes, tenant scoping, server validation, and AI non-fabrication boundaries.
+- UNKNOWN: exact technical-regulation presentation, controlled allergen taxonomy, and physical-activity formula.
+- NEXT: resolve pre-existing route/type-generation quality-gate errors, complete local browser QA, then prepare one release batch only after all applicable checks pass.
+
 ## Exact Next Task
 ### R7 — Continue Real Exposure / Controlled Optimization Review
 

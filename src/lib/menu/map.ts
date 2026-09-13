@@ -1,6 +1,6 @@
 import { isThemeKey, DEFAULT_THEME_KEY } from "../theme/index.ts";
 import { bool, num } from "../utils.ts";
-import type { Branch, BranchHour, Category, Product, PublicTenant, Tenant } from "./types";
+import type { Branch, BranchHour, Category, CaffeineBasis, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
   return value == null ? "" : String(value);
@@ -82,6 +82,7 @@ export function mapCategory(row: Record<string, unknown>): Category {
 
 export function mapProduct(row: Record<string, unknown>): Product {
   const caloriesRaw = row.calories;
+  const caffeineBasis = row.caffeine_basis === "per_100ml" || row.caffeine_basis === "per_cup" ? row.caffeine_basis as CaffeineBasis : null;
   return {
     id: str(row.id),
     tenantId: str(row.tenant_id),
@@ -95,6 +96,9 @@ export function mapProduct(row: Record<string, unknown>): Product {
     currency: str(row.currency) || "SAR",
     imageUrl: str(row.image_url),
     calories: caloriesRaw == null || caloriesRaw === "" ? null : num(caloriesRaw),
+    sodiumMg: row.sodium_mg == null || row.sodium_mg === "" ? null : num(row.sodium_mg),
+    caffeineMg: row.caffeine_mg == null || row.caffeine_mg === "" ? null : num(row.caffeine_mg),
+    caffeineBasis,
     isAvailable: bool(row.is_available),
     isFeatured: bool(row.is_featured),
     allergens: str(row.allergens),
