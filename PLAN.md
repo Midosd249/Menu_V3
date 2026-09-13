@@ -128,6 +128,16 @@ Live Menu
 - UNKNOWN: exact technical-regulation presentation, controlled allergen taxonomy, and physical-activity formula.
 - NEXT: resolve pre-existing route/type-generation quality-gate errors, complete local browser QA, then prepare one release batch only after all applicable checks pass.
 
+## Golden Demo Restaurant — 2026-09-13
+
+- STATUS: `VERIFIED_LOCALLY` / data applied to the authorized existing tenant, not deployed.
+- VERIFIED: fictional `مائدة سُرى / Sura Table`, Riyadh context, one preserved branch, 10 coherent categories, and 28 bilingual products.
+- VERIFIED: Kids Menu, calories, sodium, caffeine bases, allergen combinations, availability state, empty image fields, modifier groups, and variants are represented using existing schema.
+- VERIFIED: tenant owner and orders were preserved; no unrelated tenant was changed.
+- VERIFIED: static five-theme contracts and all available repository QA passed.
+- BLOCKED: browser visual QA is unavailable in this environment because Playwright browser binaries are absent and local PGlite schema is behind the current public-menu cache migration.
+- NEXT: prepare one release batch after final diff review; do not deploy from this local task.
+
 ## Exact Next Task
 ### R7 — Continue Real Exposure / Controlled Optimization Review
 
