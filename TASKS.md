@@ -67,23 +67,26 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - DECISION: do not select a winner or end the experiment; continue eligible real exposure.
 - R7 is a NON-BLOCKING monitoring lane and does not stop independent development work.
 
+## R8 — Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: `/studio/growth` provides the unified owner-facing Observe → Act → Measure surface.
+- VERIFIED: recommendations are deterministic and grounded in existing `StudioSnapshot` and `OwnerAnalytics` fields.
+- VERIFIED: thin traffic is explicitly treated as insufficient evidence.
+- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation was introduced.
+- VERIFIED: experiment catalogue contains active `whatsapp-cta-v1` and design-ready `featured-item-order` / `category-entry` opportunities.
+- VERIFIED: future experiments require baseline, isolated change, primary metric, guardrail, and owner-approved activation.
+- VERIFIED: `src/lib/menu/growth-engine.test.ts` is included in the repository `test` script.
+- VERIFIED: no database/schema, authentication, authorization, tenant/branch isolation, subscription, pricing, ordering, or R6/R7 semantics changed.
+- VERIFIED: GitHub Actions run 1437 passed route generation, typecheck, tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: PR #128 merged to `main` as `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+
 ## Production / Commercial Readiness — IN PROGRESS
 
-- VERIFIED: temporary premium-theme testing override is server-side, expiry-bound, client-inaccessible, and hard-disabled in production.
-- VERIFIED: current all-free theme catalog means the override does not currently grant an otherwise unavailable premium theme.
-- VERIFIED: no code removal is justified solely by this review.
-- VERIFIED: GitHub quality workflow covers route generation, typecheck, tests, lint, production build, Playwright/Chromium browser QA, all-theme template QA, and performance audit.
-- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
+- VERIFIED: R8 repository implementation and CI quality gates are complete.
+- VERIFIED: R8 branch Preview deployment reached Ready; this is not Production evidence.
 - UNKNOWN: direct Vercel Production environment-variable values cannot be inspected through the current GitHub connector.
+- UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA is unavailable through the current connector environment.
-
-## Gallery + Noir Theme Hardening — CLOSED / VERIFIED / MERGED
-
-- Gallery hides only its floating bottom action dock while the assistant dialog is open and restores it on close.
-- Noir no longer traps shared dialogs inside the content stacking context.
-- Noir dialog surface, text, and border tokens are hardened for readability.
-- Focused regression coverage protects both fixes.
-- Canonical main: `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
 
 ## Protected Scope
 
@@ -93,11 +96,11 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` is `0295650fe3d59e5e25f75cecd51b9a5c8a9b131d`.
-- VERIFIED: continuity synchronization follow-up is the current main commit.
-- VERIFIED: the quality workflow remains configured for both `main` pushes and pull requests.
-- UNKNOWN: direct current Vercel Production environment configuration cannot be verified from the GitHub connector.
-- UNKNOWN: direct physical-device production QA is not available through the current connector environment.
+- VERIFIED: canonical `main` is `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: R8 quality run 1437 passed before merge.
+- VERIFIED: PR #128 is merged.
+- UNKNOWN: direct current Vercel Production environment configuration and deployment state.
+- UNKNOWN: direct physical-device production QA.
 
 ## Exact Next Task
 ### Production / Commercial Readiness — External Verification Gate
