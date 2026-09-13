@@ -12,16 +12,12 @@
 - VERIFIED: canonical database schema `menu_v3`.
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
-## Current Verified Position — 2026-09-12
-- VERIFIED: current canonical `main` is `8bce889eda8605c73173e390139e54393024b03b` after the continuity synchronization merge.
-- VERIFIED: the preceding application baseline is the theme-hardening main commit `42b67382d3e1f1c3d66ed8fd8ba582101cf7da7a`.
-- VERIFIED: Guest Assistant public rendering hardening is present in main through commits `8614eae9b77a64569282ad17aa3224b1f3c4cb05` and `887077710808aeae448ccf3d00b027adea165c77`.
-- VERIFIED: Gallery assistant modal layering and Noir item-modal stacking/surface contrast hardening are present in main through the preceding theme-hardening commit.
-- VERIFIED: the latest theme fix has focused regression coverage for Gallery and Noir.
-- VERIFIED: R2.7 WhatsApp Report Sharing, R4.1–R4.5 Owner Intelligence, R5 Growth Extensions, and R6 bounded WhatsApp CTA experiment remain in repository history and are protected.
-- VERIFIED: R6 assigns `control` / `prominent` deterministically from the existing anonymous session id, persists the server-derived variant on the existing `menu_events` stream, and limits participation to published menus with configured WhatsApp.
-- VERIFIED: R6 measurement contract is WhatsApp-click sessions / exposed sessions, with product-view sessions / exposed sessions as guardrail and 50 exposed sessions per variant as the collection threshold.
-- VERIFIED: R6 does not claim statistical significance; results are directional only.
+## Current Verified Position — 2026-09-13
+- VERIFIED: current canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 merged the R9 guest relationship batch into `main` after final quality run 1453 passed all configured stages.
+- VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery remain complete and protected.
+- VERIFIED: R9 Guest CRM, Loyalty, Campaigns, Feedback, and Retention is complete for the implemented owner-controlled scope.
+- VERIFIED: R10 is explicitly deferred and has not been started.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -39,9 +35,15 @@
 - Menu Intelligence V5 Report Center — CLOSED / VERIFIED / MERGED.
 - R2.7 WhatsApp Report Sharing — CLOSED / VERIFIED / MERGED.
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
-- Grounded Guest Menu Assistant — DONE / VERIFIED, including public-route rendering and accessibility hardening.
+- Grounded Guest Menu Assistant — DONE / VERIFIED.
 - Gallery + Noir theme hardening — DONE / VERIFIED / MERGED.
 - Continuity reconciliation — CLOSED / VERIFIED / MERGED.
+- R8.1 Action Loop — CLOSED / VERIFIED / MERGED.
+- R8.2 Evidence-based Recommendations — CLOSED / VERIFIED / MERGED.
+- R8.3 Experiment Expansion — CLOSED / VERIFIED / MERGED.
+- R8.4 Evidence-based Upsell — CLOSED / VERIFIED / MERGED.
+- R8.5 Restaurant Discovery — CLOSED / VERIFIED / MERGED.
+- R9 Guest Relationships — CLOSED / VERIFIED / MERGED.
 
 ## R2 — Menu Intelligence Product Layer
 STATUS: CLOSED / VERIFIED
@@ -61,7 +63,7 @@ Protected R2 principles:
 - Deterministic findings precede AI explanation.
 - AI cannot invent price, availability, allergen, tenant, branch, permission, payment, revenue, or financial truth.
 - Reports use canonical verified analytics.
-- WhatsApp sharing is owner-reviewed; no autonomous outbound messaging was introduced.
+- WhatsApp sharing is owner-reviewed; no autonomous outbound messaging.
 
 ## R4 — Owner Intelligence
 STATUS: CLOSED / VERIFIED
@@ -74,48 +76,60 @@ R4.4 Intelligence Data Quality        DONE / VERIFIED
 R4.5 Owner Decision Loop              DONE / VERIFIED
 ```
 
-R4 protected contract:
-- Owner intelligence is grounded in existing analytics.
-- Evidence quality is deterministic: `fresh`, `stale`, or `insufficient`.
-- Insights and actions remain owner-reviewed.
-- Refresh/re-check reuses the existing analytics flow.
-- AI remains explanatory/recommendation-only and is never the source of truth.
-
 ## R5 — Growth Extensions
 STATUS: CLOSED / VERIFIED
 
-- VERIFIED: published zero-activity menus surface a deterministic `distribution` action using existing OwnerAnalytics fields and verified publication state.
+- VERIFIED: published zero-activity menus surface a deterministic distribution action using existing OwnerAnalytics fields and verified publication state.
 - VERIFIED: owner is routed to existing `/studio/brand`; no duplicate route/dashboard was created.
 - VERIFIED: unpublished menus retain the existing `publish-menu` action without duplicate guidance.
-- VERIFIED: no new metrics, conversion claims, autonomous messaging, or production mutation were introduced.
+- VERIFIED: no new metrics, conversion claims, autonomous messaging, or autonomous menu mutation were introduced.
 
 ## R6 — Experiments
 STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 
-### Selected experiment
-- VERIFIED: `whatsapp-cta-v1` is a bounded CTA hierarchy experiment using the existing shared WhatsApp action.
-- VERIFIED: hypothesis: stronger visual prominence of the existing WhatsApp action may increase WhatsApp-intent sessions without reducing product exploration.
-- VERIFIED: control is the existing presentation; treatment adds only `font-semibold shadow-sm`.
-- VERIFIED: assignment is stable per existing anonymous session id and is recomputed server-side when recording events.
-- VERIFIED: experiment data remains inside the canonical `menu_events` stream through nullable `experiment_key` and `experiment_variant` fields.
-- VERIFIED: preview/owner-preview mode does not activate the treatment or record experiment clicks.
-
-### Measurement contract
-- Primary: WhatsApp-click sessions / exposed sessions.
-- Guardrail: product-view sessions / exposed sessions.
-- Exposure: distinct session ids with recorded `visit` events for the experiment.
-- Collection threshold: 50 exposed sessions per variant.
+- VERIFIED: `whatsapp-cta-v1` uses the existing anonymous session id for stable `control` / `prominent` assignment and server-derived recorded variant.
+- VERIFIED: participation is limited to published menus with configured WhatsApp.
+- VERIFIED: existing `menu_events` remains canonical through nullable experiment fields.
+- VERIFIED: preview/owner-preview does not activate or record the experiment.
+- Measurement: WhatsApp-click sessions / exposed sessions; product-view sessions / exposed sessions as guardrail.
+- Collection target: 50 exposed sessions per variant.
 - Decision output is directional only; no statistical significance is claimed.
 
-## R7 — Initial Post-Experiment Evidence Review
-STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
+## R7 — Post-Experiment Evidence Review
+STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
-- VERIFIED: canonical `menu_v3.menu_events` currently contains R6 exposure for `whatsapp-cta-v1` only in the `prominent` variant.
-- VERIFIED: current observed exposure is 1 distinct exposed session for `prominent` and 0 observed exposed sessions for `control`.
-- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: the experiment has not reached the declared collection threshold of 50 exposed sessions per variant and cannot support a keep-treatment, keep-control, or end-experiment decision.
-- DECISION: no treatment decision is made from the current sample; continue real exposure and re-review after meaningful accumulation.
-- VERIFIED: no statistical significance claim is made.
+- VERIFIED: canonical table is `menu_v3.menu_events`.
+- VERIFIED: observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: no treatment decision is justified; continue eligible real exposure and re-review after meaningful accumulation.
+- VERIFIED: no synthetic traffic is used.
+
+## R8 — Closed-Loop Menu Growth Engine
+STATUS: CLOSED / VERIFIED / MERGED
+
+- VERIFIED: `/studio/growth` provides Observe → Act → Measure.
+- VERIFIED: recommendations are deterministic and evidence-bound.
+- VERIFIED: thin traffic is explicitly insufficient evidence.
+- VERIFIED: recommendations route to existing Studio destinations; no automatic menu mutation.
+- VERIFIED: future experiments require baseline, isolated change, primary metric, guardrail, and owner-approved activation.
+- VERIFIED: R8.4 Evidence-based Upsell uses observed co-view/co-cart/co-order evidence and owner approval before measurement.
+- VERIFIED: R8.5 Restaurant Discovery covers public discovery/SEO/readability without inventing tenant data.
+
+## R9 — Guest Relationships
+STATUS: CLOSED / VERIFIED / MERGED
+
+- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
+- VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles used by the existing permission contract.
+- VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records have RLS enabled and public access revoked.
+- VERIFIED: retention and relationship overview are derived from real guest/order data; no synthetic evidence is introduced.
+- VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
+- VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: the initial CI failure was a PGlite portability issue caused by unconditional `anon`/`authenticated` role revocation; the migration was hardened conditionally without weakening Supabase security semantics.
+
+## R10
+STATUS: DEFERRED / NOT STARTED
+
+R10 is intentionally not started. Do not begin R10 until the owner explicitly authorizes it.
 
 ## AI Provider Infrastructure
 - VERIFIED: server-side provider abstraction is merged.
@@ -124,11 +138,22 @@ STATUS: IN_PROGRESS — INSUFFICIENT EXPOSURE
 - VERIFIED: schema validation, tenant/user rate limiting, prompt-injection safeguards, and human-review boundaries remain intact.
 - VERIFIED: server-only credentials; no client API-key exposure is part of the supported architecture.
 
+## Production / Commercial Readiness
+STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
+
+- VERIFIED: repository-side R9 implementation and CI quality gates are complete.
+- VERIFIED: GitHub `main` contains the R9 merge commit.
+- UNKNOWN: direct current Vercel Production environment-variable values.
+- UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
+- UNKNOWN: physical real-device Production QA.
+- BLOCKED: unnecessary Vercel deployment retries must not be attempted while the known free daily deployment quota is exhausted.
+
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- BLOCKED: Vercel production deployment state for the latest application release must be verified separately because the account has a deployment/build-rate limit condition.
-- UNKNOWN: direct physical-device production QA is unavailable through the current connector environment.
+- VERIFIED: GitHub `main` is `afece1cb591566e885520b703117d0994643597a`.
+- UNKNOWN: direct current Vercel Production environment configuration and deployment state.
+- UNKNOWN: physical real-device Production QA.
 
 ## Current Strategic Direction
 Menu V3 is a Premium Arabic-first Restaurant Presence + Menu Intelligence platform:
@@ -140,6 +165,8 @@ Live Menu
 → Owner Intelligence
 → Growth Extensions
 → Experiments
+→ Guest Relationships
+→ Production / Commercial Readiness
 ```
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
@@ -164,9 +191,23 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 - NOT DEPLOYED: no push or Vercel deployment was performed.
 
 ## Exact Next Task
-### R7 — Continue Real Exposure / Controlled Optimization Review
+### Production / Commercial Readiness — External Verification Gate
 
-Keep `whatsapp-cta-v1` running for eligible real traffic. Re-read canonical `menu_events` after exposure accumulates, compare control and prominent against the declared primary and guardrail metrics, and make a directional decision only when the evidence is sufficient. Do not start another experiment before this review.
+Complete only the remaining evidence-dependent work:
+1. verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`;
+2. perform available authenticated/browser/QR/theme/order/RTL Production QA;
+3. perform real-device QA when a real device/browser session is available;
+4. record direct evidence and close the readiness milestone when all applicable checks pass.
+
+R7 remains active independently and does not block this task. R10 must remain untouched.
+
+## Session Log — 2026-09-13 — R9 Closure
+- VERIFIED: PR #136 completed the R9 guest relationship batch and merged into `main`.
+- VERIFIED: final main commit is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: quality run 1453 passed all configured stages after the R9 migration portability fix.
+- VERIFIED: no protected authentication, authorization, tenant/branch isolation, subscription, ordering, R6, or R7 semantics were weakened.
+- VERIFIED: R10 is explicitly deferred and not started.
+- UNKNOWN/BLOCKED: Vercel Production state and real-device QA remain external evidence items; free daily deployment quota must not be retried unnecessarily.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
@@ -177,13 +218,6 @@ At the end of every atomic task:
 5. update material audit/research/project-memory records when the task reveals a durable lesson;
 6. record exactly one next task;
 7. stop.
-
-## Session Log — 2026-09-12 — Post-Merge Continuity Synchronization
-- VERIFIED: continuity synchronization PR merged into `main` at `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: preceding canonical main was `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Supabase canonical `menu_v3.menu_events` currently shows 1 exposed `prominent` session, 0 observed `control` exposure, 0 prominent WhatsApp-click sessions, and 1 prominent product-view session for `whatsapp-cta-v1`.
-- DECISION: R7 remains open because the declared 50-exposed-sessions-per-variant threshold is not met.
-- BLOCKED: Vercel deployment state remains separate from Git state.
 
 ## Evidence Labels
 `VERIFIED` = direct repository/tool/test/platform evidence.

@@ -57,20 +57,44 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Directional results only; no statistical significance claim.
 - Production outcome remains UNKNOWN until real exposure accumulates.
 
-## R7 — Initial Evidence Review
+## R7 — Initial Evidence Review — IN PROGRESS / NON-BLOCKING
 
-- VERIFIED: current canonical `menu_v3.menu_events` has 1 exposed `prominent` session and 0 observed `control` exposed sessions for `whatsapp-cta-v1`.
-- VERIFIED: current `prominent` exposure has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: evidence is insufficient for the declared 50-exposed-sessions-per-variant decision threshold.
-- DECISION: do not select a winner or end the experiment; continue eligible real exposure.
+- VERIFIED: canonical table is `menu_v3.menu_events`.
+- VERIFIED: current observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: no treatment decision is justified; continue eligible real exposure.
+- R7 remains independent and must not be closed using synthetic or insufficient traffic.
 
-## Gallery + Noir Theme Hardening — CLOSED / VERIFIED / MERGED
+## R8 — Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED
 
-- Gallery hides only its floating bottom action dock while the assistant dialog is open and restores it on close.
-- Noir no longer traps shared dialogs inside the content stacking context.
-- Noir dialog surface, text, and border tokens are hardened for readability.
-- Focused regression coverage protects both fixes.
-- Canonical main after continuity synchronization: `8bce889eda8605c73173e390139e54393024b03b`.
+- VERIFIED: `/studio/growth` provides the unified owner-facing Observe → Act → Measure surface.
+- VERIFIED: recommendations are deterministic and grounded in existing analytics evidence.
+- VERIFIED: thin traffic is explicitly treated as insufficient evidence.
+- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation.
+- VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery are complete and protected.
+
+## R9 — Guest Relationships — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
+- VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles in the existing permission contract.
+- VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records use RLS with public access revoked.
+- VERIFIED: retention and relationship overview are derived from real guest/order data; no synthetic evidence is introduced.
+- VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
+- VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: a PGlite portability failure from unconditional `anon`/`authenticated` role revocation was fixed without weakening Supabase security semantics.
+
+## R10 — DEFERRED / NOT STARTED
+
+R10 is intentionally not started. Do not begin R10 until the owner explicitly authorizes it.
+
+## Production / Commercial Readiness — IN PROGRESS
+
+- VERIFIED: repository-side R9 implementation and quality gates are complete.
+- VERIFIED: canonical `main` contains the R9 merge.
+- UNKNOWN: direct current Vercel Production environment-variable values.
+- UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
+- UNKNOWN: physical real-device Production QA.
+- BLOCKED: do not retry Vercel deployment while the known free daily deployment quota is exhausted.
 
 ## Protected Scope
 
@@ -98,21 +122,21 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - NOT DEPLOYED: no push, preview, or Vercel deployment was performed.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` is `8bce889eda8605c73173e390139e54393024b03b`.
-- VERIFIED: continuity synchronization was merged after the preceding canonical main `df72b5b9efa3df19f84c7e7f92057b1cc250bccd`.
-- VERIFIED: Quality Run 1420 completed successfully for the pre-merge reconciliation commit.
-- BLOCKED: Vercel production state must be verified separately; do not infer deployment from GitHub main.
-- UNKNOWN: direct physical-device production QA is not available through the current connector environment.
+- VERIFIED: canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 is merged.
+- VERIFIED: quality run 1453 passed all configured stages.
+- UNKNOWN: direct current Vercel Production environment configuration and deployment state.
+- UNKNOWN: direct physical-device production QA.
 
 ## Exact Next Task
-### R7 — Continue Real Exposure / Controlled Optimization Review
+### Production / Commercial Readiness — External Verification Gate
 
-1. Keep `whatsapp-cta-v1` active for eligible real traffic.
-2. Re-read canonical `menu_events` after exposure accumulates.
-3. Compare control vs prominent using the declared primary and guardrail metrics.
-4. Decide keep control, keep treatment, or end the experiment only when the evidence is sufficient.
-5. Do not claim statistical significance without sufficient data.
-6. Do not start a second experiment before this review.
+1. Verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`.
+2. Perform available authenticated/browser/QR/theme/order/RTL Production QA without overstating unavailable device evidence.
+3. Perform real-device QA when a real device/browser session is available.
+4. Record direct evidence and close the readiness milestone when all applicable checks pass.
+
+R7 remains active independently and does not block this task. R10 must remain untouched.
 
 ## Working Rules
 - `main` is source of truth.
