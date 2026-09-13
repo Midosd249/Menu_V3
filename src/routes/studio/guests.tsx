@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LoadingState, ErrorState } from "@/components/state-panel";
+import { useLang } from "@/lib/lang";
 import { getGuestRelationshipOverview, type GuestRelationshipOverview } from "@/lib/menu/guest-relationships";
 
 export const Route = createFileRoute("/studio/guests")({ component: GuestsPage });
