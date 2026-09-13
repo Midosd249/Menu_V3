@@ -103,6 +103,24 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
+## Saudi Food Disclosure Extension — 2026-09-13
+
+- IMPLEMENTED LOCALLY: nullable sodium and caffeine fields with explicit caffeine basis, owner entry/review, public display, and derived high-salt warning.
+- VERIFIED: canonical `menu_v3.products` migration applied successfully.
+- PRESERVED: calories, existing allergen text, AI review boundaries, tenant scoping, and protected menu/theme behavior.
+- UNKNOWN: final technical-regulation presentation details, controlled allergen categories, and physical-activity calculation formula.
+- BLOCKED: full TypeScript gate has pre-existing route/type-generation errors unrelated to the changed Product fields.
+- NOT DEPLOYED: release-only workflow has not been started.
+
+## Golden Demo Restaurant — 2026-09-13
+
+- VERIFIED: authorized existing tenant was rebuilt as fictional `مائدة سُرى / Sura Table`; no user, membership, order, or unrelated tenant data was overwritten.
+- VERIFIED: 10 categories and 28 products, including 5 Kids Menu items, bilingual copy, calories, sodium, 4 caffeine cases, 2 high-salt cases, varied allergen coverage, one unavailable item, empty image fields, options, and variants.
+- VERIFIED: Supabase direct checks confirmed tenant/owner scope, zero orders, no duplicate Arabic names, no orphan products, no invalid nutrition values, and zero non-empty image fields.
+- VERIFIED LOCALLY: `npm test` 263/263, static theme/public-menu contracts 19/19, focused data/theme/SEO tests 24/24, `npm run build`, `npm run lint`, and `npm run typecheck` passed.
+- BLOCKED: Playwright browser QA could not run because the browser executable is unavailable; local PGlite also lacks the pre-existing `public_content_version` schema. Static evidence passed; no theme code was changed without visual evidence.
+- NOT DEPLOYED: no push, preview, or Vercel deployment was performed.
+
 ## Current Release Evidence
 - VERIFIED: canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
 - VERIFIED: PR #136 is merged.

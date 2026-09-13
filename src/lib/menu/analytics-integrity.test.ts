@@ -7,6 +7,8 @@ import { dirname, join } from "node:path";
 const here = dirname(fileURLToPath(import.meta.url));
 const ownerSource = readFileSync(join(here, "owner.ts"), "utf8");
 const publicSource = readFileSync(join(here, "public.ts"), "utf8");
+const typesSource = readFileSync(join(here, "types.ts"), "utf8");
+const disclosureMigration = readFileSync(join(here, "../../../migrations/20260913001000_saudifood_disclosure.sql"), "utf8");
 
 test("owner analytics accepts only the supported 7/30 day ranges", () => {
   assert.match(
@@ -50,4 +52,13 @@ test("public events resolve the tenant from the published active slug", () => {
     publicSource,
     /select id, whatsapp from tenants where slug = \$\{data\.slug\} and is_active = true and is_published = true limit 1/,
   );
+});
+
+test("Saudi disclosure keeps nutrition values nullable and derives high salt from sodium", () => {
+  assert.match(typesSource, /sodiumMg\?: number \| null/);
+  assert.match(typesSource, /caffeineMg\?: number \| null/);
+  assert.match(typesSource, /product\.sodiumMg >= 2000/);
+  assert.match(disclosureMigration, /add column if not exists sodium_mg/);
+  assert.match(disclosureMigration, /add column if not exists caffeine_mg/);
+  assert.match(disclosureMigration, /caffeine_basis in \('per_100ml', 'per_cup'\)/);
 });

@@ -25,6 +25,9 @@ type ProductDraft = {
   price: string;
   imageUrl: string;
   calories: string;
+  sodiumMg: string;
+  caffeineMg: string;
+  caffeineBasis: "per_100ml" | "per_cup";
   allergens: string;
   isAvailable: boolean;
   isFeatured: boolean;
@@ -44,6 +47,9 @@ function emptyDraft(categoryId: string | null): ProductDraft {
     price: "",
     imageUrl: "",
     calories: "",
+    sodiumMg: "",
+    caffeineMg: "",
+    caffeineBasis: "per_cup",
     allergens: "",
     isAvailable: true,
     isFeatured: false,
@@ -61,6 +67,9 @@ function fromProduct(p: Product): ProductDraft {
     price: String(p.price),
     imageUrl: p.imageUrl,
     calories: p.calories == null ? "" : String(p.calories),
+    sodiumMg: p.sodiumMg == null ? "" : String(p.sodiumMg),
+    caffeineMg: p.caffeineMg == null ? "" : String(p.caffeineMg),
+    caffeineBasis: p.caffeineBasis ?? "per_cup",
     allergens: p.allergens,
     isAvailable: p.isAvailable,
     isFeatured: p.isFeatured,
@@ -97,12 +106,18 @@ function MenuStudio() {
     if (!draft) return;
     const price = Number(draft.price);
     const calories = draft.calories === "" ? null : Number(draft.calories);
+    const sodiumMg = draft.sodiumMg === "" ? null : Number(draft.sodiumMg);
+    const caffeineMg = draft.caffeineMg === "" ? null : Number(draft.caffeineMg);
     if (!draft.nameAr.trim() || !Number.isFinite(price) || price < 0) {
       flash.setError(lang === "ar" ? "الاسم والسعر مطلوبان" : "Name and price are required");
       return;
     }
     if (calories != null && !Number.isFinite(calories)) {
       flash.setError(lang === "ar" ? "السعرات غير صالحة" : "Calories must be a number");
+      return;
+    }
+    if ((sodiumMg != null && (!Number.isFinite(sodiumMg) || sodiumMg < 0)) || (caffeineMg != null && (!Number.isFinite(caffeineMg) || caffeineMg < 0))) {
+      flash.setError(lang === "ar" ? "بيانات الإفصاح الغذائي غير صالحة" : "Disclosure values must be non-negative numbers");
       return;
     }
     const saved = await flash.run(() =>
@@ -117,6 +132,9 @@ function MenuStudio() {
           price,
           imageUrl: draft.imageUrl.trim(),
           calories,
+          sodiumMg,
+          caffeineMg,
+          caffeineBasis: caffeineMg == null ? null : draft.caffeineBasis,
           allergens: draft.allergens.trim(),
           isAvailable: draft.isAvailable,
           isFeatured: draft.isFeatured,
@@ -485,6 +503,28 @@ function MenuStudio() {
               <Field label={t(copy.studio.calories, lang)}>
                 <Input inputMode="numeric" value={draft.calories} onChange={(e) => setDraft({ ...draft, calories: e.target.value })} />
               </Field>
+            </div>
+            <div className="grid gap-3 rounded-xl border border-line bg-sand/50 p-3">
+              <div>
+                <p className="text-sm font-medium">{lang === "ar" ? "الإفصاح الغذائي السعودي" : "Saudi food disclosure"}</p>
+                <p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "أدخل القيم الموثقة فقط. لا تُنشئ Menu V3 قيمًا غذائية تلقائيًا." : "Enter verified values only. Menu V3 never invents nutrition values."}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Field label={lang === "ar" ? "الصوديوم (ملغ)" : "Sodium (mg)"}>
+                  <Input inputMode="decimal" value={draft.sodiumMg} onChange={(e) => setDraft({ ...draft, sodiumMg: e.target.value })} />
+                </Field>
+                <Field label={lang === "ar" ? "الكافيين (ملغ)" : "Caffeine (mg)"}>
+                  <Input inputMode="decimal" value={draft.caffeineMg} onChange={(e) => setDraft({ ...draft, caffeineMg: e.target.value })} />
+                </Field>
+              </div>
+              <label className="grid gap-1 text-sm">
+                <span>{lang === "ar" ? "أساس قياس الكافيين" : "Caffeine basis"}</span>
+                <select className="h-11 rounded-xl border border-line bg-paper px-3 text-sm" value={draft.caffeineBasis} onChange={(e) => setDraft({ ...draft, caffeineBasis: e.target.value as ProductDraft["caffeineBasis"] })}>
+                  <option value="per_cup">{lang === "ar" ? "لكل كوب" : "Per cup"}</option>
+                  <option value="per_100ml">{lang === "ar" ? "لكل 100 مل" : "Per 100 ml"}</option>
+                </select>
+              </label>
+              <p className="text-[11px] leading-5 text-muted">{lang === "ar" ? "يُشتق تحذير الملح عند بلوغ 2000 ملغ صوديوم أو أكثر وفق الإرشاد الرسمي المنشور. هذا ليس شهادة امتثال قانونية." : "A salt warning is derived at 2000 mg sodium or above based on published official guidance. This is not a legal compliance certification."}</p>
             </div>
             <Field label={t(copy.studio.descAr, lang)}>
               <Textarea value={draft.descriptionAr} onChange={(e) => setDraft({ ...draft, descriptionAr: e.target.value })} />

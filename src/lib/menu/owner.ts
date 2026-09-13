@@ -286,6 +286,9 @@ export const saveProduct = createServerFn({ method: "POST" })
       price: z.number().min(0).max(100000),
       imageUrl: z.string().trim().max(500).optional(),
       calories: z.number().int().min(0).max(10000).nullable().optional(),
+      sodiumMg: z.number().min(0).max(100000).nullable().optional(),
+      caffeineMg: z.number().min(0).max(100000).nullable().optional(),
+      caffeineBasis: z.enum(["per_100ml", "per_cup"]).nullable().optional(),
       isAvailable: z.boolean().optional(),
       isFeatured: z.boolean().optional(),
       allergens: z.string().trim().max(200).optional(),
@@ -313,6 +316,9 @@ export const saveProduct = createServerFn({ method: "POST" })
             price = ${data.price},
             image_url = ${data.imageUrl ?? ""},
             calories = ${data.calories ?? null},
+            sodium_mg = ${data.sodiumMg ?? null},
+            caffeine_mg = ${data.caffeineMg ?? null},
+            caffeine_basis = ${data.caffeineBasis ?? null},
             is_available = coalesce(${data.isAvailable ?? null}, is_available),
             is_featured = coalesce(${data.isFeatured ?? null}, is_featured),
             allergens = ${data.allergens ?? ""},
@@ -325,12 +331,12 @@ export const saveProduct = createServerFn({ method: "POST" })
         await sql`
           insert into products (
             id, tenant_id, category_id, sort_order, name_ar, name_en, description_ar, description_en,
-            price, image_url, calories, is_available, is_featured, allergens
+            price, image_url, calories, sodium_mg, caffeine_mg, caffeine_basis, is_available, is_featured, allergens
           ) values (
             ${newId()}, ${member.tenant_id}, ${data.categoryId ?? null},
             ${data.sortOrder ?? (max[0]?.m ?? 0) + 10},
             ${data.nameAr}, ${data.nameEn ?? ""}, ${data.descriptionAr ?? ""}, ${data.descriptionEn ?? ""},
-            ${data.price}, ${data.imageUrl ?? ""}, ${data.calories ?? null},
+            ${data.price}, ${data.imageUrl ?? ""}, ${data.calories ?? null}, ${data.sodiumMg ?? null}, ${data.caffeineMg ?? null}, ${data.caffeineBasis ?? null},
             ${data.isAvailable ?? true}, ${data.isFeatured ?? false}, ${data.allergens ?? ""}
           )
         `;

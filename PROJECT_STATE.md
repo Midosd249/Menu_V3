@@ -171,6 +171,25 @@ Live Menu
 
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
+## Saudi Food Disclosure Extension — 2026-09-13
+- IN_PROGRESS: focused Saudi food disclosure extension implemented locally and applied to canonical `menu_v3.products`.
+- VERIFIED: existing calories and free-text allergen behavior preserved.
+- VERIFIED: nullable sodium and caffeine fields with explicit caffeine basis (`per_100ml` / `per_cup`) are available to the owner editor and public item details.
+- VERIFIED: high-salt state is derived from stored sodium at or above 2,000 mg; no client-controlled flag or fabricated value is used.
+- UNKNOWN: exact technical-regulation presentation details, controlled allergen taxonomy, and physical-activity calorie-burn formula remain unverified and are not implemented.
+- BLOCKED: TypeScript quality gate remains blocked by pre-existing route/type-generation errors outside the changed Product fields.
+- NOT DEPLOYED: release-only workflow remains pending local/CI verification and a coherent release batch.
+
+## Golden Demo Restaurant — 2026-09-13
+- VERIFIED: the explicitly authorized existing tenant `2e3f3c63-7dbd-4af2-920a-5f0c9ced8497`, owned by `midosd2@hotmail.com`, was rebuilt as the fictional `مائدة سُرى / Sura Table` demo.
+- VERIFIED: one existing branch was preserved and updated to `فرع النخيل / Al Nakheel Branch`; the user, membership, permissions, and orders were preserved.
+- VERIFIED: 10 categories, 28 products, 5 Kids Menu products, 4 caffeine products, 2 sodium-derived high-salt cases, 8 products with no allergens, 13 with multiple allergen entries, 1 unavailable product, 2 modifier groups, 4 modifier options, and 2 variants.
+- VERIFIED: every demo image field is empty; no image was generated, downloaded, uploaded, or processed.
+- VERIFIED: Supabase counts show zero orders for this tenant before and after the replacement; no unrelated tenant was written.
+- VERIFIED LOCALLY: 263 repository tests, 19 static theme/public-menu contract tests, 24 focused data/theme/SEO tests, build, lint, and TypeScript passed.
+- BLOCKED: browser visual QA could not run because Playwright's browser executable was unavailable and local PGlite lacks the pre-existing `public_content_version` schema; no visual defect was claimed or changed.
+- NOT DEPLOYED: no push or Vercel deployment was performed.
+
 ## Exact Next Task
 ### Production / Commercial Readiness — External Verification Gate
 

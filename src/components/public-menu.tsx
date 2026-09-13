@@ -7,7 +7,7 @@ import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getGuestSessionId } from "@/lib/menu/session";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
-import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
+import { hasHighSalt, type Lang, type Product, type ProductOptions, type PublicMenu } from "@/lib/menu/types";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 
 const label = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
@@ -96,6 +96,11 @@ function ProductSheet({ lang, product, options, close, addToCart, ordering }: { 
         {product.dietaryLabels.length ? <div className="flex flex-wrap gap-2">{product.dietaryLabels.map((x) => <span key={x} dir="auto" className="rounded-full bg-sand px-3 py-1 text-xs">{x}</span>)}</div> : null}
         {product.allergens ? <p className="rounded-xl bg-sand p-3 text-xs leading-5" dir="auto"><strong>{label(lang, "مسببات الحساسية:", "Allergens:")}</strong> {product.allergens}</p> : null}
         {product.calories != null ? <p className="text-xs text-muted"><bdi dir="ltr" className="tabular bidi-isolate">{product.calories}</bdi> {label(lang, "سعرة حرارية", "calories")}</p> : null}
+        {product.sodiumMg != null || product.caffeineMg != null ? <div className="grid gap-1 rounded-xl border border-line p-3 text-xs text-muted">
+          {product.sodiumMg != null ? <p><bdi dir="ltr" className="tabular bidi-isolate">{product.sodiumMg}</bdi> {label(lang, "ملغ صوديوم", "mg sodium")}</p> : null}
+          {product.caffeineMg != null ? <p><bdi dir="ltr" className="tabular bidi-isolate">{product.caffeineMg}</bdi> {label(lang, product.caffeineBasis === "per_100ml" ? "ملغ كافيين لكل 100 مل" : "ملغ كافيين لكل كوب", product.caffeineBasis === "per_100ml" ? "mg caffeine per 100 ml" : "mg caffeine per cup")}</p> : null}
+          {hasHighSalt(product) ? <p role="note" className="font-medium text-bad">{label(lang, "تنبيه: هذا الصنف مرتفع الملح.", "Salt warning: this item is high in salt.")}</p> : null}
+        </div> : null}
         {variants.length ? <fieldset className="grid gap-2 border-t border-line pt-4"><legend className="text-sm font-medium">{label(lang, "الحجم", "Size")}</legend>{variants.map((v) => <label key={v.id} className={cn("flex min-h-12 cursor-pointer items-center justify-between rounded-xl border p-3", variantId === v.id ? "border-ink bg-sand" : "border-line")}><span className="flex items-center gap-2"><input type="radio" name={`product-variant-${product.id}`} checked={variantId === v.id} onChange={() => setVariantId(v.id)} />{value(lang, v.nameAr, v.nameEn)}</span><bdi dir="ltr" className="text-sm text-accent tabular bidi-isolate">{formatSar(v.price, lang)}</bdi></label>)}</fieldset> : null}
         {groups.map((g) => { const items = (options?.options ?? []).filter((o) => o.groupId === g.id && o.isAvailable); const groupTitleId = `modifier-group-${g.id}`; return <fieldset key={g.id} aria-labelledby={groupTitleId} className="grid gap-2 border-t border-line pt-4"><div><legend id={groupTitleId} className="text-sm font-medium">{value(lang, g.nameAr, g.nameEn)} {g.isRequired ? <span className="text-bad" aria-hidden="true">*</span> : null}</legend><p className="text-xs text-muted">{label(lang, `اختر من ${g.minSelect} إلى ${g.maxSelect}`, `Choose ${g.minSelect} to ${g.maxSelect}`)}</p></div>{items.map((o) => <label key={o.id} className="flex min-h-12 cursor-pointer items-center justify-between rounded-xl border border-line p-3"><span className="flex items-center gap-2"><input type={g.maxSelect === 1 ? "radio" : "checkbox"} name={`modifier-${product.id}-${g.id}`} checked={selected.includes(o.id)} onChange={() => toggle(g.id, o.id, g.maxSelect)} />{value(lang, o.nameAr, o.nameEn)}</span><bdi dir="ltr" className="text-sm text-accent tabular bidi-isolate">{o.priceDelta === 0 ? "—" : `${o.priceDelta > 0 ? "+" : ""}${formatSar(o.priceDelta, lang)}`}</bdi></label>)}</fieldset>; })}
         {error ? <p role="alert" aria-live="assertive" className="rounded-xl bg-bad/10 p-3 text-sm text-bad">{error}</p> : null}

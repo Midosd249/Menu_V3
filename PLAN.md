@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: canonical `main` includes the fetched `origin/main` R9 baseline through `fb76e14`; the final merge commit is recorded after this merge completes.
 - VERIFIED: R9 guest relationship batch was merged by squash from PR #136 after GitHub Actions quality run 1453 passed all configured stages.
 - VERIFIED: the R9 migration is portable across Supabase and local PGlite; Supabase `anon`/`authenticated` revokes remain conditional while `public` remains revoked.
 - VERIFIED: R8 and all preceding protected work remain in main.
@@ -162,7 +162,24 @@ Live Menu
 → Production / Commercial Readiness
 ```
 
-R10 remains deferred by owner decision.
+## Saudi Food Disclosure Extension — 2026-09-13
+
+- STATUS: `IMPLEMENTATION_IN_PROGRESS` / locally changed, not deployed.
+- VERIFIED: official SFDA announcements were reviewed for caffeine disclosure, high-salt labeling, and physical-activity calorie-burn labeling.
+- IMPLEMENTED: nullable sodium and caffeine fields, explicit caffeine basis, owner entry/review, public disclosure, and derived high-salt warning.
+- PRESERVED: existing calories, allergen text, themes, tenant scoping, server validation, and AI non-fabrication boundaries.
+- UNKNOWN: exact technical-regulation presentation, controlled allergen taxonomy, and physical-activity formula.
+- NEXT: resolve pre-existing route/type-generation quality-gate errors, complete local browser QA, then prepare one release batch only after all applicable checks pass.
+
+## Golden Demo Restaurant — 2026-09-13
+
+- STATUS: `VERIFIED_LOCALLY` / data applied to the authorized existing tenant, not deployed.
+- VERIFIED: fictional `مائدة سُرى / Sura Table`, Riyadh context, one preserved branch, 10 coherent categories, and 28 bilingual products.
+- VERIFIED: Kids Menu, calories, sodium, caffeine bases, allergen combinations, availability state, empty image fields, modifier groups, and variants are represented using existing schema.
+- VERIFIED: tenant owner and orders were preserved; no unrelated tenant was changed.
+- VERIFIED: static five-theme contracts and all available repository QA passed.
+- BLOCKED: browser visual QA is unavailable in this environment because Playwright browser binaries are absent and local PGlite schema is behind the current public-menu cache migration.
+- NEXT: prepare one release batch after final diff review; do not deploy from this local task.
 
 ## Exact Next Task
 ### Production / Commercial Readiness — External Verification Gate
@@ -175,9 +192,11 @@ Complete only the remaining evidence-dependent work:
 
 R7 remains active independently and does not block this task. R10 must remain untouched.
 
+R10 remains deferred by owner decision and is not started.
+
 ## Session Log — 2026-09-13 — R9 Closure
 - VERIFIED: PR #136 completed the R9 guest relationship batch and merged into `main`.
-- VERIFIED: final main commit is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: the R9 baseline commit is `afece1cb591566e885520b703117d0994643597a`; the current main merge commit is recorded after this merge completes.
 - VERIFIED: quality run 1453 passed all configured stages after the R9 migration portability fix.
 - VERIFIED: no protected authentication, authorization, tenant/branch isolation, subscription, ordering, R6, or R7 semantics were weakened.
 - VERIFIED: R10 is explicitly deferred and not started.
