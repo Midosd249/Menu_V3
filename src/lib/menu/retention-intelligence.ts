@@ -21,20 +21,13 @@ export const getRetentionOverview = createServerFn({ method: "GET" })
     try {
       const sql = await getSql();
       const membership = await getMembership(sql, context.userId);
-      if (!membership || !["owner", "admin", "manager"].includes(membership.role)) {
+      if (!membership || !["owner", "admin"].includes(membership.role)) {
         return { ok: false, code: "forbidden", error: "ليست لديك صلاحية عرض تحليلات الاحتفاظ" };
       }
 
       const branchId = data.branchId ?? null;
-      if (branchId) {
-        if (!(await canAccessBranch(sql, membership, branchId))) {
-          return { ok: false, code: "forbidden", error: "ليست لديك صلاحية عرض هذا الفرع" };
-        }
-      } else if (membership.role === "manager") {
-        const branchScope = membership.branchScope ?? [];
-        if (branchScope.length === 0) {
-          return { ok: false, code: "forbidden", error: "يجب تحديد فرع مصرح به لعرض تحليلات الاحتفاظ" };
-        }
+      if (branchId && !(await canAccessBranch(sql, membership, branchId))) {
+        return { ok: false, code: "forbidden", error: "ليست لديك صلاحية عرض هذا الفرع" };
       }
 
       const rows = await sql<{
@@ -49,13 +42,7 @@ export const getRetentionOverview = createServerFn({ method: "GET" })
           from orders
           where tenant_id = ${membership.tenantId}
             and status <> 'cancelled'
-            and (
-              ${branchId}::text is not null and branch_id = ${branchId}::text
-              or ${branchId}::text is null and (
-                ${membership.role}::text in ('owner', 'admin')
-                or branch_id = any(${membership.branchScope ?? []}::text[])
-              )
-            )
+            and (${branchId}::text is null or branch_id = ${branchId})
             and coalesce(customer_phone, '') <> ''
         ), repeaters as (
           select customer_phone from scoped group by customer_phone having count(*) > 1
