@@ -57,36 +57,44 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Directional results only; no statistical significance claim.
 - Production outcome remains UNKNOWN until real exposure accumulates.
 
-## R7 — Initial Evidence Review
+## R7 — Initial Evidence Review — IN PROGRESS / NON-BLOCKING
 
 - VERIFIED: canonical table is `menu_v3.menu_events`.
-- VERIFIED: current observed exposure is 1 distinct `control` session and 2 distinct `prominent` sessions.
-- VERIFIED: current `control` has 0 WhatsApp-click sessions and 0 product-view sessions.
-- VERIFIED: current `prominent` has 0 WhatsApp-click sessions and 1 product-view session.
-- INFERRED: Control is at 2% of the 50-session target and Prominent is at 4% of the 50-session target.
-- DECISION: do not select a winner or end the experiment; continue eligible real exposure.
-- R7 is a NON-BLOCKING monitoring lane and does not stop independent development work.
+- VERIFIED: current observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
+- VERIFIED: no treatment decision is justified; continue eligible real exposure.
+- R7 remains independent and must not be closed using synthetic or insufficient traffic.
 
 ## R8 — Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED
 
 - VERIFIED: `/studio/growth` provides the unified owner-facing Observe → Act → Measure surface.
-- VERIFIED: recommendations are deterministic and grounded in existing `StudioSnapshot` and `OwnerAnalytics` fields.
+- VERIFIED: recommendations are deterministic and grounded in existing analytics evidence.
 - VERIFIED: thin traffic is explicitly treated as insufficient evidence.
-- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation was introduced.
-- VERIFIED: experiment catalogue contains active `whatsapp-cta-v1` and design-ready `featured-item-order` / `category-entry` opportunities.
-- VERIFIED: future experiments require baseline, isolated change, primary metric, guardrail, and owner-approved activation.
-- VERIFIED: `src/lib/menu/growth-engine.test.ts` is included in the repository `test` script.
-- VERIFIED: no database/schema, authentication, authorization, tenant/branch isolation, subscription, pricing, ordering, or R6/R7 semantics changed.
-- VERIFIED: GitHub Actions run 1437 passed route generation, typecheck, tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
-- VERIFIED: PR #128 merged to `main` as `8a355f5c0f14ac123e79707483ad58b27e427c64`.
+- VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation.
+- VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery are complete and protected.
+
+## R9 — Guest Relationships — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
+- VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles in the existing permission contract.
+- VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records use RLS with public access revoked.
+- VERIFIED: retention and relationship overview are derived from real guest/order data; no synthetic evidence is introduced.
+- VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
+- VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: a PGlite portability failure from unconditional `anon`/`authenticated` role revocation was fixed without weakening Supabase security semantics.
+
+## R10 — DEFERRED / NOT STARTED
+
+R10 is intentionally not started. Do not begin R10 until the owner explicitly authorizes it.
 
 ## Production / Commercial Readiness — IN PROGRESS
 
-- VERIFIED: R8 repository implementation and CI quality gates are complete.
-- VERIFIED: R8 branch Preview deployment reached Ready; this is not Production evidence.
-- UNKNOWN: direct Vercel Production environment-variable values cannot be inspected through the current GitHub connector.
+- VERIFIED: repository-side R9 implementation and quality gates are complete.
+- VERIFIED: canonical `main` contains the R9 merge.
+- UNKNOWN: direct current Vercel Production environment-variable values.
 - UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
-- UNKNOWN: physical real-device Production QA is unavailable through the current connector environment.
+- UNKNOWN: physical real-device Production QA.
+- BLOCKED: do not retry Vercel deployment while the known free daily deployment quota is exhausted.
 
 ## Protected Scope
 
@@ -96,9 +104,9 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - Do not repeat completed work without current reproducible regression evidence.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` is `8a355f5c0f14ac123e79707483ad58b27e427c64`.
-- VERIFIED: R8 quality run 1437 passed before merge.
-- VERIFIED: PR #128 is merged.
+- VERIFIED: canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 is merged.
+- VERIFIED: quality run 1453 passed all configured stages.
 - UNKNOWN: direct current Vercel Production environment configuration and deployment state.
 - UNKNOWN: direct physical-device production QA.
 
@@ -110,7 +118,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 3. Perform real-device QA when a real device/browser session is available.
 4. Record direct evidence and close the readiness milestone when all applicable checks pass.
 
-R7 remains active independently and does not block this task.
+R7 remains active independently and does not block this task. R10 must remain untouched.
 
 ## Working Rules
 - `main` is source of truth.
