@@ -12,11 +12,12 @@
 - VERIFIED: canonical database schema `menu_v3`.
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
-## Current Verified Position — 2026-09-14
+## Current Verified Position — 2026-09-15
 - VERIFIED: current canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: latest main commit mounts shared nutrition disclosure on the published QR menu route and protects it with a test.
 - VERIFIED: R8/R9 protected work remains in history.
 - VERIFIED: R10 remains deferred and has not been started.
+- VERIFIED: W7.3 is DONE / VERIFIED on working branch; W7.4 is IMPLEMENTED / CI VERIFIED on the same working branch.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -182,57 +183,55 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 - VERIFIED: fictional `مائدة سُرى / Sura Table` demo was applied to the authorized existing tenant; one existing branch was preserved and updated to `فرع النخيل / Al Nakheel Branch`.
 - VERIFIED: 10 categories, 28 products, 5 Kids Menu products, 4 caffeine products, 2 sodium-derived high-salt cases, varied allergen coverage, 1 unavailable product, 2 modifier groups, 4 modifier options, and 2 variants.
 - VERIFIED: every demo image field is empty; no image was generated, downloaded, uploaded, or processed.
-- VERIFIED: Supabase counts show zero orders for this tenant before and after the replacement; no unrelated tenant was written.
-- VERIFIED LOCALLY: 263 repository tests, 19 static theme/public-menu contract tests, 24 focused data/theme/SEO tests, build, lint, and TypeScript passed.
-- BLOCKED: browser visual QA could not run because Playwright's browser executable was unavailable and local PGlite lacks the pre-existing `public_content_version` schema; no visual defect was claimed or changed.
-- NOT DEPLOYED: no push or Vercel deployment was performed.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 IN PROGRESS
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE — CURRENT WORKING BRANCH
 
+### W7.1 — COMPLETE
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against `main` SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: working branch `w7-1-ia-audit` contains the W7.1 architecture deliverables.
-- VERIFIED: `/admin` is a tab-driven monolith with 12 tab/pseudo-route states.
-- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist.
-- VERIFIED: W7.2 route generation executed in GitHub Actions run `34898237425` and produced both `/studio/growth` and `/studio/guests` in the generated route tree.
-- VERIFIED: generated artifact `src/routeTree.gen.ts` was committed by the generator-producing CI step as commit `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`; no hand edit was made.
-- VERIFIED: route-generation freshness check passed in the same run.
-- VERIFIED: typecheck, tests, lint, and production build all passed in run `34898237425` before browser-specific QA continued.
-- VERIFIED: W7.2 route-independent primitives remain reusable and no page migration occurred during W7.2.
-- VERIFIED: W7.3 shell work is now limited to `src/components/studio-shell.tsx`, W7.3 documentation, and shell contract coverage.
-- VERIFIED: Growth and Guests are now safe to expose in Studio navigation because the generated route tree contains both real routes.
-- VERIFIED: Platform Admin remains separate.
-- PENDING_BROWSER_QA: real browser/device validation of W7.3 has not yet completed.
+- VERIFIED: W7.1 architecture deliverables exist: source sweep, IA audit, route map, and wireframes.
+- VERIFIED: `/admin` remains separate and `/studio/growth` + `/studio/guests` are real routes.
 
-## W7.2 Acceptance
-STATUS: ACCEPTED / VERIFIED
+### W7.2 — ACCEPTED / VERIFIED
+- VERIFIED: route-independent reusable primitives were added in `src/components/internal-design-system.tsx`.
+- VERIFIED: route generation run `34898237425` produced `/studio/growth` and `/studio/guests` and passed generated freshness, typecheck, tests, lint, and production build.
+- VERIFIED: generator-produced route tree commit `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d` was used; no hand edit.
+- VERIFIED: no page migration, navigation behavior change, backend/security change, dependency addition, merge, or deployment occurred during W7.2.
 
-- VERIFIED: route generation is current and contains Growth + Guests.
-- VERIFIED: generated artifact was produced by TanStack generation and committed by CI.
-- VERIFIED: W7.2 components remain route-independent.
-- VERIFIED: no page migration, Studio navigation change, Admin refactor, dependency addition, backend/data/security change, merge, or deployment occurred during W7.2.
-- VERIFIED: typecheck, tests, lint, and production build passed in actual CI.
+### W7.3 — DONE / VERIFIED
+- VERIFIED: desktop primary workspaces are Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: contextual navigation only exposes real existing routes; Reports remains intentionally out of Studio navigation by repository contract.
+- VERIFIED: Appearance groups Brand + Design; Publishing groups QR + Preview.
+- VERIFIED: mobile primary is Home, Menu, Orders, Growth, More; More is permission-filtered and Escape closes it.
+- VERIFIED: existing settings/team permission gates and Platform Admin separation remain intact.
+- VERIFIED: the original browser blocker was a CI-only PGlite schema mismatch (`tenant_members.is_active`, followed by `orders.archived_at`).
+- VERIFIED: temporary fixture correction solved the blocker inside the isolated runner and was removed on step cleanup; no production migration was committed.
+- VERIFIED: accepted browser run `34905256209` actually served `http://127.0.0.1:8082/studio` and passed the W7.3 browser test.
+- VERIFIED: accepted run passed route generation, generated freshness, typecheck, 266 tests, lint, production build, Playwright/Chromium, public all-theme browser QA, performance audit, diagnostics upload, and cleanup.
+- VERIFIED: browser matrix covered 1280×800, 390×844, 430×932, 768×1024, RTL/LTR, active state, keyboard focus, More/Escape, dead-link exclusion, Reports exclusion, Platform Admin exclusion, and overflow.
+- UNKNOWN: physical real-device QA; this remains a release-stage check.
 
-## W7.3 Studio Shell — 2026-09-15
-STATUS: IMPLEMENTATION_IN_PROGRESS
+### W7.4 — DONE / VERIFIED
+- VERIFIED: Studio Home was started only after W7.3 browser acceptance passed.
+- VERIFIED: `/studio/` now renders focused `StudioHome` without changing the route URL.
+- VERIFIED: Home uses only existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` data sources.
+- VERIFIED: Home contains greeting/current branch context, Needs Attention, Current Performance, Recent Operational Activity, Menu Health, Growth Opportunity, and one contextual next action.
+- VERIFIED: loading, error, empty, populated, RTL/LTR, responsive, focus, semantic progress, and permission-aware action states are represented.
+- VERIFIED: no fake revenue, orders, guests, conversion rates, recommendations, charts, rankings, or sample numbers were added.
+- VERIFIED: W7.4 contract test and browser QA were added and executed through the quality workflow.
+- VERIFIED: current-head quality run `34906025538` passed route generation, generated freshness, typecheck, repository tests, W7.4 contract tests, lint, production build, Playwright/Chromium, public browser QA, performance audit, Studio Shell + Home browser QA, artifact upload, and cleanup.
+- VERIFIED: no database schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders business logic, public menu, Platform Admin, dependency, merge, or deployment changes were used to implement W7.4.
+- UNKNOWN: physical real-device Studio Home QA; release-stage only.
 
-- VERIFIED: desktop primary workspaces now target Home, Menu, Orders, Growth, Customers, Settings.
-- VERIFIED: contextual navigation only points to real existing routes.
-- VERIFIED: Brand and Design are grouped under Appearance context; QR and Preview under Publishing context.
-- VERIFIED: Growth includes Overview, Intelligence, Actions, Analytics, Reports using existing routes.
-- VERIFIED: Customers exposes the existing Guests relationship surface; non-existent standalone Loyalty/Campaigns/Feedback/Retention routes were not invented.
-- VERIFIED: mobile primary navigation is Home, Menu, Orders, Growth, More and uses the W7.2 `MobileBottomNav` primitive.
-- VERIFIED: existing permission gates for settings/team destinations are preserved.
-- VERIFIED: Platform Admin remains outside Studio navigation.
-- VERIFIED: no data fetching, backend, RLS, auth, permissions contract, subscriptions, AI, orders, public-menu, or route URL changes were introduced by the shell transformation.
-- PENDING_BROWSER_QA: 390/430px, tablet, desktop, RTL/LTR, keyboard, focus, long tenant names, and mixed-direction content require real browser execution.
+## W7 Continuity Documents
+- `docs/W7_3_BROWSER_QA.md` records the PGlite root cause, fixture-only correction, accepted run, browser matrix, and security boundary.
+- `docs/W7_4_STUDIO_HOME.md` records Home scope, real data sources, sections, state rules, visual rules, and non-goals.
+- `docs/W7_4_HOME_QA.md` records the Home verification contract and release boundary.
 
 ## Exact Next Task
-### W7.3 — Execute quality and browser verification, then review diff
+### W7.4 — Final diff review only, then stop
 
-Run actual route generation, typecheck, tests, lint, production build, existing navigation/component tests, and browser/visual/RTL/accessibility checks. Mark W7.3 complete only when those checks pass and forbidden-file diff review is clean.
-
-R7 remains active independently and does not block W7.3. R10 must remain untouched.
+W7.4 quality and browser verification is complete. Review the final diff against `main`, ensure forbidden areas remain unchanged, keep PR #146 Draft, do not merge, do not deploy, and stop. R7 remains active independently. R10 remains untouched.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
