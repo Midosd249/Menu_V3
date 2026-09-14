@@ -74,7 +74,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 
 ## R9 — Guest Relationships — CLOSED / VERIFIED / MERGED
 
-- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 merged into `main`.
 - VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
 - VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles in the existing permission contract.
 - VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records use RLS with public access revoked.
@@ -90,7 +90,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 ## Production / Commercial Readiness — IN PROGRESS
 
 - VERIFIED: repository-side R9 implementation and quality gates are complete.
-- VERIFIED: canonical `main` contains the R9 merge.
+- VERIFIED: canonical `main` contains the protected product work.
 - UNKNOWN: direct current Vercel Production environment-variable values.
 - UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA.
@@ -102,6 +102,32 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - Public menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls.
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
+
+## W7 — Internal Product Experience Architecture
+
+### W7.1 — COMPLETE / ANALYSIS ONLY
+
+- VERIFIED: audited current Studio/Admin architecture from `main` SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: created `docs/W7_SOURCE_SWEEP.md`.
+- VERIFIED: created `docs/W7_1_IA_AUDIT.md`.
+- VERIFIED: created `docs/W7_1_ROUTE_MAP.md`.
+- VERIFIED: created `docs/W7_1_WIREFRAMES.md`.
+- VERIFIED: `/admin` is a tab-driven monolith with 12 tab/pseudo-route states.
+- VERIFIED: `/studio/growth` and `/studio/guests` source files exist but are absent from the checked-in generated route tree.
+- PROPOSED: Studio hierarchy = Home, Menu, Orders, Growth, Customers, Settings.
+- PROPOSED: Appearance and Publishing are consolidated subdomains.
+- PROPOSED: mobile primary navigation = Home, Menu, Orders, Growth, More.
+- BLOCKED: Mobbin direct MCP inspection was unavailable/paid.
+- VERIFIED: no UI implementation or route change occurred.
+
+### W7.2 — NOT STARTED / WAITING FOR EXPLICIT APPROVAL
+
+Entry criteria:
+1. Regenerate/verify route tree locally and explain `growth`/`guests` mismatch.
+2. Recheck `docs/W7_1_ROUTE_MAP.md` against route generation and permission contracts.
+3. Implement only the approved internal shell/navigation scope.
+4. Run relevant tests, typecheck, lint, build, RTL/mobile and accessibility checks.
+5. Stop before production deployment.
 
 ## Saudi Food Disclosure Extension — 2026-09-13
 
@@ -122,19 +148,14 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - NOT DEPLOYED: no push, preview, or Vercel deployment was performed.
 
 ## Current Release Evidence
-- VERIFIED: canonical `main` is `afece1cb591566e885520b703117d0994643597a`.
-- VERIFIED: PR #136 is merged.
-- VERIFIED: quality run 1453 passed all configured stages.
+- VERIFIED: current canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - UNKNOWN: direct current Vercel Production environment configuration and deployment state.
 - UNKNOWN: direct physical-device production QA.
 
 ## Exact Next Task
-### Production / Commercial Readiness — External Verification Gate
+### W7.2 — Internal Experience Shell and Navigation
 
-1. Verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`.
-2. Perform available authenticated/browser/QR/theme/order/RTL Production QA without overstating unavailable device evidence.
-3. Perform real-device QA when a real device/browser session is available.
-4. Record direct evidence and close the readiness milestone when all applicable checks pass.
+**WAITING FOR EXPLICIT USER APPROVAL.** Do not start W7.2 until the user explicitly approves W7.1.
 
 R7 remains active independently and does not block this task. R10 must remain untouched.
 
