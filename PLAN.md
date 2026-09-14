@@ -161,44 +161,37 @@ Live Menu
 ```
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 IMPLEMENTATION FOUNDATION COMPLETE / EXECUTION VERIFICATION PENDING
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 IN PROGRESS
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: W7.1 deliverables were added on working branch `w7-1-ia-audit`: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
 - VERIFIED: `/admin` is a tab-driven monolith with 12 tabs/pseudo-route states.
-- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree.
-- INFERRED: primary internal UX debt is information architecture/discoverability, not missing backend capabilities.
-- PROPOSED: internal workspace hierarchy = Home, Menu, Orders, Growth, Customers, Settings; Appearance and Publishing are consolidated subdomains.
-- PROPOSED: desktop grouped navigation and a dedicated mobile bottom navigation of Home, Menu, Orders, Growth, More.
-- PROPOSED: side panels for contextual entity inspection and full pages for dense tables/long forms/analytics.
-- BLOCKED: Mobbin direct connected inspection was unavailable/paid; no inaccessible evidence was used.
+- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist.
+- VERIFIED: W7.2 route generation executed in GitHub Actions run `34898237425` and produced both routes in `src/routeTree.gen.ts`.
+- VERIFIED: generated route artifact was committed by generator-producing CI as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
+- VERIFIED: route freshness check passed.
+- VERIFIED: typecheck, tests, lint, and production build passed in actual CI run `34898237425`.
+- VERIFIED: W7.2 was accepted without page migration or navigation changes.
 
-### W7.2 — Route-Independent Internal Design System Foundation
+### W7.3 — Studio Shell Transformation
+STATUS: IMPLEMENTATION_IN_PROGRESS
 
-- VERIFIED: created `src/components/internal-design-system.tsx` with reusable `InternalShell`, `WorkspaceNavigation`, `WorkspaceHeader`, `PageHeader`, `MobileBottomNav`, `SectionHeader`, `StatusBadge`, `EmptyState`, `LoadingState`, `ErrorState`, `PermissionDeniedState`, `SearchField`, `FilterBar`, `DataTable`, `MetricRow`, `InsightCard`, and `ActionCard`.
-- VERIFIED: created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
-- VERIFIED: created `tests/internal-design-system-contract.test.mjs`.
-- VERIFIED: existing project `Input`, utility, and token conventions are reused; no dependency was added.
-- VERIFIED: no page was migrated and no navigation behavior was changed.
-- VERIFIED: no route, router configuration, generated file, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
-- PENDING_LOCAL_VERIFICATION: route generation has not executed successfully in a real local/CI environment.
-- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, RTL/accessibility, and real-device QA remain pending because the current execution environment cannot run the repository.
-- Required command: `npx vite build --mode development`.
-- Growth and Guests must not be added to primary navigation until route-generation verification succeeds.
-- `DetailPanel` and `ConfirmDialog` remain intentionally deferred because an existing reusable project Radix dialog/drawer pattern was not established without introducing a parallel modal system.
+- VERIFIED: primary desktop workspaces are Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: contextual navigation maps only to real existing routes.
+- VERIFIED: Appearance consolidates Brand + Design; Publishing consolidates QR + Preview.
+- VERIFIED: Growth exposes existing Overview, Intelligence, Actions, Analytics, Reports routes.
+- VERIFIED: Customers exposes existing Guests/Retention surface without inventing standalone child routes.
+- VERIFIED: mobile primary is Home, Menu, Orders, Growth, More using W7.2 `MobileBottomNav`.
+- VERIFIED: existing `settings.write` and `team.write` permission gates remain in place.
+- VERIFIED: Platform Admin remains outside the Studio shell hierarchy.
+- PENDING_BROWSER_QA: real browser/device, RTL/LTR, keyboard, focus, and long-content validation remains.
 
 ## Exact Next Task
-### W7.2 — Finish execution verification and review
+### W7.3 — Execute quality and browser verification, then review diff
 
-Run `npx vite build --mode development` in a real local/CI environment, then run the relevant typecheck/lint/tests/build and browser/RTL/accessibility QA. Review the resulting diff and only then mark W7.2 complete.
+Run route generation, generated-artifact freshness, typecheck, tests, lint, production build, existing navigation/component contract tests, and browser/visual/RTL/accessibility QA. Then review the final diff and forbidden-file list. Do not start W7.4.
 
 R7 remains active independently. R10 remains deferred and untouched.
-
-## Session Log — 2026-09-15 — W7.2 Foundation
-- VERIFIED: W7.2 proceeded under the controlled verification exception authorized by the owner.
-- VERIFIED: route-independent internal primitives were created without touching route registration or generated artifacts.
-- PENDING_LOCAL_VERIFICATION: route generation, typecheck, lint, tests, build and browser QA remain unexecuted in the current environment.
-- VERIFIED: no merge or deployment occurred.
 
 ## Continuity Rule
 At the end of every atomic task:
