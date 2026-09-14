@@ -48,23 +48,41 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: W7.2 does not mount the new navigation primitives, alter existing Studio navigation, migrate pages, modify routes, or edit generated files.
 - VERIFIED: existing `Input`, utility class composition, and current token vocabulary are reused; no dependency was added.
 - VERIFIED: `tests/internal-design-system-contract.test.mjs` was added for static contract coverage.
-- PENDING_LOCAL_VERIFICATION: route generation has not yet executed in a real local/CI environment.
-- PENDING_LOCAL_VERIFICATION: typecheck, lint, repository tests, build, browser/visual QA, and RTL/device QA could not execute in the current environment.
-- Required command: `npx vite build --mode development`.
-- The route-generation mismatch is not classified as runtime failure, configuration error, or drift until the required command succeeds.
-- `DetailPanel` and `ConfirmDialog` were not created because no existing reusable project Radix dialog/drawer pattern was established that meets the W7.2 reuse constraint.
-- Growth and Guests must not be added to primary navigation until route-generation verification succeeds.
-- No database, RLS, auth, permissions, subscriptions, AI, orders, public menu, deployment, or merge changed.
+- VERIFIED: GitHub Actions run `34898237425` executed `npx vite build --mode development` successfully and generated Growth + Guests in the route tree.
+- VERIFIED: generated artifact freshness check passed and generator-produced `src/routeTree.gen.ts` was committed as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
+- VERIFIED: typecheck, tests, lint, and production build passed in run `34898237425`.
+- ACCEPTED: W7.2 verification gate passed for its defined acceptance criteria.
+- PENDING_BROWSER_QA: browser/device QA was not required to accept the route-independent W7.2 foundation and remains required for W7.3 shell completion.
 
-## W7.2 QA gate preview
+## W7.3 — Studio Shell Transformation — 2026-09-15
 
-Before W7.2 can be marked complete, verify at minimum:
-- 390px RTL owner shell with Home/Menu/Orders/Growth/More.
-- Desktop grouped navigation and branch context.
-- Arabic/English/mixed-direction content, SAR values, URLs, phone numbers and dates.
-- Keyboard focus order and visible focus.
-- Dialog/drawer/detail-panel focus management.
-- No horizontal overflow at 390px.
-- Existing permission-filtered navigation remains consistent with server authorization.
-- Route generation, typecheck, lint, build and relevant Playwright/browser checks.
-- No regression to public-menu themes.
+- VERIFIED: `src/components/studio-shell.tsx` now uses W7.2 `WorkspaceNavigation` and `MobileBottomNav`.
+- VERIFIED: desktop primary workspaces are Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: contextual groups only expose real routes: Menu, Growth, Customers, Appearance/Publishing, Settings.
+- VERIFIED: Brand and Design are contextualized under Appearance; QR and Preview under Publishing.
+- VERIFIED: Growth exposes existing Growth, Intelligence, Intelligence Actions, Analytics, and Reports routes.
+- VERIFIED: Customers exposes existing Guests/Retention functionality without inventing standalone Loyalty/Campaigns/Feedback/Retention routes.
+- VERIFIED: mobile primary is Home, Menu, Orders, Growth, More.
+- VERIFIED: existing `settings.write` and `team.write` gates remain applied.
+- VERIFIED: `/admin` remains outside Studio navigation.
+- VERIFIED: no page content, route URLs, data fetching, backend, Supabase, RLS, auth, permissions contract, subscriptions, AI, orders, or public-menu logic was intentionally changed.
+- PENDING_CI_VERIFICATION: W7.3 shell changes require a fresh CI run after the latest branch commits.
+- PENDING_BROWSER_QA: 390/430px, tablet, desktop, RTL/LTR, keyboard/focus, long tenant names, mixed-direction labels, URLs/phones/dates/SAR, and stacking/overflow checks remain.
+
+## W7.3 QA gate
+
+Required before W7.3 completion:
+- `npx vite build --mode development` with committed generated route tree.
+- Typecheck.
+- Tests including `tests/w7-3-studio-shell.test.mjs`.
+- Lint.
+- Production build.
+- Desktop grouped navigation QA.
+- 390px and 430px mobile QA.
+- Tablet QA.
+- RTL/LTR and mixed Arabic/English QA.
+- Keyboard/focus and `aria-current` semantics.
+- Long restaurant names and mixed-direction content.
+- URLs, phone numbers, dates, SAR values.
+- No horizontal overflow, clipped labels, inaccessible actions, or broken stacking.
+- Confirm no forbidden files changed and no Platform Admin/public-menu/backend behavior was touched.
