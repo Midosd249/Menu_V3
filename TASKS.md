@@ -120,14 +120,19 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - BLOCKED: Mobbin direct MCP inspection was unavailable/paid.
 - VERIFIED: no UI implementation or route change occurred.
 
-### W7.2 — NOT STARTED / WAITING FOR EXPLICIT APPROVAL
+### W7.2 — IMPLEMENTED FOUNDATION / EXECUTION VERIFICATION PENDING
 
-Entry criteria:
-1. Regenerate/verify route tree locally and explain `growth`/`guests` mismatch.
-2. Recheck `docs/W7_1_ROUTE_MAP.md` against route generation and permission contracts.
-3. Implement only the approved internal shell/navigation scope.
-4. Run relevant tests, typecheck, lint, build, RTL/mobile and accessibility checks.
-5. Stop before production deployment.
+- VERIFIED: created route-independent shared internal primitives in `src/components/internal-design-system.tsx`.
+- VERIFIED: created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
+- VERIFIED: added `tests/internal-design-system-contract.test.mjs` for static contract coverage.
+- VERIFIED: no pages were migrated and no Studio/Admin navigation behavior changed.
+- VERIFIED: no route, generated file, router configuration, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
+- VERIFIED: no dependency was added.
+- PENDING_LOCAL_VERIFICATION: route generation has not successfully executed in a real local/CI environment.
+- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, accessibility, and real-device checks remain to be executed in a runnable environment.
+- Required command: `npx vite build --mode development`.
+- Growth/Guests must not be added to primary navigation until route-generation verification succeeds.
+- `DetailPanel` and `ConfirmDialog` were intentionally deferred because no existing reusable project Radix dialog/drawer pattern was established that met the W7.2 reuse constraint.
 
 ## Saudi Food Disclosure Extension — 2026-09-13
 
@@ -153,11 +158,11 @@ Entry criteria:
 - UNKNOWN: direct physical-device production QA.
 
 ## Exact Next Task
-### W7.2 — Internal Experience Shell and Navigation
+### W7.2 — Finish execution verification and review
 
-**WAITING FOR EXPLICIT USER APPROVAL.** Do not start W7.2 until the user explicitly approves W7.1.
+Run the required route-generation command in a real local/CI environment, then run the appropriate typecheck/lint/tests/build and browser/RTL/accessibility QA. Only after that review should W7.2 be marked complete and W7.3 authorized.
 
-R7 remains active independently and does not block this task. R10 must remain untouched.
+R7 remains active independently and R10 remains untouched.
 
 ## Working Rules
 - `main` is source of truth.
