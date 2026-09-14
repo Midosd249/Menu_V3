@@ -13,7 +13,7 @@ function walkingMinutes(calories: number) {
   return Math.max(1, Math.round((60 * calories) / (WALKING_EFFORT * WALKING_WEIGHT_KG)));
 }
 
-const itemClass = "menu-nutrition-item rounded-xl px-3 py-2 text-xs leading-5";
+const itemClass = "menu-nutrition-item taste-allergen rounded-xl px-3 py-2 text-xs leading-5";
 const valueClass = "bidi-isolate tabular font-semibold";
 
 export function MenuNutritionDisclosure({ product, lang }: { product: Product; lang: Lang }) {
