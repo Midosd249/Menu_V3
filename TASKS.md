@@ -120,49 +120,40 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - BLOCKED: Mobbin direct MCP inspection was unavailable/paid.
 - VERIFIED: no UI implementation or route change occurred.
 
-### W7.2 — IMPLEMENTED FOUNDATION / EXECUTION VERIFICATION PENDING
+### W7.2 — ACCEPTED / VERIFIED
 
 - VERIFIED: created route-independent shared internal primitives in `src/components/internal-design-system.tsx`.
 - VERIFIED: created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
 - VERIFIED: added `tests/internal-design-system-contract.test.mjs` for static contract coverage.
-- VERIFIED: no pages were migrated and no Studio/Admin navigation behavior changed.
-- VERIFIED: no route, generated file, router configuration, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
+- VERIFIED: no pages were migrated and no Studio/Admin navigation behavior changed during W7.2.
+- VERIFIED: no route, router configuration, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
 - VERIFIED: no dependency was added.
-- PENDING_LOCAL_VERIFICATION: route generation has not successfully executed in a real local/CI environment.
-- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, accessibility, and real-device checks remain to be executed in a runnable environment.
-- Required command: `npx vite build --mode development`.
-- Growth/Guests must not be added to primary navigation until route-generation verification succeeds.
-- `DetailPanel` and `ConfirmDialog` were intentionally deferred because no existing reusable project Radix dialog/drawer pattern was established that met the W7.2 reuse constraint.
+- VERIFIED: `npx vite build --mode development` generated Growth and Guests in the TanStack route tree during GitHub Actions run `34898237425`.
+- VERIFIED: generated `src/routeTree.gen.ts` was committed by generator-producing CI as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
+- VERIFIED: route-tree freshness check, typecheck, tests, lint, and production build passed in the same run.
+- VERIFIED: Growth and Guests are now safe to expose in Studio navigation.
+- `DetailPanel` and `ConfirmDialog` remain deferred.
 
-## Saudi Food Disclosure Extension — 2026-09-13
+### W7.3 — IMPLEMENTATION IN PROGRESS
 
-- IMPLEMENTED LOCALLY: nullable sodium and caffeine fields with explicit caffeine basis, owner entry/review, public display, and derived high-salt warning.
-- VERIFIED: canonical `menu_v3.products` migration applied successfully.
-- PRESERVED: calories, existing allergen text, AI review boundaries, tenant scoping, and protected menu/theme behavior.
-- UNKNOWN: final technical-regulation presentation details, controlled allergen categories, and physical-activity calculation formula.
-- BLOCKED: full TypeScript gate has pre-existing route/type-generation errors unrelated to the changed Product fields.
-- NOT DEPLOYED: release-only workflow has not been started.
-
-## Golden Demo Restaurant — 2026-09-13
-
-- VERIFIED: authorized existing tenant was rebuilt as fictional `مائدة سُرى / Sura Table`; no user, membership, order, or unrelated tenant data was overwritten.
-- VERIFIED: 10 categories and 28 products, including 5 Kids Menu items, bilingual copy, calories, sodium, 4 caffeine cases, 2 high-salt cases, varied allergen coverage, one unavailable item, empty image fields, options, and variants.
-- VERIFIED: Supabase direct checks confirmed tenant/owner scope, zero orders, no duplicate Arabic names, no orphan products, no invalid nutrition values, and zero non-empty image fields.
-- VERIFIED LOCALLY: `npm test` 263/263, static theme/public-menu contracts 19/19, focused data/theme/SEO tests 24/24, `npm run build`, `npm run lint`, and `npm run typecheck` passed.
-- BLOCKED: Playwright browser QA could not run because the browser executable is unavailable; local PGlite also lacks the pre-existing `public_content_version` schema. Static evidence passed; no theme code was changed without visual evidence.
-- NOT DEPLOYED: no push, preview, or Vercel deployment was performed.
-
-## Current Release Evidence
-- VERIFIED: current canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- UNKNOWN: direct current Vercel Production environment configuration and deployment state.
-- UNKNOWN: direct physical-device production QA.
+- VERIFIED: transformed `src/components/studio-shell.tsx` into the approved workspace architecture.
+- VERIFIED: desktop primary workspaces = Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: contextual groups expose only real routes for Menu, Growth, Customers, Appearance/Publishing, and Settings.
+- VERIFIED: non-existent standalone Loyalty/Campaigns/Feedback/Retention/Restaurant/Subscription/Advanced routes were not invented.
+- VERIFIED: mobile primary = Home, Menu, Orders, Growth, More using W7.2 `MobileBottomNav`.
+- VERIFIED: W7.2 `WorkspaceNavigation` is reused for the desktop workspace layer.
+- VERIFIED: existing permission gates remain active for settings/team destinations.
+- VERIFIED: Platform Admin remains separate.
+- VERIFIED: created `docs/W7_3_STUDIO_SHELL.md` and `docs/W7_3_NAVIGATION_MAP.md`.
+- VERIFIED: created `tests/w7-3-studio-shell.test.mjs`.
+- PENDING_BROWSER_QA: actual desktop/mobile/RTL/keyboard/focus validation remains.
 
 ## Exact Next Task
-### W7.2 — Finish execution verification and review
+### W7.3 — Execute quality and browser verification, then review diff
 
-Run the required route-generation command in a real local/CI environment, then run the appropriate typecheck/lint/tests/build and browser/RTL/accessibility QA. Only after that review should W7.2 be marked complete and W7.3 authorized.
+Run route generation, generated-artifact freshness, typecheck, tests, lint, production build, navigation/component contract tests, and browser/visual/RTL/accessibility QA. Review forbidden-file changes and keep W7.4 untouched.
 
-R7 remains active independently and R10 remains untouched.
+R7 remains active independently. R10 remains untouched.
 
 ## Working Rules
 - `main` is source of truth.
