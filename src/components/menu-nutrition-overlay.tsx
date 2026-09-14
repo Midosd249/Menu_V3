@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Coffee, Flame, Footprints } from "lucide-react";
 import type { Lang, Product } from "@/lib/menu/types";
 
@@ -42,7 +43,8 @@ export function MenuNutritionOverlay({ products, lang }: { products: Product[]; 
       const heading = candidate.querySelector("h1,h2,h3");
       const name = heading?.textContent?.trim() ?? "";
       const match = products.find((item) => text(lang, item.nameAr, item.nameEn).trim() === name) ?? null;
-      setTarget(candidate.querySelector(".taste-dialog-body") ?? candidate.querySelector("[class*='dialog-body']") ?? candidate);
+      const panelTarget = candidate.querySelector(".taste-dialog-body") ?? candidate.querySelector("[class*='dialog-body']") ?? candidate;
+      setTarget(panelTarget instanceof HTMLElement ? panelTarget : null);
       setProduct(match);
     };
     sync();
