@@ -1,5 +1,6 @@
 import { PublicMenuView } from "@/components/public-menu";
 import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
+import { MenuNutritionOverlay } from "@/components/menu-nutrition-overlay";
 import { TasteTemplate } from "@/components/templates/taste";
 import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
 import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
@@ -36,6 +37,7 @@ export function ThemeRenderer({ menu, preview = false }: Props) {
   return (
     <>
       {content}
+      <MenuNutritionOverlay products={menu.products} lang={menu.tenant.themeKey === "heritage" ? "ar" : "ar"} />
       {!preview && <GuestMenuAssistant menu={menu} />}
     </>
   );
