@@ -1,6 +1,5 @@
 import { Coffee, Flame, Footprints } from "lucide-react";
-import type { Lang, Product } from "@/lib/menu/types";
-import { hasHighSalt } from "@/lib/menu/types";
+import { hasHighSalt, type Lang, type Product } from "@/lib/menu/types";
 
 const WALKING_WEIGHT_KG = 70;
 const WALKING_MET = 3.8;
