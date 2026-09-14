@@ -72,8 +72,8 @@ test("AI product price extraction is review-first and wired into Add Product", (
   assert.match(menuAi, /Do not invent or estimate a price/);
   assert.match(menuAi, /price: number \| null/);
   assert.match(menuWorkspacePage, /type AiOperation = .*"price"/);
+  assert.match(menuAi, /كبسة دجاج 20/);
   assert.match(menuWorkspacePage, /استخراج الاسم والسعر|Extract name & price/);
-  assert.match(menuWorkspacePage, /كبسة دجاج 20/);
   assert.match(menuWorkspacePage, /applyAiPrice/);
   assert.match(menuWorkspacePage, /تطبيق على المسودة|Apply to draft/);
   assert.match(menuWorkspacePage, /price: aiPrice\.price/);
