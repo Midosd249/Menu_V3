@@ -83,12 +83,14 @@ jobs:
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8082/onboarding >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/"
-              if STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1; then
-                exit 0
-              fi
+              set +e
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1
               STATUS=$?
-              echo "[studio-browser] Playwright failed — dev-server log follows"
-              cat .grok/studio-shell-browser.log
+              set -e
+              if [ "$STATUS" -ne 0 ]; then
+                echo "[studio-browser] Playwright failed — dev-server log follows"
+                cat .grok/studio-shell-browser.log
+              fi
               exit "$STATUS"
             fi
             sleep 0.25
