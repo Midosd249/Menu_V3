@@ -49,7 +49,9 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(moreSheet).toHaveCount(0);
 
-  await page.getByRole("button", { name: "اختيار اللغة" }).getByRole("button", { name: "EN" }).click();
+  const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
+  await expect(languageGroup).toBeVisible();
+  await languageGroup.getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
   await expect(page.getByRole("button", { name: "More" })).toBeVisible();
