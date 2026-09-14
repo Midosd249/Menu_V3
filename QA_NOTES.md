@@ -26,7 +26,7 @@ A readiness-based check confirmed that the owner studio becomes fully usable on 
 
 ## Production preview — 2026-09-02
 
-The production preview initially failed because PGLite runtime files were not copied into the server function output. After adding the targeted build step, production preview started successfully. Automated and visual checks on the root route at both 1280×800 and 390×844 confirmed visible content, no console or page errors, and no horizontal overflow.
+The production preview initially failed because PGLITE runtime files were not copied into the server function output. After adding the targeted build step, production preview started successfully. Automated and visual checks on the root route at both 1280×800 and 390×844 confirmed visible content, no console or page errors, and no horizontal overflow.
 
 ## Production public menu — 2026-09-02
 
@@ -41,6 +41,20 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - UNKNOWN: current browser/device behavior of the internal shell requires a fresh W7.2 browser QA pass after implementation.
 - VERIFIED: W7.1 produced architecture/reference documents only: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
 - BLOCKED: Mobbin direct MCP inspection was unavailable/paid; no inaccessible visual evidence was treated as fact.
+
+## W7.2 — Internal Design System Foundation — 2026-09-15
+
+- VERIFIED: route-independent reusable primitives were added in `src/components/internal-design-system.tsx`.
+- VERIFIED: W7.2 does not mount the new navigation primitives, alter existing Studio navigation, migrate pages, modify routes, or edit generated files.
+- VERIFIED: existing `Input`, utility class composition, and current token vocabulary are reused; no dependency was added.
+- VERIFIED: `tests/internal-design-system-contract.test.mjs` was added for static contract coverage.
+- PENDING_LOCAL_VERIFICATION: route generation has not yet executed in a real local/CI environment.
+- PENDING_LOCAL_VERIFICATION: typecheck, lint, repository tests, build, browser/visual QA, and RTL/device QA could not execute in the current environment.
+- Required command: `npx vite build --mode development`.
+- The route-generation mismatch is not classified as runtime failure, configuration error, or drift until the required command succeeds.
+- `DetailPanel` and `ConfirmDialog` were not created because no existing reusable project Radix dialog/drawer pattern was established that meets the W7.2 reuse constraint.
+- Growth and Guests must not be added to primary navigation until route-generation verification succeeds.
+- No database, RLS, auth, permissions, subscriptions, AI, orders, public menu, deployment, or merge changed.
 
 ## W7.2 QA gate preview
 
