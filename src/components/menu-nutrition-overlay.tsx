@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { Coffee, Flame, Footprints, Salt } from "lucide-react";
+import { Coffee, Flame, Footprints } from "lucide-react";
 import type { Lang, Product } from "@/lib/menu/types";
 
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
 
+function SaltIcon({ className = "size-4" }: { className?: string }) {
+  return <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 9h8l1 10H7L8 9Z" /><path d="M9 9V6h6v3" /><path d="M10 4h4" /><circle cx="10" cy="6" r=".4" fill="currentColor" stroke="none" /><circle cx="12" cy="6" r=".4" fill="currentColor" stroke="none" /><circle cx="14" cy="6" r=".4" fill="currentColor" stroke="none" /></svg>;
+}
+
 function NutritionPanel({ product, lang }: { product: Product; lang: Lang }) {
   const items = [
     product.calories != null ? { icon: Flame, label: text(lang, "السعرات", "Calories"), value: `${product.calories} ${text(lang, "سعرة", "kcal")}` } : null,
-    product.sodiumMg != null ? { icon: Salt, label: text(lang, "الصوديوم", "Sodium"), value: `${product.sodiumMg} mg` } : null,
+    product.sodiumMg != null ? { icon: SaltIcon, label: text(lang, "الصوديوم / الملح", "Sodium / salt"), value: `${product.sodiumMg} mg` } : null,
     product.caffeineMg != null ? { icon: Coffee, label: text(lang, "الكافيين", "Caffeine"), value: `${product.caffeineMg} mg` } : null,
   ].filter(Boolean) as Array<{ icon: typeof Flame; label: string; value: string }>;
   if (!items.length && !product.allergens) return null;
@@ -18,7 +21,7 @@ function NutritionPanel({ product, lang }: { product: Product; lang: Lang }) {
         {items.map(({ icon: Icon, label, value }) => <div key={label} className="flex min-h-12 items-center gap-2 rounded-xl bg-paper/70 px-3 py-2 text-xs"><Icon className="size-4 shrink-0 text-accent" aria-hidden="true" /><span className="min-w-0"><span className="block text-muted">{label}</span><bdi dir="ltr" className="tabular bidi-isolate font-medium">{value}</bdi></span></div>)}
       </div> : null}
       {product.allergens ? <p className="text-xs leading-5" dir="auto"><strong>{text(lang, "مسببات الحساسية:", "Allergens:")}</strong> {product.allergens}</p> : null}
-      {product.sodiumMg != null && product.sodiumMg >= 2000 ? <p role="note" className="flex items-center gap-2 text-xs font-medium text-bad"><Salt className="size-4 shrink-0" aria-hidden="true" />{text(lang, "تنبيه: هذا الصنف مرتفع الملح.", "Salt warning: this item is high in salt.")}</p> : null}
+      {product.sodiumMg != null && product.sodiumMg >= 2000 ? <p role="note" className="flex items-center gap-2 text-xs font-medium text-bad"><SaltIcon />{text(lang, "تنبيه: هذا الصنف مرتفع الملح.", "Salt warning: this item is high in salt.")}</p> : null}
       <p className="flex items-center gap-2 text-[11px] leading-5 text-muted"><Footprints className="size-4 shrink-0" aria-hidden="true" />{text(lang, "المشي: لا نعرض مدة حرق تقديرية دون قيمة موثقة للصنف.", "Walking: no estimated burn time is shown without a verified item value.")}</p>
     </section>
   );
