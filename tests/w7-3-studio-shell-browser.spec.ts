@@ -53,9 +53,11 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
   await mobileNav.getByRole("button", { name: "المزيد" }).click();
-  await expect(page.getByText("المزيد", { exact: true })).toBeVisible();
+  const moreSheet = page.locator("div.fixed.inset-0.z-40");
+  await expect(moreSheet).toBeVisible();
+  await expect(moreSheet.getByText("المزيد", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByText("المزيد", { exact: true })).toHaveCount(0);
+  await expect(moreSheet).toHaveCount(0);
 
   await page.getByRole("button", { name: "اختيار اللغة" }).getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
