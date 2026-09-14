@@ -22,11 +22,20 @@ test("shared nutrition disclosure exposes the agreed fields and icons", () => {
   assert.ok(disclosure.includes("WALKING_MET = 3.8"));
 });
 
-test("nutrition overlay mounts the shared disclosure deterministically and normalizes native fields", () => {
+test("nutrition fields share the same presentation contract as allergens", () => {
+  assert.ok(disclosure.includes('const itemClass = "menu-nutrition-item rounded-xl px-3 py-2 text-xs leading-5"'));
+  assert.ok(disclosure.includes('className={itemClass + " bg-sand text-ink"}'));
+  assert.ok(disclosure.includes('className={itemClass + " flex items-center gap-2 bg-sand text-ink"}'));
+  assert.ok(disclosure.includes('className={itemClass + " flex items-start gap-2 bg-bad/10 font-semibold text-bad"}'));
+  assert.ok(disclosure.includes('className={itemClass + " flex items-start gap-2 bg-sand text-muted"}'));
+});
+
+test("nutrition overlay mounts the shared disclosure deterministically and protects it from native cleanup", () => {
   assert.ok(overlay.includes("aria-modal=\"true\""));
   assert.ok(overlay.includes("data-menu-nutrition=\"true\""));
   assert.ok(overlay.includes("data-menu-nutrition-host"));
   assert.ok(overlay.includes("data-menu-nutrition-hidden"));
+  assert.ok(overlay.includes("closest(\"[data-menu-nutrition=\\\"true\\\"]\")"));
   assert.ok(overlay.includes("hideNativeNutrition"));
   assert.ok(overlay.includes("aria-labelledby"));
   assert.ok(overlay.includes("MenuNutritionDisclosure"));
