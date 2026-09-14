@@ -52,37 +52,28 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: generated artifact freshness check passed and generator-produced `src/routeTree.gen.ts` was committed as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
 - VERIFIED: typecheck, tests, lint, and production build passed in run `34898237425`.
 - ACCEPTED: W7.2 verification gate passed for its defined acceptance criteria.
-- PENDING_BROWSER_QA: browser/device QA was not required to accept the route-independent W7.2 foundation and remains required for W7.3 shell completion.
 
 ## W7.3 — Studio Shell Transformation — 2026-09-15
 
-- VERIFIED: `src/components/studio-shell.tsx` now uses W7.2 `WorkspaceNavigation` and `MobileBottomNav`.
+- VERIFIED: `src/components/studio-shell.tsx` uses W7.2 `WorkspaceNavigation` and `MobileBottomNav`.
 - VERIFIED: desktop primary workspaces are Home, Menu, Orders, Growth, Customers, Settings.
-- VERIFIED: contextual groups only expose real routes: Menu, Growth, Customers, Appearance/Publishing, Settings.
-- VERIFIED: Brand and Design are contextualized under Appearance; QR and Preview under Publishing.
-- VERIFIED: Growth exposes existing Growth, Intelligence, Intelligence Actions, Analytics, and Reports routes.
-- VERIFIED: Customers exposes existing Guests/Retention functionality without inventing standalone Loyalty/Campaigns/Feedback/Retention routes.
-- VERIFIED: mobile primary is Home, Menu, Orders, Growth, More.
-- VERIFIED: existing `settings.write` and `team.write` gates remain applied.
-- VERIFIED: `/admin` remains outside Studio navigation.
-- VERIFIED: no page content, route URLs, data fetching, backend, Supabase, RLS, auth, permissions contract, subscriptions, AI, orders, or public-menu logic was intentionally changed.
-- PENDING_CI_VERIFICATION: W7.3 shell changes require a fresh CI run after the latest branch commits.
-- PENDING_BROWSER_QA: 390/430px, tablet, desktop, RTL/LTR, keyboard/focus, long tenant names, mixed-direction labels, URLs/phones/dates/SAR, and stacking/overflow checks remain.
+- VERIFIED: contextual groups only expose real routes; Reports remains intentionally excluded from Studio navigation.
+- VERIFIED: mobile primary is Home, Menu, Orders, Growth, More; More is permission-filtered and Escape closes it.
+- VERIFIED: existing permission gates remain applied and `/admin` stays outside Studio navigation.
+- VERIFIED: the first browser failure was isolated to a PGlite fixture schema mismatch (`tenant_members.is_active`, then `orders.archived_at`).
+- VERIFIED: the CI-only temporary fixture solved the blocker without changing production schema behavior.
+- VERIFIED: accepted CI run `34905256209` passed route generation, freshness, typecheck, 266 tests, lint, production build, Playwright/Chromium, public all-theme browser QA, performance audit, Studio Shell browser QA, artifact upload, and cleanup.
+- VERIFIED: the Studio browser step actually served `http://127.0.0.1:8082/studio` and the W7.3 test reported `1 passed (10.2s)`.
+- VERIFIED: the temporary fixture was created inside the runner and removed by the shell step `EXIT` trap; no fixture SQL file is committed.
+- ACCEPTED: W7.3 is DONE / VERIFIED. Physical real-device QA remains release-stage evidence.
 
-## W7.3 QA gate
+## W7.4 — Studio Home — 2026-09-15
 
-Required before W7.3 completion:
-- `npx vite build --mode development` with committed generated route tree.
-- Typecheck.
-- Tests including `tests/w7-3-studio-shell.test.mjs`.
-- Lint.
-- Production build.
-- Desktop grouped navigation QA.
-- 390px and 430px mobile QA.
-- Tablet QA.
-- RTL/LTR and mixed Arabic/English QA.
-- Keyboard/focus and `aria-current` semantics.
-- Long restaurant names and mixed-direction content.
-- URLs, phone numbers, dates, SAR values.
-- No horizontal overflow, clipped labels, inaccessible actions, or broken stacking.
-- Confirm no forbidden files changed and no Platform Admin/public-menu/backend behavior was touched.
+- VERIFIED: W7.4 began only after W7.3 browser acceptance passed.
+- VERIFIED: `/studio/` now renders the focused `StudioHome` component.
+- VERIFIED: Home uses only existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` data sources.
+- VERIFIED: Home sections are attention, current performance, recent operational activity, menu health, evidence-bound growth opportunity, and one contextual next action.
+- VERIFIED: loading, error, empty, populated, RTL/LTR, keyboard focus, semantic progress, and responsive states are represented.
+- VERIFIED: no fake revenue, orders, guests, conversion rates, recommendations, charts, rankings, or sample numbers were added.
+- VERIFIED: no backend/auth/RLS/permissions/subscription/AI/order/public-menu/Admin/dependency changes were intentionally introduced.
+- PENDING_CI_VERIFICATION: W7.4 current-head quality and browser QA must complete before W7.4 can be marked DONE.
