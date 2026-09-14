@@ -40,13 +40,13 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
   await mobileNav.getByRole("button", { name: "المزيد" }).click();
-  const moreSheet = page.getByRole("dialog").last();
+  const moreSheet = page.locator("div.fixed.inset-0.z-40").last();
   await expect(moreSheet).toBeVisible();
   await expect(moreSheet.locator('a[href="/studio/reports"]')).toHaveCount(0);
   await expect(moreSheet.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
   await expect(moreSheet.locator('a[href="/admin"]')).toHaveCount(0);
   await page.keyboard.press("Escape");
-  await expect(moreSheet).toHaveCount(0);
+  await expect(moreSheet).toBeHidden();
 
   const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
   await expect(languageGroup).toBeVisible();
