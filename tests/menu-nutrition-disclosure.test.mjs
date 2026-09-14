@@ -25,15 +25,18 @@ test("shared nutrition disclosure exposes the agreed fields and SFDA-aligned ind
 });
 
 test("nutrition fields share the same presentation contract as allergens", () => {
-  assert.ok(disclosure.includes('const itemClass = "menu-nutrition-item rounded-xl px-3 py-2 text-xs leading-5"'));
+  assert.ok(disclosure.includes('const itemClass = "menu-nutrition-item taste-allergen rounded-xl px-3 py-2 text-xs leading-5"'));
   assert.ok(disclosure.includes('className={itemClass + " bg-sand text-ink"}'));
   assert.ok(disclosure.includes('className={itemClass + " flex items-center gap-2 bg-sand text-ink"}'));
   assert.ok(disclosure.includes('className={itemClass + " flex items-start gap-2 bg-bad/10 font-semibold text-bad"}'));
   assert.ok(disclosure.includes('className={itemClass + " flex items-start gap-2 bg-sand text-muted"}'));
 });
 
-test("nutrition overlay targets product identity instead of dialog heading", () => {
+test("nutrition overlay targets the actual product dialog and never the cart", () => {
   assert.ok(overlay.includes("productNameInDialog"));
+  assert.ok(overlay.includes("isProductDialog"));
+  assert.ok(overlay.includes("أضف للطلب"));
+  assert.ok(overlay.includes("Add to order"));
   assert.ok(overlay.includes("[aria-label],h1,h2,h3,h4"));
   assert.ok(overlay.includes("dialog.querySelectorAll<HTMLElement>(\"p,li,span\")"));
   assert.ok(!overlay.includes("dialog.querySelectorAll<HTMLElement>(\"p,div\")"));
