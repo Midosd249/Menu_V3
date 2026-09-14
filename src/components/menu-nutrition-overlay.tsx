@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { AlertTriangle, Coffee, Flame, Footprints, Salt } from "lucide-react";
+import { Coffee, Flame, Footprints, Salt } from "lucide-react";
 import type { Lang, Product } from "@/lib/menu/types";
 
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
@@ -31,14 +31,11 @@ export function MenuNutritionOverlay({ products, lang }: { products: Product[]; 
     const sync = () => {
       const dialogs = Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"]'));
       const candidate = dialogs.find((dialog) => {
-        if (dialog.querySelector("[data-menu-nutrition]")) return false;
         const heading = dialog.querySelector("h1,h2,h3");
         if (!heading?.textContent?.trim()) return false;
         return products.some((item) => text(lang, item.nameAr, item.nameEn).trim() === heading.textContent.trim());
       });
-      if (!candidate) {
-        setTarget(null); setProduct(null); return;
-      }
+      if (!candidate) { setTarget(null); setProduct(null); return; }
       const heading = candidate.querySelector("h1,h2,h3");
       const name = heading?.textContent?.trim() ?? "";
       const match = products.find((item) => text(lang, item.nameAr, item.nameEn).trim() === name) ?? null;
