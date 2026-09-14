@@ -7,7 +7,7 @@
 | Home | `/studio` | Existing Studio access | — |
 | Menu | `/studio/menu` | Existing Studio access | Items & categories, Options, Import |
 | Orders | `/studio/orders` | Existing Studio access | — |
-| Growth | `/studio/growth` | Existing Studio access | Overview, Intelligence, Actions, Analytics, Reports |
+| Growth | `/studio/growth` | Existing Studio access | Overview, Intelligence, Actions, Analytics |
 | Customers | `/studio/guests` | Existing Studio access | Guests & retention |
 | Settings | `/studio/settings` | `settings.write` | Branches, Team & Permissions, Appearance, Publishing |
 
@@ -20,8 +20,8 @@
 - Menu Intelligence → Growth context (`/studio/intelligence`)
 - Intelligence Actions → Growth context (`/studio/intelligence-actions`)
 - Analytics → Growth context (`/studio/analytics`)
-- Reports → Growth context (`/studio/reports`)
 - Guests → Customers context (`/studio/guests`)
+- Reports remains an existing analytics/reporting route but is intentionally not exposed as Studio navigation because current repository contract tests explicitly require it to stay out of navigation.
 
 ## Intentionally omitted as navigation destinations
 
