@@ -17,12 +17,14 @@ Primary desktop workspaces:
 - Customers → `/studio/guests`
 - Settings → `/studio/settings` (permission-gated)
 
-Contextual groups expose only real existing routes:
+Contextual groups expose only real existing routes allowed by the current repository navigation contract:
 - Menu: `/studio/menu`, `/studio/options`, `/studio/import`
-- Growth: `/studio/growth`, `/studio/intelligence`, `/studio/intelligence-actions`, `/studio/analytics`, `/studio/reports`
+- Growth: `/studio/growth`, `/studio/intelligence`, `/studio/intelligence-actions`, `/studio/analytics`
 - Customers: `/studio/guests`
 - Appearance & Publishing: `/studio/brand`, `/studio/design`, `/studio/qr`, `/studio/preview`
 - Settings: `/studio/branches`, `/studio/team`, `/studio/settings`
+
+`/studio/reports` remains a real route but is intentionally not exposed in Studio navigation because the current repository contract explicitly keeps Reports out of Studio navigation while retaining the route for the reporting workflow.
 
 Non-existent concepts such as standalone Categories, Loyalty, Campaigns, Feedback, Retention, Restaurant, Subscription, and Advanced routes are not rendered as dead links.
 
@@ -60,6 +62,6 @@ Required before W7.3 completion:
 - lint
 - production build
 - existing navigation/component contract tests
-- browser/visual QA where available
+- browser/visual QA of the Studio shell itself
 
-Browser/device status must be reported as `PENDING_BROWSER_QA` until actually executed.
+The existing CI browser job validates public theme/template behavior; it does not constitute Studio-shell browser QA. Browser/device status therefore remains `PENDING_BROWSER_QA` until the shell is actually exercised.
