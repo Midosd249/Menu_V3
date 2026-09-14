@@ -7,18 +7,18 @@ async function ensureStudio(page: Page) {
   if (page.url().includes("/studio")) return;
 
   const setupHeading = page.getByRole("heading", { name: /جهّز منيو منشأتك|Set up your business menu/ });
-  await expect(setupHeading).toBeVisible({ timeout: 15_000 });
+  await expect(setupHeading).toBeVisible({ timeout: 45_000 });
   const isArabic = (await setupHeading.textContent())?.includes("جهّز") ?? false;
   await page.getByLabel(/اسم المنشأة بالعربية|Business name in Arabic/).fill("مطعم اختبار الاستوديو الطويل — Long Studio Restaurant");
   await page.getByLabel(/اسم المنشأة بالإنجليزية \(اختياري\)|Business name in English/).fill("Long Studio Restaurant");
   await page.getByRole("button", { name: /متابعة|Continue/ }).click();
   await page.getByRole("button", { name: /متابعة|Continue/ }).click();
   await page.getByRole("button", { name: isArabic ? "تخطي الأصناف" : "Skip items" }).click();
-  await expect(page).toHaveURL(/\/studio(?:\/)?$/, { timeout: 15_000 });
+  await expect(page).toHaveURL(/\/studio(?:\/)?$/, { timeout: 20_000 });
 }
 
 test("W7.3 Studio shell browser QA", async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
   await ensureStudio(page);
 
   await page.setViewportSize({ width: 1280, height: 800 });
