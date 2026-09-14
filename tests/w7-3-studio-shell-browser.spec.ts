@@ -7,21 +7,22 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
 
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
-  await expect(page.locator('nav[aria-label="مساحات العمل"]')).toBeVisible();
-  await expect(page.locator('nav[aria-label="مساحات العمل"] button')).toHaveCount(6);
+  const desktopNav = page.locator('nav[aria-label="مساحات العمل"]');
+  await expect(desktopNav).toBeVisible();
+  await expect(desktopNav.locator("button")).toHaveCount(6);
 
   for (const label of ["نظرة عامة", "القائمة", "الطلبات", "النمو", "العملاء", "الإعدادات"]) {
-    await expect(page.locator('nav[aria-label="مساحات العمل"] button', { hasText: label })).toBeVisible();
+    await expect(desktopNav.getByRole("button", { name: label })).toBeVisible();
   }
-  await expect(page.locator('nav[aria-label="مساحات العمل"] [aria-current="page"]')).toHaveCount(1);
-  await expect(page.locator('a[href="/studio/reports"]')).toHaveCount(0);
-  await expect(page.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
-  await expect(page.locator('a[href="/admin"]')).toHaveCount(0);
+  await expect(desktopNav.locator('[aria-current="page"]')).toHaveCount(1);
+  await expect(desktopNav.locator('a[href="/studio/reports"]')).toHaveCount(0);
+  await expect(desktopNav.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
+  await expect(desktopNav.locator('a[href="/admin"]')).toHaveCount(0);
 
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
-  const firstWorkspace = page.locator('nav[aria-label="مساحات العمل"] button').first();
+  const firstWorkspace = desktopNav.locator("button").first();
   await firstWorkspace.focus();
   await expect(firstWorkspace).toBeFocused();
   await page.keyboard.press("Tab");
@@ -35,13 +36,16 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   for (const label of ["نظرة عامة", "القائمة", "الطلبات", "النمو", "المزيد"]) {
     await expect(mobileNav.getByRole("button", { name: label })).toBeVisible();
   }
-  await expect(page.locator('nav[aria-label="مساحات العمل"]')).toBeHidden();
+  await expect(desktopNav).toBeHidden();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
   await mobileNav.getByRole("button", { name: "المزيد" }).click();
   const moreSheet = page.locator("div.fixed.inset-0.z-40");
   await expect(moreSheet).toBeVisible();
   await expect(moreSheet.getByText("المزيد", { exact: true })).toBeVisible();
+  await expect(moreSheet.locator('a[href="/studio/reports"]')).toHaveCount(0);
+  await expect(moreSheet.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
+  await expect(moreSheet.locator('a[href="/admin"]')).toHaveCount(0);
   await page.keyboard.press("Escape");
   await expect(moreSheet).toHaveCount(0);
 
