@@ -48,6 +48,15 @@ test("W7.3 mobile primary navigation is exactly Home, Menu, Orders, Growth, More
   assert.match(shell, /setMoreOpen\(true\)/);
 });
 
+test("W7.3 keeps Reports outside Studio navigation", () => {
+  assert.doesNotMatch(shell, /\/studio\/reports/);
+});
+
+test("W7.3 More navigation supports Escape dismissal", () => {
+  assert.match(shell, /event\.key === "Escape"/);
+  assert.match(shell, /setMoreOpen\(false\)/);
+});
+
 test("W7.3 does not invent standalone child routes", () => {
   for (const route of forbiddenDeadLinks) assert.doesNotMatch(shell, new RegExp(route.replaceAll("/", "\\/")));
 });
