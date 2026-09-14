@@ -52,7 +52,6 @@ const NAV_SECTIONS: readonly StudioNavSection[] = [
       { to: "/studio/intelligence", icon: Sparkles, label: { ar: "الذكاء", en: "Intelligence" } },
       { to: "/studio/intelligence-actions", icon: SlidersHorizontal, label: { ar: "الإجراءات", en: "Actions" } },
       { to: "/studio/analytics", icon: BarChart3, label: { ar: "التحليلات", en: "Analytics" } },
-      { to: "/studio/reports", icon: BarChart3, label: { ar: "التقارير", en: "Reports" } },
     ],
   },
   {
