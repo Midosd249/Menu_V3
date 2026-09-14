@@ -10,7 +10,7 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   await expect(page.locator('nav[aria-label="مساحات العمل"]')).toBeVisible();
   await expect(page.locator('nav[aria-label="مساحات العمل"] button')).toHaveCount(6);
 
-  for (const label of ["الرئيسية", "القائمة", "الطلبات", "النمو", "العملاء", "الإعدادات"]) {
+  for (const label of ["نظرة عامة", "القائمة", "الطلبات", "النمو", "العملاء", "الإعدادات"]) {
     await expect(page.locator('nav[aria-label="مساحات العمل"] button', { hasText: label })).toBeVisible();
   }
   await expect(page.locator('nav[aria-label="مساحات العمل"] [aria-current="page"]')).toHaveCount(1);
@@ -32,7 +32,7 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   const mobileNav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(mobileNav).toBeVisible();
   await expect(mobileNav.locator("button")).toHaveCount(5);
-  for (const label of ["الرئيسية", "القائمة", "الطلبات", "النمو", "المزيد"]) {
+  for (const label of ["نظرة عامة", "القائمة", "الطلبات", "النمو", "المزيد"]) {
     await expect(mobileNav.getByRole("button", { name: label })).toBeVisible();
   }
   await expect(page.locator('nav[aria-label="مساحات العمل"]')).toBeHidden();
@@ -47,6 +47,7 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
 
   await page.getByRole("button", { name: "اختيار اللغة" }).getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
   await expect(page.getByRole("button", { name: "More" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 
