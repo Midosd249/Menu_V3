@@ -188,55 +188,51 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 - NOT DEPLOYED: no push or Vercel deployment was performed.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 IMPLEMENTATION FOUNDATION COMPLETE / EXECUTION VERIFICATION PENDING
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 IN PROGRESS
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against `main` SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: working branch `w7-1-ia-audit` contains the W7.1 architecture deliverables.
 - VERIFIED: `/admin` is a tab-driven monolith with 12 tab/pseudo-route states.
-- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree.
-- INFERRED: primary internal UX debt is information architecture/discoverability, not missing backend capabilities.
-- PROPOSED: Studio hierarchy = Home, Menu, Orders, Growth, Customers, Settings, with Appearance and Publishing as coherent subdomains.
-- PROPOSED: desktop grouped navigation and mobile Home/Menu/Orders/Growth/More.
-- PROPOSED: contextual detail panels for entity inspection and full pages for dense tables/long forms/analytics.
-- BLOCKED: Mobbin direct connected inspection was unavailable/paid; no inaccessible evidence was used.
+- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist.
+- VERIFIED: W7.2 route generation executed in GitHub Actions run `34898237425` and produced both `/studio/growth` and `/studio/guests` in the generated route tree.
+- VERIFIED: generated artifact `src/routeTree.gen.ts` was committed by the generator-producing CI step as commit `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`; no hand edit was made.
+- VERIFIED: route-generation freshness check passed in the same run.
+- VERIFIED: typecheck, tests, lint, and production build all passed in run `34898237425` before browser-specific QA continued.
+- VERIFIED: W7.2 route-independent primitives remain reusable and no page migration occurred during W7.2.
+- VERIFIED: W7.3 shell work is now limited to `src/components/studio-shell.tsx`, W7.3 documentation, and shell contract coverage.
+- VERIFIED: Growth and Guests are now safe to expose in Studio navigation because the generated route tree contains both real routes.
+- VERIFIED: Platform Admin remains separate.
+- PENDING_BROWSER_QA: real browser/device validation of W7.3 has not yet completed.
 
-## W7.2 — Controlled Verification Exception / Internal Design System
+## W7.2 Acceptance
+STATUS: ACCEPTED / VERIFIED
 
-- VERIFIED: owner explicitly authorized W7.2 to proceed with a controlled verification exception for route-independent primitives.
-- VERIFIED: `src/routes/studio/growth.tsx` exists and declares the expected route path.
-- VERIFIED: `src/routes/studio/guests.tsx` exists and declares the expected route path.
-- VERIFIED: `src/routeTree.gen.ts` currently does not include those routes.
-- VERIFIED: repository CI uses `npx vite build --mode development` to generate the TanStack route tree.
-- VERIFIED: current execution environment could not clone/run the repository because GitHub DNS/network access failed.
-- PENDING_LOCAL_VERIFICATION: route generation has not successfully executed in a real local/CI environment.
-- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, RTL/accessibility, and real-device QA remain pending.
-- VERIFIED: route-independent internal primitives were added in `src/components/internal-design-system.tsx`.
-- VERIFIED: `tests/internal-design-system-contract.test.mjs` was added for static contract coverage.
-- VERIFIED: W7.2 created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
-- VERIFIED: existing UI/token conventions were reused; no dependency was added.
-- VERIFIED: no pages were migrated; no Studio navigation behavior changed; no Admin tabs changed.
-- VERIFIED: no route, router configuration, generated file, database, RLS, auth, permissions, subscriptions, AI, orders, public menu, deployment, or merge changed.
-- VERIFIED: `DetailPanel` and `ConfirmDialog` were intentionally deferred because no existing reusable project Radix dialog/drawer pattern was established that met the requested reuse constraint.
-- PENDING_LOCAL_VERIFICATION: Growth and Guests remain excluded from primary navigation until route generation succeeds.
+- VERIFIED: route generation is current and contains Growth + Guests.
+- VERIFIED: generated artifact was produced by TanStack generation and committed by CI.
+- VERIFIED: W7.2 components remain route-independent.
+- VERIFIED: no page migration, Studio navigation change, Admin refactor, dependency addition, backend/data/security change, merge, or deployment occurred during W7.2.
+- VERIFIED: typecheck, tests, lint, and production build passed in actual CI.
+
+## W7.3 Studio Shell — 2026-09-15
+STATUS: IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: desktop primary workspaces now target Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: contextual navigation only points to real existing routes.
+- VERIFIED: Brand and Design are grouped under Appearance context; QR and Preview under Publishing context.
+- VERIFIED: Growth includes Overview, Intelligence, Actions, Analytics, Reports using existing routes.
+- VERIFIED: Customers exposes the existing Guests relationship surface; non-existent standalone Loyalty/Campaigns/Feedback/Retention routes were not invented.
+- VERIFIED: mobile primary navigation is Home, Menu, Orders, Growth, More and uses the W7.2 `MobileBottomNav` primitive.
+- VERIFIED: existing permission gates for settings/team destinations are preserved.
+- VERIFIED: Platform Admin remains outside Studio navigation.
+- VERIFIED: no data fetching, backend, RLS, auth, permissions contract, subscriptions, AI, orders, public-menu, or route URL changes were introduced by the shell transformation.
+- PENDING_BROWSER_QA: 390/430px, tablet, desktop, RTL/LTR, keyboard, focus, long tenant names, and mixed-direction content require real browser execution.
 
 ## Exact Next Task
-### W7.2 — Finish execution verification and review
+### W7.3 — Execute quality and browser verification, then review diff
 
-Run the exact command below in a real local/CI environment:
+Run actual route generation, typecheck, tests, lint, production build, existing navigation/component tests, and browser/visual/RTL/accessibility checks. Mark W7.3 complete only when those checks pass and forbidden-file diff review is clean.
 
-```bash
-npx vite build --mode development
-```
-
-Then run the relevant typecheck, lint, tests, build, browser/RTL/accessibility checks and review the final diff. Only after those checks should W7.2 be marked complete and W7.3 authorized.
-
-R7 remains active independently and does not block W7.2. R10 must remain untouched.
-
-## Session Log — 2026-09-15 — W7.2 Controlled Verification Exception
-- VERIFIED: W7.2 proceeded only within the owner-authorized route-independent scope.
-- VERIFIED: internal design system primitives and static contract coverage were added without route integration.
-- PENDING_LOCAL_VERIFICATION: route generation and executable quality/browser checks remain unverified.
-- VERIFIED: no merge or deployment occurred.
+R7 remains active independently and does not block W7.3. R10 must remain untouched.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
