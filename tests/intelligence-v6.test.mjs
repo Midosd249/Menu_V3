@@ -8,7 +8,6 @@ const whatsapp = await readFile("src/lib/menu/ai-whatsapp.ts", "utf8");
 const aiCore = await readFile("src/lib/menu/ai-core.ts", "utf8");
 const providers = await readFile("src/lib/menu/ai-providers.ts", "utf8");
 const reports = await readFile("src/routes/studio/reports.tsx", "utf8");
-const menu = await readFile("src/routes/studio/menu.tsx", "utf8");
 const menuWorkspacePage = await readFile("src/components/studio-menu-workspace-page.tsx", "utf8");
 const menuAi = await readFile("src/lib/menu/ai.ts", "utf8");
 const packageJson = await readFile("package.json", "utf8");
