@@ -86,7 +86,7 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Directional interpretation only; no statistical significance claim.
 
 ## R7 — Initial Evidence Review
-STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
+STATUS: IN PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
 - VERIFIED: canonical table is `menu_v3.menu_events`.
 - VERIFIED: current observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
@@ -126,7 +126,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: server-only credentials.
 
 ## Production / Commercial Readiness
-STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
+STATUS: IN PROGRESS — EXTERNAL EVIDENCE REMAINING
 
 - VERIFIED: repository-side R9 implementation and CI quality gates are complete.
 - VERIFIED: GitHub `main` contains the protected product work.
@@ -161,40 +161,44 @@ Live Menu
 ```
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 NOT STARTED
+STATUS: W7.1 COMPLETE / W7.2 IMPLEMENTATION FOUNDATION COMPLETE / EXECUTION VERIFICATION PENDING
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: W7.1 deliverables were added on working branch `w7-1-ia-audit`: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
-- VERIFIED: `/admin` is a tab-driven monolith with 12 tabs/pseudo-routes.
-- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree; this requires local route-generation verification before W7.2.
+- VERIFIED: `/admin` is a tab-driven monolith with 12 tabs/pseudo-route states.
+- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree.
 - INFERRED: primary internal UX debt is information architecture/discoverability, not missing backend capabilities.
 - PROPOSED: internal workspace hierarchy = Home, Menu, Orders, Growth, Customers, Settings; Appearance and Publishing are consolidated subdomains.
 - PROPOSED: desktop grouped navigation and a dedicated mobile bottom navigation of Home, Menu, Orders, Growth, More.
 - PROPOSED: side panels for contextual entity inspection and full pages for dense tables/long forms/analytics.
 - BLOCKED: Mobbin direct connected inspection was unavailable/paid; no inaccessible evidence was used.
 
-### W7.2 Entry Criteria
-1. Regenerate/verify TanStack route tree locally and explain the `growth`/`guests` mismatch.
-2. Review `docs/W7_1_ROUTE_MAP.md` against current route generation and permission contracts.
-3. Implement only the shared internal shell/IA changes necessary for the approved W7.2 scope.
-4. Run relevant tests, typecheck, lint, build, RTL/mobile and accessibility checks.
-5. Stop before any production deployment.
+### W7.2 — Route-Independent Internal Design System Foundation
+
+- VERIFIED: created `src/components/internal-design-system.tsx` with reusable `InternalShell`, `WorkspaceNavigation`, `WorkspaceHeader`, `PageHeader`, `MobileBottomNav`, `SectionHeader`, `StatusBadge`, `EmptyState`, `LoadingState`, `ErrorState`, `PermissionDeniedState`, `SearchField`, `FilterBar`, `DataTable`, `MetricRow`, `InsightCard`, and `ActionCard`.
+- VERIFIED: created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
+- VERIFIED: created `tests/internal-design-system-contract.test.mjs`.
+- VERIFIED: existing project `Input`, utility, and token conventions are reused; no dependency was added.
+- VERIFIED: no page was migrated and no navigation behavior was changed.
+- VERIFIED: no route, router configuration, generated file, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
+- PENDING_LOCAL_VERIFICATION: route generation has not executed successfully in a real local/CI environment.
+- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, RTL/accessibility, and real-device QA remain pending because the current execution environment cannot run the repository.
+- Required command: `npx vite build --mode development`.
+- Growth and Guests must not be added to primary navigation until route-generation verification succeeds.
+- `DetailPanel` and `ConfirmDialog` remain intentionally deferred because an existing reusable project Radix dialog/drawer pattern was not established without introducing a parallel modal system.
 
 ## Exact Next Task
-### W7.2 — Internal Experience Shell and Navigation
+### W7.2 — Finish execution verification and review
 
-**WAITING FOR EXPLICIT USER APPROVAL.** Do not start W7.2 until the user explicitly approves W7.1.
+Run `npx vite build --mode development` in a real local/CI environment, then run the relevant typecheck/lint/tests/build and browser/RTL/accessibility QA. Review the resulting diff and only then mark W7.2 complete.
 
 R7 remains active independently. R10 remains deferred and untouched.
 
-## Session Log — 2026-09-14 — W7.1 IA Audit
-- VERIFIED: repository-first W7.1 research completed from current `main` at `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: external research covered shadcn Sidebar, Radix accessibility/RTL, Tailwind logical properties, NN/G IA/mobile guidance, WCAG 2.2, Toast Orders/Menu reports, Square menu management, SaaSFrame side panels/patterns, Dribbble visual references, and Refine GitHub reference material.
-- VERIFIED: no new dependency or framework was added.
-- VERIFIED: no UI code, route code, database, RLS, auth, subscription, deployment or merge occurred.
-- VERIFIED: W7.1 deliverables are architecture/reference documents only.
-- UNKNOWN: live browser/device rendering of the current internal shell; W7.1 did not perform browser QA.
-- BLOCKED: Mobbin direct MCP access was unavailable/paid.
+## Session Log — 2026-09-15 — W7.2 Foundation
+- VERIFIED: W7.2 proceeded under the controlled verification exception authorized by the owner.
+- VERIFIED: route-independent internal primitives were created without touching route registration or generated artifacts.
+- PENDING_LOCAL_VERIFICATION: route generation, typecheck, lint, tests, build and browser QA remain unexecuted in the current environment.
+- VERIFIED: no merge or deployment occurred.
 
 ## Continuity Rule
 At the end of every atomic task:
