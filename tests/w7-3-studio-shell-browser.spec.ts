@@ -6,12 +6,14 @@ async function ensureStudio(page: Page) {
   await page.goto(`${BASE_URL}/onboarding`, { waitUntil: "domcontentloaded" });
   if (page.url().includes("/studio")) return;
 
-  await expect(page.getByRole("heading", { name: "جهّز منيو منشأتك" })).toBeVisible({ timeout: 15_000 });
-  await page.getByLabel("اسم المنشأة بالعربية").fill("مطعم اختبار الاستوديو الطويل — Long Studio Restaurant");
-  await page.getByLabel("اسم المنشأة بالإنجليزية (اختياري)").fill("Long Studio Restaurant");
-  await page.getByRole("button", { name: "متابعة" }).click();
-  await page.getByRole("button", { name: "متابعة" }).click();
-  await page.getByRole("button", { name: "تخطي الأصناف" }).click();
+  const setupHeading = page.getByRole("heading", { name: /جهّز منيو منشأتك|Set up your business menu/ });
+  await expect(setupHeading).toBeVisible({ timeout: 15_000 });
+  const isArabic = (await setupHeading.textContent())?.includes("جهّز") ?? false;
+  await page.getByLabel(/اسم المنشأة بالعربية|Business name in Arabic/).fill("مطعم اختبار الاستوديو الطويل — Long Studio Restaurant");
+  await page.getByLabel(/اسم المنشأة بالإنجليزية \(اختياري\)|Business name in English/).fill("Long Studio Restaurant");
+  await page.getByRole("button", { name: /متابعة|Continue/ }).click();
+  await page.getByRole("button", { name: /متابعة|Continue/ }).click();
+  await page.getByRole("button", { name: isArabic ? "تخطي الأصناف" : "Skip items" }).click();
   await expect(page).toHaveURL(/\/studio(?:\/)?$/, { timeout: 15_000 });
 }
 
