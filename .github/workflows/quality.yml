@@ -83,8 +83,13 @@ jobs:
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8082/onboarding >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/"
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1
-              exit $?
+              if STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1; then
+                exit 0
+              fi
+              STATUS=$?
+              echo "[studio-browser] Playwright failed — dev-server log follows"
+              cat .grok/studio-shell-browser.log
+              exit "$STATUS"
             fi
             sleep 0.25
           done
@@ -98,6 +103,17 @@ jobs:
           name: g6-performance-baseline
           path: .grok/performance-audit.json
           if-no-files-found: warn
+          retention-days: 14
+      - name: Upload Studio browser QA diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w7-3-studio-browser-diagnostics
+          path: |
+            .grok/studio-shell-browser.log
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
           retention-days: 14
       - name: Stop built preview
         if: always()
