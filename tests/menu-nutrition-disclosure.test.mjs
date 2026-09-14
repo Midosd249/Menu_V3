@@ -11,7 +11,7 @@ const contemporary = await readFile("src/components/templates/contemporary-resta
 const coverMigration = await readFile("migrations/20260914090000_sura_table_cover.sql", "utf8");
 const cover = await readFile("public/menu-covers/sura-table.svg", "utf8");
 
-test("shared nutrition disclosure exposes the agreed fields and icons", () => {
+test("shared nutrition disclosure exposes the agreed fields and SFDA-aligned indicators", () => {
   assert.ok(disclosure.includes("product.calories != null"));
   assert.ok(disclosure.includes("product.sodiumMg != null"));
   assert.ok(disclosure.includes("product.caffeineMg != null"));
@@ -19,7 +19,9 @@ test("shared nutrition disclosure exposes the agreed fields and icons", () => {
   assert.ok(disclosure.includes("SaltIcon"));
   assert.ok(disclosure.includes("Footprints"));
   assert.ok(disclosure.includes("WALKING_WEIGHT_KG = 70"));
-  assert.ok(disclosure.includes("WALKING_MET = 3.8"));
+  assert.ok(disclosure.includes("WALKING_EFFORT = 3.3"));
+  assert.ok(disclosure.includes("60 * calories"));
+  assert.ok(disclosure.includes("400 mg"));
 });
 
 test("nutrition fields share the same presentation contract as allergens", () => {
@@ -30,14 +32,15 @@ test("nutrition fields share the same presentation contract as allergens", () =>
   assert.ok(disclosure.includes('className={itemClass + " flex items-start gap-2 bg-sand text-muted"}'));
 });
 
-test("nutrition overlay mounts the shared disclosure deterministically and protects it from native cleanup", () => {
-  assert.ok(overlay.includes("aria-modal=\"true\""));
+test("nutrition overlay targets product identity instead of dialog heading", () => {
+  assert.ok(overlay.includes("productNameInDialog"));
+  assert.ok(overlay.includes("[aria-label],h1,h2,h3,h4"));
+  assert.ok(overlay.includes("dialog.querySelectorAll<HTMLElement>(\"p,li,span\")"));
+  assert.ok(!overlay.includes("dialog.querySelectorAll<HTMLElement>(\"p,div\")"));
   assert.ok(overlay.includes("data-menu-nutrition=\"true\""));
   assert.ok(overlay.includes("data-menu-nutrition-host"));
   assert.ok(overlay.includes("data-menu-nutrition-hidden"));
-  assert.ok(overlay.includes("closest(\"[data-menu-nutrition=\\\"true\\\"]\")"));
   assert.ok(overlay.includes("hideNativeNutrition"));
-  assert.ok(overlay.includes("aria-labelledby"));
   assert.ok(overlay.includes("MenuNutritionDisclosure"));
 });
 
