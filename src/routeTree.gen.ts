@@ -25,6 +25,8 @@ import { Route as StudioAnalyticsRouteImport } from './routes/studio/analytics'
 import { Route as StudioBranchesRouteImport } from './routes/studio/branches'
 import { Route as StudioBrandRouteImport } from './routes/studio/brand'
 import { Route as StudioDesignRouteImport } from './routes/studio/design'
+import { Route as StudioGrowthRouteImport } from './routes/studio/growth'
+import { Route as StudioGuestsRouteImport } from './routes/studio/guests'
 import { Route as StudioImportRouteImport } from './routes/studio/import'
 import { Route as StudioIntelligenceRouteImport } from './routes/studio/intelligence'
 import { Route as StudioIntelligenceActionsRouteImport } from './routes/studio/intelligence-actions'
@@ -121,6 +123,16 @@ const StudioDesignRoute = StudioDesignRouteImport.update({
   path: '/design',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
 const StudioImportRoute = StudioImportRouteImport.update({
   id: '/import',
   path: '/import',
@@ -214,6 +226,8 @@ export interface FileRoutesByFullPath {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -246,6 +260,8 @@ export interface FileRoutesByTo {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -280,6 +296,8 @@ export interface FileRoutesById {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -315,6 +333,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -347,6 +367,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -380,6 +402,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -527,6 +551,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioDesignRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
     '/studio/import': {
       id: '/studio/import'
       path: '/import'
@@ -662,6 +700,8 @@ interface StudioRouteChildren {
   StudioBranchesRoute: typeof StudioBranchesRoute
   StudioBrandRoute: typeof StudioBrandRoute
   StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
   StudioImportRoute: typeof StudioImportRoute
   StudioIntelligenceRoute: typeof StudioIntelligenceRoute
   StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
@@ -681,6 +721,8 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioBranchesRoute: StudioBranchesRoute,
   StudioBrandRoute: StudioBrandRoute,
   StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
   StudioImportRoute: StudioImportRoute,
   StudioIntelligenceRoute: StudioIntelligenceRoute,
   StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
