@@ -41,5 +41,5 @@ test("W7.4 Home is Arabic-first and responsive by construction", () => {
   assert.match(page, /sm:grid-cols|lg:grid-cols/);
   assert.match(page, /focus-visible:ring-2/);
   assert.match(page, /aria-labelledby/);
-  assert.match(page, /role=\"progressbar\"/);
+  assert.match(page, /role="progressbar"/);
 });
