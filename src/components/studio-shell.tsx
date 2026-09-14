@@ -141,6 +141,15 @@ export function StudioShell() {
     void navigate({ to: item.id as never });
   };
 
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [moreOpen]);
+
   const platformAdminLink = <Link to="/admin" className="inline-flex min-h-11 items-center gap-2 text-sm text-ink-soft"><ShieldCheck className="size-4" />{lang === "ar" ? "إدارة المنصة" : "Platform Admin"}</Link>;
 
   useEffect(() => {
