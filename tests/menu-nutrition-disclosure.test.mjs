@@ -22,10 +22,12 @@ test("shared nutrition disclosure exposes the agreed fields and icons", () => {
   assert.ok(disclosure.includes("WALKING_MET = 3.8"));
 });
 
-test("nutrition overlay mounts the shared disclosure deterministically", () => {
+test("nutrition overlay mounts the shared disclosure deterministically and normalizes native fields", () => {
   assert.ok(overlay.includes("aria-modal=\"true\""));
   assert.ok(overlay.includes("data-menu-nutrition=\"true\""));
   assert.ok(overlay.includes("data-menu-nutrition-host"));
+  assert.ok(overlay.includes("data-menu-nutrition-hidden"));
+  assert.ok(overlay.includes("hideNativeNutrition"));
   assert.ok(overlay.includes("aria-labelledby"));
   assert.ok(overlay.includes("MenuNutritionDisclosure"));
 });
