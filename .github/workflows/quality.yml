@@ -74,15 +74,28 @@ jobs:
           echo "[preview] failed to become ready — see .grok/preview.log"
           cat .grok/preview.log
           exit 1
+      - name: Prepare Studio browser fixture
+        run: |
+          cat > migrations/99999999_w7_3_studio_fixture.sql <<'SQL'
+          alter table tenant_members
+            add column if not exists is_active boolean not null default true;
+          insert into tenant_members (tenant_id, user_id, role)
+          values ('demo-nafas', 'dev-user', 'owner')
+          on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner';
+          SQL
       - name: Studio Shell browser QA — auth-disabled local mode
         run: |
           mkdir -p .grok
+          cleanup() {
+            kill "$STUDIO_PID" 2>/dev/null || true
+            rm -f migrations/99999999_w7_3_studio_fixture.sql
+          }
+          trap cleanup EXIT
           setsid bash -c 'unset RUNNER_TRACKING_ID; exec env VITE_AUTH_ENABLED=false node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
           STUDIO_PID=$!
-          trap 'kill "$STUDIO_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
-            if curl --silent --show-error --fail http://127.0.0.1:8082/onboarding >/dev/null; then
-              echo "[studio-browser] serving http://127.0.0.1:8082/"
+            if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
+              echo "[studio-browser] serving http://127.0.0.1:8082/studio"
               set +e
               STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1
               STATUS=$?
