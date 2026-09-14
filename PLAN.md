@@ -7,9 +7,9 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` includes the fetched `origin/main` R9 baseline through `fb76e14`; the final merge commit is recorded after this merge completes.
-- VERIFIED: R9 guest relationship batch was merged by squash from PR #136 after GitHub Actions quality run 1453 passed all configured stages.
-- VERIFIED: the R9 migration is portable across Supabase and local PGlite; Supabase `anon`/`authenticated` revokes remain conditional while `public` remains revoked.
+- VERIFIED: canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc` as directly fetched from GitHub on 2026-09-14.
+- VERIFIED: latest main commit mounts the shared nutrition disclosure on the published QR menu route and adds a protecting test.
+- VERIFIED: R9 guest relationship work remains protected in history; current main is newer than the prior continuity SHA.
 - VERIFIED: R8 and all preceding protected work remain in main.
 
 ## Completed Strategic Milestones
@@ -105,14 +105,13 @@ STATUS: CLOSED / VERIFIED / MERGED
 ## R9 — Guest Relationships
 STATUS: CLOSED / VERIFIED / MERGED
 
-- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 merged the R9 guest relationship batch.
 - VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
 - VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles used by the existing permission contract.
 - VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records have RLS enabled and public access revoked.
 - VERIFIED: retention and relationship overview are derived from existing guest/order data; no synthetic evidence is introduced.
 - VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
-- VERIFIED: GitHub Actions quality run 1453 passed route generation, typecheck, all 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
-- VERIFIED: the initial CI failure was a PGlite portability issue caused by unconditional `anon`/`authenticated` role revocation; the migration was hardened conditionally without weakening Supabase security semantics.
+- VERIFIED: prior quality run 1453 passed the configured route generation, typecheck, tests, lint, build, Playwright and browser-quality stages.
 
 ## R10
 STATUS: DEFERRED / NOT STARTED
@@ -130,7 +129,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
 
 - VERIFIED: repository-side R9 implementation and CI quality gates are complete.
-- VERIFIED: GitHub `main` contains the R9 merge commit.
+- VERIFIED: GitHub `main` contains the protected product work.
 - UNKNOWN: direct current Vercel Production environment-variable values.
 - UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA.
@@ -144,9 +143,8 @@ Normal path:
 Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
 
 ## Current Release State
-- VERIFIED: `main` is `afece1cb591566e885520b703117d0994643597a`.
-- VERIFIED: PR #136 is merged.
-- VERIFIED: final R9 quality run 1453 passed all configured stages.
+- VERIFIED: `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: the latest main commit was directly fetched from GitHub.
 - UNKNOWN: direct current Vercel Production deployment state and environment configuration.
 - UNKNOWN: physical real-device Production QA.
 
@@ -162,45 +160,41 @@ Live Menu
 → Production / Commercial Readiness
 ```
 
-## Saudi Food Disclosure Extension — 2026-09-13
+## W7 — Internal Product Experience Architecture
+STATUS: W7.1 COMPLETE / W7.2 NOT STARTED
 
-- STATUS: `IMPLEMENTATION_IN_PROGRESS` / locally changed, not deployed.
-- VERIFIED: official SFDA announcements were reviewed for caffeine disclosure, high-salt labeling, and physical-activity calorie-burn labeling.
-- IMPLEMENTED: nullable sodium and caffeine fields, explicit caffeine basis, owner entry/review, public disclosure, and derived high-salt warning.
-- PRESERVED: existing calories, allergen text, themes, tenant scoping, server validation, and AI non-fabrication boundaries.
-- UNKNOWN: exact technical-regulation presentation, controlled allergen taxonomy, and physical-activity formula.
-- NEXT: resolve pre-existing route/type-generation quality-gate errors, complete local browser QA, then prepare one release batch only after all applicable checks pass.
+- VERIFIED: W7.1 audited current Studio/Admin source architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: W7.1 deliverables were added on working branch `w7-1-ia-audit`: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
+- VERIFIED: `/admin` is a tab-driven monolith with 12 tabs/pseudo-routes.
+- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree; this requires local route-generation verification before W7.2.
+- INFERRED: primary internal UX debt is information architecture/discoverability, not missing backend capabilities.
+- PROPOSED: internal workspace hierarchy = Home, Menu, Orders, Growth, Customers, Settings; Appearance and Publishing are consolidated subdomains.
+- PROPOSED: desktop grouped navigation and a dedicated mobile bottom navigation of Home, Menu, Orders, Growth, More.
+- PROPOSED: side panels for contextual entity inspection and full pages for dense tables/long forms/analytics.
+- BLOCKED: Mobbin direct connected inspection was unavailable/paid; no inaccessible evidence was used.
 
-## Golden Demo Restaurant — 2026-09-13
-
-- STATUS: `VERIFIED_LOCALLY` / data applied to the authorized existing tenant, not deployed.
-- VERIFIED: fictional `مائدة سُرى / Sura Table`, Riyadh context, one preserved branch, 10 coherent categories, and 28 bilingual products.
-- VERIFIED: Kids Menu, calories, sodium, caffeine bases, allergen combinations, availability state, empty image fields, modifier groups, and variants are represented using existing schema.
-- VERIFIED: tenant owner and orders were preserved; no unrelated tenant was changed.
-- VERIFIED: static five-theme contracts and all available repository QA passed.
-- BLOCKED: browser visual QA is unavailable in this environment because Playwright browser binaries are absent and local PGlite schema is behind the current public-menu cache migration.
-- NEXT: prepare one release batch after final diff review; do not deploy from this local task.
+### W7.2 Entry Criteria
+1. Regenerate/verify TanStack route tree locally and explain the `growth`/`guests` mismatch.
+2. Review `docs/W7_1_ROUTE_MAP.md` against current route generation and permission contracts.
+3. Implement only the shared internal shell/IA changes necessary for the approved W7.2 scope.
+4. Run relevant tests, typecheck, lint, build, RTL/mobile and accessibility checks.
+5. Stop before any production deployment.
 
 ## Exact Next Task
-### Production / Commercial Readiness — External Verification Gate
+### W7.2 — Internal Experience Shell and Navigation
 
-Complete only the remaining evidence-dependent work:
-1. verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`;
-2. perform available authenticated/browser/QR/theme/order/RTL Production QA;
-3. perform real-device QA when a real device/browser session is available;
-4. record direct evidence and close the readiness milestone when all applicable checks pass.
+**WAITING FOR EXPLICIT USER APPROVAL.** Do not start W7.2 until the user explicitly approves W7.1.
 
-R7 remains active independently and does not block this task. R10 must remain untouched.
+R7 remains active independently. R10 remains deferred and untouched.
 
-R10 remains deferred by owner decision and is not started.
-
-## Session Log — 2026-09-13 — R9 Closure
-- VERIFIED: PR #136 completed the R9 guest relationship batch and merged into `main`.
-- VERIFIED: the R9 baseline commit is `afece1cb591566e885520b703117d0994643597a`; the current main merge commit is recorded after this merge completes.
-- VERIFIED: quality run 1453 passed all configured stages after the R9 migration portability fix.
-- VERIFIED: no protected authentication, authorization, tenant/branch isolation, subscription, ordering, R6, or R7 semantics were weakened.
-- VERIFIED: R10 is explicitly deferred and not started.
-- UNKNOWN/BLOCKED: Vercel Production state and real-device QA remain external evidence items; free daily deployment quota must not be retried unnecessarily.
+## Session Log — 2026-09-14 — W7.1 IA Audit
+- VERIFIED: repository-first W7.1 research completed from current `main` at `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: external research covered shadcn Sidebar, Radix accessibility/RTL, Tailwind logical properties, NN/G IA/mobile guidance, WCAG 2.2, Toast Orders/Menu reports, Square menu management, SaaSFrame side panels/patterns, Dribbble visual references, and Refine GitHub reference material.
+- VERIFIED: no new dependency or framework was added.
+- VERIFIED: no UI code, route code, database, RLS, auth, subscription, deployment or merge occurred.
+- VERIFIED: W7.1 deliverables are architecture/reference documents only.
+- UNKNOWN: live browser/device rendering of the current internal shell; W7.1 did not perform browser QA.
+- BLOCKED: Mobbin direct MCP access was unavailable/paid.
 
 ## Continuity Rule
 At the end of every atomic task:
