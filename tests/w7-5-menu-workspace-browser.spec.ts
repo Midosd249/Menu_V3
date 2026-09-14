@@ -21,8 +21,8 @@ test("W7.5 Menu Workspace browser QA", async ({ page }) => {
     await expect(page.getByRole("link", { name: "الاستيراد" })).toHaveAttribute("href", "/studio/import");
     await expect(page.getByRole("link", { name: "المعاينة" })).toHaveAttribute("href", "/studio/preview");
     await expect(page.getByRole("link", { name: "رمز QR" })).toHaveAttribute("href", "/studio/qr");
-    await expect(page.getByRole("button", { name: "متاح" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "غير متاح" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "متاح", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "غير متاح", exact: true })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   }
@@ -34,9 +34,9 @@ test("W7.5 Menu Workspace browser QA", async ({ page }) => {
   await search.focus();
   await expect(search).toBeFocused();
 
-  await page.getByRole("button", { name: "غير متاح" }).click();
-  await expect(page.getByRole("button", { name: "غير متاح" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("button", { name: "متاح" })).toHaveAttribute("aria-pressed", "false");
+  await page.getByRole("button", { name: "غير متاح", exact: true }).click();
+  await expect(page.getByRole("button", { name: "غير متاح", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "متاح", exact: true })).toHaveAttribute("aria-pressed", "false");
 
   const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
   await languageGroup.getByRole("button", { name: "EN" }).click();
