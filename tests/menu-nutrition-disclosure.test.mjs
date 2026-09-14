@@ -5,6 +5,7 @@ import test from "node:test";
 const disclosure = await readFile("src/components/menu-nutrition-disclosure.tsx", "utf8");
 const overlay = await readFile("src/components/menu-nutrition-overlay.tsx", "utf8");
 const renderer = await readFile("src/components/theme-renderer.tsx", "utf8");
+const publicRoute = await readFile("src/routes/m.$slug.tsx", "utf8");
 const publicMenu = await readFile("src/components/public-menu.tsx", "utf8");
 const taste = await readFile("src/components/templates/taste.tsx", "utf8");
 const contemporary = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
@@ -49,6 +50,11 @@ test("nutrition overlay targets the actual product dialog and never the cart", (
 
 test("canonical renderer mounts the nutrition integration for every theme family", () => {
   assert.ok(renderer.includes("<MenuNutritionOverlay products={menu.products} lang={lang} />"));
+});
+
+test("published QR route mounts the same nutrition integration as ThemeRenderer", () => {
+  assert.ok(publicRoute.includes('import { MenuNutritionOverlay } from "@/components/menu-nutrition-overlay";'));
+  assert.ok(publicRoute.includes("<MenuNutritionOverlay products={themedMenu.products} lang={locale} />"));
 });
 
 test("custom theme dialogs and the native public renderer are covered", () => {
