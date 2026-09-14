@@ -136,7 +136,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: temporary PGlite fixture solved the browser-only schema blocker and was removed from the runner; no production migration was committed.
 - VERIFIED: physical device QA remains release-stage evidence only.
 
-### W7.4 — IMPLEMENTATION IN PROGRESS / PENDING CI
+### W7.4 — DONE / VERIFIED
 
 - VERIFIED: created `src/components/studio-home.tsx` as the focused operational Home presentation component.
 - VERIFIED: `/studio/` now renders `StudioHome` without changing the route URL.
@@ -144,15 +144,26 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: added W7.4 focused contract test and browser spec.
 - VERIFIED: Home contains loading, error, empty, populated, RTL/LTR, responsive, focus, and semantic progress states.
 - VERIFIED: no fabricated metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
-- VERIFIED: no database, Supabase, RLS, auth, permissions, subscriptions, AI, orders business logic, public menu, Platform Admin, dependency, merge, or deployment changes are in scope.
-- PENDING_CI_VERIFICATION: current-head W7.4 quality and browser run must pass before W7.4 can be marked DONE.
+- VERIFIED: W7.4 final-head quality/browser evidence was completed before W7.5 began.
+
+### W7.5 — DONE / VERIFIED
+
+- VERIFIED: `/studio/menu` is a focused Menu Workspace at the existing route.
+- VERIFIED: real restaurant/branch context, menu counts/state, search, category/availability filters, existing item/category actions, Options, Import, Preview, QR, AI draft assistance, and Menu QA are preserved.
+- VERIFIED: focused tests `tests/w7-5-menu-workspace.test.mjs` and `tests/w7-5-menu-workspace-browser.spec.ts` are present.
+- VERIFIED: final current-head CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permission model, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changes were introduced.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
+## W7.5 Continuity Reconciliation — 2026-09-15
+
+- VERIFIED: prior continuity entries for W7.5 were missing from the four canonical continuity files despite final W7.5 implementation/CI evidence being present in PR #146.
+- VERIFIED: reconciliation records the actual W7.5 status, current verified pre-reconciliation HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, final CI run `34908577942`, changed-file scope, forbidden-area boundary, and physical-device QA limitation.
+- VERIFIED: this reconciliation does not reopen W7.5 or change its product behavior.
 
 ## Exact Next Task
-### W7.4 — Execute current-head quality and browser verification, then review diff
-
-Run route generation, generated-artifact freshness, typecheck, repository tests, focused W7.4 contract tests, lint, production build, Studio Home browser QA, and final diff/forbidden-area review. Mark W7.4 DONE only after direct current-head evidence passes.
-
-R7 remains active independently. R10 remains untouched.
+### W7.6 — Growth Workspace
+Build only the Growth Workspace on top of existing Growth, Intelligence, Intelligence Actions, Analytics, and verified contextual reporting/experiment capability. Preserve routes and business logic; do not begin W7.7 Customers, W7.8 Platform Admin, W7.9 route restructuring, W7.10 full mobile pass, or W7.11 final visual QA.
 
 ## Working Rules
 - `main` is source of truth.

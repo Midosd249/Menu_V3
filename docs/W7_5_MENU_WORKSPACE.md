@@ -1,6 +1,6 @@
 # W7.5 Menu Workspace
 
-Status: IMPLEMENTATION IN PROGRESS — browser QA pending final CI.
+Status: DONE / VERIFIED
 
 ## Purpose
 
@@ -64,6 +64,24 @@ Empty, error, loading, and permission behavior remains tied to existing Studio/s
 
 Focused contract and browser tests are added under `tests/w7-5-menu-workspace.test.mjs` and `tests/w7-5-menu-workspace-browser.spec.ts`.
 
-The quality workflow runs route generation/freshness, typecheck, repository tests, W7.4/W7.5 contracts, lint, production build, public browser QA, Studio Shell/Home/Menu browser QA, and performance audit.
+Final quality run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5 contract tests, lint, production build, Playwright runtime/Chromium, public all-theme browser QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
 
-Final W7.5 status must remain pending until the current-head CI run completes successfully.
+Browser matrix:
+- 390×844 RTL/LTR
+- 430×932 RTL
+- 768×1024 RTL
+- 1280×800 RTL
+- contextual link reachability
+- search keyboard focus
+- availability filter state
+- no horizontal page overflow
+
+The established CI-only PGlite fixture pattern was reused without committing a temporary migration or changing production schema behavior.
+
+## Release Boundary
+
+W7.5 is not merged or deployed by this task. Physical real-device QA remains a release-stage check after a coherent release batch reaches `main`.
+
+## Forbidden-area confirmation
+
+No production database/schema, Supabase, RLS, authentication, authorization/permission model, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies/package manager, route URL restructuring, merge, or deployment changed during W7.5.

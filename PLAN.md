@@ -161,7 +161,7 @@ Live Menu
 ```
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.4 IN PROGRESS
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE — CURRENT WORKING BRANCH
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: W7.1 deliverables were added on working branch `w7-1-ia-audit`.
@@ -174,7 +174,7 @@ STATUS: DONE / VERIFIED
 
 - VERIFIED: primary desktop workspaces are Home, Menu, Orders, Growth, Customers, Settings.
 - VERIFIED: contextual navigation maps only to real existing routes; Reports remains excluded from Studio navigation by repository contract.
-- VERIFIED: Appearance consolidates Brand + Design; Publishing consolidates QR + Preview.
+- VERIFIED: Appearance consolidates Brand + Design; Publishing groups QR + Preview.
 - VERIFIED: mobile primary is Home, Menu, Orders, Growth, More using W7.2 primitives.
 - VERIFIED: existing permission gates and Platform Admin separation remain intact.
 - VERIFIED: accepted browser run `34905256209` reached `/studio` and passed the W7.3 shell test.
@@ -182,31 +182,34 @@ STATUS: DONE / VERIFIED
 - VERIFIED: the CI-only PGlite fixture was temporary and removed by the runner cleanup; no production migration was committed.
 
 ### W7.4 — Studio Home
-STATUS: IMPLEMENTATION_IN_PROGRESS / PENDING_CI_VERIFICATION
+STATUS: DONE / VERIFIED
 
-Purpose: replace the previous feature-directory Home with an Arabic-first Premium Operational Workspace.
+- VERIFIED: Studio Home is the Arabic-first Premium Operational Workspace and no longer a feature directory.
+- VERIFIED: `/studio/` uses existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` sources only.
+- VERIFIED: Home includes attention, current performance, recent operational activity, menu health, evidence-bound growth opportunity, and one contextual next action.
+- VERIFIED: loading/error/empty/populated, RTL/LTR, responsive, focus, semantic progress, and permission-aware action states are represented.
+- VERIFIED: no fabricated business metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
+- VERIFIED: W7.4 current-head quality/browser evidence was reconciled before W7.5 proceeded.
 
-Current sections:
-- greeting and tenant/branch context;
-- Needs attention from existing menu-health attention items;
-- current seven-day OwnerAnalytics metrics;
-- recent existing orders;
-- existing MenuHealth score/checks and real counts;
-- evidence-bound Growth advisor output or neutral Growth link;
-- one contextual next action.
+## W7.5 — Menu Workspace
+STATUS: DONE / VERIFIED
 
-Real data sources are limited to existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor`.
+- VERIFIED: `/studio/menu` is a focused Menu Workspace using real restaurant/branch context and existing menu operations.
+- VERIFIED: existing Options, Import, Preview, and QR routes are exposed contextually; no dead routes were invented.
+- VERIFIED: search, category/availability filters, item/category actions, AI draft assistance, and Menu QA preserve existing behavior.
+- VERIFIED: honest loading, empty, error, permission, RTL/LTR, mixed-direction, responsive, and keyboard states are covered.
+- VERIFIED: no fake metrics, health scores, completeness, revenue, order/customer data, import results, QR state, or sample production data were introduced.
+- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, focused W7.4/W7.5 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
+- UNKNOWN: physical real-device QA remains release-stage evidence.
 
-No fabricated business metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
-
-No database, Supabase, RLS, auth, permissions, subscriptions, AI, orders business logic, public menu, Platform Admin, dependency, merge, or deployment changes are in scope.
+## W7 Continuity Reconciliation — 2026-09-15
+- VERIFIED: final W7.5 state before this update was branch `w7-2-internal-design-system`, HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, PR #146 Draft, no merge/deployment.
+- VERIFIED: continuity documents were stale against the final W7.5 implementation; this reconciliation records the actual evidence without reopening completed work.
+- VERIFIED: documentation-only reconciliation must not be treated as code validation; the next W7.6 quality run must validate the complete current head after implementation changes.
 
 ## Exact Next Task
-### W7.4 — Execute current-head quality and browser verification, then review diff
-
-Run route generation, generated-artifact freshness, typecheck, repository tests, focused W7.4 contract tests, lint, production build, Studio Home browser QA, and final diff/forbidden-area review. Mark W7.4 DONE only after direct current-head evidence passes.
-
-R7 remains active independently. R10 remains deferred and untouched.
+### W7.6 — Growth Workspace
+Unify existing Growth, Intelligence, Intelligence Actions, Analytics, and contextual Reports/experiment capability where verified into one owner-facing Observe → Understand → Act → Measure workspace. Preserve all business logic and route URLs; do not begin W7.7+.
 
 ## Continuity Rule
 At the end of every atomic task:

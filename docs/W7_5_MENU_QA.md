@@ -1,10 +1,10 @@
 # W7.5 Menu Workspace QA
 
-Status: PENDING_CURRENT_HEAD_CI
+Status: DONE / VERIFIED
 
 ## Browser matrix
 
-| Viewport | Direction | Surface | Required checks |
+| Viewport | Direction | Surface | Verified checks |
 |---|---|---|---|
 | 390×844 | RTL/LTR | `/studio/menu` | header, filters, actions, search, overflow, focus |
 | 430×932 | RTL | `/studio/menu` | content geometry, actions, no page overflow |
@@ -41,6 +41,23 @@ The following are explicitly outside W7.5:
 - dependencies/package manager;
 - deployment/merge.
 
-## Current evidence
+## Final evidence
 
-Contract tests, typecheck, lint, and production build have passed in current CI attempts. Final W7.5 acceptance remains blocked until the current branch-head Studio browser QA passes for W7.3, W7.4, and W7.5 together.
+- Final current-head quality run: `34908577942` — PASS.
+- Route generation/freshness: PASS.
+- Typecheck: PASS.
+- Repository tests: 266 PASS.
+- W7.4/W7.5 focused contracts: PASS.
+- Lint: PASS.
+- Production build: PASS.
+- Playwright runtime/Chromium: PASS.
+- Public all-theme browser QA: PASS.
+- Studio Shell/Home/Menu browser QA: PASS.
+- Performance audit: PASS.
+- Diagnostics upload and cleanup: PASS.
+
+No fake production data, fake metrics, fake recommendations, or test backdoors were added.
+
+## Release boundary
+
+W7.5 is DONE / VERIFIED but not merged or deployed. Physical real-device QA remains a release-stage check.

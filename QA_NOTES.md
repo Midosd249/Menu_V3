@@ -76,4 +76,17 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: loading, error, empty, populated, RTL/LTR, keyboard focus, semantic progress, and responsive states are represented.
 - VERIFIED: no fake revenue, orders, guests, conversion rates, recommendations, charts, rankings, or sample numbers were added.
 - VERIFIED: no backend/auth/RLS/permissions/subscription/AI/order/public-menu/Admin/dependency changes were intentionally introduced.
-- PENDING_CI_VERIFICATION: W7.4 current-head quality and browser QA must complete before W7.4 can be marked DONE.
+- VERIFIED: final-head W7.4 quality/browser verification was completed before W7.5 began.
+
+## W7.5 — Menu Workspace — 2026-09-15
+
+- VERIFIED: W7.5 Menu Workspace is DONE / VERIFIED at pre-reconciliation HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`.
+- VERIFIED: final CI run `34908577942` passed route generation, generated freshness, typecheck, 266 repository tests, W7.4/W7.5 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800, RTL/LTR, contextual link reachability, search focus, availability filtering, and no horizontal page overflow.
+- VERIFIED: changed scope was limited to the existing Menu Workspace presentation/wiring, focused tests, W7.3 browser selector contract, quality workflow, and W7.5 documentation.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment change was introduced.
+- VERIFIED: no fake counts, scores, completeness, revenue, order/customer metrics, recommendations, import results, QR state, or sample production data were introduced.
+- UNKNOWN: physical real-device QA remains pending release-stage work only.
+
+## QA Continuity Rule
+Documentation reconciliation is not a substitute for current code validation. Every W7.6 implementation commit must receive a new current-head quality/browser verification before being marked DONE.
