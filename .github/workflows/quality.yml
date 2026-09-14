@@ -37,6 +37,8 @@ jobs:
         run: npm run typecheck
       - name: Tests
         run: npm test
+      - name: W7.4 Studio Home contract tests
+        run: node --test tests/w7-4-studio-home.test.mjs
       - name: Lint
         run: npm run lint
       - name: Production build
@@ -85,7 +87,7 @@ jobs:
           values ('demo-nafas', 'dev-user', 'owner')
           on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner';
           SQL
-      - name: Studio Shell browser QA — auth-disabled local mode
+      - name: Studio Shell and Home browser QA — auth-disabled local mode
         run: |
           mkdir -p .grok
           cleanup() {
@@ -99,7 +101,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/studio"
               set +e
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts --workers=1
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then
