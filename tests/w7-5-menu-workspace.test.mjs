@@ -6,10 +6,10 @@ const route = fs.readFileSync("src/routes/studio/menu.tsx", "utf8");
 const page = fs.readFileSync("src/components/studio-menu-workspace-page.tsx", "utf8");
 const workspace = fs.readFileSync("src/components/studio-menu-workspace.tsx", "utf8");
 
- test("Menu route mounts the focused workspace without changing its URL", () => {
+test("Menu route mounts the focused workspace without changing its URL", () => {
   assert.match(route, /createFileRoute\("\/studio\/menu"\)/);
   assert.match(route, /StudioMenuWorkspacePage/);
-  assert.doesNotMatch(route, /createFileRoute\("\/studio\/menu\/[^\"]+"\)/);
+  assert.doesNotMatch(route, /createFileRoute\("\/studio\/menu\/[^"]+"\)/);
 });
 
 test("Menu Workspace uses existing menu sources and business actions", () => {
@@ -41,7 +41,7 @@ test("Menu Workspace has honest empty/error/permission boundaries and accessibil
   assert.match(workspace, /Start with your menu structure|ابدأ ببناء هيكل القائمة/);
   assert.match(workspace, /aria-label/);
   assert.match(workspace, /aria-pressed/);
-  assert.match(workspace, /scope=\"col\"/);
+  assert.match(workspace, /scope="col"/);
   assert.match(page, /flash\.run/);
   assert.match(page, /result\.ok/);
 });
