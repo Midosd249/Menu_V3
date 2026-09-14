@@ -188,31 +188,55 @@ Do not turn the product into a generic AI chatbot, POS, accounting system, or au
 - NOT DEPLOYED: no push or Vercel deployment was performed.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / ANALYSIS ONLY / W7.2 NOT STARTED
+STATUS: W7.1 COMPLETE / W7.2 IMPLEMENTATION FOUNDATION COMPLETE / EXECUTION VERIFICATION PENDING
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against `main` SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: working branch `w7-1-ia-audit` contains the W7.1 architecture deliverables.
 - VERIFIED: `/admin` is a tab-driven monolith with 12 tab/pseudo-route states.
-- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree; local route generation must explain this before W7.2.
+- VERIFIED: `/studio/growth` and `/studio/guests` source routes exist but are absent from the checked-in generated route tree.
 - INFERRED: primary internal UX debt is information architecture/discoverability, not missing backend capabilities.
 - PROPOSED: Studio hierarchy = Home, Menu, Orders, Growth, Customers, Settings, with Appearance and Publishing as coherent subdomains.
 - PROPOSED: desktop grouped navigation and mobile Home/Menu/Orders/Growth/More.
 - PROPOSED: contextual detail panels for entity inspection and full pages for dense tables/long forms/analytics.
 - BLOCKED: Mobbin direct connected inspection was unavailable/paid; no inaccessible evidence was used.
 
+## W7.2 — Controlled Verification Exception / Internal Design System
+
+- VERIFIED: owner explicitly authorized W7.2 to proceed with a controlled verification exception for route-independent primitives.
+- VERIFIED: `src/routes/studio/growth.tsx` exists and declares the expected route path.
+- VERIFIED: `src/routes/studio/guests.tsx` exists and declares the expected route path.
+- VERIFIED: `src/routeTree.gen.ts` currently does not include those routes.
+- VERIFIED: repository CI uses `npx vite build --mode development` to generate the TanStack route tree.
+- VERIFIED: current execution environment could not clone/run the repository because GitHub DNS/network access failed.
+- PENDING_LOCAL_VERIFICATION: route generation has not successfully executed in a real local/CI environment.
+- PENDING_LOCAL_VERIFICATION: typecheck, lint, full tests, build, browser/visual, RTL/accessibility, and real-device QA remain pending.
+- VERIFIED: route-independent internal primitives were added in `src/components/internal-design-system.tsx`.
+- VERIFIED: `tests/internal-design-system-contract.test.mjs` was added for static contract coverage.
+- VERIFIED: W7.2 created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
+- VERIFIED: existing UI/token conventions were reused; no dependency was added.
+- VERIFIED: no pages were migrated; no Studio navigation behavior changed; no Admin tabs changed.
+- VERIFIED: no route, router configuration, generated file, database, RLS, auth, permissions, subscriptions, AI, orders, public menu, deployment, or merge changed.
+- VERIFIED: `DetailPanel` and `ConfirmDialog` were intentionally deferred because no existing reusable project Radix dialog/drawer pattern was established that met the requested reuse constraint.
+- PENDING_LOCAL_VERIFICATION: Growth and Guests remain excluded from primary navigation until route generation succeeds.
+
 ## Exact Next Task
-### W7.2 — Internal Experience Shell and Navigation
+### W7.2 — Finish execution verification and review
 
-WAITING FOR EXPLICIT USER APPROVAL. Do not start W7.2 until the user explicitly approves W7.1.
+Run the exact command below in a real local/CI environment:
 
-R7 remains active independently and does not block this task. R10 must remain untouched.
+```bash
+npx vite build --mode development
+```
 
-## Session Log — 2026-09-14 — W7.1 IA Audit
-- VERIFIED: repository-first W7.1 research completed from current `main`.
-- VERIFIED: no UI code, route code, database, RLS, auth, subscription, deployment or merge occurred.
-- VERIFIED: W7.1 deliverables are architecture/reference documents only.
-- UNKNOWN: live browser/device rendering of the current internal shell; W7.1 did not perform browser QA.
-- BLOCKED: Mobbin direct MCP access was unavailable/paid.
+Then run the relevant typecheck, lint, tests, build, browser/RTL/accessibility checks and review the final diff. Only after those checks should W7.2 be marked complete and W7.3 authorized.
+
+R7 remains active independently and does not block W7.2. R10 must remain untouched.
+
+## Session Log — 2026-09-15 — W7.2 Controlled Verification Exception
+- VERIFIED: W7.2 proceeded only within the owner-authorized route-independent scope.
+- VERIFIED: internal design system primitives and static contract coverage were added without route integration.
+- PENDING_LOCAL_VERIFICATION: route generation and executable quality/browser checks remain unverified.
+- VERIFIED: no merge or deployment occurred.
 
 ## Continuity Reconciliation Rule
 At the end of every atomic task:
