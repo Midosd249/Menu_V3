@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Sparkles, Star } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Flash, Sheet } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
@@ -188,7 +188,7 @@ export function StudioMenuWorkspacePage() {
         onAddProduct={addProduct}
         onAddCategory={addCategory}
         onReviewMenu={() => void reviewMenu()}
-        onEditProduct={setDraft ? (product) => setDraft(fromProduct(product)) : undefined}
+        onEditProduct={(product) => setDraft(fromProduct(product))}
         onToggleAvailability={(product) => void flash.run(() => toggleProduct({ data: { id: product.id, field: "isAvailable", value: !product.isAvailable } }))}
         onEditCategory={editCategory}
         onDeleteCategory={() => { if (catFilter !== "all") setPendingDelete({ type: "category", id: catFilter }); }}
