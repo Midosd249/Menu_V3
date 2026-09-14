@@ -1,25 +1,9 @@
-import { expect, test, type Page } from "playwright/test";
+import { expect, test } from "playwright/test";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
 
-async function ensureStudio(page: Page) {
-  await page.goto(`${BASE_URL}/onboarding`, { waitUntil: "domcontentloaded" });
-  if (page.url().includes("/studio")) return;
-
-  const setupHeading = page.getByRole("heading", { name: /جهّز منيو منشأتك|Set up your business menu/ });
-  await expect(setupHeading).toBeVisible({ timeout: 45_000 });
-  const isArabic = (await setupHeading.textContent())?.includes("جهّز") ?? false;
-  await page.getByLabel(/اسم المنشأة بالعربية|Business name in Arabic/).fill("مطعم اختبار الاستوديو الطويل — Long Studio Restaurant");
-  await page.getByLabel(/اسم المنشأة بالإنجليزية \(اختياري\)|Business name in English/).fill("Long Studio Restaurant");
-  await page.getByRole("button", { name: /متابعة|Continue/ }).click();
-  await page.getByRole("button", { name: /متابعة|Continue/ }).click();
-  await page.getByRole("button", { name: isArabic ? "تخطي الأصناف" : "Skip items" }).click();
-  await expect(page).toHaveURL(/\/studio(?:\/)?$/, { timeout: 20_000 });
-}
-
 test("W7.3 Studio shell browser QA", async ({ page }) => {
   test.setTimeout(120_000);
-  await ensureStudio(page);
 
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
