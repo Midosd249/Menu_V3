@@ -33,11 +33,15 @@ jobs:
             echo "Generated route tree is already current."
             exit 0
           fi
+          cp src/routeTree.gen.ts /tmp/routeTree.gen.ts
+          git fetch origin "${{ github.head_ref }}"
+          git checkout -B "${{ github.head_ref }}" "origin/${{ github.head_ref }}"
+          cp /tmp/routeTree.gen.ts src/routeTree.gen.ts
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/routeTree.gen.ts
           git commit -m "chore: refresh generated route tree"
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin "${{ github.head_ref }}"
       - name: Verify generated route tree is committed
         run: |
           if ! git diff --exit-code -- src/routeTree.gen.ts; then
