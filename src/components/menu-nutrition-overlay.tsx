@@ -34,7 +34,6 @@ export function MenuNutritionOverlay({ products, lang }: { products: Product[]; 
       if (host && !host.isConnected) host = null;
       const dialogs = Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"]'));
       const candidate = dialogs.find((dialog) => {
-        if (dialog.querySelector('[data-menu-nutrition-host="true"]')) return false;
         const labelledBy = dialog.getAttribute("aria-labelledby");
         const labelled = labelledBy ? document.getElementById(labelledBy) : null;
         const name = labelled?.textContent?.trim() || dialog.querySelector("h1,h2,h3")?.textContent?.trim() || "";
