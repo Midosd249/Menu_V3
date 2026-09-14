@@ -11,7 +11,7 @@ function hideNativeNutrition(dialog: HTMLElement, product: Product, lang: Lang) 
   const sodiumLabel = text(lang, "ملغ صوديوم", "mg sodium");
   const caffeineLabel = text(lang, "ملغ كافيين", "mg caffeine");
   for (const element of Array.from(dialog.querySelectorAll<HTMLElement>("p,div"))) {
-    if (element.dataset.menuNutritionHidden === "true") continue;
+    if (element.dataset.menuNutritionHidden === "true" || element.closest("[data-menu-nutrition=\"true\"]")) continue;
     const content = element.textContent?.trim() ?? "";
     const hide = content.includes(allergenLabel) ||
       (product.calories != null && content.includes(String(product.calories)) && content.includes(calorieLabel)) ||
