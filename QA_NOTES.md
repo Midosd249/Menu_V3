@@ -88,5 +88,17 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: no fake counts, scores, completeness, revenue, order/customer metrics, recommendations, import results, QR state, or sample production data were introduced.
 - UNKNOWN: physical real-device QA remains pending release-stage work only.
 
+## W7.6 — Growth Workspace — 2026-09-15
+
+- VERIFIED: W7.6 is DONE / VERIFIED at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
+- VERIFIED: final current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused contracts, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: W7.6 browser matrix covered 390×844, 430×932, 768×1024, and 1280×800 with RTL/LTR, active navigation, contextual-link reachability, keyboard focus, and no horizontal page overflow.
+- VERIFIED: Growth uses existing `useStudio`, `getOwnerAnalytics`, `buildMenuGrowthEngine`, `buildMenuGrowthAdvisor`, `buildMenuIntelligence`, and `buildIntelligenceDataQuality` sources only.
+- VERIFIED: Reports remains contextual and no `/studio/experiments` route was invented.
+- VERIFIED: no fake metrics, scores, trends, charts, impact, ROI, conversion claims, experiment results, or production sample data were added.
+- VERIFIED: the initial W7.6 current-head browser run exposed only a W7.3 More-sheet test selector defect. Repository inspection showed the real More surface is `fixed inset-0 z-40`; the selector was corrected without changing runtime behavior. The subsequent current-head run passed all Studio browser specs.
+- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
 ## QA Continuity Rule
-Documentation reconciliation is not a substitute for current code validation. Every W7.6 implementation commit must receive a new current-head quality/browser verification before being marked DONE.
+Documentation reconciliation is not a substitute for current code validation. Every W7.6 implementation change received a new current-head quality/browser verification before DONE.

@@ -161,7 +161,7 @@ Live Menu
 ```
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE — CURRENT WORKING BRANCH
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE — CURRENT WORKING BRANCH
 
 - VERIFIED: W7.1 audited current Studio/Admin source architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
 - VERIFIED: W7.1 deliverables were added on working branch `w7-1-ia-audit`.
@@ -191,7 +191,7 @@ STATUS: DONE / VERIFIED
 - VERIFIED: no fabricated business metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
 - VERIFIED: W7.4 current-head quality/browser evidence was reconciled before W7.5 proceeded.
 
-## W7.5 — Menu Workspace
+### W7.5 — Menu Workspace
 STATUS: DONE / VERIFIED
 
 - VERIFIED: `/studio/menu` is a focused Menu Workspace using real restaurant/branch context and existing menu operations.
@@ -202,14 +202,26 @@ STATUS: DONE / VERIFIED
 - VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, focused W7.4/W7.5 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-## W7 Continuity Reconciliation — 2026-09-15
-- VERIFIED: final W7.5 state before this update was branch `w7-2-internal-design-system`, HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, PR #146 Draft, no merge/deployment.
-- VERIFIED: continuity documents were stale against the final W7.5 implementation; this reconciliation records the actual evidence without reopening completed work.
-- VERIFIED: documentation-only reconciliation must not be treated as code validation; the next W7.6 quality run must validate the complete current head after implementation changes.
+### W7 Continuity Reconciliation — 2026-09-15
+- VERIFIED: final W7.5 state before W7.6 was branch `w7-2-internal-design-system`, HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, PR #146 Draft, no merge/deployment.
+- VERIFIED: continuity records were reconciled before W7.6 implementation began.
+
+### W7.6 — Growth Workspace
+STATUS: DONE / VERIFIED
+
+- VERIFIED: current working HEAD is `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
+- VERIFIED: current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: Growth Workspace unifies existing Growth, Intelligence, Intelligence Actions, Analytics, and contextual Reports around Observe → Understand → Act → Measure.
+- VERIFIED: existing sources only: `useStudio`, `getOwnerAnalytics({ days: 7 })`, `buildMenuGrowthEngine`, `buildMenuGrowthAdvisor`, `buildMenuIntelligence`, and `buildIntelligenceDataQuality`.
+- VERIFIED: no new backend, analytics contract, recommendation engine, experiment engine, charting dependency, or AI business logic was introduced.
+- VERIFIED: Reports remains contextual; no `/studio/experiments` route was invented.
+- VERIFIED: no fake metrics, scores, trends, charts, impact, ROI, conversion claims, experiment results, or production sample data were introduced.
+- VERIFIED: the W7.3 More-sheet browser selector was corrected to match the actual `fixed inset-0 z-40` container; this was a test-only regression correction with no runtime product behavior change.
+- UNKNOWN: physical real-device QA remains release-stage evidence.
 
 ## Exact Next Task
-### W7.6 — Growth Workspace
-Unify existing Growth, Intelligence, Intelligence Actions, Analytics, and contextual Reports/experiment capability where verified into one owner-facing Observe → Understand → Act → Measure workspace. Preserve all business logic and route URLs; do not begin W7.7+.
+### W7.7 — Customers Workspace
+Do not begin W7.8+ work. W7.7 is now the only next safe phase.
 
 ## Continuity Rule
 At the end of every atomic task:

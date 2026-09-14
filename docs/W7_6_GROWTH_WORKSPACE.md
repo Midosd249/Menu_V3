@@ -1,6 +1,6 @@
 # W7.6 Growth Workspace
 
-Status: IMPLEMENTATION IN PROGRESS — current-head quality pending.
+Status: DONE / VERIFIED
 
 ## Purpose
 
@@ -98,8 +98,36 @@ W7.6 does not:
 - change Menu, Customers, Orders, Platform Admin, public menu, authentication, authorization, subscriptions, RLS, Supabase, database schema, dependencies, or deployment;
 - begin W7.7, W7.8, W7.9, W7.10, or W7.11.
 
-## Verification target
+## Verification
 
-The W7.6 quality gate must run route generation/freshness, typecheck, repository tests, W7.4/W7.5/W7.6 focused contracts, lint, production build, public browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
+Final current-head quality run `34910495789` passed:
+- route generation;
+- generated route freshness;
+- typecheck;
+- 266 repository tests;
+- W7.4, W7.5, and W7.6 focused contracts;
+- lint;
+- production build;
+- Playwright runtime/Chromium;
+- public all-theme browser QA;
+- Studio Shell/Home/Menu/Growth browser QA;
+- performance audit;
+- diagnostics and cleanup.
 
-The browser matrix is 390×844, 430×932, 768×1024, and 1280×800 with Arabic RTL and supported English LTR, contextual-link reachability, keyboard focus, active navigation semantics, and horizontal-overflow checks.
+Browser matrix:
+- 390×844 RTL/LTR
+- 430×932 RTL
+- 768×1024 RTL
+- 1280×800 RTL
+- contextual-link reachability
+- search/refresh keyboard focus
+- active navigation semantics
+- no horizontal page overflow
+
+## Regression correction
+
+The same current-head run exposed a pre-existing W7.3 browser selector defect in the More-sheet assertion. The defect was not a product behavior issue. The test was corrected to target the actual `fixed inset-0 z-40` More-sheet container, and the subsequent current-head run passed all Studio browser tests. No runtime UI behavior was changed.
+
+## Release Boundary
+
+W7.6 is DONE / VERIFIED but not merged or deployed. Physical real-device QA remains a release-stage check after a coherent release batch reaches `main`.

@@ -1,6 +1,6 @@
 # W7.6 Growth Workspace QA
 
-Status: IMPLEMENTATION IN PROGRESS — current-head verification pending.
+Status: DONE / VERIFIED
 
 ## Contract checks
 
@@ -18,12 +18,12 @@ Status: IMPLEMENTATION IN PROGRESS — current-head verification pending.
 
 ## Browser matrix
 
-| Viewport | Direction | Surface | Required checks |
+| Viewport | Direction | Surface | Result |
 |---|---|---|---|
-| 390×844 | RTL/LTR | `/studio/growth` | hierarchy, contextual tabs, state visibility, focus, overflow |
-| 430×932 | RTL | `/studio/growth` | content geometry, actions, no page overflow |
-| 768×1024 | RTL | `/studio/growth` | tablet hierarchy and navigation geometry |
-| 1280×800 | RTL | `/studio/growth` | desktop workspace hierarchy and contextual navigation |
+| 390×844 | RTL/LTR | `/studio/growth` | PASS |
+| 430×932 | RTL | `/studio/growth` | PASS |
+| 768×1024 | RTL | `/studio/growth` | PASS |
+| 1280×800 | RTL | `/studio/growth` | PASS |
 
 ## Browser assertions
 
@@ -37,9 +37,30 @@ Status: IMPLEMENTATION IN PROGRESS — current-head verification pending.
 - No horizontal page overflow occurs across the required viewport matrix.
 - The refresh action is keyboard reachable and focusable.
 
+## Current-head evidence
+
+- Final current-head CI run: `34910495789` — PASS.
+- Route generation/freshness: PASS.
+- Typecheck: PASS.
+- Repository tests: 266 PASS.
+- W7.4 focused contracts: PASS.
+- W7.5 focused contracts: PASS.
+- W7.6 focused contracts: 10 PASS.
+- Lint: PASS; existing repository warnings remain non-blocking and unrelated.
+- Production build: PASS.
+- Playwright runtime/Chromium: PASS.
+- Public all-theme browser QA: PASS.
+- Studio Shell/Home/Menu/Growth browser QA: PASS.
+- Performance audit: PASS.
+- Diagnostics and cleanup: PASS.
+
+## Browser regression resolved during W7.6
+
+A current-head browser run initially failed only because `tests/w7-3-studio-shell-browser.spec.ts` expected the More surface to expose `role=dialog`. Repository inspection confirmed the real More surface is a `fixed inset-0 z-40` container. The test was corrected to target that actual container. The subsequent run passed all four Studio browser specs.
+
 ## Regression boundary
 
-W7.6 must not modify production database/schema, Supabase, RLS, authentication, authorization/permission model, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies/package manager, route URL structure, merge, or deployment.
+W7.6 did not modify production database/schema, Supabase, RLS, authentication, authorization/permission model, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies/package manager, or route URL structure. No merge or deployment occurred.
 
 ## CI fixture boundary
 
@@ -47,4 +68,4 @@ The established temporary PGlite fixture is created only inside GitHub Actions, 
 
 ## Release boundary
 
-W7.6 is not merged or deployed by this task. Physical real-device QA remains release-stage evidence after a coherent verified release batch reaches `main`.
+W7.6 is DONE / VERIFIED but not merged or deployed. Physical real-device QA remains release-stage evidence after a coherent verified release batch reaches `main`.

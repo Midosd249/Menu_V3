@@ -161,9 +161,19 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: reconciliation records the actual W7.5 status, current verified pre-reconciliation HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, final CI run `34908577942`, changed-file scope, forbidden-area boundary, and physical-device QA limitation.
 - VERIFIED: this reconciliation does not reopen W7.5 or change its product behavior.
 
+### W7.6 — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: Growth Workspace is complete at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
+- VERIFIED: final current-head CI run `34910495789` passed all configured route, test, build, lint, public browser, Studio Shell/Home/Menu/Growth browser, performance, diagnostics, and cleanup stages.
+- VERIFIED: W7.6 uses existing Growth/Intelligence/Actions/Analytics logic only and organizes it around Observe → Understand → Act → Measure.
+- VERIFIED: Reports is contextual only; no Experiments route or engine was invented.
+- VERIFIED: no fake metrics, charts, impact, ROI, conversion, experiment results, production sample data, or new business logic was introduced.
+- VERIFIED: the W7.3 More-sheet test selector was corrected against the actual `fixed inset-0 z-40` runtime container; no product runtime behavior changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
 ## Exact Next Task
-### W7.6 — Growth Workspace
-Build only the Growth Workspace on top of existing Growth, Intelligence, Intelligence Actions, Analytics, and verified contextual reporting/experiment capability. Preserve routes and business logic; do not begin W7.7 Customers, W7.8 Platform Admin, W7.9 route restructuring, W7.10 full mobile pass, or W7.11 final visual QA.
+### W7.7 — Customers Workspace
+Build only the Customers Workspace. Do not begin W7.8 Platform Admin, W7.9 route restructuring, W7.10 full mobile pass, or W7.11 final visual QA.
 
 ## Working Rules
 - `main` is source of truth.
