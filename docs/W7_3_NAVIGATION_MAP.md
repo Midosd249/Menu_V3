@@ -1,5 +1,7 @@
 # W7.3 — Studio Navigation Map
 
+Status: DONE / VERIFIED
+
 ## Primary desktop
 
 | Workspace | Route | Access | Contextual destinations |
@@ -45,6 +47,10 @@ These concepts were part of the approved IA but do not have standalone routes in
 | 3 | Orders `/studio/orders` |
 | 4 | Growth `/studio/growth` |
 | 5 | More (real permission-filtered destinations) |
+
+## Browser Evidence
+
+`VERIFIED`: GitHub Actions run `34905256209` reached `/studio` directly with the deterministic PGlite fixture and passed the Studio Shell browser test across the required desktop/mobile/tablet matrix, RTL/LTR, active-state, keyboard focus, More/Escape, no-dead-link, Reports exclusion, and overflow checks.
 
 ## Platform Admin
 
