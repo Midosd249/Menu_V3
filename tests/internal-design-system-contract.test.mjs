@@ -30,7 +30,7 @@ test("W7.2 internal design system exports the approved route-independent primiti
     assert.match(source, new RegExp(`export function ${name}\\b`), `${name} export is missing`);
   }
 
-  assert.doesNotMatch(source, /@tanstack\\/react-router|createFileRoute/);
+  assert.doesNotMatch(source, /createFileRoute|@tanstack/);
   assert.doesNotMatch(source, /supabase|tenant|subscription|order/i);
 });
 
@@ -42,6 +42,8 @@ test("W7.2 internal navigation primitives remain data-driven and non-routing", (
   assert.match(source, /absolute start-3/);
 });
 
-test("W7.2 source does not edit or reference generated route registration", () => {
-  assert.doesNotMatch(source, /routeTree\.gen|router\.tsx|routes\\/studio\\/growth|routes\\/studio\\/guests/);
+test("W7.2 source does not reference generated route registration", () => {
+  assert.doesNotMatch(source, /routeTree\.gen|router\.tsx/);
+  assert.equal(source.includes("routes/studio/growth"), false);
+  assert.equal(source.includes("routes/studio/guests"), false);
 });
