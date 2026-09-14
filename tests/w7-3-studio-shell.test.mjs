@@ -53,7 +53,7 @@ test("W7.3 does not invent standalone child routes", () => {
 });
 
 test("W7.3 keeps Platform Admin outside Studio workspace navigation", () => {
-  assert.match(shell, /to=\"\/admin\"/);
+  assert.match(shell, /to="\/admin"/);
   assert.match(shell, /Platform Admin/);
 });
 
