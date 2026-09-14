@@ -31,3 +31,26 @@ The production preview initially failed because PGLite runtime files were not co
 ## Production public menu — 2026-09-02
 
 The production preview served `/m/nafas` successfully at 1280×800 and 390×844. Its PGLite fallback loaded the menu migrations, the demo image backfill, and the packaged food assets. Both automated and visual checks found visible RTL content, complete product imagery, no console or page errors, and no horizontal overflow.
+
+## W7.1 — Internal Experience Architecture — 2026-09-14
+
+- VERIFIED: W7.1 is analysis/architecture only; no UI implementation was performed.
+- VERIFIED: current `main` baseline used for audit is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: existing historical owner Studio readiness evidence at 1280×800 and 390×844 remains useful as a baseline for W7.2.
+- UNKNOWN: current rendered Studio/Admin visual behavior was not re-captured in W7.1.
+- UNKNOWN: current browser/device behavior of the internal shell requires a fresh W7.2 browser QA pass after implementation.
+- VERIFIED: W7.1 produced architecture/reference documents only: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
+- BLOCKED: Mobbin direct MCP inspection was unavailable/paid; no inaccessible visual evidence was treated as fact.
+
+## W7.2 QA gate preview
+
+Before W7.2 can be marked complete, verify at minimum:
+- 390px RTL owner shell with Home/Menu/Orders/Growth/More.
+- Desktop grouped navigation and branch context.
+- Arabic/English/mixed-direction content, SAR values, URLs, phone numbers and dates.
+- Keyboard focus order and visible focus.
+- Dialog/drawer/detail-panel focus management.
+- No horizontal overflow at 390px.
+- Existing permission-filtered navigation remains consistent with server authorization.
+- Route generation, typecheck, lint, build and relevant Playwright/browser checks.
+- No regression to public-menu themes.
