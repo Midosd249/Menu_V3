@@ -16,11 +16,12 @@ test("W7.5 Menu Workspace browser QA", async ({ page }) => {
     await expect(page.getByRole("heading", { name: "القائمة" })).toBeVisible();
     await expect(page.getByText("مساحة عمل القائمة", { exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "الأصناف" })).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "أدوات القائمة" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "الخيارات" })).toHaveAttribute("href", "/studio/options");
-    await expect(page.getByRole("link", { name: "الاستيراد" })).toHaveAttribute("href", "/studio/import");
-    await expect(page.getByRole("link", { name: "المعاينة" })).toHaveAttribute("href", "/studio/preview");
-    await expect(page.getByRole("link", { name: "رمز QR" })).toHaveAttribute("href", "/studio/qr");
+    const toolsNav = page.getByRole("navigation", { name: "أدوات القائمة" });
+    await expect(toolsNav).toBeVisible();
+    await expect(toolsNav.getByRole("link", { name: "الخيارات" })).toHaveAttribute("href", "/studio/options");
+    await expect(toolsNav.getByRole("link", { name: "الاستيراد" })).toHaveAttribute("href", "/studio/import");
+    await expect(toolsNav.getByRole("link", { name: "المعاينة" })).toHaveAttribute("href", "/studio/preview");
+    await expect(toolsNav.getByRole("link", { name: "رمز QR" })).toHaveAttribute("href", "/studio/qr");
     await expect(page.getByRole("button", { name: "متاح", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "غير متاح", exact: true })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
