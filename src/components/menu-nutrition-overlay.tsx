@@ -13,6 +13,12 @@ function productNameInDialog(dialog: HTMLElement, product: Product, lang: Lang) 
   );
 }
 
+function isProductDialog(dialog: HTMLElement, products: Product[], lang: Lang) {
+  if (!products.some((item) => productNameInDialog(dialog, item, lang))) return false;
+  const content = dialog.textContent ?? "";
+  return content.includes(text(lang, "أضف للطلب", "Add to order"));
+}
+
 function hideNativeNutrition(dialog: HTMLElement, product: Product, lang: Lang) {
   const allergenLabel = text(lang, "مسببات الحساسية:", "Allergens:");
   const calorieLabel = text(lang, "سعرة حرارية", "calories");
@@ -53,7 +59,7 @@ export function MenuNutritionOverlay({ products, lang }: { products: Product[]; 
     const sync = () => {
       if (host && !host.isConnected) host = null;
       const dialogs = Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"][aria-modal="true"]'));
-      const candidate = dialogs.find((dialog) => products.some((item) => productNameInDialog(dialog, item, lang)));
+      const candidate = dialogs.find((dialog) => isProductDialog(dialog, products, lang));
 
       if (!candidate) {
         if (host) host.remove();
