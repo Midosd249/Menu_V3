@@ -70,7 +70,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - VERIFIED: recommendations are deterministic and grounded in existing analytics evidence.
 - VERIFIED: thin traffic is explicitly treated as insufficient evidence.
 - VERIFIED: recommendations route to existing supported Studio destinations; no automatic menu mutation.
-- VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery are complete and protected.
+- VERIFIED: R8.1–R8.5 are complete and protected.
 
 ## R9 — Guest Relationships — CLOSED / VERIFIED / MERGED
 
@@ -108,50 +108,49 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 ### W7.1 — COMPLETE / ANALYSIS ONLY
 
 - VERIFIED: audited current Studio/Admin architecture from `main` SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: created `docs/W7_SOURCE_SWEEP.md`.
-- VERIFIED: created `docs/W7_1_IA_AUDIT.md`.
-- VERIFIED: created `docs/W7_1_ROUTE_MAP.md`.
-- VERIFIED: created `docs/W7_1_WIREFRAMES.md`.
-- VERIFIED: `/admin` is a tab-driven monolith with 12 tab/pseudo-route states.
-- VERIFIED: `/studio/growth` and `/studio/guests` source files exist but are absent from the checked-in generated route tree.
-- PROPOSED: Studio hierarchy = Home, Menu, Orders, Growth, Customers, Settings.
-- PROPOSED: Appearance and Publishing are consolidated subdomains.
-- PROPOSED: mobile primary navigation = Home, Menu, Orders, Growth, More.
-- BLOCKED: Mobbin direct MCP inspection was unavailable/paid.
+- VERIFIED: created W7.1 source sweep, IA audit, route map, and wireframe documents.
+- VERIFIED: `/admin` is a tab-driven monolith and `/studio/growth` + `/studio/guests` source routes exist.
 - VERIFIED: no UI implementation or route change occurred.
 
 ### W7.2 — ACCEPTED / VERIFIED
 
 - VERIFIED: created route-independent shared internal primitives in `src/components/internal-design-system.tsx`.
-- VERIFIED: created `docs/W7_2_INTERNAL_DESIGN_SYSTEM.md` and `docs/W7_2_COMPONENT_INVENTORY.md`.
-- VERIFIED: added `tests/internal-design-system-contract.test.mjs` for static contract coverage.
+- VERIFIED: created W7.2 design-system documentation and static contract coverage.
 - VERIFIED: no pages were migrated and no Studio/Admin navigation behavior changed during W7.2.
-- VERIFIED: no route, router configuration, backend, RLS, auth, permissions, subscription, AI, orders, or public menu code changed.
+- VERIFIED: no route, backend, RLS, auth, permissions, subscription, AI, orders, or public-menu code changed.
 - VERIFIED: no dependency was added.
-- VERIFIED: `npx vite build --mode development` generated Growth and Guests in the TanStack route tree during GitHub Actions run `34898237425`.
-- VERIFIED: generated `src/routeTree.gen.ts` was committed by generator-producing CI as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
-- VERIFIED: route-tree freshness check, typecheck, tests, lint, and production build passed in the same run.
-- VERIFIED: Growth and Guests are now safe to expose in Studio navigation.
+- VERIFIED: route generation run `34898237425` generated Growth and Guests and passed freshness, typecheck, tests, lint, and production build.
+- VERIFIED: generator-produced route tree commit `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d` was used; no hand edit.
 - `DetailPanel` and `ConfirmDialog` remain deferred.
 
-### W7.3 — IMPLEMENTATION IN PROGRESS
+### W7.3 — DONE / VERIFIED
 
 - VERIFIED: transformed `src/components/studio-shell.tsx` into the approved workspace architecture.
-- VERIFIED: desktop primary workspaces = Home, Menu, Orders, Growth, Customers, Settings.
+- VERIFIED: desktop primary = Home, Menu, Orders, Growth, Customers, Settings.
 - VERIFIED: contextual groups expose only real routes for Menu, Growth, Customers, Appearance/Publishing, and Settings.
-- VERIFIED: non-existent standalone Loyalty/Campaigns/Feedback/Retention/Restaurant/Subscription/Advanced routes were not invented.
+- VERIFIED: non-existent standalone child routes were not invented.
 - VERIFIED: mobile primary = Home, Menu, Orders, Growth, More using W7.2 `MobileBottomNav`.
-- VERIFIED: W7.2 `WorkspaceNavigation` is reused for the desktop workspace layer.
-- VERIFIED: existing permission gates remain active for settings/team destinations.
+- VERIFIED: existing permission gates remain active.
 - VERIFIED: Platform Admin remains separate.
-- VERIFIED: created `docs/W7_3_STUDIO_SHELL.md` and `docs/W7_3_NAVIGATION_MAP.md`.
-- VERIFIED: created `tests/w7-3-studio-shell.test.mjs`.
-- PENDING_BROWSER_QA: actual desktop/mobile/RTL/keyboard/focus validation remains.
+- VERIFIED: accepted GitHub Actions run `34905256209` passed all required quality gates and actual `/studio` browser QA.
+- VERIFIED: temporary PGlite fixture solved the browser-only schema blocker and was removed from the runner; no production migration was committed.
+- VERIFIED: physical device QA remains release-stage evidence only.
+
+### W7.4 — IMPLEMENTATION IN PROGRESS / PENDING CI
+
+- VERIFIED: created `src/components/studio-home.tsx` as the focused operational Home presentation component.
+- VERIFIED: `/studio/` now renders `StudioHome` without changing the route URL.
+- VERIFIED: Home reads only existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` sources.
+- VERIFIED: added W7.4 focused contract test and browser spec.
+- VERIFIED: Home contains loading, error, empty, populated, RTL/LTR, responsive, focus, and semantic progress states.
+- VERIFIED: no fabricated metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
+- VERIFIED: no database, Supabase, RLS, auth, permissions, subscriptions, AI, orders business logic, public menu, Platform Admin, dependency, merge, or deployment changes are in scope.
+- PENDING_CI_VERIFICATION: current-head W7.4 quality and browser run must pass before W7.4 can be marked DONE.
 
 ## Exact Next Task
-### W7.3 — Execute quality and browser verification, then review diff
+### W7.4 — Execute current-head quality and browser verification, then review diff
 
-Run route generation, generated-artifact freshness, typecheck, tests, lint, production build, navigation/component contract tests, and browser/visual/RTL/accessibility QA. Review forbidden-file changes and keep W7.4 untouched.
+Run route generation, generated-artifact freshness, typecheck, repository tests, focused W7.4 contract tests, lint, production build, Studio Home browser QA, and final diff/forbidden-area review. Mark W7.4 DONE only after direct current-head evidence passes.
 
 R7 remains active independently. R10 remains untouched.
 
