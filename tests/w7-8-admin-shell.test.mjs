@@ -16,7 +16,7 @@ test("W7.8 Admin keeps the existing route and all current tab capabilities", () 
 test("W7.8 Admin navigation is grouped around real capabilities only", () => {
   for (const label of ["نظرة عامة", "العملاء", "التجارة والتشغيل", "المبيعات", "الذكاء التشغيلي", "النظام"]) assert.match(admin, new RegExp(label));
   assert.match(admin, /aria-current=\{tab === item\.id \? "page"/);
-  assert.match(admin, /تقسيم المسارات مؤجل صراحةً إلى W7\.9/);
+  assert.match(admin, /W7\.9 يحوّل هذه المساحات إلى روابط URL حقيقية/);
   for (const unsupported of ["Security مستقلة", "Platform Health مستقلة", "Configuration مستقلة"]) assert.match(admin, new RegExp(unsupported));
 });
 
