@@ -28,7 +28,7 @@ test("W7.8 preserves existing Admin operations and authorization boundaries", ()
 });
 
 test("W7.8 contains no fabricated Admin destinations or platform claims", () => {
-  assert.doesNotMatch(admin, /href=\"\/admin\/(security|health|configuration)\"/);
+  assert.doesNotMatch(admin, /href="\/admin\/(security|health|configuration)"/);
   assert.doesNotMatch(admin, /fake|sample data|demo data/i);
   assert.doesNotMatch(admin, /health score|security events|revenue trend|predicted/i);
 });
