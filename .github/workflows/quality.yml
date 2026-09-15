@@ -13,6 +13,19 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: menu_v3_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d menu_v3_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,12 +152,22 @@ jobs:
           echo "[studio-browser] failed to become ready — see .grok/studio-shell-browser.log"
           cat .grok/studio-shell-browser.log
           exit 1
+      - name: Prepare Platform Admin browser database
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+        run: |
+          node scripts/migrate.mjs
+          node --input-type=module -e 'import pg from "pg"; const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 }); await pool.query("insert into menu_v3.platform_admins (user_id) values ($1) on conflict (user_id) do nothing", ["dev-user"]); await pool.end();'
       - name: Platform Admin browser QA — auth-disabled local mode
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+          VITE_AUTH_ENABLED: "false"
+          PLATFORM_ADMIN_USER_IDS: dev-user
         run: |
           mkdir -p .grok
           cleanup() { kill "$ADMIN_PID" 2>/dev/null || true; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec env VITE_AUTH_ENABLED=false PLATFORM_ADMIN_USER_IDS=dev-user node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec env DATABASE_URL="$DATABASE_URL" VITE_AUTH_ENABLED="$VITE_AUTH_ENABLED" PLATFORM_ADMIN_USER_IDS="$PLATFORM_ADMIN_USER_IDS" node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
           ADMIN_PID=$!
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
