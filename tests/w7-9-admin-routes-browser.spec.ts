@@ -22,7 +22,7 @@ for (const route of routes) {
     await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
     await expect(page.locator("[aria-current='page']")).toHaveCount(1);
-    await expect(page.locator("body")).not.toHaveCSS("overflow-x", "visible");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
     await page.reload({ waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
   });
