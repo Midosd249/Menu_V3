@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "playwright/test";
 
 const baseURL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 const adminNav = 'aside[aria-label="تنقل إدارة المنصة"]';
@@ -53,7 +53,9 @@ test("W7.9 Admin browser back/forward preserves workspace routes", async ({ page
 test("W7.9 legacy Admin tab query values normalize safely", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(`${baseURL}/admin?tab=orders&keep=1`, { waitUntil: "networkidle" });
-  await expect(page).toHaveURL(/\/admin\/orders\?keep=1$/);
+  await expect(page).toHaveURL(/\/admin\/orders\?keep=%221%22$/);
+  const search = new URL(page.url()).searchParams;
+  expect(search.get("keep")).toBe("1");
   await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
 
   await page.goto(`${baseURL}/admin?tab=unknown`, { waitUntil: "networkidle" });
