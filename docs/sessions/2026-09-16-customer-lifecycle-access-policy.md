@@ -24,6 +24,7 @@ Complete the new-customer lifecycle so direct account registration cannot create
 - Added `/admin/users` for Platform Owner account listing, phone approval, freeze/unfreeze, and guarded hard deletion.
 - Freeze revokes existing sessions; protected Platform Owner accounts cannot be frozen or deleted through the customer-management path.
 - Hard deletion is blocked for any account linked to tenant membership or tenant ownership, preserving restaurant data.
+- Restored the repository's existing `@radix-ui/react-tooltip` dependency version after detecting an unrelated temporary downgrade during verification.
 - Added focused contract tests and lifecycle documentation.
 
 ## Security decisions
@@ -32,28 +33,30 @@ Complete the new-customer lifecycle so direct account registration cannot create
 - Phone approval is explicitly platform-approved, not falsely represented as SMS/OTP verification.
 - SMS OTP is not exposed as a production capability until an SMS provider is configured.
 - Existing tenants and existing owner memberships are not retroactively changed.
+- Restaurant-linked accounts cannot be hard-deleted through the account-management path; freezing is the safe administrative action until a separate ownership-transfer/archive policy exists.
 
 ## Verification
-- Repository contract tests reached `success` on the corrected branch head during the final Quality run.
-- Route-generation freshness passed after registering `/admin/users` in `src/routeTree.gen.ts`.
-- A previous Quality attempt failed only because a temporary package edit used an unavailable Radix Tooltip version; the branch dependency was restored to its prior version before the corrected run.
-- W9 focused browser workflow was rerun against the corrected branch and reached the workflow's browser QA stage; no manual production deployment was performed.
-- Full final browser/production evidence remains a CI/release gate and is not represented here as a local browser claim.
+- Corrected branch head `f97ce636bd3331247744cd371704b343b0666b0a` passed the final `Menu V3 Quality` run `35037060757` / run `1725`.
+- The final Quality workflow passed route generation/freshness, typecheck, repository tests, W7.4–W7.10 contract tests, lint, production build, Playwright runtime/Chromium, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance/diagnostics, and cleanup.
+- `Menu V3 W9 Orders QA` run `35037060758` / run `26` passed on the corrected branch head.
+- The branch's Vercel status briefly reported `build-rate-limit`; no manual Vercel retry or bypass was used.
+- After merge, GitHub reported the resulting `main` commit with a successful Vercel status; this is build/status evidence, not proof of a manually triggered Production deployment.
 
-## Pull request
-- PR `#152`: `OPEN / READY FOR REVIEW / UNMERGED`.
+## Pull request / merge
+- PR `#152`: merged by squash after final CI passed.
 - Branch: `customer-lifecycle-access-policy`.
-- Current head: `666cd008781136c192c160163b141e16a70479d0`.
-- Target: `main` at `bf28f56d0422fb03aff7b24dc9c50dd28cc9dcce`.
-- Merge was not performed because the user did not authorize merging this PR.
+- Final branch head before merge: `f97ce636bd3331247744cd371704b343b0666b0a`.
+- Target before merge: `main` at `bf28f56d0422fb03aff7b24dc9c50dd28cc9dcce`.
+- Resulting canonical `main`: `1be08a420058a52e0ded536e46bfe658ad7bbcb3`.
 
 ## Deployment
-- No manual Vercel action or production deployment performed.
-- Vercel reported a `build-rate-limit` status during the branch work; this was not manually retried or bypassed.
+- No manual Vercel deployment was performed.
+- Automatic Vercel status for resulting `main` is `success`.
+- Production deployment identity remains `UNKNOWN` without direct Vercel Production evidence.
 
 ## Continuity
-- `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md` still require a safe reconciliation after final CI/release evidence; they were not rewritten blindly because their complete historical content was not safely available through the current repository tool response.
-- Real-device QA remains a release-stage gate.
+- `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md` contain older continuity snapshots and require a controlled reconciliation to the new canonical `main` state rather than blind replacement.
+- Real-device Android/iOS QA remains a release-stage gate.
 
-## Exact next action
-Review PR #152's final CI status and diff. If the user authorizes merge, perform only the required merge, then verify the resulting `main` commit and post-merge quality gates. Do not manually deploy Vercel unless separately authorized.
+## Exact next task
+Controlled continuity reconciliation for `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`, then release-stage real-device QA when explicitly authorized. Do not manually deploy Vercel unless separately authorized.
