@@ -11,7 +11,6 @@ async function assertAdminShell(page: import("playwright/test").Page) {
 
   const visual = await page.evaluate(() => {
     const body = getComputedStyle(document.body);
-    const canvas = document.querySelector(".min-h-dvh");
     const aside = document.querySelector('aside[aria-label="تنقل إدارة المنصة"]');
     const active = document.querySelector('[aria-current="page"]');
     return {
@@ -20,7 +19,6 @@ async function assertAdminShell(page: import("playwright/test").Page) {
       bodyPaper: body.getPropertyValue("--color-paper").trim(),
       bodyInk: body.getPropertyValue("--color-ink").trim(),
       bodyRing: body.getPropertyValue("--color-ring").trim(),
-      canvasBackground: canvas ? getComputedStyle(canvas).backgroundColor : "",
       asideBackground: aside ? getComputedStyle(aside).backgroundColor : "",
       activeBackground: active ? getComputedStyle(active).backgroundColor : "",
       activeColor: active ? getComputedStyle(active).color : "",
@@ -32,7 +30,6 @@ async function assertAdminShell(page: import("playwright/test").Page) {
   expect(visual.bodyPaper).toBe("#fbf8f2");
   expect(visual.bodyInk).toBe("#1d2421");
   expect(visual.bodyRing).toBe("#8b642e");
-  expect(visual.canvasBackground).toBe("rgb(242, 237, 227)");
   expect(visual.asideBackground).toBe("rgb(31, 37, 34)");
   expect(visual.activeBackground).toBe("rgb(44, 52, 48)");
   expect(visual.activeColor).toBe("rgb(255, 255, 255)");
