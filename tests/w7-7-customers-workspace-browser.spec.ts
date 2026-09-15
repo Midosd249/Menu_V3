@@ -11,8 +11,6 @@ async function assertCustomersPage(page: Page) {
   await expect(page.getByRole("heading", { name: "حدود المساحة الحالية" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
-  const customersNav = page.locator('nav[aria-label="مساحات العمل"]');
-  await expect(customersNav.getByRole("button", { name: "العملاء" })).toHaveAttribute("aria-current", "page");
   await expect(page.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
 }
 
@@ -29,6 +27,11 @@ test("W7.7 Customers Workspace browser QA", async ({ page }) => {
     await page.goto(`${BASE_URL}/studio/guests`, { waitUntil: "domcontentloaded" });
     await assertCustomersPage(page);
   }
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(`${BASE_URL}/studio/guests`, { waitUntil: "domcontentloaded" });
+  const customersNav = page.locator('nav[aria-label="مساحات العمل"]');
+  await expect(customersNav.getByRole("button", { name: "العملاء" })).toHaveAttribute("aria-current", "page");
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${BASE_URL}/studio/guests`, { waitUntil: "domcontentloaded" });
