@@ -223,3 +223,263 @@ html[data-menu-theme="gallery"] .menu-public-shell {
     animation-duration: 0.01ms !important;
   }
 }
+
+/*
+ * W8 — Internal Visual System: Direction B / Midnight Ink & Sand
+ *
+ * This block is intentionally scoped through the existing internal route
+ * landmarks. It does not modify the five protected Public Menu themes.
+ * Existing Tailwind color utilities inherit these semantic values through
+ * the internal body scope, avoiding raw color scatter across components.
+ */
+
+body:has([role="banner"]),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) {
+  --internal-app-background: #f2ede3;
+  --internal-surface: #fbf8f2;
+  --internal-surface-elevated: #ffffff;
+  --internal-surface-subtle: #e7ded0;
+  --internal-surface-inverse: #1f2522;
+  --internal-overlay: rgb(31 37 34 / 0.72);
+
+  --internal-primary: #1f2522;
+  --internal-primary-hover: #161b19;
+  --internal-primary-muted: #dde4df;
+  --internal-on-primary: #ffffff;
+  --internal-secondary: #8b642e;
+  --internal-accent: #8b642e;
+  --internal-accent-muted: #e8dcc8;
+  --internal-on-surface: #1d2421;
+  --internal-on-muted: #5e655f;
+  --internal-on-inverse: #ffffff;
+
+  --internal-border: #d3cbc0;
+  --internal-border-strong: #b6ada1;
+  --internal-focus-ring: #8b642e;
+
+  --internal-success: #246044;
+  --internal-success-surface: #e8f0eb;
+  --internal-on-success: #ffffff;
+  --internal-warning: #7a5218;
+  --internal-warning-surface: #f4eadb;
+  --internal-on-warning: #ffffff;
+  --internal-danger: #9a3b32;
+  --internal-danger-surface: #f4e3e1;
+  --internal-on-danger: #ffffff;
+  --internal-info: #2d5c76;
+  --internal-info-surface: #e3edf2;
+  --internal-on-info: #ffffff;
+
+  --internal-disabled: #6f746f;
+  --internal-disabled-surface: #e2ddd4;
+  --internal-disabled-border: #c9c2b8;
+
+  --internal-nav: #1f2522;
+  --internal-nav-foreground: #ffffff;
+  --internal-nav-muted: #c7cec9;
+  --internal-nav-active: #2c3430;
+  --internal-nav-active-indicator: #b58a4a;
+
+  --internal-radius-sm: 8px;
+  --internal-radius-md: 10px;
+  --internal-radius-lg: 14px;
+  --internal-radius-xl: 18px;
+
+  /* Legacy utility aliases used by the existing internal components. */
+  --color-paper: var(--internal-surface);
+  --color-sand: var(--internal-surface-subtle);
+  --color-ink: var(--internal-on-surface);
+  --color-ink-soft: #36403b;
+  --color-muted: var(--internal-on-muted);
+  --color-line: var(--internal-border);
+  --color-accent: var(--internal-accent);
+  --color-accent-foreground: var(--internal-on-primary);
+  --color-ring: var(--internal-focus-ring);
+  --color-good: var(--internal-success);
+  --color-warn: var(--internal-warning);
+  --color-bad: var(--internal-danger);
+
+  --radius-sm: var(--internal-radius-sm);
+  --radius-md: var(--internal-radius-md);
+  --radius-lg: var(--internal-radius-lg);
+  --radius-xl: var(--internal-radius-xl);
+
+  background: var(--internal-app-background);
+  color: var(--internal-on-surface);
+  color-scheme: light;
+}
+
+/* Studio and Admin work canvases */
+body:has([role="banner"]) .min-h-dvh,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) .min-h-dvh {
+  background-color: var(--internal-app-background);
+  color: var(--internal-on-surface);
+}
+
+body:has([role="banner"]) :where(h1),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(h1) {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+}
+
+body:has([role="banner"]) :where(h2),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(h2) {
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation: dark operational spine, warm content surfaces. */
+body:has([role="banner"]) aside,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) aside[aria-label="تنقل إدارة المنصة"] {
+  background: var(--internal-nav);
+  color: var(--internal-nav-foreground);
+  border-color: rgb(255 255 255 / 0.14);
+}
+
+body:has([role="banner"]) aside :where(p, a),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) aside[aria-label="تنقل إدارة المنصة"] :where(p, a) {
+  color: var(--internal-nav-muted);
+}
+
+body:has([role="banner"]) aside :where(a, button)[aria-current="page"],
+body:has(aside[aria-label="تنقل إدارة المنصة"]) aside[aria-label="تنقل إدارة المنصة"] :where(a, button)[aria-current="page"] {
+  background: var(--internal-nav-active) !important;
+  color: var(--internal-nav-foreground) !important;
+  box-shadow: inset 3px 0 0 var(--internal-nav-active-indicator);
+}
+
+body:has([role="banner"]) aside :where(a, button):hover:not(:disabled),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) aside[aria-label="تنقل إدارة المنصة"] :where(a, button):hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.08);
+  color: var(--internal-nav-foreground);
+}
+
+body:has([role="banner"]) aside :where(a, button):focus-visible,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) aside[aria-label="تنقل إدارة المنصة"] :where(a, button):focus-visible {
+  outline-color: #d6b878;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.18), 0 0 0 5px #d6b878;
+}
+
+/* Header and contextual action bars */
+body:has([role="banner"]) header,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) header {
+  background: var(--internal-surface) !important;
+  border-color: var(--internal-border);
+}
+
+body:has([role="banner"]) header :where(button, a),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) header :where(button, a) {
+  min-height: 2.75rem;
+}
+
+/* Inputs, filters, tables and shared state components */
+body:has([role="banner"]) :where(input, textarea, select),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(input, textarea, select) {
+  background: var(--internal-surface-elevated);
+  color: var(--internal-on-surface);
+  border-color: var(--internal-border);
+}
+
+body:has([role="banner"]) :where(input, textarea, select)::placeholder,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(input, textarea, select)::placeholder {
+  color: var(--internal-on-muted);
+  opacity: 1;
+}
+
+body:has([role="banner"]) :where(input, textarea, select):focus,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(input, textarea, select):focus {
+  border-color: var(--internal-focus-ring);
+  box-shadow: 0 0 0 3px rgb(139 100 46 / 0.18);
+}
+
+body:has([role="banner"]) :where(table thead th),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(table thead th) {
+  color: var(--internal-on-surface);
+  background: var(--internal-surface-subtle);
+}
+
+body:has([role="banner"]) :where(table tbody tr:hover),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(table tbody tr:hover) {
+  background: rgb(139 100 46 / 0.055);
+}
+
+body:has([role="banner"]) :where([role="region"][tabindex="0"]):focus-visible,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where([role="region"][tabindex="0"]):focus-visible {
+  outline: 2px solid var(--internal-focus-ring);
+  outline-offset: 3px;
+}
+
+/* Keep status meaning independent from the brand palette. */
+body:has([role="banner"]) .status-success,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) .status-success { color: var(--internal-success); background: var(--internal-success-surface); }
+body:has([role="banner"]) .status-warning,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) .status-warning { color: var(--internal-warning); background: var(--internal-warning-surface); }
+body:has([role="banner"]) .status-danger,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) .status-danger { color: var(--internal-danger); background: var(--internal-danger-surface); }
+body:has([role="banner"]) .status-info,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) .status-info { color: var(--internal-info); background: var(--internal-info-surface); }
+
+/* Shared cards/state panels: quiet layers instead of card walls. */
+body:has([role="banner"]) :where(.border-line.bg-paper),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(.border-line.bg-paper) {
+  border-color: var(--internal-border);
+  background: var(--internal-surface-elevated);
+}
+
+body:has([role="banner"]) :where(.bg-sand),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(.bg-sand) {
+  background-color: var(--internal-surface-subtle);
+}
+
+body:has([role="banner"]) :where(.border-line),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(.border-line) {
+  border-color: var(--internal-border);
+}
+
+body:has([role="banner"]) :where(.text-muted),
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(.text-muted) {
+  color: var(--internal-on-muted);
+}
+
+/* Disabled states remain structured and distinguishable without opacity tricks. */
+body:has([role="banner"]) :where(button, input, textarea, select):disabled,
+body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(button, input, textarea, select):disabled {
+  color: var(--internal-disabled);
+  background: var(--internal-disabled-surface);
+  border-color: var(--internal-disabled-border);
+  opacity: 1;
+}
+
+/* Mobile bottom navigation stays touch-safe and readable. */
+body:has([role="banner"]) nav[aria-label="تنقل مساحة العمل على الهاتف"] {
+  background: rgb(251 248 242 / 0.97);
+  border-color: var(--internal-border);
+  box-shadow: 0 -8px 24px rgb(31 37 34 / 0.10);
+  backdrop-filter: none;
+}
+
+body:has([role="banner"]) nav[aria-label="تنقل مساحة العمل على الهاتف"] [aria-current="page"] {
+  background: var(--internal-primary);
+  color: var(--internal-on-primary);
+}
+
+@media (prefers-contrast: more) {
+  body:has([role="banner"]),
+  body:has(aside[aria-label="تنقل إدارة المنصة"]) {
+    --internal-border: #a9a196;
+    --internal-border-strong: #81786d;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has([role="banner"]) :where(*, *::before, *::after),
+  body:has(aside[aria-label="تنقل إدارة المنصة"]) :where(*, *::before, *::after) {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
