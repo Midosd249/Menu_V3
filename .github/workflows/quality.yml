@@ -35,7 +35,21 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
       - name: Tests
-        run: npm test
+        run: |
+          mkdir -p .grok
+          set +e
+          npm test 2>&1 | tee .grok/npm-test.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          exit "$STATUS"
+      - name: Upload npm test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w7-9-npm-test-diagnostics
+          path: .grok/npm-test.log
+          if-no-files-found: warn
+          retention-days: 2
       - name: W7.4 Studio Home contract tests
         run: node --test tests/w7-4-studio-home.test.mjs
       - name: W7.5 Menu Workspace contract tests
