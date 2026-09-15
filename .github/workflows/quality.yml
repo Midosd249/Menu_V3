@@ -54,6 +54,8 @@ jobs:
         run: node --test tests/w7-7-customers-workspace.test.mjs
       - name: W7.8 Platform Admin shell contract tests
         run: node --test tests/w7-8-admin-shell.test.mjs
+      - name: W7.9 Platform Admin route contract tests
+        run: node --test tests/w7-9-admin-routes.test.mjs
       - name: Lint
         run: npm run lint
       - name: Production build
@@ -142,7 +144,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
               echo "[admin-browser] serving http://127.0.0.1:8083/admin"
               set +e
-              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts --workers=1
+              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then
