@@ -29,6 +29,15 @@ const ROUTES = [
   "/studio/preview",
 ] as const;
 
+async function gotoStudioRoute(page: Parameters<Parameters<typeof test>[1]>[0]["page"], url: string) {
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+  } catch (error) {
+    if (!(error instanceof Error) || !error.message.includes("ERR_ABORTED")) throw error;
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+  }
+}
+
 test("W7.10 Studio responsive route matrix", async ({ page }) => {
   test.setTimeout(240_000);
   for (const viewport of VIEWPORTS) {
@@ -39,7 +48,7 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
       page.on("console", (message) => {
         if (message.type() === "error") consoleErrors.push(message.text());
       });
-      await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
+      await gotoStudioRoute(page, `${BASE_URL}${route}`);
       const shellBanner = page.getByRole("banner").first();
       await expect(shellBanner, `Expected the Studio shell banner for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 30_000 });
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
@@ -63,7 +72,7 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
 
 test("W7.10 Studio shell remains accessible at the narrowest viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
-  await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
+  await gotoStudioRoute(page, `${BASE_URL}/studio`);
   const mobileNav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(mobileNav).toBeVisible();
   await expect(mobileNav.locator("button")).toHaveCount(5);
@@ -76,7 +85,7 @@ test("W7.10 Studio shell remains accessible at the narrowest viewport", async ({
 
 test("W7.10 Studio Menu header keeps the import action reachable at 320px", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
-  await page.goto(`${BASE_URL}/studio/menu`, { waitUntil: "domcontentloaded" });
+  await gotoStudioRoute(page, `${BASE_URL}/studio/menu`);
   const importButton = page.getByRole("button", { name: "استيراد القائمة" });
   await expect(importButton).toBeVisible();
   await expect(importButton).toBeEnabled();
@@ -89,7 +98,7 @@ test("W7.10 Studio Menu header keeps the import action reachable at 320px", asyn
 
 test("W7.10 Studio language switch preserves usable LTR at mobile width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${BASE_URL}/studio/menu`, { waitUntil: "domcontentloaded" });
+  await gotoStudioRoute(page, `${BASE_URL}/studio/menu`);
   const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
   await languageGroup.getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
