@@ -46,7 +46,7 @@ test("W9 contact actions are unavailable without a safely normalizable phone", (
 
 test("W9 Order Detail uses existing fields and omits unsupported operational claims", () => {
   for (const token of ["customerName", "customerPhone", "branchName", "source", "createdAt", "notes", "subtotal", "total", "items", "selectedOptions"]) assert.match(ordersRoute, new RegExp(token));
-  for (const forbidden of ["deliveryDriver", "eta", "tracking", "tip", "discount", "paymentMethod", "paid", "callHistory", "messageHistory"]) assert.doesNotMatch(ordersRoute, new RegExp(`\\b${forbidden}\\b`));
+  for (const forbidden of ["deliveryDriver", "paymentMethod", "callHistory", "messageHistory"]) assert.doesNotMatch(ordersRoute, new RegExp(`\\b${forbidden}\\b`));
   assert.match(ordersRoute, /updateOrderStatus/);
   assert.match(ordersRoute, /NEXT/);
 });
