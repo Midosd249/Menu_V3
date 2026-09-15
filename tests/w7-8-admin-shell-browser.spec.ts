@@ -31,24 +31,26 @@ test("W7.8 Platform Admin shell browser QA", async ({ page }) => {
   await expect(page.getByText("لا توجد شاشة Platform Health مستقلة")).toBeVisible();
   await expect(page.getByText("لا توجد شاشة Configuration مستقلة")).toBeVisible();
 
-  for (const item of [
-    "المطاعم",
-    "العملاء والحسابات",
-    "الفروع",
-    "الطلبات",
-    "الاشتراكات",
-    "طلبات الخدمات",
-    "العملاء المحتملون",
-    "المشاريع",
-    "تحليلات المنصة",
-    "سجل النشاط",
-    "النظام والأمان",
-  ]) {
-    const control = nav.getByRole("button", { name: item });
-    await control.click();
-    await expect(control).toHaveAttribute("aria-current", "page");
+  const items = [
+    ["المطاعم", "/admin/restaurants"],
+    ["العملاء والحسابات", "/admin/clients"],
+    ["الفروع", "/admin/branches"],
+    ["الطلبات", "/admin/orders"],
+    ["الاشتراكات", "/admin/subscriptions"],
+    ["طلبات الخدمات", "/admin/service-requests"],
+    ["العملاء المحتملون", "/admin/leads"],
+    ["المشاريع", "/admin/projects"],
+    ["تحليلات المنصة", "/admin/analytics"],
+    ["سجل النشاط", "/admin/activity"],
+    ["النظام والأمان", "/admin/system"],
+  ] as const;
+
+  for (const [label, route] of items) {
+    await nav.getByRole("button", { name: label }).click();
+    await expect(page).toHaveURL(new RegExp(`${route.replaceAll("/", "\\/")}$`));
+    await expect(nav.getByRole("button", { name: label })).toHaveAttribute("aria-current", "page");
   }
 
-  await page.getByRole("button", { name: "النظام والأمان" }).focus();
-  await expect(page.getByRole("button", { name: "النظام والأمان" })).toBeFocused();
+  await nav.getByRole("button", { name: "النظام والأمان" }).focus();
+  await expect(nav.getByRole("button", { name: "النظام والأمان" })).toBeFocused();
 });
