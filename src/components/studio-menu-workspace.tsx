@@ -72,7 +72,7 @@ export function StudioMenuWorkspace({
   return (
     <div className="mx-auto grid max-w-6xl gap-6">
       <header className="grid gap-4 rounded-2xl border border-line bg-paper p-5 shadow-sm sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
               <UtensilsCrossed className="size-4" />
