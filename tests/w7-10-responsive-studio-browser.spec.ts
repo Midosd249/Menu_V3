@@ -40,9 +40,8 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
         if (message.type() === "error") consoleErrors.push(message.text());
       });
       await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
-      const mainCount = await page.locator("main").count();
-      expect(mainCount, `Expected a main region for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeGreaterThan(0);
-      await expect(page.locator("main").first()).toBeVisible();
+      const main = page.locator("main").first();
+      await expect(main, `Expected a main region for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 15_000 });
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
       const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
       expect(overflow.scrollWidth, `Horizontal overflow at ${route} ${viewport.name}px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
