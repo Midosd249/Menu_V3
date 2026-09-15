@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Activity, Archive, BarChart3, Building2, CheckCircle2, ClipboardList, Clock3, Copy, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Phone, RefreshCw, Search, Settings, ShieldCheck, Store, UserCheck, Users, Wallet, Wrench, XCircle } from "lucide-react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ErrorState, LoadingState, MetricRow, PageHeader, SectionHeader } from "@/components/internal-design-system";
@@ -11,9 +11,77 @@ import { archivePlatformOrder, getPlatformDashboard, getPlatformOrders, updatePl
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/menu/orders";
 
-export const Route = createFileRoute("/admin")({ component: PlatformAdminPage });
+export type Tab = "overview" | "tenants" | "orders" | "clients" | "branches" | "leads" | "projects" | "requests" | "subscriptions" | "analytics" | "activity" | "system";
+export type AdminRoutePath = "/admin" | "/admin/restaurants" | "/admin/orders" | "/admin/clients" | "/admin/branches" | "/admin/leads" | "/admin/projects" | "/admin/service-requests" | "/admin/subscriptions" | "/admin/analytics" | "/admin/activity" | "/admin/system";
 
-type Tab = "overview" | "tenants" | "orders" | "clients" | "branches" | "leads" | "projects" | "requests" | "subscriptions" | "analytics" | "activity" | "system";
+export const ADMIN_ROUTES: Record<Tab, AdminRoutePath> = {
+  overview: "/admin",
+  tenants: "/admin/restaurants",
+  orders: "/admin/orders",
+  clients: "/admin/clients",
+  branches: "/admin/branches",
+  leads: "/admin/leads",
+  projects: "/admin/projects",
+  requests: "/admin/service-requests",
+  subscriptions: "/admin/subscriptions",
+  analytics: "/admin/analytics",
+  activity: "/admin/activity",
+  system: "/admin/system",
+};
+
+export const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
+  restaurants: "tenants",
+  orders: "orders",
+  clients: "clients",
+  branches: "branches",
+  leads: "leads",
+  projects: "projects",
+  "service-requests": "requests",
+  subscriptions: "subscriptions",
+  analytics: "analytics",
+  activity: "activity",
+  system: "system",
+};
+
+const LEGACY_TAB_ROUTES: Record<string, AdminRoutePath> = {
+  overview: "/admin",
+  tenants: "/admin/restaurants",
+  orders: "/admin/orders",
+  clients: "/admin/clients",
+  branches: "/admin/branches",
+  leads: "/admin/leads",
+  projects: "/admin/projects",
+  requests: "/admin/service-requests",
+  subscriptions: "/admin/subscriptions",
+  analytics: "/admin/analytics",
+  activity: "/admin/activity",
+  system: "/admin/system",
+};
+
+export const Route = createFileRoute("/admin")({
+  beforeLoad: ({ location }) => {
+    if (location.pathname !== "/admin") return;
+    const params = new URLSearchParams(location.searchStr);
+    const legacyTab = params.get("tab");
+    if (!legacyTab) return;
+    const target = LEGACY_TAB_ROUTES[legacyTab];
+    params.delete("tab");
+    if (!target) {
+      throw redirect({ to: "/admin", search: Object.fromEntries(params.entries()) as never, replace: true });
+    }
+    const search = Object.fromEntries(params.entries());
+    if (target === "/admin" && Object.keys(search).length === 0) {
+      throw redirect({ to: "/admin", replace: true });
+    }
+    throw redirect({ to: target, search: search as never, replace: true });
+  },
+  component: AdminRouteShell,
+});
+
+function AdminRouteShell() {
+  return <Outlet />;
+}
+
 const LABELS: Record<LeadStatus, string> = { new: "جديد", contacted: "تم التواصل", qualified: "مؤهل", converted: "تم التحويل", lost: "مغلق" };
 const ORDER_LABELS: Record<OrderStatus, string> = { new: "جديد", confirmed: "مؤكد", preparing: "قيد التحضير", ready: "جاهز", completed: "مكتمل", cancelled: "ملغى" };
 const emptyPlatform = (): PlatformDashboard => ({ tenants: [], branches: [], members: [], projects: [], serviceRequests: [], activity: [], analytics: { visits: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, orders: 0, completedOrders: 0 }, tenantCount: 0, activeTenantCount: 0, publishedTenantCount: 0, branchCount: 0, productCount: 0, orderCount: 0, openOrderCount: 0, leadCount: 0, newLeadCount: 0, menuEventCount: 0, activeSubscriptionCount: 0, trialSubscriptionCount: 0 });
@@ -46,10 +114,10 @@ const ADMIN_GROUPS: Array<{ id: string; label: string; items: Tab[] }> = [
   { id: "system", label: "النظام", items: ["system"] },
 ];
 
-function PlatformAdminPage() {
+export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Tab }) {
   const navigate = useNavigate();
   const { user, isPending } = useCurrentUserState();
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [platform, setPlatform] = useState<PlatformDashboard>(emptyPlatform);
   const [orders, setOrders] = useState<PlatformOrder[]>([]);
   const [orderStatus, setOrderStatus] = useState<OrderStatus | "all">("all");
@@ -91,6 +159,12 @@ function PlatformAdminPage() {
       if (!l.ok) setError((current) => current || l.error); else setLeads(l.data);
     } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحميل مركز تحكم المنصة"); }
     finally { setLoading(false); }
+  }
+
+  function selectTab(next: Tab) {
+    setTab(next);
+    setQuery("");
+    void navigate({ to: ADMIN_ROUTES[next] });
   }
 
   useEffect(() => {
@@ -143,11 +217,11 @@ function PlatformAdminPage() {
       eyebrow="Platform Admin"
       title="مركز تحكم Menu V3"
       description="مساحة تشغيل مستقلة لمالك المنصة لمراجعة المطاعم، الطلبات، الحسابات، المبيعات، الذكاء التشغيلي، والنظام — دون خلطها بمساحة تشغيل المطعم."
-      actions={<div className="flex flex-wrap gap-2"><button type="button" onClick={() => setTab("leads")} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-line bg-paper px-4 py-2 text-sm font-medium text-ink"><ClipboardList className="size-4" />اعتماد العملاء الجدد</button><Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }} disabled={loading || ordersLoading}><RefreshCw className={cn("size-4", (loading || ordersLoading) && "animate-spin")} /> تحديث البيانات</Button></div>}
+      actions={<div className="flex flex-wrap gap-2"><button type="button" onClick={() => selectTab("leads")} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-line bg-paper px-4 py-2 text-sm font-medium text-ink"><ClipboardList className="size-4" />اعتماد العملاء الجدد</button><Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }} disabled={loading || ordersLoading}><RefreshCw className={cn("size-4", (loading || ordersLoading) && "animate-spin")} /> تحديث البيانات</Button></div>}
     />
 
     <div className="grid gap-5 lg:grid-cols-[250px_minmax(0,1fr)]">
-      <AdminNavigation tab={tab} platform={platform} onSelect={(next) => { setTab(next); setQuery(""); }} />
+      <AdminNavigation tab={tab} platform={platform} onSelect={selectTab} />
 
       <section className="min-w-0 grid gap-4">
         {error ? <ErrorState title="تعذر تحميل بعض بيانات المنصة" message={error} action={<Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }}>إعادة المحاولة</Button>} /> : null}
@@ -167,7 +241,7 @@ function PlatformAdminPage() {
             </div>
           </section>
           {tab !== "overview" && tab !== "system" && tab !== "orders" ? <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} /> : null}
-          {tab === "overview" ? <Overview platform={platform} leads={leads} onTab={setTab} onApproval={() => setTab("leads")} /> : null}
+          {tab === "overview" ? <Overview platform={platform} onTab={selectTab} onApproval={() => selectTab("leads")} /> : null}
           {tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}
           {tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}
           {tab === "clients" ? <Clients rows={filteredMembers} /> : null}
@@ -202,7 +276,7 @@ function AdminNavigation({ tab, platform, onSelect }: { tab: Tab; platform: Plat
         </div>
       </section>)}
     </nav>
-    <p className="px-3 py-3 text-[11px] leading-5 text-muted">تبقى كل المساحات داخل `/admin` في W7.8. تقسيم المسارات مؤجل صراحةً إلى W7.9.</p>
+    <p className="px-3 py-3 text-[11px] leading-5 text-muted">W7.9 يحوّل هذه المساحات إلى روابط URL حقيقية مع الحفاظ على نفس بيانات وأفعال Admin.</p>
   </aside>;
 }
 
@@ -211,13 +285,13 @@ function filterRows<T>(rows: T[], q: string, fields: (row: T) => string[]) { con
 function Toolbar({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) { return <label className="relative block rounded-2xl border border-line bg-paper p-3"><Search className="pointer-events-none absolute start-6 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></label>; }
 function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-muted">{text}</div>; }
 
-function Overview({ platform, leads, onTab, onApproval }: { platform: PlatformDashboard; leads: AdminDashboard; onTab: (tab: Tab) => void; onApproval: () => void }) { return <div className="grid gap-6">
+function Overview({ platform, onTab, onApproval }: { platform: PlatformDashboard; onTab: (tab: Tab) => void; onApproval: () => void }) { return <div className="grid gap-6">
   <section className="grid gap-3"><SectionHeader title="العملاء" description="المطاعم والحسابات والفروع التي تظهر فعليًا في بيانات المنصة." /><div className="grid gap-3 md:grid-cols-3"><Panel title="المطاعم" icon={<Store className="size-5" />} text={`${platform.tenantCount} مطعم · ${platform.activeTenantCount} نشط · ${platform.publishedTenantCount} منشور`} action="إدارة المطاعم" onClick={() => onTab("tenants")} /><Panel title="الحسابات والفريق" icon={<Users className="size-5" />} text={`${platform.members.length} عضوية مسجلة في البيانات الحالية`} action="عرض الحسابات" onClick={() => onTab("clients")} /><Panel title="الفروع" icon={<Building2 className="size-5" />} text={`${platform.branchCount} فرع مرتبط بالمطاعم`} action="إدارة الفروع" onClick={() => onTab("branches")} /></div></section>
   <section className="grid gap-3"><SectionHeader title="التجارة والتشغيل" description="عمليات حقيقية متاحة من مركز المنصة." /><div className="grid gap-3 md:grid-cols-3"><Panel title="الطلبات" icon={<PackageCheck className="size-5" />} text={`${platform.openOrderCount} مفتوح الآن · ${platform.orderCount} طلبًا غير مؤرشف`} action="فتح الطلبات" onClick={() => onTab("orders")} /><Panel title="الاشتراكات" icon={<Wallet className="size-5" />} text={`${platform.activeSubscriptionCount} نشطة · ${platform.trialSubscriptionCount} تجريبية`} action="عرض الاشتراكات" onClick={() => onTab("subscriptions")} /><Panel title="طلبات الخدمات" icon={<Wrench className="size-5" />} text={`${platform.serviceRequests.length} طلب خدمة في البيانات الحالية`} action="عرض الطلبات" onClick={() => onTab("requests")} /></div></section>
-  <section className="grid gap-3"><SectionHeader title="المبيعات" description="العملاء المحتملون والمشاريع الفعلية فقط." /><div className="grid gap-3 md:grid-cols-2"><Panel title="العملاء المحتملون" icon={<ClipboardList className="size-5" />} text={`${leads.newCount} جديد · ${leads.qualifiedCount} مؤهل · ${leads.convertedCount} محوّل`} action="فتح CRM" onClick={() => onTab("leads")} /><Panel title="المشاريع" icon={<Wrench className="size-5" />} text={`${platform.projects.length} مشروع في البيانات الحالية`} action="إدارة المشاريع" onClick={() => onTab("projects")} /></div></section>
+  <section className="grid gap-3"><SectionHeader title="المبيعات" description="العملاء المحتملون والمشاريع الفعلية فقط." /><div className="grid gap-3 md:grid-cols-2"><Panel title="العملاء المحتملون" icon={<ClipboardList className="size-5" />} text={`${platform.leadCount} إجمالي · ${platform.newLeadCount} جديد`} action="فتح CRM" onClick={() => onTab("leads")} /><Panel title="المشاريع" icon={<Wrench className="size-5" />} text={`${platform.projects.length} مشروع في البيانات الحالية`} action="إدارة المشاريع" onClick={() => onTab("projects")} /></div></section>
   <section className="grid gap-3"><SectionHeader title="الذكاء التشغيلي" description="تحليلات وسجل نشاط مشتقان من البيانات الحالية، دون توقعات أو درجات مخترعة." /><div className="grid gap-3 md:grid-cols-2"><Panel title="تحليلات المنصة" icon={<BarChart3 className="size-5" />} text={`${platform.analytics.visits} زيارة · ${platform.analytics.productViews} مشاهدة صنف · ${platform.analytics.qrScans} مسح QR`} action="فتح التحليلات" onClick={() => onTab("analytics")} /><Panel title="سجل النشاط" icon={<Activity className="size-5" />} text={`${platform.activity.length} حدثًا متاحًا للمراجعة`} action="فتح السجل" onClick={() => onTab("activity")} /></div></section>
-  <LeadContactPanel leads={leads.leads} onApproval={onApproval} />
-  <section className="rounded-2xl border border-line bg-sand/20 p-4"><SectionHeader title="حدود المساحة" description="لا توجد هنا مساحات مستقلة للأمان أو صحة المنصة أو الإعدادات؛ W7.8 يعرض فقط ما يدعمه Admin الحالي." /><div className="mt-3 flex flex-wrap gap-2 text-xs text-muted"><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Security مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Platform Health مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Configuration مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">Route splitting مؤجل إلى W7.9</span></div></section>
+  <LeadContactPanel leads={[]} onApproval={onApproval} />
+  <section className="rounded-2xl border border-line bg-sand/20 p-4"><SectionHeader title="حدود المساحة" description="لا توجد هنا مساحات مستقلة للأمان أو صحة المنصة أو الإعدادات؛ W7.9 يحافظ على نفس حدود Admin الحالية." /><div className="mt-3 flex flex-wrap gap-2 text-xs text-muted"><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Security مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Platform Health مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Configuration مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">التقسيم أصبح route-based</span></div></section>
 </div>; }
 function LeadContactPanel({ leads, onApproval }: { leads: AdminDashboard["leads"]; onApproval: () => void }) {
   const visible = leads.slice(0, 3);
