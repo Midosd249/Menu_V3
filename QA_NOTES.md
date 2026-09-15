@@ -105,14 +105,15 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 
 ## W7.9 — Platform Admin Route Architecture / Route Splitting — 2026-09-15
 
-- VERIFIED: final quality run `34925141809` / run 1638 passed all configured quality and browser stages at implementation/test HEAD `db9e2f6a816d6e1d10fc7e37bfaad4c7004a40f0`.
+- VERIFIED: final route correction quality run `34925141809` / run 1638 passed all configured quality and browser stages at implementation/test HEAD `db9e2f6a816d6e1d10fc7e37bfaad4c7004a40f0` before continuity reconciliation.
 - VERIFIED: the original Platform Admin browser blocker was an `AUTH_DISABLED_FIXTURE_GAP`; the CI-only temporary PostgreSQL service now applies the required compatible existing migrations, creates missing Supabase-compatible roles, and seeds `dev-user` in `menu_v3.platform_admins`. This fixture is runner-local and does not modify production schema or migration files.
 - VERIFIED: the only remaining W7.9 browser failure was a test serialization expectation. The actual router URL was `/admin/orders?keep=%221%22`; `URLSearchParams.get("keep")` therefore returns `"1"`. The test now asserts the actual serialized value rather than the unencoded expectation.
 - VERIFIED: `/admin` remains Overview/Shell; `/admin/$workspace` is the protected workspace adapter; `setTab(next)` remains intact and URL synchronization is additive through `navigate({ to: ADMIN_ROUTES[next] })`.
-- VERIFIED: all real Admin child routes, legacy known-tab normalization, unknown-tab safe fallback, refresh, back/forward, active navigation, responsive geometry, and authorized Admin browser state passed in CI.
+- VERIFIED: all real Admin child routes, legacy known-tab normalization, unknown-tab safe fallback, refresh, back/forward, active navigation, responsive geometry, and authorized Admin browser state passed in the final route-correction run.
 - VERIFIED: public all-theme QA and Studio Shell/Home/Menu/Growth/Customers browser QA remained green.
 - VERIFIED: no fake Admin data, metrics, charts, health scores, security events, recommendations, or operator sample data were added.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, Vercel, merge, or deployment changed.
+- VERIFIED: continuity documentation for W7.9 has now been reconciled in the canonical project-control and W7.9 audit/architecture/QA records; a final current-head quality run is required to validate this documentation-only reconciliation.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
 ## QA Continuity Rule
