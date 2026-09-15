@@ -12,7 +12,7 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,6 +44,8 @@ jobs:
         run: node --test tests/w7-6-growth-workspace.test.mjs
       - name: W7.7 Customers Workspace contract tests
         run: node --test tests/w7-7-customers-workspace.test.mjs
+      - name: W7.8 Platform Admin shell contract tests
+        run: node --test tests/w7-8-admin-shell.test.mjs
       - name: Lint
         run: npm run lint
       - name: Production build
@@ -121,6 +123,31 @@ jobs:
           echo "[studio-browser] failed to become ready — see .grok/studio-shell-browser.log"
           cat .grok/studio-shell-browser.log
           exit 1
+      - name: Platform Admin browser QA — auth-disabled local mode
+        run: |
+          mkdir -p .grok
+          cleanup() { kill "$ADMIN_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec env VITE_AUTH_ENABLED=false PLATFORM_ADMIN_USER_IDS=dev-user node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
+          ADMIN_PID=$!
+          for attempt in $(seq 1 120); do
+            if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
+              echo "[admin-browser] serving http://127.0.0.1:8083/admin"
+              set +e
+              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts --workers=1
+              STATUS=$?
+              set -e
+              if [ "$STATUS" -ne 0 ]; then
+                echo "[admin-browser] Playwright failed — dev-server log follows"
+                cat .grok/platform-admin-browser.log
+              fi
+              exit "$STATUS"
+            fi
+            sleep 0.25
+          done
+          echo "[admin-browser] failed to become ready — see .grok/platform-admin-browser.log"
+          cat .grok/platform-admin-browser.log
+          exit 1
       - name: Upload browser performance baseline
         if: always()
         uses: actions/upload-artifact@v4
@@ -136,6 +163,7 @@ jobs:
           name: w7-3-studio-browser-diagnostics
           path: |
             .grok/studio-shell-browser.log
+            .grok/platform-admin-browser.log
             test-results/
             playwright-report/
           if-no-files-found: ignore
