@@ -56,7 +56,7 @@ test("W7.9 preserves every existing Admin workspace mapping", () => {
   }
   assert.match(admin, /const ADMIN_WORKSPACE_TABS: Record<string, Tab>/);
   for (const [workspace, tab] of Object.entries(workspaceMappings)) {
-    assert.ok(admin.includes(`${JSON.stringify(workspace)}: "${tab}"`), `missing ${workspace} → ${tab}`);
+    assert.ok(admin.includes(`${workspace}: "${tab}"`), `missing ${workspace} → ${tab}`);
   }
 });
 
