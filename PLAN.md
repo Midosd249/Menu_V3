@@ -7,10 +7,9 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc` as directly fetched from GitHub on 2026-09-14.
-- VERIFIED: latest main commit mounts the shared nutrition disclosure on the published QR menu route and adds a protecting test.
-- VERIFIED: R9 guest relationship work remains protected in history; current main is newer than the prior continuity SHA.
-- VERIFIED: R8 and all preceding protected work remain in main.
+- VERIFIED: canonical `main` is `2023e1b0875edc78518e5968006be471df5c32a9` as directly fetched from GitHub on 2026-09-15.
+- VERIFIED: W8 Draft PR #147 targets this canonical main and remains intentionally unmerged.
+- VERIFIED: R9 guest relationship work remains protected in history; R8 and all preceding protected work remain in main.
 
 ## Completed Strategic Milestones
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -152,14 +151,24 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: W7.12 performed no product/runtime code changes, no deployment, and no Vercel action.
 - VERIFIED: W7.12 changed only release-readiness documentation plus the PR description/comment.
 
+## W8 — Internal Visual System — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: W8 selected `Midnight Ink & Sand` for internal Studio/Admin surfaces only.
+- VERIFIED: implemented semantic internal roles use the approved palette: `#F2EDE3`, `#FBF8F2`, `#FFFFFF`, `#E7DED0`, `#1F2522`, `#161B19`, `#DDE4DF`, `#FFFFFF`, `#8B642E`, `#E8DCC8`, `#1D2421`, `#5E655F`, `#D3CBC0`, `#B6ADA1`, `#246044`, `#7A5218`, `#9A3B32`, `#2D5C76`, `#6F746F`, `#E2DDD4`, `#C9C2B8`, and `rgb(31 37 34 / 0.72)`.
+- VERIFIED: brass `#8B642E` is restricted to UI/focus/action emphasis and is not normal body text.
+- VERIFIED: final Quality Run `1684` / `34996084516` passed on implementation head `28e65914a0fe87b5879982d0fa82f90b25c52593`; documentation-only W8 updates then produced current branch head `82336d5e370e1ef7264e856f277aaf69a4b222d9` and require final current-head CI verification.
+- VERIFIED: final pre-documentation CI passed route generation/freshness, typecheck, repository tests, W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, public all-theme, Studio, Platform Admin, responsive, RTL/LTR/mixed-direction, accessibility, overflow, performance, diagnostics, and cleanup.
+- VERIFIED: Public Menu themes/selectors remain protected; no `.menu-public-shell` or `html[data-menu-theme=...]` selector is introduced in the W8 internal layer.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+- VERIFIED: PR #147 remains Draft/unmerged and no production deployment was performed by ATLAS.
+
 ## Production / Commercial Readiness — IN PROGRESS
 
-- VERIFIED: repository-side R9 implementation and quality gates are complete.
-- VERIFIED: GitHub `main` contains the protected product work.
+- VERIFIED: repository-side R9 and W8 implementation/quality gates are complete for their respective scopes.
 - UNKNOWN: direct current Vercel Production environment-variable values.
 - UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA.
 - BLOCKED: unnecessary Vercel deployment retries must not be attempted while the known free daily deployment quota is exhausted.
 
 ## Exact Next Task
-Human review of Draft PR #146 using `docs/W7_12_HUMAN_PR_REVIEW.md`, followed by the release-stage physical-device QA gate when explicitly authorized. Do not begin another product milestone automatically.
+Human review of Draft PR #147, followed by release-stage physical-device QA when explicitly authorized. Do not merge or deploy automatically.
