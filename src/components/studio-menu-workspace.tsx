@@ -87,7 +87,7 @@ export function StudioMenuWorkspace({
               {snapshot.branches[0] ? ` · ${lang === "ar" ? snapshot.branches[0].nameAr : snapshot.branches[0].nameEn || snapshot.branches[0].nameAr}` : ""}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full min-w-0 max-w-full flex-wrap gap-2 sm:w-auto">
             <Button type="button" variant="outline" disabled={menuQaBusy} onClick={onReviewMenu}>
               {menuQaBusy ? t(copy.state.loading, lang) : lang === "ar" ? "مراجعة القائمة" : "Review menu"}
             </Button>
