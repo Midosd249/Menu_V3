@@ -25,6 +25,14 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Generate route tree
         run: npx vite build --mode development
+      - name: Capture generated route tree for W7.9 route synchronization
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w7-9-generated-route-tree
+          path: src/routeTree.gen.ts
+          if-no-files-found: error
+          retention-days: 2
       - name: Verify generated route tree is committed
         run: |
           if ! git diff --exit-code -- src/routeTree.gen.ts; then
