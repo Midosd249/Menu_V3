@@ -47,8 +47,8 @@ test("Customers Workspace has honest state and accessibility structure", () => {
   for (const pattern of [/LoadingState/, /EmptyState/, /ErrorState/, /PermissionDeniedState/, /aria-label/, /aria-labelledby/]) {
     assert.match(workspace, pattern);
   }
-  assert.match(workspace, /status === "forbidden"/);
-  assert.match(workspace, /status === "loading"/);
+  assert.match(workspace, /state\.code === "forbidden"/);
+  assert.match(workspace, /state\.status === "loading"/);
   assert.match(workspace, /onClick/);
 });
 
