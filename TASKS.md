@@ -168,8 +168,8 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: W7.7 current-head quality run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
 - VERIFIED: all configured route, typecheck, repository test, W7.4/W7.5/W7.6/W7.7 focused test, lint, build, Playwright, public browser, Studio browser, performance, diagnostics, and cleanup stages passed.
 - VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI PGlite fixture and auth-disabled local mode.
-- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop active Customers navigation was asserted at desktop only, mobile navigation at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
-- VERIFIED: final correction was test-only; no runtime Customers behavior changed.
+- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
+- VERIFIED: final correction was test-only and scoped the desktop active-nav assertion to desktop; no runtime Customers behavior changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
 ### W7.8 — DONE / VERIFIED — 2026-09-15
@@ -192,7 +192,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: the original Platform Admin browser blocker was an `AUTH_DISABLED_FIXTURE_GAP`; the CI-only PostgreSQL fixture now reaches real `requirePlatformAdmin` / `assertPlatformAdmin` authorization without changing production schema or migrations.
 - VERIFIED: the final browser assertion was corrected test-only to match actual TanStack Router serialization (`keep=%221%22` parses as `"1"`).
 - VERIFIED: final quality run `34925141809` / run 1638 passed all route, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
-- VERIFIED: no unsupported Admin detail routes, fake data, metrics, charts, health scores, security events, or operator records were introduced.
+- VERIFIED: no unsupported Admin detail routes, fake data, metrics, charts, health scores, security events, recommendations, or operator records were introduced.
 - VERIFIED: no protected backend/security/business areas changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
@@ -211,9 +211,20 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 
 - VERIFIED: final visual/product consistency/release-readiness audit is recorded in `docs/W7_11_FINAL_QUALITY_AUDIT.md`.
 - VERIFIED: Draft PR review is recorded in `docs/W7_11_PR_REVIEW.md` with result `READY_FOR_HUMAN_REVIEW`.
-- VERIFIED: no release blocker or unresolved high/medium visual, accessibility, navigation, or state defect was found in the audited W7 scope.
+- VERIFIED: no release blocker or unresolved high/medium visual/accessibility/navigation/state defect was found.
 - VERIFIED: no W7.11 product/runtime code fix was required.
 - UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
 
+## W8 — Internal Visual System — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: selected direction is `Midnight Ink & Sand`.
+- VERIFIED: W8 affects only existing internal Studio/Admin visual surfaces and the shared internal semantic layer.
+- VERIFIED: approved semantic roles and exact palette are recorded in `docs/W8_INTERNAL_VISUAL_SYSTEM.md` and `docs/W8_CONTINUITY_RECONCILIATION.md`.
+- VERIFIED: brass `#8B642E` is restricted to UI/focus/action emphasis and is not normal body text.
+- VERIFIED: final pre-documentation Quality Run `1684` / `34996084516` passed on implementation head `28e65914a0fe87b5879982d0fa82f90b25c52593`.
+- VERIFIED: subsequent documentation reconciliation changes remain within W8 continuity scope; a final current-head CI run is required after the documentation batch.
+- VERIFIED: Public Menu themes and selectors remain protected; no `.menu-public-shell` or `html[data-menu-theme=...]` selector was introduced in the W8 internal layer.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
 ## Next Safe Action
-Human review of Draft PR #146. No merge/deploy by ATLAS.
+Complete final current-head CI for the W8 continuity batch, then human review of Draft PR #147. No merge/deploy by ATLAS.
