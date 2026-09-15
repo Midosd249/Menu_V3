@@ -1,7 +1,7 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
 import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
-import { bearer, genericOAuth } from "better-auth/plugins";
+import { admin, bearer, genericOAuth, phoneNumber } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { createHash } from "node:crypto";
@@ -195,7 +195,19 @@ export const auth = betterAuth({
       dont_remember: { name: "__Host-grok-auth.dont_remember" },
     },
   },
-  plugins: [gateIdentitySessions(), ...(grokOAuthPlugin ? [grokOAuthPlugin] : []), bearer(), tanstackStartCookies()],
+  plugins: [
+    gateIdentitySessions(),
+    admin(),
+    phoneNumber({
+      // Phone login uses the platform-approved service-request number.
+      // SMS OTP is intentionally not claimed until an SMS provider is configured.
+      sendOTP: async () => undefined,
+      requireVerification: true,
+    }),
+    ...(grokOAuthPlugin ? [grokOAuthPlugin] : []),
+    bearer(),
+    tanstackStartCookies(),
+  ],
 });
 
 export function readSessionToken(): string | null {
