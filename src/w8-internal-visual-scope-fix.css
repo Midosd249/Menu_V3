@@ -1,0 +1,77 @@
+/*
+ * W8 runtime delivery correction — Studio scope bridge.
+ *
+ * The original W8 selector expects an explicit [role="banner"] attribute,
+ * while Studio's existing header exposes the banner landmark implicitly.
+ * The browser selector therefore never matched the Studio runtime DOM.
+ *
+ * This bridge uses the existing, explicit Studio navigation landmark as the
+ * smallest safe internal-only scope. It does not target Public Menu markup.
+ */
+
+body:has(nav[aria-label="مساحات العمل"]) {
+  --color-paper: #fbf8f2;
+  --color-sand: #e7ded0;
+  --color-ink: #1d2421;
+  --color-ink-soft: #36403b;
+  --color-muted: #5e655f;
+  --color-line: #d3cbc0;
+  --color-accent: #8b642e;
+  --color-accent-foreground: #ffffff;
+  --color-ring: #8b642e;
+  --color-good: #246044;
+  --color-warn: #7a5218;
+  --color-bad: #9a3b32;
+  background: #f2ede3;
+  color: #1d2421;
+  color-scheme: light;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) .min-h-dvh {
+  background-color: #f2ede3;
+  color: #1d2421;
+}
+
+/* Preserve the W8 dark operational spine for Studio navigation. */
+body:has(nav[aria-label="مساحات العمل"]) aside {
+  background: #1f2522 !important;
+  color: #ffffff;
+  border-color: rgb(255 255 255 / 0.14);
+}
+
+body:has(nav[aria-label="مساحات العمل"]) aside :where(p, a) {
+  color: #c7cec9;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) aside :where(a, button)[aria-current="page"] {
+  background: #2c3430 !important;
+  color: #ffffff !important;
+  box-shadow: inset 3px 0 0 #b58a4a;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) aside :where(a, button):hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.08);
+  color: #ffffff;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) aside :where(a, button):focus-visible {
+  outline-color: #d6b878;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.18), 0 0 0 5px #d6b878;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) header {
+  background: #fbf8f2 !important;
+  border-color: #d3cbc0;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) nav[aria-label="تنقل مساحة العمل على الهاتف"] {
+  background: rgb(251 248 242 / 0.97);
+  border-color: #d3cbc0;
+  box-shadow: 0 -8px 24px rgb(31 37 34 / 0.10);
+  backdrop-filter: none;
+}
+
+body:has(nav[aria-label="مساحات العمل"]) nav[aria-label="تنقل مساحة العمل على الهاتف"] [aria-current="page"] {
+  background: #1f2522;
+  color: #ffffff;
+}
