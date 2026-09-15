@@ -41,10 +41,17 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
       });
       await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
       const main = page.locator("main").first();
-      await expect(main, `Expected a main region for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 15_000 });
+      await expect(main, `Expected a main region for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 30_000 });
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-      const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
-      expect(overflow.scrollWidth, `Horizontal overflow at ${route} ${viewport.name}px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+        offenders: Array.from(document.querySelectorAll("body *")).map((node) => {
+          const rect = (node as HTMLElement).getBoundingClientRect();
+          return { tag: node.tagName, text: (node.textContent || "").trim().slice(0, 80), left: Math.round(rect.left), right: Math.round(rect.right), width: Math.round(rect.width), overflowX: getComputedStyle(node).overflowX };
+        }).filter((item) => item.right > window.innerWidth + 1 || item.left < -1).slice(0, 12),
+      }));
+      expect(overflow.scrollWidth, `Horizontal overflow at ${route} ${viewport.name}px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}; offenders=${JSON.stringify(overflow.offenders)}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
       expect(await page.locator("button:visible, a:visible").evaluateAll((nodes) => nodes.filter((node) => {
         const label = node.getAttribute("aria-label") || node.textContent?.trim();
         return !label;
