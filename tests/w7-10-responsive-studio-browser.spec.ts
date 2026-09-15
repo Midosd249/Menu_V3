@@ -29,7 +29,9 @@ const ROUTES = [
   "/studio/preview",
 ] as const;
 
-async function gotoStudioRoute(page: Parameters<Parameters<typeof test>[1]>[0]["page"], url: string) {
+type PlaywrightPage = { goto: (url: string, options: { waitUntil: "domcontentloaded" }) => Promise<unknown> };
+
+async function gotoStudioRoute(page: PlaywrightPage, url: string) {
   try {
     await page.goto(url, { waitUntil: "domcontentloaded" });
   } catch (error) {
