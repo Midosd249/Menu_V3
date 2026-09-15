@@ -24,8 +24,9 @@ test("platform onboarding workspace exposes the owner workflow", () => {
 
 test("platform owner approval entry point opens the working controls inside the existing admin center", () => {
   assert.match(rootAdmin, /التواصل واعتماد الطلبات/);
-  assert.match(rootAdmin, /onClick=\{\(\) => setTab\("leads"\)\}/);
-  assert.match(rootAdmin, /onApproval=\{\(\) => setTab\("leads"\)\}/);
+  assert.match(rootAdmin, /function selectTab\(next: Tab\) \{ setTab\(next\);/);
+  assert.match(rootAdmin, /onClick=\{\(\) => selectTab\("leads"\)\}/);
+  assert.match(rootAdmin, /onApproval=\{\(\) => selectTab\("leads"\)\}/);
   assert.doesNotMatch(rootAdmin, /href="\/admin\/onboarding"/);
   assert.match(rootAdmin, /approveLead/);
   assert.match(rootAdmin, /اعتماد وإنشاء رابط التسجيل/);
