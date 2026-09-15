@@ -40,9 +40,12 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
         if (message.type() === "error") consoleErrors.push(message.text());
       });
       await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
+      const mainCount = await page.locator("main").count();
+      expect(mainCount, `Expected a main region for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeGreaterThan(0);
       await expect(page.locator("main").first()).toBeVisible();
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+      const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+      expect(overflow.scrollWidth, `Horizontal overflow at ${route} ${viewport.name}px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
       expect(await page.locator("button:visible, a:visible").evaluateAll((nodes) => nodes.filter((node) => {
         const label = node.getAttribute("aria-label") || node.textContent?.trim();
         return !label;
@@ -74,7 +77,8 @@ test("W7.10 Studio Menu header keeps the import action reachable at 320px", asyn
   const box = await importButton.boundingBox();
   expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
   expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+  const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+  expect(overflow.scrollWidth, `Horizontal overflow at Studio Menu 320px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
 });
 
 test("W7.10 Studio language switch preserves usable LTR at mobile width", async ({ page }) => {
@@ -84,5 +88,6 @@ test("W7.10 Studio language switch preserves usable LTR at mobile width", async 
   await languageGroup.getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { name: "Items" })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+  const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
+  expect(overflow.scrollWidth, `Horizontal overflow at Studio Menu LTR 390px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
 });
