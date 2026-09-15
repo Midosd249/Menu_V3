@@ -136,7 +136,27 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: `docs/W7_11_PR_REVIEW.md` records Draft PR #146 review result `READY_FOR_HUMAN_REVIEW`.
 - VERIFIED: no release blocker or unresolved high/medium visual/accessibility/navigation/state defect was found.
 - VERIFIED: no W7.11 product/runtime code fix was required.
-- VERIFIED: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
+## W7.12 — Release Readiness Package — 2026-09-15
+
+- VERIFIED: W7.12 release-readiness documentation is complete: lint triage, real-device QA protocol, human PR review package, and release risk register.
+- VERIFIED: 29 lint warnings and 0 errors were triaged; no warning is an automatic merge blocker.
+- VERIFIED: physical Android/iOS QA remains `PENDING_RELEASE_STAGE` and was not performed.
+- VERIFIED: PR #146 remains Open / Draft / Unmerged; no merge approval was granted.
+- VERIFIED: W7.12 performed no product/runtime code changes, no deployment, and no Vercel action.
+
+## W8 — Internal Visual System — 2026-09-15
+
+- VERIFIED: selected direction is `Midnight Ink & Sand`.
+- VERIFIED: W8 is internal-only and affects existing Studio/Admin visual surfaces plus the shared internal semantic layer.
+- VERIFIED: final Quality Run `1684` / workflow run `34996084516` passed on implementation head `28e65914a0fe87b5879982d0fa82f90b25c52593` before continuity documentation reconciliation.
+- VERIFIED: route generation/freshness, typecheck, repository tests, W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, Public all-theme browser QA, Studio browser QA, Platform Admin browser QA, responsive, RTL/LTR/mixed-direction, focus/accessibility, overflow, performance, diagnostics, and cleanup passed.
+- VERIFIED: Run 1683's failure was limited to `no-useless-escape` linting in the W8 contract test and was corrected without production visual/runtime changes.
+- VERIFIED: Public Menu themes/selectors remain protected; no Public Menu component/theme file was changed and the W8 layer contains neither `.menu-public-shell` nor `html[data-menu-theme=...]` selectors.
+- VERIFIED: package-lock and dependency declarations were unchanged by W8.
+- UNKNOWN: physical Android/iOS real-device QA remains `PENDING_RELEASE_STAGE`.
+- VERIFIED: no deployment was intentionally triggered by ATLAS; an automatic Vercel Preview status appeared on the PR from the repository integration and was not used as W8 verification evidence.
 
 ## QA Continuity Rule
 Documentation reconciliation is not a substitute for current code validation. Every implementation change receives a new current-head quality/browser verification before DONE.
