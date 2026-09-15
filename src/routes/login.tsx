@@ -22,6 +22,7 @@ function Login() {
   const navigate = useNavigate();
   const { user, isPending, error: sessionError, refresh } = useCurrentUserState();
   const [mode, setMode] = useState<"in" | "up">("in");
+  const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const invite = invitationToken();
@@ -35,17 +36,21 @@ function Login() {
     e.preventDefault();
     if (busy) return;
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "").trim().toLowerCase();
+    const identity = String(form.get("identity") || "").trim();
     const password = String(form.get("password") || "");
     const name = String(form.get("name") || "").trim();
     setBusy(true);
     setError("");
     try {
       if (mode === "up") {
+        const email = identity.toLowerCase();
         const result = await authClient.signUp.email({ email, password, name: name || email.split("@")[0] });
         if (result.error) throw new Error(result.error.message);
+      } else if (loginMethod === "phone") {
+        const result = await authClient.signIn.phoneNumber({ phoneNumber: identity, password });
+        if (result.error) throw new Error(result.error.message);
       } else {
-        const result = await authClient.signIn.email({ email, password });
+        const result = await authClient.signIn.email({ email: identity.toLowerCase(), password });
         if (result.error) throw new Error(result.error.message);
       }
       await refresh();
@@ -58,6 +63,7 @@ function Login() {
     }
   }
 
+  const isPhoneLogin = mode === "in" && loginMethod === "phone";
   return <main className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
     <div className="w-full max-w-md grid gap-6">
       <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">{t(copy.brand, lang)}</Link><LangToggle /></div>
@@ -67,12 +73,17 @@ function Login() {
         <p className="text-center text-xs text-muted">{t(copy.auth.or, lang)}</p>
         <form className="grid gap-3" onSubmit={onSubmit}>
           {mode === "up" ? <Field label={t(copy.auth.name, lang)}><Input name="name" autoComplete="name" /></Field> : null}
-          <Field label={t(copy.auth.email, lang)}><Input name="email" type="email" required autoComplete="email" /></Field>
+          {mode === "in" ? <div className="grid grid-cols-2 gap-2 rounded-xl border border-line bg-sand/20 p-1">
+            <button type="button" className={`rounded-lg px-3 py-2 text-sm ${loginMethod === "email" ? "bg-paper font-medium shadow-sm" : "text-muted"}`} onClick={() => setLoginMethod("email")} disabled={busy}>{lang === "ar" ? "بالبريد" : "Email"}</button>
+            <button type="button" className={`rounded-lg px-3 py-2 text-sm ${loginMethod === "phone" ? "bg-paper font-medium shadow-sm" : "text-muted"}`} onClick={() => setLoginMethod("phone")} disabled={busy}>{lang === "ar" ? "بالجوال" : "Phone"}</button>
+          </div> : null}
+          <Field label={mode === "up" || !isPhoneLogin ? t(copy.auth.email, lang) : (lang === "ar" ? "رقم الجوال" : "Phone number")}><Input name="identity" type={mode === "up" || !isPhoneLogin ? "email" : "tel"} required autoComplete={mode === "up" || !isPhoneLogin ? "email" : "tel"} placeholder={isPhoneLogin ? "+9665XXXXXXXX" : undefined} /></Field>
           <Field label={t(copy.auth.password, lang)}><Input name="password" type="password" required minLength={8} autoComplete={mode === "up" ? "new-password" : "current-password"} /></Field>
+          {isPhoneLogin ? <p className="text-xs leading-5 text-muted">{lang === "ar" ? "يعمل الدخول بالجوال بعد اعتماد الرقم ضمن طلب الخدمة." : "Phone sign-in is available after the number is approved on the service request."}</p> : null}
           {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
           <Button type="submit" disabled={busy}>{busy ? t(copy.state.loading, lang) : mode === "up" ? t(copy.auth.signUp, lang) : t(copy.auth.signIn, lang)}</Button>
         </form>
-        <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => setMode(mode === "up" ? "in" : "up")}>{mode === "up" ? t(copy.auth.haveAccount, lang) : t(copy.auth.noAccount, lang)}</button>
+        <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{mode === "up" ? t(copy.auth.haveAccount, lang) : t(copy.auth.noAccount, lang)}</button>
       </> : <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>}
       <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>
     </div>
