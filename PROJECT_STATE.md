@@ -17,7 +17,7 @@
 - VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery remain complete and protected.
 - VERIFIED: R9 Guest CRM, Loyalty, Campaigns, Feedback, and Retention remains complete for the implemented owner-controlled scope.
 - VERIFIED: R10 is explicitly deferred and has not been started.
-- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, W7.7, W7.8, and W7.9 are complete and verified on the current working branch.
+- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, W7.7, W7.8, W7.9, and W7.10 are complete and verified on the current working branch.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -171,7 +171,7 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE / W7.9 DONE — CURRENT WORKING BRANCH
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE / W7.9 DONE / W7.10 DONE — CURRENT WORKING BRANCH
 
 ### W7.1 — COMPLETE / ANALYSIS
 - VERIFIED: W7.1 audited current Studio/Admin architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
@@ -198,8 +198,8 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 ### W7.5 — DONE / VERIFIED
 - VERIFIED: `/studio/menu` is a focused Menu Workspace using existing menu data and actions.
 - VERIFIED: Options, Import, Preview, and QR are contextual real destinations; no dead routes were invented.
-- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 tests, focused W7.4/W7.5 tests, lint, build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu QA, performance audit, diagnostics, and cleanup.
-- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI/order logic, public menu, Platform Admin, dependencies, merge, or deployment changes were introduced.
+- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 tests, focused W7.4/W7.5 tests, lint, build, Playwright/Chromium, public all-theme browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: no protected backend/security/business areas changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
 ### W7.6 — Growth Workspace — DONE / VERIFIED
@@ -222,7 +222,7 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 - VERIFIED: final quality run `34915603884` / run 1602 passed route generation/freshness, typecheck, 266 repository tests, W7.4–W7.8 contracts, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
 - VERIFIED: Platform Admin browser QA reached the actual `/admin` application in the authorized CI development-user state across 390×844, 430×932, 768×1024, and 1280×800.
 - VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator records were added.
-- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, merge, or deployment changed.
+- VERIFIED: no protected backend/security/business areas changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
 ### W7.9 — Platform Admin Route Architecture / Route Splitting — DONE / VERIFIED
@@ -236,9 +236,21 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 - VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, Vercel configuration, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
+### W7.10 — Full-Product Mobile and Responsive Pass — DONE / VERIFIED — PASSED_WITH_RELEASE_STAGE_DEVICE_QA_PENDING
+- VERIFIED: final W7.10 CI run `34932493596` / run 1655 passed route generation/freshness, typecheck, 266 repository tests, W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio responsive QA, Platform Admin responsive QA, performance, diagnostics, and cleanup at implementation HEAD `16d11eae278641062503c0a6d23d60677e6c7cb3`.
+- VERIFIED: public all-theme QA covered 320×800, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1280×800, and 1440×900 across all five themes with no horizontal overflow, accessible-name failures, or runtime console errors.
+- VERIFIED: Studio browser QA passed 9 tests and Platform Admin browser QA passed 20 tests.
+- VERIFIED: the earlier Studio readiness assertion used `<main>` although the actual Studio Shell landmark is `role="banner"`; this was a test-only correction retaining real route, viewport, overflow, and accessibility assertions.
+- VERIFIED: the earlier 320px Studio overflow was real (`scrollWidth=344`, `clientWidth=320`) and diagnostics identified the Studio Shell top-header action group as the source.
+- VERIFIED: `src/components/studio-shell.tsx` makes the mobile action group `w-full min-w-0 max-w-full flex-wrap` and restores compact horizontal behavior from `sm`.
+- VERIFIED: `src/components/studio-menu-workspace.tsx` adds narrow-width containment while preserving the existing Menu Import action and behavior.
+- VERIFIED: shared WorkspaceHeader stacks on small screens and shared FilterBar actions wrap.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu business logic, Studio business logic, Admin business logic, dependencies, route architecture, Vercel, merge, or deployment changed.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
 ## Exact Next Task
-### W7.10 — Full-Product Mobile and Responsive Pass
-W7.10 is the next safe phase. W7.11, merge, deployment, database work, and release work remain out of scope until W7.10 is explicitly completed and verified.
+### W7.11 — Final Visual QA
+W7.11 remains NOT STARTED. Do not begin it as part of W7.10.
 
 ## Continuity Rule
 At the end of every atomic task:
