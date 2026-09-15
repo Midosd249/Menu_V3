@@ -1,6 +1,6 @@
 # W8 Internal Visual System
 
-Status: IMPLEMENTATION_IN_PROGRESS — selected Direction B
+Status: DONE / VERIFIED — Direction B
 Scope: Studio, Studio Home/Menu/Growth/Customers/Orders/Settings, Platform Admin, and shared internal visual surfaces only.
 
 ## Before
@@ -117,3 +117,17 @@ Not changed:
 - dependencies;
 - Vercel/deployment;
 - Public Menu themes.
+
+## Final CI Verification — 2026-09-15
+
+- VERIFIED: current W8 branch head is `28e65914a0fe87b5879982d0fa82f90b25c52593`.
+- VERIFIED: GitHub Actions Quality Run `1684` / workflow run `34996084516` completed successfully against that exact head.
+- VERIFIED: route generation and generated route freshness passed.
+- VERIFIED: typecheck, full repository tests, W7.4–W7.10 regression contracts, lint, and production build passed.
+- VERIFIED: Playwright runtime and Chromium installation passed.
+- VERIFIED: Public all-theme browser QA passed; Studio browser QA passed; Platform Admin browser QA passed.
+- VERIFIED: responsive, RTL/LTR, mixed-direction, keyboard/focus, accessible-name, `aria-current`, overflow, performance, diagnostics, and cleanup stages completed successfully as part of the quality workflow.
+- VERIFIED: no W8 code correction was required after the prior lint-only test correction; Run 1683's `no-useless-escape` failure was resolved before Run 1684.
+- VERIFIED: no Public Menu selector/theme adapter was introduced or changed by the W8 internal layer.
+- VERIFIED: W8 remains internal-only and preserves all protected backend, security, business, route, dependency, and deployment boundaries.
+- UNKNOWN: physical Android/iOS real-device QA; this remains `PENDING_RELEASE_STAGE` and is not represented as CI evidence.
