@@ -155,11 +155,12 @@ const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
   path: '/intelligence',
   getParentRoute: () => StudioRoute,
 } as any)
-const StudioIntelligenceActionsRoute = StudioIntelligenceActionsRouteImport.update({
-  id: '/intelligence-actions',
-  path: '/intelligence-actions',
-  getParentRoute: () => StudioRoute,
-} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
 const StudioMenuRoute = StudioMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -778,7 +779,8 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioIndexRoute: StudioIndexRoute,
 }
 
-const StudioRouteWithChildren = StudioRoute._addFileChildren(StudioRouteChildren)
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
 
 interface MSlugRouteChildren {
   MSlugBranchRoute: typeof MSlugBranchRoute
