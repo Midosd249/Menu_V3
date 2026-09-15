@@ -43,6 +43,8 @@ jobs:
         run: node --test tests/w7-5-menu-workspace.test.mjs
       - name: W7.6 Growth Workspace contract tests
         run: node --test tests/w7-6-growth-workspace.test.mjs
+      - name: W7.7 Customers Workspace contract tests
+        run: node --test tests/w7-7-customers-workspace.test.mjs
       - name: Lint
         run: npm run lint
       - name: Production build
@@ -91,7 +93,7 @@ jobs:
           values ('demo-nafas', 'dev-user', 'owner')
           on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner';
           SQL
-      - name: Studio Shell, Home, Menu, and Growth browser QA — auth-disabled local mode
+      - name: Studio Shell, Home, Menu, Growth, and Customers browser QA — auth-disabled local mode
         run: |
           mkdir -p .grok
           cleanup() {
@@ -105,7 +107,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/studio"
               set +e
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts --workers=1
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then
