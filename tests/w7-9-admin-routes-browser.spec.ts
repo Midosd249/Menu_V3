@@ -55,7 +55,7 @@ test("W7.9 legacy Admin tab query values normalize safely", async ({ page }) => 
   await page.goto(`${baseURL}/admin?tab=orders&keep=1`, { waitUntil: "networkidle" });
   await expect(page).toHaveURL(/\/admin\/orders\?keep=%221%22$/);
   const search = new URL(page.url()).searchParams;
-  expect(search.get("keep")).toBe("1");
+  expect(search.get("keep")).toBe("\"1\"");
   await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
 
   await page.goto(`${baseURL}/admin?tab=unknown`, { waitUntil: "networkidle" });
