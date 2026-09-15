@@ -24,9 +24,14 @@ const parsed = new URL(baseUrl);
 const requestedTheme = parsed.searchParams.get("theme") || "editorial";
 const themes = allThemes ? ["essential", "editorial", "noir", "heritage", "gallery"] : [requestedTheme];
 const viewports = [
-  { name: "mobile", width: 390, height: 844 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "desktop", width: 1440, height: 900 },
+  { name: "small-mobile-320", width: 320, height: 800 },
+  { name: "small-mobile-360", width: 360, height: 800 },
+  { name: "mobile-390", width: 390, height: 844 },
+  { name: "mobile-430", width: 430, height: 932 },
+  { name: "tablet-768", width: 768, height: 1024 },
+  { name: "tablet-landscape-1024", width: 1024, height: 768 },
+  { name: "desktop-1280", width: 1280, height: 800 },
+  { name: "desktop-1440", width: 1440, height: 900 },
 ];
 
 const browser = await chromium.launch({
@@ -106,9 +111,9 @@ try {
         }
       }
 
-      if (viewport.name === "mobile") {
+      if (viewport.name === "mobile-390") {
         const reducedMotion = await page.emulateMedia({ reducedMotion: "reduce" }).then(() => true).catch(() => false);
-        console.log(`${reducedMotion ? "PASS" : "FAIL"} ${theme} · mobile · reduced-motion emulation · ${reducedMotion ? "supported" : "unsupported"}`);
+        console.log(`${reducedMotion ? "PASS" : "FAIL"} ${theme} · mobile-390 · reduced-motion emulation · ${reducedMotion ? "supported" : "unsupported"}`);
         if (!reducedMotion) failures += 1;
       }
 
@@ -123,4 +128,4 @@ if (failures > 0) {
   console.error(`Template QA failed with ${failures} gate failure(s).`);
   process.exit(1);
 }
-console.log(`Template QA passed for ${themes.length} theme(s) across mobile, tablet, and desktop viewports.`);
+console.log(`Template QA passed for ${themes.length} theme(s) across the full W7.10 viewport matrix.`);

@@ -75,6 +75,8 @@ jobs:
         run: node --test tests/w7-8-admin-shell.test.mjs
       - name: W7.9 Platform Admin route contract tests
         run: node --test tests/w7-9-admin-routes.test.mjs
+      - name: W7.10 responsive design-system contract tests
+        run: node --test tests/w7-10-responsive.test.mjs
       - name: Lint
         run: npm run lint
       - name: Production build
@@ -124,7 +126,7 @@ jobs:
           values ('demo-nafas', 'dev-user', 'owner', 'tenant_owner', null)
           on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner', access_role = 'tenant_owner', branch_scope = null;
           SQL
-      - name: Studio Shell, Home, Menu, Growth, and Customers browser QA — auth-disabled local mode
+      - name: Studio Shell, Home, Menu, Growth, Customers, and W7.10 responsive browser QA — auth-disabled local mode
         run: |
           mkdir -p .grok
           cleanup() {
@@ -138,7 +140,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/studio"
               set +e
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts --workers=1
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then
@@ -203,7 +205,7 @@ jobs:
             await pool.end();
           }
           NODE
-      - name: Platform Admin browser QA — auth-disabled local mode
+      - name: Platform Admin and W7.10 responsive browser QA — auth-disabled local mode
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
           VITE_AUTH_ENABLED: "false"
@@ -218,7 +220,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
               echo "[admin-browser] serving http://127.0.0.1:8083/admin"
               set +e
-              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts --workers=1
+              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then
