@@ -2,6 +2,39 @@ import { expect, test } from "playwright/test";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
 
+async function assertMidnightInkAndSand(page: import("playwright/test").Page) {
+  const visual = await page.evaluate(() => {
+    const body = getComputedStyle(document.body);
+    const canvas = document.querySelector(".min-h-dvh");
+    const header = document.querySelector("header");
+    const aside = document.querySelector('aside');
+    const active = document.querySelector('[aria-current="page"]');
+    return {
+      studioScope: Boolean(document.querySelector('nav[aria-label="مساحات العمل"]')),
+      bodyBackground: body.backgroundColor,
+      bodyPaper: body.getPropertyValue("--color-paper").trim(),
+      bodyInk: body.getPropertyValue("--color-ink").trim(),
+      bodyRing: body.getPropertyValue("--color-ring").trim(),
+      canvasBackground: canvas ? getComputedStyle(canvas).backgroundColor : "",
+      headerBackground: header ? getComputedStyle(header).backgroundColor : "",
+      asideBackground: aside ? getComputedStyle(aside).backgroundColor : "",
+      activeBackground: active ? getComputedStyle(active).backgroundColor : "",
+      activeColor: active ? getComputedStyle(active).color : "",
+    };
+  });
+
+  expect(visual.studioScope).toBe(true);
+  expect(visual.bodyBackground).toBe("rgb(242, 237, 227)");
+  expect(visual.bodyPaper).toBe("#fbf8f2");
+  expect(visual.bodyInk).toBe("#1d2421");
+  expect(visual.bodyRing).toBe("#8b642e");
+  expect(visual.canvasBackground).toBe("rgb(242, 237, 227)");
+  expect(visual.headerBackground).toBe("rgb(251, 248, 242)");
+  expect(visual.asideBackground).toBe("rgb(31, 37, 34)");
+  expect(visual.activeBackground).toBe("rgb(44, 52, 48)");
+  expect(visual.activeColor).toBe("rgb(255, 255, 255)");
+}
+
 test("W7.3 Studio shell browser QA", async ({ page }) => {
   test.setTimeout(120_000);
 
@@ -10,6 +43,8 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   const desktopNav = page.locator('nav[aria-label="مساحات العمل"]');
   await expect(desktopNav).toBeVisible();
   await expect(desktopNav.locator("button")).toHaveCount(6);
+
+  await assertMidnightInkAndSand(page);
 
   for (const label of ["نظرة عامة", "القائمة", "الطلبات", "النمو", "العملاء", "الإعدادات"]) {
     await expect(desktopNav.getByRole("button", { name: label })).toBeVisible();

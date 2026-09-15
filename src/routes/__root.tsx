@@ -4,6 +4,7 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { LangProvider } from "@/lib/lang";
 import appCss from "../styles.css?url";
 import colorsCss from "../colors.css?url";
+import w8InternalVisualScopeFixCss from "../w8-internal-visual-scope-fix.css?url";
 import typographyCss from "../typography.css?url";
 import imageArtDirectionCss from "../image-art-direction.css?url";
 import motionCss from "../motion.css?url";
@@ -47,6 +48,7 @@ export const Route = createRootRoute({
       { rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" },
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: colorsCss },
+      { rel: "stylesheet", href: w8InternalVisualScopeFixCss },
       { rel: "stylesheet", href: typographyCss },
       { rel: "stylesheet", href: imageArtDirectionCss },
       { rel: "stylesheet", href: motionCss },

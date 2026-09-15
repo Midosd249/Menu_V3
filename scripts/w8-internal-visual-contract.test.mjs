@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const css = await readFile(new URL("../src/colors.css", import.meta.url), "utf8");
+const studioScopeFix = await readFile(new URL("../src/w8-internal-visual-scope-fix.css", import.meta.url), "utf8");
 
 const requiredRoles = [
   "--internal-app-background", "--internal-surface", "--internal-surface-elevated", "--internal-surface-subtle", "--internal-primary", "--internal-primary-hover", "--internal-primary-muted", "--internal-on-primary", "--internal-secondary", "--internal-accent", "--internal-accent-muted", "--internal-on-surface", "--internal-on-muted", "--internal-border", "--internal-border-strong", "--internal-focus-ring", "--internal-success", "--internal-success-surface", "--internal-on-success", "--internal-warning", "--internal-warning-surface", "--internal-on-warning", "--internal-danger", "--internal-danger-surface", "--internal-on-danger", "--internal-info", "--internal-info-surface", "--internal-on-info", "--internal-disabled", "--internal-disabled-surface", "--internal-disabled-border", "--internal-overlay",
@@ -29,6 +30,17 @@ test("W8 internal visual system defines the complete semantic role layer", () =>
   assert.match(css, /body:has\(aside\[aria-label="تنقل إدارة المنصة"\]\)/);
 });
 
+test("W8 Studio scope correction uses the existing explicit Studio landmark", () => {
+  assert.match(studioScopeFix, /body:has\(nav\[aria-label="مساحات العمل"\]\)/);
+  assert.match(studioScopeFix, /--color-paper:\s*#fbf8f2/);
+  assert.match(studioScopeFix, /--color-sand:\s*#e7ded0/);
+  assert.match(studioScopeFix, /--color-ink:\s*#1d2421/);
+  assert.match(studioScopeFix, /--color-ring:\s*#8b642e/);
+  assert.match(studioScopeFix, /background:\s*#1f2522\s*!important/);
+  assert.doesNotMatch(studioScopeFix, /\.menu-public-shell/);
+  assert.doesNotMatch(studioScopeFix, /html\[data-menu-theme=/);
+});
+
 test("W8 internal palette meets the required contrast targets", () => {
   const pairs = [["#1d2421", "#fbf8f2", 4.5], ["#36403b", "#fbf8f2", 4.5], ["#5e655f", "#fbf8f2", 4.5], ["#246044", "#fbf8f2", 4.5], ["#7a5218", "#fbf8f2", 4.5], ["#9a3b32", "#fbf8f2", 4.5], ["#2d5c76", "#fbf8f2", 4.5], ["#ffffff", "#1f2522", 4.5], ["#8b642e", "#fbf8f2", 3]];
   for (const [foreground, background, minimum] of pairs) assert.ok(contrast(foreground, background) >= minimum);
@@ -42,6 +54,8 @@ test("W8 internal visual layer is isolated from Public Menu theme adapters", () 
   const internalLayer = css.slice(internalStart);
   assert.doesNotMatch(internalLayer, /html\[data-menu-theme=/);
   assert.doesNotMatch(internalLayer, /\.menu-public-shell/);
+  assert.doesNotMatch(studioScopeFix, /html\[data-menu-theme=/);
+  assert.doesNotMatch(studioScopeFix, /\.menu-public-shell/);
 });
 
 test("W8 preserves semantic status separation from the primary brand color", () => {
