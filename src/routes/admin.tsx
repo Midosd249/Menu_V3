@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Activity, Archive, BarChart3, Building2, CheckCircle2, ClipboardList, Clock3, Copy, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Phone, RefreshCw, Search, Settings, ShieldCheck, Store, UserCheck, Users, Wallet, Wrench, XCircle } from "lucide-react";
-import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useLocation, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ErrorState, LoadingState, MetricRow, PageHeader, SectionHeader } from "@/components/internal-design-system";
@@ -66,12 +66,9 @@ export const Route = createFileRoute("/admin")({
     if (!legacyTab) return;
     const target = LEGACY_TAB_ROUTES[legacyTab];
     params.delete("tab");
-    if (!target) {
-      throw redirect({ to: "/admin", search: Object.fromEntries(params.entries()) as never, replace: true });
-    }
     const search = Object.fromEntries(params.entries());
-    if (target === "/admin" && Object.keys(search).length === 0) {
-      throw redirect({ to: "/admin", replace: true });
+    if (!target) {
+      throw redirect({ to: "/admin", search: search as never, replace: true });
     }
     throw redirect({ to: target, search: search as never, replace: true });
   },
@@ -79,6 +76,8 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminRouteShell() {
+  const location = useLocation();
+  if (location.pathname === "/admin" || location.pathname === "/admin/") return <PlatformAdminPage initialTab="overview" />;
   return <Outlet />;
 }
 
@@ -241,7 +240,7 @@ export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Ta
             </div>
           </section>
           {tab !== "overview" && tab !== "system" && tab !== "orders" ? <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} /> : null}
-          {tab === "overview" ? <Overview platform={platform} onTab={selectTab} onApproval={() => selectTab("leads")} /> : null}
+          {tab === "overview" ? <Overview platform={platform} leads={leads} onTab={selectTab} onApproval={() => selectTab("leads")} /> : null}
           {tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}
           {tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}
           {tab === "clients" ? <Clients rows={filteredMembers} /> : null}
@@ -285,12 +284,12 @@ function filterRows<T>(rows: T[], q: string, fields: (row: T) => string[]) { con
 function Toolbar({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) { return <label className="relative block rounded-2xl border border-line bg-paper p-3"><Search className="pointer-events-none absolute start-6 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></label>; }
 function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-muted">{text}</div>; }
 
-function Overview({ platform, onTab, onApproval }: { platform: PlatformDashboard; onTab: (tab: Tab) => void; onApproval: () => void }) { return <div className="grid gap-6">
+function Overview({ platform, leads, onTab, onApproval }: { platform: PlatformDashboard; leads: AdminDashboard; onTab: (tab: Tab) => void; onApproval: () => void }) { return <div className="grid gap-6">
   <section className="grid gap-3"><SectionHeader title="العملاء" description="المطاعم والحسابات والفروع التي تظهر فعليًا في بيانات المنصة." /><div className="grid gap-3 md:grid-cols-3"><Panel title="المطاعم" icon={<Store className="size-5" />} text={`${platform.tenantCount} مطعم · ${platform.activeTenantCount} نشط · ${platform.publishedTenantCount} منشور`} action="إدارة المطاعم" onClick={() => onTab("tenants")} /><Panel title="الحسابات والفريق" icon={<Users className="size-5" />} text={`${platform.members.length} عضوية مسجلة في البيانات الحالية`} action="عرض الحسابات" onClick={() => onTab("clients")} /><Panel title="الفروع" icon={<Building2 className="size-5" />} text={`${platform.branchCount} فرع مرتبط بالمطاعم`} action="إدارة الفروع" onClick={() => onTab("branches")} /></div></section>
   <section className="grid gap-3"><SectionHeader title="التجارة والتشغيل" description="عمليات حقيقية متاحة من مركز المنصة." /><div className="grid gap-3 md:grid-cols-3"><Panel title="الطلبات" icon={<PackageCheck className="size-5" />} text={`${platform.openOrderCount} مفتوح الآن · ${platform.orderCount} طلبًا غير مؤرشف`} action="فتح الطلبات" onClick={() => onTab("orders")} /><Panel title="الاشتراكات" icon={<Wallet className="size-5" />} text={`${platform.activeSubscriptionCount} نشطة · ${platform.trialSubscriptionCount} تجريبية`} action="عرض الاشتراكات" onClick={() => onTab("subscriptions")} /><Panel title="طلبات الخدمات" icon={<Wrench className="size-5" />} text={`${platform.serviceRequests.length} طلب خدمة في البيانات الحالية`} action="عرض الطلبات" onClick={() => onTab("requests")} /></div></section>
-  <section className="grid gap-3"><SectionHeader title="المبيعات" description="العملاء المحتملون والمشاريع الفعلية فقط." /><div className="grid gap-3 md:grid-cols-2"><Panel title="العملاء المحتملون" icon={<ClipboardList className="size-5" />} text={`${platform.leadCount} إجمالي · ${platform.newLeadCount} جديد`} action="فتح CRM" onClick={() => onTab("leads")} /><Panel title="المشاريع" icon={<Wrench className="size-5" />} text={`${platform.projects.length} مشروع في البيانات الحالية`} action="إدارة المشاريع" onClick={() => onTab("projects")} /></div></section>
+  <section className="grid gap-3"><SectionHeader title="المبيعات" description="العملاء المحتملون والمشاريع الفعلية فقط." /><div className="grid gap-3 md:grid-cols-2"><Panel title="العملاء المحتملون" icon={<ClipboardList className="size-5" />} text={`${leads.newCount} جديد · ${leads.qualifiedCount} مؤهل · ${leads.convertedCount} محوّل`} action="فتح CRM" onClick={() => onTab("leads")} /><Panel title="المشاريع" icon={<Wrench className="size-5" />} text={`${platform.projects.length} مشروع في البيانات الحالية`} action="إدارة المشاريع" onClick={() => onTab("projects")} /></div></section>
   <section className="grid gap-3"><SectionHeader title="الذكاء التشغيلي" description="تحليلات وسجل نشاط مشتقان من البيانات الحالية، دون توقعات أو درجات مخترعة." /><div className="grid gap-3 md:grid-cols-2"><Panel title="تحليلات المنصة" icon={<BarChart3 className="size-5" />} text={`${platform.analytics.visits} زيارة · ${platform.analytics.productViews} مشاهدة صنف · ${platform.analytics.qrScans} مسح QR`} action="فتح التحليلات" onClick={() => onTab("analytics")} /><Panel title="سجل النشاط" icon={<Activity className="size-5" />} text={`${platform.activity.length} حدثًا متاحًا للمراجعة`} action="فتح السجل" onClick={() => onTab("activity")} /></div></section>
-  <LeadContactPanel leads={[]} onApproval={onApproval} />
+  <LeadContactPanel leads={leads.leads} onApproval={onApproval} />
   <section className="rounded-2xl border border-line bg-sand/20 p-4"><SectionHeader title="حدود المساحة" description="لا توجد هنا مساحات مستقلة للأمان أو صحة المنصة أو الإعدادات؛ W7.9 يحافظ على نفس حدود Admin الحالية." /><div className="mt-3 flex flex-wrap gap-2 text-xs text-muted"><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Security مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Platform Health مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">لا توجد شاشة Configuration مستقلة</span><span className="rounded-full border border-line bg-paper px-3 py-1.5">التقسيم أصبح route-based</span></div></section>
 </div>; }
 function LeadContactPanel({ leads, onApproval }: { leads: AdminDashboard["leads"]; onApproval: () => void }) {
