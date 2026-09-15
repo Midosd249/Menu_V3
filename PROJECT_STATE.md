@@ -13,11 +13,11 @@
 - VERIFIED: Menu V3 is separated from legacy application data by schema boundary.
 
 ## Current Verified Position — 2026-09-15
-- VERIFIED: current canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: current canonical `main` is `2023e1b0875edc78518e5968006be471df5c32a9`.
 - VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery remain complete and protected.
 - VERIFIED: R9 Guest CRM, Loyalty, Campaigns, Feedback, and Retention remains complete for the implemented owner-controlled scope.
 - VERIFIED: R10 is explicitly deferred and has not been started.
-- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, W7.7, W7.8, W7.9, and W7.10 are complete and verified on the current working branch.
+- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, W7.7, W7.8, W7.9, and W7.10 are complete and verified.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -150,7 +150,7 @@ STATUS: IN PROGRESS — EXTERNAL EVIDENCE REMAINING
 ## Release / Deployment
 - VERIFIED: release-only Vercel workflow remains mandatory.
 - VERIFIED: development must not use Vercel as the iteration loop.
-- VERIFIED: GitHub `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: GitHub `main` is `2023e1b0875edc78518e5968006be471df5c32a9`.
 - UNKNOWN: direct current Vercel Production environment configuration and deployment state.
 - UNKNOWN: physical real-device Production QA.
 
@@ -171,10 +171,10 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE / W7.9 DONE / W7.10 DONE — CURRENT WORKING BRANCH
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE / W7.9 DONE / W7.10 DONE — VERIFIED
 
 ### W7.1 — COMPLETE / ANALYSIS
-- VERIFIED: W7.1 audited current Studio/Admin architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: W7.1 audited current Studio/Admin architecture against the historical W7 baseline.
 - VERIFIED: source sweep, IA audit, route map, and wireframes exist.
 - VERIFIED: `/admin` remains separate and `/studio/growth` + `/studio/guests` are real routes.
 
@@ -198,97 +198,76 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 ### W7.5 — DONE / VERIFIED
 - VERIFIED: `/studio/menu` is a focused Menu Workspace using existing menu data and actions.
 - VERIFIED: Options, Import, Preview, and QR are contextual real destinations; no dead routes were invented.
-- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 tests, focused W7.4/W7.5 tests, lint, build, Playwright/Chromium, public all-theme browser QA, performance audit, diagnostics, and cleanup.
-- VERIFIED: no protected backend/security/business areas changed.
+- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, tests, lint, build, Playwright/Chromium, public all-theme browser QA, performance, diagnostics, and cleanup.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-### W7.6 — Growth Workspace — DONE / VERIFIED
-- VERIFIED: current working HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab` and final quality run `34910495789` passed all required W7.6 gates.
+### W7.6 — DONE / VERIFIED
+- VERIFIED: final quality run `34910495789` passed all required W7.6 gates.
 - VERIFIED: Growth Workspace unifies existing Growth, Intelligence, Actions, Analytics, and contextual Reports around Observe → Understand → Act → Measure.
 - VERIFIED: existing sources only; no new backend, analytics contract, recommendation engine, experiment engine, AI business logic, or charting dependency.
 - VERIFIED: no fake metrics, scores, trends, charts, impact, ROI, conversion claims, experiment results, recommendations, or production sample data were added.
 - VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800 with RTL/LTR, active navigation, contextual links, focus, and no horizontal overflow.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-### W7.7 — Customers Workspace — DONE / VERIFIED
-- VERIFIED: W7.7 final quality run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+### W7.7 — DONE / VERIFIED
+- VERIFIED: final quality run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
 - VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI fixture and auth-disabled local mode; responsive, RTL/LTR, focus, overflow, and unsupported relationship links passed.
 - VERIFIED: final W7.7 correction was test-only and scoped desktop active navigation to desktop; no runtime Customers behavior changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-### W7.8 — Platform Admin Information Architecture and Admin Shell — DONE / VERIFIED
-- VERIFIED: discovery confirmed the real `/admin` tab model, data sources, server-side Platform Admin authorization, existing actions, loading/error/empty boundaries, and absence of separate Security/Platform Health/Configuration capabilities.
+### W7.8 — DONE / VERIFIED
 - VERIFIED: grouped IA is implemented inside `/admin` without route splitting: Overview; Customers; Commerce; Sales; Intelligence; System.
-- VERIFIED: final quality run `34915603884` / run 1602 passed route generation/freshness, typecheck, 266 repository tests, W7.4–W7.8 contracts, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
+- VERIFIED: final quality run `34915603884` / run 1602 passed route generation/freshness, typecheck, tests, lint, build, Playwright/Chromium, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance, diagnostics, and cleanup.
 - VERIFIED: Platform Admin browser QA reached the actual `/admin` application in the authorized CI development-user state across 390×844, 430×932, 768×1024, and 1280×800.
 - VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator records were added.
-- VERIFIED: no protected backend/security/business areas changed.
-- UNKNOWN: physical real-device QA remains release-stage evidence.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-### W7.9 — Platform Admin Route Architecture / Route Splitting — DONE / VERIFIED
+### W7.9 — DONE / VERIFIED
 - VERIFIED: `/admin` remains the authorized Overview/Shell and `/admin/$workspace` is the whitelisted child-route adapter for all 11 real Admin workspaces.
-- VERIFIED: `setTab(next)` remains the existing runtime contract and URL synchronization is additive through `navigate({ to: ADMIN_ROUTES[next] })`.
-- VERIFIED: legacy `/admin?tab=<known>` values normalize to the mapped route; `tab` is removed; unrelated query parameters are preserved through the router serialization contract; unknown values safely fall back to `/admin` with `replace: true`.
-- VERIFIED: the original Platform Admin browser blocker was `AUTH_DISABLED_FIXTURE_GAP`; CI now uses an isolated PostgreSQL fixture with compatible existing migrations, Supabase-compatible roles, and `dev-user` seeded in `menu_v3.platform_admins`. No production schema or migration was changed.
-- VERIFIED: the final remaining browser assertion was test-only and corrected to match actual TanStack Router serialization: `keep=%221%22` parses as `"1"`.
-- VERIFIED: final current-head quality run `34925141809` / run 1638 passed all configured route, freshness, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
-- VERIFIED: no unsupported Admin detail routes or fabricated data, metrics, charts, health scores, security events, recommendations, or operator sample data were introduced.
+- VERIFIED: legacy `/admin?tab=<known>` values normalize to the mapped route; unrelated query parameters are preserved; unknown values safely fall back to `/admin`.
+- VERIFIED: final quality run `34925141809` / run 1638 passed all configured route, freshness, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
 - VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, Vercel configuration, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-### W7.10 — Full-Product Mobile and Responsive Pass — DONE / VERIFIED — PASSED_WITH_RELEASE_STAGE_DEVICE_QA_PENDING
-- VERIFIED: final W7.10 CI run `34932493596` / run 1655 passed route generation/freshness, typecheck, 266 repository tests, W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio responsive QA, Platform Admin responsive QA, performance, diagnostics, and cleanup at implementation HEAD `16d11eae278641062503c0a6d23d60677e6c7cb3`.
-- VERIFIED: public all-theme QA covered 320×800, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1280×800, and 1440×900 across all five themes with no horizontal overflow, accessible-name failures, or runtime console errors.
+### W7.10 — DONE / VERIFIED — RELEASE-STAGE DEVICE QA PENDING
+- VERIFIED: final W7.10 quality run `34932493596` / run 1655 passed all configured route, freshness, typecheck, repository, W7.4–W7.10 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin, performance, diagnostics, and cleanup stages.
+- VERIFIED: public all-theme QA passed all five themes across the full 320×800 through 1440×900 matrix.
 - VERIFIED: Studio browser QA passed 9 tests and Platform Admin browser QA passed 20 tests.
-- VERIFIED: the earlier Studio readiness assertion used `<main>` although the actual Studio Shell landmark is `role="banner"`; this was a test-only correction retaining real route, viewport, overflow, and accessibility assertions.
-- VERIFIED: the earlier 320px Studio overflow was real (`scrollWidth=344`, `clientWidth=320`) and diagnostics identified the Studio Shell top-header action group as the source.
-- VERIFIED: `src/components/studio-shell.tsx` makes the mobile action group `w-full min-w-0 max-w-full flex-wrap` and restores compact horizontal behavior from `sm`.
-- VERIFIED: `src/components/studio-menu-workspace.tsx` adds narrow-width containment while preserving the existing Menu Import action and behavior.
-- VERIFIED: shared WorkspaceHeader stacks on small screens and shared FilterBar actions wrap.
-- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu business logic, Studio business logic, Admin business logic, dependencies, route architecture, Vercel, merge, or deployment changed.
+- VERIFIED: previous Studio 320px overflow was corrected with width containment/wrapping only; Menu Import behavior was preserved.
 - UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
 
-### W7.11 — Final Visual Quality, Product Consistency, Release-Readiness Audit — DONE / VERIFIED — 2026-09-15
-- VERIFIED: final W7.11 CI run `34940468908` / run 1668 passed route generation, freshness, typecheck, 266 repository tests, W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, public all-theme QA, Studio QA, Platform Admin QA, performance, diagnostics, and cleanup at implementation HEAD `c11dfb90a87fcb0137daa3e47dd405ba34908233`.
-- VERIFIED: `docs/W7_11_FINAL_QUALITY_AUDIT.md` records the final visual, responsive, navigation, state, accessibility, and consistency audit.
-- VERIFIED: `docs/W7_11_PR_REVIEW.md` records `READY_FOR_HUMAN_REVIEW`.
-- VERIFIED: no release blocker or unresolved high/medium visual, accessibility, navigation, or state defect was evidenced in the audited W7 scope.
-- VERIFIED: no W7.11 product/runtime code fix was required.
+### W7.11 — DONE / VERIFIED
+- VERIFIED: final visual/product consistency/release-readiness audit is recorded in `docs/W7_11_FINAL_QUALITY_AUDIT.md`.
+- VERIFIED: Draft PR review is recorded in `docs/W7_11_PR_REVIEW.md` with result `READY_FOR_HUMAN_REVIEW`.
+- VERIFIED: no release blocker or unresolved high/medium visual, accessibility, navigation, or state defect was found.
 - UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
 
-### W7.12 — Release Readiness Package — DONE / VERIFIED — 2026-09-15
-- VERIFIED: W7.12 is documentation/review preparation only; no product feature or production release work was started.
-- VERIFIED: lint triage records 29 warnings and 0 errors; no warning is classified as an automatic merge blocker.
-- VERIFIED: real-device QA protocol is prepared in `docs/W7_12_REAL_DEVICE_QA.md`; physical testing did not occur and remains `PENDING_RELEASE_STAGE`.
-- VERIFIED: human PR review package is prepared in `docs/W7_12_HUMAN_PR_REVIEW.md`.
-- VERIFIED: release risk register is prepared in `docs/W7_12_RELEASE_RISKS.md`.
-- VERIFIED: PR #146 remains Open / Draft / Unmerged; human review is required before any merge decision.
-- VERIFIED: no deployment occurred and Vercel was not touched by W7.12.
-- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions, AI, orders, public menu business logic, Studio business logic, Admin business logic, dependencies, or route architecture changed in W7.12.
-- UNKNOWN: direct current Vercel Production state remains external evidence and is not a release approval.
+### W7.12 — DONE / VERIFIED
+- VERIFIED: release-readiness documentation is complete: lint triage, real-device QA protocol, human PR review package, and release risk register.
+- VERIFIED: 29 lint warnings and 0 errors were triaged; no warning is an automatic merge blocker.
+- VERIFIED: PR #146 remains Open / Draft / Unmerged.
+- VERIFIED: W7.12 performed no product/runtime code changes, no deployment, and no Vercel action.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
+## W8 — Internal Visual System — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: selected direction is `Midnight Ink & Sand`.
+- VERIFIED: W8 is internal-only: Studio shell/Home/Menu/Growth/Customers/Orders/Settings, Platform Admin, and shared internal visual surfaces.
+- VERIFIED: semantic palette uses `#F2EDE3`, `#FBF8F2`, `#FFFFFF`, `#E7DED0`, `#1F2522`, `#161B19`, `#DDE4DF`, `#8B642E`, `#E8DCC8`, `#1D2421`, `#5E655F`, `#D3CBC0`, `#B6ADA1`, `#246044`, `#7A5218`, `#9A3B32`, `#2D5C76`, `#6F746F`, `#E2DDD4`, `#C9C2B8`, and `rgb(31 37 34 / 0.72)`.
+- VERIFIED: brass `#8B642E` is restricted to UI/focus/action emphasis and is not normal body text.
+- VERIFIED: Quality Run `1684` / `34996084516` passed on implementation head `28e65914a0fe87b5879982d0fa82f90b25c52593` before documentation reconciliation.
+- VERIFIED: the W8 documentation reconciliation batch was applied to the branch without changing application architecture, data, security, dependencies, lockfiles, routes, Public Menu themes, or deployment configuration.
+- VERIFIED: the final current-head quality run after the documentation batch is required before this session is closed.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
 
 ## Production / Release Gates
-- VERIFIED: release-stage real-device QA is still required unless an authorized human formally waives it.
-- VERIFIED: human review of Draft PR #146 is required before merge.
-- VERIFIED: W7.12 changes are documentation-only; the last full current-head CI evidence remains W7.11 run `34940468908` / #1668 — PASS at `c11dfb90a87fcb0137daa3e47dd405ba34908233`.
-- VERIFIED: no merge, deployment, or production release is authorized by this state.
+- VERIFIED: release-stage real-device QA remains required unless an authorized human formally waives it.
+- VERIFIED: PR #147 remains Draft and unmerged.
+- VERIFIED: no production deployment was intentionally performed by ATLAS.
+- UNKNOWN: direct current Vercel Production state remains external evidence.
 
 ## Exact Next Task
-Human review of Draft PR #146 using `docs/W7_12_HUMAN_PR_REVIEW.md`, followed by the release-stage physical-device QA gate when explicitly authorized. Do not begin another product milestone automatically.
+Complete final current-head CI for the W8 continuity batch, then human review of Draft PR #147. No merge/deploy by ATLAS.
 
 ## Continuity Rule
-At the end of every atomic task:
-1. reconcile current Git head;
-2. verify CI evidence;
-3. verify deployment separately when relevant;
-4. update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`;
-5. update material audit/research/project-memory records when the task reveals a durable lesson;
-6. record exactly one next task;
-7. stop.
-
-## Evidence Labels
-`VERIFIED` = direct repository/tool/test/platform evidence.
-`INFERRED` = derived from verified evidence.
-`PROPOSED` = recommendation not yet proven.
-`UNKNOWN` = insufficient evidence.
-`BLOCKED` = hard constraint prevents verification or implementation.
+At the end of every atomic task, reconcile Git head, verify CI, verify deployment separately when relevant, update continuity files, record exactly one next task, and stop.
