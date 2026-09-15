@@ -109,12 +109,26 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: the original Platform Admin browser blocker was an `AUTH_DISABLED_FIXTURE_GAP`; the CI-only temporary PostgreSQL service now applies the required compatible existing migrations, creates missing Supabase-compatible roles, and seeds `dev-user` in `menu_v3.platform_admins`. This fixture is runner-local and does not modify production schema or migration files.
 - VERIFIED: the only remaining W7.9 browser failure was a test serialization expectation. The actual router URL was `/admin/orders?keep=%221%22`; `URLSearchParams.get("keep")` therefore returns `"1"`. The test now asserts the actual serialized value rather than the unencoded expectation.
 - VERIFIED: `/admin` remains Overview/Shell; `/admin/$workspace` is the protected workspace adapter; `setTab(next)` remains intact and URL synchronization is additive through `navigate({ to: ADMIN_ROUTES[next] })`.
-- VERIFIED: all real Admin child routes, legacy known-tab normalization, unknown-tab safe fallback, refresh, back/forward, active navigation, responsive geometry, and authorized Admin browser state passed in the final route-correction run.
+- VERIFIED: all real Admin child routes, legacy known-tab normalization, unknown-tab safe fallback, refresh, back/forward, active navigation, responsive geometry, RTL/LTR structure, focus/aria-current, and no-overflow checks passed in the final route-correction run.
 - VERIFIED: public all-theme QA and Studio Shell/Home/Menu/Growth/Customers browser QA remained green.
 - VERIFIED: no fake Admin data, metrics, charts, health scores, security events, recommendations, or operator sample data were added.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, Vercel, merge, or deployment changed.
 - VERIFIED: continuity documentation for W7.9 has now been reconciled in the canonical project-control and W7.9 audit/architecture/QA records; a final current-head quality run is required to validate this documentation-only reconciliation.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
+
+## W7.10 — Full-Product Mobile and Responsive Pass — 2026-09-15
+
+- VERIFIED: final implementation/test workflow `34932493596` / run 1655 passed all configured route, freshness, typecheck, repository, W7.4–W7.10 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin, performance, diagnostics, and cleanup stages at implementation HEAD `16d11eae278641062503c0a6d23d60677e6c7cb3`.
+- VERIFIED: the prior Studio readiness failure was test-only: the test waited for `<main>` while the real Studio Shell uses `role="banner"`; the test was corrected without weakening route, viewport, overflow, or accessibility assertions.
+- VERIFIED: the prior Studio 320px overflow was real: `scrollWidth=344` and `clientWidth=320`; diagnostics identified the Studio Shell header action group as the source of the width pressure.
+- VERIFIED: `src/components/studio-shell.tsx` now makes the mobile header action group width-contained and wrapping-safe (`w-full min-w-0 max-w-full flex-wrap`) and restores compact horizontal behavior from `sm`.
+- VERIFIED: `src/components/studio-menu-workspace.tsx` adds narrow-width containment to the Menu header/action row while preserving the existing Import action and behavior.
+- VERIFIED: shared WorkspaceHeader stacks on small screens and shared FilterBar actions wrap; no route architecture or business logic changed.
+- VERIFIED: public template QA passed all five themes at 320×800, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1280×800, and 1440×900 with no horizontal overflow, accessible-name failures, or runtime console errors.
+- VERIFIED: Studio responsive browser QA passed 9 tests; Platform Admin responsive browser QA passed 20 tests.
+- VERIFIED: performance audit completed and baseline artifact was uploaded.
+- VERIFIED: no protected backend, security, authorization, business logic, dependency, route, Vercel, merge, or deployment area changed.
+- UNKNOWN: physical Android/iOS device QA remains `PENDING_RELEASE_STAGE`.
 
 ## QA Continuity Rule
 Documentation reconciliation is not a substitute for current code validation. Every implementation change receives a new current-head quality/browser verification before DONE.
