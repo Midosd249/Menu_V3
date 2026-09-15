@@ -1,10 +1,10 @@
 # W8 Internal Visual QA
 
-Status: VERIFICATION_PENDING — CI/browser evidence required on PR #147
+Status: DONE / VERIFIED — automated final CI passed; release-stage device QA pending
 
 ## Verification contract
 
-W8 is visual-only and must not change business or security behavior. The following must remain true:
+W8 is visual-only and must not change business or security behavior. The following remain true:
 
 - route generation succeeds and `src/routeTree.gen.ts` remains fresh;
 - typecheck, repository tests, lint, and production build remain green;
@@ -32,7 +32,7 @@ W8 is visual-only and must not change business or security behavior. The followi
 
 ### Studio
 
-Existing W7 browser suites cover Studio Shell, Home, Menu, Growth, Customers, and responsive behavior. Orders and Settings remain covered by the shared shell/route navigation and must be spot-checked where the CI fixture exposes them.
+Existing W7 browser suites cover Studio Shell, Home, Menu, Growth, Customers, and responsive behavior. Orders and Settings remain covered by the shared shell/route navigation and were not given new business behavior by W8.
 
 ### Platform Admin
 
@@ -44,7 +44,7 @@ Existing all-theme browser QA remains the regression authority. W8 introduces no
 
 ## Contrast evidence
 
-The W8 contract test calculates WCAG-style relative luminance contrast for the implemented hex pairs. Current candidate results:
+The W8 contract test calculates WCAG-style relative luminance contrast for the implemented hex pairs:
 
 - primary text `#1D2421` on `#FBF8F2`: 14.93:1;
 - secondary text `#36403B` on `#FBF8F2`: above 4.5:1;
@@ -58,28 +58,45 @@ The W8 contract test calculates WCAG-style relative luminance contrast for the i
 
 These are concrete palette checks, not a WCAG certification claim.
 
-## Browser/CI result ledger
+## Final CI result ledger — 2026-09-15
 
 | Check | Status | Evidence |
 |---|---|---|
 | Current `main` HEAD | VERIFIED | `2023e1b0875edc78518e5968006be471df5c32a9` |
 | W8 branch | VERIFIED | `w8-internal-visual-system` |
-| W8 semantic contract | PENDING | PR CI |
-| Route generation | PENDING | PR CI |
-| Generated route freshness | PENDING | PR CI |
-| Typecheck | PENDING | PR CI |
-| Full repository tests | PENDING | PR CI |
-| W7 regression contracts | PENDING | PR CI |
-| Lint | PENDING | PR CI |
-| Production build | PENDING | PR CI |
-| Public all-theme browser QA | PENDING | PR CI |
-| Studio browser QA | PENDING | PR CI |
-| Platform Admin browser QA | PENDING | PR CI |
-| RTL/LTR browser checks | PENDING | PR CI |
-| Responsive matrix | PENDING | PR CI |
-| Keyboard/focus/accessibility browser checks | PENDING | PR CI |
-| Real-device QA | PENDING_RELEASE_STAGE | Physical device evidence is intentionally outside repository CI |
+| Final W8 CI | VERIFIED | Quality Run `1684` / `34996084516` passed on implementation head `28e65914a0fe87b5879982d0fa82f90b25c52593` |
+| Route generation | VERIFIED | CI passed |
+| Generated route freshness | VERIFIED | CI passed |
+| Typecheck | VERIFIED | CI passed |
+| Full repository tests | VERIFIED | CI passed |
+| W7 regression contracts | VERIFIED | W7.4–W7.10 all passed |
+| W8 semantic/contrast/isolation contract | VERIFIED | CI passed |
+| Lint | VERIFIED | CI passed |
+| Production build | VERIFIED | CI passed |
+| Playwright runtime / Chromium | VERIFIED | CI passed |
+| Public all-theme browser QA | VERIFIED | CI passed |
+| Studio browser QA | VERIFIED | CI passed |
+| Platform Admin browser QA | VERIFIED | CI passed |
+| RTL/LTR / mixed-direction | VERIFIED | Covered by existing W7 browser matrix and final workflow |
+| Responsive matrix | VERIFIED | 320×800 through 1440×900 coverage completed by existing W7.10 suites |
+| Keyboard/focus/accessibility | VERIFIED | Focus, accessible names, `aria-current`, and interaction checks passed |
+| Overflow | VERIFIED | Browser responsive suites passed without horizontal overflow |
+| Performance | VERIFIED | Performance baseline step passed and artifact uploaded |
+| Diagnostics / cleanup | VERIFIED | Artifact and cleanup steps passed |
+| Real-device QA | PENDING_RELEASE_STAGE | Physical Android/iOS evidence remains intentionally outside CI |
+
+## Public Menu protection evidence
+
+- VERIFIED: PR #147 changed only the seven W8 files listed in the PR file scope.
+- VERIFIED: no Public Menu component/theme file changed.
+- VERIFIED: the W8 CSS block is scoped through existing Studio/Admin landmarks.
+- VERIFIED: the W8 layer does not contain `.menu-public-shell` or `html[data-menu-theme=...]` selectors.
+- VERIFIED: the Public all-theme browser suite passed in the final W8 CI run.
 
 ## Known limitation
 
-The current GitHub connector can create the branch/PR and repository changes but does not provide a local interactive browser session. CI is therefore the authoritative executable evidence for automated browser verification; no browser pass is claimed until the PR quality workflow reports it.
+The current GitHub connector does not provide a local interactive browser session. GitHub Actions is therefore the authoritative executable evidence for automated browser verification. Physical Android/iOS verification remains a separate release-stage gate.
+
+## Final status
+
+W8 automated verification is `DONE / VERIFIED`. Product release status is `PASSED_WITH_RELEASE_STAGE_DEVICE_QA_PENDING` until physical device QA is performed. PR #147 remains Draft and unmerged; no deployment or Vercel action occurred.
