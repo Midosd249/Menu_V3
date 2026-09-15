@@ -22,13 +22,13 @@ test("approved onboarding binds the service-request phone to the authenticated a
   const onboarding = read("src/lib/menu/platform-onboarding.ts");
   assert.match(onboarding, /normalizePhoneDigits/);
   assert.match(onboarding, /"phoneNumberVerified" = true/);
-  assert.match(onboarding, /phoneNumber.*linked to another account|phoneNumber/);
+  assert.match(onboarding, /phoneNumber.*حساب آخر|phoneNumber/);
 });
 
 test("Platform Owner account controls are server-authorized and preserve restaurant data", () => {
   const users = read("src/lib/menu/platform-users.ts");
   const route = read("src/routes/admin/users.tsx");
-  assert.match(users, /requirePlatformAdmin\(context\.userId\)/);
+  assert.match(users, /requirePlatformAdmin\(userId\)/);
   assert.match(users, /delete from "session"/);
   assert.match(users, /where user_id = \$\{data\.userId\}/);
   assert.match(users, /لا يمكن حذف حساب مرتبط بمطعم/);
