@@ -12,7 +12,7 @@ async function assertCustomersPage(page: Page) {
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   const customersNav = page.locator('nav[aria-label="مساحات العمل"]');
-  await expect(customersNav.getByRole("button", { name: "العملاء" })).toHaveAttribute("aria-current", "page");
+  await expect(customersNav.getByRole("link", { name: "العملاء" })).toHaveAttribute("aria-current", "page");
   await expect(page.locator('a[href="/studio/loyalty"], a[href="/studio/campaigns"], a[href="/studio/feedback"], a[href="/studio/retention"]')).toHaveCount(0);
 }
 
