@@ -4,7 +4,7 @@ const BASE_URL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 
 async function assertAdminShell(page: import("playwright/test").Page) {
   await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "تنقل إدارة المنصة" })).toBeVisible();
+  await expect(page.locator('aside[aria-label="تنقل إدارة المنصة"] nav')).toBeVisible();
   for (const group of ["نظرة عامة", "العملاء", "التجارة والتشغيل", "المبيعات", "الذكاء التشغيلي", "النظام"]) {
     await expect(page.getByRole("heading", { name: group })).toBeVisible();
   }
@@ -26,7 +26,11 @@ test("W7.8 Platform Admin shell browser QA", async ({ page }) => {
   }
 
   await page.setViewportSize({ width: 1280, height: 800 });
-  const nav = page.getByRole("navigation", { name: "تنقل إدارة المنصة" });
+  const nav = page.locator('aside[aria-label="تنقل إدارة المنصة"] nav');
+  await expect(page.getByText("لا توجد شاشة Security مستقلة")).toBeVisible();
+  await expect(page.getByText("لا توجد شاشة Platform Health مستقلة")).toBeVisible();
+  await expect(page.getByText("لا توجد شاشة Configuration مستقلة")).toBeVisible();
+
   for (const item of [
     "المطاعم",
     "العملاء والحسابات",
@@ -47,7 +51,4 @@ test("W7.8 Platform Admin shell browser QA", async ({ page }) => {
 
   await page.getByRole("button", { name: "النظام والأمان" }).focus();
   await expect(page.getByRole("button", { name: "النظام والأمان" })).toBeFocused();
-  await expect(page.getByText("لا توجد شاشة Security مستقلة")).toBeVisible();
-  await expect(page.getByText("لا توجد شاشة Platform Health مستقلة")).toBeVisible();
-  await expect(page.getByText("لا توجد شاشة Configuration مستقلة")).toBeVisible();
 });

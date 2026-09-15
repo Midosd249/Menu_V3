@@ -22,7 +22,8 @@ test("W7.8 Admin navigation is grouped around real capabilities only", () => {
 
 test("W7.8 preserves existing Admin operations and authorization boundaries", () => {
   for (const operation of ["getPlatformDashboard", "getPlatformOrders", "updatePlatformOrderStatus", "archivePlatformOrder", "updatePlatformTenantStatus", "getAdminDashboard", "updateLead", "approveLead"]) assert.match(admin, new RegExp(operation));
-  assert.match(platform, /requirePlatformAdmin\(context\.userId\)/);
+  assert.match(platform, /assertPlatformAdmin\(context\.userId\)/);
+  assert.match(platform, /requirePlatformAdmin\(userId\)/);
   assert.match(auth, /requirePlatformAdmin/);
 });
 
