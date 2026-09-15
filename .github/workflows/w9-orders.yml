@@ -1,0 +1,104 @@
+name: Menu V3 W9 Orders QA
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  orders-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: menu_v3_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d menu_v3_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+      VITE_AUTH_ENABLED: "false"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Generate route tree and typecheck
+        run: |
+          npx vite build --mode development
+          git diff --exit-code -- src/routeTree.gen.ts
+          npm run typecheck
+      - name: Prepare isolated Orders fixture
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from "node:fs/promises";
+          import { join } from "node:path";
+          import pg from "pg";
+
+          const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
+          const client = await pool.connect();
+          try {
+            await client.query("create schema if not exists menu_v3");
+            await client.query("create role anon nologin").catch((e) => { if (e.code !== "42710") throw e; });
+            await client.query("create role authenticated nologin").catch((e) => { if (e.code !== "42710") throw e; });
+            await client.query("set search_path to menu_v3, public");
+            for (const name of ["0001_auth.sql", "0002_menu_v3.sql", "0003_leads_admin.sql", "0004_demo_visuals.sql", "0005_demo_product_photos.sql", "0008_menu_product_options.sql", "0009_orders.sql", "20260903008000_roles_permissions_foundation.sql"]) {
+              await client.query("begin");
+              try { await client.query(await readFile(join(process.cwd(), "migrations", name), "utf8")); await client.query("commit"); }
+              catch (error) { await client.query("rollback"); throw error; }
+            }
+            await client.query("alter table tenant_members add column if not exists access_role text not null default 'tenant_owner'");
+            await client.query("alter table tenant_members add column if not exists branch_scope text[] null");
+            await client.query("alter table tenant_members add column if not exists is_active boolean not null default true");
+            await client.query("alter table orders add column if not exists archived_at timestamptz");
+            await client.query("insert into tenant_members (tenant_id,user_id,role,access_role,branch_scope) values ('demo-nafas','dev-user','owner','tenant_owner',null) on conflict (tenant_id,user_id) do update set is_active=true,role='owner',access_role='tenant_owner',branch_scope=null");
+            await client.query("insert into orders (id,tenant_id,branch_id,status,source,customer_name,customer_phone,notes,currency,subtotal,total) values ('w9-order-primary','demo-nafas','demo-nafas-olaya','new','web','أحمد العتيبي','0551234567','بدون سكر','SAR',48,50) on conflict (id) do update set status='new',customer_name=excluded.customer_name,customer_phone=excluded.customer_phone,notes=excluded.notes,subtotal=excluded.subtotal,total=excluded.total,updated_at=now()");
+            await client.query("insert into order_items (id,order_id,product_id,product_name_ar,product_name_en,quantity,unit_price,line_total,selected_options) values ('w9-item-primary','w9-order-primary','demo-p-v60','في ٦٠','V60',2,22,44,'[{\"type\":\"modifier\",\"id\":\"w9-modifier-1\",\"nameAr\":\"حار\",\"nameEn\":\"Hot\",\"priceDelta\":0},{\"type\":\"note\",\"id\":\"w9-note-1\",\"nameAr\":\"بدون سكر\",\"nameEn\":\"No sugar\",\"priceDelta\":0}]'::jsonb) on conflict (id) do nothing");
+            await client.query("insert into orders (id,tenant_id,branch_id,status,source,customer_name,customer_phone,notes,currency,subtotal,total) values ('w9-order-no-phone','demo-nafas','demo-nafas-olaya','preparing','qr','سارة القحطاني','','','SAR',18,18) on conflict (id) do update set status='preparing',customer_name=excluded.customer_name,customer_phone='',notes='',subtotal=18,total=18,updated_at=now()");
+            await client.query("insert into order_items (id,order_id,product_id,product_name_ar,product_name_en,quantity,unit_price,line_total,selected_options) values ('w9-item-no-phone','w9-order-no-phone','demo-p-flatwhite','فلات وايت','Flat White',1,18,18,'[]'::jsonb) on conflict (id) do nothing");
+          } finally { client.release(); await pool.end(); }
+          await writeFile(".w9-fixture-ready", "fixture-ready\n");
+          NODE
+      - name: Install Playwright
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Run W9 Orders browser QA
+        run: |
+          setsid bash -c 'exec env VITE_AUTH_ENABLED=false DATABASE_URL="$DATABASE_URL" node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8082' > w9-orders-browser.log 2>&1 < /dev/null &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 120); do
+            if curl --silent --show-error --fail http://127.0.0.1:8082/studio/orders >/dev/null; then
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w9-orders-browser.spec.ts --workers=1
+              exit $?
+            fi
+            sleep 0.25
+          done
+          cat w9-orders-browser.log
+          exit 1
+      - name: Upload W9 browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w9-orders-browser-diagnostics
+          path: |
+            w9-orders-browser.log
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
