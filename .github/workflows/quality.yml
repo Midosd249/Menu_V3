@@ -156,8 +156,51 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
         run: |
-          node scripts/migrate.mjs
-          node --input-type=module -e 'import pg from "pg"; const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 }); await pool.query("insert into menu_v3.platform_admins (user_id) values ($1) on conflict (user_id) do nothing", ["dev-user"]); await pool.end();'
+          node --input-type=module <<'NODE'
+          import { readFile } from "node:fs/promises";
+          import { join } from "node:path";
+          import pg from "pg";
+
+          const migrations = [
+            "0001_auth.sql",
+            "0002_menu_v3.sql",
+            "0003_leads_admin.sql",
+            "0004_demo_visuals.sql",
+            "0005_demo_product_photos.sql",
+            "0008_menu_product_options.sql",
+            "0009_orders.sql",
+            "20260903008000_roles_permissions_foundation.sql",
+          ];
+          const pool = new pg.Pool({
+            connectionString: process.env.DATABASE_URL,
+            options: "-c search_path=menu_v3,public",
+            max: 1,
+          });
+          const client = await pool.connect();
+          try {
+            await client.query("create schema if not exists menu_v3");
+            await client.query("set search_path to menu_v3, public");
+            for (const name of migrations) {
+              await client.query("begin");
+              try {
+                const sql = await readFile(join(process.cwd(), "migrations", name), "utf8");
+                await client.query(sql);
+                await client.query("commit");
+                console.log(`[admin-fixture] applied ${name}`);
+              } catch (error) {
+                await client.query("rollback");
+                throw error;
+              }
+            }
+            await client.query(
+              "insert into menu_v3.platform_admins (user_id) values ($1) on conflict (user_id) do nothing",
+              ["dev-user"],
+            );
+          } finally {
+            client.release();
+            await pool.end();
+          }
+          NODE
       - name: Platform Admin browser QA — auth-disabled local mode
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
