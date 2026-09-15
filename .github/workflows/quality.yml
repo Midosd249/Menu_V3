@@ -179,6 +179,8 @@ jobs:
           const client = await pool.connect();
           try {
             await client.query("create schema if not exists menu_v3");
+            await client.query("create role anon nologin").catch((error) => { if (error.code !== "42710") throw error; });
+            await client.query("create role authenticated nologin").catch((error) => { if (error.code !== "42710") throw error; });
             await client.query("set search_path to menu_v3, public");
             for (const name of migrations) {
               await client.query("begin");
