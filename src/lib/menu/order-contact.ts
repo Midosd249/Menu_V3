@@ -1,5 +1,5 @@
 import type { AdminOrder } from "./orders";
-import { normalizePhoneDigits } from "./public-actions";
+import { normalizePhoneDigits } from "./public-actions.ts";
 import type { Lang } from "./types";
 
 export type OrderContact = { digits: string; tel: string; whatsapp: string };
