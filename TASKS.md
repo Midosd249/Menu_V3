@@ -131,7 +131,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: existing permission gates remain active.
 - VERIFIED: Platform Admin remains separate.
 - VERIFIED: accepted GitHub Actions run `34905256209` passed all required quality gates and actual `/studio` browser QA.
-- VERIFIED: physical device QA remains release-stage evidence only.
+- VERIFIED: physical real-device QA remains release-stage evidence only.
 
 ### W7.4 — DONE / VERIFIED
 
@@ -184,6 +184,18 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 - VERIFIED: route splitting is deferred to W7.9.
 
+### W7.9 — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: Platform Admin route architecture is implemented with `/admin` as the authorized Overview/Shell and `/admin/$workspace` as the whitelisted child-route adapter for all 11 real Admin workspaces.
+- VERIFIED: the existing `setTab(next)` runtime contract remains intact; URL synchronization is additive through `navigate({ to: ADMIN_ROUTES[next] })`.
+- VERIFIED: legacy `/admin?tab=<known>` values normalize to the mapped child route, `tab` is removed, unrelated query parameters are preserved according to the router serialization contract, and unknown values safely fall back to `/admin` with `replace: true`.
+- VERIFIED: the original Platform Admin browser blocker was an `AUTH_DISABLED_FIXTURE_GAP`; the CI-only PostgreSQL fixture now reaches real `requirePlatformAdmin` / `assertPlatformAdmin` authorization without changing production schema or migrations.
+- VERIFIED: the final browser assertion was corrected test-only to match actual TanStack Router serialization (`keep=%221%22` parses as `"1"`).
+- VERIFIED: final quality run `34925141809` / run 1638 passed all route, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
+- VERIFIED: no unsupported Admin detail routes, fake data, metrics, charts, health scores, security events, or operator records were introduced.
+- VERIFIED: no protected production/database/auth/security/business areas changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
 ## Exact Next Task
-### W7.9 — Platform Admin Route Architecture / Route Splitting
-Complete only W7.9, then stop. W7.10+ and release work remain out of scope.
+### W7.10 — Full-Product Mobile and Responsive Pass
+W7.10 is the next safe phase. Do not begin W7.11, merge, deployment, or release work until W7.10 is explicitly completed and verified.
