@@ -69,12 +69,11 @@ test("W7.9 keeps legacy tab compatibility and safe unknown fallback", () => {
   assert.match(admin, /replace: true/);
 });
 
-test("W7.9 child route whitelists only real Admin workspaces", () => {
+test("W7.9 child route is a protected adapter over the verified workspace mapping", () => {
   assert.match(workspaceRoute, /ADMIN_WORKSPACE_TABS\[params\.workspace\]/);
   assert.match(workspaceRoute, /if \(!ADMIN_WORKSPACE_TABS\[params\.workspace\]\)/);
-  for (const workspace of Object.keys(workspaceMappings)) {
-    assert.ok(workspaceRoute.includes(`"${workspace}"`), `missing workspace key: ${workspace}`) || true;
-  }
+  assert.match(workspaceRoute, /const initialTab = ADMIN_WORKSPACE_TABS\[workspace\] as Tab/);
+  assert.match(workspaceRoute, /return <PlatformAdminPage initialTab=\{initialTab\} \/>/);
   assert.match(workspaceRoute, /throw redirect\(\{ to: "\/admin", replace: true \}\)/);
   assert.doesNotMatch(workspaceRoute, /\/admin\/(security|platform-health|configuration)/);
 });
