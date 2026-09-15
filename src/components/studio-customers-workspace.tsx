@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { HeartHandshake, Megaphone, MessageSquareText, RefreshCw, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorState, InsightCard, LoadingState, MetricRow, PageHeader, PermissionDeniedState, SectionHeader, StatusBadge } from "@/components/internal-design-system";
@@ -19,22 +19,22 @@ export function StudioCustomersWorkspace() {
   const [refreshing, setRefreshing] = useState(false);
   const isAr = lang === "ar";
 
-  const load = async (refresh = false) => {
+  const load = useCallback(async (refresh = false) => {
     if (refresh) setRefreshing(true);
     else setState({ status: "loading" });
 
-    const result = await getGuestRelationshipOverview({ data: {} });
-    if (result.ok) {
-      setState({ status: "ready", data: result.data });
-    } else {
-      setState({ status: "error", code: result.code, message: result.error });
+    try {
+      const result = await getGuestRelationshipOverview({ data: {} });
+      if (result.ok) setState({ status: "ready", data: result.data });
+      else setState({ status: "error", code: result.code, message: result.error });
+    } catch (error: unknown) {
+      setState({ status: "error", code: "unavailable", message: error instanceof Error ? error.message : (isAr ? "تعذر تحميل بيانات العملاء" : "Customer data could not be loaded") });
+    } finally {
+      setRefreshing(false);
     }
-    setRefreshing(false);
-  };
+  }, [isAr]);
 
-  useEffect(() => {
-    void load();
-  }, []);
+  useEffect(() => { void load(); }, [load]);
 
   const number = useMemo(
     () => (value: number) => Number(value).toLocaleString(isAr ? "ar-SA" : "en-US"),
@@ -77,43 +77,30 @@ export function StudioCustomersWorkspace() {
         eyebrow={isAr ? "مساحة العملاء · R9" : "Customers Workspace · R9"}
         title={isAr ? "العملاء والضيوف" : "Customers & Guests"}
         description={isAr ? "مساحة تشغيلية لفهم الضيوف المعروفين للنظام، إشارات العلاقات المتاحة، وما يمكن استخدامه فعليًا — دون تحويلها إلى CRM وهمي أو تسويق آلي." : "An operational view of known guests, available relationship signals, and supported actions — without inventing CRM or marketing capabilities."}
-        actions={<Button type="button" variant="outline" onClick={() => void load(true)} disabled={refreshing} aria-label={isAr ? "تحديث بيانات العملاء" : "Refresh customer data"}><RefreshCw className={refreshing ? "size-4 animate-spin" : "size-4"} />{isAr ? "تحديث" : "Refresh"}</Button>}
+        actions={<Button type="button" variant="outline" onClick={() => void load(true)} disabled={refreshing} aria-label={isAr ? "تحديث بيانات العملاء" : "Refresh customer data"}><RefreshCw className={refreshing ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />{isAr ? "تحديث" : "Refresh"}</Button>}
       />
 
-      <section aria-labelledby="customers-overview" className="grid gap-3">
-        <SectionHeader title={isAr ? "ما البيانات الموجودة؟" : "What customer data exists?"} description={isAr ? "مؤشرات حقيقية من طبقة علاقات الضيوف الحالية، ضمن نطاق المطعم والصلاحيات الحالية." : "Real signals from the existing guest relationship layer, scoped by the current restaurant and permissions."} />
+      <section aria-labelledby="customers-overview-heading" className="grid gap-3">
+        <SectionHeader title={<span id="customers-overview-heading">{isAr ? "ما البيانات الموجودة؟" : "What customer data exists?"}</span>} description={isAr ? "مؤشرات حقيقية من طبقة علاقات الضيوف الحالية، ضمن نطاق المطعم والصلاحيات الحالية." : "Real signals from the existing guest relationship layer, scoped by the current restaurant and permissions."} />
         {hasGuestData ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {metrics.map((metric) => <article key={metric.label} className="rounded-lg border border-line bg-paper p-4"><MetricRow label={metric.label} value={metric.value} detail={metric.detail} /></article>)}
           </div>
         ) : (
-          <EmptyState
-            title={isAr ? "لا توجد بيانات ضيوف حاليًا" : "No guest data currently"}
-            body={isAr ? "هذا يعني فقط أنه لا توجد ملفات ضيوف مسجلة في النطاق الحالي. لا يعني ذلك عدم وجود عملاء في المطعم." : "This means there are no guest profiles recorded in the current scope. It does not mean the restaurant has no customers."}
-          />
+          <EmptyState title={isAr ? "لا توجد بيانات ضيوف حاليًا" : "No guest data currently"} body={isAr ? "هذا يعني فقط أنه لا توجد ملفات ضيوف مسجلة في النطاق الحالي. لا يعني ذلك عدم وجود عملاء في المطعم." : "This means there are no guest profiles recorded in the current scope. It does not mean the restaurant has no customers."} />
         )}
       </section>
 
-      <section aria-labelledby="customer-signals" className="grid gap-3">
-        <SectionHeader title={isAr ? "إشارات تحتاج فهمًا" : "Signals that need interpretation"} description={isAr ? "نعرض ما يسجله المصدر الحالي فقط؛ لا نحول العدد إلى حالة أو توصية غير مدعومة." : "Only recorded source signals are shown; counts are not turned into unsupported status or recommendations."} />
+      <section aria-labelledby="customer-signals-heading" className="grid gap-3">
+        <SectionHeader title={<span id="customer-signals-heading">{isAr ? "إشارات تحتاج فهمًا" : "Signals that need interpretation"}</span>} description={isAr ? "نعرض ما يسجله المصدر الحالي فقط؛ لا نحول العدد إلى حالة أو توصية غير مدعومة." : "Only recorded source signals are shown; counts are not turned into unsupported status or recommendations."} />
         <div className="grid gap-3 md:grid-cols-2">
-          <InsightCard
-            title={isAr ? "الملاحظات والتقييمات" : "Feedback & ratings"}
-            body={hasFeedback ? (isAr ? `${number(d.feedbackCount)} سجل ملاحظات${d.averageRating == null ? "" : `، ومتوسط التقييم ${d.averageRating.toFixed(1)}/5`}. حالة المراجعة التفصيلية غير متاحة في هذا الملخص.` : `${number(d.feedbackCount)} feedback records${d.averageRating == null ? "" : `, with a ${d.averageRating.toFixed(1)}/5 average`}. Detailed review status is not exposed by this overview.`) : (isAr ? "لا توجد سجلات ملاحظات في النطاق الحالي." : "No feedback records exist in the current scope.")}
-            meta={<StatusBadge status={hasFeedback ? "info" : "neutral"}>{hasFeedback ? (isAr ? "بيانات حقيقية" : "Real data") : (isAr ? "لا توجد بيانات" : "No data")}</StatusBadge>}
-            tone={hasFeedback ? "info" : "neutral"}
-          />
-          <InsightCard
-            title={isAr ? "الاحتفاظ" : "Retention"}
-            body={d.evidence === "verified" ? (isAr ? "حجم بيانات الضيوف الحالي يسمح بقراءة وصفية ضمن النطاق المتاح. لا توجد هنا ادعاءات تنبؤية أو churn score." : "The current guest-data volume supports a descriptive interpretation within scope. No predictive claim or churn score is presented.") : (isAr ? "الأدلة الحالية غير كافية لتفسير قوي للاحتفاظ. لا يتم اختراع معدل احتفاظ أو cohort." : "Current evidence is insufficient for a strong retention interpretation. No retention rate or cohort is invented.")}
-            meta={<StatusBadge status={d.evidence === "verified" ? "success" : "warning"}>{d.evidence === "verified" ? (isAr ? "دليل موثوق ضمن النطاق" : "Verified within scope") : (isAr ? "يحتاج مراجعة" : "Needs review")}</StatusBadge>}
-            tone={d.evidence === "verified" ? "success" : "warning"}
-          />
+          <InsightCard title={isAr ? "الملاحظات والتقييمات" : "Feedback & ratings"} body={hasFeedback ? (isAr ? `${number(d.feedbackCount)} سجل ملاحظات${d.averageRating == null ? "" : `، ومتوسط التقييم ${d.averageRating.toFixed(1)}/5`}. حالة المراجعة التفصيلية غير متاحة في هذا الملخص.` : `${number(d.feedbackCount)} feedback records${d.averageRating == null ? "" : `, with a ${d.averageRating.toFixed(1)}/5 average`}. Detailed review status is not exposed by this overview.`) : (isAr ? "لا توجد سجلات ملاحظات في النطاق الحالي." : "No feedback records exist in the current scope.")} meta={<StatusBadge status={hasFeedback ? "info" : "neutral"}>{hasFeedback ? (isAr ? "بيانات حقيقية" : "Real data") : (isAr ? "لا توجد بيانات" : "No data")}</StatusBadge>} tone={hasFeedback ? "info" : "neutral"} />
+          <InsightCard title={isAr ? "الاحتفاظ" : "Retention"} body={d.evidence === "verified" ? (isAr ? "حجم بيانات الضيوف الحالي يسمح بقراءة وصفية ضمن النطاق المتاح. لا توجد هنا ادعاءات تنبؤية أو churn score." : "The current guest-data volume supports a descriptive interpretation within scope. No predictive claim or churn score is presented.") : (isAr ? "الأدلة الحالية غير كافية لتفسير قوي للاحتفاظ. لا يتم اختراع معدل احتفاظ أو cohort." : "Current evidence is insufficient for a strong retention interpretation. No retention rate or cohort is invented.")} meta={<StatusBadge status={d.evidence === "verified" ? "success" : "warning"}>{d.evidence === "verified" ? (isAr ? "دليل موثوق ضمن النطاق" : "Verified within scope") : (isAr ? "يحتاج مراجعة" : "Needs review")}</StatusBadge>} tone={d.evidence === "verified" ? "success" : "warning"} />
         </div>
       </section>
 
-      <section aria-labelledby="supported-capabilities" className="grid gap-3">
-        <SectionHeader title={isAr ? "ما الذي يدعمه النظام؟" : "What is actually supported?"} description={isAr ? "هذه القدرات موجودة داخل طبقة R9، لكن لا توجد لها مسارات مستقلة في `/studio` حاليًا." : "These R9 capabilities exist in the current relationship layer, but they do not have standalone `/studio` routes today."} />
+      <section aria-labelledby="supported-capabilities-heading" className="grid gap-3">
+        <SectionHeader title={<span id="supported-capabilities-heading">{isAr ? "ما الذي يدعمه النظام؟" : "What is actually supported?"}</span>} description={isAr ? "هذه القدرات موجودة داخل طبقة R9، لكن لا توجد لها مسارات مستقلة في `/studio` حاليًا." : "These R9 capabilities exist in the current relationship layer, but they do not have standalone `/studio` routes today."} />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <CapabilityCard icon={<HeartHandshake className="size-5" />} title={isAr ? "الولاء" : "Loyalty"} value={hasLoyalty ? `${number(d.loyaltyMembers)} ${isAr ? "عضو" : "members"} · ${number(d.loyaltyPoints)} ${isAr ? "نقطة" : "points"}` : (isAr ? "لا توجد بيانات" : "No data")} />
           <CapabilityCard icon={<Megaphone className="size-5" />} title={isAr ? "الحملات" : "Campaigns"} value={hasCampaignDrafts ? `${number(d.campaignDrafts)} ${isAr ? "مسودة" : "drafts"}` : (isAr ? "لا توجد مسودات" : "No drafts")} />
@@ -122,8 +109,8 @@ export function StudioCustomersWorkspace() {
         </div>
       </section>
 
-      <section aria-labelledby="customer-data-limits" className="grid gap-3 rounded-lg border border-line bg-sand/35 p-4">
-        <SectionHeader title={isAr ? "حدود المساحة الحالية" : "Current workspace limits"} />
+      <section aria-labelledby="customer-data-limits-heading" className="grid gap-3 rounded-lg border border-line bg-sand/35 p-4">
+        <SectionHeader title={<span id="customer-data-limits-heading">{isAr ? "حدود المساحة الحالية" : "Current workspace limits"}</span>} />
         <ul className="grid gap-2 text-sm leading-6 text-ink-soft sm:grid-cols-2">
           <li>{isAr ? "بيانات الضيف الفردية والتفاصيل الشخصية: غير معروضة كقائمة/تفاصيل مستقلة في المسار الحالي." : "Individual guest records and personal details are not exposed as a standalone list/detail flow here."}</li>
           <li>{isAr ? "لا توجد شرائح أو cohorts أو قيمة عمرية للعميل أو churn score." : "No segments, cohorts, customer lifetime value, or churn score are presented."}</li>
