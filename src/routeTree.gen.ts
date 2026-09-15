@@ -18,6 +18,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as AdminWorkspaceRouteImport } from './routes/admin/$workspace'
 import { Route as AdminOnboardingRouteImport } from './routes/admin/onboarding'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MSlugRouteImport } from './routes/m.$slug'
 import { Route as OnboardingTokenRouteImport } from './routes/onboarding/$token'
@@ -89,6 +90,11 @@ const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const InviteTokenRoute = InviteTokenRouteImport.update({
   id: '/invite/$token',
   path: '/invite/$token',
@@ -149,12 +155,11 @@ const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
   path: '/intelligence',
   getParentRoute: () => StudioRoute,
 } as any)
-const StudioIntelligenceActionsRoute =
-  StudioIntelligenceActionsRouteImport.update({
-    id: '/intelligence-actions',
-    path: '/intelligence-actions',
-    getParentRoute: () => StudioRoute,
-  } as any)
+const StudioIntelligenceActionsRoute = StudioIntelligenceActionsRouteImport.update({
+  id: '/intelligence-actions',
+  path: '/intelligence-actions',
+  getParentRoute: () => StudioRoute,
+} as any)
 const StudioMenuRoute = StudioMenuRouteImport.update({
   id: '/menu',
   path: '/menu',
@@ -226,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/studio': typeof StudioRouteWithChildren
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
@@ -261,6 +267,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
@@ -298,6 +305,7 @@ export interface FileRoutesById {
   '/studio': typeof StudioRouteWithChildren
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
@@ -336,6 +344,7 @@ export interface FileRouteTypes {
     | '/studio'
     | '/admin/$workspace'
     | '/admin/onboarding'
+    | '/admin/users'
     | '/invite/$token'
     | '/m/$slug'
     | '/onboarding/$token'
@@ -371,6 +380,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/admin/$workspace'
     | '/admin/onboarding'
+    | '/admin/users'
     | '/invite/$token'
     | '/m/$slug'
     | '/onboarding/$token'
@@ -407,6 +417,7 @@ export interface FileRouteTypes {
     | '/studio'
     | '/admin/$workspace'
     | '/admin/onboarding'
+    | '/admin/users'
     | '/invite/$token'
     | '/m/$slug'
     | '/onboarding/$token'
@@ -512,6 +523,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/admin/onboarding'
       preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/invite/$token': {
@@ -695,11 +713,13 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminWorkspaceRoute: typeof AdminWorkspaceRoute
   AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminWorkspaceRoute: AdminWorkspaceRoute,
   AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -758,8 +778,7 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioIndexRoute: StudioIndexRoute,
 }
 
-const StudioRouteWithChildren =
-  StudioRoute._addFileChildren(StudioRouteChildren)
+const StudioRouteWithChildren = StudioRoute._addFileChildren(StudioRouteChildren)
 
 interface MSlugRouteChildren {
   MSlugBranchRoute: typeof MSlugBranchRoute
