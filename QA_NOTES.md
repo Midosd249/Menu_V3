@@ -100,5 +100,14 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
+## W7.7 — Customers Workspace — 2026-09-15
+
+- VERIFIED: current-head CI run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright runtime/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup passed.
+- VERIFIED: Customers browser QA reached `/studio/guests` in the real application with the CI PGlite fixture and auth-disabled local mode; five Studio browser tests passed.
+- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and unsupported Loyalty/Campaigns/Feedback/Retention links passed.
+- VERIFIED: final correction was test-only and scoped the desktop active-nav assertion to desktop; no runtime Customers behavior changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
 ## QA Continuity Rule
-Documentation reconciliation is not a substitute for current code validation. Every W7.6 implementation change received a new current-head quality/browser verification before DONE.
+Documentation reconciliation is not a substitute for current code validation. Every implementation change receives a new current-head quality/browser verification before DONE.

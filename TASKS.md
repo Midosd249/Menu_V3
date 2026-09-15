@@ -164,21 +164,28 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 ### W7.6 — DONE / VERIFIED — 2026-09-15
 
 - VERIFIED: Growth Workspace is complete at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
-- VERIFIED: final current-head CI run `34910495789` passed all configured route, test, build, lint, public browser, Studio Shell/Home/Menu/Growth browser, performance, diagnostics, and cleanup stages.
+- VERIFIED: final current-head CI run `34910495789` passed all required route, test, build, lint, public browser, Studio Shell/Home/Menu/Growth browser, performance, diagnostics, and cleanup stages.
 - VERIFIED: W7.6 uses existing Growth/Intelligence/Actions/Analytics logic only and organizes it around Observe → Understand → Act → Measure.
 - VERIFIED: Reports is contextual only; no Experiments route or engine was invented.
 - VERIFIED: no fake metrics, charts, impact, ROI, conversion, experiment results, production sample data, or new business logic was introduced.
 - VERIFIED: the W7.3 More-sheet test selector was corrected against the actual `fixed inset-0 z-40` runtime container; no product runtime behavior changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-## Exact Next Task
-### W7.7 — Customers Workspace
-Build only the Customers Workspace. Do not begin W7.8 Platform Admin, W7.9 route restructuring, W7.10 full mobile pass, or W7.11 final visual QA.
+### W7.7 — DONE / VERIFIED — 2026-09-15
 
-## Working Rules
-- `main` is source of truth.
-- Use `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, `BLOCKED`.
-- Preserve completed work.
-- One atomic task at a time unless the user explicitly names a complete milestone.
-- Never claim deployment without direct deployment evidence.
-- Reconcile continuity files against Git history at every session boundary.
+- VERIFIED: W7.7 current-head quality run `34914024416` (run 1597) completed successfully against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- VERIFIED: all configured route, typecheck, repository test, W7.4/W7.5/W7.6/W7.7 focused test, lint, build, Playwright, public browser, Studio browser, performance, diagnostics, and cleanup stages passed.
+- VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI PGlite fixture and auth-disabled local mode.
+- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop active Customers navigation was asserted at desktop only, mobile navigation at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
+- VERIFIED: final correction was test-only; no runtime Customers behavior changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
+### W7.8 — Platform Admin Information Architecture and Admin Shell
+
+STATUS: AUTHORIZED / NEXT TASK
+
+- Preserve `/admin` and its current tab state.
+- Reorganize only real Admin capabilities into Overview, Customers, Commerce, Sales, Intelligence, and System groups.
+- Preserve all existing data hooks, actions, server authorization, and semantics.
+- No route splitting in W7.8; defer route architecture to W7.9.
+- No database, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, merge, or deployment changes.

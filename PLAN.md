@@ -174,7 +174,6 @@ STATUS: DONE / VERIFIED
 
 - VERIFIED: primary desktop workspaces are Home, Menu, Orders, Growth, Customers, Settings.
 - VERIFIED: contextual navigation maps only to real existing routes; Reports remains excluded from Studio navigation by repository contract.
-- VERIFIED: Appearance consolidates Brand + Design; Publishing groups QR + Preview.
 - VERIFIED: mobile primary is Home, Menu, Orders, Growth, More using W7.2 primitives.
 - VERIFIED: existing permission gates and Platform Admin separation remain intact.
 - VERIFIED: accepted browser run `34905256209` reached `/studio` and passed the W7.3 shell test.
@@ -198,8 +197,7 @@ STATUS: DONE / VERIFIED
 - VERIFIED: existing Options, Import, Preview, and QR routes are exposed contextually; no dead routes were invented.
 - VERIFIED: search, category/availability filters, item/category actions, AI draft assistance, and Menu QA preserve existing behavior.
 - VERIFIED: honest loading, empty, error, permission, RTL/LTR, mixed-direction, responsive, and keyboard states are covered.
-- VERIFIED: no fake metrics, health scores, completeness, revenue, order/customer data, import results, QR state, or sample production data were introduced.
-- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, focused W7.4/W7.5 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
 ### W7 Continuity Reconciliation — 2026-09-15
@@ -219,16 +217,25 @@ STATUS: DONE / VERIFIED
 - VERIFIED: the W7.3 More-sheet browser selector was corrected to match the actual `fixed inset-0 z-40` container; this was a test-only regression correction with no runtime product behavior change.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-## Exact Next Task
-### W7.7 — Customers Workspace
-Do not begin W7.8+ work. W7.7 is now the only next safe phase.
+### W7.7 — Customers Workspace — DONE / VERIFIED — 2026-09-15
+- VERIFIED: current-head quality run `34914024416` (run 1597) completed successfully against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup all passed.
+- VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI PGlite fixture and auth-disabled local mode; five Studio browser tests passed.
+- VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800; desktop active Customers navigation was asserted at 1280×800 only, mobile navigation at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
+- VERIFIED: the final W7.7 correction was test-only; no runtime Customers behavior changed.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu, Platform Admin, dependencies, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence.
 
-## Continuity Rule
-At the end of every atomic task:
-1. reconcile current Git head;
-2. verify CI evidence;
-3. verify deployment separately when relevant;
-4. update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`;
-5. update material audit/research/project-memory records when the task reveals a durable lesson;
-6. record exactly one next task;
-7. stop.
+### W7.8 — Platform Admin Information Architecture and Admin Shell
+STATUS: AUTHORIZED / READY TO IMPLEMENT
+
+- Scope is presentation/IA only inside the existing `/admin` route and directly related Admin presentation/tests/docs.
+- Preserve all existing Admin tabs, data hooks, actions, and server authorization.
+- Group real capabilities under Overview, Customers, Commerce, Sales, Intelligence, and System.
+- Do not create Security, Platform Health, or Configuration destinations unless existing capabilities support them; current `system` view remains the real combined system/security surface.
+- Route splitting is explicitly deferred to W7.9.
+- No database, Supabase, RLS, auth, permission, subscription, AI, orders, public menu, Studio business logic, dependency, merge, or deployment changes.
+
+## Exact Next Task
+### W7.8 — Platform Admin Information Architecture and Admin Shell
+Complete only W7.8, then stop. W7.9+ and release work remain out of scope.

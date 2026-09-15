@@ -122,7 +122,7 @@ STATUS: CLOSED / VERIFIED / MERGED
 - VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records have RLS enabled and public access revoked.
 - VERIFIED: retention and relationship overview are derived from real guest/order data; no synthetic evidence is introduced.
 - VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
-- VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
+- VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
 - VERIFIED: the initial CI failure was a PGlite portability issue caused by unconditional `anon`/`authenticated` role revocation; the migration was hardened conditionally without weakening Supabase security semantics.
 
 ## R10
@@ -208,7 +208,7 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 
 ### W7.6 — Growth Workspace — DONE / VERIFIED
 - VERIFIED: current working HEAD is `3fe58decd1f0c39806bd037e717778c4d58d01ab` after a focused W7.3 browser-regression locator correction.
-- VERIFIED: W7.6 current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused contracts, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: W7.6 current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused tests, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
 - VERIFIED: Growth Workspace unifies existing Growth, Intelligence, Intelligence Actions, Analytics, and contextual Reports around Observe → Understand → Act → Measure.
 - VERIFIED: real sources reused: `useStudio()`, `getOwnerAnalytics({ days: 7 })`, `buildMenuGrowthEngine`, `buildMenuGrowthAdvisor`, `buildMenuIntelligence`, and `buildIntelligenceDataQuality`.
 - VERIFIED: `/studio/growth` route URL and existing business logic were preserved; no new backend, analytics contract, recommendation engine, experiment engine, or AI logic was introduced.
@@ -219,9 +219,19 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 - VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage work only.
 
+### W7.7 — Customers Workspace — DONE / VERIFIED — 2026-09-15
+- VERIFIED: W7.7 current-head quality run `34914024416` (run 1597) completed successfully.
+- VERIFIED: run 1597 was associated with implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`; GitHub checked out PR merge ref `80c90c1d4ad7c3fab266c8c5f4465f10d470ea4a`, explicitly merged from that HEAD into canonical `main` baseline `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup all passed.
+- VERIFIED: Studio Customers browser QA reached `http://127.0.0.1:8082/studio/guests` in the real application with the CI PGlite fixture and `VITE_AUTH_ENABLED=false`; 5 browser tests passed, including the W7.7 Customers spec.
+- VERIFIED: W7.7 browser matrix covered 390×844, 430×932, 768×1024, and 1280×800; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and absence of unsupported Loyalty/Campaigns/Feedback/Retention links passed.
+- VERIFIED: the final W7.7 correction was test-only and scoped desktop active navigation to desktop after the earlier 390px selector mismatch; no runtime Customers behavior changed.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu, Platform Admin, dependencies, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence.
+
 ## Exact Next Task
-### W7.7 — Customers Workspace
-Do not begin until W7.6 continuity and current-head verification are recorded. W7.7 is the only next safe phase; W7.8+ remain untouched.
+### W7.8 — Platform Admin Information Architecture and Admin Shell
+Only W7.8 is authorized next. W7.9 Admin route splitting, W7.10 full-product mobile pass, W7.11 final visual QA, merge, deployment, database work, and release work remain out of scope.
 
 ## Continuity Rule
 At the end of every atomic task:

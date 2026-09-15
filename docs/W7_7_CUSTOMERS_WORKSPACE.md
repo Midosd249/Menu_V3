@@ -1,7 +1,7 @@
 # W7.7 Customers Workspace
 
 ## Status
-`IMPLEMENTATION_IN_PROGRESS` pending current-head quality verification.
+`DONE / VERIFIED` — 2026-09-15.
 
 ## Purpose
 
@@ -104,18 +104,15 @@ The existing `getGuestRelationshipOverview` remains the only relationship data e
 - No W7.8+ work.
 - No merge or deployment.
 
-## Verification target
+## Verification evidence — 2026-09-15
 
-Required current-head evidence:
-- route generation and generated freshness;
-- typecheck;
-- repository tests;
-- W7.7 focused contract tests;
-- lint;
-- production build;
-- public browser QA;
-- Studio Shell/Home/Menu/Growth/Customers browser QA;
-- performance audit where configured;
-- final diff review.
+- `34914024416` / run 1597 is the final current-head quality workflow.
+- Implementation HEAD: `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- Customers browser QA reached `/studio/guests` in the real application using the CI PGlite fixture and auth-disabled local mode.
+- The Studio browser job ran the existing Shell/Home/Menu/Growth/Customers suite; five browser tests passed, including W7.7.
+- W7.7 browser coverage: 390×844, 430×932, 768×1024, 1280×800, RTL/LTR, desktop Customers active state only at 1280×800, mobile navigation at 390×844, keyboard focus, and no horizontal overflow.
+- Unsupported `/studio/loyalty`, `/studio/campaigns`, `/studio/feedback`, and `/studio/retention` links were asserted absent.
+- Route generation/freshness, typecheck, repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, performance baseline, diagnostics, and cleanup passed.
+- The final test correction was test-only and changed no runtime Customers behavior.
 
 Physical real-device QA remains release-stage evidence only.
