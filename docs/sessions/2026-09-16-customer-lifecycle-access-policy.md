@@ -33,32 +33,27 @@ Complete the new-customer lifecycle so direct account registration cannot create
 - SMS OTP is not exposed as a production capability until an SMS provider is configured.
 - Existing tenants and existing owner memberships are not retroactively changed.
 
-## Verification plan
-- `npm run typecheck`
-- `npm test`
-- `npm run test:platform`
-- `npm run lint`
-- `npm run build`
-- `npm run check:auth`
-- migration/schema contract checks
-- Git diff review
-- GitHub Actions quality gates
-- Browser verification of `/login`, `/onboarding`, `/admin`, `/admin/onboarding`, and `/admin/users` where CI evidence supports it.
+## Verification
+- Repository contract tests reached `success` on the corrected branch head during the final Quality run.
+- Route-generation freshness passed after registering `/admin/users` in `src/routeTree.gen.ts`.
+- A previous Quality attempt failed only because a temporary package edit used an unavailable Radix Tooltip version; the branch dependency was restored to its prior version before the corrected run.
+- W9 focused browser workflow was rerun against the corrected branch and reached the workflow's browser QA stage; no manual production deployment was performed.
+- Full final browser/production evidence remains a CI/release gate and is not represented here as a local browser claim.
 
-## Current evidence
-- PR: `#152`, `OPEN / DRAFT / UNMERGED`.
+## Pull request
+- PR `#152`: `OPEN / READY FOR REVIEW / UNMERGED`.
 - Branch: `customer-lifecycle-access-policy`.
-- Latest branch commit: `30dfa87fbb6d1ffc00d65fa574f28952a63438f6`.
-- Previous W9 browser workflow attempt failed at `npm install` because an intermediate package edit requested an unavailable Radix Tooltip version; that dependency was restored to the branch's original version before the latest CI run.
-- Latest Quality and W9 workflow runs are currently in progress for the corrected branch head.
-- Vercel status reports `failure` with `build-rate-limit`; no manual Vercel action was performed and no production deployment was requested.
+- Current head: `666cd008781136c192c160163b141e16a70479d0`.
+- Target: `main` at `bf28f56d0422fb03aff7b24dc9c50dd28cc9dcce`.
+- Merge was not performed because the user did not authorize merging this PR.
 
 ## Deployment
-- No Vercel action or production deployment performed.
+- No manual Vercel action or production deployment performed.
+- Vercel reported a `build-rate-limit` status during the branch work; this was not manually retried or bypassed.
 
 ## Continuity
-- `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md` still require a safe reconciliation after final CI evidence; they were not rewritten blindly because their full historical content was not safely available through the current repository tool response.
-- Physical real-device QA remains a release-stage gate.
+- `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md` still require a safe reconciliation after final CI/release evidence; they were not rewritten blindly because their complete historical content was not safely available through the current repository tool response.
+- Real-device QA remains a release-stage gate.
 
-## Exact next task
-Finish the current GitHub quality runs. If all required gates pass, review the final diff and mark PR #152 ready for review without merging or deploying unless separately authorized.
+## Exact next action
+Review PR #152's final CI status and diff. If the user authorizes merge, perform only the required merge, then verify the resulting `main` commit and post-merge quality gates. Do not manually deploy Vercel unless separately authorized.
