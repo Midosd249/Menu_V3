@@ -17,7 +17,7 @@
 - VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery remain complete and protected.
 - VERIFIED: R9 Guest CRM, Loyalty, Campaigns, Feedback, and Retention remains complete for the implemented owner-controlled scope.
 - VERIFIED: R10 is explicitly deferred and has not been started.
-- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, and W7.7 are complete and verified on the current working branch.
+- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, W7.7, W7.8, and W7.9 are complete and verified on the current working branch.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -138,7 +138,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: server-only credentials; no client API-key exposure is part of the supported architecture.
 
 ## Production / Commercial Readiness
-STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
+STATUS: IN PROGRESS — EXTERNAL EVIDENCE REMAINING
 
 - VERIFIED: repository-side R9 implementation and CI quality gates are complete.
 - VERIFIED: GitHub `main` contains the protected product work.
@@ -171,7 +171,7 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE — CURRENT WORKING BRANCH
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE / W7.9 DONE — CURRENT WORKING BRANCH
 
 ### W7.1 — COMPLETE / ANALYSIS
 - VERIFIED: W7.1 audited current Studio/Admin architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
@@ -188,7 +188,7 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 - VERIFIED: contextual navigation exposes only real routes; Reports remains outside primary Studio navigation.
 - VERIFIED: mobile primary = Home, Menu, Orders, Growth, More.
 - VERIFIED: accepted browser run `34905256209` passed the W7.3 browser and quality gates.
-- VERIFIED: physical device QA remains release-stage evidence.
+- VERIFIED: physical real-device QA remains release-stage evidence.
 
 ### W7.4 — DONE / VERIFIED
 - VERIFIED: `/studio/` is the focused operational Home using existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` sources.
@@ -202,48 +202,43 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI/order logic, public menu, Platform Admin, dependencies, merge, or deployment changes were introduced.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-### W7.5 Continuity Reconciliation — 2026-09-15
-- VERIFIED: prior W7.5 continuity entries were missing from the four canonical files; the reconciliation restored the documented W7.5 completion state.
-- VERIFIED: pre-reconciliation W7.5 HEAD was `193912be0a2fa9c7fadcd70995108a4ec9166722` and final W7.5 CI was `34908577942`.
-
 ### W7.6 — Growth Workspace — DONE / VERIFIED
-- VERIFIED: current working HEAD is `3fe58decd1f0c39806bd037e717778c4d58d01ab` after a focused W7.3 browser-regression locator correction.
-- VERIFIED: W7.6 current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused tests, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
-- VERIFIED: Growth Workspace unifies existing Growth, Intelligence, Intelligence Actions, Analytics, and contextual Reports around Observe → Understand → Act → Measure.
-- VERIFIED: real sources reused: `useStudio()`, `getOwnerAnalytics({ days: 7 })`, `buildMenuGrowthEngine`, `buildMenuGrowthAdvisor`, `buildMenuIntelligence`, and `buildIntelligenceDataQuality`.
-- VERIFIED: `/studio/growth` route URL and existing business logic were preserved; no new backend, analytics contract, recommendation engine, experiment engine, or AI logic was introduced.
-- VERIFIED: Reports remains contextual only; no `/studio/experiments` route was invented.
+- VERIFIED: current working HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab` and final quality run `34910495789` passed all required W7.6 gates.
+- VERIFIED: Growth Workspace unifies existing Growth, Intelligence, Actions, Analytics, and contextual Reports around Observe → Understand → Act → Measure.
+- VERIFIED: existing sources only; no new backend, analytics contract, recommendation engine, experiment engine, AI business logic, or charting dependency.
 - VERIFIED: no fake metrics, scores, trends, charts, impact, ROI, conversion claims, experiment results, recommendations, or production sample data were added.
-- VERIFIED: W7.3 More-sheet browser regression was corrected with a selector matching the actual `fixed inset-0 z-40` container; no product behavior was changed.
-- VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800 with RTL/LTR, active navigation, contextual-link reachability, keyboard focus, and no horizontal page overflow.
-- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
-- UNKNOWN: physical real-device QA remains release-stage work only.
+- VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800 with RTL/LTR, active navigation, contextual links, focus, and no horizontal overflow.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-### W7.7 — Customers Workspace — DONE / VERIFIED — 2026-09-15
-- VERIFIED: W7.7 current-head quality run `34914024416` (run 1597) completed successfully.
-- VERIFIED: run 1597 was associated with implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`; GitHub checked out PR merge ref explicitly merged from that HEAD into canonical `main` baseline `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright/Chromium, all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup all passed.
-- VERIFIED: Studio Customers browser QA reached `http://127.0.0.1:8082/studio/guests` in the real application with the CI PGlite fixture and `VITE_AUTH_ENABLED=false`; 5 browser tests passed.
-- VERIFIED: W7.7 browser matrix covered 390×844, 430×932, 768×1024, and 1280×800; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and absence of unsupported Loyalty/Campaigns/Feedback/Retention links passed.
-- VERIFIED: the final W7.7 correction was test-only and scoped desktop active navigation to desktop after the earlier 390px selector mismatch; no runtime Customers behavior changed.
-- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu, Platform Admin, dependencies, merge, or deployment changed.
+### W7.7 — Customers Workspace — DONE / VERIFIED
+- VERIFIED: W7.7 final quality run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI fixture and auth-disabled local mode; responsive, RTL/LTR, focus, overflow, and unsupported relationship links passed.
+- VERIFIED: final W7.7 correction was test-only and scoped desktop active navigation to desktop; no runtime Customers behavior changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
-### W7.8 — Platform Admin Information Architecture and Admin Shell — DONE / VERIFIED — 2026-09-15
-- VERIFIED: discovery confirmed the real `/admin` tab model, data sources, server-side Platform Admin authorization, existing actions, loading/error/empty boundaries, and the absence of separate Security/Platform Health/Configuration capabilities.
-- VERIFIED: grouped IA is implemented inside `/admin` without route splitting: Overview; Customers (Restaurants, Clients, Branches); Commerce (Orders, Subscriptions, Service Requests); Sales (Leads, Projects); Intelligence (Analytics, Activity); System (existing combined system/security view).
-- VERIFIED: all existing Admin tab identifiers and actions remain reachable; active navigation exposes `aria-current="page"`.
-- VERIFIED: Overview was reorganized around real operational data and existing `MetricRow`, `PageHeader`, `SectionHeader`, `LoadingState`, and `ErrorState` primitives; no generic dashboard/card-wall template was introduced.
-- VERIFIED: final current-head quality run `34915257732` / run 1601 passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
-- VERIFIED: Platform Admin browser QA reached the actual `/admin` application in the authorized CI development-user state; the browser exercised 390×844, 430×932, 768×1024, and 1280×800, grouped navigation, all existing tab controls, active semantics, keyboard focus, RTL structure, and no horizontal overflow.
+### W7.8 — Platform Admin Information Architecture and Admin Shell — DONE / VERIFIED
+- VERIFIED: discovery confirmed the real `/admin` tab model, data sources, server-side Platform Admin authorization, existing actions, loading/error/empty boundaries, and absence of separate Security/Platform Health/Configuration capabilities.
+- VERIFIED: grouped IA is implemented inside `/admin` without route splitting: Overview; Customers; Commerce; Sales; Intelligence; System.
+- VERIFIED: final quality run `34915603884` / run 1602 passed route generation/freshness, typecheck, 266 repository tests, W7.4–W7.8 contracts, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
+- VERIFIED: Platform Admin browser QA reached the actual `/admin` application in the authorized CI development-user state across 390×844, 430×932, 768×1024, and 1280×800.
 - VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator records were added.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
-- VERIFIED: W7.9 route splitting is explicitly deferred and is the next safe phase; W7.10/W7.11 and release work remain out of scope.
+
+### W7.9 — Platform Admin Route Architecture / Route Splitting — DONE / VERIFIED
+- VERIFIED: `/admin` remains the authorized Overview/Shell and `/admin/$workspace` is the whitelisted child-route adapter for all 11 real Admin workspaces.
+- VERIFIED: `setTab(next)` remains the existing runtime contract and URL synchronization is additive through `navigate({ to: ADMIN_ROUTES[next] })`.
+- VERIFIED: legacy `/admin?tab=<known>` values normalize to the mapped route; `tab` is removed; unrelated query parameters are preserved through the router serialization contract; unknown values safely fall back to `/admin` with `replace: true`.
+- VERIFIED: the original Platform Admin browser blocker was `AUTH_DISABLED_FIXTURE_GAP`; CI now uses an isolated PostgreSQL fixture with compatible existing migrations, Supabase-compatible roles, and `dev-user` seeded in `menu_v3.platform_admins`. No production schema or migration was changed.
+- VERIFIED: the final remaining browser assertion was test-only and corrected to match actual TanStack Router serialization: `keep=%221%22` parses as `"1"`.
+- VERIFIED: final current-head quality run `34925141809` / run 1638 passed all configured route, freshness, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
+- VERIFIED: no unsupported Admin detail routes or fabricated data, metrics, charts, health scores, security events, recommendations, or operator sample data were introduced.
+- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, Vercel configuration, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
 
 ## Exact Next Task
-### W7.9 — Platform Admin Route Architecture / Route Splitting
-Only W7.9 is authorized next. W7.10 full-product mobile pass, W7.11 final visual QA, merge, deployment, database work, and release work remain out of scope.
+### W7.10 — Full-Product Mobile and Responsive Pass
+W7.10 is the next safe phase. W7.11, merge, deployment, database work, and release work remain out of scope until W7.10 is explicitly completed and verified.
 
 ## Continuity Rule
 At the end of every atomic task:
