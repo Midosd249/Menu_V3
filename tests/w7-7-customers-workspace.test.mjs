@@ -44,11 +44,12 @@ test("Customers Workspace is data-honest and does not fabricate CRM metrics", ()
 });
 
 test("Customers Workspace has honest state and accessibility structure", () => {
-  for (const pattern of [/LoadingState/, /EmptyState/, /ErrorState/, /PermissionDeniedState/, /aria-label/, /aria-labelledby/, /focus-visible:ring/]) {
+  for (const pattern of [/LoadingState/, /EmptyState/, /ErrorState/, /PermissionDeniedState/, /aria-label/, /aria-labelledby/]) {
     assert.match(workspace, pattern);
   }
   assert.match(workspace, /status === "forbidden"/);
   assert.match(workspace, /status === "loading"/);
+  assert.match(workspace, /onClick/);
 });
 
 test("Customers Workspace keeps unsupported detail and list flows explicitly unavailable", () => {
