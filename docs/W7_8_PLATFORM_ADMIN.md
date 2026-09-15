@@ -1,7 +1,7 @@
 # W7.8 Platform Admin
 
 ## Status
-`IMPLEMENTATION_IN_PROGRESS` — implementation staged after W7.7 current-head verification.
+`DONE / VERIFIED` — 2026-09-15.
 
 ## Scope
 W7.8 reorganizes the existing `/admin` presentation into an operator-oriented grouped shell while preserving the existing route, local tab state, data sources, actions, and authorization boundaries.
@@ -43,6 +43,24 @@ No fake Admin metrics, totals, health scores, activity, security events, charts,
 - Existing keyboard focus styling is preserved.
 - Tables keep deliberate horizontal overflow inside their existing containers.
 - Browser QA covers 390×844, 430×932, 768×1024, and 1280×800.
+
+## Verification — 2026-09-15
+- VERIFIED: final current-head quality run `34915257732` / run 1601 passed.
+- VERIFIED: implementation HEAD `4a4c5963961715e1a7eaec67508255480aff4bb1` was the workflow head; the workflow checked out the PR merge ref for that exact head against `main` `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: route generation and generated route freshness passed.
+- VERIFIED: typecheck passed.
+- VERIFIED: repository suite passed with 266 tests.
+- VERIFIED: W7.4, W7.5, W7.6, W7.7 and W7.8 focused contract tests passed.
+- VERIFIED: lint passed; only the repository's existing warnings remained.
+- VERIFIED: production build passed.
+- VERIFIED: Playwright runtime and Chromium installation passed.
+- VERIFIED: public all-theme browser QA passed.
+- VERIFIED: Studio Shell/Home/Menu/Growth/Customers browser QA passed.
+- VERIFIED: Platform Admin browser QA passed in the actual `/admin` application using the existing auth-disabled CI user semantics and configured platform-admin authorization contract.
+- VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800; RTL document structure, grouped navigation, active semantics, keyboard focus, tab reachability, and no horizontal overflow were checked.
+- VERIFIED: all existing Admin tab identifiers remained reachable.
+- VERIFIED: unavailable Security, Platform Health, and Configuration destinations were explicitly represented as unavailable rather than dead links.
+- VERIFIED: performance baseline, diagnostics, and cleanup stages passed.
 
 ## Explicit non-goals
 - No `/admin/*` route splitting.

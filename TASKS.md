@@ -81,7 +81,6 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 - VERIFIED: retention and relationship overview are derived from real guest/order data; no synthetic evidence is introduced.
 - VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
 - VERIFIED: final GitHub Actions quality run 1453 passed route generation, typecheck, 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
-- VERIFIED: a PGlite portability failure from unconditional `anon`/`authenticated` role revocation was fixed without weakening Supabase security semantics.
 
 ## R10 — DEFERRED / NOT STARTED
 
@@ -128,12 +127,10 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: transformed `src/components/studio-shell.tsx` into the approved workspace architecture.
 - VERIFIED: desktop primary = Home, Menu, Orders, Growth, Customers, Settings.
 - VERIFIED: contextual groups expose only real routes for Menu, Growth, Customers, Appearance/Publishing, and Settings.
-- VERIFIED: non-existent standalone child routes were not invented.
 - VERIFIED: mobile primary = Home, Menu, Orders, Growth, More using W7.2 `MobileBottomNav`.
 - VERIFIED: existing permission gates remain active.
 - VERIFIED: Platform Admin remains separate.
 - VERIFIED: accepted GitHub Actions run `34905256209` passed all required quality gates and actual `/studio` browser QA.
-- VERIFIED: temporary PGlite fixture solved the browser-only schema blocker and was removed from the runner; no production migration was committed.
 - VERIFIED: physical device QA remains release-stage evidence only.
 
 ### W7.4 — DONE / VERIFIED
@@ -144,28 +141,23 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: added W7.4 focused contract test and browser spec.
 - VERIFIED: Home contains loading, error, empty, populated, RTL/LTR, responsive, focus, and semantic progress states.
 - VERIFIED: no fabricated metrics, sample orders, revenue, guests, conversion rates, recommendations, charts, rankings, or activity were added.
-- VERIFIED: W7.4 final-head quality/browser evidence was completed before W7.5 began.
 
 ### W7.5 — DONE / VERIFIED
 
 - VERIFIED: `/studio/menu` is a focused Menu Workspace at the existing route.
 - VERIFIED: real restaurant/branch context, menu counts/state, search, category/availability filters, existing item/category actions, Options, Import, Preview, QR, AI draft assistance, and Menu QA are preserved.
-- VERIFIED: focused tests `tests/w7-5-menu-workspace.test.mjs` and `tests/w7-5-menu-workspace-browser.spec.ts` are present.
-- VERIFIED: final current-head CI run `34908577942` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
-- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permission model, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changes were introduced.
+- VERIFIED: final current-head CI run `34908577942` passed all required route, test, lint, build, browser, performance, diagnostics, and cleanup stages.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-## W7.5 Continuity Reconciliation — 2026-09-15
-
-- VERIFIED: prior continuity entries for W7.5 were missing from the four canonical continuity files despite final W7.5 implementation/CI evidence being present in PR #146.
-- VERIFIED: reconciliation records the actual W7.5 status, current verified pre-reconciliation HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`, final CI run `34908577942`, changed-file scope, forbidden-area boundary, and physical-device QA limitation.
-- VERIFIED: this reconciliation does not reopen W7.5 or change its product behavior.
+### W7.5 Continuity Reconciliation — 2026-09-15
+- VERIFIED: prior W7.5 continuity entries were missing from the canonical continuity files; reconciliation restored the documented completion state.
+- VERIFIED: pre-reconciliation W7.5 HEAD was `193912be0a2fa9c7fadcd70995108a4ec9166722` and final W7.5 CI was `34908577942`.
 
 ### W7.6 — DONE / VERIFIED — 2026-09-15
 
 - VERIFIED: Growth Workspace is complete at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
 - VERIFIED: final current-head CI run `34910495789` passed all required route, test, build, lint, public browser, Studio Shell/Home/Menu/Growth browser, performance, diagnostics, and cleanup stages.
-- VERIFIED: W7.6 uses existing Growth/Intelligence/Actions/Analytics logic only and organizes it around Observe → Understand → Act → Measure.
+- VERIFIED: W7.6 uses existing Growth/Intelligence/Actions/Analytics/Reports logic only and organizes it around Observe → Understand → Act → Measure.
 - VERIFIED: Reports is contextual only; no Experiments route or engine was invented.
 - VERIFIED: no fake metrics, charts, impact, ROI, conversion, experiment results, production sample data, or new business logic was introduced.
 - VERIFIED: the W7.3 More-sheet test selector was corrected against the actual `fixed inset-0 z-40` runtime container; no product runtime behavior changed.
@@ -173,19 +165,25 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 
 ### W7.7 — DONE / VERIFIED — 2026-09-15
 
-- VERIFIED: W7.7 current-head quality run `34914024416` (run 1597) completed successfully against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
+- VERIFIED: W7.7 current-head quality run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
 - VERIFIED: all configured route, typecheck, repository test, W7.4/W7.5/W7.6/W7.7 focused test, lint, build, Playwright, public browser, Studio browser, performance, diagnostics, and cleanup stages passed.
 - VERIFIED: Customers browser QA reached `/studio/guests` in the real application using the CI PGlite fixture and auth-disabled local mode.
 - VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop active Customers navigation was asserted at desktop only, mobile navigation at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
 - VERIFIED: final correction was test-only; no runtime Customers behavior changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-### W7.8 — Platform Admin Information Architecture and Admin Shell
+### W7.8 — DONE / VERIFIED — 2026-09-15
 
-STATUS: AUTHORIZED / NEXT TASK
+- VERIFIED: Admin discovery documented the actual 12-tab model, data sources, actions, Platform Admin authorization, state boundaries, and unavailable capabilities.
+- VERIFIED: grouped Admin IA is implemented without route splitting: Overview; Customers; Commerce; Sales; Intelligence; System.
+- VERIFIED: existing Admin tab identifiers, data hooks, actions, and permission behavior remain intact.
+- VERIFIED: final current-head quality run `34915257732` / run 1601 passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
+- VERIFIED: Platform Admin browser QA reached the real `/admin` application in the authorized CI development-user state and covered 390×844, 430×932, 768×1024, and 1280×800 with RTL, active semantics, focus, tab reachability, and no overflow.
+- VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator data were added.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+- VERIFIED: route splitting is deferred to W7.9.
 
-- Preserve `/admin` and its current tab state.
-- Reorganize only real Admin capabilities into Overview, Customers, Commerce, Sales, Intelligence, and System groups.
-- Preserve all existing data hooks, actions, server authorization, and semantics.
-- No route splitting in W7.8; defer route architecture to W7.9.
-- No database, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, merge, or deployment changes.
+## Exact Next Task
+### W7.9 — Platform Admin Route Architecture / Route Splitting
+Complete only W7.9, then stop. W7.10+ and release work remain out of scope.

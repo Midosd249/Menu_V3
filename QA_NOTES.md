@@ -36,22 +36,18 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 
 - VERIFIED: W7.1 is analysis/architecture only; no UI implementation was performed.
 - VERIFIED: current `main` baseline used for audit is `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: existing historical owner Studio readiness evidence at 1280×800 and 390×844 remains useful as a baseline for W7.2.
+- VERIFIED: historical owner Studio readiness evidence remains useful as a baseline for W7.2.
 - UNKNOWN: current rendered Studio/Admin visual behavior was not re-captured in W7.1.
-- UNKNOWN: current browser/device behavior of the internal shell requires a fresh W7.2 browser QA pass after implementation.
-- VERIFIED: W7.1 produced architecture/reference documents only: `docs/W7_SOURCE_SWEEP.md`, `docs/W7_1_IA_AUDIT.md`, `docs/W7_1_ROUTE_MAP.md`, `docs/W7_1_WIREFRAMES.md`.
+- VERIFIED: W7.1 produced source sweep, IA audit, route map, and wireframe documents.
 - BLOCKED: Mobbin direct MCP inspection was unavailable/paid; no inaccessible visual evidence was treated as fact.
 
 ## W7.2 — Internal Design System Foundation — 2026-09-15
 
 - VERIFIED: route-independent reusable primitives were added in `src/components/internal-design-system.tsx`.
 - VERIFIED: W7.2 does not mount the new navigation primitives, alter existing Studio navigation, migrate pages, modify routes, or edit generated files.
-- VERIFIED: existing `Input`, utility class composition, and current token vocabulary are reused; no dependency was added.
 - VERIFIED: `tests/internal-design-system-contract.test.mjs` was added for static contract coverage.
-- VERIFIED: GitHub Actions run `34898237425` executed `npx vite build --mode development` successfully and generated Growth + Guests in the route tree.
-- VERIFIED: generated artifact freshness check passed and generator-produced `src/routeTree.gen.ts` was committed as `0b4057bbfabadff156fd7f2fd48ecf1e1d8c118d`.
-- VERIFIED: typecheck, tests, lint, and production build passed in run `34898237425`.
-- ACCEPTED: W7.2 verification gate passed for its defined acceptance criteria.
+- VERIFIED: GitHub Actions run `34898237425` passed route generation/freshness, typecheck, tests, lint, and production build.
+- ACCEPTED: W7.2 verification gate passed.
 
 ## W7.3 — Studio Shell Transformation — 2026-09-15
 
@@ -59,23 +55,16 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: desktop primary workspaces are Home, Menu, Orders, Growth, Customers, Settings.
 - VERIFIED: contextual groups only expose real routes; Reports remains intentionally excluded from Studio navigation.
 - VERIFIED: mobile primary is Home, Menu, Orders, Growth, More; More is permission-filtered and Escape closes it.
-- VERIFIED: existing permission gates remain applied and `/admin` stays outside Studio navigation.
-- VERIFIED: the first browser failure was isolated to a PGlite fixture schema mismatch (`tenant_members.is_active`, then `orders.archived_at`).
-- VERIFIED: the CI-only temporary fixture solved the blocker without changing production schema behavior.
 - VERIFIED: accepted CI run `34905256209` passed route generation, freshness, typecheck, 266 tests, lint, production build, Playwright/Chromium, public all-theme browser QA, performance audit, Studio Shell browser QA, artifact upload, and cleanup.
-- VERIFIED: the Studio browser step actually served `http://127.0.0.1:8082/studio` and the W7.3 test reported `1 passed (10.2s)`.
-- VERIFIED: the temporary fixture was created inside the runner and removed by the shell step `EXIT` trap; no fixture SQL file is committed.
+- VERIFIED: the Studio browser step actually served `http://127.0.0.1:8082/studio` and the W7.3 test passed.
 - ACCEPTED: W7.3 is DONE / VERIFIED. Physical real-device QA remains release-stage evidence.
 
 ## W7.4 — Studio Home — 2026-09-15
 
 - VERIFIED: W7.4 began only after W7.3 browser acceptance passed.
 - VERIFIED: `/studio/` now renders the focused `StudioHome` component.
-- VERIFIED: Home uses only existing `useStudio`, `getOwnerAnalytics`, `getOrdersDashboard`, and `buildMenuGrowthAdvisor` data sources.
-- VERIFIED: Home sections are attention, current performance, recent operational activity, menu health, evidence-bound growth opportunity, and one contextual next action.
-- VERIFIED: loading, error, empty, populated, RTL/LTR, keyboard focus, semantic progress, and responsive states are represented.
+- VERIFIED: Home uses only existing data sources and includes loading/error/empty/populated, RTL/LTR, keyboard focus, semantic progress, and responsive states.
 - VERIFIED: no fake revenue, orders, guests, conversion rates, recommendations, charts, rankings, or sample numbers were added.
-- VERIFIED: no backend/auth/RLS/permissions/subscription/AI/order/public-menu/Admin/dependency changes were intentionally introduced.
 - VERIFIED: final-head W7.4 quality/browser verification was completed before W7.5 began.
 
 ## W7.5 — Menu Workspace — 2026-09-15
@@ -83,21 +72,15 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: W7.5 Menu Workspace is DONE / VERIFIED at pre-reconciliation HEAD `193912be0a2fa9c7fadcd70995108a4ec9166722`.
 - VERIFIED: final CI run `34908577942` passed route generation, generated freshness, typecheck, 266 repository tests, W7.4/W7.5 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu browser QA, performance audit, diagnostics, and cleanup.
 - VERIFIED: browser matrix covered 390×844, 430×932, 768×1024, and 1280×800, RTL/LTR, contextual link reachability, search focus, availability filtering, and no horizontal page overflow.
-- VERIFIED: changed scope was limited to the existing Menu Workspace presentation/wiring, focused tests, W7.3 browser selector contract, quality workflow, and W7.5 documentation.
-- VERIFIED: no production database/schema, Supabase, RLS, auth, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment change was introduced.
-- VERIFIED: no fake counts, scores, completeness, revenue, order/customer metrics, recommendations, import results, QR state, or sample production data were introduced.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains pending release-stage work only.
 
 ## W7.6 — Growth Workspace — 2026-09-15
 
-- VERIFIED: W7.6 is DONE / VERIFIED at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
+- VERIFIED: W7.6 is DONE / VERIFIED at HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
 - VERIFIED: final current-head quality run `34910495789` passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6 focused contracts, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth browser QA, performance audit, diagnostics, and cleanup.
-- VERIFIED: W7.6 browser matrix covered 390×844, 430×932, 768×1024, and 1280×800 with RTL/LTR, active navigation, contextual-link reachability, keyboard focus, and no horizontal page overflow.
-- VERIFIED: Growth uses existing `useStudio`, `getOwnerAnalytics`, `buildMenuGrowthEngine`, `buildMenuGrowthAdvisor`, `buildMenuIntelligence`, and `buildIntelligenceDataQuality` sources only.
-- VERIFIED: Reports remains contextual and no `/studio/experiments` route was invented.
-- VERIFIED: no fake metrics, scores, trends, charts, impact, ROI, conversion claims, experiment results, or production sample data were added.
-- VERIFIED: the initial W7.6 current-head browser run exposed only a W7.3 More-sheet test selector defect. Repository inspection showed the real More surface is `fixed inset-0 z-40`; the selector was corrected without changing runtime behavior. The subsequent current-head run passed all Studio browser specs.
-- VERIFIED: no production database/schema, Supabase, RLS, authentication, authorization/permissions, subscriptions/entitlements, AI provider/business logic, orders business logic, public menu behavior, Platform Admin, dependencies, merge, or deployment changed.
+- VERIFIED: Growth uses existing sources only and does not invent metrics, charts, impact, ROI, conversion, experiment results, or production sample data.
+- VERIFIED: the initial W7.6 current-head browser issue was only a W7.3 More-sheet test selector defect; correction changed no runtime behavior.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
 ## W7.7 — Customers Workspace — 2026-09-15
@@ -105,8 +88,19 @@ The production preview served `/m/nafas` successfully at 1280×800 and 390×844.
 - VERIFIED: current-head CI run `34914024416` / run 1597 passed against implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`.
 - VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright runtime/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup passed.
 - VERIFIED: Customers browser QA reached `/studio/guests` in the real application with the CI PGlite fixture and auth-disabled local mode; five Studio browser tests passed.
-- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and unsupported Loyalty/Campaigns/Feedback/Retention links passed.
+- VERIFIED: 390×844, 430×932, 768×1024, and 1280×800 were covered; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and unsupported relationship links passed.
 - VERIFIED: final correction was test-only and scoped the desktop active-nav assertion to desktop; no runtime Customers behavior changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence only.
+
+## W7.8 — Platform Admin Information Architecture and Admin Shell — 2026-09-15
+
+- VERIFIED: final current-head CI run `34915257732` / run 1601 passed.
+- VERIFIED: run 1601 belongs to implementation HEAD `4a4c5963961715e1a7eaec67508255480aff4bb1` and checked the PR merge ref against main `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 focused tests, lint, production build, Playwright runtime/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup all passed.
+- VERIFIED: Platform Admin browser QA exercised the real `/admin` application in the authorized CI development-user state at 390×844, 430×932, 768×1024, and 1280×800.
+- VERIFIED: grouped navigation, all existing Admin tabs, active `aria-current` semantics, keyboard focus, RTL structure, and no horizontal overflow passed.
+- VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator data were added.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu, Studio business logic, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
 ## QA Continuity Rule

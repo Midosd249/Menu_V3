@@ -17,7 +17,7 @@
 - VERIFIED: R8.1 Action Loop, R8.2 Evidence-based Recommendations, R8.3 Experiment Expansion, R8.4 Evidence-based Upsell, and R8.5 Restaurant Discovery remain complete and protected.
 - VERIFIED: R9 Guest CRM, Loyalty, Campaigns, Feedback, and Retention remains complete for the implemented owner-controlled scope.
 - VERIFIED: R10 is explicitly deferred and has not been started.
-- VERIFIED: W7.2, W7.3, W7.4, and W7.5 are complete on the current working branch; W7.6 is now DONE / VERIFIED after current-head quality run `34910495789`.
+- VERIFIED: W7.2, W7.3, W7.4, W7.5, W7.6, and W7.7 are complete and verified on the current working branch.
 
 ## Completed Protected Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -96,7 +96,7 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Decision output is directional only; no statistical significance is claimed.
 
 ## R7 — Post-Experiment Evidence Review
-STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
+STATUS: IN PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
 - VERIFIED: canonical table is `menu_v3.menu_events`.
 - VERIFIED: observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
@@ -171,7 +171,7 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## W7 — Internal Product Experience Architecture
-STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE — CURRENT WORKING BRANCH
+STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6 DONE / W7.7 DONE / W7.8 DONE — CURRENT WORKING BRANCH
 
 ### W7.1 — COMPLETE / ANALYSIS
 - VERIFIED: W7.1 audited current Studio/Admin architecture against main SHA `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
@@ -198,7 +198,7 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 ### W7.5 — DONE / VERIFIED
 - VERIFIED: `/studio/menu` is a focused Menu Workspace using existing menu data and actions.
 - VERIFIED: Options, Import, Preview, and QR are contextual real destinations; no dead routes were invented.
-- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 tests, focused W7.4/W7.5 tests, lint, build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu QA, performance audit, diagnostics, and cleanup.
+- VERIFIED: final W7.5 CI run `34908577942` passed route generation/freshness, typecheck, 266 tests, focused W7.4/W7.5 tests, lint, build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu QA, performance audit, diagnostics, and cleanup.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI/order logic, public menu, Platform Admin, dependencies, merge, or deployment changes were introduced.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
@@ -221,17 +221,29 @@ STATUS: W7.1 COMPLETE / W7.2 VERIFIED / W7.3 DONE / W7.4 DONE / W7.5 DONE / W7.6
 
 ### W7.7 — Customers Workspace — DONE / VERIFIED — 2026-09-15
 - VERIFIED: W7.7 current-head quality run `34914024416` (run 1597) completed successfully.
-- VERIFIED: run 1597 was associated with implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`; GitHub checked out PR merge ref `80c90c1d4ad7c3fab266c8c5f4465f10d470ea4a`, explicitly merged from that HEAD into canonical `main` baseline `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
-- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup all passed.
-- VERIFIED: Studio Customers browser QA reached `http://127.0.0.1:8082/studio/guests` in the real application with the CI PGlite fixture and `VITE_AUTH_ENABLED=false`; 5 browser tests passed, including the W7.7 Customers spec.
+- VERIFIED: run 1597 was associated with implementation HEAD `a89cc5110175d633ac6f3379fdb1ce6ce27fd4fa`; GitHub checked out PR merge ref explicitly merged from that HEAD into canonical `main` baseline `9995848b747bdb238e45b7ed6fe6b551c6779fcc`.
+- VERIFIED: route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7 focused tests, lint, production build, Playwright/Chromium, all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers browser QA, performance baseline, diagnostics, and cleanup all passed.
+- VERIFIED: Studio Customers browser QA reached `http://127.0.0.1:8082/studio/guests` in the real application with the CI PGlite fixture and `VITE_AUTH_ENABLED=false`; 5 browser tests passed.
 - VERIFIED: W7.7 browser matrix covered 390×844, 430×932, 768×1024, and 1280×800; desktop Customers active navigation was asserted only at 1280×800; mobile navigation was asserted at 390×844; RTL/LTR, focus, overflow, and absence of unsupported Loyalty/Campaigns/Feedback/Retention links passed.
 - VERIFIED: the final W7.7 correction was test-only and scoped desktop active navigation to desktop after the earlier 390px selector mismatch; no runtime Customers behavior changed.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu, Platform Admin, dependencies, merge, or deployment changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence.
 
+### W7.8 — Platform Admin Information Architecture and Admin Shell — DONE / VERIFIED — 2026-09-15
+- VERIFIED: discovery confirmed the real `/admin` tab model, data sources, server-side Platform Admin authorization, existing actions, loading/error/empty boundaries, and the absence of separate Security/Platform Health/Configuration capabilities.
+- VERIFIED: grouped IA is implemented inside `/admin` without route splitting: Overview; Customers (Restaurants, Clients, Branches); Commerce (Orders, Subscriptions, Service Requests); Sales (Leads, Projects); Intelligence (Analytics, Activity); System (existing combined system/security view).
+- VERIFIED: all existing Admin tab identifiers and actions remain reachable; active navigation exposes `aria-current="page"`.
+- VERIFIED: Overview was reorganized around real operational data and existing `MetricRow`, `PageHeader`, `SectionHeader`, `LoadingState`, and `ErrorState` primitives; no generic dashboard/card-wall template was introduced.
+- VERIFIED: final current-head quality run `34915257732` / run 1601 passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 focused tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
+- VERIFIED: Platform Admin browser QA reached the actual `/admin` application in the authorized CI development-user state; the browser exercised 390×844, 430×932, 768×1024, and 1280×800, grouped navigation, all existing tab controls, active semantics, keyboard focus, RTL structure, and no horizontal overflow.
+- VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator records were added.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI provider/business logic, orders business logic, public menu behavior, Studio business logic, dependencies, merge, or deployment changed.
+- UNKNOWN: physical real-device QA remains release-stage evidence.
+- VERIFIED: W7.9 route splitting is explicitly deferred and is the next safe phase; W7.10/W7.11 and release work remain out of scope.
+
 ## Exact Next Task
-### W7.8 — Platform Admin Information Architecture and Admin Shell
-Only W7.8 is authorized next. W7.9 Admin route splitting, W7.10 full-product mobile pass, W7.11 final visual QA, merge, deployment, database work, and release work remain out of scope.
+### W7.9 — Platform Admin Route Architecture / Route Splitting
+Only W7.9 is authorized next. W7.10 full-product mobile pass, W7.11 final visual QA, merge, deployment, database work, and release work remain out of scope.
 
 ## Continuity Rule
 At the end of every atomic task:
