@@ -8,7 +8,7 @@ const whatsapp = await readFile("src/lib/menu/ai-whatsapp.ts", "utf8");
 const aiCore = await readFile("src/lib/menu/ai-core.ts", "utf8");
 const providers = await readFile("src/lib/menu/ai-providers.ts", "utf8");
 const reports = await readFile("src/routes/studio/reports.tsx", "utf8");
-const menu = await readFile("src/routes/studio/menu.tsx", "utf8");
+const menuWorkspacePage = await readFile("src/components/studio-menu-workspace-page.tsx", "utf8");
 const menuAi = await readFile("src/lib/menu/ai.ts", "utf8");
 const packageJson = await readFile("package.json", "utf8");
 
@@ -70,13 +70,13 @@ test("AI product price extraction is review-first and wired into Add Product", (
   assert.match(menuAi, /menu_price/);
   assert.match(menuAi, /Do not invent or estimate a price/);
   assert.match(menuAi, /price: number \| null/);
-  assert.match(menu, /type AiOperation = .*"price"/);
-  assert.match(menu, /استخراج الاسم والسعر|Extract name & price/);
-  assert.match(menu, /كبسة دجاج 20/);
-  assert.match(menu, /applyAiPrice/);
-  assert.match(menu, /تطبيق على المسودة|Apply to draft/);
-  assert.match(menu, /price: aiPrice\.price/);
-  assert.match(menu, /nameAr: aiPrice\.cleanedNameAr/);
+  assert.match(menuWorkspacePage, /type AiOperation = .*"price"/);
+  assert.match(menuAi, /كبسة دجاج 20/);
+  assert.match(menuWorkspacePage, /استخراج الاسم والسعر|Extract name & price/);
+  assert.match(menuWorkspacePage, /applyAiPrice/);
+  assert.match(menuWorkspacePage, /تطبيق على المسودة|Apply to draft/);
+  assert.match(menuWorkspacePage, /price: aiPrice\.price/);
+  assert.match(menuWorkspacePage, /nameAr: aiPrice\.cleanedNameAr/);
 });
 
 test("the quality suite no longer references the retired V4 regression", () => {

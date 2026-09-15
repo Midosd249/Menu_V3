@@ -7,9 +7,9 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` includes the fetched `origin/main` R9 baseline through `fb76e14`; the final merge commit is recorded after this merge completes.
-- VERIFIED: R9 guest relationship batch was merged by squash from PR #136 after GitHub Actions quality run 1453 passed all configured stages.
-- VERIFIED: the R9 migration is portable across Supabase and local PGlite; Supabase `anon`/`authenticated` revokes remain conditional while `public` remains revoked.
+- VERIFIED: canonical `main` is `9995848b747bdb238e45b7ed6fe6b551c6779fcc` as directly fetched from GitHub on 2026-09-14.
+- VERIFIED: latest main commit mounts the shared nutrition disclosure on the published QR menu route and adds a protecting test.
+- VERIFIED: R9 guest relationship work remains protected in history; current main is newer than the prior continuity SHA.
 - VERIFIED: R8 and all preceding protected work remain in main.
 
 ## Completed Strategic Milestones
@@ -67,7 +67,7 @@ R4.5 Owner Decision Loop              DONE / VERIFIED
 STATUS: CLOSED / VERIFIED
 
 - Deterministic distribution action for published zero-activity menus.
-- Uses existing OwnerAnalytics evidence and verified publication state.
+- Uses only existing OwnerAnalytics evidence and verified publication state.
 - Reuses `/studio/brand`; no duplicate dashboard or route.
 - No fabricated metrics or autonomous messaging.
 
@@ -86,7 +86,7 @@ STATUS: CLOSED / VERIFIED — ACTIVATION COMPLETE; OUTCOME PENDING REAL EXPOSURE
 - Directional interpretation only; no statistical significance claim.
 
 ## R7 — Initial Evidence Review
-STATUS: IN_PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
+STATUS: IN PROGRESS — NON-BLOCKING / INSUFFICIENT EXPOSURE
 
 - VERIFIED: canonical table is `menu_v3.menu_events`.
 - VERIFIED: current observed exposure remains 1 distinct `control` session and 2 distinct `prominent` sessions.
@@ -105,109 +105,61 @@ STATUS: CLOSED / VERIFIED / MERGED
 ## R9 — Guest Relationships
 STATUS: CLOSED / VERIFIED / MERGED
 
-- VERIFIED: PR #136 merged into `main` as `afece1cb591566e885520b703117d0994643597a`.
+- VERIFIED: PR #136 merged the R9 guest relationship batch.
 - VERIFIED: owner-facing Studio guest relationship surface covers Guest CRM, Loyalty, Campaigns, Feedback, and Retention.
 - VERIFIED: relationship data is server-authorized and tenant/branch scoped; owner/admin are the elevated roles used by the existing permission contract.
 - VERIFIED: loyalty accounts and ledger, owner-controlled campaign drafts, and feedback records have RLS enabled and public access revoked.
-- VERIFIED: retention and relationship overview are derived from existing guest/order data; no synthetic evidence is introduced.
+- VERIFIED: retention and relationship overview is derived from existing guest/order data; no synthetic evidence is introduced.
 - VERIFIED: autonomous outbound messaging, automatic rewards, autonomous campaign execution, predictive claims, and pricing mutation are excluded.
-- VERIFIED: GitHub Actions quality run 1453 passed route generation, typecheck, all 265 tests, lint, production build, Playwright runtime/Chromium, all-theme browser QA, performance artifact upload, and cleanup.
-- VERIFIED: the initial CI failure was a PGlite portability issue caused by unconditional `anon`/`authenticated` role revocation; the migration was hardened conditionally without weakening Supabase security semantics.
+- VERIFIED: prior quality run 1453 passed the configured route generation, typecheck, tests, lint, build, Playwright and browser-quality stages.
 
 ## R10
 STATUS: DEFERRED / NOT STARTED
 
 R10 is intentionally not started. Do not begin R10 until the owner explicitly authorizes it.
 
-## AI Infrastructure
-- VERIFIED: server-side provider abstraction.
-- VERIFIED: structured routing for Inception/Mercury, Gemini, Z.AI, OpenRouter, and xKiro.
-- VERIFIED: multimodal routing for Gemini, OpenRouter, Z.AI, and xKiro.
-- VERIFIED: schema validation, rate limiting, prompt-injection safeguards, and human-review boundaries.
-- VERIFIED: server-only credentials.
+## W7.10 — Full-Product Mobile and Responsive Pass — DONE / VERIFIED / RELEASE-STAGE DEVICE QA PENDING
 
-## Production / Commercial Readiness
-STATUS: IN_PROGRESS — EXTERNAL EVIDENCE REMAINING
+- VERIFIED: final responsive CI run `34932493596` / run 1655 passed the complete configured route, test, lint, build, public, Studio, Platform Admin, performance, diagnostics, and cleanup stages for implementation HEAD `16d11eae278641062503c0a6d23d60677e6c7cb3`.
+- VERIFIED: the previous Studio browser readiness assertion used `<main>` even though the real Studio Shell exposes `role="banner"`; the correction was test-only and retained route, viewport, overflow, and accessibility assertions.
+- VERIFIED: the prior 320px Studio overflow measured `scrollWidth=344` versus `clientWidth=320`; diagnostics identified the Studio Shell header action group as the source.
+- VERIFIED: `src/components/studio-shell.tsx` makes the mobile header action group width-contained and wrapping-safe, restoring compact horizontal sizing from `sm`.
+- VERIFIED: `src/components/studio-menu-workspace.tsx` adds narrow-width containment while preserving the Menu Import action and behavior.
+- VERIFIED: shared WorkspaceHeader and FilterBar wrapping protections were retained.
+- VERIFIED: public all-theme QA passed all five themes across 320×800, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1280×800, and 1440×900 with no horizontal overflow, accessible-name failures, or runtime console errors.
+- VERIFIED: Studio browser QA passed 9 tests and Platform Admin browser QA passed 20 tests in the final workflow.
+- VERIFIED: no business logic, data contracts, routes, permissions, backend, dependencies, Supabase, database, RLS, auth, subscriptions, AI, orders, Vercel, merge, or deployment changed.
+- UNKNOWN: physical Android/iOS device QA remains `PENDING_RELEASE_STAGE`.
 
-- VERIFIED: repository-side R9 implementation and CI quality gates are complete.
-- VERIFIED: GitHub `main` contains the R9 merge commit.
+## W7.11 — Final Visual Quality, Product Consistency, Release-Readiness Audit, and Draft PR Review — DONE / VERIFIED
+
+- VERIFIED: final visual/consistency audit is recorded in `docs/W7_11_FINAL_QUALITY_AUDIT.md`.
+- VERIFIED: Draft PR review is recorded in `docs/W7_11_PR_REVIEW.md`.
+- VERIFIED: W7.11 found no release blocker and no unresolved high/medium visual, accessibility, navigation, or state defect in the audited W7 scope.
+- VERIFIED: final W7.10 CI remains the current implementation evidence: `34933400630` / run 1661 PASS against `7a1aa201c6556d8d6f8dfcabe85489a264150663`.
+- VERIFIED: PR #146 remains Open / Draft / Unmerged and is `READY_FOR_HUMAN_REVIEW`.
+- VERIFIED: no product/runtime code change was required during W7.11.
+- VERIFIED: no database, Supabase, RLS, auth, permissions, subscriptions, AI, orders, business logic, route architecture, dependency, Vercel, merge, or deployment change occurred during W7.11.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
+## W7.12 — Release Readiness Package — DONE / VERIFIED — 2026-09-15
+
+- VERIFIED: release-readiness documentation is complete: lint triage, real-device QA protocol, human PR review package, and release risk register.
+- VERIFIED: `PROJECT_STATE.md` contains the W7.12 append-only continuity entry and the next safe action is human review of Draft PR #146.
+- VERIFIED: 29 lint warnings and 0 errors were triaged; 0 warnings are automatic merge blockers.
+- VERIFIED: physical Android/iOS QA remains `PENDING_RELEASE_STAGE` and is documented as a manual gate, not completed evidence.
+- VERIFIED: PR #146 remains Open / Draft / Unmerged; no merge approval was granted.
+- VERIFIED: W7.12 performed no product/runtime code changes, no deployment, and no Vercel action.
+- VERIFIED: W7.12 changed only release-readiness documentation plus the PR description/comment.
+
+## Production / Commercial Readiness — IN PROGRESS
+
+- VERIFIED: repository-side R9 implementation and quality gates are complete.
+- VERIFIED: GitHub `main` contains the protected product work.
 - UNKNOWN: direct current Vercel Production environment-variable values.
 - UNKNOWN: current Production deployment commit/state requires direct Vercel evidence.
 - UNKNOWN: physical real-device Production QA.
 - BLOCKED: unnecessary Vercel deployment retries must not be attempted while the known free daily deployment quota is exhausted.
 
-## Release-Only Vercel Policy
-Normal path:
-
-**LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT**
-
-Do not use Vercel as the normal development loop. Do not infer production state from GitHub or HTTP 200. Do not randomly retry quota/rate/build failures.
-
-## Current Release State
-- VERIFIED: `main` is `afece1cb591566e885520b703117d0994643597a`.
-- VERIFIED: PR #136 is merged.
-- VERIFIED: final R9 quality run 1453 passed all configured stages.
-- UNKNOWN: direct current Vercel Production deployment state and environment configuration.
-- UNKNOWN: physical real-device Production QA.
-
-## Current Strategic Direction
-```text
-Live Menu
-→ Guest Experience
-→ Menu Intelligence
-→ Owner Intelligence
-→ Growth Extensions
-→ Experiments
-→ Guest Relationships
-→ Production / Commercial Readiness
-```
-
-## Saudi Food Disclosure Extension — 2026-09-13
-
-- STATUS: `IMPLEMENTATION_IN_PROGRESS` / locally changed, not deployed.
-- VERIFIED: official SFDA announcements were reviewed for caffeine disclosure, high-salt labeling, and physical-activity calorie-burn labeling.
-- IMPLEMENTED: nullable sodium and caffeine fields, explicit caffeine basis, owner entry/review, public disclosure, and derived high-salt warning.
-- PRESERVED: existing calories, allergen text, themes, tenant scoping, server validation, and AI non-fabrication boundaries.
-- UNKNOWN: exact technical-regulation presentation, controlled allergen taxonomy, and physical-activity formula.
-- NEXT: resolve pre-existing route/type-generation quality-gate errors, complete local browser QA, then prepare one release batch only after all applicable checks pass.
-
-## Golden Demo Restaurant — 2026-09-13
-
-- STATUS: `VERIFIED_LOCALLY` / data applied to the authorized existing tenant, not deployed.
-- VERIFIED: fictional `مائدة سُرى / Sura Table`, Riyadh context, one preserved branch, 10 coherent categories, and 28 bilingual products.
-- VERIFIED: Kids Menu, calories, sodium, caffeine bases, allergen combinations, availability state, empty image fields, modifier groups, and variants are represented using existing schema.
-- VERIFIED: tenant owner and orders were preserved; no unrelated tenant was changed.
-- VERIFIED: static five-theme contracts and all available repository QA passed.
-- BLOCKED: browser visual QA is unavailable in this environment because Playwright browser binaries are absent and local PGlite schema is behind the current public-menu cache migration.
-- NEXT: prepare one release batch after final diff review; do not deploy from this local task.
-
 ## Exact Next Task
-### Production / Commercial Readiness — External Verification Gate
-
-Complete only the remaining evidence-dependent work:
-1. verify Vercel Production environment/configuration against canonical Supabase project `ublxptcqefujkbeepylc` and schema `menu_v3`;
-2. perform available authenticated/browser/QR/theme/order/RTL Production QA;
-3. perform real-device QA when a real device/browser session is available;
-4. record direct evidence and close the readiness milestone when all applicable checks pass.
-
-R7 remains active independently and does not block this task. R10 must remain untouched.
-
-R10 remains deferred by owner decision and is not started.
-
-## Session Log — 2026-09-13 — R9 Closure
-- VERIFIED: PR #136 completed the R9 guest relationship batch and merged into `main`.
-- VERIFIED: the R9 baseline commit is `afece1cb591566e885520b703117d0994643597a`; the current main merge commit is recorded after this merge completes.
-- VERIFIED: quality run 1453 passed all configured stages after the R9 migration portability fix.
-- VERIFIED: no protected authentication, authorization, tenant/branch isolation, subscription, ordering, R6, or R7 semantics were weakened.
-- VERIFIED: R10 is explicitly deferred and not started.
-- UNKNOWN/BLOCKED: Vercel Production state and real-device QA remain external evidence items; free daily deployment quota must not be retried unnecessarily.
-
-## Continuity Rule
-At the end of every atomic task:
-1. reconcile current Git head;
-2. verify CI evidence;
-3. verify deployment separately when relevant;
-4. update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`;
-5. update material audit/research/project-memory records when the task reveals a durable lesson;
-6. record exactly one next task;
-7. stop.
+Human review of Draft PR #146 using `docs/W7_12_HUMAN_PR_REVIEW.md`, followed by the release-stage physical-device QA gate when explicitly authorized. Do not begin another product milestone automatically.

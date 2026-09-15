@@ -16,6 +16,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as AdminWorkspaceRouteImport } from './routes/admin/$workspace'
 import { Route as AdminOnboardingRouteImport } from './routes/admin/onboarding'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as MSlugRouteImport } from './routes/m.$slug'
@@ -25,6 +26,8 @@ import { Route as StudioAnalyticsRouteImport } from './routes/studio/analytics'
 import { Route as StudioBranchesRouteImport } from './routes/studio/branches'
 import { Route as StudioBrandRouteImport } from './routes/studio/brand'
 import { Route as StudioDesignRouteImport } from './routes/studio/design'
+import { Route as StudioGrowthRouteImport } from './routes/studio/growth'
+import { Route as StudioGuestsRouteImport } from './routes/studio/guests'
 import { Route as StudioImportRouteImport } from './routes/studio/import'
 import { Route as StudioIntelligenceRouteImport } from './routes/studio/intelligence'
 import { Route as StudioIntelligenceActionsRouteImport } from './routes/studio/intelligence-actions'
@@ -76,6 +79,11 @@ const StudioRoute = StudioRouteImport.update({
   path: '/studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -119,6 +127,16 @@ const StudioBrandRoute = StudioBrandRouteImport.update({
 const StudioDesignRoute = StudioDesignRouteImport.update({
   id: '/design',
   path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
   getParentRoute: () => StudioRoute,
 } as any)
 const StudioImportRoute = StudioImportRouteImport.update({
@@ -206,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
   '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
@@ -214,6 +233,8 @@ export interface FileRoutesByFullPath {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -238,6 +259,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
@@ -246,6 +268,8 @@ export interface FileRoutesByTo {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -272,6 +296,7 @@ export interface FileRoutesById {
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
   '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/invite/$token': typeof InviteTokenRoute
   '/m/$slug': typeof MSlugRouteWithChildren
@@ -280,6 +305,8 @@ export interface FileRoutesById {
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
   '/studio/import': typeof StudioImportRoute
   '/studio/intelligence': typeof StudioIntelligenceRoute
   '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
@@ -307,6 +334,7 @@ export interface FileRouteTypes {
     | '/owner'
     | '/pricing'
     | '/studio'
+    | '/admin/$workspace'
     | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
@@ -315,6 +343,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -339,6 +369,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/owner'
     | '/pricing'
+    | '/admin/$workspace'
     | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
@@ -347,6 +378,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -372,6 +405,7 @@ export interface FileRouteTypes {
     | '/owner'
     | '/pricing'
     | '/studio'
+    | '/admin/$workspace'
     | '/admin/onboarding'
     | '/invite/$token'
     | '/m/$slug'
@@ -380,6 +414,8 @@ export interface FileRouteTypes {
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
     | '/studio/import'
     | '/studio/intelligence'
     | '/studio/intelligence-actions'
@@ -464,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/onboarding': {
       id: '/admin/onboarding'
       path: '/onboarding'
@@ -525,6 +568,20 @@ declare module '@tanstack/react-router' {
       path: '/design'
       fullPath: '/studio/design'
       preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
       parentRoute: typeof StudioRoute
     }
     '/studio/import': {
@@ -636,10 +693,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
   AdminOnboardingRoute: typeof AdminOnboardingRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
   AdminOnboardingRoute: AdminOnboardingRoute,
 }
 
@@ -662,6 +721,8 @@ interface StudioRouteChildren {
   StudioBranchesRoute: typeof StudioBranchesRoute
   StudioBrandRoute: typeof StudioBrandRoute
   StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
   StudioImportRoute: typeof StudioImportRoute
   StudioIntelligenceRoute: typeof StudioIntelligenceRoute
   StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
@@ -681,6 +742,8 @@ const StudioRouteChildren: StudioRouteChildren = {
   StudioBranchesRoute: StudioBranchesRoute,
   StudioBrandRoute: StudioBrandRoute,
   StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
   StudioImportRoute: StudioImportRoute,
   StudioIntelligenceRoute: StudioIntelligenceRoute,
   StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
