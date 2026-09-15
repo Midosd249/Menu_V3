@@ -29,7 +29,7 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   await expect(page.locator(":focus")).toHaveCount(1);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
+  await page.goto(`${BASE_URL}/studio`, { waitUntil: "networkidle" });
   const mobileNav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(mobileNav).toBeVisible();
   await expect(mobileNav.locator("button")).toHaveCount(5);
