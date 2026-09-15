@@ -1,50 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
-import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { getMyCustomerAccessStatus } from "@/lib/menu/platform-onboarding";
+import { getMyStudio } from "@/lib/menu/owner";
 import { LangToggle } from "@/components/lang-toggle";
-import { Flash, LoadingState, ErrorState } from "@/components/state-panel";
+import { LoadingState, ErrorState } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
-import { Field, Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
-import { copy, t } from "@/lib/menu/i18n";
-import { createRestaurant, getMyStudio, saveBranch, seedStarterItems, updateTenant } from "@/lib/menu/owner";
-import { ensureOwnerMembership } from "@/lib/menu/onboarding-recovery";
-import { slugify } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({ component: Onboarding });
 
+type AccessStatus = "none" | "pending" | "approved" | "converted" | "rejected";
+
 function Onboarding() {
   const { lang } = useLang();
-  const navigate = useNavigate();
   const { user, isPending } = useCurrentUserState();
   const [checking, setChecking] = useState(true);
   const [checkError, setCheckError] = useState("");
   const [hasTenant, setHasTenant] = useState(false);
-  const [step, setStep] = useState(0);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  const [ok, setOk] = useState(false);
-  const [form, setForm] = useState({
-    nameAr: "",
-    nameEn: "",
-    city: "الرياض",
-    slug: "",
-    whatsapp: "",
-    branchNameAr: "الفرع الرئيسي",
-    branchNameEn: "Main branch",
-    addressAr: "",
-    addressEn: "",
-    mapsUrl: "",
-    branchPhone: "",
-  });
-  const [items, setItems] = useState([
-    { categoryAr: "القهوة", categoryEn: "Coffee", nameAr: "", nameEn: "", price: "" },
-    { categoryAr: "المخبوزات", categoryEn: "Bakery", nameAr: "", nameEn: "", price: "" },
-    { categoryAr: "المطبخ", categoryEn: "Kitchen", nameAr: "", nameEn: "", price: "" },
-  ]);
+  const [status, setStatus] = useState<AccessStatus>("none");
 
-  const checkStudio = useCallback(async () => {
+  const checkAccess = useCallback(async () => {
     if (!user) {
       setChecking(false);
       return;
@@ -52,271 +29,96 @@ function Onboarding() {
     setChecking(true);
     setCheckError("");
     try {
-      const result = await getMyStudio();
-      if (!result.ok) {
-        setCheckError(result.error);
+      const studio = await getMyStudio();
+      if (!studio.ok) {
+        setCheckError(studio.error);
         return;
       }
-      setHasTenant("tenant" in result.data && Boolean(result.data.tenant));
+      if ("tenant" in studio.data && studio.data.tenant) {
+        setHasTenant(true);
+        return;
+      }
+      const access = await getMyCustomerAccessStatus();
+      if (!access.ok) {
+        setCheckError(access.error);
+        return;
+      }
+      setStatus(access.data.status);
     } catch (err) {
-      setCheckError(err instanceof Error ? err.message : t(copy.state.error, lang));
+      setCheckError(err instanceof Error ? err.message : "تعذر التحقق من حالة الحساب");
     } finally {
       setChecking(false);
     }
-  }, [user, lang]);
+  }, [user]);
 
   useEffect(() => {
-    void checkStudio();
-  }, [checkStudio]);
+    void checkAccess();
+  }, [checkAccess]);
 
   if (isPending || checking) return <LoadingState />;
   if (!user) return <RedirectToSignIn />;
-  if (checkError) {
-    return <ErrorState message={checkError} onRetry={() => void checkStudio()} />;
-  }
   if (hasTenant) return <Navigate to="/studio" replace />;
+  if (checkError) return <ErrorState message={checkError} onRetry={() => void checkAccess()} />;
 
-  function set<K extends keyof typeof form>(key: K, value: string) {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  }
+  const copy = {
+    ar: {
+      brand: "Menu V3",
+      title: "مساحة العميل بانتظار الاعتماد",
+      noneTitle: "ابدأ بطلب الخدمة",
+      noneBody: "الحساب وحده لا ينشئ مساحة مطعم. أرسل طلب الخدمة من الموقع، ثم يراجعه مالك المنصة قبل إنشاء مساحة العمل.",
+      pendingTitle: "تم استلام طلبك",
+      pendingBody: "طلبك قيد المراجعة. بعد الاعتماد ستصلك تعليمات ورابط التسجيل الآمن لإنشاء مساحة مطعمك.",
+      approvedTitle: "تم اعتماد طلبك",
+      approvedBody: "طلبك معتمد. استخدم رابط التسجيل الذي أرسلته إدارة المنصة بالحساب المرتبط بالبريد الذي قدمته في الطلب.",
+      rejectedTitle: "لم تتم الموافقة على الطلب",
+      rejectedBody: "يمكنك التواصل مع إدارة المنصة إذا أردت إعادة مراجعة الطلب.",
+      convertedTitle: "مساحة العميل موجودة بالفعل",
+      convertedBody: "هذا الحساب سبق ربطه بمساحة مطعم. أعد فتح الاستوديو.",
+      request: "طلب الخدمة",
+      refresh: "تحديث الحالة",
+      signOutHint: "يمكنك العودة للموقع في أي وقت.",
+    },
+    en: {
+      brand: "Menu V3",
+      title: "Customer workspace awaiting approval",
+      noneTitle: "Start with a service request",
+      noneBody: "An account alone does not create a restaurant workspace. Submit a service request from the website, then the platform owner reviews it before workspace creation.",
+      pendingTitle: "Your request was received",
+      pendingBody: "Your request is under review. After approval, you will receive secure registration instructions and a link to create your restaurant workspace.",
+      approvedTitle: "Your request is approved",
+      approvedBody: "Your request is approved. Use the registration link sent by the platform owner with the account matching the email used in your request.",
+      rejectedTitle: "The request was not approved",
+      rejectedBody: "Contact the platform owner if you want the request reviewed again.",
+      convertedTitle: "A customer workspace already exists",
+      convertedBody: "This account has already been linked to a restaurant workspace. Open Studio again.",
+      request: "Request service",
+      refresh: "Refresh status",
+      signOutHint: "You can return to the website at any time.",
+    },
+  }[lang];
 
-  async function finish(publish: boolean) {
-    if (busy) return;
-    setBusy(true);
-    setError("");
-    setOk(false);
-    try {
-      // Recover a tenant that may have been created before its membership was
-      // persisted. This is strictly derived from the authenticated user on the server.
-      const recovered = await ensureOwnerMembership();
-      if (!recovered.ok) {
-        setError(recovered.error);
-        return;
-      }
-
-      let created = await createRestaurant({
-        data: {
-          nameAr: form.nameAr.trim(),
-          nameEn: form.nameEn.trim() || undefined,
-          slug: (form.slug.trim() || slugify(form.nameEn || form.nameAr)) || undefined,
-          city: form.city.trim() || undefined,
-          branchNameAr: form.branchNameAr.trim(),
-          branchNameEn: form.branchNameEn.trim() || undefined,
-          addressAr: form.addressAr.trim() || undefined,
-          whatsapp: form.whatsapp.trim() || undefined,
-        },
-      });
-
-      if (!created.ok) {
-        // If a prior request created the tenant before the membership write, repair
-        // the server-side membership and retry once instead of surfacing a duplicate-owner error.
-        const repaired = await ensureOwnerMembership();
-        if (repaired.ok && repaired.data.repaired) {
-          created = await createRestaurant({
-            data: {
-              nameAr: form.nameAr.trim(),
-              nameEn: form.nameEn.trim() || undefined,
-              slug: (form.slug.trim() || slugify(form.nameEn || form.nameAr)) || undefined,
-              city: form.city.trim() || undefined,
-              branchNameAr: form.branchNameAr.trim(),
-              branchNameEn: form.branchNameEn.trim() || undefined,
-              addressAr: form.addressAr.trim() || undefined,
-              whatsapp: form.whatsapp.trim() || undefined,
-            },
-          });
-        }
-      }
-
-      if (!created.ok) {
-        const existing = await getMyStudio();
-        if (existing.ok && "tenant" in existing.data && existing.data.tenant) {
-          await navigate({ to: "/studio", replace: true });
-          return;
-        }
-        setError(created.error);
-        return;
-      }
-
-      // Ensure newly-created owners receive the canonical authorization role as well
-      // as the legacy-compatible owner role used by the existing studio layer.
-      const ownerRole = await ensureOwnerMembership();
-      if (!ownerRole.ok) {
-        setError(ownerRole.error);
-        return;
-      }
-
-      const branch = created.data.branches[0];
-      if (branch) {
-        const savedBranch = await saveBranch({
-          data: {
-            id: branch.id,
-            nameAr: form.branchNameAr.trim(),
-            nameEn: form.branchNameEn.trim(),
-            addressAr: form.addressAr.trim(),
-            addressEn: form.addressEn.trim(),
-            mapsUrl: form.mapsUrl.trim(),
-            phone: form.branchPhone.trim(),
-            isActive: true,
-          },
-        });
-        if (!savedBranch.ok) {
-          setError(savedBranch.error);
-          return;
-        }
-      }
-
-      const starter = items
-        .filter((row) => row.nameAr.trim() && Number(row.price) >= 0 && row.price !== "")
-        .map((row) => ({
-          categoryAr: row.categoryAr,
-          categoryEn: row.categoryEn,
-          nameAr: row.nameAr.trim(),
-          nameEn: row.nameEn.trim(),
-          price: Number(row.price),
-        }));
-
-      if (starter.length) {
-        const seeded = await seedStarterItems({ data: { items: starter } });
-        if (!seeded.ok) {
-          setError(seeded.error);
-          return;
-        }
-      }
-
-      if (publish) {
-        const published = await updateTenant({ data: { isPublished: true } });
-        if (!published.ok) {
-          setError(published.error);
-          return;
-        }
-      }
-
-      setOk(true);
-      await navigate({ to: "/studio", replace: true });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t(copy.state.error, lang));
-    } finally {
-      setBusy(false);
-    }
-  }
+  const title = status === "none" ? copy.noneTitle : status === "pending" ? copy.pendingTitle : status === "approved" ? copy.approvedTitle : status === "rejected" ? copy.rejectedTitle : copy.convertedTitle;
+  const body = status === "none" ? copy.noneBody : status === "pending" ? copy.pendingBody : status === "approved" ? copy.approvedBody : status === "rejected" ? copy.rejectedBody : copy.convertedBody;
 
   return (
-    <main className="mx-auto grid min-h-dvh max-w-lg content-start gap-6 px-5 py-8">
-      <div className="flex items-center justify-between">
-        <Link to="/" className="font-display text-xl font-semibold">
-          {t(copy.brand, lang)}
-        </Link>
-        <LangToggle />
-      </div>
-      <div>
-        <h1 className="font-display text-2xl font-semibold">{lang === "ar" ? "جهّز منيو منشأتك" : "Set up your business menu"}</h1>
-        <p className="mt-1 text-sm text-muted">
-          {step + 1} / 3 · {t([copy.onboarding.step1, copy.onboarding.step2, copy.onboarding.step3][step], lang)}
-        </p>
-      </div>
-      <div className="grid grid-cols-3 gap-2" aria-label={`${step + 1} / 3`}>
-        {[0, 1, 2].map((i) => (
-          <div key={i} className={`h-1 rounded-full ${i <= step ? "bg-accent" : "bg-sand"}`} />
-        ))}
-      </div>
-
-      {step === 0 ? (
-        <div className="grid gap-3">
-          <Field label={lang === "ar" ? "اسم المنشأة بالعربية" : "Business name in Arabic"}>
-            <Input value={form.nameAr} onChange={(e) => set("nameAr", e.target.value)} required />
-          </Field>
-          <Field label={lang === "ar" ? "اسم المنشأة بالإنجليزية (اختياري)" : "Business name in English (optional)"}>
-            <Input value={form.nameEn} onChange={(e) => set("nameEn", e.target.value)} />
-          </Field>
-          <Field label={t(copy.studio.city, lang)}>
-            <Input value={form.city} onChange={(e) => set("city", e.target.value)} />
-          </Field>
-          <Field label={t(copy.studio.whatsapp, lang)}>
-            <Input value={form.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} inputMode="tel" placeholder="9665XXXXXXXX" />
-          </Field>
+    <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
+      <section className="w-full max-w-lg rounded-3xl border border-line bg-white p-6 shadow-sm md:p-8">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="font-display text-xl font-semibold">{copy.brand}</Link>
+          <LangToggle />
         </div>
-      ) : null}
-
-      {step === 1 ? (
-        <div className="grid gap-3">
-          <Field label={t(copy.studio.nameAr, lang)}>
-            <Input value={form.branchNameAr} onChange={(e) => set("branchNameAr", e.target.value)} />
-          </Field>
-          <Field label={t(copy.studio.nameEn, lang)}>
-            <Input value={form.branchNameEn} onChange={(e) => set("branchNameEn", e.target.value)} />
-          </Field>
-          <Field label={t(copy.studio.address, lang)}>
-            <Input value={form.addressAr} onChange={(e) => set("addressAr", e.target.value)} />
-          </Field>
-          <Field label={lang === "ar" ? "العنوان بالإنجليزية" : "Address in English"}>
-            <Input value={form.addressEn} onChange={(e) => set("addressEn", e.target.value)} />
-          </Field>
-          <Field label={t(copy.studio.maps, lang)}>
-            <Input value={form.mapsUrl} onChange={(e) => set("mapsUrl", e.target.value)} type="url" placeholder="https://maps.google.com/..." />
-          </Field>
-          <Field label={t(copy.studio.phone, lang)}>
-            <Input value={form.branchPhone} onChange={(e) => set("branchPhone", e.target.value)} inputMode="tel" />
-          </Field>
-          <p className="text-xs leading-5 text-muted">
-            {lang === "ar" ? "أدخل رابط Google Maps للفرع ليظهر زر الموقع في المنيو. العنوان ورابط الخريطة والمدينة هي بيانات الموقع الأساسية." : "Add the branch Google Maps URL so the location action can appear on the menu. Address, map URL and city form the core location data."}
-          </p>
+        <div className="mt-8 grid gap-3">
+          <p className="text-sm font-medium text-accent">{copy.title}</p>
+          <h1 className="font-display text-2xl font-semibold">{title}</h1>
+          <p className="text-sm leading-6 text-muted">{body}</p>
         </div>
-      ) : null}
-
-      {step === 2 ? (
-        <div className="grid gap-4">
-          <p className="text-sm text-muted">{lang === "ar" ? "أضف ثلاثة أصناف للبداية، أو اتركها فارغة." : "Add three starter items, or leave them blank."}</p>
-          {items.map((row, i) => (
-            <div key={i} className="grid gap-2 rounded-xl border border-line p-3">
-              <Input
-                placeholder={t(copy.studio.nameAr, lang)}
-                value={row.nameAr}
-                onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, nameAr: e.target.value } : r)))}
-              />
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  placeholder={t(copy.studio.price, lang)}
-                  inputMode="decimal"
-                  value={row.price}
-                  onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, price: e.target.value } : r)))}
-                />
-                <Input
-                  placeholder={lang === "ar" ? "التصنيف" : "Category"}
-                  value={row.categoryAr}
-                  onChange={(e) => setItems((prev) => prev.map((r, idx) => (idx === i ? { ...r, categoryAr: e.target.value } : r)))}
-                />
-              </div>
-            </div>
-          ))}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {status === "none" ? <Button asChild><Link to="/">{copy.request}</Link></Button> : null}
+          {status === "converted" ? <Button asChild><Link to="/studio">{lang === "ar" ? "فتح الاستوديو" : "Open Studio"}</Link></Button> : null}
+          <Button type="button" variant="outline" onClick={() => void checkAccess}>{copy.refresh}</Button>
         </div>
-      ) : null}
-
-      <Flash error={error} ok={ok} />
-      <div className="flex flex-wrap gap-2">
-        {step > 0 ? (
-          <Button type="button" variant="outline" disabled={busy} onClick={() => setStep(step - 1)}>
-            {t(copy.onboarding.back, lang)}
-          </Button>
-        ) : null}
-        {step < 2 ? (
-          <Button
-            type="button"
-            disabled={busy || (step === 0 && form.nameAr.trim().length < 2)}
-            onClick={() => setStep(step + 1)}
-          >
-            {t(copy.onboarding.continue, lang)}
-          </Button>
-        ) : (
-          <>
-            <Button type="button" variant="outline" disabled={busy} onClick={() => void finish(false)}>
-              {t(copy.onboarding.skipItems, lang)}
-            </Button>
-            <Button type="button" disabled={busy} onClick={() => void finish(true)}>
-              {busy ? t(copy.state.loading, lang) : t(copy.onboarding.finish, lang)}
-            </Button>
-          </>
-        )}
-      </div>
+        <p className="mt-5 text-xs leading-5 text-muted">{copy.signOutHint}</p>
+      </section>
     </main>
   );
 }
