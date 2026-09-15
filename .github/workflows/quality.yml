@@ -23,7 +23,6 @@ jobs:
           cache: npm
       - name: Install
         run: npm install --no-audit --no-fund
-      # TanStack Start generates routeTree.gen.ts during Vite build; generate it before tsc.
       - name: Generate route tree
         run: npx vite build --mode development
       - name: Verify generated route tree is committed
@@ -49,7 +48,6 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
-      # performance-audit.mjs imports Playwright directly; keep it CI-local rather than adding browser tooling to the app runtime.
       - name: Install Playwright runtime
         run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
       - name: Install Playwright Chromium
@@ -86,12 +84,14 @@ jobs:
         run: |
           cat > migrations/99999999_w7_3_studio_fixture.sql <<'SQL'
           alter table tenant_members
+            add column if not exists access_role text not null default 'tenant_owner',
+            add column if not exists branch_scope text[] null,
             add column if not exists is_active boolean not null default true;
           alter table orders
             add column if not exists archived_at timestamptz;
-          insert into tenant_members (tenant_id, user_id, role)
-          values ('demo-nafas', 'dev-user', 'owner')
-          on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner';
+          insert into tenant_members (tenant_id, user_id, role, access_role, branch_scope)
+          values ('demo-nafas', 'dev-user', 'owner', 'tenant_owner', null)
+          on conflict (tenant_id, user_id) do update set is_active = true, role = 'owner', access_role = 'tenant_owner', branch_scope = null;
           SQL
       - name: Studio Shell, Home, Menu, Growth, and Customers browser QA — auth-disabled local mode
         run: |
