@@ -5,14 +5,13 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { requirePlatformAdmin } from "@/lib/auth/platform-admin.server";
 import { getSql } from "@/lib/db";
 import { newId, slugify } from "@/lib/utils";
+import { normalizePhoneDigits } from "./public-actions";
 import type { FnResult } from "./types";
 
 const tokenSchema = z.string().trim().min(40).max(200);
 const leadIdSchema = z.string().trim().min(1).max(100);
 
-function hashToken(token: string) {
-  return createHash("sha256").update(token).digest("hex");
-}
+function hashToken(token: string) { return createHash("sha256").update(token).digest("hex"); }
 
 async function assertAdmin(userId: string): Promise<FnResult<true>> {
   try {
@@ -57,28 +56,12 @@ export const getMyCustomerAccessStatus = createServerFn({ method: "GET" })
       const users = await sql<{ email: string }>`select "email" from "user" where "id" = ${context.userId} limit 1`;
       const email = users[0]?.email?.trim().toLowerCase();
       if (!email) return { ok: true, data: { status: "none" } };
-      const leads = await sql<{ status: string }>`
-        select status
-        from leads
-        where lower(trim(contact_email)) = ${email}
-        order by updated_at desc, created_at desc
-        limit 1
-      `;
+      const leads = await sql<{ status: string }>`select status from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1`;
       const lead = leads[0];
       if (!lead) return { ok: true, data: { status: "none" } };
       if (lead.status === "converted") return { ok: true, data: { status: "converted" } };
       if (lead.status === "lost") return { ok: true, data: { status: "rejected" } };
-      const activeApproval = await sql`
-        select id
-        from lead_onboarding
-        where lead_id = (select id from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1)
-          and approved_at is not null
-          and used_at is null
-          and revoked_at is null
-          and expires_at > now()
-        order by created_at desc
-        limit 1
-      `;
+      const activeApproval = await sql`select id from lead_onboarding where lead_id = (select id from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1) and approved_at is not null and used_at is null and revoked_at is null and expires_at > now() order by created_at desc limit 1`;
       if (activeApproval[0]) return { ok: true, data: { status: "approved" } };
       return { ok: true, data: { status: "pending" } };
     } catch (err) {
@@ -121,8 +104,7 @@ export const approveLead = createServerFn({ method: "POST" })
       await sql`insert into lead_onboarding (id, lead_id, token_hash, expires_at, approved_at, created_by) values (${newId()}, ${data.leadId}, ${hashToken(token)}, ${expiresAt}, now(), ${context.userId})`;
       await sql`update leads set status = 'qualified', updated_at = now() where id = ${data.leadId}`;
       const status = mapStatus({ expires_at: expiresAt, approved_at: new Date().toISOString() }, data.leadId);
-      const registrationUrl = `/onboarding/${token}`;
-      return { ok: true, data: { ...status, token, registrationUrl } };
+      return { ok: true, data: { ...status, token, registrationUrl: `/onboarding/${token}` } };
     } catch (err) {
       console.error("approveLead failed", err);
       return { ok: false, code: "unavailable", error: "تعذر اعتماد العميل وإنشاء رابط التسجيل" };
@@ -160,11 +142,17 @@ export const activateLeadOnboarding = createServerFn({ method: "POST" })
       const users = await sql<{ email: string }>`select "email" from "user" where "id" = ${context.userId} limit 1`;
       const accountEmail = users[0]?.email?.trim().toLowerCase();
       const leadEmail = String(onboarding.contact_email ?? "").trim().toLowerCase();
-      if (!accountEmail || !leadEmail || accountEmail !== leadEmail) {
-        return { ok: false, code: "forbidden", error: "استخدم الحساب المرتبط بالبريد الإلكتروني في طلب الخدمة" };
-      }
+      if (!accountEmail || !leadEmail || accountEmail !== leadEmail) return { ok: false, code: "forbidden", error: "استخدم الحساب المرتبط بالبريد الإلكتروني في طلب الخدمة" };
       const existingMember = await sql`select tenant_id from tenant_members where user_id = ${context.userId} and is_active = true limit 1`;
       if (existingMember[0]) return { ok: false, code: "conflict", error: "هذا الحساب مرتبط بمطعم بالفعل" };
+
+      const phone = normalizePhoneDigits(String(onboarding.contact_phone ?? ""), "SA");
+      if (phone) {
+        const phoneOwner = await sql`select "id" from "user" where "phoneNumber" = ${`+${phone}`} and "id" <> ${context.userId} limit 1`;
+        if (phoneOwner[0]) return { ok: false, code: "conflict", error: "رقم الجوال مرتبط بحساب آخر. راجع مالك المنصة." };
+        await sql`update "user" set "phoneNumber" = ${`+${phone}`}, "phoneNumberVerified" = true, "updatedAt" = now() where "id" = ${context.userId}`;
+      }
+
       const slugBase = slugify(String(onboarding.business_name)) || `restaurant-${Date.now().toString(36)}`;
       let slug = slugBase;
       const clash = await sql`select id from tenants where slug = ${slug} limit 1`;
