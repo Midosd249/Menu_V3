@@ -155,7 +155,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 
 ### W7.6 — DONE / VERIFIED — 2026-09-15
 
-- VERIFIED: Growth Workspace is complete at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
+- VERIFIED: W7.6 is complete at current HEAD `3fe58decd1f0c39806bd037e717778c4d58d01ab`.
 - VERIFIED: final current-head CI run `34910495789` passed all required route, test, build, lint, public browser, Studio Shell/Home/Menu/Growth browser, performance, diagnostics, and cleanup stages.
 - VERIFIED: W7.6 uses existing Growth/Intelligence/Actions/Analytics/Reports logic only and organizes it around Observe → Understand → Act → Measure.
 - VERIFIED: Reports is contextual only; no Experiments route or engine was invented.
@@ -177,7 +177,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: Admin discovery documented the actual 12-tab model, data sources, actions, Platform Admin authorization, state boundaries, and unavailable capabilities.
 - VERIFIED: grouped Admin IA is implemented without route splitting: Overview; Customers; Commerce; Sales; Intelligence; System.
 - VERIFIED: existing Admin tab identifiers, data hooks, actions, and permission behavior remain intact.
-- VERIFIED: final current-head quality run `34915257732` / run 1601 passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 tests, lint, production build, Playwright/Chromium, public all-theme QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
+- VERIFIED: final current-head quality run `34915257732` / run 1601 passed route generation/freshness, typecheck, 266 repository tests, W7.4/W7.5/W7.6/W7.7/W7.8 tests, lint, production build, Playwright/Chromium, public all-theme browser QA, Studio Shell/Home/Menu/Growth/Customers QA, Platform Admin browser QA, performance baseline, diagnostics, and cleanup.
 - VERIFIED: Platform Admin browser QA reached the real `/admin` application in the authorized CI development-user state and covered 390×844, 430×932, 768×1024, and 1280×800 with RTL, active semantics, focus, tab reachability, and no overflow.
 - VERIFIED: no fake Admin metrics, totals, health scores, activity, security events, charts, recommendations, or operator data were added.
 - VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu, Studio business logic, dependencies, merge, or deployment changed.
@@ -193,9 +193,20 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - VERIFIED: the final browser assertion was corrected test-only to match actual TanStack Router serialization (`keep=%221%22` parses as `"1"`).
 - VERIFIED: final quality run `34925141809` / run 1638 passed all route, typecheck, repository, W7.4–W7.9 contract, lint, production build, Playwright/Chromium, public, Studio, Platform Admin browser, performance, diagnostics, and cleanup stages.
 - VERIFIED: no unsupported Admin detail routes, fake data, metrics, charts, health scores, security events, or operator records were introduced.
-- VERIFIED: no protected production/database/auth/security/business areas changed.
+- VERIFIED: no protected backend/security/business areas changed.
 - UNKNOWN: physical real-device QA remains release-stage evidence only.
 
-## Exact Next Task
-### W7.10 — Full-Product Mobile and Responsive Pass
-W7.10 is the next safe phase. Do not begin W7.11, merge, deployment, or release work until W7.10 is explicitly completed and verified.
+### W7.10 — DONE / VERIFIED / RELEASE-STAGE DEVICE QA PENDING — 2026-09-15
+
+- VERIFIED: final W7.10 quality run `34932493596` / run 1655 completed successfully at implementation HEAD `16d11eae278641062503c0a6d23d60677e6c7cb3`.
+- VERIFIED: public all-theme QA passed the full 320×800, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1280×800, and 1440×900 matrix across all five themes.
+- VERIFIED: Studio browser QA passed 9 tests and Platform Admin browser QA passed 20 tests; route, overflow, active-state, focus, RTL/LTR, and responsive checks remained green.
+- VERIFIED: the previous Studio 320px overflow was real (`344px` scroll width vs `320px` viewport) and was corrected in `src/components/studio-shell.tsx` and `src/components/studio-menu-workspace.tsx` with wrapping/containment only.
+- VERIFIED: the previous Studio `<main>` selector mismatch was corrected test-only to the actual `role="banner"` readiness landmark.
+- VERIFIED: Menu Import remains part of the existing Studio Menu action group and was retained through the responsive correction.
+- VERIFIED: no production database/schema, Supabase, RLS, auth, permissions, subscriptions, AI, orders, public menu business logic, Studio business logic, Admin business logic, dependencies, route architecture, Vercel, merge, or deployment changed.
+- UNKNOWN: physical Android/iOS QA remains `PENDING_RELEASE_STAGE`.
+
+## W7.11 — DEFERRED / NOT STARTED
+
+W7.11 is intentionally not started. Do not begin W7.11 as part of W7.10.
