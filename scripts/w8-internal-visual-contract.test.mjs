@@ -55,7 +55,7 @@ const contrast = (foreground, background) => {
 };
 
 test("W8 internal visual system defines the complete semantic role layer", () => {
-  for (const role of requiredRoles) assert.match(css, new RegExp(`\\${role}\\s*:`), `Missing internal role ${role}`);
+  for (const role of requiredRoles) assert.ok(css.includes(`${role}:`), `Missing internal role ${role}`);
   assert.match(css, /body:has\(\[role="banner"\]\)/);
   assert.match(css, /body:has\(aside\[aria-label="تنقل إدارة المنصة"\]\)/);
 });
