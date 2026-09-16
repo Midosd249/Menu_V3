@@ -92,5 +92,5 @@ test("business type is restricted to the six approved values and the primary bra
   assert.match(selfServe, /restaurant.*cafe.*bakery.*dessert.*food_truck.*other/);
   assert.match(businessTypeMigration, /business_type/);
   assert.match(businessTypeMigration, /restaurant.*cafe.*bakery.*dessert.*food_truck.*other/);
-  assert.match(selfServe, /الفرع الرئيسي/);
+  assert.match(atomicMigration, /الفرع الرئيسي/);
 });
