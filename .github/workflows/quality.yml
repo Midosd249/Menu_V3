@@ -221,7 +221,11 @@ jobs:
             "0005_demo_product_photos.sql",
             "0008_menu_product_options.sql",
             "0009_orders.sql",
+            "20260903003000_branch_scope_authorization.sql",
+            "20260903005000_team_invitations.sql",
             "20260903008000_roles_permissions_foundation.sql",
+            "20260913020000_guest_intelligence_foundation.sql",
+            "20260913030000_r9_guest_relationships.sql",
             "20260916020000_customer_phone_and_account_controls.sql",
           ];
           const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
