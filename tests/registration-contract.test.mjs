@@ -18,7 +18,7 @@ test("registration exposes exactly the six approved contract fields", () => {
     'name="identity"',
     'name="password"',
     'name="confirmPassword"',
-  ]) assert.match(login, new RegExp(field.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  ]) assert.ok(login.includes(field), `missing registration field: ${field}`);
   assert.match(contract, /fullName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(100\)/);
   assert.match(contract, /brandName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(120\)/);
   assert.match(contract, /phone: z\.string\(\)\.trim\(\)\.min\(8\)\.max\(30\)/);
@@ -29,11 +29,11 @@ test("registration exposes exactly the six approved contract fields", () => {
 
 test("required-field validation is enforced before signup", () => {
   assert.match(login, /required minLength=\{2\} maxLength=\{100\}/);
-  assert.match(login, /name=\"brandName\" required/);
-  assert.match(login, /name=\"phone\"[^>]*required/);
-  assert.match(login, /name=\"identity\"[^>]*required/);
-  assert.match(login, /name=\"password\"[^>]*required/);
-  assert.match(login, /name=\"confirmPassword\"[^>]*required/);
+  assert.ok(login.includes('name="brandName" required'));
+  assert.match(login, /name="phone"[^>]*required/);
+  assert.match(login, /name="identity"[^>]*required/);
+  assert.match(login, /name="password"[^>]*required/);
+  assert.match(login, /name="confirmPassword"[^>]*required/);
   assert.match(login, /customerRegistrationSchema\.safeParse/);
   assert.match(registration, /customerRegistrationSchema\.safeParse\(data\)/);
 });
@@ -46,8 +46,8 @@ test("password confirmation mismatch is validated on both client and server", ()
 });
 
 test("Saudi phone remains normalized and invalid-phone rejection stays server-side", () => {
-  assert.match(registration, /normalizePhoneDigits\(data\.phone, \"SA\"\)/);
-  assert.match(registration, /digits\.startsWith\(\"9665\"\)/);
+  assert.match(registration, /normalizePhoneDigits\(data\.phone, "SA"\)/);
+  assert.match(registration, /digits\.startsWith\("9665"\)/);
   assert.match(registration, /const phone = `\+\$\{digits\}`/);
   assert.match(registration, /phoneNumberVerified.*false/);
   assert.match(login, /Enter a valid Saudi phone number/);
@@ -55,10 +55,10 @@ test("Saudi phone remains normalized and invalid-phone rejection stays server-si
 });
 
 test("duplicate phone errors do not disclose account ownership", () => {
-  assert.match(registration, /where \"phoneNumber\" = \$\{phone\} and \"id\" <> \$\{context\.userId\}/);
-  assert.match(registration, /code: \"unavailable\", error: GENERIC_REGISTRATION_ERROR\.ar/);
+  assert.match(registration, /where "phoneNumber" = \$\{phone\} and "id" <> \$\{context\.userId\}/);
+  assert.match(registration, /code: "unavailable", error: GENERIC_REGISTRATION_ERROR\.ar/);
   assert.doesNotMatch(registration, /رقم الجوال مرتبط بحساب آخر/);
-  assert.doesNotMatch(registration, /select \"id\" from \"user\" where \"phoneNumber\" = \$\{phone\} limit 1/);
+  assert.doesNotMatch(registration, /select "id" from "user" where "phoneNumber" = \$\{phone\} limit 1/);
 });
 
 test("duplicate email errors are mapped to the same generic registration error", () => {
@@ -70,7 +70,7 @@ test("duplicate email errors are mapped to the same generic registration error",
 
 test("registration preserves Better Auth and keeps mode=signup as navigation state", () => {
   assert.match(login, /authClient\.signUp\.email/);
-  assert.match(login, /get\(\"mode\"\) === \"signup\"/);
+  assert.match(login, /get\("mode"\) === "signup"/);
   assert.doesNotMatch(login, /mode=signup[\s\S]*(?:tenant|membership|branch|role|entitlement)/);
   assert.match(authServer, /betterAuth\(/);
   assert.match(authServer, /emailAndPassword:/);
@@ -80,7 +80,7 @@ test("successful registration still performs identity and phone persistence only
   assert.match(login, /validateCustomerRegistrationContract/);
   assert.match(login, /authClient\.signUp\.email/);
   assert.match(login, /saveCustomerRegistrationPhone/);
-  assert.match(login, /navigate\(\{ to: \"\/onboarding\"/);
+  assert.match(login, /navigate\(\{ to: "\/onboarding"/);
   assert.doesNotMatch(login, /createRestaurant\(/);
   assert.doesNotMatch(login, /createSelfServeWorkspace/);
   assert.doesNotMatch(login, /activateCustomerWorkspace/);
@@ -95,14 +95,14 @@ test("registration does not introduce historical self-serve grants or workspace 
 });
 
 test("existing authenticated-user behavior remains protected by Studio membership", () => {
-  assert.match(login, /if \(user\) return <Navigate to=\"\/studio\" \/>/);
-  assert.match(login, /if \(user && invite\) return <Navigate to=\"\/invite\/\$token\"/);
-  assert.match(studio, /state\.status === \"empty\"/);
+  assert.match(login, /if \(user\) return <Navigate to="\/studio" \/>/);
+  assert.match(login, /if \(user && invite\) return <Navigate to="\/invite\/\$token"/);
+  assert.match(studio, /state\.status === "empty"/);
   assert.match(studio, /Navigate to=.*onboarding/);
 });
 
 test("Arabic RTL and English LTR registration rendering remain explicit", () => {
-  assert.match(login, /dir=\{lang === \"ar\" \? \"rtl\" : \"ltr\"\}/);
+  assert.match(login, /dir=\{lang === "ar" \? "rtl" : "ltr"\}/);
   assert.match(login, /اسم البراند أو المطعم/);
   assert.match(login, /Brand \/ restaurant name/);
   assert.match(login, /رقم الجوال السعودي/);
