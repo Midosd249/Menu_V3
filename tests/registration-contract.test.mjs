@@ -35,25 +35,30 @@ test("required-field validation is enforced before signup", () => {
   assert.match(login, /name=\"password\"[^>]*required/);
   assert.match(login, /name=\"confirmPassword\"[^>]*required/);
   assert.match(login, /customerRegistrationSchema\.safeParse/);
+  assert.match(registration, /customerRegistrationSchema\.safeParse\(data\)/);
 });
 
-test("password confirmation mismatch is validated", () => {
+test("password confirmation mismatch is validated on both client and server", () => {
   assert.match(contract, /data\.password === data\.confirmPassword/);
+  assert.match(registration, /customerRegistrationSchema\.safeParse\(data\)/);
   assert.match(login, /Passwords do not match/);
   assert.match(login, /كلمتا المرور غير متطابقتين/);
 });
 
-test("Saudi phone remains normalized and validated server-side", () => {
+test("Saudi phone remains normalized and invalid-phone rejection stays server-side", () => {
   assert.match(registration, /normalizePhoneDigits\(data\.phone, \"SA\"\)/);
   assert.match(registration, /digits\.startsWith\(\"9665\"\)/);
   assert.match(registration, /const phone = `\+\$\{digits\}`/);
   assert.match(registration, /phoneNumberVerified.*false/);
+  assert.match(login, /Enter a valid Saudi phone number/);
+  assert.match(login, /أدخل رقم جوال سعودي صحيح/);
 });
 
 test("duplicate phone errors do not disclose account ownership", () => {
   assert.match(registration, /where \"phoneNumber\" = \$\{phone\} and \"id\" <> \$\{context\.userId\}/);
-  assert.match(registration, /code: \"conflict\", error: GENERIC_REGISTRATION_ERROR\.ar/);
+  assert.match(registration, /code: \"unavailable\", error: GENERIC_REGISTRATION_ERROR\.ar/);
   assert.doesNotMatch(registration, /رقم الجوال مرتبط بحساب آخر/);
+  assert.doesNotMatch(registration, /select \"id\" from \"user\" where \"phoneNumber\" = \$\{phone\} limit 1/);
 });
 
 test("duplicate email errors are mapped to the same generic registration error", () => {
@@ -72,6 +77,7 @@ test("registration preserves Better Auth and keeps mode=signup as navigation sta
 });
 
 test("successful registration still performs identity and phone persistence only; workspace handoff remains deferred", () => {
+  assert.match(login, /validateCustomerRegistrationContract/);
   assert.match(login, /authClient\.signUp\.email/);
   assert.match(login, /saveCustomerRegistrationPhone/);
   assert.match(login, /navigate\(\{ to: \"\/onboarding\"/);
