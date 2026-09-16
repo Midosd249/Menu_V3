@@ -1,65 +1,88 @@
 # PH-01.3 — Secure Self-Serve Workspace Provisioning
 
 ## Status
-- Implementation: `IMPLEMENTATION_IN_PROGRESS`
+- Implementation: `DONE — VERIFIED` pending final current-head CI confirmation after this continuity-only update.
 - Branch: `feat/ph-01-3-self-serve-workspace`
 - Base: `main` at `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2`
-- PR: `#160`
+- PR: `#160` — Open / Unmerged / Ready for review
+- Current implementation head before this documentation update: `215733172be9b38832d2dfee32e366697f73dd1b`
 - Production data: not touched
-- Vercel: no retry/deploy action taken
+- Production accounts: not created or modified
+- Vercel: no manual deploy/retry action taken
 
 ## Scope
-Implement only:
+Implemented only PH-01.3:
 - workspace setup contract;
-- server-authoritative self-serve provisioning;
+- server-authoritative self-serve eligibility and provisioning;
 - atomic tenant/owner membership/primary branch/branch-hours creation;
 - idempotent/concurrency-safe recovery;
 - onboarding → Studio handoff;
-- required security, migration, unit/contract, PostgreSQL, and browser QA.
+- required security, migration, contract, PostgreSQL, and browser QA.
 
 Explicitly excluded: PH-01.4+, pricing/billing/trials/invoices/WhatsApp/AI/menu creation/logo upload/entitlement work, production signup/data mutation, and Vercel deployment/retry.
 
-## Repository audit
-Verified current source at `main` before implementation:
-- PH-01.2 registration contract is merged and registration does not provision a workspace.
-- `authMiddleware` derives `context.userId` from the server session.
-- `/studio` already gates authenticated users without an authorized tenant to `/onboarding`.
-- legacy Customer Lifecycle approval and registration-link paths remain implemented and protected.
-- historical `self_serve_registration_grants` and `create_self_serve_workspace` are retired; PH-01.3 does not restore them.
-- `tenants_owner_user_id_uidx` already enforces one tenant owner at the database boundary.
-- `branch_hours` has `(branch_id, weekday)` as its primary key.
+## Verified implementation
+- `selfServeEligibleAt` is persisted on the Better Auth user and is set only from the server-side registration flow when the latest authenticated session is within the new-registration window.
+- Existing users logging in later do not receive the marker automatically.
+- `/onboarding` uses the persisted eligibility marker plus server-derived Customer Lifecycle state; query parameters and localStorage are not authorization inputs.
+- Legacy Customer Lifecycle users without the self-serve marker remain on the legacy approval flow.
+- `provisionCustomerWorkspace` uses `authMiddleware` and `context.userId`; client-supplied user/tenant/role/approval state is not trusted.
+- `menu_v3.provision_customer_workspace` is `SECURITY DEFINER`, uses a fixed `search_path`, requires the server provisioner role, is protected by a transaction-local marker, and is executable only by `postgres`.
+- Legacy approved registration-link and account-bound approval paths remain valid; unapproved direct tenant inserts still raise `CUSTOMER_APPROVAL_REQUIRED`.
+- The historical `self_serve_registration_grants` and `create_self_serve_workspace` paths remain retired and are not restored.
+- Provisioning locks the Better Auth user row, converges on an existing active membership or owned tenant, and creates tenant + owner membership + primary branch + seven branch-hours in one transaction.
+- Repeated/concurrent provisioning converges to exactly one workspace; existing owner recovery repairs missing membership/branch/hours without creating duplicates.
+- Studio handoff occurs only after successful provisioning and the existing Studio authorization gate remains authoritative.
 
-## Provisioning architecture
-- Client submits only setup fields validated by the shared Zod contract.
-- Server function `provisionCustomerWorkspace` uses `authMiddleware`; the caller identity is `context.userId`.
-- Server calls the single database authority `menu_v3.provision_customer_workspace`.
-- Database function is `SECURITY DEFINER`, has a fixed `search_path`, is not executable by `PUBLIC`, `anon`, or `authenticated`, and is granted only to the server database role (`postgres`).
-- The database function locks the authenticated user's row, rejects legacy lifecycle-linked accounts, converges on an existing active membership/owned tenant, and otherwise creates tenant + owner membership + primary branch + seven branch-hours rows in one transaction.
-- Tenant creation is admitted through a transaction-local provisioning marker plus session-role check; normal direct tenant inserts still fail with `CUSTOMER_APPROVAL_REQUIRED` unless they use the existing approved legacy paths.
+## Final browser-fixture corrections
+- The Customer Lifecycle browser fixture now applies the PH-01.3 migration before starting its server, so the legacy onboarding regression test exercises the same schema contract as production.
+- PH-01.3 browser users now use distinct Saudi phone numbers and explicitly seed `selfServeEligibleAt`, matching the production eligibility boundary without weakening authorization.
 
-## UX
-- `/onboarding` no longer uses a query parameter to decide authorization.
-- Accounts without an existing Customer Lifecycle request receive the self-serve setup form.
-- Accounts linked to an existing lifecycle request remain on the legacy approval UI.
-- Setup supports Arabic-first RTL and English LTR, required brand name/business type, optional English name, optional short description, accessible business-type controls, validation, retry, and refresh-safe Studio handoff.
-- Studio navigation is entered only after the server provisioning call returns successfully; Studio independently verifies authorized tenant membership.
+## CI evidence before this continuity-only update
+Quality run `35154075898` passed on implementation head `215733172be9b38832d2dfee32e366697f73dd1b`.
 
-## Verification plan
-Required final evidence:
-- isolated PostgreSQL migration/function/concurrency tests;
-- PGlite compatibility checks through repository quality/build paths;
+Verified Quality stages:
+- route generation + committed route freshness;
 - typecheck;
-- focused tests;
 - full `npm test`;
-- auth/security checks;
+- W7.4–W7.10 contract tests;
 - lint;
 - production build;
-- Playwright/Chromium browser QA for registration/onboarding/setup/Studio, validation, refresh/retry, Arabic RTL, English LTR, mobile, and existing W7/W8/W9 coverage;
-- final exact-HEAD diff review;
-- PR remains open and unmerged unless separately authorized.
+- Playwright + Chromium installation;
+- browser template QA across all themes;
+- Customer Lifecycle browser database preparation;
+- Studio browser fixture preparation;
+- Studio Shell/Home/Menu/Growth/Customers/W7.10 browser QA;
+- Platform Admin browser database preparation;
+- Platform Admin/W7.10 browser QA;
+- performance baseline;
+- diagnostics upload;
+- cleanup.
 
-## Current evidence
-- Branch created from verified `main` SHA `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2`.
-- PR #160 opened against `main`.
-- Current implementation head will be recorded after final verification.
-- Vercel is intentionally not used as a blocking development signal and no deployment/retry was triggered.
+W9 run `35154075965` passed on the same exact head, including isolated PGLite preparation and Orders browser QA.
+
+## CI diagnosis and resolution
+Earlier exact-head browser evidence identified two PH-01.3 fixture defects:
+1. Customer Lifecycle browser QA lacked the new migration column, causing `selfServeEligibleAt` lookup failure. The test now applies the PH-01.3 migration before starting the lifecycle browser servers.
+2. The two self-serve browser users shared one phone number, violating the unique phone constraint. The fixture now uses distinct numbers and seeds the eligibility marker.
+
+These were fixture/test-boundary corrections only; no production authorization was weakened.
+
+## Scope review
+Final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` is PH-01.3 scoped to:
+- `docs/sessions/2026-09-17-ph-01-3-secure-workspace-provisioning.md`
+- `migrations/20260917100000_self_serve_workspace_provisioning.sql`
+- `package.json`
+- `src/lib/auth/customer-registration.ts`
+- `src/lib/menu/self-serve-provisioning.ts`
+- `src/routes/onboarding.tsx`
+- `tests/self-serve-provisioning.test.mjs`
+- `tests/w7-3-studio-shell-browser.spec.ts`
+
+No PH-01.4+ implementation was introduced. No pricing, billing, trials, AI, menu creation, logo upload, invoices, WhatsApp, or entitlement work was introduced. PR #159 and PH-01.2 remain unchanged. W8/W9 behavior remains covered by the successful CI gates.
+
+## Final current-head verification requirement
+Because this continuity record is itself a repository commit, the resulting new branch head must receive fresh Quality and W9 verification before PH-01.3 is considered fully complete at the repository HEAD. No production deployment or Vercel retry is authorized.
+
+## Next task
+After fresh current-head Quality and W9 success: keep PR #160 Open / Unmerged / Ready for review, record the final head and evidence, and stop. PH-01.4 through PH-05 remain `TODO / NOT STARTED`.
