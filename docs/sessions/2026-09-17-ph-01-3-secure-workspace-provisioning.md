@@ -1,11 +1,11 @@
 # PH-01.3 — Secure Self-Serve Workspace Provisioning
 
 ## Status
-- Implementation: `DONE — VERIFIED` pending final current-head CI confirmation after this continuity-only update.
+- Implementation: `DONE — VERIFIED`
 - Branch: `feat/ph-01-3-self-serve-workspace`
 - Base: `main` at `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2`
 - PR: `#160` — Open / Unmerged / Ready for review
-- Current implementation head before this documentation update: `215733172be9b38832d2dfee32e366697f73dd1b`
+- Verified implementation head: `11a056066bf7c286c42a47322bfe87c961424dd5`
 - Production data: not touched
 - Production accounts: not created or modified
 - Vercel: no manual deploy/retry action taken
@@ -35,41 +35,46 @@ Explicitly excluded: PH-01.4+, pricing/billing/trials/invoices/WhatsApp/AI/menu 
 - Studio handoff occurs only after successful provisioning and the existing Studio authorization gate remains authoritative.
 
 ## Final browser-fixture corrections
-- The Customer Lifecycle browser fixture now applies the PH-01.3 migration before starting its server, so the legacy onboarding regression test exercises the same schema contract as production.
-- PH-01.3 browser users now use distinct Saudi phone numbers and explicitly seed `selfServeEligibleAt`, matching the production eligibility boundary without weakening authorization.
+- The Customer Lifecycle browser fixture applies the PH-01.3 migration before starting its server, so the legacy onboarding regression test exercises the same schema contract as production.
+- PH-01.3 browser users use distinct Saudi phone numbers and explicitly seed `selfServeEligibleAt`, matching the production eligibility boundary without weakening authorization.
 
-## CI evidence before this continuity-only update
-Quality run `35154075898` passed on implementation head `215733172be9b38832d2dfee32e366697f73dd1b`.
+## Final CI evidence
+Quality run `35159611731` / #1846 passed on exact head `11a056066bf7c286c42a47322bfe87c961424dd5`.
 
-Verified Quality stages:
+Verified Quality coverage includes:
+- install/containers;
 - route generation + committed route freshness;
 - typecheck;
-- full `npm test`;
+- full `npm test` including `tests/self-serve-provisioning.test.mjs`;
 - W7.4–W7.10 contract tests;
 - lint;
 - production build;
-- Playwright + Chromium installation;
+- Playwright + Chromium;
 - browser template QA across all themes;
-- Customer Lifecycle browser database preparation;
-- Studio browser fixture preparation;
+- self-serve provisioning browser QA;
+- Customer Lifecycle browser QA;
 - Studio Shell/Home/Menu/Growth/Customers/W7.10 browser QA;
-- Platform Admin browser database preparation;
-- Platform Admin/W7.10 browser QA;
+- Platform Admin browser QA;
+- RTL/LTR and responsive/mobile browser coverage;
 - performance baseline;
 - diagnostics upload;
-- cleanup.
+- cleanup and final conclusion.
 
-W9 run `35154075965` passed on the same exact head, including isolated PGLite preparation and Orders browser QA.
+W9 run `35159611730` / #142 passed on the same exact head, including isolated PGLite preparation and Orders browser QA.
 
-## CI diagnosis and resolution
-Earlier exact-head browser evidence identified two PH-01.3 fixture defects:
-1. Customer Lifecycle browser QA lacked the new migration column, causing `selfServeEligibleAt` lookup failure. The test now applies the PH-01.3 migration before starting the lifecycle browser servers.
-2. The two self-serve browser users shared one phone number, violating the unique phone constraint. The fixture now uses distinct numbers and seeds the eligibility marker.
+## Eligibility/security evidence
+- Newly registered self-serve users receive eligibility only through the authenticated registration path.
+- Existing Customer Lifecycle users do not receive eligibility automatically and remain in the legacy flow unless legitimately provisioned through the existing protected lifecycle.
+- Query parameters, localStorage, client form fields, fabricated status, and direct client RPC execution are not authorization inputs.
+- `self_serve_registration_grants` remains retired; `create_self_serve_workspace` remains retired and is not granted to client roles.
+- The provisioning function requires the server provisioner authority and the server path supplies the authenticated `context.userId`.
+- Legacy approval guards remain fail-closed.
 
-These were fixture/test-boundary corrections only; no production authorization was weakened.
+## Atomicity/idempotency/concurrency evidence
+The focused provisioning suite and Quality database checks cover successful provisioning, required validation, ownership enforcement, unauthorized rejection, legacy approval protection, repeated provisioning, concurrent provisioning, failure rollback, existing-workspace recovery, and retired-path protections. The implementation serializes provisioning by locking the authenticated user row and uses transaction rollback semantics for failures.
 
 ## Scope review
-Final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` is PH-01.3 scoped to:
+Final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` is limited to the eight PH-01.3 files:
 - `docs/sessions/2026-09-17-ph-01-3-secure-workspace-provisioning.md`
 - `migrations/20260917100000_self_serve_workspace_provisioning.sql`
 - `package.json`
@@ -79,10 +84,7 @@ Final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` is PH-01.3
 - `tests/self-serve-provisioning.test.mjs`
 - `tests/w7-3-studio-shell-browser.spec.ts`
 
-No PH-01.4+ implementation was introduced. No pricing, billing, trials, AI, menu creation, logo upload, invoices, WhatsApp, or entitlement work was introduced. PR #159 and PH-01.2 remain unchanged. W8/W9 behavior remains covered by the successful CI gates.
+`package.json` contains only the intended `npm test` integration for `tests/self-serve-provisioning.test.mjs`; no unrelated dependency change is present. No PH-01.4+ implementation was introduced. No pricing, billing, trials, AI, menu creation, logo upload, invoices, WhatsApp, or entitlement work was introduced. PR #159 and PH-01.2 remain unchanged. W8/W9 behavior remains covered by the successful CI gates.
 
-## Final current-head verification requirement
-Because this continuity record is itself a repository commit, the resulting new branch head must receive fresh Quality and W9 verification before PH-01.3 is considered fully complete at the repository HEAD. No production deployment or Vercel retry is authorized.
-
-## Next task
-After fresh current-head Quality and W9 success: keep PR #160 Open / Unmerged / Ready for review, record the final head and evidence, and stop. PH-01.4 through PH-05 remain `TODO / NOT STARTED`.
+## Final state
+PH-01.3 is `DONE / VERIFIED` for implementation and verification head `11a056066bf7c286c42a47322bfe87c961424dd5`. PR #160 remains Open / Unmerged / Ready for review. PH-01.4 through PH-05 remain `TODO / NOT STARTED`. No production deployment, signup, migration, data mutation, or Vercel retry was performed.
