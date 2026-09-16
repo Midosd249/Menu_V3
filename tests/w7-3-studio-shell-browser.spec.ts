@@ -124,7 +124,9 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
       try {
         const response = await fetch(`http://127.0.0.1:${port}/onboarding`);
         if (response.ok) break;
-      } catch {}
+      } catch {
+        continue;
+      }
       await new Promise((resolve) => setTimeout(resolve, 250));
       if (attempt === 120) throw new Error("Customer onboarding browser fixture did not start");
     }
