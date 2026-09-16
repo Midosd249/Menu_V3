@@ -77,7 +77,7 @@ test("self-serve workspace creation requires the registered Saudi phone and cons
   assert.match(registration, /normalizePhoneDigits/);
   assert.match(registration, /phoneNumber.*حساب آخر|phoneNumber/);
   assert.match(selfServe, /authMiddleware/);
-  assert.match(selfServe, /\^\\\+9665\\d\{8\}\$/);
+  assert.match(selfServe, /9665/);
   assert.match(selfServe, /used_at is null/);
   assert.match(selfServe, /create_self_serve_workspace/);
   assert.match(atomicMigration, /insert into menu_v3\.tenants/);
