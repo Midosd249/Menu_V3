@@ -109,7 +109,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await page.goto(`${adminBase}/admin/onboarding?lang=en`, { waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
     await expect(page.getByRole("heading", { name: "Customer Activation Requests" })).toBeVisible();
-    await expect(page.getByText(brand)).toBeVisible();
+    await expect(page.getByRole("heading", { name: brand })).toBeVisible();
     await page.getByRole("button", { name: "Request changes" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
@@ -118,7 +118,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
 
     await page.goto(`${adminBase}/admin/onboarding?lang=en`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByText(brand)).toBeVisible();
+    await expect(page.getByRole("heading", { name: brand })).toBeVisible();
     await page.getByRole("button", { name: "Reject" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
@@ -127,7 +127,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
 
     await page.goto(`${adminBase}/admin/onboarding?lang=en`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByText(brand)).toBeVisible();
+    await expect(page.getByRole("heading", { name: brand })).toBeVisible();
     await page.getByRole("button", { name: "Approve request" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
