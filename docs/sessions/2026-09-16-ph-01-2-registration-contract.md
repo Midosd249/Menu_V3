@@ -68,15 +68,30 @@ The existing Better Auth email/password flow remains the authentication authorit
 
 ## Verification Evidence
 
-`VERIFIED`: Quality run `35145610654` completed successfully against the exact head `23a6987241afca7c6e54c0cf945209e3d98be133` on branch `feat/ph-01-2-registration-contract`, with PR #159 targeting `main` at `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d`.
+`VERIFIED`: Quality run `35146619386` completed successfully against the exact head `a92b34fba94af6c4821327586005789d31f1cc9d` on branch `feat/ph-01-2-registration-contract`, with PR #159 targeting `main` at `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d`.
 
-`VERIFIED`: the registration contract test is included in the normal `npm test` path and was visibly executed by the Quality workflow.
+`VERIFIED`: the Quality job completed successfully. Its `Tests` step (#9) succeeded on the exact head, followed by successful W7.4–W7.10 contract tests, lint, production build, Playwright/Chromium installation, all-theme template QA, customer-lifecycle and Studio browser preparation, Studio/browser QA, Platform Admin browser preparation and browser QA, performance-baseline upload, Studio diagnostics upload, preview cleanup, and final job completion.
 
-`VERIFIED`: the Quality workflow completed its configured typecheck, full-test, platform-test, auth, lint, production-build, and browser QA stages successfully, including the W7.4–W7.10 suite, template/studio/customer-lifecycle/platform-admin browser coverage, and final conclusion.
+`VERIFIED`: `tests/registration-contract.test.mjs` is included in the normal `npm test` command in `package.json`; the Quality workflow's `Tests` step succeeded and the corresponding npm-test diagnostics artifact was uploaded for this exact run.
 
-`VERIFIED`: W9 run `35145610631` succeeded for this implementation line and is supplemental evidence only; it was not used as a substitute for Quality.
+`VERIFIED`: W9 run `35146619381` succeeded against the same exact head. It is supplemental evidence only and was not used as a substitute for Quality.
 
-No production deployment was authorized or performed by this phase. Any automatically generated Vercel Preview is not production evidence.
+`EXTERNAL BLOCKED`: the GitHub commit status contains a Vercel `failure` context pointing to `build-rate-limit`. This is separate from the successful Quality and W9 conclusions and is not treated as a PH-01.2 Quality failure.
+
+No production deployment was authorized or performed by this phase. No production account or production data was created or mutated.
+
+## Final Diff Review
+
+`VERIFIED`: comparison of base `main` `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d` to the verified implementation head `a92b34fba94af6c4821327586005789d31f1cc9d` contains exactly six changed files:
+
+- `docs/sessions/2026-09-16-ph-01-2-registration-contract.md`
+- `package.json`
+- `src/lib/auth/customer-registration-contract.ts`
+- `src/lib/auth/customer-registration.ts`
+- `src/routes/login.tsx`
+- `tests/registration-contract.test.mjs`
+
+`VERIFIED`: no migrations, tenant/workspace/membership/branch/branch-hours provisioning, subscription/entitlement/trial creation, pricing, billing, AI, invoice, WhatsApp, menu creation, W7/W8/W9, Studio/onboarding handoff, or PR #157 changes are included in the implementation diff.
 
 ## Phase Boundary
 
