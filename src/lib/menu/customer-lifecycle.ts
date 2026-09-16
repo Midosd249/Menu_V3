@@ -22,7 +22,7 @@ async function account(sql: Awaited<ReturnType<typeof getSql>>, userId: string) 
 export const getMyActivationRequest = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(async ({ context }): Promise<FnResult<CustomerActivationRequest | null>> => {
   try {
     const sql = await getSql();
-    const rows = await sql<Record<string, unknown>>`select l.*, t.id as tenant_id, t.slug as tenant_slug from leads l left join tenants t on t.id = (select tm.tenant_id from tenant_members tm where tm.user_id = l.account_user_id and tm.is_active = true order by tm.created_at limit 1) where l.account_user_id = ${context.userId} limit 1`;
+    const rows = await sql<Record<string, unknown>>`select l.*, coalesce(l.activation_tenant_id, t.id) as tenant_id, coalesce((select at.slug from tenants at where at.id = l.activation_tenant_id limit 1), t.slug) as tenant_slug from leads l left join tenants t on t.id = (select tm.tenant_id from tenant_members tm where tm.user_id = l.account_user_id and tm.is_active = true order by tm.created_at limit 1) where l.account_user_id = ${context.userId} limit 1`;
     return { ok: true, data: rows[0] ? mapRequest(rows[0]) : null };
   } catch (err) { console.error("getMyActivationRequest failed", err); return { ok: false, code: "unavailable", error: "تعذر تحميل حالة طلب التفعيل" }; }
 });
@@ -66,12 +66,12 @@ export const submitActivationRequest = createServerFn({ method: "POST" }).middle
 export const activateApprovedWorkspace = createServerFn({ method: "POST" }).middleware([authMiddleware]).handler(async ({ context }): Promise<FnResult<{ tenantId: string; slug: string }>> => {
   try {
     const sql = await getSql();
-    const rows = await sql<{ id: string; business_name: string; activation_status: ActivationStatus; tenant_id: string | null }>`select l.id, l.business_name, l.activation_status, (select tm.tenant_id from tenant_members tm where tm.user_id = l.account_user_id and tm.is_active = true order by tm.created_at limit 1) as tenant_id from leads l where l.account_user_id = ${context.userId} limit 1`;
+    const rows = await sql<{ id: string; business_name: string; activation_status: ActivationStatus; activation_tenant_id: string | null }>`select id, business_name, activation_status, activation_tenant_id from leads where account_user_id = ${context.userId} limit 1`;
     const request = rows[0];
     if (!request) return { ok: false, code: "not_found", error: "لا يوجد طلب تفعيل" };
-    if (request.activation_status === "activated" && request.tenant_id) {
-      const tenant = await sql<{ slug: string }>`select slug from tenants where id = ${request.tenant_id} limit 1`;
-      if (tenant[0]) return { ok: true, data: { tenantId: request.tenant_id, slug: tenant[0].slug } };
+    if (request.activation_status === "activated" && request.activation_tenant_id) {
+      const tenant = await sql<{ slug: string }>`select slug from tenants where id = ${request.activation_tenant_id} limit 1`;
+      if (tenant[0]) return { ok: true, data: { tenantId: request.activation_tenant_id, slug: tenant[0].slug } };
     }
     if (request.activation_status !== "approved") return { ok: false, code: "forbidden", error: "يجب اعتماد طلب التفعيل أولاً" };
     const tenantId = newId(); const branchId = newId();
