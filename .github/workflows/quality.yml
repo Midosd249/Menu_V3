@@ -34,6 +34,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+        
       - name: Install
         run: npm install --no-audit --no-fund
       - name: Generate route tree
@@ -132,6 +133,7 @@ jobs:
             "0008_menu_product_options.sql",
             "0009_orders.sql",
             "20260903008000_roles_permissions_foundation.sql",
+            "20260909230000_lead_onboarding.sql",
             "20260916100000_customer_activation_lifecycle.sql",
             "20260916110000_retire_self_serve_workspace.sql",
             "20260916120000_harden_legacy_approval_decision.sql",
