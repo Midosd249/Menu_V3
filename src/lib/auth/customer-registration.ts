@@ -4,10 +4,9 @@ import { authMiddleware } from "./middleware";
 import { getSql } from "@/lib/db";
 import { normalizePhoneDigits } from "@/lib/menu/public-actions";
 import type { FnResult } from "@/lib/menu/types";
+import { GENERIC_REGISTRATION_ERROR } from "./customer-registration-contract";
 
 const phoneSchema = z.string().trim().min(8).max(30);
-
-const GENERIC_REGISTRATION_ERROR = "تعذر إنشاء الحساب. راجع البيانات وحاول مرة أخرى.";
 
 export const saveCustomerRegistrationPhone = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
@@ -21,7 +20,7 @@ export const saveCustomerRegistrationPhone = createServerFn({ method: "POST" })
       const phone = `+${digits}`;
       const sql = await getSql();
       const existing = await sql`select "id" from "user" where "phoneNumber" = ${phone} and "id" <> ${context.userId} limit 1`;
-      if (existing[0]) return { ok: false, code: "conflict", error: GENERIC_REGISTRATION_ERROR };
+      if (existing[0]) return { ok: false, code: "conflict", error: GENERIC_REGISTRATION_ERROR.ar };
       await sql`
         update "user"
         set "phoneNumber" = ${phone}, "phoneNumberVerified" = false, "updatedAt" = now()
@@ -30,8 +29,6 @@ export const saveCustomerRegistrationPhone = createServerFn({ method: "POST" })
       return { ok: true, data: { phone } };
     } catch (err) {
       console.error("saveCustomerRegistrationPhone failed", err);
-      return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR };
+      return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
     }
   });
-
-export { GENERIC_REGISTRATION_ERROR };
