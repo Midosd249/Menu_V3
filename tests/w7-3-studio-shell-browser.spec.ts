@@ -45,6 +45,13 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   const adminPort = "8085";
   const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? (process.env.CI === "true" ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci" : "");
   if (!databaseUrl) throw new Error("CUSTOMER_LIFECYCLE_DATABASE_URL is required for shared customer/admin browser QA");
+  const migration = readFileSync("migrations/20260917100000_self_serve_workspace_provisioning.sql", "utf8");
+  const migrationPool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
+  try {
+    await migrationPool.query(migration);
+  } finally {
+    await migrationPool.end();
+  }
 
   const spawnBrowserServer = (port: string, userId: string) => {
     const child = spawn(
@@ -158,11 +165,12 @@ test("PH-01.3 self-serve setup provisions safely and hands off to Studio in Arab
   const userIds = ["ph-01-3-browser-ar", "ph-01-3-browser-en"];
   try {
     await pool.query(migration);
-    for (const userId of userIds) {
+    for (const [index, userId] of userIds.entries()) {
+      const phone = `+96651234567${index}`;
       await pool.query("delete from menu_v3.tenants where owner_user_id = $1", [userId]);
       await pool.query(
-        `insert into menu_v3."user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,true,$4,false) on conflict ("id") do update set "name"=excluded."name", "email"=excluded."email", "phoneNumber"=excluded."phoneNumber", "phoneNumberVerified"=false`,
-        [userId, "PH-01.3 Browser", `${userId}@example.test`, "+966512345670"],
+        `insert into menu_v3."user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified", "selfServeEligibleAt") values ($1,$2,$3,true,$4,false,now()) on conflict ("id") do update set "name"=excluded."name", "email"=excluded."email", "phoneNumber"=excluded."phoneNumber", "phoneNumberVerified"=false, "selfServeEligibleAt"=now()`,
+        [userId, "PH-01.3 Browser", `${userId}@example.test`, phone],
       );
     }
   } finally {
