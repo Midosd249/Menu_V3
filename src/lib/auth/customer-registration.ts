@@ -20,11 +20,7 @@ export const validateCustomerRegistrationContract = createServerFn({ method: "PO
       if (!digits || !digits.startsWith("9665")) {
         return { ok: false, code: "invalid", error: "أدخل رقم جوال سعودي صحيح" };
       }
-      const phone = `+${digits}`;
-      const sql = await getSql();
-      const existing = await sql`select "id" from "user" where "phoneNumber" = ${phone} limit 1`;
-      if (existing[0]) return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
-      return { ok: true, data: { phone } };
+      return { ok: true, data: { phone: `+${digits}` } };
     } catch (err) {
       console.error("validateCustomerRegistrationContract failed", err);
       return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
