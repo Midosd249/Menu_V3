@@ -11,7 +11,17 @@ create table if not exists menu_v3.self_serve_registration_grants (
 
 alter table menu_v3.self_serve_registration_grants enable row level security;
 
-revoke all on menu_v3.self_serve_registration_grants from public, anon, authenticated;
+revoke all on menu_v3.self_serve_registration_grants from public;
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    revoke all on menu_v3.self_serve_registration_grants from anon;
+  end if;
+  if exists (select 1 from pg_roles where rolname = 'authenticated') then
+    revoke all on menu_v3.self_serve_registration_grants from authenticated;
+  end if;
+end;
+$$;
 
 create or replace function menu_v3.enforce_customer_approval_before_tenant_insert()
 returns trigger
@@ -58,4 +68,14 @@ create trigger tenants_customer_approval_guard
 before insert on menu_v3.tenants
 for each row execute function menu_v3.enforce_customer_approval_before_tenant_insert();
 
-revoke all on function menu_v3.enforce_customer_approval_before_tenant_insert() from public, anon, authenticated;
+revoke all on function menu_v3.enforce_customer_approval_before_tenant_insert() from public;
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    revoke all on function menu_v3.enforce_customer_approval_before_tenant_insert() from anon;
+  end if;
+  if exists (select 1 from pg_roles where rolname = 'authenticated') then
+    revoke all on function menu_v3.enforce_customer_approval_before_tenant_insert() from authenticated;
+  end if;
+end;
+$$;
