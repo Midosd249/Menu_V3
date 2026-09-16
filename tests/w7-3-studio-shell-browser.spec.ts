@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { createWriteStream } from "node:fs";
 import { spawn } from "node:child_process";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
@@ -60,7 +61,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
         POSTGRES_PRISMA_URL: "",
         POSTGRES_URL_NON_POOLING: "",
       },
-      stdio: "ignore",
+      stdio: ["ignore", createWriteStream(`.grok/customer-lifecycle-${port}.log"), createWriteStream(`.grok/customer-lifecycle-${port}.error.log`)],
     },
   );
 
