@@ -3,49 +3,33 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const admin = readFileSync("src/routes/admin/onboarding.tsx", "utf8");
+const adminServer = readFileSync("src/lib/menu/admin.ts", "utf8");
 const server = readFileSync("src/lib/menu/platform-onboarding.ts", "utf8");
 const migration = readFileSync("migrations/20260909230000_lead_onboarding.sql", "utf8");
+const lifecycleMigration = readFileSync("migrations/20260916100000_customer_activation_lifecycle.sql", "utf8");
 const publicOnboarding = readFileSync("src/routes/onboarding/$token.tsx", "utf8");
 const rootAdmin = readFileSync("src/routes/admin.tsx", "utf8");
 const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
-const adminAccess = readFileSync("src/lib/menu/admin.ts", "utf8");
 const publicHome = readFileSync("src/routes/index.tsx", "utf8");
 
 
-test("platform onboarding workspace exposes the owner workflow", () => {
+test("platform onboarding exposes the unified activation review workflow", () => {
   assert.match(rootAdmin, /اعتماد العملاء الجدد/);
-  assert.match(admin, /اعتماد وإنشاء رابط التسجيل|Approve & create registration link/);
-  assert.match(admin, /اتصال/);
-  assert.match(admin, /WhatsApp/);
-  assert.match(admin, /نسخ رابط التسجيل/);
-  assert.match(admin, /updateLead/);
-  assert.match(admin, /getAdminDashboard/);
+  assert.match(admin, /طلبات تفعيل العملاء|Customer Activation Requests/);
+  assert.match(admin, /اعتماد الطلب|Approve request/);
+  assert.match(admin, /طلب تعديل|Request changes/);
+  assert.match(admin, /getAdminActivationRequests/);
+  assert.match(adminServer, /reviewActivationRequest/);
 });
 
-test("platform owner approval entry point opens the working controls inside the existing admin center", () => {
-  assert.match(rootAdmin, /التواصل واعتماد الطلبات/);
-  assert.match(rootAdmin, /function selectTab\(next: Tab\) \{ setTab\(next\);/);
-  assert.match(rootAdmin, /onClick=\{\(\) => selectTab\("leads"\)\}/);
-  assert.match(rootAdmin, /onApproval=\{\(\) => selectTab\("leads"\)\}/);
-  assert.doesNotMatch(rootAdmin, /href="\/admin\/onboarding"/);
-  assert.match(rootAdmin, /approveLead/);
-  assert.match(rootAdmin, /اعتماد وإنشاء رابط التسجيل/);
-  assert.match(rootAdmin, /رفض الطلب/);
-  assert.match(rootAdmin, /تم التواصل/);
-  assert.match(rootAdmin, /حفظ الملاحظات/);
-  assert.match(rootAdmin, /تفاصيل الطلب/);
+test("new activation review never requires a registration link", () => {
+  assert.doesNotMatch(admin, /approveLead\(\{ data: \{ leadId: selected\.id \}\}/);
+  assert.doesNotMatch(admin, /نسخ رابط التسجيل/);
+  assert.match(admin, /legacy/);
+  assert.match(admin, /legacyApprove/);
 });
 
-test("platform admin lead approval renders the returned registration URL with copy and open actions", () => {
-  assert.match(rootAdmin, /const \[registrationUrl, setRegistrationUrl\] = useState\(""\)/);
-  assert.match(rootAdmin, /setRegistrationUrl\(result\.data\.registrationUrl\)/);
-  assert.match(rootAdmin, /window\.location\.origin\}\$\{registrationUrl\}/);
-  assert.match(rootAdmin, /نسخ الرابط/);
-  assert.match(rootAdmin, /فتح الرابط/);
-  assert.match(rootAdmin, /الرابط صالح لمدة 7 أيام ويُستخدم مرة واحدة/);
-});
-
-test("lead onboarding is server-authorized and token based", () => {
+test("legacy lead approval remains server-authorized and token based", () => {
   assert.match(server, /requirePlatformAdmin/);
   assert.match(server, /createHash\("sha256"\)/);
   assert.match(server, /randomBytes\(32\)/);
@@ -55,22 +39,25 @@ test("lead onboarding is server-authorized and token based", () => {
   assert.match(server, /\/onboarding\/\$\{token\}/);
 });
 
-test("lead onboarding schema keeps the token secret and preserves the lead tenant link", () => {
+test("legacy onboarding schema keeps the token secret and tenant link", () => {
   assert.match(migration, /token_hash text not null unique/);
   assert.match(migration, /lead_id text not null references leads/);
   assert.match(migration, /tenant_id text references tenants/);
   assert.match(migration, /revoked_at timestamptz/);
 });
 
-test("customer onboarding creates a restaurant workspace and menu URL", () => {
-  assert.match(publicOnboarding, /authClient\.signUp\.email/);
+test("legacy registration link remains available as a fallback", () => {
   assert.match(publicOnboarding, /activateLeadOnboarding/);
   assert.match(publicOnboarding, /فتح الاستوديو/);
-  assert.match(publicOnboarding, /QR للمنيو/);
+  assert.match(lifecycleMigration, /activate_legacy_customer_workspace/);
+});
+
+test("legacy lead activation is concurrency hardened", () => {
+  assert.match(lifecycleMigration, /select \* into onboarding_row[\s\S]*for update/);
+  assert.match(lifecycleMigration, /LEGACY_ONBOARDING_STATE_CHANGED/);
 });
 
 test("platform owners leave studio for the dedicated admin workspace", () => {
-  assert.match(adminAccess, /getPlatformAdminAccess/);
   assert.match(studio, /getPlatformAdminAccess/);
   assert.match(studio, /state\.isPlatformAdmin/);
   assert.match(studio, /Navigate to=.*admin/);
@@ -81,13 +68,4 @@ test("public lead form keeps the form reference across the async submit", () => 
   assert.match(publicHome, /const formElement = event\.currentTarget/);
   assert.match(publicHome, /new FormData\(formElement\)/);
   assert.match(publicHome, /formElement\.reset\(\)/);
-  assert.doesNotMatch(publicHome, /setStatus\("success"\); event\.currentTarget\.reset\(\)/);
-});
-
-test("approval center exposes an explicit rejection action backed by the existing lead status model", () => {
-  assert.match(admin, /reject: "رفض الطلب"/);
-  assert.match(admin, /onClick=\{\(\) => void save\("lost"\)\}/);
-  assert.match(adminAccess, /LEAD_STATUSES = \["new", "contacted", "qualified", "converted", "lost"\]/);
-  assert.match(adminAccess, /status: z\.enum\(LEAD_STATUSES\)/);
-  assert.match(adminAccess, /update leads/);
 });

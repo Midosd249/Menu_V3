@@ -1,13 +1,12 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
-import { createAuthMiddleware } from "better-auth/api";
 import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
 import { admin, bearer, genericOAuth, phoneNumber } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { createHash } from "node:crypto";
 import { Pool } from "pg";
-import { ensureDbReady, getPglite, getSql, POSTGRES_SCHEMA } from "../db";
+import { ensureDbReady, getPglite, POSTGRES_SCHEMA } from "../db";
 import { emailAndPasswordEnabled } from "./email-password";
 import { GATE_PROVIDER_ID, gateIdentitySessions } from "./gate-session.server";
 import { GROK_PROVIDERS } from "./providers";
@@ -184,24 +183,6 @@ export const auth = betterAuth({
         },
       }
     : {}),
-  hooks: {
-    after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path !== "/sign-up/email") return;
-      const userId = ctx.context.newSession?.user.id;
-      if (!userId) return;
-      try {
-        const sql = await getSql();
-        await sql`
-          insert into self_serve_registration_grants (user_id)
-          values (${userId})
-          on conflict (user_id) do update set created_at = now(), used_at = null
-        `;
-      } catch (error) {
-        console.error("[auth] failed to grant self-serve registration access", error);
-        throw error;
-      }
-    }),
-  },
   advanced: {
     useSecureCookies: false,
     trustedProxyHeaders: true,
