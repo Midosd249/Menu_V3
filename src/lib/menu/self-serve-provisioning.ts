@@ -46,9 +46,10 @@ const PROVISIONING_ERROR: Record<string, { ar: string; en: string }> = {
   },
 };
 
-function publicError(message: unknown, lang: "ar" | "en") {
+function errorCode(message: unknown) {
   const code = message instanceof Error ? message.message : String(message ?? "");
-  return PROVISIONING_ERROR[code]?.[lang] ?? (lang === "ar" ? "تعذر إنشاء مساحة العمل. حاول مرة أخرى." : "We couldn't create the workspace. Try again.");
+  if (code in PROVISIONING_ERROR) return code;
+  return "unavailable";
 }
 
 export const provisionCustomerWorkspace = createServerFn({ method: "POST" })
@@ -69,22 +70,18 @@ export const provisionCustomerWorkspace = createServerFn({ method: "POST" })
           ${data.businessType}
         )
       `;
-      if (!result[0]) return { ok: false, code: "unavailable", error: "تعذر إنشاء مساحة العمل" };
+      if (!result[0]) return { ok: false, code: "unavailable", error: "PROVISIONING_UNAVAILABLE" };
 
       const studio = await getMyStudio();
       if (!studio.ok) return studio;
       if (!("tenant" in studio.data) || !studio.data.tenant) {
-        return { ok: false, code: "unavailable", error: "تعذر تحميل مساحة العمل بعد إنشائها" };
+        return { ok: false, code: "unavailable", error: "PROVISIONING_UNAVAILABLE" };
       }
       return { ok: true, data: studio.data as StudioSnapshot };
     } catch (err) {
       console.error("provisionCustomerWorkspace failed", err);
-      const code = err instanceof Error ? err.message : "";
-      return { ok: false, code: code === "CUSTOMER_APPROVAL_REQUIRED" ? "forbidden" : "unavailable", error: publicError(err, "ar") };
+      const code = errorCode(err);
+      const message = PROVISIONING_ERROR[code]?.ar ?? "تعذر إنشاء مساحة العمل. حاول مرة أخرى.";
+      return { ok: false, code: code === "CUSTOMER_APPROVAL_REQUIRED" ? "forbidden" : code === "PROVISIONING_USER_NOT_FOUND" ? "not_found" : code === "CUSTOMER_PHONE_REQUIRED" ? "invalid" : "unavailable", error: message };
     }
   });
-
-export function buildSelfServeWorkspaceSlug(nameAr: string, nameEn: string | undefined, userId: string) {
-  const base = slugify(nameEn || nameAr) || `brand-${userId.slice(-8).toLowerCase()}`;
-  return base.slice(0, 63);
-}
