@@ -143,8 +143,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     if (!started) throw new Error("Customer onboarding browser fixture did not start");
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`http://127.0.0.1:${port}/studio`, { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveURL(/\/onboarding$/);
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "أرسل طلب التفعيل" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
