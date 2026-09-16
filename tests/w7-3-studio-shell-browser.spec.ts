@@ -102,6 +102,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
         ...process.env,
         VITE_AUTH_ENABLED: "false",
         MENU_V3_DEV_USER_ID: userId,
+        MENU_V3_AUTH_DISABLED_TEST_DATABASE: "true",
         PLATFORM_ADMIN_USER_IDS: "dev-user",
         DATABASE_URL: databaseUrl,
         SUPABASE_DB_URL: "",
