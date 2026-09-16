@@ -23,7 +23,7 @@ begin
 
   if current_setting('menu_v3.provision_customer_workspace', true) = '1'
      and provisioner_role is not null
-     and current_user = provisioner_role then
+     and session_user = provisioner_role then
     return new;
   end if;
 
@@ -202,7 +202,7 @@ begin
   from pg_proc p
   join pg_roles r on r.oid = p.proowner
   where p.oid = 'menu_v3.provision_customer_workspace(text,text,text,text,text,text)'::regprocedure;
-  if provisioner_role is null or current_user <> provisioner_role then
+  if provisioner_role is null or session_user <> provisioner_role then
     raise exception using errcode = '42501', message = 'PROVISIONING_AUTHORITY_REQUIRED';
   end if;
 
