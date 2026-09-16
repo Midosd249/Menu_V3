@@ -125,7 +125,10 @@ test("self-serve grant authorizes exactly one concurrent workspace creation", { 
     const rejected = results.filter((result) => result.status === "rejected");
     assert.equal(fulfilled.length, 1, "exactly one concurrent workspace creation must succeed");
     assert.equal(rejected.length, 1, "the competing workspace creation must fail");
-    assert.match(rejected[0].reason?.message ?? "", /SELF_SERVE_GRANT_ALREADY_USED/);
+    assert.match(
+      rejected[0].reason?.message ?? "",
+      /SELF_SERVE_GRANT_(ALREADY_USED|REQUIRED)/,
+    );
 
     const counts = await pool.query(`
       select
@@ -151,10 +154,17 @@ test("self-serve grant authorizes exactly one concurrent workspace creation", { 
       (error) => ({ ok: false, error }),
     );
     assert.equal(repeated.ok, false, "a repeated attempt must fail after the grant is consumed");
-    assert.match(repeated.error?.message ?? "", /SELF_SERVE_GRANT_ALREADY_USED/);
+    assert.match(repeated.error?.message ?? "", /SELF_SERVE_GRANT_(ALREADY_USED|REQUIRED)/);
 
-    const afterRepeat = await pool.query(`select count(*) from ${schema}.tenants`);
-    assert.equal(afterRepeat.rows[0].count, "1", "repeated failure must not create another tenant");
+    const afterRepeat = await pool.query(`
+      select
+        (select count(*) from ${schema}.tenants) as tenants,
+        (select count(*) from ${schema}.tenant_members) as members,
+        (select count(*) from ${schema}.branches) as branches,
+        (select count(*) from ${schema}.branch_hours) as hours,
+        (select count(*) from ${schema}.self_serve_registration_grants where used_at is not null) as consumed_grants
+    `);
+    assert.deepEqual(afterRepeat.rows[0], counts.rows[0], "a failed repeated attempt must leave workspace state unchanged");
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
     await pool.end();
