@@ -1,81 +1,96 @@
 # Customer Lifecycle & Access Policy
 
-Status: `VERIFIED` implementation policy — 2026-09-16
+Status: `VERIFIED` unified activation implementation — 2026-09-16
 
 ## Canonical lifecycle
 
 ```text
-Public website
-→ Service request (lead)
-→ Platform Owner review
-→ Approval
-→ Secure registration link
-→ Customer account
-→ Tenant + owner membership + main branch
-→ Subscription/trial
-→ Customer setup
-→ QA / publish
-→ Public menu + QR
-→ Customer handoff
+Account registration
+→ Activation request + brand/business information
+→ Platform Admin review
+→ Approval / rejection / action required
+→ Workspace activation
+→ Studio
 ```
+
+Account registration and workspace activation are separate concepts. Signing up never creates a tenant, membership, branch, or branch hours.
 
 ## Access policy
 
-- `VERIFIED`: a new account may exist without a tenant, but an account alone does not grant Studio workspace creation.
-- `VERIFIED`: new tenant creation is denied by the database unless the authenticated owner email matches a lead with an active, non-revoked, non-expired approved onboarding record.
-- `VERIFIED`: `/studio` continues to redirect an authenticated user without a tenant to `/onboarding`; `/onboarding` is now an approval-status gate rather than a self-service tenant creator.
-- `VERIFIED`: Platform Owner approval remains the explicit commercial gate and produces the existing single-use, hashed, 7-day registration token.
-- `VERIFIED`: the approved registration token must be used with the account whose email matches the service-request email.
-- `VERIFIED`: after token activation, the lead becomes `converted` and the tenant/owner/branch are provisioned.
-- `VERIFIED`: existing tenants and existing owner memberships are not changed by this policy migration.
+- `VERIFIED`: a new account may exist without a tenant and can sign in again later.
+- `VERIFIED`: the activation request is linked to the authenticated account through `leads.account_user_id` with a database uniqueness guard.
+- `VERIFIED`: activation request states are `pending`, `action_required`, `approved`, `activated`, and `rejected`.
+- `VERIFIED`: Platform Admin review is server-authorized with `requirePlatformAdmin`.
+- `VERIFIED`: Studio remains unavailable until the account has an active tenant membership.
+- `VERIFIED`: approved customer activation is performed through an atomic database function that locks the request row and is idempotent under repeated/concurrent activation attempts.
+- `VERIFIED`: the database tenant trigger accepts either an active legacy registration-token approval or an `approved` account-linked activation request; signup grants are no longer an authorization path.
+- `VERIFIED`: the historical `self_serve_registration_grants` table and migrations remain for migration history, but the signup hook no longer creates grants and the legacy `create_self_serve_workspace` function is retired.
+- `VERIFIED`: existing tenants and existing owner memberships are preserved.
 
 ## Customer identity and login
 
 - `VERIFIED`: customer authentication remains Better Auth based.
 - `VERIFIED`: email/password sign-in remains supported.
-- `VERIFIED`: approved service-request phone numbers are normalized to Saudi E.164 form (`+966...`) and bound to the matching customer account during approved onboarding.
-- `VERIFIED`: the approved service-request phone is marked `phoneNumberVerified=true` because it is a Platform Owner-approved identity attribute; this is **not** an SMS/OTP claim.
-- `VERIFIED`: the login surface now allows the customer to choose email or phone number for password-based sign-in.
-- `UNKNOWN`: an SMS provider is not configured in the repository; phone OTP verification/change flows are therefore not presented as production capability.
-- `PROPOSED`: connect an SMS provider later if self-service phone verification or phone-number changes are required.
+- `VERIFIED`: approved service-request phone numbers continue to be normalized to Saudi E.164 form (`+966...`) for the legacy onboarding fallback.
+- `VERIFIED`: the approved service-request phone can be bound to the matching customer account during legacy onboarding; this is not an SMS/OTP claim.
+- `VERIFIED`: the login surface supports email or phone password sign-in where configured.
+- `UNKNOWN`: an SMS provider is not configured in the repository; SMS OTP is not presented as production capability.
 
-## Platform Owner account controls
+## New activation request behavior
 
-- `VERIFIED`: `/admin/users` is a dedicated Platform Owner account-management surface.
-- `VERIFIED`: account listing, phone approval, freeze/unfreeze, and deletion operations are server-authorized with the existing `requirePlatformAdmin` contract.
-- `VERIFIED`: freezing a user sets Better Auth `banned` state and revokes the user's existing sessions.
-- `VERIFIED`: Platform Owner accounts cannot be frozen or deleted through this customer-management path.
-- `VERIFIED`: hard deletion is intentionally limited to users with no tenant membership and no tenant ownership, preventing accidental destruction/orphaning of restaurant business data.
-- `VERIFIED`: deleting an account does not provide a route to delete an existing restaurant workspace.
+1. The user registers with full name, email, Saudi phone, password, and confirmation.
+2. The account is created only; no workspace is created and no self-serve grant is issued.
+3. `/onboarding` loads the account's activation state.
+4. `none` / `action_required` / `rejected` shows the brand/business activation form.
+5. Submission creates or updates exactly one account-linked activation request.
+6. `pending` shows a clear review state and remains available after logout/login.
+7. Platform Admin can approve, reject, or request changes.
+8. `approved` allows the authenticated account owner to activate the workspace.
+9. Workspace activation creates tenant + owner membership + main branch + seven branch-hour rows atomically and changes the request to `activated` / legacy lead status `converted`.
+10. `activated` redirects the customer to Studio.
+
+## Platform Admin
+
+- `VERIFIED`: `/admin/onboarding` now has a primary activation-request queue with Arabic/English status labels and approve/reject/request-changes actions.
+- `VERIFIED`: legacy lead requests remain visible in the same page for backward compatibility.
+- `VERIFIED`: legacy requests may still use the existing secure, hashed, 7-day registration-link workflow.
+- `VERIFIED`: new activation requests never require the admin to copy or send a registration link.
+- `VERIFIED`: concurrent admin decisions are guarded by conditional state transitions so only one decision can win from an eligible state.
 
 ## Customer states
 
 | State | Customer can | Customer cannot |
 |---|---|---|
-| No request | Create/sign in to an account | Create a restaurant workspace or enter Studio |
-| Request pending | Sign in and view status | Create a tenant or operate Studio |
-| Approved | Use the registration link with the matching email | Bypass the approval requirement with an unrelated account |
-| Provisioned | Enter Studio and complete setup; sign in with approved email or phone | Use the onboarding token again |
-| Frozen | Remains recorded for platform administration | Sign in while the account is banned |
-| Rejected | Contact the platform owner for review | Create a tenant through self-service onboarding |
+| No request | Create/sign in to an account and submit activation data | Create a tenant or enter Studio |
+| Pending | Sign in and view request status | Create a tenant or operate Studio |
+| Action required | Review the admin note and resubmit | Enter Studio or bypass review |
+| Approved | Activate the approved workspace | Bypass approval with another account |
+| Activated | Enter Studio | Reuse the activation request to create another workspace |
+| Rejected | Resubmit the request after reviewing the decision note | Create a tenant through signup alone |
 
-## Plan and theme policy
+## Legacy registration-link compatibility
 
-- `VERIFIED`: plan/theme selections from the public request remain request context; this task does not silently convert them into entitlements or tenant theme configuration.
-- `PROPOSED`: commercial plan assignment and theme provisioning should become explicit handoff steps after the customer lifecycle policy is accepted, rather than being inferred from lead metadata.
+- `VERIFIED`: existing approved legacy leads continue to use `/onboarding/:token`.
+- `VERIFIED`: legacy token activation still requires an authenticated account whose email matches the approved service request.
+- `VERIFIED`: legacy activation is now atomic and idempotent through `activate_legacy_customer_workspace`.
+- `VERIFIED`: an already-used legacy token cannot create a second tenant; if the tenant already exists, the existing tenant is returned.
+- `VERIFIED`: the legacy path remains a fallback only; it is not presented as the primary path for new account activation.
 
-## Email verification
+## Security model
 
-- `UNKNOWN`: production email-verification delivery is not currently established in the repository evidence.
-- `PROPOSED`: require verified email ownership before commercial handoff once a transactional email provider and verification UX are implemented. Better Auth supports `requireEmailVerification`, but its documentation requires a verification-email delivery function when that policy is enabled.
+- `VERIFIED`: client-controlled query parameters no longer select a self-serve workspace-creation mode.
+- `VERIFIED`: no authenticated signup path creates a tenant merely because an account exists.
+- `VERIFIED`: privileged activation functions are `SECURITY DEFINER` with explicit `search_path` and revoked execution from `public`, `anon`, and `authenticated` database roles.
+- `VERIFIED`: tenant creation remains behind the database approval trigger.
+- `VERIFIED`: request ownership is checked inside the activation function, not only in UI code.
+- `VERIFIED`: request-row locking plus unique account linkage prevents duplicate workspace activation under concurrent attempts.
+- `VERIFIED`: existing tenant isolation, membership authorization, and Studio gates remain the final application boundary.
 
-## Security rationale
+## Plan and subscription policy
 
-The policy uses server-side/database enforcement rather than relying on the `/onboarding` UI. Platform Owner account actions also use server-side authorization and Better Auth's standard ban/session semantics. This follows the repository security contract and the OWASP default-deny/server-side authorization guidance.
+- `VERIFIED`: approval remains separate from subscription, pricing, trials, entitlements, AI, menu creation, and logo upload.
+- `PROPOSED`: commercial plan assignment remains a later explicit handoff step.
 
 ## Verification boundary
 
-- Contract tests cover the policy, email binding, phone login, Platform Owner controls, Studio gate, and removal of self-service tenant creation from `/onboarding`.
-- Database migration behavior must be exercised by the repository migration/build gates before merge.
-- Real authenticated browser verification should cover: new unapproved account → `/studio` → approval gate; approved link + matching email → tenant creation; approved link + different email → denial; existing owner → unchanged Studio access; approved phone → phone sign-in; frozen account → sign-in denial; protected Platform Owner → cannot be deleted/frozen.
-- Production deployment remains outside this task and was not performed.
+Required verification for this lifecycle includes isolated PostgreSQL migration/authorization/concurrency coverage, repository typecheck/tests/lint/build, Platform Admin browser QA, and authenticated customer browser scenarios. Production deployment is outside this branch and must not be claimed from local/CI evidence alone.
