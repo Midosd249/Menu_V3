@@ -1,5 +1,4 @@
 import { spawn } from "node:child_process";
-import { unlink, writeFile } from "node:fs/promises";
 import { expect, test } from "playwright/test";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
@@ -106,12 +105,6 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   test.setTimeout(180_000);
 
   const port = "8084";
-  const fixturePath = "migrations/99999999_w7_3_customer_activation_browser_fixture.sql";
-  await writeFile(
-    fixturePath,
-    `create table if not exists member_branch_access (\n  tenant_id text not null,\n  user_id text not null,\n  branch_id text not null,\n  created_at timestamptz not null default now(),\n  primary key (user_id, branch_id),\n  foreign key (tenant_id) references tenants(id) on delete cascade,\n  foreign key (branch_id) references branches(id) on delete cascade\n);\n\ncreate index if not exists member_branch_access_tenant_user_idx\n  on member_branch_access (tenant_id, user_id);\n\ncreate index if not exists member_branch_access_branch_idx\n  on member_branch_access (branch_id, user_id);\n\ninsert into "user" ("id", "name", "email", "emailVerified")\nvalues ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true)\non conflict ("id") do update set "name" = excluded."name", "email" = excluded."email", "emailVerified" = excluded."emailVerified";\n`,
-  );
-
   const child = spawn("node", ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port], {
     env: {
       ...process.env,
@@ -192,6 +185,5 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   } finally {
     child.kill("SIGTERM");
-    await unlink(fixturePath).catch(() => undefined);
   }
 });
