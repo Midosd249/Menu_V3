@@ -1,11 +1,12 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
+import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
 import { admin, bearer, genericOAuth, phoneNumber } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { createHash } from "node:crypto";
 import { Pool } from "pg";
-import { ensureDbReady, getPglite, getSql, POSTGRES_SCHEMA } from "../db";
+import { ensureDbReady, getPglite, POSTGRES_SCHEMA } from "../db";
 import { emailAndPasswordEnabled } from "./email-password";
 import { GATE_PROVIDER_ID, gateIdentitySessions } from "./gate-session.server";
 import { GROK_PROVIDERS } from "./providers";
@@ -25,13 +26,15 @@ function previewAuthSecret(): string {
   return globalAuthRef.__grokAuthPreviewSecret__;
 }
 const env = (key: string): string | undefined => { const value = process.env[key]?.trim(); return value ? value : undefined; };
+
+const authDisabled = env("VITE_AUTH_ENABLED") === "false";
 const runningOnVercel = Boolean(env("VERCEL"));
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
 const explicitGrokClientId = env("GROK_AUTH_CLIENT_ID");
 const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
 const googleClientId = env("GOOGLE_CLIENT_ID");
 const googleClientSecret = env("GOOGLE_CLIENT_SECRET");
-const authDisabled = env("VITE_AUTH_ENABLED") === "false";
+
 const grokClientId = runningOnVercel ? undefined : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
 const grokClientSecret = runningOnVercel ? undefined : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
 const authConfigured = !authDisabled && (runningOnVercel ? Boolean(googleClientId && googleClientSecret) : Boolean(grokClientId && grokClientSecret));
@@ -64,10 +67,7 @@ async function verifyLegacyOrNativePassword({ hash, password }: { hash: string; 
       return false;
     }
   }
-  try {
-    const { verifyPassword: verifyScryptPassword } = await import("better-auth/crypto");
-    return await verifyScryptPassword({ hash, password });
-  } catch { return false; }
+  try { return await verifyScryptPassword({ hash, password }); } catch { return false; }
 }
 
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
@@ -84,7 +84,12 @@ export const auth = betterAuth({
   plugins: [
     gateIdentitySessions(),
     admin(),
-    phoneNumber({ sendOTP: async () => undefined, requireVerification: true }),
+    phoneNumber({
+      // Phone login uses the platform-approved service-request number.
+      // SMS OTP is intentionally not claimed until an SMS provider is configured.
+      sendOTP: async () => undefined,
+      requireVerification: true,
+    }),
     ...(grokOAuthPlugin ? [grokOAuthPlugin] : []),
     bearer(),
     tanstackStartCookies(),
