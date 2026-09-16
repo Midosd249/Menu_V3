@@ -61,7 +61,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
         POSTGRES_PRISMA_URL: "",
         POSTGRES_URL_NON_POOLING: "",
       },
-      stdio: ["ignore", createWriteStream(`.grok/customer-lifecycle-${port}.log"), createWriteStream(`.grok/customer-lifecycle-${port}.error.log`)],
+      stdio: ["ignore", createWriteStream(`.grok/customer-lifecycle-${port}.log`), createWriteStream(`.grok/customer-lifecycle-${port}.error.log`)],
     },
   );
 
