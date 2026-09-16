@@ -128,7 +128,9 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
           started = true;
           break;
         }
-      } catch {}
+      } catch (error) {
+        if (attempt === 120) throw error;
+      }
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
     if (!started) throw new Error("Customer onboarding browser fixture did not start");
