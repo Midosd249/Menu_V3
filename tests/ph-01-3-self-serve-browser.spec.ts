@@ -1,17 +1,32 @@
 import { test, expect } from "@playwright/test";
-import { createWriteStream } from "node:fs";
+import { createWriteStream, readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
+import pg from "pg";
 
 const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? (process.env.CI === "true" ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci" : "");
+const provisioningMigration = readFileSync("migrations/20260917100000_self_serve_workspace_provisioning.sql", "utf8");
 
 test("PH-01.3 self-serve setup provisions safely and hands off to Studio in Arabic and English", async ({ page }) => {
   test.setTimeout(180_000);
   if (!databaseUrl) throw new Error("CUSTOMER_LIFECYCLE_DATABASE_URL is required for PH-01.3 browser QA");
 
-  const servers = [
-    { port: "8086", userId: "ph-01-3-browser-ar" },
-    { port: "8087", userId: "ph-01-3-browser-en" },
-  ].map(({ port, userId }) => {
+  const pool = new pg.Pool({ connectionString: databaseUrl, max: 4 });
+  const userIds = ["ph-01-3-browser-ar", "ph-01-3-browser-en"];
+  try {
+    await pool.query(provisioningMigration);
+    for (const userId of userIds) {
+      await pool.query(`delete from menu_v3.tenants where owner_user_id = $1`, [userId]);
+      await pool.query(
+        `insert into menu_v3."user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,true,$4,false) on conflict ("id") do update set "name"=excluded."name", "email"=excluded."email", "phoneNumber"=excluded."phoneNumber", "phoneNumberVerified"=false`,
+        [userId, "PH-01.3 Browser", `${userId}@example.test`, "+966512345670"],
+      );
+    }
+  } finally {
+    await pool.end();
+  }
+
+  const servers = userIds.map((userId, index) => {
+    const port = String(8086 + index);
     const child = spawn(
       "node",
       ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port],
@@ -82,5 +97,14 @@ test("PH-01.3 self-serve setup provisions safely and hands off to Studio in Arab
     await expect(page).toHaveURL(/\/studio$/);
   } finally {
     for (const { child } of servers) child.kill("SIGTERM");
+    const cleanup = new pg.Pool({ connectionString: databaseUrl, max: 2 });
+    try {
+      for (const userId of userIds) {
+        await cleanup.query(`delete from menu_v3.tenants where owner_user_id = $1`, [userId]);
+        await cleanup.query('delete from menu_v3."user" where "id" = $1', [userId]);
+      }
+    } finally {
+      await cleanup.end();
+    }
   }
 });
