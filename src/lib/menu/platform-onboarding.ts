@@ -10,7 +10,6 @@ import type { FnResult } from "./types";
 
 const tokenSchema = z.string().trim().min(40).max(200);
 const leadIdSchema = z.string().trim().min(1).max(100);
-
 function hashToken(token: string) { return createHash("sha256").update(token).digest("hex"); }
 
 async function assertAdmin(userId: string): Promise<FnResult<true>> {
@@ -53,12 +52,7 @@ export const getMyCustomerAccessStatus = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<FnResult<{ status: CustomerAccessStatus }>> => {
     try {
       const sql = await getSql();
-      const activation = await sql<{ activation_status: string }>`
-        select activation_status
-        from leads
-        where account_user_id = ${context.userId}
-        limit 1
-      `;
+      const activation = await sql<{ activation_status: string }>`select activation_status from leads where account_user_id = ${context.userId} limit 1`;
       const activationStatus = activation[0]?.activation_status;
       if (activationStatus === "pending") return { ok: true, data: { status: "pending" } };
       if (activationStatus === "action_required") return { ok: true, data: { status: "action_required" } };
@@ -107,7 +101,7 @@ export const approveLead = createServerFn({ method: "POST" })
     if (!permission.ok) return permission as FnResult<LeadOnboardingStatus & { token: string; registrationUrl: string }>;
     try {
       const sql = await getSql();
-      const lead = await sql`select id from leads where id = ${data.leadId} limit 1`;
+      const lead = await sql`select id from leads where id = ${data.leadId} limit 1 for update`;
       if (!lead[0]) return { ok: false, code: "not_found", error: "العميل المحتمل غير موجود" };
       const existing = await sql`select id from lead_onboarding where lead_id = ${data.leadId} and used_at is null and revoked_at is null and expires_at > now() order by created_at desc limit 1`;
       if (existing[0]) return { ok: false, code: "conflict", error: "يوجد رابط تسجيل نشط بالفعل. ألغِ الرابط الحالي أولاً إذا أردت إنشاء رابط جديد." };
@@ -156,29 +150,22 @@ export const activateLeadOnboarding = createServerFn({ method: "POST" })
       const accountEmail = users[0]?.email?.trim().toLowerCase();
       const leadEmail = String(onboarding.contact_email ?? "").trim().toLowerCase();
       if (!accountEmail || !leadEmail || accountEmail !== leadEmail) return { ok: false, code: "forbidden", error: "استخدم الحساب المرتبط بالبريد الإلكتروني في طلب الخدمة" };
-
       const phone = normalizePhoneDigits(String(onboarding.contact_phone ?? ""), "SA");
       if (phone) {
         const phoneOwner = await sql`select "id" from "user" where "phoneNumber" = ${`+${phone}`} and "id" <> ${context.userId} limit 1`;
         if (phoneOwner[0]) return { ok: false, code: "conflict", error: "رقم الجوال مرتبط بحساب آخر. راجع مالك المنصة." };
         await sql`update "user" set "phoneNumber" = ${`+${phone}`}, "phoneNumberVerified" = true, "updatedAt" = now() where "id" = ${context.userId}`;
       }
-
       const existingMember = await sql`select tenant_id from tenant_members where user_id = ${context.userId} and is_active = true limit 1`;
       if (existingMember[0]) {
         const existingTenant = await sql<{ slug: string }>`select slug from tenants where id = ${String(existingMember[0].tenant_id)} limit 1`;
         if (existingTenant[0]) return { ok: true, data: { tenantId: String(existingMember[0].tenant_id), slug: existingTenant[0].slug, menuUrl: `/m/${existingTenant[0].slug}/main?src=onboarding` } };
       }
-
       const slugBase = slugify(String(onboarding.business_name)) || `restaurant-${Date.now().toString(36)}`;
       const slug = `${slugBase}-${String(onboarding.id).slice(-6).toLowerCase()}`.slice(0, 63);
       const tenantId = newId();
       const branchId = newId();
-      const result = await sql<{ tenant_id: string; slug: string }>`
-        select * from menu_v3.activate_legacy_customer_workspace(
-          ${String(onboarding.id)}, ${context.userId}, ${tenantId}, ${branchId}, ${slug}
-        )
-      `;
+      const result = await sql<{ tenant_id: string; slug: string }>`select * from menu_v3.activate_legacy_customer_workspace(${String(onboarding.id)}, ${context.userId}, ${tenantId}, ${branchId}, ${slug})`;
       const activated = result[0];
       if (!activated) return { ok: false, code: "unavailable", error: "تعذر إكمال إنشاء مساحة المطعم" };
       return { ok: true, data: { tenantId: activated.tenant_id, slug: activated.slug, menuUrl: `/m/${activated.slug}/main?src=onboarding` } };
