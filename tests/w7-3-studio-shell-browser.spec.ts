@@ -113,26 +113,26 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await page.getByRole("button", { name: "Request changes" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: "Action required" })).toBeVisible();
-    await page.getByRole("button", { name: "Resubmit activation request" }).click();
-    await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "نحتاج معلومات إضافية" })).toBeVisible();
+    await page.getByRole("button", { name: "إعادة إرسال طلب التفعيل" }).click();
+    await expect(page.getByRole("heading", { name: "طلبك قيد المراجعة" })).toBeVisible();
 
     await page.goto(`${adminBase}/admin/onboarding?lang=en`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: brand })).toBeVisible();
     await page.getByRole("button", { name: "Reject" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: "The request was not approved" })).toBeVisible();
-    await page.getByRole("button", { name: "Resubmit activation request" }).click();
-    await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "لم تتم الموافقة على الطلب" })).toBeVisible();
+    await page.getByRole("button", { name: "إعادة إرسال طلب التفعيل" }).click();
+    await expect(page.getByRole("heading", { name: "طلبك قيد المراجعة" })).toBeVisible();
 
     await page.goto(`${adminBase}/admin/onboarding?lang=en`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: brand })).toBeVisible();
     await page.getByRole("button", { name: "Approve request" }).click();
 
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: "Your request is approved" })).toBeVisible();
-    await page.getByRole("button", { name: "Activate workspace" }).click();
+    await expect(page.getByRole("heading", { name: "تم اعتماد طلبك" })).toBeVisible();
+    await page.getByRole("button", { name: "تفعيل مساحة العمل" }).click();
     await expect(page).toHaveURL(/\/studio$/);
     await expect(page.locator('nav[aria-label="مساحات العمل"], nav[aria-label="Workspace navigation"]')).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
