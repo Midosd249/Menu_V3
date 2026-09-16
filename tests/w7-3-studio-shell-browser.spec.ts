@@ -1,6 +1,7 @@
+import { execFileSync } from "node:child_process";
 import { spawn } from "node:child_process";
-import { unlinkSync, writeFileSync } from "node:fs";
 import { expect, test } from "playwright/test";
+import pg from "pg";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
 
@@ -105,22 +106,32 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
 test("customer approval lifecycle browser QA covers request, decisions, activation, RTL and LTR", async ({ page }) => {
   test.setTimeout(180_000);
 
-  const fixturePath = "migrations/99999998_w7_3_customer_activation_fixture.sql";
-  writeFileSync(fixturePath, `create table if not exists member_branch_access (
-  tenant_id text not null,
-  user_id text not null,
-  branch_id text not null,
-  created_at timestamptz not null default now(),
-  primary key (user_id, branch_id),
-  foreign key (tenant_id) references tenants(id) on delete cascade,
-  foreign key (branch_id) references branches(id) on delete cascade
-);
-create index if not exists member_branch_access_tenant_user_idx on member_branch_access (tenant_id, user_id);
-create index if not exists member_branch_access_branch_idx on member_branch_access (branch_id, user_id);
-insert into "user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified")
-values ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true, '+966500000001', true)
-on conflict ("id") do update set "name" = excluded."name", "email" = excluded."email", "emailVerified" = excluded."emailVerified", "phoneNumber" = excluded."phoneNumber", "phoneNumberVerified" = excluded."phoneNumberVerified";
-`);
+  const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci";
+  execFileSync(process.execPath, ["scripts/migrate.mjs"], {
+    env: { ...process.env, DATABASE_URL: databaseUrl, POSTGRES_URL: "", POSTGRES_PRISMA_URL: "", SUPABASE_DB_URL: "", POSTGRES_URL_NON_POOLING: "" },
+    stdio: "inherit",
+  });
+  const fixturePool = new pg.Pool({ connectionString: databaseUrl, options: "-c search_path=menu_v3,public", max: 1 });
+  try {
+    await fixturePool.query(`
+      create table if not exists member_branch_access (
+        tenant_id text not null,
+        user_id text not null,
+        branch_id text not null,
+        created_at timestamptz not null default now(),
+        primary key (user_id, branch_id),
+        foreign key (tenant_id) references tenants(id) on delete cascade,
+        foreign key (branch_id) references branches(id) on delete cascade
+      );
+      create index if not exists member_branch_access_tenant_user_idx on member_branch_access (tenant_id, user_id);
+      create index if not exists member_branch_access_branch_idx on member_branch_access (branch_id, user_id);
+      insert into "user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified")
+      values ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true, '+966500000001', true)
+      on conflict ("id") do update set "name" = excluded."name", "email" = excluded."email", "emailVerified" = excluded."emailVerified", "phoneNumber" = excluded."phoneNumber", "phoneNumberVerified" = excluded."phoneNumberVerified";
+    `);
+  } finally {
+    await fixturePool.end();
+  }
 
   const port = "8084";
   const child = spawn("node", ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port], {
@@ -129,7 +140,7 @@ on conflict ("id") do update set "name" = excluded."name", "email" = excluded."e
       VITE_AUTH_ENABLED: "false",
       MENU_V3_DEV_USER_ID: "customer-lifecycle-user",
       PLATFORM_ADMIN_USER_IDS: "customer-lifecycle-user",
-      DATABASE_URL: "",
+      DATABASE_URL: databaseUrl,
       SUPABASE_DB_URL: "",
       POSTGRES_URL: "",
       POSTGRES_PRISMA_URL: "",
@@ -203,6 +214,5 @@ on conflict ("id") do update set "name" = excluded."name", "email" = excluded."e
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   } finally {
     child.kill("SIGTERM");
-    try { unlinkSync(fixturePath); } catch { /* best-effort fixture cleanup */ }
   }
 });
