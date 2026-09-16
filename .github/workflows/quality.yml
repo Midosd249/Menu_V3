@@ -209,6 +209,7 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
         run: |
+          npm run db:migrate
           cat > migrations/99999999_w7_3_studio_fixture.sql <<'SQL'
           alter table tenant_members
             add column if not exists access_role text not null default 'tenant_owner',
