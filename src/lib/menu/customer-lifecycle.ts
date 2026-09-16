@@ -3,8 +3,7 @@ import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { newId, slugify } from "@/lib/utils";
-import { getMyStudio } from "./owner";
-import type { FnResult, StudioSnapshot } from "./types";
+import type { FnResult } from "./types";
 
 export const ACTIVATION_STATUSES = ["pending", "action_required", "approved", "activated", "rejected"] as const;
 export type ActivationStatus = (typeof ACTIVATION_STATUSES)[number];
@@ -84,5 +83,3 @@ export const activateApprovedWorkspace = createServerFn({ method: "POST" }).midd
     return { ok: true, data: { tenantId: activated.tenant_id, slug: activated.slug } };
   } catch (err) { console.error("activateApprovedWorkspace failed", err); return { ok: false, code: "unavailable", error: "تعذر تفعيل مساحة العمل" }; }
 });
-
-export async function loadMyStudioAfterActivation(): Promise<FnResult<StudioSnapshot>> { return getMyStudio(); }
