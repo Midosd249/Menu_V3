@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import { expect, test } from "playwright/test";
 
 const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
@@ -98,4 +99,83 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+});
+
+test("customer approval lifecycle browser QA covers request, decisions, activation, RTL and LTR", async ({ page }) => {
+  test.setTimeout(180_000);
+
+  const port = "8084";
+  const child = spawn("node", ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port], {
+    env: {
+      ...process.env,
+      VITE_AUTH_ENABLED: "false",
+      PLATFORM_ADMIN_USER_IDS: "dev-user",
+      DATABASE_URL: "",
+      SUPABASE_DB_URL: "",
+      POSTGRES_URL: "",
+      POSTGRES_PRISMA_URL: "",
+      POSTGRES_URL_NON_POOLING: "",
+    },
+    stdio: "ignore",
+  });
+
+  try {
+    for (let attempt = 1; attempt <= 120; attempt += 1) {
+      try {
+        const response = await fetch(`http://127.0.0.1:${port}/onboarding`);
+        if (response.ok) break;
+      } catch {}
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      if (attempt === 120) throw new Error("Customer onboarding browser fixture did not start");
+    }
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "أرسل طلب التفعيل" })).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+
+    const brand = "متجر اختبار دورة الاعتماد";
+    await page.getByRole("textbox").nth(0).fill(brand);
+    await page.getByRole("textbox").nth(1).fill("Approval Lifecycle Test");
+    await page.getByRole("button", { name: "كافيه" }).click();
+    await page.getByRole("button", { name: "إرسال طلب التفعيل" }).click();
+    await expect(page.getByRole("heading", { name: "طلبك قيد المراجعة" })).toBeVisible();
+
+    await page.getByRole("group", { name: "اختيار اللغة" }).getByRole("button", { name: "EN" }).click();
+    await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+    await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
+
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Customer Activation Requests" })).toBeVisible();
+    await expect(page.getByText(brand)).toBeVisible();
+    await page.getByRole("button", { name: "Request changes" }).click();
+
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Action required" })).toBeVisible();
+    await page.getByRole("button", { name: "Resubmit activation request" }).click();
+    await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
+
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByText(brand)).toBeVisible();
+    await page.getByRole("button", { name: "Reject" }).click();
+
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "The request was not approved" })).toBeVisible();
+    await page.getByRole("button", { name: "Resubmit activation request" }).click();
+    await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
+
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByText(brand)).toBeVisible();
+    await page.getByRole("button", { name: "Approve request" }).click();
+
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Your request is approved" })).toBeVisible();
+    await page.getByRole("button", { name: "Activate workspace" }).click();
+    await expect(page).toHaveURL(/\/studio$/);
+    await expect(page.locator('nav[aria-label="مساحات العمل"], nav[aria-label="Workspace navigation"]')).toHaveCount(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+  } finally {
+    child.kill("SIGTERM");
+  }
 });
