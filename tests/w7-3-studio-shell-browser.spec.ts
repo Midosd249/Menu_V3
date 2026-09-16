@@ -203,6 +203,6 @@ on conflict ("id") do update set "name" = excluded."name", "email" = excluded."e
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   } finally {
     child.kill("SIGTERM");
-    try { unlinkSync(fixturePath); } catch {}
+    try { unlinkSync(fixturePath); } catch { /* best-effort fixture cleanup */ }
   }
 });
