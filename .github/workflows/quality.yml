@@ -34,7 +34,6 @@ jobs:
         with:
           node-version: 24
           cache: npm
-        
       - name: Install
         run: npm install --no-audit --no-fund
       - name: Generate route tree
@@ -190,14 +189,12 @@ jobs:
               );
               create index if not exists member_branch_access_tenant_user_idx on member_branch_access (tenant_id, user_id);
               create index if not exists member_branch_access_branch_idx on member_branch_access (branch_id, user_id);
-              insert into "user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified")
-              values ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true, '+966500000001', true)
+              insert into "user" ("id", "name", "email", "emailVerified")
+              values ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true)
               on conflict ("id") do update set
                 "name" = excluded."name",
                 "email" = excluded."email",
-                "emailVerified" = excluded."emailVerified",
-                "phoneNumber" = excluded."phoneNumber",
-                "phoneNumberVerified" = excluded."phoneNumberVerified";
+                "emailVerified" = excluded."emailVerified";
               insert into platform_admins (user_id) values ('dev-user') on conflict (user_id) do nothing;
             `);
           } finally {
