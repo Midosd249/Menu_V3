@@ -13,9 +13,17 @@ const databaseConfigured = Boolean(
     process.env.POSTGRES_URL_NON_POOLING?.trim(),
 );
 
+/**
+ * CI-only browser fixtures may use a real isolated PostgreSQL database while
+ * auth remains disabled. Production and non-CI environments never receive this
+ * fallback, so a configured real database still fails closed by default.
+ */
+const authDisabledTestDatabase =
+  process.env.CI === "true" && process.env.MENU_V3_AUTH_DISABLED_TEST_DATABASE === "true";
+
 export { authConfigured };
 
-if (databaseConfigured && !authConfigured) {
+if (databaseConfigured && !authConfigured && !authDisabledTestDatabase) {
   console.error(
     "[auth] A production database is configured but auth is disabled (VITE_AUTH_ENABLED=false) " +
       "— requireUserId() will reject every request rather than share one dev user.",
@@ -52,7 +60,7 @@ export async function getSessionUser(
 
 export async function requireUserId(bearerToken?: string): Promise<string> {
   if (!authConfigured && !gateIdentityEnabled()) {
-    if (databaseConfigured) {
+    if (databaseConfigured && !authDisabledTestDatabase) {
       throw new Error(
         "Auth is disabled (VITE_AUTH_ENABLED=false) but a production database is set — " +
           "refusing to fall back to the shared dev user against real data.",
