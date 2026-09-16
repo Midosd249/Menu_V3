@@ -109,7 +109,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   const fixturePath = "migrations/99999999_w7_3_customer_activation_browser_fixture.sql";
   await writeFile(
     fixturePath,
-    `create table if not exists menu_v3.member_branch_access (\n  tenant_id text not null,\n  user_id text not null,\n  branch_id text not null,\n  created_at timestamptz not null default now(),\n  primary key (user_id, branch_id),\n  foreign key (tenant_id) references menu_v3.tenants(id) on delete cascade,\n  foreign key (branch_id) references menu_v3.branches(id) on delete cascade\n);\n\ncreate index if not exists member_branch_access_tenant_user_idx\n  on menu_v3.member_branch_access (tenant_id, user_id);\n\ncreate index if not exists member_branch_access_branch_idx\n  on menu_v3.member_branch_access (branch_id, user_id);\n`,
+    `create table if not exists member_branch_access (\n  tenant_id text not null,\n  user_id text not null,\n  branch_id text not null,\n  created_at timestamptz not null default now(),\n  primary key (user_id, branch_id),\n  foreign key (tenant_id) references tenants(id) on delete cascade,\n  foreign key (branch_id) references branches(id) on delete cascade\n);\n\ncreate index if not exists member_branch_access_tenant_user_idx\n  on member_branch_access (tenant_id, user_id);\n\ncreate index if not exists member_branch_access_branch_idx\n  on member_branch_access (branch_id, user_id);\n`,
   );
 
   const child = spawn("node", ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port], {
