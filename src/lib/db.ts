@@ -140,6 +140,15 @@ async function createPgliteSql(): Promise<Sql> {
   if (isCustomerLifecycleBrowserFixture) {
     await pg.exec(`
       create schema if not exists menu_v3;
+      alter table leads add column if not exists account_user_id text;
+      alter table leads add column if not exists brand_name_en text not null default '';
+      alter table leads add column if not exists business_type text not null default 'restaurant';
+      alter table leads add column if not exists activation_status text not null default 'legacy';
+      alter table leads add column if not exists activation_requested_at timestamptz;
+      alter table leads add column if not exists decision_at timestamptz;
+      alter table leads add column if not exists decision_by text;
+      alter table leads add column if not exists decision_reason text not null default '';
+      alter table leads add column if not exists activation_tenant_id text;
       create table if not exists member_branch_access (
         tenant_id text not null,
         user_id text not null,
@@ -175,9 +184,7 @@ async function createPgliteSql(): Promise<Sql> {
         existing_tenant text;
         existing_slug text;
       begin
-        select activation_status, account_user_id
-          into request_status, request_user
-          from leads where id = p_request_id for update;
+        select activation_status, account_user_id into request_status, request_user from leads where id = p_request_id for update;
         if request_status is null then raise exception using errcode = 'P0002', message = 'ACTIVATION_REQUEST_NOT_FOUND'; end if;
         if request_user <> p_user_id then raise exception using errcode = '42501', message = 'ACTIVATION_REQUEST_USER_MISMATCH'; end if;
         if request_status = 'activated' then
@@ -190,19 +197,15 @@ async function createPgliteSql(): Promise<Sql> {
         end if;
         if request_status <> 'approved' then raise exception using errcode = '42501', message = 'ACTIVATION_APPROVAL_REQUIRED'; end if;
         insert into tenants (id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type, is_published, is_active)
-        select p_tenant_id, p_user_id, p_slug, business_name, brand_name_en, coalesce(details, ''), business_type, false, true
-        from leads where id = p_request_id;
+        select p_tenant_id, p_user_id, p_slug, business_name, brand_name_en, coalesce(details, ''), business_type, false, true from leads where id = p_request_id;
         insert into tenant_members (tenant_id, user_id, role) values (p_tenant_id, p_user_id, 'owner');
-        insert into branches (id, tenant_id, slug, name_ar, name_en, address_ar, is_active)
-        values (p_branch_id, p_tenant_id, 'main', 'الفرع الرئيسي', 'Main branch', '', true);
-        insert into branch_hours (branch_id, weekday, opens_at, closes_at, is_closed)
-        values
+        insert into branches (id, tenant_id, slug, name_ar, name_en, address_ar, is_active) values (p_branch_id, p_tenant_id, 'main', 'الفرع الرئيسي', 'Main branch', '', true);
+        insert into branch_hours (branch_id, weekday, opens_at, closes_at, is_closed) values
           (p_branch_id, 0, '07:00', '00:00', false), (p_branch_id, 1, '07:00', '00:00', false),
           (p_branch_id, 2, '07:00', '00:00', false), (p_branch_id, 3, '07:00', '00:00', false),
           (p_branch_id, 4, '07:00', '00:00', false), (p_branch_id, 5, '13:00', '00:00', false),
           (p_branch_id, 6, '07:00', '00:00', false);
-        update leads set activation_status = 'activated', activation_tenant_id = p_tenant_id, status = 'converted', updated_at = now()
-        where id = p_request_id and activation_status = 'approved';
+        update leads set activation_status = 'activated', activation_tenant_id = p_tenant_id, status = 'converted', updated_at = now() where id = p_request_id and activation_status = 'approved';
         if not found then raise exception using errcode = '40001', message = 'ACTIVATION_REQUEST_STATE_CHANGED'; end if;
         return query select p_tenant_id, p_slug;
       end;
