@@ -8,6 +8,7 @@ const { Pool } = pg;
 const migration = readFileSync("migrations/20260916100000_customer_activation_lifecycle.sql", "utf8");
 const approvalMigration = readFileSync("migrations/20260916120000_harden_legacy_approval_decision.sql", "utf8");
 const edgeMigration = readFileSync("migrations/20260916130000_fix_activation_function_edge_cases.sql", "utf8");
+const idempotencyMigration = readFileSync("migrations/20260916140000_make_activation_retries_strictly_idempotent.sql", "utf8");
 const databaseUrl = process.env.CUSTOMER_ACTIVATION_TEST_DATABASE_URL?.trim() || (process.env.CI ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci" : "");
 function isolateMigration(sql, schema) { return sql.replace(/\bmenu_v3\b/g, schema); }
 
@@ -29,6 +30,7 @@ test("customer activation lifecycle blocks signup-only tenant creation and is id
     await pool.query(isolateMigration(migration, schema));
     await pool.query(isolateMigration(approvalMigration, schema));
     await pool.query(isolateMigration(edgeMigration, schema));
+    await pool.query(isolateMigration(idempotencyMigration, schema));
     await pool.query(`insert into ${schema}."user" (id, "email", "name", "phoneNumber") values ($1,$2,$3,$4)`, [userId, "customer@example.com", "Customer", "+966512345678"]);
     await assert.rejects(pool.query(`insert into ${schema}.tenants (id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type) values ($1,$2,$3,$4,$5,$6,$7)`, [randomUUID(), userId, "signup-only", "Signup Only", "", "", "restaurant"]), /CUSTOMER_APPROVAL_REQUIRED/, "signup alone must not authorize tenant creation");
     await pool.query(`insert into ${schema}.leads (id,business_name,contact_name,contact_phone,contact_email,account_user_id,activation_status,activation_requested_at) values ($1,$2,$3,$4,$5,$6,'pending',now())`, [requestId, "Test Brand", "Customer", "+966512345678", "customer@example.com", userId]);
@@ -43,8 +45,10 @@ test("customer activation lifecycle blocks signup-only tenant creation and is id
     assert.equal(activations.filter((result) => result.status === "fulfilled").length, 2, "concurrent activation retries must be idempotent");
     const counts = await pool.query(`select (select count(*) from ${schema}.tenants) tenants, (select count(*) from ${schema}.tenant_members) members, (select count(*) from ${schema}.branches) branches, (select count(*) from ${schema}.branch_hours) hours`);
     assert.deepEqual(counts.rows[0], { tenants: "1", members: "1", branches: "1", hours: "7" });
-    const request = await pool.query(`select activation_status, status from ${schema}.leads where id=$1`, [requestId]);
-    assert.deepEqual(request.rows[0], { activation_status: "activated", status: "converted" });
+    const request = await pool.query(`select activation_status, status, activation_tenant_id from ${schema}.leads where id=$1`, [requestId]);
+    assert.equal(request.rows[0].activation_status, "activated");
+    assert.equal(request.rows[0].status, "converted");
+    assert.equal(request.rows[0].activation_tenant_id, (await pool.query(`select id from ${schema}.tenants limit 1`)).rows[0].id);
   } finally { await pool.query(`drop schema if exists ${schema} cascade`); await pool.end(); }
 });
 
@@ -74,5 +78,7 @@ test("customer activation migration removes self-serve grant authorization", () 
   assert.match(approvalMigration, /approve_legacy_lead/);
   assert.match(edgeMigration, /coalesce\(request_row\.details, ''\)/);
   assert.match(edgeMigration, /lo\.expires_at > now\(\)/);
+  assert.match(idempotencyMigration, /activation_tenant_id/);
+  assert.match(idempotencyMigration, /ACTIVATION_ALREADY_COMPLETED/);
   assert.doesNotMatch(migration, /self_serve_registration_grants[\s\S]*used_at is null[\s\S]*return new/);
 });
