@@ -5,7 +5,7 @@
 - Branch: `feat/ph-01-3-self-serve-workspace`
 - Base: `main` at `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2`
 - PR: `#160` — Open / Unmerged / Ready for review
-- Final verification head: `8f97c21498320c34277220f66dea2a1475921e53`
+- Final verification head: `889f683f9bf94f7dc91ccb4b23dad74f90706b28`
 - Production data: not touched
 - Production accounts: not created or modified
 - Vercel: no manual deploy/retry action taken
@@ -39,7 +39,7 @@ Explicitly excluded: PH-01.4+, pricing/billing/trials/invoices/WhatsApp/AI/menu 
 - PH-01.3 browser users use distinct Saudi phone numbers and explicitly seed `selfServeEligibleAt`, matching the production eligibility boundary without weakening authorization.
 
 ## Final CI evidence on final head
-Quality run `35160990345` / #1848 passed on exact head `8f97c21498320c34277220f66dea2a1475921e53`.
+Quality run `35161631945` / #1849 passed on exact head `889f683f9bf94f7dc91ccb4b23dad74f90706b28` after one transient browser-test rerun. W9 run `35161631941` / #145 passed on the same exact head.
 
 All required Quality stages completed successfully:
 - install/containers;
@@ -61,9 +61,11 @@ All required Quality stages completed successfully:
 - built preview stop and cleanup;
 - final workflow completion.
 
-W9 run `35160990335` / #144 passed on the same exact head, including isolated PGLite preparation and Orders browser QA.
+The first Quality attempt on this same head failed only at the Studio/W7.10 browser test because Vite dependency optimization triggered a navigation while `locator.evaluateAll` was executing (`Execution context was destroyed, most likely because of a navigation`). The rerun completed the same Studio browser suite successfully, with no source-code fix or assertion weakening. This is recorded as a transient CI/dev-server race rather than a PH-01.3 product failure.
 
-`GitHub.fetch_commit_workflow_runs` for `8f97c21498320c34277220f66dea2a1475921e53` returned exactly these two pull-request workflow runs: Quality `35160990345` and W9 `35160990335`.
+W9 completed successfully on the same exact head, including isolated PGLite preparation and Orders browser QA.
+
+`GitHub.fetch_commit_workflow_runs` for `889f683f9bf94f7dc91ccb4b23dad74f90706b28` returned exactly these two pull-request workflow runs: Quality `35161631945` and W9 `35161631941`.
 
 ## Eligibility/security evidence
 - Newly registered self-serve users receive eligibility only through the authenticated registration path.
@@ -77,7 +79,7 @@ W9 run `35160990335` / #144 passed on the same exact head, including isolated PG
 The focused provisioning suite and Quality database checks cover successful provisioning, required validation, ownership enforcement, unauthorized rejection, legacy approval protection, repeated provisioning, concurrent provisioning, failure rollback, existing-workspace recovery, and retired-path protections. The implementation serializes provisioning by locking the authenticated user row and uses transaction rollback semantics for failures.
 
 ## Final diff/scope review
-The final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` on final head `8f97c21498320c34277220f66dea2a1475921e53` is ahead by 26 commits, with no commits behind base. The changed-file set is limited to these eight PH-01.3 files:
+The final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` on final head `889f683f9bf94f7dc91ccb4b23dad74f90706b28` is ahead by 27 commits, with no commits behind base. The changed-file set is limited to these eight PH-01.3 files:
 - `docs/sessions/2026-09-17-ph-01-3-secure-workspace-provisioning.md`
 - `migrations/20260917100000_self_serve_workspace_provisioning.sql`
 - `package.json`
@@ -92,7 +94,7 @@ The final compare against base `46d9f86bf29d92f01f7f396fdd989ad02c41cdc2` on fin
 The reviewed provisioning server path derives identity from `authMiddleware`/`context.userId`. The migration's provisioning function validates inputs, locks the authenticated user row, preserves legacy approval guards, uses `SECURITY DEFINER` with a fixed `search_path`, requires the server provisioner authority, sets only a transaction-local authorization marker, and revokes execute from `public`, `anon`, and `authenticated`, granting execution only to `postgres`.
 
 ## Final state
-- PH-01.3: `DONE / VERIFIED` on final tested head `8f97c21498320c34277220f66dea2a1475921e53`.
+- PH-01.3: `DONE / VERIFIED` on final tested head `889f683f9bf94f7dc91ccb4b23dad74f90706b28`.
 - PH-01.4 through PH-05: `TODO / NOT STARTED`.
 - PR #160: Open / Unmerged / Ready for review at the time this evidence was recorded.
 - No production deployment, signup, migration, data mutation, or Vercel retry was performed.
