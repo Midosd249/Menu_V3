@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { saveCustomerRegistrationPhone } from "@/lib/auth/customer-registration";
+import { saveCustomerRegistrationPhone, validateCustomerRegistrationContract } from "@/lib/auth/customer-registration";
 import { customerRegistrationSchema, GENERIC_REGISTRATION_ERROR } from "@/lib/auth/customer-registration-contract";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
@@ -71,6 +71,16 @@ function Login() {
             throw new Error(lang === "ar" ? "أدخل بريدًا إلكترونيًا صحيحًا." : "Enter a valid email address.");
           }
           throw new Error(lang === "ar" ? "تحقق من بيانات التسجيل." : "Check your registration details.");
+        }
+        let validationResult: Awaited<ReturnType<typeof validateCustomerRegistrationContract>>;
+        try {
+          validationResult = await validateCustomerRegistrationContract({ data: contract.data });
+        } catch {
+          throw new Error(lang === "ar" ? "تحقق من بيانات التسجيل." : "Check your registration details.");
+        }
+        if (!validationResult.ok) {
+          if (validationResult.code === "invalid") throw new Error(lang === "ar" ? "أدخل رقم جوال سعودي صحيح." : "Enter a valid Saudi phone number.");
+          throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
         }
         const result = await authClient.signUp.email({ email, password, name });
         if (result.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
