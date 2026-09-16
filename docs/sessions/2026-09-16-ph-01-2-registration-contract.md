@@ -8,8 +8,8 @@ Scope: registration contract only
 ## Baseline
 
 - `VERIFIED`: base `main` is `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d`.
-- `VERIFIED`: PR #158 remains a separate documentation-only Draft PR and was not modified by this implementation branch.
-- `VERIFIED`: PR #157 remains merged at the same `main` SHA and its approval-lifecycle security hardening is preserved.
+- `VERIFIED`: PR #159 targets `main` and remains separate from the protected merged PR #157.
+- `VERIFIED`: PR #157 remains merged at the base `main` SHA and its approval-lifecycle security hardening is preserved.
 - `VERIFIED`: no workspace provisioning, tenant creation, membership creation, branch creation, subscription/trial changes, pricing, billing, AI, invoice, WhatsApp, menu creation, or production-data changes are part of this task.
 
 ## Registration Contract
@@ -66,23 +66,23 @@ The existing Better Auth email/password flow remains the authentication authorit
 - existing authenticated-user Studio/invite behavior;
 - Arabic RTL / English LTR registration rendering.
 
-## Verification Evidence
+## Final Verification Evidence — Current Exact HEAD
 
-`VERIFIED`: Quality run `35146619386` completed successfully against the exact head `a92b34fba94af6c4821327586005789d31f1cc9d` on branch `feat/ph-01-2-registration-contract`, with PR #159 targeting `main` at `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d`.
+`VERIFIED`: final tested HEAD is `1c3f26fce8473de15c711a71019b4998eebd68ed` on `feat/ph-01-2-registration-contract`, with PR #159 targeting `main` at `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d`.
 
-`VERIFIED`: the Quality job completed successfully. Its `Tests` step (#9) succeeded on the exact head, followed by successful W7.4–W7.10 contract tests, lint, production build, Playwright/Chromium installation, all-theme template QA, customer-lifecycle and Studio browser preparation, Studio/browser QA, Platform Admin browser preparation and browser QA, performance-baseline upload, Studio diagnostics upload, preview cleanup, and final job completion.
+`VERIFIED`: Quality run `35147552010` completed successfully on the exact HEAD. The job passed install/containers, route generation and committed-route-tree verification, typecheck, full tests, W7.4–W7.10 contract tests, lint, production build, Playwright/Chromium installation, all-theme template QA, Customer Lifecycle browser preparation, Studio fixture preparation, Studio browser QA, Platform Admin fixture preparation, Platform Admin browser QA, performance baseline, diagnostics uploads, preview cleanup, and final completion.
 
-`VERIFIED`: `tests/registration-contract.test.mjs` is included in the normal `npm test` command in `package.json`; the Quality workflow's `Tests` step succeeded and the corresponding npm-test diagnostics artifact was uploaded for this exact run.
+`VERIFIED`: the Quality `Tests` step (#9) succeeded on the exact HEAD. `tests/registration-contract.test.mjs` is included in the normal `npm test` path in `package.json`, and the npm-test diagnostics artifact was uploaded by that exact Quality run.
 
-`VERIFIED`: W9 run `35146619381` succeeded against the same exact head. It is supplemental evidence only and was not used as a substitute for Quality.
+`VERIFIED`: W9 run `35147552029` completed successfully on the same exact HEAD. Its Orders browser QA job passed route generation/typecheck, isolated PGLite Orders fixture preparation, Playwright installation, W9 Orders browser QA, diagnostics upload, and final completion.
 
-`EXTERNAL BLOCKED`: the GitHub commit status contains a Vercel `failure` context pointing to `build-rate-limit`. This is separate from the successful Quality and W9 conclusions and is not treated as a PH-01.2 Quality failure.
+`VERIFIED`: browser QA completed successfully for the configured template, Customer Lifecycle, Studio, Platform Admin, responsive design-system, and W9 Orders surfaces in the final current-head workflows.
 
-No production deployment was authorized or performed by this phase. No production account or production data was created or mutated.
+`VERIFIED`: GitHub combined status for the exact HEAD currently reports Vercel `success`. No Vercel retry or redeployment was performed.
 
 ## Final Diff Review
 
-`VERIFIED`: comparison of base `main` `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d` to the verified implementation head `a92b34fba94af6c4821327586005789d31f1cc9d` contains exactly six changed files:
+`VERIFIED`: comparison of base `main` `25f2f1db404bebc79ec7535e5e3eff8ae3d91b0d` to the final tested HEAD `1c3f26fce8473de15c711a71019b4998eebd68ed` is ahead by 19 commits and contains exactly six changed files:
 
 - `docs/sessions/2026-09-16-ph-01-2-registration-contract.md`
 - `package.json`
@@ -91,7 +91,7 @@ No production deployment was authorized or performed by this phase. No productio
 - `src/routes/login.tsx`
 - `tests/registration-contract.test.mjs`
 
-`VERIFIED`: no migrations, tenant/workspace/membership/branch/branch-hours provisioning, subscription/entitlement/trial creation, pricing, billing, AI, invoice, WhatsApp, menu creation, W7/W8/W9, Studio/onboarding handoff, or PR #157 changes are included in the implementation diff.
+`VERIFIED`: the implementation diff contains no migrations, tenant/workspace/membership/branch/branch-hours provisioning, subscription/entitlement/trial creation, pricing, billing, AI, invoice, WhatsApp, menu creation, W7/W8/W9 runtime changes, Studio/onboarding handoff changes, or PR #157 changes.
 
 ## Phase Boundary
 
@@ -103,3 +103,10 @@ No production deployment was authorized or performed by this phase. No productio
 - `PH-01.7`: `TODO` — not started.
 - `PH-01.8`: `TODO` — not started.
 - `PH-02`–`PH-05`: `TODO` — not started.
+
+## Release / Deployment Boundary
+
+- `VERIFIED`: no merge of PR #159 occurred.
+- `VERIFIED`: no Production deployment was authorized or performed by this phase.
+- `VERIFIED`: no Production account or Production data was created or mutated.
+- `VERIFIED`: Vercel status for the tested HEAD is successful; this is not Production deployment evidence.
