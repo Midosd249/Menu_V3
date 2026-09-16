@@ -46,22 +46,35 @@ function mapStatus(row: Record<string, unknown> | undefined, leadId: string): Le
   return { leadId, status, expiresAt, approvedAt, usedAt, tenantId: row.tenant_id ? String(row.tenant_id) : null, tenantSlug: slug, registrationUrl: null, menuUrl: slug ? `/m/${slug}/main?src=onboarding` : null };
 }
 
-export type CustomerAccessStatus = "none" | "pending" | "approved" | "converted" | "rejected";
+export type CustomerAccessStatus = "none" | "pending" | "action_required" | "approved" | "converted" | "rejected";
 
 export const getMyCustomerAccessStatus = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<FnResult<{ status: CustomerAccessStatus }>> => {
     try {
       const sql = await getSql();
+      const activation = await sql<{ activation_status: string }>`
+        select activation_status
+        from leads
+        where account_user_id = ${context.userId}
+        limit 1
+      `;
+      const activationStatus = activation[0]?.activation_status;
+      if (activationStatus === "pending") return { ok: true, data: { status: "pending" } };
+      if (activationStatus === "action_required") return { ok: true, data: { status: "action_required" } };
+      if (activationStatus === "approved") return { ok: true, data: { status: "approved" } };
+      if (activationStatus === "activated") return { ok: true, data: { status: "converted" } };
+      if (activationStatus === "rejected") return { ok: true, data: { status: "rejected" } };
+
       const users = await sql<{ email: string }>`select "email" from "user" where "id" = ${context.userId} limit 1`;
       const email = users[0]?.email?.trim().toLowerCase();
       if (!email) return { ok: true, data: { status: "none" } };
-      const leads = await sql<{ status: string }>`select status from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1`;
+      const leads = await sql<{ id: string; status: string }>`select id, status from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1`;
       const lead = leads[0];
       if (!lead) return { ok: true, data: { status: "none" } };
       if (lead.status === "converted") return { ok: true, data: { status: "converted" } };
       if (lead.status === "lost") return { ok: true, data: { status: "rejected" } };
-      const activeApproval = await sql`select id from lead_onboarding where lead_id = (select id from leads where lower(trim(contact_email)) = ${email} order by updated_at desc, created_at desc limit 1) and approved_at is not null and used_at is null and revoked_at is null and expires_at > now() order by created_at desc limit 1`;
+      const activeApproval = await sql`select id from lead_onboarding where lead_id = ${lead.id} and approved_at is not null and used_at is null and revoked_at is null and expires_at > now() order by created_at desc limit 1`;
       if (activeApproval[0]) return { ok: true, data: { status: "approved" } };
       return { ok: true, data: { status: "pending" } };
     } catch (err) {
@@ -143,8 +156,6 @@ export const activateLeadOnboarding = createServerFn({ method: "POST" })
       const accountEmail = users[0]?.email?.trim().toLowerCase();
       const leadEmail = String(onboarding.contact_email ?? "").trim().toLowerCase();
       if (!accountEmail || !leadEmail || accountEmail !== leadEmail) return { ok: false, code: "forbidden", error: "استخدم الحساب المرتبط بالبريد الإلكتروني في طلب الخدمة" };
-      const existingMember = await sql`select tenant_id from tenant_members where user_id = ${context.userId} and is_active = true limit 1`;
-      if (existingMember[0]) return { ok: false, code: "conflict", error: "هذا الحساب مرتبط بمطعم بالفعل" };
 
       const phone = normalizePhoneDigits(String(onboarding.contact_phone ?? ""), "SA");
       if (phone) {
@@ -153,19 +164,24 @@ export const activateLeadOnboarding = createServerFn({ method: "POST" })
         await sql`update "user" set "phoneNumber" = ${`+${phone}`}, "phoneNumberVerified" = true, "updatedAt" = now() where "id" = ${context.userId}`;
       }
 
+      const existingMember = await sql`select tenant_id from tenant_members where user_id = ${context.userId} and is_active = true limit 1`;
+      if (existingMember[0]) {
+        const existingTenant = await sql<{ slug: string }>`select slug from tenants where id = ${String(existingMember[0].tenant_id)} limit 1`;
+        if (existingTenant[0]) return { ok: true, data: { tenantId: String(existingMember[0].tenant_id), slug: existingTenant[0].slug, menuUrl: `/m/${existingTenant[0].slug}/main?src=onboarding` } };
+      }
+
       const slugBase = slugify(String(onboarding.business_name)) || `restaurant-${Date.now().toString(36)}`;
-      let slug = slugBase;
-      const clash = await sql`select id from tenants where slug = ${slug} limit 1`;
-      if (clash[0]) slug = `${slugBase}-${Math.random().toString(36).slice(2, 6)}`;
+      const slug = `${slugBase}-${String(onboarding.id).slice(-6).toLowerCase()}`.slice(0, 63);
       const tenantId = newId();
       const branchId = newId();
-      await sql`insert into tenants (id, owner_user_id, slug, name_ar, name_en, city, whatsapp, is_published, is_active) values (${tenantId}, ${context.userId}, ${slug}, ${String(onboarding.business_name)}, '', ${String(onboarding.city ?? "")}, ${String(onboarding.contact_phone ?? "")}, false, true)`;
-      await sql`insert into tenant_members (tenant_id, user_id, role) values (${tenantId}, ${context.userId}, 'owner')`;
-      await sql`insert into branches (id, tenant_id, slug, name_ar, name_en, address_ar, is_active) values (${branchId}, ${tenantId}, 'main', 'الفرع الرئيسي', '', '', true)`;
-      for (const day of [0, 1, 2, 3, 4, 5, 6]) await sql`insert into branch_hours (branch_id, weekday, opens_at, closes_at, is_closed) values (${branchId}, ${day}, ${day === 5 ? "13:00" : "07:00"}, '00:00', false)`;
-      await sql`update lead_onboarding set used_at = now(), tenant_id = ${tenantId} where id = ${String(onboarding.id)} and used_at is null and revoked_at is null`;
-      await sql`update leads set status = 'converted', updated_at = now() where id = ${String(onboarding.lead_id)}`;
-      return { ok: true, data: { tenantId, slug, menuUrl: `/m/${slug}/main?src=onboarding` } };
+      const result = await sql<{ tenant_id: string; slug: string }>`
+        select * from menu_v3.activate_legacy_customer_workspace(
+          ${String(onboarding.id)}, ${context.userId}, ${tenantId}, ${branchId}, ${slug}
+        )
+      `;
+      const activated = result[0];
+      if (!activated) return { ok: false, code: "unavailable", error: "تعذر إكمال إنشاء مساحة المطعم" };
+      return { ok: true, data: { tenantId: activated.tenant_id, slug: activated.slug, menuUrl: `/m/${activated.slug}/main?src=onboarding` } };
     } catch (err) {
       console.error("activateLeadOnboarding failed", err);
       return { ok: false, code: "unavailable", error: "تعذر إكمال إنشاء مساحة المطعم" };
