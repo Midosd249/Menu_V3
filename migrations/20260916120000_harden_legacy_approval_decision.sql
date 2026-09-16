@@ -35,7 +35,7 @@ begin
     raise exception using errcode = '23505', message = 'LEGACY_APPROVAL_ALREADY_ACTIVE';
   end if;
 
-  onboarding_id := encode(gen_random_bytes(16), 'hex');
+  onboarding_id := md5(p_lead_id || ':' || p_token_hash || ':' || clock_timestamp()::text);
   insert into menu_v3.lead_onboarding (
     id, lead_id, token_hash, expires_at, approved_at, created_by
   ) values (
