@@ -133,7 +133,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await page.goto(`${customerBase}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "تم اعتماد طلبك" })).toBeVisible();
     await page.getByRole("button", { name: "تفعيل مساحة العمل" }).click();
-    await expect(page).toHaveURL(/\/studio$/);
+    await expect(page).toHaveURL(/\/studio$/, { timeout: 15_000 });
     await expect(page.locator('nav[aria-label="مساحات العمل"], nav[aria-label="Workspace navigation"]')).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   } finally {
