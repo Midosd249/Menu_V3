@@ -1,7 +1,5 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
-import { createAuthMiddleware } from "better-auth/api";
-import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
 import { admin, bearer, genericOAuth, phoneNumber } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
@@ -12,12 +10,7 @@ import { emailAndPasswordEnabled } from "./email-password";
 import { GATE_PROVIDER_ID, gateIdentitySessions } from "./gate-session.server";
 import { GROK_PROVIDERS } from "./providers";
 import { pgliteDialect } from "./pglite-dialect";
-import {
-  GROK_ISSUER_DEFAULT,
-  PREVIEW_ALLOWED_HOSTS,
-  PREVIEW_CLIENT_ID,
-  PREVIEW_CLIENT_SECRET,
-} from "./preview";
+import { GROK_ISSUER_DEFAULT, PREVIEW_ALLOWED_HOSTS, PREVIEW_CLIENT_ID, PREVIEW_CLIENT_SECRET } from "./preview";
 
 void ensureDbReady();
 
@@ -26,132 +19,55 @@ function previewAuthSecret(): string {
   const explicit = process.env.BETTER_AUTH_SECRET?.trim();
   if (explicit) return explicit;
   if (!globalAuthRef.__grokAuthPreviewSecret__) {
-    const stableSource =
-      process.env.SUPABASE_DB_URL?.trim() ??
-      process.env.DATABASE_URL?.trim() ??
-      process.env.POSTGRES_URL?.trim() ??
-      "menu-v3-local-development-secret";
-    globalAuthRef.__grokAuthPreviewSecret__ = createHash("sha256")
-      .update(`menu-v3-auth:${stableSource}`)
-      .digest("hex");
+    const stableSource = process.env.SUPABASE_DB_URL?.trim() ?? process.env.DATABASE_URL?.trim() ?? process.env.POSTGRES_URL?.trim() ?? "menu-v3-local-development-secret";
+    globalAuthRef.__grokAuthPreviewSecret__ = createHash("sha256").update(`menu-v3-auth:${stableSource}`).digest("hex");
   }
   return globalAuthRef.__grokAuthPreviewSecret__;
 }
-const env = (key: string): string | undefined => {
-  const value = process.env[key]?.trim();
-  return value ? value : undefined;
-};
-
-const authDisabled = env("VITE_AUTH_ENABLED") === "false";
+const env = (key: string): string | undefined => { const value = process.env[key]?.trim(); return value ? value : undefined; };
 const runningOnVercel = Boolean(env("VERCEL"));
 const grokIssuer = env("GROK_AUTH_ISSUER") ?? GROK_ISSUER_DEFAULT;
 const explicitGrokClientId = env("GROK_AUTH_CLIENT_ID");
 const explicitGrokClientSecret = env("GROK_AUTH_CLIENT_SECRET");
 const googleClientId = env("GOOGLE_CLIENT_ID");
 const googleClientSecret = env("GOOGLE_CLIENT_SECRET");
-
+const authDisabled = env("VITE_AUTH_ENABLED") === "false";
 const grokClientId = runningOnVercel ? undefined : explicitGrokClientId ?? PREVIEW_CLIENT_ID;
 const grokClientSecret = runningOnVercel ? undefined : explicitGrokClientSecret ?? PREVIEW_CLIENT_SECRET;
-const authConfigured = !authDisabled &&
-  (runningOnVercel ? Boolean(googleClientId && googleClientSecret) : Boolean(grokClientId && grokClientSecret));
-export const authConfigurationError =
-  !authDisabled && runningOnVercel && !authConfigured
-    ? "Google sign-in is not configured for this Vercel deployment."
-    : null;
+const authConfigured = !authDisabled && (runningOnVercel ? Boolean(googleClientId && googleClientSecret) : Boolean(grokClientId && grokClientSecret));
+export const authConfigurationError = !authDisabled && runningOnVercel && !authConfigured ? "Google sign-in is not configured for this Vercel deployment." : null;
 
 const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
 const LOCAL_DEV_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080", "http://[::1]:8080"];
-const VERCEL_ORIGINS = [
-  "https://menu-v3-kohl.vercel.app",
-  "https://menu-v3-midosd2s-projects.vercel.app",
-  "https://menu-v3-git-main-midosd2s-projects.vercel.app",
-  "https://menu-v3-*.vercel.app",
-];
-const baseURL = explicitBaseURL ?? {
-  allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]", "menu-v3-*.vercel.app"],
-  protocol: "auto" as const,
-  fallback: "https://menu-v3-kohl.vercel.app",
-};
-const trustedOrigins = explicitBaseURL
-  ? [explicitBaseURL, ...VERCEL_ORIGINS, ...LOCAL_DEV_ORIGINS]
-  : [
-      ...previewAllowedHosts,
-      ...previewAllowedHosts.flatMap((host) => [`https://${host}`, `http://${host}`]),
-      ...VERCEL_ORIGINS,
-      ...LOCAL_DEV_ORIGINS,
-    ];
+const VERCEL_ORIGINS = ["https://menu-v3-kohl.vercel.app", "https://menu-v3-midosd2s-projects.vercel.app", "https://menu-v3-git-main-midosd2s-projects.vercel.app", "https://menu-v3-*.vercel.app"];
+const baseURL = explicitBaseURL ?? { allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]", "menu-v3-*.vercel.app"], protocol: "auto" as const, fallback: "https://menu-v3-kohl.vercel.app" };
+const trustedOrigins = explicitBaseURL ? [explicitBaseURL, ...VERCEL_ORIGINS, ...LOCAL_DEV_ORIGINS] : [...previewAllowedHosts, ...previewAllowedHosts.flatMap((host) => [`https://${host}`, `http://${host}`]), ...VERCEL_ORIGINS, ...LOCAL_DEV_ORIGINS];
 
-const databaseUrl =
-  env("DATABASE_URL") ??
-  env("POSTGRES_URL") ??
-  env("POSTGRES_PRISMA_URL") ??
-  env("SUPABASE_DB_URL") ??
-  env("POSTGRES_URL_NON_POOLING");
-const database = databaseUrl
-  ? new Pool({
-      connectionString: databaseUrl,
-      options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      max: 2,
-      idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 5000,
-      keepAlive: true,
-    })
-  : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
+const databaseUrl = env("DATABASE_URL") ?? env("POSTGRES_URL") ?? env("POSTGRES_PRISMA_URL") ?? env("SUPABASE_DB_URL") ?? env("POSTGRES_URL_NON_POOLING");
+const database = databaseUrl ? new Pool({ connectionString: databaseUrl, options: `-c search_path=${POSTGRES_SCHEMA},public`, max: 2, idleTimeoutMillis: 10000, connectionTimeoutMillis: 5000, keepAlive: true }) : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
-const grokOAuthPlugin = authConfigured
-  ? genericOAuth({
-      config: GROK_PROVIDERS.map(({ providerId, idp }) =>
-        runningOnVercel
-          ? {
-              providerId,
-              clientId: googleClientId as string,
-              clientSecret: googleClientSecret as string,
-              authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth",
-              tokenUrl: "https://oauth2.googleapis.com/token",
-              userInfoUrl: "https://openidconnect.googleapis.com/v1/userinfo",
-              scopes: ["openid", "profile", "email"],
-            }
-          : {
-              providerId,
-              clientId: grokClientId as string,
-              clientSecret: grokClientSecret as string,
-              authorizationUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/authorize`,
-              tokenUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/token`,
-              userInfoUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/userinfo`,
-              scopes: ["openid", "profile", "email"],
-              authorizationUrlParams: { idp, prompt: "login" },
-            },
-      ),
-    })
-  : null;
+const grokOAuthPlugin = authConfigured ? genericOAuth({
+  config: GROK_PROVIDERS.map(({ providerId, idp }) => runningOnVercel
+    ? { providerId, clientId: googleClientId as string, clientSecret: googleClientSecret as string, authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth", tokenUrl: "https://oauth2.googleapis.com/token", userInfoUrl: "https://openidconnect.googleapis.com/v1/userinfo", scopes: ["openid", "profile", "email"] }
+    : { providerId, clientId: grokClientId as string, clientSecret: grokClientSecret as string, authorizationUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/authorize`, tokenUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/token`, userInfoUrl: `${grokIssuer.replace(/\/+$/, "")}/api/auth/oauth2/userinfo`, scopes: ["openid", "profile", "email"], authorizationUrlParams: { idp, prompt: "login" } }),
+}) : null;
 
-async function verifyLegacyOrNativePassword({
-  hash,
-  password,
-}: {
-  hash: string;
-  password: string;
-}): Promise<boolean> {
+async function verifyLegacyOrNativePassword({ hash, password }: { hash: string; password: string }): Promise<boolean> {
   if (/^\$2[aby]?\$\d{2}\$/.test(hash)) {
     if (!(database instanceof Pool)) return false;
     try {
-      const result = await database.query<{ valid: boolean }>(
-        "select extensions.crypt($1, $2) = $2 as valid",
-        [password, hash],
-      );
+      const result = await database.query<{ valid: boolean }>("select extensions.crypt($1, $2) = $2 as valid", [password, hash]);
       return result.rows[0]?.valid === true;
     } catch (error) {
       console.error("[auth] legacy bcrypt verification failed", error);
       return false;
     }
   }
-
   try {
+    const { verifyPassword: verifyScryptPassword } = await import("better-auth/crypto");
     return await verifyScryptPassword({ hash, password });
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
 export const SESSION_TOKEN_COOKIE = "__Host-grok-auth.session_token";
@@ -161,74 +77,19 @@ export const auth = betterAuth({
   secret: previewAuthSecret(),
   database,
   trustedOrigins,
-  account: {
-    encryptOAuthTokens: true,
-    accountLinking: {
-      enabled: true,
-      trustedProviders: [...GROK_PROVIDERS.map((p) => p.providerId), GATE_PROVIDER_ID],
-      requireLocalEmailVerified: false,
-    },
-  },
+  account: { encryptOAuthTokens: true, accountLinking: { enabled: true, trustedProviders: [...GROK_PROVIDERS.map((p) => p.providerId), GATE_PROVIDER_ID], requireLocalEmailVerified: false } },
   session: { cookieCache: { enabled: true, maxAge: 300 } },
-  ...(emailAndPasswordEnabled
-    ? {
-        emailAndPassword: {
-          enabled: true,
-          password: {
-            hash: async (password: string) => {
-              const { hashPassword } = await import("better-auth/crypto");
-              return hashPassword(password);
-            },
-            verify: verifyLegacyOrNativePassword,
-          },
-        },
-      }
-    : {}),
-  hooks: {
-    after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path !== "/sign-up/email") return;
-      const userId = ctx.context.newSession?.user.id;
-      if (!userId) return;
-      try {
-        const sql = await getSql();
-        await sql`
-          insert into self_serve_registration_grants (user_id)
-          values (${userId})
-          on conflict (user_id) do update set created_at = now(), used_at = null
-        `;
-      } catch (error) {
-        console.error("[auth] failed to grant self-serve registration access", error);
-        throw error;
-      }
-    }),
-  },
-  advanced: {
-    useSecureCookies: false,
-    trustedProxyHeaders: true,
-    defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
-    cookies: {
-      session_token: { name: SESSION_TOKEN_COOKIE },
-      session_data: { name: "__Host-grok-auth.session_data" },
-      account_data: { name: "__Host-grok-auth.account_data" },
-      dont_remember: { name: "__Host-grok-auth.dont_remember" },
-    },
-  },
+  ...(emailAndPasswordEnabled ? { emailAndPassword: { enabled: true, password: { hash: async (password: string) => { const { hashPassword } = await import("better-auth/crypto"); return hashPassword(password); }, verify: verifyLegacyOrNativePassword } } } : {}),
+  advanced: { useSecureCookies: false, trustedProxyHeaders: true, defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" }, cookies: { session_token: { name: SESSION_TOKEN_COOKIE }, session_data: { name: "__Host-grok-auth.session_data" }, account_data: { name: "__Host-grok-auth.account_data" }, dont_remember: { name: "__Host-grok-auth.dont_remember" } } },
   plugins: [
     gateIdentitySessions(),
     admin(),
-    phoneNumber({
-      // Phone login uses the platform-approved service-request number.
-      // SMS OTP is intentionally not claimed until an SMS provider is configured.
-      sendOTP: async () => undefined,
-      requireVerification: true,
-    }),
+    phoneNumber({ sendOTP: async () => undefined, requireVerification: true }),
     ...(grokOAuthPlugin ? [grokOAuthPlugin] : []),
     bearer(),
     tanstackStartCookies(),
   ],
 });
 
-export function readSessionToken(): string | null {
-  return getCookie(SESSION_TOKEN_COOKIE) ?? null;
-}
+export function readSessionToken(): string | null { return getCookie(SESSION_TOKEN_COOKIE) ?? null; }
 export { GROK_PROVIDERS } from "./providers";
