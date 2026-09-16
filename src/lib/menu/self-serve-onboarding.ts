@@ -31,7 +31,23 @@ export const createSelfServeWorkspace = createServerFn({ method: "POST" })
         return { ok: false, code: "unavailable", error: "تعذر تحميل مساحة العمل الحالية" };
       }
 
-      const grant = await sql`select user_id from self_serve_registration_grants where user_id = ${context.userId} and used_at is not null limit 1`;
+      const account = await sql<{ phone: string | null }>`
+        select "phoneNumber" as phone
+        from "user"
+        where "id" = ${context.userId}
+        limit 1
+      `;
+      const phone = account[0]?.phone?.trim() ?? "";
+      if (!/^\+9665\d{8}$/.test(phone)) {
+        return { ok: false, code: "invalid", error: "أكمل رقم الجوال السعودي قبل إنشاء البراند" };
+      }
+
+      const grant = await sql`
+        select user_id
+        from self_serve_registration_grants
+        where user_id = ${context.userId} and used_at is null
+        limit 1
+      `;
       if (!grant[0]) return { ok: false, code: "forbidden", error: "يجب إكمال التسجيل قبل إنشاء البراند" };
 
       let slug = slugify(data.nameEn || data.nameAr) || `brand-${Date.now().toString(36)}`;
@@ -41,28 +57,12 @@ export const createSelfServeWorkspace = createServerFn({ method: "POST" })
       const tenantId = newId();
       const branchId = newId();
       await sql`
-        insert into tenants (
-          id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type,
-          is_published, is_active
-        ) values (
-          ${tenantId}, ${context.userId}, ${slug}, ${data.nameAr}, ${data.nameEn ?? ""},
-          ${data.descriptionAr ?? ""}, ${data.businessType}, false, true
+        select menu_v3.create_self_serve_workspace(
+          ${context.userId}, ${tenantId}, ${branchId}, ${slug},
+          ${data.nameAr}, ${data.nameEn ?? ""}, ${data.descriptionAr ?? ""}, ${data.businessType}
         )
       `;
-      await sql`
-        insert into tenant_members (tenant_id, user_id, role)
-        values (${tenantId}, ${context.userId}, 'owner')
-      `;
-      await sql`
-        insert into branches (id, tenant_id, slug, name_ar, name_en, address_ar, is_active)
-        values (${branchId}, ${tenantId}, 'main', 'الفرع الرئيسي', 'Main branch', '', true)
-      `;
-      for (const weekday of [0, 1, 2, 3, 4, 5, 6]) {
-        await sql`
-          insert into branch_hours (branch_id, weekday, opens_at, closes_at, is_closed)
-          values (${branchId}, ${weekday}, ${weekday === 5 ? "13:00" : "07:00"}, '00:00', false)
-        `;
-      }
+
       const studio = await getMyStudio();
       if (!studio.ok) return studio;
       if (!("tenant" in studio.data) || !studio.data.tenant) {
