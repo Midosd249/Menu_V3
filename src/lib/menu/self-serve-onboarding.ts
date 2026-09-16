@@ -68,7 +68,7 @@ export const createSelfServeWorkspace = createServerFn({ method: "POST" })
       if (!("tenant" in studio.data) || !studio.data.tenant) {
         return { ok: false, code: "unavailable", error: "تم إنشاء البراند لكن تعذر تحميل الاستوديو" };
       }
-      return studio;
+      return { ok: true, data: studio.data as StudioSnapshot };
     } catch (err) {
       console.error("createSelfServeWorkspace failed", err);
       return { ok: false, code: "unavailable", error: "تعذر إنشاء البراند ومساحة العمل" };
