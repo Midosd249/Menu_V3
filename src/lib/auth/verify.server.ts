@@ -22,7 +22,7 @@ if (databaseConfigured && !authConfigured) {
   );
 }
 
-export const DEV_USER_ID = "dev-user";
+export const DEV_USER_ID = process.env.MENU_V3_DEV_USER_ID?.trim() || "dev-user";
 
 export class UnauthorizedError extends Error {
   readonly status = 401;
