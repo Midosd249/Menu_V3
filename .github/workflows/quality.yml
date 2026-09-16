@@ -115,7 +115,8 @@ jobs:
           exit 1
       - name: Prepare Customer Lifecycle browser database
         env:
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+          ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+          CUSTOMER_LIFECYCLE_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci
         run: |
           node --input-type=module <<'NODE'
           import { readFile } from "node:fs/promises";
@@ -137,8 +138,17 @@ jobs:
             "20260916130000_fix_activation_function_edge_cases.sql",
             "20260916140000_make_activation_retries_strictly_idempotent.sql",
           ];
+          const adminPool = new pg.Pool({ connectionString: process.env.ADMIN_DATABASE_URL, max: 1 });
+          const adminClient = await adminPool.connect();
+          try {
+            await adminClient.query("create database menu_v3_customer_ci").catch((error) => { if (error.code !== "42P04") throw error; });
+          } finally {
+            adminClient.release();
+            await adminPool.end();
+          }
+
           const pool = new pg.Pool({
-            connectionString: process.env.DATABASE_URL,
+            connectionString: process.env.CUSTOMER_LIFECYCLE_DATABASE_URL,
             options: "-c search_path=menu_v3,public",
             max: 1,
           });
