@@ -109,14 +109,15 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   const fixturePath = "migrations/99999999_w7_3_customer_activation_browser_fixture.sql";
   await writeFile(
     fixturePath,
-    `create table if not exists member_branch_access (\n  tenant_id text not null,\n  user_id text not null,\n  branch_id text not null,\n  created_at timestamptz not null default now(),\n  primary key (user_id, branch_id),\n  foreign key (tenant_id) references tenants(id) on delete cascade,\n  foreign key (branch_id) references branches(id) on delete cascade\n);\n\ncreate index if not exists member_branch_access_tenant_user_idx\n  on member_branch_access (tenant_id, user_id);\n\ncreate index if not exists member_branch_access_branch_idx\n  on member_branch_access (branch_id, user_id);\n\ndelete from member_branch_access where user_id = 'dev-user';\ndelete from tenant_members where user_id = 'dev-user';\n`,
+    `create table if not exists member_branch_access (\n  tenant_id text not null,\n  user_id text not null,\n  branch_id text not null,\n  created_at timestamptz not null default now(),\n  primary key (user_id, branch_id),\n  foreign key (tenant_id) references tenants(id) on delete cascade,\n  foreign key (branch_id) references branches(id) on delete cascade\n);\n\ncreate index if not exists member_branch_access_tenant_user_idx\n  on member_branch_access (tenant_id, user_id);\n\ncreate index if not exists member_branch_access_branch_idx\n  on member_branch_access (branch_id, user_id);\n\ninsert into "user" ("id", "name", "email", "emailVerified")\nvalues ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true)\non conflict ("id") do update set "name" = excluded."name", "email" = excluded."email", "emailVerified" = excluded."emailVerified";\n`,
   );
 
   const child = spawn("node", ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port], {
     env: {
       ...process.env,
       VITE_AUTH_ENABLED: "false",
-      PLATFORM_ADMIN_USER_IDS: "dev-user",
+      MENU_V3_DEV_USER_ID: "customer-lifecycle-user",
+      PLATFORM_ADMIN_USER_IDS: "customer-lifecycle-user",
       DATABASE_URL: "",
       SUPABASE_DB_URL: "",
       POSTGRES_URL: "",
@@ -143,7 +144,8 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     if (!started) throw new Error("Customer onboarding browser fixture did not start");
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
+    await page.goto(`http://127.0.0.1:${port}/studio`, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(/\/onboarding$/);
     await expect(page.getByRole("heading", { name: "أرسل طلب التفعيل" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
