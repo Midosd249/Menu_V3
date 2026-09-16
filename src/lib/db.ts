@@ -15,8 +15,6 @@ const databaseUrlCandidates =
 const databaseUrl = databaseUrlCandidates.find((value) => Boolean(value?.trim()))?.trim();
 export const dbSource: DbSource = databaseUrl ? "postgres" : "pglite";
 
-// Keep Menu V3 completely isolated from the older public-schema Menu V2 data.
-// PostgreSQL resolves all unqualified application tables against this schema.
 export const POSTGRES_SCHEMA = "menu_v3";
 
 export interface Sql {
@@ -42,11 +40,6 @@ const OID_INTERVAL = 1186;
 const identity = (v: string) => v;
 type Run = <T>(text: string, params: unknown[]) => Promise<T[]>;
 
-/**
- * Production-only migrations qualify tables/functions in the menu_v3 schema.
- * PGlite intentionally keeps its compatible fallback database in public, so
- * those migrations must be recorded as skipped instead of executed there.
- */
 export function isPgliteIncompatibleMigration(sql: string): boolean {
   return /\bmenu_v3\./i.test(sql);
 }
@@ -74,8 +67,6 @@ function createPostgresSql(): Promise<Sql> {
     const pool = new Pool({
       connectionString: databaseUrl,
       options: `-c search_path=${POSTGRES_SCHEMA},public`,
-      // Supavisor is already a connection pool. Keep the per-instance pool
-      // small so Vercel scale-out cannot exhaust the database connection budget.
       max: 2,
       idleTimeoutMillis: 10000,
       connectionTimeoutMillis: 5000,
@@ -139,6 +130,36 @@ async function createPgliteSql(): Promise<Sql> {
     .then(migrate);
   globalRef.__pgliteMigrateChain__ = pass;
   await pass;
+
+  const isCustomerLifecycleBrowserFixture =
+    typeof process !== "undefined" &&
+    process.env.VITE_AUTH_ENABLED === "false" &&
+    process.env.MENU_V3_DEV_USER_ID === "customer-lifecycle-user" &&
+    !databaseUrl;
+
+  if (isCustomerLifecycleBrowserFixture) {
+    await pg.exec(`
+      create table if not exists member_branch_access (
+        tenant_id text not null,
+        user_id text not null,
+        branch_id text not null,
+        created_at timestamptz not null default now(),
+        primary key (user_id, branch_id),
+        foreign key (tenant_id) references tenants(id) on delete cascade,
+        foreign key (branch_id) references branches(id) on delete cascade
+      );
+      create index if not exists member_branch_access_tenant_user_idx on member_branch_access (tenant_id, user_id);
+      create index if not exists member_branch_access_branch_idx on member_branch_access (branch_id, user_id);
+      insert into "user" ("id", "name", "email", "emailVerified", "phoneNumber", "phoneNumberVerified")
+      values ('customer-lifecycle-user', 'Customer Lifecycle Test', 'customer-lifecycle@example.test', true, '+966500000001', true)
+      on conflict ("id") do update set
+        "name" = excluded."name",
+        "email" = excluded."email",
+        "emailVerified" = excluded."emailVerified",
+        "phoneNumber" = excluded."phoneNumber",
+        "phoneNumberVerified" = excluded."phoneNumberVerified";
+    `);
+  }
 
   return toSql(async <T>(text: string, params: unknown[]) => {
     const result = await pg.query<T>(text, params);
