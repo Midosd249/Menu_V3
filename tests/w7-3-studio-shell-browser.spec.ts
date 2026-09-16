@@ -66,7 +66,7 @@ test("W7.3 Studio shell browser QA", async ({ page }) => {
   await expect(page.locator(":focus")).toHaveCount(1);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${BASE_URL}/studio`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
   const mobileNav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(mobileNav).toBeVisible();
   await expect(mobileNav.locator("button")).toHaveCount(5);
@@ -143,7 +143,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     if (!started) throw new Error("Customer onboarding browser fixture did not start");
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "أرسل طلب التفعيل" })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
@@ -159,30 +159,30 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
     await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
 
-    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Customer Activation Requests" })).toBeVisible();
     await expect(page.getByText(brand)).toBeVisible();
     await page.getByRole("button", { name: "Request changes" }).click();
 
-    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Action required" })).toBeVisible();
     await page.getByRole("button", { name: "Resubmit activation request" }).click();
     await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
 
-    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByText(brand)).toBeVisible();
     await page.getByRole("button", { name: "Reject" }).click();
 
-    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "The request was not approved" })).toBeVisible();
     await page.getByRole("button", { name: "Resubmit activation request" }).click();
     await expect(page.getByRole("heading", { name: "Your request is under review" })).toBeVisible();
 
-    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/admin/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByText(brand)).toBeVisible();
     await page.getByRole("button", { name: "Approve request" }).click();
 
-    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
+    await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Your request is approved" })).toBeVisible();
     await page.getByRole("button", { name: "Activate workspace" }).click();
     await expect(page).toHaveURL(/\/studio$/);
