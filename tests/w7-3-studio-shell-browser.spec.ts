@@ -91,7 +91,7 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   test.setTimeout(180_000);
   const customerPort = "8084";
   const adminPort = "8085";
-  const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? "";
+  const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? (process.env.CI === "true" ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci" : "");
   if (!databaseUrl) throw new Error("CUSTOMER_LIFECYCLE_DATABASE_URL is required for shared customer/admin browser QA");
 
   const spawnBrowserServer = (port: string, userId: string) => spawn(
