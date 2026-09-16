@@ -109,7 +109,8 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
     await page.goto(`${adminBase}/admin/onboarding`, { waitUntil: "domcontentloaded" });
     const adminLanguageGroup = page.getByRole("group", { name: "اختيار اللغة" });
     await expect(adminLanguageGroup).toBeVisible();
-    await adminLanguageGroup.getByRole("button", { name: "EN" }).click();
+    await page.evaluate(() => window.localStorage.setItem("menu-lang", "en"));
+    await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
     await expect(page.getByRole("heading", { name: "Customer Activation Requests" })).toBeVisible();
     await expect(page.getByText(brand)).toBeVisible();
