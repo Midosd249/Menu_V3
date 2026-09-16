@@ -22,8 +22,8 @@ function isolateMigration(sql, schema) {
 async function createFixture(pool, schema) {
   await pool.query(`create schema ${schema}`);
   await pool.query(`
-    create role anon;
-    create role authenticated;
+    do $$ begin if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon; end if; end $$;
+    do $$ begin if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated; end if; end $$;
     create table ${schema}."user" (
       "id" text primary key,
       "name" text not null,
@@ -181,8 +181,6 @@ test("PH-01.3 isolated PostgreSQL concurrency creates exactly one workspace", { 
     assert.equal(repeated.rows.length, 1, "repeated provisioning should return the existing workspace");
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
-    await pool.query("drop role if exists anon");
-    await pool.query("drop role if exists authenticated");
     await pool.end();
   }
 });
@@ -208,8 +206,6 @@ test("PH-01.3 unauthorized direct tenant inserts remain approval-guarded", { ski
     );
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
-    await pool.query("drop role if exists anon");
-    await pool.query("drop role if exists authenticated");
     await pool.end();
   }
 });
