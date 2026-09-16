@@ -10,6 +10,17 @@ create index if not exists leads_activation_tenant_idx
   on menu_v3.leads (activation_tenant_id)
   where activation_tenant_id is not null;
 
+-- Customer activation persists the approved business type on the workspace.
+alter table menu_v3.tenants
+  add column if not exists business_type text not null default 'restaurant';
+
+alter table menu_v3.tenants
+  drop constraint if exists tenants_business_type_ck;
+
+alter table menu_v3.tenants
+  add constraint tenants_business_type_ck
+  check (business_type in ('restaurant', 'cafe', 'bakery', 'dessert', 'food_truck', 'other'));
+
 create or replace function menu_v3.activate_customer_workspace(
   p_request_id text,
   p_user_id text,
