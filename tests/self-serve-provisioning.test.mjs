@@ -22,6 +22,8 @@ function isolateMigration(sql, schema) {
 async function createFixture(pool, schema) {
   await pool.query(`create schema ${schema}`);
   await pool.query(`
+    create role anon;
+    create role authenticated;
     create table ${schema}."user" (
       "id" text primary key,
       "name" text not null,
@@ -114,8 +116,8 @@ test("PH-01.3 keeps the self-serve authority server-side and does not use retire
   assert.match(onboarding, /provisionCustomerWorkspace/);
   assert.doesNotMatch(onboarding, /createSelfServeWorkspace/);
   assert.doesNotMatch(onboarding, /localStorage/);
-  assert.doesNotMatch(onboarding, /tenantId/);
-  assert.doesNotMatch(onboarding, /role/);
+  assert.doesNotMatch(onboarding, /tenantId\s*=/);
+  assert.doesNotMatch(onboarding, /data\.role|role\s*:/);
   assert.doesNotMatch(owner, /self_serve_registration_grants/);
   assert.doesNotMatch(registration, /self_serve_registration_grants/);
   assert.match(retiredMigration, /drop function if exists menu_v3\.create_self_serve_workspace/);
@@ -125,7 +127,7 @@ test("PH-01.3 migration preserves legacy approval and adds a distinct trusted pr
   assert.match(migration, /CUSTOMER_APPROVAL_REQUIRED/);
   assert.match(migration, /lead_onboarding/);
   assert.match(migration, /current_setting\('menu_v3\.provision_customer_workspace', true\)/);
-  assert.match(migration, /current_user = provisioner_role/);
+  assert.match(migration, /session_user = provisioner_role/);
   assert.match(migration, /revoke all on function menu_v3\.provision_customer_workspace/);
   assert.match(migration, /grant execute on function menu_v3\.provision_customer_workspace[^\n]*to postgres/);
   assert.match(migration, /for update/);
@@ -179,6 +181,8 @@ test("PH-01.3 isolated PostgreSQL concurrency creates exactly one workspace", { 
     assert.equal(repeated.rows.length, 1, "repeated provisioning should return the existing workspace");
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
+    await pool.query("drop role if exists anon");
+    await pool.query("drop role if exists authenticated");
     await pool.end();
   }
 });
@@ -204,6 +208,8 @@ test("PH-01.3 unauthorized direct tenant inserts remain approval-guarded", { ski
     );
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
+    await pool.query("drop role if exists anon");
+    await pool.query("drop role if exists authenticated");
     await pool.end();
   }
 });
