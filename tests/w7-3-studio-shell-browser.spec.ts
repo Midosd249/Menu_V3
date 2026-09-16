@@ -45,25 +45,30 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? (process.env.CI === "true" ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci" : "");
   if (!databaseUrl) throw new Error("CUSTOMER_LIFECYCLE_DATABASE_URL is required for shared customer/admin browser QA");
 
-  const spawnBrowserServer = (port: string, userId: string) => spawn(
-    "node",
-    ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port],
-    {
-      env: {
-        ...process.env,
-        VITE_AUTH_ENABLED: "false",
-        MENU_V3_DEV_USER_ID: userId,
-        MENU_V3_AUTH_DISABLED_TEST_DATABASE: "true",
-        PLATFORM_ADMIN_USER_IDS: "dev-user",
-        DATABASE_URL: databaseUrl,
-        SUPABASE_DB_URL: "",
-        POSTGRES_URL: "",
-        POSTGRES_PRISMA_URL: "",
-        POSTGRES_URL_NON_POOLING: "",
+  const spawnBrowserServer = (port: string, userId: string) => {
+    const child = spawn(
+      "node",
+      ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port],
+      {
+        env: {
+          ...process.env,
+          VITE_AUTH_ENABLED: "false",
+          MENU_V3_DEV_USER_ID: userId,
+          MENU_V3_AUTH_DISABLED_TEST_DATABASE: "true",
+          PLATFORM_ADMIN_USER_IDS: "dev-user",
+          DATABASE_URL: databaseUrl,
+          SUPABASE_DB_URL: "",
+          POSTGRES_URL: "",
+          POSTGRES_PRISMA_URL: "",
+          POSTGRES_URL_NON_POOLING: "",
+        },
+        stdio: ["ignore", "pipe", "pipe"],
       },
-      stdio: ["ignore", createWriteStream(`.grok/customer-lifecycle-${port}.log`), createWriteStream(`.grok/customer-lifecycle-${port}.error.log`)],
-    },
-  );
+    );
+    child.stdout?.pipe(createWriteStream(`.grok/customer-lifecycle-${port}.log`));
+    child.stderr?.pipe(createWriteStream(`.grok/customer-lifecycle-${port}.error.log`));
+    return child;
+  };
 
   const customerServer = spawnBrowserServer(customerPort, "customer-lifecycle-user");
   const adminServer = spawnBrowserServer(adminPort, "dev-user");
