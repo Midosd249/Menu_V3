@@ -156,32 +156,16 @@ test("PH-01.3 isolated PostgreSQL concurrency creates exactly one workspace", { 
   const email = `${userId}@example.test`;
   try {
     await createFixture(pool, schema);
-    await pool.query(
-      `insert into ${schema}."user" ("id", "name", "email", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,$4,false)`,
-      [userId, "PH-01.3 Test", email, "+966512345678"],
-    );
-
-    const run = (name) => pool.query(
-      `select * from ${schema}.provision_customer_workspace($1,$2,$3,$4,$5,$6)`,
-      [userId, "ph-013-test", name, "", "", "restaurant"],
-    );
+    await pool.query(`insert into ${schema}."user" ("id", "name", "email", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,$4,false)`, [userId, "PH-01.3 Test", email, "+966512345678"]);
+    const run = (name) => pool.query(`select * from ${schema}.provision_customer_workspace($1,$2,$3,$4,$5,$6)`, [userId, "ph-013-test", name, "", "", "restaurant"]);
     const results = await Promise.allSettled([run("Concurrent One"), run("Concurrent Two")]);
     assert.equal(results.filter((result) => result.status === "fulfilled").length, 2, "concurrent retries must converge on one existing workspace");
-
-    const counts = await pool.query(`
-      select
-        (select count(*) from ${schema}.tenants where owner_user_id = $1) as tenants,
-        (select count(*) from ${schema}.tenant_members where user_id = $1 and is_active = true) as members,
-        (select count(*) from ${schema}.branches where tenant_id = (select id from ${schema}.tenants where owner_user_id = $1)) as branches,
-        (select count(*) from ${schema}.branch_hours where branch_id = (select id from ${schema}.branches where tenant_id = (select id from ${schema}.tenants where owner_user_id = $1) order by created_at limit 1)) as hours
-    `, [userId]);
+    const counts = await pool.query(`select (select count(*) from ${schema}.tenants where owner_user_id = $1) as tenants, (select count(*) from ${schema}.tenant_members where user_id = $1 and is_active = true) as members, (select count(*) from ${schema}.branches where tenant_id = (select id from ${schema}.tenants where owner_user_id = $1)) as branches, (select count(*) from ${schema}.branch_hours where branch_id = (select id from ${schema}.branches where tenant_id = (select id from ${schema}.tenants where owner_user_id = $1) order by created_at limit 1)) as hours`, [userId]);
     assert.deepEqual(counts.rows[0], { tenants: "1", members: "1", branches: "1", hours: "7" });
-
     const repeated = await run("Third Attempt");
     assert.equal(repeated.rows.length, 1, "repeated provisioning should return the existing workspace");
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
-    await pool.end();
   }
 });
 
@@ -193,19 +177,9 @@ test("PH-01.3 unauthorized direct tenant inserts remain approval-guarded", { ski
   const email = `${userId}@example.test`;
   try {
     await createFixture(pool, schema);
-    await pool.query(
-      `insert into ${schema}."user" ("id", "name", "email", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,$4,false)`,
-      [userId, "Unauthorized Test", email, "+966512345679"],
-    );
-    await assert.rejects(
-      pool.query(
-        `insert into ${schema}.tenants (id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type, is_published, is_active) values ($1,$2,$3,$4,'','','restaurant',false,true)`,
-        [randomUUID(), userId, `unauth-${randomUUID().slice(0, 8)}`, "Unauthorized"],
-      ),
-      /CUSTOMER_APPROVAL_REQUIRED/,
-    );
+    await pool.query(`insert into ${schema}."user" ("id", "name", "email", "phoneNumber", "phoneNumberVerified") values ($1,$2,$3,$4,false)`, [userId, "Unauthorized Test", email, "+966512345679"]);
+    await assert.rejects(pool.query(`insert into ${schema}.tenants (id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type, is_published, is_active) values ($1,$2,$3,$4,'','','restaurant',false,true)`, [randomUUID(), userId, `unauth-${randomUUID().slice(0, 8)}`, "Unauthorized"]), /CUSTOMER_APPROVAL_REQUIRED/);
   } finally {
     await pool.query(`drop schema if exists ${schema} cascade`);
-    await pool.end();
   }
 });
