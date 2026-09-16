@@ -4,6 +4,10 @@
 -- existing approval guard.
 set search_path to menu_v3, public;
 
+alter table menu_v3."user"
+  add column if not exists "selfServeEligibleAt" timestamptz;
+create index if not exists "user_selfServeEligibleAt_idx" on menu_v3."user" ("selfServeEligibleAt");
+
 create or replace function menu_v3.enforce_customer_approval_before_tenant_insert()
 returns trigger
 language plpgsql
