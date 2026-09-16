@@ -1,0 +1,76 @@
+-- Persist the activation result on the request itself so a concurrent retry can
+-- return the same workspace even when the retry's transaction snapshot predates
+-- the first transaction's membership insert.
+set search_path to menu_v3, public;
+
+alter table menu_v3.leads
+  add column if not exists activation_tenant_id text;
+
+create index if not exists leads_activation_tenant_idx
+  on menu_v3.leads (activation_tenant_id)
+  where activation_tenant_id is not null;
+
+create or replace function menu_v3.activate_customer_workspace(
+  p_request_id text,
+  p_user_id text,
+  p_tenant_id text,
+  p_branch_id text,
+  p_slug text
+)
+returns table (tenant_id text, slug text)
+language plpgsql
+security definer
+set search_path = menu_v3, pg_temp
+as $$
+declare
+  request_row menu_v3.leads%rowtype;
+  existing_member record;
+  existing_tenant_slug text;
+begin
+  select * into request_row from menu_v3.leads where id = p_request_id for update;
+  if request_row.id is null then raise exception using errcode = 'P0002', message = 'ACTIVATION_REQUEST_NOT_FOUND'; end if;
+  if request_row.account_user_id <> p_user_id then raise exception using errcode = '42501', message = 'ACTIVATION_REQUEST_USER_MISMATCH'; end if;
+
+  if request_row.activation_status = 'activated' and request_row.activation_tenant_id is not null then
+    select t.slug into existing_tenant_slug from menu_v3.tenants t where t.id = request_row.activation_tenant_id limit 1;
+    if existing_tenant_slug is not null then
+      return query select request_row.activation_tenant_id::text, existing_tenant_slug::text;
+      return;
+    end if;
+    raise exception using errcode = '23505', message = 'ACTIVATION_ALREADY_COMPLETED';
+  end if;
+
+  if request_row.activation_status <> 'approved' then raise exception using errcode = '42501', message = 'ACTIVATION_APPROVAL_REQUIRED'; end if;
+
+  select tm.tenant_id, t.slug into existing_member
+  from menu_v3.tenant_members tm
+  join menu_v3.tenants t on t.id = tm.tenant_id
+  where tm.user_id = p_user_id and tm.is_active = true
+  order by tm.created_at limit 1;
+
+  if existing_member.tenant_id is not null then
+    update menu_v3.leads
+    set activation_status = 'activated', activation_tenant_id = existing_member.tenant_id, status = 'converted', updated_at = now(), decision_at = coalesce(decision_at, now())
+    where id = request_row.id;
+    return query select existing_member.tenant_id::text, existing_member.slug::text;
+    return;
+  end if;
+
+  insert into menu_v3.tenants (id, owner_user_id, slug, name_ar, name_en, tagline_ar, business_type, is_published, is_active)
+  values (p_tenant_id, p_user_id, p_slug, request_row.business_name, request_row.brand_name_en, coalesce(request_row.details, ''), request_row.business_type, false, true);
+  insert into menu_v3.tenant_members (tenant_id, user_id, role) values (p_tenant_id, p_user_id, 'owner');
+  insert into menu_v3.branches (id, tenant_id, slug, name_ar, name_en, address_ar, is_active) values (p_branch_id, p_tenant_id, 'main', 'الفرع الرئيسي', 'Main branch', '', true);
+  insert into menu_v3.branch_hours (branch_id, weekday, opens_at, closes_at, is_closed)
+  values
+    (p_branch_id, 0, '07:00', '00:00', false), (p_branch_id, 1, '07:00', '00:00', false),
+    (p_branch_id, 2, '07:00', '00:00', false), (p_branch_id, 3, '07:00', '00:00', false),
+    (p_branch_id, 4, '07:00', '00:00', false), (p_branch_id, 5, '13:00', '00:00', false),
+    (p_branch_id, 6, '07:00', '00:00', false);
+
+  update menu_v3.leads
+  set activation_status = 'activated', activation_tenant_id = p_tenant_id, status = 'converted', updated_at = now()
+  where id = request_row.id and activation_status = 'approved';
+  if not found then raise exception using errcode = '40001', message = 'ACTIVATION_REQUEST_STATE_CHANGED'; end if;
+  return query select p_tenant_id, p_slug;
+end;
+$$;
