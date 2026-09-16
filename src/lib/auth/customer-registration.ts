@@ -25,11 +25,6 @@ export const saveCustomerRegistrationPhone = createServerFn({ method: "POST" })
         set "phoneNumber" = ${phone}, "phoneNumberVerified" = false, "updatedAt" = now()
         where "id" = ${context.userId}
       `;
-      await sql`
-        insert into self_serve_registration_grants (user_id)
-        values (${context.userId})
-        on conflict (user_id) do update set created_at = now(), used_at = null
-      `;
       return { ok: true, data: { phone } };
     } catch (err) {
       console.error("saveCustomerRegistrationPhone failed", err);
