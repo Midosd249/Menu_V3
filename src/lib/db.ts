@@ -168,6 +168,10 @@ async function createPgliteSql(): Promise<Sql> {
         "emailVerified" = excluded."emailVerified",
         "phoneNumber" = excluded."phoneNumber",
         "phoneNumberVerified" = excluded."phoneNumberVerified";
+      create or replace function menu_v3.is_platform_admin(p_user_id text)
+      returns boolean
+      language sql
+      as $$ select p_user_id = 'customer-lifecycle-user' $$;
       create or replace function menu_v3.activate_customer_workspace(
         p_request_id text,
         p_user_id text,
