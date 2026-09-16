@@ -120,16 +120,18 @@ test("customer approval lifecycle browser QA covers request, decisions, activati
   });
 
   try {
+    let started = false;
     for (let attempt = 1; attempt <= 120; attempt += 1) {
       try {
         const response = await fetch(`http://127.0.0.1:${port}/onboarding`);
-        if (response.ok) break;
-      } catch {
-        continue;
-      }
+        if (response.ok) {
+          started = true;
+          break;
+        }
+      } catch {}
       await new Promise((resolve) => setTimeout(resolve, 250));
-      if (attempt === 120) throw new Error("Customer onboarding browser fixture did not start");
     }
+    if (!started) throw new Error("Customer onboarding browser fixture did not start");
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`http://127.0.0.1:${port}/onboarding`, { waitUntil: "networkidle" });
