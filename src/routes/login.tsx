@@ -12,16 +12,8 @@ import { copy, t } from "@/lib/menu/i18n";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
-function invitationToken() {
-  if (typeof window === "undefined") return "";
-  const token = new URLSearchParams(window.location.search).get("invite")?.trim() || "";
-  return token.length >= 40 && token.length <= 200 ? token : "";
-}
-
-function initialMode(): "in" | "up" {
-  if (typeof window === "undefined") return "in";
-  return new URLSearchParams(window.location.search).get("mode") === "signup" ? "up" : "in";
-}
+function invitationToken() { if (typeof window === "undefined") return ""; const token = new URLSearchParams(window.location.search).get("invite")?.trim() || ""; return token.length >= 40 && token.length <= 200 ? token : ""; }
+function initialMode(): "in" | "up" { if (typeof window === "undefined") return "in"; return new URLSearchParams(window.location.search).get("mode") === "signup" ? "up" : "in"; }
 
 function Login() {
   const { lang } = useLang();
@@ -47,8 +39,7 @@ function Login() {
     const confirmPassword = String(form.get("confirmPassword") || "");
     const name = String(form.get("name") || "").trim();
     const phone = String(form.get("phone") || "").trim();
-    setBusy(true);
-    setError("");
+    setBusy(true); setError("");
     try {
       if (mode === "up") {
         const email = identity.toLowerCase();
@@ -60,7 +51,7 @@ function Login() {
         const phoneResult = await saveCustomerRegistrationPhone({ data: { phone } });
         if (!phoneResult.ok) throw new Error(phoneResult.error);
         await refresh();
-        await navigate({ to: "/onboarding", search: { new: "1" } as never, replace: true });
+        await navigate({ to: "/onboarding", replace: true });
         return;
       }
       if (loginMethod === "phone") {
@@ -75,9 +66,7 @@ function Login() {
       else await navigate({ to: "/studio", replace: true });
     } catch (err) {
       setError(err instanceof Error && err.message ? err.message : t(copy.auth.error, lang));
-    } finally {
-      setBusy(false);
-    }
+    } finally { setBusy(false); }
   }
 
   const isPhoneLogin = mode === "in" && loginMethod === "phone";
@@ -85,7 +74,7 @@ function Login() {
   return <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
     <div className="w-full max-w-md grid gap-6">
       <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">{t(copy.brand, lang)}</Link><LangToggle /></div>
-      <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menu V3" : "Start with Menu V3"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "ابدأ بحسابك، ثم أنشئ البراند وادخل الاستوديو. لا تحتاج بطاقة ائتمانية." : "Create your account, then set up your brand and enter Studio. No credit card required.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
+      <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menu V3" : "Start with Menu V3"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أنشئ الحساب أولًا، ثم أرسل طلب تفعيل البراند. لن يتم إنشاء مساحة مطعم قبل اعتماد الطلب." : "Create your account first, then submit a brand activation request. No restaurant workspace is created before approval.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
       {authEnabled ? <>
         {!signup && <><div className="grid gap-2">{GROK_PROVIDERS.map((p) => <Button key={p.providerId} type="button" variant="outline" disabled={busy} onClick={() => signIn(p.providerId, { callbackURL: invite ? `/invite/${encodeURIComponent(invite)}` : "/studio" })}>{t(copy.auth.google, lang)}</Button>)}</div><p className="text-center text-xs text-muted">{t(copy.auth.or, lang)}</p></>}
         <form className="grid gap-3" onSubmit={onSubmit}>
@@ -96,7 +85,7 @@ function Login() {
           <Field label={t(copy.auth.password, lang)}><Input name="password" type="password" required minLength={8} autoComplete={signup ? "new-password" : "current-password"} /></Field>
           {signup ? <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm password"}><Input name="confirmPassword" type="password" required minLength={8} autoComplete="new-password" /></Field> : null}
           {isPhoneLogin ? <p className="text-xs leading-5 text-muted">{lang === "ar" ? "الدخول بالجوال متاح للحسابات التي تم اعتماد رقمها. لا نستخدم SMS OTP في التسجيل الحالي." : "Phone sign-in is available for accounts with an approved number. SMS OTP is not used for signup currently."}</p> : null}
-          {signup ? <p className="text-xs leading-5 text-muted">{lang === "ar" ? "رقم الجوال يُحفظ للحساب دون تفعيل SMS OTP. يمكن إضافة تحقق البريد قبل نشر المنيو لاحقًا." : "Your phone is stored with the account without SMS OTP. Email verification can be required before publishing later."}</p> : null}
+          {signup ? <p className="text-xs leading-5 text-muted">{lang === "ar" ? "رقم الجوال يُحفظ للحساب دون تفعيل SMS OTP. يمكنك متابعة طلب التفعيل من صفحة الحساب بعد التسجيل." : "Your phone is stored with the account without SMS OTP. You can track activation from the account page after signup."}</p> : null}
           {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
           <Button type="submit" disabled={busy}>{busy ? t(copy.state.loading, lang) : signup ? (lang === "ar" ? "إنشاء الحساب" : "Create account") : t(copy.auth.signIn, lang)}</Button>
         </form>
