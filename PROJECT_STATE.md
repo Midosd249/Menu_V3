@@ -16,7 +16,7 @@
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Current Decision## PH Lifecycle — Current Decision
+## PH Lifecycle — Current Decision
 The owner has explicitly decided to stop before payment-provider integration and commercial launch. Do not implement either unless explicitly authorized in a future task.
 
 ```text
