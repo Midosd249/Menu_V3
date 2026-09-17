@@ -45,15 +45,12 @@ export const getPlatformCustomerNotifications = createServerFn({ method: "GET" }
   const permission = await assertPlatformAdmin(context.userId); if (!permission.ok) return permission;
   try {
     const sql = await getSql();
-    const rows = await sql<Record<string, unknown>>`select t.id as tenant_id, t.name_ar as tenant_name, coalesce(u.name, '') as customer_name, coalesce(u.email, '') as email, t.created_at from tenants t left join "user" u on u.id = t.owner_user_id order by t.created_at desc limit 20`;
-    const recent = rows.map((row) => ({ tenantId: String(row.tenant_id), tenantName: String(row.tenant_name ?? ""), customerName: String(row.customer_name ?? ""), email: String(row.email ?? ""), createdAt: iso(row.created_at) }));
-    const newCustomers = data.since ? recent.filter((customer) => customer.createdAt > data.since!) : [];
-    return { ok: true, data: { recent, newCustomers } };
-  } catch (error) {
-    console.error("getPlatformCustomerNotifications failed", error);
-    return { ok: false, code: "unavailable", error: "تعذر تحميل إشعارات العملاء الجدد" };
-  }
-});
+    const recentRows = await sql<Record<string, unknown>>`select t.id as tenant_id, t.name_ar as tenant_name, coalesce(u.name, '') as customer_name, coalesce(u.email, '') as email, t.created_at from tenants t left join "user" u on u.id = t.owner_user_id order by t.created_at desc limit 20`;
+    const newRows = data.since
+      ? await sql<Record<string, unknown>>`select t.id as tenant_id, t.name_ar as tenant_name, coalesce(u.name, '') as customer_name, coalesce(u.email, '') as email, t.created_at from tenants t left join "user" u on u.id = t.owner_user_id where t.created_at > ${data.since} order by t.created_at desc limit 100`
+      : [];
+    const recent = recentRows.map((row) => ({ tenantId: String(row.tenant_id), tenantName: String(row.tenant_name ?? ""), customerName: String(row.customer_name ?? ""), email: String(row.email ?? ""), createdAt: iso(row.created_at) }));
+    const newCustomers = newRows.map((row) => ({ tenantId: String(row.tenant_id), tenantName: String(row.tenant_name ?? ""), customerName: String(row.customer_name ?? ""), email: String(row.email ?? ""), createdAt: iso(row.created_at) }));
 
 const orderStatusSchema = z.enum(["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const);
 export const getPlatformOrders = createServerFn({ method: "GET" }).middleware([authMiddleware]).validator(z.object({ status: orderStatusSchema.optional(), q: z.string().trim().max(120).optional() })).handler(async ({ context, data }): Promise<FnResult<PlatformOrder[]>> => { const permission = await assertPlatformAdmin(context.userId); if (!permission.ok) return permission; try { const sql = await getSql(); const q = data.q ? `%${data.q.toLowerCase()}%` : null; const rows = await sql<Record<string, unknown>>`with filtered as (select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name, (select count(*) from order_items oi where oi.order_id = o.id) as item_count, coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id where o.archived_at is null and (${data.status ?? null}::text is null or o.status = ${data.status ?? null}) and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q} or cast(o.order_number as text) like ${q})) select * from filtered order by created_at desc limit 200`; return { ok: true, data: rows.map(mapPlatformOrder) }; } catch (error) { console.error("getPlatformOrders failed", error); return { ok: false, code: "unavailable", error: "تعذر تحميل طلبات المنصة" }; } });
