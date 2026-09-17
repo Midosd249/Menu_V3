@@ -8,7 +8,7 @@ const ui = readFileSync("src/components/admin-subscription-control.tsx", "utf8")
 const route = readFileSync("src/routes/admin/$workspace.tsx", "utf8");
 const plan = readFileSync("docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md", "utf8");
 
- test("PH-04 mutation is server-authorized and database-authoritative", () => {
+test("PH-04 mutation is server-authorized and database-authoritative", () => {
   assert.match(server, /authMiddleware/);
   assert.match(server, /requirePlatformAdmin\(userId\)/);
   assert.match(server, /context\.userId/);
@@ -25,6 +25,8 @@ test("PH-04 keeps account and subscription states separate", () => {
   assert.match(migration, /status.*IN \('trialing','active','past_due','cancelled'\)/s);
   assert.match(migration, /freeze_account/);
   assert.match(migration, /unfreeze_account/);
+  assert.match(migration, /v_account_status = 'blocked'/);
+  assert.match(migration, /account_status = 'frozen'/);
 });
 
 test("PH-04 trial controls are bounded and state-aware", () => {
