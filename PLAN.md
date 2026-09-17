@@ -122,7 +122,7 @@ Await the owner's next explicitly scoped task. No payment provider work, commerc
 - VERIFIED: current main = 8939474e705459e7e5757d93b053593a2ee1d4b2.
 - VERIFIED: direct self-serve signup is active; new customers are provisioned into their workspace without the retired approval/request queue.
 - VERIFIED: /admin/orders remains a real operational order-management surface and is separate from customer onboarding.
-- IMPLEMENTATION_IN_PROGRESS: Platform Admin new-customer notification center is being added on branch feat/platform-new-customer-notifications.
+- IMPLEMENTATION_IN_PROGRESS: Platform Admin new-customer notification center is being added on branch feat/platform-new-customer-notifications-ready.
 - Scope: notification bell + unread badge + in-app toast + recent customers + optional browser notifications, backed by server-authorized polling.
 - Not in scope: Supabase Realtime migration, push infrastructure, customer lifecycle redesign, order removal, payment-provider work, commercial launch, or PH-07.
 - Exact next task: verify the focused notification change, create the PR, and stop before unrelated work.
