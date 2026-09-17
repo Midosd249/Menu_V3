@@ -1,10 +1,10 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { ADMIN_WORKSPACE_TABS, PlatformAdminPage, type Tab } from "@/routes/admin";
 
 export const Route = createFileRoute("/admin/$workspace")({
   beforeLoad: ({ params }) => {
     if (!ADMIN_WORKSPACE_TABS[params.workspace]) {
-      throw notFound();
+      throw redirect({ to: "/admin", replace: true });
     }
   },
   component: PlatformAdminWorkspaceRoute,
