@@ -32,6 +32,14 @@ test("PH-06 Free has no trial and Pro product entitlement is unlimited", () => {
   assert.match(catalog, /code: "pro".*Number\.MAX_SAFE_INTEGER/);
 });
 
+test("PH-06 paid selection starts a 14-day trial and Free is normalized to active", () => {
+  assert.match(migration, /old_code = 'free' AND new_code <> 'free'/);
+  assert.match(migration, /NEW\.status := 'trialing'/);
+  assert.match(migration, /NEW\.trial_ends_at := now\(\) \+ interval '14 days'/);
+  assert.match(migration, /new_code = 'free'/);
+  assert.match(migration, /NEW\.status := 'active'/);
+});
+
 test("PH-06 pricing UX exposes annual billing without a fake checkout", () => {
   assert.match(pricing, /Annual — 2 months free/);
   assert.match(pricing, /getCommercialPrice/);
