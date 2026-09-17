@@ -1,0 +1,33 @@
+name: PH-05 Route Tree Sync
+
+on:
+  push:
+    branches:
+      - ph-05-invoice-whatsapp
+
+permissions:
+  contents: write
+
+jobs:
+  sync-route-tree:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: npx vite build --mode development
+      - name: Commit generated route tree
+        run: |
+          if git diff --exit-code -- src/routeTree.gen.ts; then
+            echo "Route tree is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/routeTree.gen.ts
+          git commit -m "chore(ph-05): sync generated route tree"
+          git push origin HEAD:ph-05-invoice-whatsapp
