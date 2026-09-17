@@ -84,23 +84,48 @@ Scope completed:
 
 ### PH-05 — Invoice Generation + WhatsApp Sharing
 
-TODO. Do not start automatically after PH-04.
+STATUS: IN_PROGRESS
+
+Scope activated by owner authorization on 2026-09-17.
+
+#### PH-05.1 — Invoice ledger and immutable subscription snapshot
+- Add tenant-scoped invoice records with server-generated invoice numbers.
+- Snapshot plan code/name, SAR amount, and billing period at issuance so later plan changes do not rewrite historical invoices.
+- Keep invoice status limited to `issued` / `void`.
+- Do not infer or record payment completion without a verified payment provider.
+
+#### PH-05.2 — Owner billing workspace
+- Add `/studio/billing` for owner/admin roles.
+- Read the current subscription and tenant-owned invoice history through server-authorized membership context.
+- Issue an invoice only for a paid `active` or `past_due` subscription.
+- Free, trialing, cancelled, and suspended states do not create invoices through this path.
+
+#### PH-05.3 — Printable invoice and WhatsApp click-to-chat
+- Provide an on-screen invoice document with browser print support.
+- Provide owner-reviewed WhatsApp click-to-chat using `https://wa.me/?text=` only.
+- Message explicitly states that the invoice is issued and is not proof of payment or electronic collection.
+- No autonomous outbound messaging and no WhatsApp Business API dependency are introduced.
+
+#### PH-05.4 — Verification gate
+- Add focused invoice/WhatsApp contract tests.
+- Run route generation, typecheck, full tests, lint, production build, migration/schema checks, auth/security checks, and relevant browser QA.
+- Keep Vercel outside the development loop; deployment is a separate release-stage concern.
 
 ## Security boundaries
 
-- Platform Admin mutations require authenticated server context plus Platform Owner authorization.
-- Tenant/account identity is resolved server-side.
-- Subscription limits remain enforced by the database/application authorization boundary.
-- No client-supplied plan, tenant, user, role, entitlement, or price is trusted.
-- No payment gateway is invented in PH-04.
-- PH-05 invoice/WhatsApp delivery is outside this milestone.
+- Customer billing reads and mutations require authenticated server context plus an active owner/admin tenant membership.
+- Tenant identity is resolved server-side; the billing client never supplies a tenant id.
+- Plan, price, invoice amount, and subscription state are read from server-side database records.
+- Historical invoices store a server-generated snapshot and cannot be rewritten through the customer UI.
+- Invoice data has RLS enabled and no direct client grants/policies are added.
+- No payment gateway, automatic charging, webhook-driven payment state, or payment-success claim is introduced in PH-05.
 
 ## Release boundary
 
 LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER/VISUAL QA → TESTS → CI QUALITY GATES → DIFF REVIEW → ONE RELEASE BATCH → MAIN → ONE PRODUCTION DEPLOYMENT → REAL-DEVICE QA.
 
-PH-04 is complete and stops here. PH-05 must not be started automatically.
+Vercel must not be used as the normal PH-05 development loop. If its free-tier deployment quota remains blocked, PH-05 implementation and GitHub verification continue without deployment retries.
 
 ## Current deployment note
 
-PH-04 was merged to `main`, but production deployment is **NOT VERIFIED**. The earlier Vercel deployment attempt on PR #163 was blocked by the free-tier deployment rate limit (`api-deployments-free-per-day`).
+PH-04 was merged to `main`, but production deployment is **NOT VERIFIED**. The earlier Vercel deployment attempt on PR #163 was blocked by the free-tier deployment rate limit (`api-deployments-free-per-day`). PH-05 does not require a Vercel deployment to continue implementation or CI verification.
