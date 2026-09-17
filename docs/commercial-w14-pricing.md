@@ -4,60 +4,68 @@
 
 Make Menu V3 commercially legible without inventing payment capabilities, gating the protected theme catalog, exposing private tenant data, or changing the existing public-menu architecture.
 
-## Repository evidence
+## Repository evidence before PH-06
 
-The existing subscription foundation is already the source of truth for plan limits and prices:
+The existing subscription foundation was already the source of truth for plan limits and prices, but its configured catalog had drifted from the owner-approved commercial decision. PH-06 reconciles the catalog while preserving the existing architecture and server-side entitlement boundary.
 
-- `free`: 0 SAR/month, 1 branch, 50 products, 3 team members.
-- `starter`: 99 SAR/month, 3 branches, 300 products, 10 team members.
-- `pro`: 199 SAR/month, 10 branches, 1,000 products, 25 team members.
-- The database entitlement boundary already rejects writes when an active/trialing subscription exceeds its plan limit.
-- The five protected themes are `essential`, `editorial`, `noir`, `heritage`, and `gallery`.
-- The theme migration contains no subscription-based theme entitlement, so W14 does not invent one.
+## Canonical commercial decision — PH-06
 
-## External market scan — 2026-09-06
+- `free`: 0 SAR/month, 0 SAR/year, 1 branch, 50 products, 3 team members, no trial.
+- `starter` / customer-facing **Growth**: 49 SAR/month, 490 SAR/year, 3 branches, 300 products, 10 team members, 14-day trial.
+- `pro`: 149 SAR/month, 1,490 SAR/year, 10 branches, unlimited products, 25 team members, 14-day trial.
+- Annual paid pricing is two months free versus twelve monthly payments: 16.67% savings.
+- The five protected themes remain available across plans; PH-06 does not introduce a theme entitlement gate.
 
-The review focused on current Saudi/MENA restaurant-menu SaaS and comparable global products. The useful pattern is not to copy a competitor's feature list, but to understand the commercial anchor:
+## Annual billing contract
 
-- **Nasj Menu:** free tier plus low-cost paid tiers; its current public pricing shows SAR 19/month Starter and SAR 49/month Pro. This supports a low-friction free-to-paid funnel.
-- **TableGreet Saudi:** current public pricing shows Free and Pro at SAR 105/month, with advanced operational features used as the paid-value anchor.
-- **TableQR Saudi:** current public pricing shows SAR 1,800/year for a managed Signature offer and SAR 4,500/year for a fully managed Concierge offer. This demonstrates a separate service/concierge value layer rather than only software limits.
-- **E-Menu Saudi:** current public pricing shows SAR 69/month Business and SAR 89/month Enterprise, with branch support and integrations used as higher-tier packaging.
-- **Menu 1000:** current public material shows a free plan and localized KSA pricing starting at SAR 59/month; multi-branch capability is positioned at enterprise level.
-- **TableQR / global managed-menu references:** higher prices are justified by setup, content work, support, custom design, and ongoing managed updates rather than simply by adding arbitrary visual themes.
+`tenant_subscriptions.billing_interval` is the server-side interval contract and is limited to `monthly` / `annual`.
 
-## Product decision
+Annual pricing is resolved from the same commercial catalog used by the pricing UX. Invoices snapshot `billing_interval` and `amount_sar` at issuance, so later plan/catalog changes cannot rewrite historical invoice amounts.
 
-W14 keeps the existing five-theme catalog available across plans. Packaging is based on operational scale already represented in the subscription schema:
+Existing PH-05 invoices are preserved as monthly historical snapshots.
 
-1. number of active branches;
-2. number of menu products;
-3. number of active team members.
+## Trial contract
 
-This is the smallest defensible commercial boundary because the product already enforces those limits server-side.
+- Free is never `trialing` and has no `trial_ends_at`.
+- Paid plans may be `trialing` for 14 days after paid-plan selection.
+- Platform Admin trial controls remain restricted to paid plans and validated future timestamps.
+- PH-06 does not introduce automatic post-trial charging.
 
-## UX decision
+## Payment boundary
 
-- `/pricing` is public, bilingual, and explicit about limits.
-- The page does **not** show a fake checkout or imply that a payment gateway exists.
-- The page states that current upgrades are handled by direct request.
-- The authenticated Studio overview shows the current plan and usage against limits.
-- Upgrade discovery is available from the Studio subscription card and the pricing page.
-- No subscription record, tenant identifier, owner identifier, or other private tenant data is emitted by the public pricing route.
+PH-06 defines a provider-neutral server-side payment contract only. The server derives plan, interval, and amount from the canonical catalog. Client-supplied amount, tenant identity, entitlement, and payment state are never trusted.
+
+No payment provider, checkout session, automatic charging, webhook, or payment-success state is introduced by PH-06.
 
 ## Security decision
 
 Commercial UI is presentation only. It does not grant entitlements.
 
-The existing database trigger remains the final write boundary, and the authenticated subscription view resolves the tenant through the authenticated user's active membership before reading the subscription.
+The database entitlement boundary remains the final write boundary. Pro product creation is explicitly unlimited at the database/server entitlement layer; branch and team-member limits remain enforced from the plan catalog.
+
+## UX decision
+
+- `/pricing` is public, bilingual, and explicit about monthly versus annual pricing.
+- Annual pricing communicates the two-month saving without implying a payment gateway exists.
+- The page states that online payment is not enabled yet and does not show a fake checkout.
+- Authenticated Platform Admin subscription controls expose the billing interval through a server-authorized mutation.
+- Public pricing does not emit private tenant identifiers or subscription state.
 
 ## Verification contract
 
-Changed commercial behavior is protected by `src/lib/menu/commercial.test.ts`. The new test is included in `npm test`.
+Changed commercial behavior is protected by:
+- `src/lib/menu/commercial.test.ts`
+- `src/lib/menu/billing.test.ts`
+- `src/lib/menu/payment-boundary.test.ts`
+- `tests/ph-06-commercial-activation.test.mjs`
 
-Full release verification remains the repository Quality Gate: typecheck, tests, lint, build, browser/template QA, and final diff review.
+Full release verification remains the repository Quality Gate: route generation, typecheck, tests, lint, production build, browser/template QA, security/auth checks, migration safety, and final diff review.
 
-## Sources reviewed
+## External authoritative research
+
+- ZATCA official VAT information confirms the standard VAT rate is 15% for applicable taxable supplies in Saudi Arabia. This is relevant to future tax-invoice/payment implementation but is deliberately **not** converted into PH-06 payment logic or tax claims. citeturn0search0turn0search12
+
+## Market-context sources reviewed previously
 
 - https://nasjmenu.sa/
 - https://tablegreet.com/ar-sa/pricing
@@ -66,4 +74,4 @@ Full release verification remains the repository Quality Gate: typecheck, tests,
 - https://menu1000.com/restaurants/
 - https://tableqr.co/pricing/
 
-These sources were used for market context only; Menu V3 pricing remains governed by its own verified database subscription catalog.
+These sources are market context only. Menu V3 pricing is governed by the repository commercial contract above.
