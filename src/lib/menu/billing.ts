@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { authMiddleware } from "../auth/middleware";
-import { getSql, type Sql } from "../db";
-import { newId } from "../utils";
-import type { FnResult, Role } from "./types";
+import { authMiddleware } from "../auth/middleware.ts";
+import { getSql, type Sql } from "../db.ts";
+import { newId } from "../utils.ts";
+import type { FnResult, Role } from "./types.ts";
 
 export type SubscriptionInvoice = {
   id: string;
