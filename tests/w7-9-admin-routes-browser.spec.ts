@@ -12,6 +12,7 @@ const routes = [
 
 test.beforeAll(async () => {
   const migrations = [
+    "migrations/20260909230000_lead_onboarding.sql",
     "migrations/20260903025817_subscription_plans.sql",
     "migrations/20260916100000_customer_activation_lifecycle.sql",
     "migrations/20260917120000_platform_admin_subscription_control.sql",
