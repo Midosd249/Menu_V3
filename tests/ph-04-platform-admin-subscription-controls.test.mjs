@@ -48,7 +48,7 @@ test("PH-04 trial control refuses free-plan trials and rejects past trial dates"
 });
 
 test("PH-04 account freeze revokes sessions and records an audit event", () => {
-  assert.match(server, /delete from \\"session\\" where \\"userId\\"/);
+  assert.match(server, /delete from "session" where "userId"/);
   assert.match(server, /action: data\.frozen \? "account_frozen" : "account_unfrozen"/);
   assert.match(users, /toggleAccountFreeze/);
 });
