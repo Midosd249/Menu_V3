@@ -1,4 +1,5 @@
 import { expect, test } from "playwright/test";
+import { ensurePlatformAdminSubscriptionSchema } from "./admin-browser-fixture.mjs";
 
 const BASE_URL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 
@@ -14,6 +15,10 @@ async function assertAdminShell(page: import("playwright/test").Page) {
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 }
+
+test.beforeAll(async () => {
+  await ensurePlatformAdminSubscriptionSchema();
+});
 
 test("Platform Admin shell browser QA", async ({ page }) => {
   test.setTimeout(120_000);
