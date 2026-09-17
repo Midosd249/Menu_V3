@@ -78,7 +78,7 @@ Scope completed:
 
 6. **PH-04.6 — Verification Gate**
    - Typecheck, tests, lint, build, route generation, migration-related coverage, and browser QA passed in Quality Run `35179073375`.
-   - W9 Orders QA passed in run `35179073395`.
+   - W9 Orders QA passed in `35179073395`.
    - A focused serializability defect found by CI was corrected before merge.
    - No production deployment is part of PH-04 implementation.
 
@@ -117,15 +117,16 @@ Scope completed:
 
 ### PH-06 — Commercial Activation: Catalog Reconciliation + Annual Billing Foundation
 
-STATUS: IN_PROGRESS — implementation branch `codex/ph-06-commercial-activation`
+STATUS: DONE / VERIFIED / MERGED
 
-Scope:
+Merged PR: #168
+Merge commit: `ec8f184735c7a45abf65df26ee016a365730d314`
 
 #### PH-06.1 — Canonical commercial catalog reconciliation
 - Approved monthly catalog: Free 0 SAR, Growth 49 SAR, Pro 149 SAR.
 - Free has no trial.
-- Paid plans retain the 14-day trial boundary.
-- Pro has unlimited products at the server entitlement boundary.
+- Paid plans receive a 14-day trial at the database plan-selection boundary.
+- Pro has unlimited products at the server/database entitlement boundary.
 - Five protected themes remain available across plans; no theme entitlement gate was introduced.
 
 #### PH-06.2 — Annual billing foundation
@@ -140,8 +141,10 @@ Scope:
 - No payment provider, automatic charging, webhook, or payment-success state is introduced.
 
 #### PH-06.4 — Verification gate
-- Migration portability, typecheck, tests, lint, build, auth/security, subscription/entitlement, invoice regression, and bilingual pricing browser checks are required before merge.
-- Vercel is not a development dependency.
+- Menu V3 Quality run `35183597776` passed route generation, typecheck, 321 tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance diagnostics, and cleanup.
+- W9 Orders QA run `35183597803` passed.
+- The first PH-06 CI cycle exposed a stale pricing contract expecting 99/199 SAR; the contract was reconciled to the approved 49/149 catalog before the final passing run.
+- Vercel remained outside the development loop and its free-tier deployment/build rate limit did not block GitHub verification.
 
 ## Security boundaries
 
@@ -156,8 +159,12 @@ Scope:
 
 LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER/VISUAL QA → TESTS → CI QUALITY GATES → DIFF REVIEW → ONE RELEASE BATCH → MAIN → ONE PRODUCTION DEPLOYMENT → REAL-DEVICE QA.
 
-Vercel remains outside the normal development loop. PH-06 implementation is verified through repository evidence and GitHub Actions; production deployment remains a separate release-stage state.
+Vercel remains outside the normal development loop. PH-06 was verified through repository evidence and GitHub Actions; production deployment remains a separate release-stage state.
 
 ## Current deployment note
 
-PH-05 is merged to `main` at `f093fcfc445e08849e41b3e965e36f40a1c23b8b`. PH-06 is not yet merged. Production deployment is **NOT VERIFIED**.
+PH-06 is merged to `main` at `ec8f184735c7a45abf65df26ee016a365730d314`. Production deployment is **NOT VERIFIED**. The Vercel status associated with the PH-06 head was a free-tier build/deployment rate-limit failure and was intentionally not retried as a development dependency.
+
+## Next phase boundary
+
+No PH-07 milestone is defined in the current repository contract. Do not invent or start a new PH phase until the next authorized milestone is explicitly defined and verified against current repository evidence.
