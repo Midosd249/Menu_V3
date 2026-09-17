@@ -28,6 +28,12 @@ test("homepage exposes canonical pricing and direct self-serve signup", () => {
   assert.match(catalog, /annualPriceSar: 1490/);
 });
 
+test("homepage keeps a stable login entrypoint for both anonymous and authenticated visitors", () => {
+  assert.match(home, /<Button asChild size="sm"><Link to="\/login">\{lang === "ar" \? "دخول" : "Sign in"\}<\/Link><\/Button>/);
+  assert.doesNotMatch(home, /<SignedIn>|<SignedOut>/);
+  assert.doesNotMatch(home, /<Link to="\/studio">\{lang === "ar" \? "الاستوديو" : "Studio"\}<\/Link>/);
+});
+
 test("homepage signup buttons keep Link as the slotted element when icons are present", () => {
   assert.match(home, /<Button asChild size="lg">\{signup\}<ArrowUpLeft/);
   assert.match(home, /<Button asChild className="mt-5 w-full" variant="outline">\{signup\}<\/Button>/);
