@@ -26,6 +26,20 @@ function SettingsPage() {
       </div>
 
       <section className="grid gap-3 rounded-xl border border-line p-5">
+        <h2 className="font-medium">{lang === "ar" ? "الفوترة" : "Billing"}</h2>
+        <p className="text-sm text-ink-soft">
+          {lang === "ar"
+            ? "راجع خطتك وفواتير الاشتراك الصادرة، ثم اطبع الفاتورة أو شاركها عبر واتساب. لا يوجد تحصيل تلقائي من هذه الصفحة."
+            : "Review your plan and issued subscription invoices, then print or share an invoice through WhatsApp. No automatic collection happens here."}
+        </p>
+        <div>
+          <Button asChild variant="outline">
+            <Link to="/studio/billing">{lang === "ar" ? "فتح الفوترة والفواتير" : "Open billing & invoices"}</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section className="grid gap-3 rounded-xl border border-line p-5">
         <h2 className="font-medium">{lang === "ar" ? "النشر" : "Publishing"}</h2>
         <p className="text-sm text-ink-soft">
           {tenant.isPublished
