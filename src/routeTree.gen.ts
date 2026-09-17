@@ -24,6 +24,7 @@ import { Route as MSlugRouteImport } from './routes/m.$slug'
 import { Route as OnboardingTokenRouteImport } from './routes/onboarding/$token'
 import { Route as StudioIndexRouteImport } from './routes/studio/index'
 import { Route as StudioAnalyticsRouteImport } from './routes/studio/analytics'
+import { Route as StudioBillingRouteImport } from './routes/studio/billing'
 import { Route as StudioBranchesRouteImport } from './routes/studio/branches'
 import { Route as StudioBrandRouteImport } from './routes/studio/brand'
 import { Route as StudioDesignRouteImport } from './routes/studio/design'
@@ -118,6 +119,11 @@ const StudioIndexRoute = StudioIndexRouteImport.update({
 const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => StudioRoute,
 } as any)
 const StudioBranchesRoute = StudioBranchesRouteImport.update({
@@ -237,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
@@ -273,6 +280,7 @@ export interface FileRoutesByTo {
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
@@ -311,6 +319,7 @@ export interface FileRoutesById {
   '/m/$slug': typeof MSlugRouteWithChildren
   '/onboarding/$token': typeof OnboardingTokenRoute
   '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
   '/studio/branches': typeof StudioBranchesRoute
   '/studio/brand': typeof StudioBrandRoute
   '/studio/design': typeof StudioDesignRoute
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/m/$slug'
     | '/onboarding/$token'
     | '/studio/analytics'
+    | '/studio/billing'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
@@ -386,6 +396,7 @@ export interface FileRouteTypes {
     | '/m/$slug'
     | '/onboarding/$token'
     | '/studio/analytics'
+    | '/studio/billing'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/m/$slug'
     | '/onboarding/$token'
     | '/studio/analytics'
+    | '/studio/billing'
     | '/studio/branches'
     | '/studio/brand'
     | '/studio/design'
@@ -566,6 +578,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/studio/analytics'
       preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
       parentRoute: typeof StudioRoute
     }
     '/studio/branches': {
@@ -739,6 +758,7 @@ const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
 
 interface StudioRouteChildren {
   StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
   StudioBranchesRoute: typeof StudioBranchesRoute
   StudioBrandRoute: typeof StudioBrandRoute
   StudioDesignRoute: typeof StudioDesignRoute
@@ -760,6 +780,7 @@ interface StudioRouteChildren {
 
 const StudioRouteChildren: StudioRouteChildren = {
   StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
   StudioBranchesRoute: StudioBranchesRoute,
   StudioBrandRoute: StudioBrandRoute,
   StudioDesignRoute: StudioDesignRoute,
