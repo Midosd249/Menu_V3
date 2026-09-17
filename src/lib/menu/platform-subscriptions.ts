@@ -6,6 +6,7 @@ import { getSql } from "@/lib/db";
 import type { FnResult } from "./types";
 
 const statusSchema = z.enum(["active", "trialing", "past_due", "cancelled", "suspended"]);
+const billingIntervalSchema = z.enum(["monthly", "annual"]);
 
 export type PlatformSubscription = {
   tenantId: string;
@@ -19,8 +20,11 @@ export type PlatformSubscription = {
   planNameAr: string;
   planNameEn: string;
   monthlyPriceSar: number;
+  annualPriceSar: number;
+  billingInterval: z.infer<typeof billingIntervalSchema>;
   maxBranches: number;
   maxProducts: number;
+  productsUnlimited: boolean;
   maxTeamMembers: number;
   status: z.infer<typeof statusSchema>;
   trialEndsAt: string | null;
@@ -56,6 +60,7 @@ async function assertAdmin(userId: string): Promise<FnResult<true>> {
 }
 
 function mapSubscription(row: Record<string, unknown>): PlatformSubscription {
+  const planCode = String(row.plan_code);
   return {
     tenantId: String(row.tenant_id),
     tenantName: String(row.tenant_name ?? ""),
@@ -64,12 +69,15 @@ function mapSubscription(row: Record<string, unknown>): PlatformSubscription {
     ownerName: String(row.owner_name ?? ""),
     ownerEmail: String(row.owner_email ?? ""),
     accountFrozen: Boolean(row.account_frozen),
-    planCode: String(row.plan_code),
+    planCode,
     planNameAr: String(row.plan_name_ar),
     planNameEn: String(row.plan_name_en),
     monthlyPriceSar: Number(row.monthly_price_sar ?? 0),
+    annualPriceSar: Number(row.annual_price_sar ?? 0),
+    billingInterval: billingIntervalSchema.parse(row.billing_interval ?? "monthly"),
     maxBranches: Number(row.max_branches ?? 0),
     maxProducts: Number(row.max_products ?? 0),
+    productsUnlimited: planCode === "pro",
     maxTeamMembers: Number(row.max_team_members ?? 0),
     status: statusSchema.parse(row.status),
     trialEndsAt: row.trial_ends_at ? new Date(String(row.trial_ends_at)).toISOString() : null,
@@ -94,9 +102,11 @@ async function loadSubscription(sql: Awaited<ReturnType<typeof getSql>>, tenantI
       sp.name_ar as plan_name_ar,
       sp.name_en as plan_name_en,
       sp.monthly_price_sar,
+      sp.annual_price_sar,
       sp.max_branches,
       sp.max_products,
       sp.max_team_members,
+      ts.billing_interval,
       ts.status,
       ts.trial_ends_at,
       ts.current_period_end,
@@ -156,9 +166,11 @@ export const getPlatformSubscriptions = createServerFn({ method: "GET" })
           coalesce(sp.name_ar, 'مجاني') as plan_name_ar,
           coalesce(sp.name_en, 'Free') as plan_name_en,
           coalesce(sp.monthly_price_sar, 0) as monthly_price_sar,
+          coalesce(sp.annual_price_sar, 0) as annual_price_sar,
           coalesce(sp.max_branches, 1) as max_branches,
           coalesce(sp.max_products, 50) as max_products,
           coalesce(sp.max_team_members, 3) as max_team_members,
+          coalesce(ts.billing_interval, 'monthly') as billing_interval,
           coalesce(ts.status, 'active') as status,
           ts.trial_ends_at,
           ts.current_period_end,
@@ -205,15 +217,17 @@ export const changePlatformSubscriptionPlan = createServerFn({ method: "POST" })
       `;
       const plan = planRows[0];
       if (!plan) return { ok: false, code: "invalid", error: "الخطة غير متاحة" };
-      if (before.branchCount > Number(plan.max_branches) || before.productCount > Number(plan.max_products) || before.teamMemberCount > Number(plan.max_team_members)) {
+      const planCode = String(plan.code);
+      if (before.branchCount > Number(plan.max_branches) || (planCode !== "pro" && before.productCount > Number(plan.max_products)) || before.teamMemberCount > Number(plan.max_team_members)) {
         return { ok: false, code: "conflict", error: "لا يمكن خفض الخطة لأن الاستخدام الحالي يتجاوز حدودها" };
       }
-      const isFree = String(plan.code) === "free";
+      const isFree = planCode === "free";
       const nextStatus = isFree ? "active" : (before.status === "trialing" ? "trialing" : "active");
       const nextTrial = isFree ? null : before.trialEndsAt;
+      const nextInterval = isFree ? "monthly" : before.billingInterval;
       await sql`
         update tenant_subscriptions
-        set plan_id = ${String(plan.id)}, status = ${nextStatus}, trial_ends_at = ${nextTrial}, updated_at = now()
+        set plan_id = ${String(plan.id)}, status = ${nextStatus}, trial_ends_at = ${nextTrial}, billing_interval = ${nextInterval}, updated_at = now()
         where tenant_id = ${data.tenantId}
       `;
       const after = await loadSubscription(sql, data.tenantId);
@@ -223,6 +237,28 @@ export const changePlatformSubscriptionPlan = createServerFn({ method: "POST" })
     } catch (error) {
       console.error("changePlatformSubscriptionPlan failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تغيير الخطة" };
+    }
+  });
+
+export const setPlatformBillingInterval = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ tenantId: z.string().min(1).max(128), billingInterval: billingIntervalSchema, reason: z.string().trim().max(500).optional() }))
+  .handler(async ({ context, data }): Promise<FnResult<PlatformSubscription>> => {
+    const permission = await assertAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const before = await loadSubscription(sql, data.tenantId);
+      if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
+      if (before.planCode === "free" && data.billingInterval !== "monthly") return { ok: false, code: "conflict", error: "الخطة المجانية لا تدعم الفوترة السنوية" };
+      await sql`update tenant_subscriptions set billing_interval = ${data.billingInterval}, updated_at = now() where tenant_id = ${data.tenantId}`;
+      const after = await loadSubscription(sql, data.tenantId);
+      if (!after) return { ok: false, code: "unavailable", error: "تعذر قراءة الحالة الجديدة" };
+      await writeAudit(sql, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "billing_interval_changed", reason: data.reason, beforeState: before, afterState: after });
+      return { ok: true, data: after };
+    } catch (error) {
+      console.error("setPlatformBillingInterval failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحديث دورة الفوترة" };
     }
   });
 
