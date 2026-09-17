@@ -41,3 +41,10 @@ end;
 $$;
 
 revoke all on function menu_v3.enforce_customer_approval_before_tenant_insert() from public;
+
+-- Re-create the guard trigger after replacing its function. This preserves
+-- fail-closed tenant creation while allowing only the dedicated provisioning
+-- function's transaction-local marker to pass.
+create trigger tenants_platform_customer_request
+before insert on menu_v3.tenants
+for each row execute function menu_v3.enforce_customer_approval_before_tenant_insert();
