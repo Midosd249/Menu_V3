@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl, type SubscriptionInvoice } from "./billing";
+import { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl, type SubscriptionInvoice } from "./billing.ts";
 
 const invoice: SubscriptionInvoice = {
   id: "invoice-1",
