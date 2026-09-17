@@ -55,6 +55,10 @@ function BillingPage() {
   }
 
   const roleAllowed = snapshot.role === "owner" || snapshot.role === "admin";
+  const intervalLabel = billing?.billingInterval === "annual"
+    ? (lang === "ar" ? "سنوية" : "Annual")
+    : (lang === "ar" ? "شهرية" : "Monthly");
+  const currentPrice = billing?.billingInterval === "annual'" ? billing.annualPriceSar : billing?.monthlyPriceSar;
 
   if (loading) return <div className="grid min-h-[50vh] place-items-center text-sm text-muted">{lang === "ar" ? "جارٍ تحميل الفوترة…" : "Loading billing…"}</div>;
 
@@ -91,7 +95,7 @@ function BillingPage() {
             <div className="md:text-end">
               <p className="text-xs text-muted">{lang === "ar" ? "الخطة الحالية" : "Current plan"}</p>
               <p className="mt-1 text-lg font-semibold">{lang === "ar" ? billing.planNameAr : billing.planNameEn}</p>
-              <p className="text-sm text-muted" dir="ltr">{billing.monthlyPriceSar.toFixed(2)} SAR / month · {billing.status}</p>
+              <p className="text-sm text-muted" dir="ltr">{currentPrice?.toFixed(2)} SAR / {billing.billingInterval === "annual" ? "year" : "month"} · {intervalLabel} · {billing.status}</p>
             </div>
           </div>
 
@@ -123,12 +127,14 @@ function BillingPage() {
 }
 
 function InvoiceCard({ invoice, lang, onSelect }: { invoice: SubscriptionInvoice; lang: "ar" | "en"; onSelect: (invoice: SubscriptionInvoice) => void }) {
+  const interval = invoice.billingInterval === "annual" ? (lang === "ar" ? "سنوية" : "Annual") : (lang === "ar" ? "شهرية" : "Monthly");
   return (
     <article className="grid gap-3 rounded-3xl border border-line bg-paper p-4 md:grid-cols-[1fr_auto] md:items-center md:p-5">
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <strong dir="ltr">{invoice.invoiceNumber}</strong>
           <span className="rounded-full bg-sand px-2 py-1 text-[11px]">{lang === "ar" ? invoice.planNameAr : invoice.planNameEn}</span>
+          <span className="rounded-full bg-sand px-2 py-1 text-[11px]">{interval}</span>
           <span className="rounded-full bg-sand px-2 py-1 text-[11px]">{lang === "ar" ? "صادرة" : "Issued"}</span>
         </div>
         <p className="mt-1 text-sm text-muted">{formatDate(invoice.periodStart, lang)} → {formatDate(invoice.periodEnd, lang)}</p>
@@ -143,6 +149,7 @@ function InvoiceCard({ invoice, lang, onSelect }: { invoice: SubscriptionInvoice
 }
 
 function InvoicePrintView({ invoice, lang, onClose }: { invoice: SubscriptionInvoice; lang: "ar" | "en"; onClose: () => void }) {
+  const interval = invoice.billingInterval === "annual" ? (lang === "ar" ? "سنوية" : "Annual") : (lang === "ar" ? "شهرية" : "Monthly");
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 p-4" role="dialog" aria-modal="true" aria-label={lang === "ar" ? "الفاتورة" : "Invoice"}>
       <div className="mx-auto my-6 max-w-2xl rounded-3xl bg-paper p-6 shadow-xl md:p-8" id="ph05-invoice-print">
@@ -156,6 +163,7 @@ function InvoicePrintView({ invoice, lang, onClose }: { invoice: SubscriptionInv
         <div className="grid gap-5 py-6 text-sm">
           <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "العميل" : "Customer"}</span><strong>{invoice.tenantName}</strong><span className="text-muted">{invoice.ownerEmail}</span></div>
           <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "الخطة" : "Plan"}</span><strong>{lang === "ar" ? invoice.planNameAr : invoice.planNameEn}</strong></div>
+          <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "دورة الفوترة" : "Billing interval"}</span><strong>{interval}</strong></div>
           <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "فترة الاشتراك" : "Billing period"}</span><strong>{formatDate(invoice.periodStart, lang)} → {formatDate(invoice.periodEnd, lang)}</strong></div>
           <div className="flex items-center justify-between rounded-2xl bg-sand/40 p-4"><span>{lang === "ar" ? "الإجمالي" : "Total"}</span><strong dir="ltr">{invoice.amountSar.toFixed(2)} {invoice.currency}</strong></div>
           <p className="text-xs leading-5 text-muted">{lang === "ar" ? "هذه فاتورة اشتراك صادرة من Menu V3. لا تمثل إثبات دفع ولا تنفذ تحصيلاً إلكترونياً." : "This is a Menu V3 subscription invoice. It is not proof of payment and does not perform electronic collection."}</p>
