@@ -3,25 +3,11 @@ import { z } from "zod";
 import { authMiddleware } from "../auth/middleware.ts";
 import { getSql, type Sql } from "../db.ts";
 import { newId } from "../utils.ts";
+import { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl, type SubscriptionInvoice } from "./billing-whatsapp.ts";
 import type { FnResult, Role } from "./types.ts";
 
-export type SubscriptionInvoice = {
-  id: string;
-  invoiceNumber: string;
-  tenantId: string;
-  tenantName: string;
-  ownerName: string;
-  ownerEmail: string;
-  planCode: string;
-  planNameAr: string;
-  planNameEn: string;
-  amountSar: number;
-  currency: "SAR";
-  periodStart: string;
-  periodEnd: string;
-  status: "issued" | "void";
-  issuedAt: string;
-};
+export type { SubscriptionInvoice } from "./billing-whatsapp.ts";
+export { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl } from "./billing-whatsapp.ts";
 
 export type BillingSummary = {
   planCode: string;
@@ -231,35 +217,3 @@ export const issueSubscriptionInvoice = createServerFn({ method: "POST" })
       return { ok: false, code: "unavailable", error: "تعذر إصدار الفاتورة" };
     }
   });
-
-export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: "ar" | "en"): string {
-  const period = `${formatInvoiceDate(invoice.periodStart, lang)} → ${formatInvoiceDate(invoice.periodEnd, lang)}`;
-  if (lang === "ar") {
-    return [
-      "فاتورة اشتراك Menu V3",
-      `رقم الفاتورة: ${invoice.invoiceNumber}`,
-      `العميل: ${invoice.tenantName}`,
-      `الخطة: ${invoice.planNameAr}`,
-      `الفترة: ${period}`,
-      `المبلغ: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
-      "الحالة: صادرة — لا تمثل هذه الرسالة إثبات دفع أو تحصيلاً إلكترونياً.",
-    ].join("\n");
-  }
-  return [
-    "Menu V3 Subscription Invoice",
-    `Invoice: ${invoice.invoiceNumber}`,
-    `Customer: ${invoice.tenantName}`,
-    `Plan: ${invoice.planNameEn}`,
-    `Period: ${period}`,
-    `Amount: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
-    "Status: Issued — this message is not proof of payment or electronic collection.",
-  ].join("\n");
-}
-
-export function buildInvoiceWhatsAppUrl(invoice: SubscriptionInvoice, lang: "ar" | "en"): string {
-  return `https://wa.me/?text=${encodeURIComponent(buildInvoiceWhatsAppMessage(invoice, lang))}`;
-}
-
-function formatInvoiceDate(value: string, lang: "ar" | "en"): string {
-  return new Intl.DateTimeFormat(lang === "ar" ? "ar-SA" : "en-US", { dateStyle: "medium", timeZone: "Asia/Riyadh" }).format(new Date(value));
-}
