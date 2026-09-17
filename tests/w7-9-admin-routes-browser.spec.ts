@@ -11,9 +11,28 @@ const routes = [
 ] as const;
 
 test.beforeAll(async () => {
-  const sql = readFileSync("migrations/20260917120000_platform_admin_subscription_control.sql", "utf8");
+  const migrations = [
+    "migrations/20260903025817_subscription_plans.sql",
+    "migrations/20260916100000_customer_activation_lifecycle.sql",
+    "migrations/20260917120000_platform_admin_subscription_control.sql",
+  ];
   const pool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
-  try { await pool.query(sql); } finally { await pool.end(); }
+  const client = await pool.connect();
+  try {
+    for (const path of migrations) {
+      await client.query("begin");
+      try {
+        await client.query(readFileSync(path, "utf8"));
+        await client.query("commit");
+      } catch (error) {
+        await client.query("rollback");
+        throw error;
+      }
+    }
+  } finally {
+    client.release();
+    await pool.end();
+  }
 });
 
 for (const route of routes) {
