@@ -4,50 +4,31 @@ Date: 2026-09-17
 
 ## Request classification / workflows
 
-- Classification: continuity recovery + milestone implementation.
+- Classification: continuity recovery + milestone implementation + verification closeout.
 - Workflows: Repository-first, Continuity, GitHub implementation, Security/Auth review, Subscription/Entitlement review, QA/Release discipline.
 - Research level: Focused.
-- Scope boundary: restore the PH plan/status record, preserve previous work, implement PH-04 only.
-
-## Recovered lifecycle record
-
-The original plan was `docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md` and defined:
-
-- PH-01 Self-Serve Registration → Workspace → Studio
-  - PH-01.1 Entry Surface Audit
-  - PH-01.2 Registration Contract
-  - PH-01.3 Secure Workspace Provisioning
-  - PH-01.4 Existing Customer Login
-  - PH-01.5 Studio Setup Guidance
-  - PH-01.6 New Customer Platform Admin Visibility
-  - PH-01.7 Remove/Bypass Legacy Approval Dependency Safely
-  - PH-01.8 Verification Gate
-- PH-02 Customer Lifecycle Visibility in Platform Admin
-- PH-03 Subscription Plans + Paid 14-Day Trial
-- PH-04 Platform Admin Subscription & Account Control
-- PH-05 Invoice Generation + WhatsApp Sharing
-
-Prior continuity also recorded the product rules: Free has no trial; paid plans receive a 14-day trial after paid-plan selection; PH-05 owns invoice + WhatsApp; subscription/account status must remain separate.
+- Scope boundary: preserve previous work, complete PH-04 only, verify it, merge it, and close the duplicate PH-04 track.
 
 ## Evidence reconciliation
 
 VERIFIED:
+- Current `main` before PH-04 was `a9ea0add9989c3949e94d1efd10065176790456f`.
 - PH-01.2 is merged in PR #159.
 - PH-01.3 is merged in PR #160.
-- Current main contains subscription-plan and tenant-subscription foundations.
-- Current main contains Platform Admin account controls including phone verification and freeze/unfreeze.
-- Current main contains commercial pricing/packaging documentation and server-side entitlement boundaries.
+- Current `main` contains subscription-plan and tenant-subscription foundations.
+- Current `main` contains Platform Admin account controls including phone verification and freeze/unfreeze.
+- PR #163 contained the complete PH-04 implementation scope.
 
 USER-CONFIRMED / RECOVERED:
 - PH-01.5 through PH-01.8 were treated as completed in the user's prior continuity.
 - PH-02 and PH-03 were treated as completed in the user's prior continuity.
 
 KNOWN EXCEPTION:
-- PR #161 (PH-01.4) is not merged in the currently verified GitHub state and has a browser-selector CI failure. This record does not silently mark that PR as merged. It remains a separate verification exception while PH-04 work proceeds from the current `main` baseline.
+- PR #161 (PH-01.4) remains open and is not claimed as merged here.
 
 ## PH-04 implementation
 
-PH-04 is explicitly limited to:
+PH-04 was limited to:
 
 - PH-04.1 plan control;
 - PH-04.2 trial control;
@@ -56,39 +37,46 @@ PH-04 is explicitly limited to:
 - PH-04.5 audit log;
 - PH-04.6 verification gate.
 
-All administrative mutations are server-authorized and validated. Audit records include admin identity, target, tenant, action, reason, before state, after state, and timestamp. Direct client access to the audit table is revoked.
+Administrative mutations are server-authorized and validated. Audit records include admin identity, target, tenant, action, reason, before state, after state, and timestamp. Direct client access to the audit table is revoked.
 
-## Files changed in this milestone
+## CI correction
 
-- `docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md`
-- `docs/sessions/2026-09-17-ph-lifecycle-continuity-recovery-and-ph-04.md`
-- `migrations/20260917120000_ph04_platform_admin_subscription_controls.sql`
-- `src/lib/menu/platform-subscriptions.ts`
-- `src/routes/admin/users.tsx`
-- `tests/ph-04-platform-admin-subscription-controls.test.mjs`
-- `package.json`
+The first PH-04 quality run exposed a TypeScript serializability error in the audit payload and corresponding downstream `result` typing in the admin route. The audit before/after state was changed to serialized JSON strings at the server-function boundary. No entitlement or authorization behavior was weakened.
 
-## Verification plan
+## Verification
 
-Required before merge:
+Quality Run `35179073375` passed:
 
-- `npm install --no-audit --no-fund`
-- `npm run typecheck`
-- `npm test`
-- `npm run test:platform`
-- `npm run lint`
-- `npm run build`
-- `npm run check:auth`
-- `npm run db:migrate`
-- browser/admin QA for `/admin/users` subscription controls
-- final diff/security review
+- route generation and route-tree verification;
+- typecheck;
+- full tests;
+- W7.4–W7.10 contract checks;
+- lint;
+- production build;
+- Playwright installation and Chromium setup;
+- browser template QA;
+- Studio/browser QA;
+- Platform Admin browser QA;
+- performance/diagnostic artifact steps.
 
-No production deployment is authorized by this milestone.
+W9 Orders QA run `35179073395` passed.
+
+## Merge
+
+- PR #163: MERGED.
+- Merge commit: `f98f1f6efdf6feac200eeb679fb947dd030d39a5`.
+- Duplicate parallel PR #162: CLOSED without merge.
+
+## Release boundary
+
+PH-04 implementation is complete. No PH-05 work was started.
+
+Production deployment was not part of the milestone. Vercel previously reported the free-tier deployment rate limit (`api-deployments-free-per-day`), so production deployment remains unverified.
 
 ## Status
 
-IMPLEMENTATION_IN_PROGRESS
+DONE / VERIFIED / MERGED
 
-Deployment: NOT DEPLOYED.
+Deployment: NOT DEPLOYED / NOT VERIFIED.
 
-Next action: run CI quality gates on this branch, inspect failures, correct only PH-04 defects, then create/review one PR. Stop after PH-04 verification; do not start PH-05.
+Next action: stop PH-04. Do not start PH-05 automatically. The separate PH-01.4 verification exception in PR #161 remains to be handled independently.
