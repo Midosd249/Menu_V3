@@ -137,3 +137,16 @@ At the end of every atomic task:
 
 ## Exact Next Task
 No new PH implementation is authorized by this reconciliation. Await the owner's next explicitly scoped product task. Payment Provider Integration and Commercial Launch remain deferred and must not be started automatically.
+
+
+## Session Log — 2026-09-18 — Platform Admin Customer Notifications
+
+- VERIFIED: current main is 8939474e705459e7e5757d93b053593a2ee1d4b2 (PR #175 merge).
+- VERIFIED: self-serve customer lifecycle is direct: registration → workspace provisioning → Studio; legacy approval/request flows are retired.
+- VERIFIED: Platform Admin already shows newly created customer accounts in its Clients/Admin Users surfaces.
+- VERIFIED: /admin/orders is an operational order-management surface backed by real orders data and status/archive mutations; it is not part of the retired customer approval flow.
+- IMPLEMENTED ON BRANCH: add a Platform Admin new-customer notification center using an authenticated server function, 10-second polling, persisted last-read timestamp, in-app toast/badge, and optional browser notifications.
+- PROTECTED: do not remove /admin/orders or /studio/orders; customer signup and order operations are separate product capabilities.
+- Branch: feat/platform-new-customer-notifications.
+- Status: IMPLEMENTATION_IN_PROGRESS until CI verification and PR review complete.
+- Exact next task: complete verification and review PR for the customer-notification enhancement.

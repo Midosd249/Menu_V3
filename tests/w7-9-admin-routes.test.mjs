@@ -92,3 +92,25 @@ test("Admin navigation remains URL-based through the dynamic workspace adapter",
   assert.ok(admin.includes('navigate({ to: "/admin" })'));
   assert.ok(admin.includes('aria-current={tab === item.id ? "page"'));
 });
+
+
+test("Platform Admin exposes server-authorized new-customer notifications without reviving legacy request flows", () => {
+  assert.ok(platform.includes("getPlatformCustomerNotifications"));
+  assert.ok(platform.includes("assertPlatformAdmin(context.userId)"));
+  assert.ok(platform.includes("from tenants t"));
+  assert.ok(platform.includes("newCustomers"));
+  assert.ok(admin.includes("customer-notifications-read-at"));
+  assert.ok(admin.includes("setInterval(() => void pollCustomerNotifications(), 10000)"));
+  assert.ok(admin.includes("Notification.requestPermission"));
+  assert.ok(admin.includes('to="/admin/users"'));
+  assert.ok(!admin.includes("service-requests"));
+  assert.ok(!admin.includes("customer_requests"));
+});
+
+test("Orders remains an operational platform surface independent of customer signup", () => {
+  assert.ok(admin.includes('orders: "/admin/orders"'));
+  assert.ok(admin.includes("getPlatformOrders"));
+  assert.ok(admin.includes("updatePlatformOrderStatus"));
+  assert.ok(admin.includes("archivePlatformOrder"));
+  assert.ok(admin.includes("فتح الطلبات"));
+});

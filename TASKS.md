@@ -112,3 +112,35 @@ Do not begin R10 without explicit authorization.
 ## Exact Next Task
 
 No new implementation task is authorized by this continuity update. Await the owner's next explicitly scoped request.
+
+
+## Platform Admin Customer Notifications — IN PROGRESS
+
+Branch: feat/platform-new-customer-notifications
+
+### Verified decision
+- New customer registration is now self-serve and direct.
+- Legacy approval/request notifications are intentionally not restored.
+- /admin/orders remains useful for actual restaurant order operations and must not be removed.
+
+### Implementation scope
+- Add a server-authorized Platform Admin notification source based on newly created tenant/workspace records.
+- Poll every 10 seconds while Platform Admin is open.
+- Show unread badge, recent-customer notification center, in-app toast, and optional browser/device notifications.
+- Link notifications to /admin/users.
+- Persist last-read timestamp locally to avoid repeated alerts.
+
+### Acceptance state
+- New self-serve customer → visible in Platform Admin notification center.
+- New customer while Admin is open → badge/toast appears without manual refresh, subject to polling interval.
+- Optional browser notification can be enabled by the owner.
+- Existing orders surface remains intact.
+- No legacy approval/request flow is restored.
+
+### Verification
+- Focused contract tests required.
+- Typecheck, full tests, lint, and production build required before merge.
+- Production deployment is not part of this implementation task.
+
+### Exact next task
+Complete verification, create PR, and review CI. Do not remove order-management surfaces.
