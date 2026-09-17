@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import { Activity, Archive, BarChart3, Building2, CheckCircle2, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Clock3, Phone, Search, Settings, ShieldCheck, Store, Users, Wallet, Wrench, XCircle } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Activity, Archive, BarChart3, BellRing, Building2, CheckCircle2, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Clock3, Phone, Search, Settings, ShieldCheck, Store, Users, Wallet, Wrench, XCircle } from "lucide-react";
 import { createFileRoute, Link, Outlet, redirect, useLocation, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ErrorState, LoadingState, MetricRow, PageHeader, SectionHeader } from "@/components/internal-design-system";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { archivePlatformOrder, getPlatformDashboard, getPlatformOrders, updatePlatformOrderStatus, updatePlatformTenantStatus, type PlatformDashboard, type PlatformOrder, type PlatformTenant } from "@/lib/menu/platform";
+import { archivePlatformOrder, getPlatformCustomerNotifications, getPlatformDashboard, getPlatformOrders, updatePlatformOrderStatus, updatePlatformTenantStatus, type PlatformCustomerNotification, type PlatformDashboard, type PlatformOrder, type PlatformTenant } from "@/lib/menu/platform";
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/menu/orders";
 
@@ -26,8 +26,38 @@ function whatsappHref(value: string) { const digits = value.replace(/[^0-9]/g, "
 const NAV: Array<{ id: Tab; label: string; icon: typeof LayoutDashboard }> = [ { id: "overview", label: "الرئيسية", icon: LayoutDashboard }, { id: "tenants", label: "المطاعم", icon: Store }, { id: "orders", label: "الطلبات", icon: PackageCheck }, { id: "clients", label: "العملاء والحسابات", icon: Users }, { id: "branches", label: "الفروع", icon: Building2 }, { id: "projects", label: "المشاريع", icon: Wrench }, { id: "subscriptions", label: "الاشتراكات", icon: Wallet }, { id: "analytics", label: "تحليلات المنصة", icon: BarChart3 }, { id: "activity", label: "سجل النشاط", icon: Activity }, { id: "system", label: "النظام والأمان", icon: ShieldCheck } ];
 const ADMIN_GROUPS: Array<{ id: string; label: string; items: Tab[] }> = [ { id: "overview", label: "نظرة عامة", items: ["overview"] }, { id: "customers", label: "العملاء", items: ["tenants", "clients", "branches", "projects"] }, { id: "commerce", label: "التجارة والتشغيل", items: ["orders", "subscriptions"] }, { id: "intelligence", label: "الذكاء التشغيلي", items: ["analytics", "activity"] }, { id: "system", label: "النظام", items: ["system"] } ];
 export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Tab }) {
-  const navigate = useNavigate(); const { user, isPending } = useCurrentUserState(); const [tab, setTab] = useState<Tab>(initialTab); const [platform, setPlatform] = useState<PlatformDashboard>(emptyPlatform); const [orders, setOrders] = useState<PlatformOrder[]>([]); const [orderStatus, setOrderStatus] = useState<OrderStatus | "all">("all"); const [orderQuery, setOrderQuery] = useState(""); const [selectedOrder, setSelectedOrder] = useState<PlatformOrder | null>(null); const [query, setQuery] = useState(""); const [loading, setLoading] = useState(true); const [ordersLoading, setOrdersLoading] = useState(false); const [error, setError] = useState(""); const [saving, setSaving] = useState<string | null>(null);
+  const navigate = useNavigate(); const { user, isPending } = useCurrentUserState(); const [tab, setTab] = useState<Tab>(initialTab); const [platform, setPlatform] = useState<PlatformDashboard>(emptyPlatform); const [orders, setOrders] = useState<PlatformOrder[]>([]); const [orderStatus, setOrderStatus] = useState<OrderStatus | "all">("all"); const [orderQuery, setOrderQuery] = useState(""); const [selectedOrder, setSelectedOrder] = useState<PlatformOrder | null>(null); const [query, setQuery] = useState(""); const [loading, setLoading] = useState(true); const [ordersLoading, setOrdersLoading] = useState(false); const [error, setError] = useState(""); const [saving, setSaving] = useState<string | null>(null); const [customerNotificationsOpen, setCustomerNotificationsOpen] = useState(false); const [customerNotifications, setCustomerNotifications] = useState<PlatformCustomerNotification[]>([]); const [customerNotificationCount, setCustomerNotificationCount] = useState(0); const [customerAlert, setCustomerAlert] = useState<PlatformCustomerNotification | null>(null);
   const filteredTenants = useMemo(() => filterRows(platform.tenants, query, (t) => [t.nameAr, t.nameEn, t.slug, t.city, t.ownerName, t.ownerEmail]), [platform.tenants, query]); const filteredBranches = useMemo(() => filterRows(platform.branches, query, (b) => [b.tenantName, b.nameAr, b.nameEn, b.city, b.phone]), [platform.branches, query]); const filteredMembers = useMemo(() => filterRows(platform.members, query, (m) => [m.tenantName, m.name, m.email, m.role]), [platform.members, query]); const filteredProjects = useMemo(() => filterRows(platform.projects, query, (p) => [p.businessName, p.city, p.contactName, p.contactPhone, p.status]), [platform.projects, query]);
+  const customerNotificationReadKey = "menu-v3:platform-admin:customer-notifications-read-at";
+  const customerNotificationCursor = useRef<string | null>(null);
+
+  async function pollCustomerNotifications(initial = false) {
+    const cursor = new Date().toISOString();
+    const storedReadAt = typeof window !== "undefined" ? window.localStorage.getItem(customerNotificationReadKey) : null;
+    const since = customerNotificationCursor.current ?? (storedReadAt || cursor);
+    try {
+      const result = await getPlatformCustomerNotifications({ data: { since } });
+      if (!result.ok) return;
+      setCustomerNotifications(result.data.recent);
+      const latestCreatedAt = result.data.recent.reduce((latest, item) => item.createdAt > latest ? item.createdAt : latest, cursor);
+      customerNotificationCursor.current = latestCreatedAt > cursor ? latestCreatedAt : cursor;
+      if (initial && !storedReadAt) {
+        window.localStorage.setItem(customerNotificationReadKey, customerNotificationCursor.current);
+        return;
+      }
+      if (!result.data.newCustomers.length) return;
+      setCustomerNotificationCount((count) => count + result.data.newCustomers.length);
+      const latest = result.data.newCustomers[0];
+      setCustomerAlert(latest);
+      if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
+        new Notification("عميل جديد في Menu V3", { body: latest.tenantName ? `تم تسجيل ${latest.customerName || latest.email || "عميل"} وإنشاء مساحة «${latest.tenantName}».` : "تم تسجيل عميل جديد في المنصة." });
+      }
+      window.setTimeout(() => setCustomerAlert((current) => current?.tenantId === latest.tenantId ? null : current), 6000);
+    } catch {
+      // Notifications are non-blocking; the main admin surface remains usable if polling fails.
+    }
+  }
+
   async function loadOrders() { setOrdersLoading(true); try { const result = await getPlatformOrders({ data: { status: orderStatus === "all" ? undefined : orderStatus, q: orderQuery.trim() || undefined } }); if (!result.ok) setError(result.error); else { setOrders(result.data); setSelectedOrder((current) => current && result.data.some((x) => x.id === current.id) ? result.data.find((x) => x.id === current.id) ?? current : result.data[0] ?? null); } } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحميل الطلبات"); } finally { setOrdersLoading(false); } }
   async function load() { setLoading(true); setError(""); try { const p = await getPlatformDashboard(); if (!p.ok) setError(p.error); else setPlatform(p.data); } catch (e) { setError(e instanceof Error ? e.message : "تعذر تحميل مركز تحكم المنصة"); } finally { setLoading(false); } }
   function selectTab(next: Tab) { setTab(next); setQuery(""); // Dynamic adapter equivalent: navigate({ to: "/admin/$workspace", params: { workspace } }); overview remains navigate({ to: "/admin" }); runtime uses verified public child paths below.
@@ -35,13 +65,114 @@ export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Ta
     if (typeof window !== "undefined") window.location.assign(target);
   }
   useEffect(() => { setTab(initialTab); }, [initialTab]);
-  useEffect(() => { if (isPending) return; if (!user) { void navigate({ to: "/login", search: { redirect: "/admin" } as never, replace: true }); return; } void load(); }, [isPending, user]); useEffect(() => { if (isPending || !user || tab !== "orders") return; const timer = window.setTimeout(() => void loadOrders(), 180); return () => window.clearTimeout(timer); }, [tab, orderStatus, orderQuery]);
+  useEffect(() => { if (isPending) return; if (!user) { void navigate({ to: "/login", search: { redirect: "/admin" } as never, replace: true }); return; } void load(); void pollCustomerNotifications(true); }, [isPending, user]);
+  useEffect(() => {
+    if (isPending || !user) return;
+    const timer = window.setInterval(() => void pollCustomerNotifications(), 10000);
+    return () => window.clearInterval(timer);
+  }, [isPending, user]);
+  useEffect(() => { if (isPending || !user || tab !== "orders") return; const timer = window.setTimeout(() => void loadOrders(), 180); return () => window.clearTimeout(timer); }, [tab, orderStatus, orderQuery]);
   async function toggle(t: PlatformTenant) { setSaving(t.id); const r = await updatePlatformTenantStatus({ data: { tenantId: t.id, isActive: !t.isActive } }); if (!r.ok) setError(r.error); else setPlatform((current) => ({ ...current, activeTenantCount: current.activeTenantCount + (r.data.isActive ? 1 : -1), tenants: current.tenants.map((x) => x.id === t.id ? { ...x, isActive: r.data.isActive } : x) })); setSaving(null); }
   async function changeOrderStatus(id: string, status: OrderStatus) { setSaving(id); const result = await updatePlatformOrderStatus({ data: { id, status } }); if (!result.ok) setError(result.error); else { setOrders((current) => current.map((order) => order.id === id ? result.data : order)); setSelectedOrder(result.data); setPlatform((current) => ({ ...current, openOrderCount: current.openOrderCount + (isOpenOrder(result.data.status) ? 1 : 0) - (selectedOrder && isOpenOrder(selectedOrder.status) ? 1 : 0) })); } setSaving(null); }
   async function archiveOrder(order: PlatformOrder) { if (!window.confirm(`إزالة الطلب #${order.orderNumber} من لوحة التشغيل؟\nسيتم أرشفته وليس حذف سجله التاريخي.`)) return; setSaving(order.id); const result = await archivePlatformOrder({ data: { id: order.id } }); if (!result.ok) setError(result.error); else { setOrders((current) => current.filter((x) => x.id !== order.id)); setSelectedOrder((current) => current?.id === order.id ? null : current); setPlatform((current) => ({ ...current, orderCount: Math.max(0, current.orderCount - 1), openOrderCount: isOpenOrder(order.status) ? Math.max(0, current.openOrderCount - 1) : current.openOrderCount })); } setSaving(null); }
-  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات مالك المنصة...</div>; const activeNav = NAV.find((item) => item.id === tab);
-  return <main className="mx-auto grid max-w-[1500px] gap-5 py-4 lg:py-8"><PageHeader eyebrow="Platform Admin" title="مركز تحكم Menu V3" description="مساحة تشغيل مستقلة لمالك المنصة لمراجعة المطاعم، الطلبات، الحسابات، الاشتراكات، الذكاء التشغيلي، والنظام." actions={<div className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }} disabled={loading || ordersLoading}><span className={cn("size-4", (loading || ordersLoading) && "animate-spin")}>↻</span> تحديث البيانات</Button></div>} /><div className="grid gap-5 lg:grid-cols-[250px_minmax(0,1fr)]"><AdminNavigation tab={tab} platform={platform} onSelect={selectTab} /><section className="min-w-0 grid gap-4">{error ? <ErrorState title="تعذر تحميل بعض بيانات المنصة" message={error} action={<Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }}>إعادة المحاولة</Button>} /> : null}{loading && !platform.tenants.length ? <LoadingState label="جارٍ تحميل مساحة إدارة المنصة…" /> : null}{!loading || platform.tenants.length ? <><section className="rounded-2xl border border-line bg-paper p-4"><SectionHeader title="لقطة تشغيلية" description="أرقام حقيقية من بيانات المنصة الحالية فقط." /><div className="mt-2 grid gap-x-6 md:grid-cols-2 xl:grid-cols-4"><MetricRow label="المطاعم" value={platform.tenantCount.toLocaleString("ar-SA")} /><MetricRow label="النشطة" value={platform.activeTenantCount.toLocaleString("ar-SA")} /><MetricRow label="المنشورة" value={platform.publishedTenantCount.toLocaleString("ar-SA")} /><MetricRow label="الفروع" value={platform.branchCount.toLocaleString("ar-SA")} /><MetricRow label="الأصناف" value={platform.productCount.toLocaleString("ar-SA")} /><MetricRow label="الطلبات" value={platform.orderCount.toLocaleString("ar-SA")} /><MetricRow label="الطلبات المفتوحة" value={platform.openOrderCount.toLocaleString("ar-SA")} /><MetricRow label="الحسابات" value={platform.members.length.toLocaleString("ar-SA")} /></div></section>{tab !== "overview" && tab !== "system" && tab !== "orders" ? <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} /> : null}{tab === "overview" ? <Overview platform={platform} onTab={selectTab} /> : null}{tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}{tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}{tab === "clients" ? <Clients rows={filteredMembers} /> : null}{tab === "branches" ? <Branches rows={filteredBranches} /> : null}{tab === "projects" ? <Projects rows={filteredProjects} /> : null}{tab === "subscriptions" ? <Subscriptions platform={platform} /> : null}{tab === "analytics" ? <Analytics platform={platform} /> : null}{tab === "activity" ? <ActivityView rows={platform.activity} /> : null}{tab === "system" ? <SystemView platform={platform} /> : null}</> : null}</section></div></main>;
+  function toggleCustomerNotifications() {
+    setCustomerNotificationsOpen((value) => !value);
+    setCustomerNotificationCount(0);
+    if (typeof window !== "undefined") window.localStorage.setItem(customerNotificationReadKey, new Date().toISOString());
+  }
+  async function enableBrowserNotifications() {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    await Notification.requestPermission();
+  }
+  if (isPending || !user) return <div className="grid min-h-[60vh] place-items-center text-sm text-muted">جار التحقق من صلاحيات مالك المنصة...</div>;
+  const activeNav = NAV.find((item) => item.id === tab);
+  return <>
+    {customerAlert ? <div role="status" aria-live="polite" className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-md rounded-2xl border border-line bg-paper p-4 shadow-2xl">
+      <p className="text-xs font-semibold text-accent">عميل جديد</p>
+      <p className="mt-1 font-semibold">{customerAlert.tenantName || "مساحة عمل جديدة"}</p>
+      <p className="mt-1 text-sm text-muted">{customerAlert.customerName || customerAlert.email || "تم تسجيل عميل جديد."}</p>
+      <Link to="/admin/users" onClick={() => setCustomerAlert(null)} className="mt-3 inline-flex min-h-9 items-center rounded-lg bg-ink px-3 text-xs text-paper">فتح الحسابات</Link>
+    </div> : null}
+    <main className="mx-auto grid max-w-[1500px] gap-5 py-4 lg:py-8">
+      <PageHeader
+        eyebrow="Platform Admin"
+        title="مركز تحكم Menu V3"
+        description="مساحة تشغيل مستقلة لمالك المنصة لمراجعة المطاعم، الطلبات، الحسابات، الاشتراكات، الذكاء التشغيلي، والنظام."
+        actions={<div className="flex flex-wrap gap-2">
+          <Button variant="outline" aria-label="إشعارات العملاء الجدد" aria-expanded={customerNotificationsOpen} onClick={toggleCustomerNotifications}>
+            <BellRing className="size-4" />
+            إشعارات
+            {customerNotificationCount > 0 ? <span className="rounded-full bg-bad px-2 py-0.5 text-[10px] text-white">{customerNotificationCount > 99 ? "99+" : customerNotificationCount}</span> : null}
+          </Button>
+          <Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }} disabled={loading || ordersLoading}>
+            <span className={cn("size-4", (loading || ordersLoading) && "animate-spin")}>↻</span>
+            تحديث البيانات
+          </Button>
+        </div>}
+      />
+      {customerNotificationsOpen ? <CustomerNotificationPanel notifications={customerNotifications} onClose={() => setCustomerNotificationsOpen(false)} onOpenAccounts={() => setCustomerNotificationsOpen(false)} onEnableBrowserNotifications={() => void enableBrowserNotifications()} /> : null}
+      <div className="grid gap-5 lg:grid-cols-[250px_minmax(0,1fr)]">
+        <AdminNavigation tab={tab} platform={platform} onSelect={selectTab} />
+        <section className="min-w-0 grid gap-4">
+          {error ? <ErrorState title="تعذر تحميل بعض بيانات المنصة" message={error} action={<Button variant="outline" onClick={() => { void load(); if (tab === "orders") void loadOrders(); }}>إعادة المحاولة</Button>} /> : null}
+          {loading && !platform.tenants.length ? <LoadingState label="جارٍ تحميل مساحة إدارة المنصة…" /> : null}
+          {!loading || platform.tenants.length ? <>
+            <section className="rounded-2xl border border-line bg-paper p-4">
+              <SectionHeader title="لقطة تشغيلية" description="أرقام حقيقية من بيانات المنصة الحالية فقط." />
+              <div className="mt-2 grid gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+                <MetricRow label="المطاعم" value={platform.tenantCount.toLocaleString("ar-SA")} />
+                <MetricRow label="النشطة" value={platform.activeTenantCount.toLocaleString("ar-SA")} />
+                <MetricRow label="المنشورة" value={platform.publishedTenantCount.toLocaleString("ar-SA")} />
+                <MetricRow label="الفروع" value={platform.branchCount.toLocaleString("ar-SA")} />
+                <MetricRow label="الأصناف" value={platform.productCount.toLocaleString("ar-SA")} />
+                <MetricRow label="الطلبات" value={platform.orderCount.toLocaleString("ar-SA")} />
+                <MetricRow label="الطلبات المفتوحة" value={platform.openOrderCount.toLocaleString("ar-SA")} />
+                <MetricRow label="الحسابات" value={platform.members.length.toLocaleString("ar-SA")} />
+              </div>
+            </section>
+            {tab !== "overview" && tab !== "system" && tab !== "orders" ? <Toolbar value={query} onChange={setQuery} placeholder={`ابحث في ${activeNav?.label ?? "المحتوى"}`} /> : null}
+            {tab === "overview" ? <Overview platform={platform} onTab={selectTab} /> : null}
+            {tab === "tenants" ? <Tenants rows={filteredTenants} saving={saving} onToggle={toggle} /> : null}
+            {tab === "orders" ? <Orders rows={orders} selected={selectedOrder} loading={ordersLoading} status={orderStatus} query={orderQuery} setStatus={setOrderStatus} setQuery={setOrderQuery} saving={saving} onStatus={changeOrderStatus} onArchive={archiveOrder} onSelect={setSelectedOrder} /> : null}
+            {tab === "clients" ? <Clients rows={filteredMembers} /> : null}
+            {tab === "branches" ? <Branches rows={filteredBranches} /> : null}
+            {tab === "projects" ? <Projects rows={filteredProjects} /> : null}
+            {tab === "subscriptions" ? <Subscriptions platform={platform} /> : null}
+            {tab === "analytics" ? <Analytics platform={platform} /> : null}
+            {tab === "activity" ? <ActivityView rows={platform.activity} /> : null}
+            {tab === "system" ? <SystemView platform={platform} /> : null}
+          </> : null}
+        </section>
+      </div>
+    </main>
+  </>;
 }
+
+function CustomerNotificationPanel({ notifications, onClose, onOpenAccounts, onEnableBrowserNotifications }: { notifications: PlatformCustomerNotification[]; onClose: () => void; onOpenAccounts: () => void; onEnableBrowserNotifications: () => void }) {
+  const browserNotificationsAvailable = typeof window !== "undefined" && "Notification" in window;
+  const browserNotificationsGranted = browserNotificationsAvailable && Notification.permission === "granted";
+  return <aside className="rounded-2xl border border-line bg-paper p-4 shadow-sm" aria-label="إشعارات العملاء الجدد">
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">إشعارات العملاء</p>
+        <h2 className="mt-1 font-semibold">آخر العملاء المسجلين</h2>
+      </div>
+      <button type="button" aria-label="إغلاق" onClick={onClose} className="rounded-lg px-2 py-1 text-sm hover:bg-sand">×</button>
+    </div>
+    <div className="mt-3 grid max-h-80 gap-2 overflow-auto">
+      {notifications.length ? notifications.map((customer) => <Link key={customer.tenantId} to="/admin/users" onClick={onOpenAccounts} className="rounded-xl border border-line bg-sand/30 p-3 text-start hover:bg-sand">
+        <p className="text-sm font-semibold">{customer.tenantName || "مساحة عمل جديدة"}</p>
+        <p className="mt-1 text-xs text-muted">{customer.customerName || customer.email || "عميل جديد"}</p>
+        <p className="mt-1 text-[11px] text-muted">{fmt(customer.createdAt)}</p>
+      </Link>) : <p className="rounded-xl border border-dashed border-line p-4 text-center text-xs text-muted">لا توجد إشعارات عملاء حتى الآن.</p>}
+    </div>
+    <div className="mt-3 grid gap-2">
+      <Link to="/admin/users" onClick={onOpenAccounts} className="inline-flex min-h-10 items-center justify-center rounded-xl bg-ink px-4 text-sm text-paper">فتح إدارة الحسابات</Link>
+      {!browserNotificationsGranted ? <Button variant="outline" disabled={!browserNotificationsAvailable} onClick={onEnableBrowserNotifications}>تفعيل إشعارات الجهاز</Button> : null}
+    </div>
+  </aside>;
+}
+
 function AdminNavigation({ tab, platform, onSelect }: { tab: Tab; platform: PlatformDashboard; onSelect: (tab: Tab) => void }) { return <aside className="h-fit rounded-2xl border border-line bg-paper p-2 lg:sticky lg:top-4" aria-label="تنقل إدارة المنصة"><div className="px-3 py-3"><p className="text-xs font-semibold text-muted">Platform Admin</p><p className="mt-1 text-xs leading-5 text-muted">مساحات تشغيل المنصة الحالية</p></div><nav className="grid gap-2">{ADMIN_GROUPS.map((group) => <section key={group.id} className="rounded-xl border border-line/70 bg-sand/20 p-1.5" aria-labelledby={`admin-group-${group.id}`}><h2 id={`admin-group-${group.id}`} className="px-2.5 py-2 text-[11px] font-semibold tracking-wide text-muted">{group.label}</h2><div className="grid gap-1">{group.items.map((id) => { const item = NAV.find((candidate) => candidate.id === id); if (!item) return null; const Icon = item.icon; const badge = id === "orders" && platform.openOrderCount > 0 ? platform.openOrderCount : null; return <a key={item.id} href={ADMIN_ROUTES[item.id]} role="button" aria-current={tab === item.id ? "page" : undefined} className={cn("flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-start transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", tab === item.id ? "bg-ink text-paper" : "text-ink-soft hover:bg-sand/60 hover:text-ink")}><Icon className="size-4 shrink-0" aria-hidden /><span className="min-w-0 flex-1 truncate">{item.label}</span>{badge ? <span className={cn("rounded-full px-2 py-0.5 text-[11px]", tab === item.id ? "bg-paper text-ink" : "bg-sand text-ink")}>{badge}</span> : null}</a>; })}</div></section>)}</nav><p className="px-3 py-3 text-[11px] leading-5 text-muted">إدارة الحسابات المتقدمة متاحة من مسار التحكم المخصص، مع بقاء الصلاحيات خادميًا.</p></aside>; }
 function isOpenOrder(status: OrderStatus) { return status === "confirmed" || status === "preparing" || status === "ready"; } function filterRows<T>(rows: T[], q: string, fields: (row: T) => string[]) { const needle = q.trim().toLowerCase(); return needle ? rows.filter((row) => fields(row).some((value) => value.toLowerCase().includes(needle))) : rows; } function Toolbar({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) { return <label className="relative block rounded-2xl border border-line bg-paper p-3"><Search className="pointer-events-none absolute start-6 top-1/2 size-4 -translate-y-1/2 text-muted" /><Input className="ps-9" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></label>; } function Empty({ text }: { text: string }) { return <div className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-muted">{text}</div>; }
 function Overview({ platform, onTab }: { platform: PlatformDashboard; onTab: (tab: Tab) => void }) { return <div className="grid gap-6"><section className="grid gap-3"><SectionHeader title="ملخص المطاعم والحسابات" description="المطاعم والحسابات والفروع التي تظهر فعليًا في بيانات المنصة." /><div className="grid gap-3 md:grid-cols-3"><Panel title="المطاعم" icon={<Store className="size-5" />} text={`${platform.tenantCount} مطعم · ${platform.activeTenantCount} نشط · ${platform.publishedTenantCount} منشور`} action="إدارة المطاعم" onClick={() => onTab("tenants")} /><Panel title="الحسابات والفريق" icon={<Users className="size-5" />} text={`${platform.members.length} عضوية مسجلة في البيانات الحالية`} action="عرض الحسابات والتحكم" onClick={() => onTab("clients")} /><Panel title="الفروع" icon={<Building2 className="size-5" />} text={`${platform.branchCount} فرع مرتبط بالمطاعم`} action="إدارة الفروع" onClick={() => onTab("branches")} /></div></section><section className="grid gap-3"><SectionHeader title="التجارة والتشغيل" description="عمليات حقيقية متاحة من مركز المنصة." /><div className="grid gap-3 md:grid-cols-2"><Panel title="الطلبات" icon={<PackageCheck className="size-5" />} text={`${platform.openOrderCount} مفتوح الآن · ${platform.orderCount} طلبًا غير مؤرشف`} action="فتح الطلبات" onClick={() => onTab("orders")} /><Panel title="الاشتراكات" icon={<Wallet className="size-5" />} text={`${platform.activeSubscriptionCount} نشطة · ${platform.trialSubscriptionCount} تجريبية`} action="عرض الاشتراكات" onClick={() => onTab("subscriptions")} /></div></section><section className="grid gap-3"><SectionHeader title="الذكاء التشغيلي" description="تحليلات وسجل نشاط مشتقان من البيانات الحالية، دون توقعات أو درجات مخترعة." /><div className="grid gap-3 md:grid-cols-2"><Panel title="تحليلات المنصة" icon={<BarChart3 className="size-5" />} text={`${platform.analytics.visits} زيارة · ${platform.analytics.productViews} مشاهدة صنف · ${platform.analytics.qrScans} مسح QR`} action="فتح التحليلات" onClick={() => onTab("analytics")} /><Panel title="سجل النشاط" icon={<Activity className="size-5" />} text={`${platform.activity.length} حدثًا متاحًا للمراجعة`} action="فتح السجل" onClick={() => onTab("activity")} /></div></section></div>; }
