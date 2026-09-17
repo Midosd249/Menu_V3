@@ -1,3 +1,5 @@
+export type BillingInterval = "monthly" | "annual";
+
 export type SubscriptionInvoice = {
   id: string;
   invoiceNumber: string;
@@ -10,6 +12,7 @@ export type SubscriptionInvoice = {
   planNameEn: string;
   amountSar: number;
   currency: "SAR";
+  billingInterval: BillingInterval;
   periodStart: string;
   periodEnd: string;
   status: "issued" | "void";
@@ -18,12 +21,16 @@ export type SubscriptionInvoice = {
 
 export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: "ar" | "en"): string {
   const period = `${formatInvoiceDate(invoice.periodStart, lang)} → ${formatInvoiceDate(invoice.periodEnd, lang)}`;
+  const interval = invoice.billingInterval === "annual"
+    ? (lang === "ar" ? "سنوية" : "Annual")
+    : (lang === "ar" ? "شهرية" : "Monthly");
   if (lang === "ar") {
     return [
       "فاتورة اشتراك Menu V3",
       `رقم الفاتورة: ${invoice.invoiceNumber}`,
       `العميل: ${invoice.tenantName}`,
       `الخطة: ${invoice.planNameAr}`,
+      `الفوترة: ${interval}`,
       `الفترة: ${period}`,
       `المبلغ: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
       "الحالة: صادرة — لا تمثل هذه الرسالة إثبات دفع أو تحصيلاً إلكترونياً.",
@@ -34,6 +41,7 @@ export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: 
     `Invoice: ${invoice.invoiceNumber}`,
     `Customer: ${invoice.tenantName}`,
     `Plan: ${invoice.planNameEn}`,
+    `Billing: ${interval}`,
     `Period: ${period}`,
     `Amount: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
     "Status: Issued — this message is not proof of payment or electronic collection.",
