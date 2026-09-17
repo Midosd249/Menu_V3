@@ -18,5 +18,5 @@ function PlatformAdminWorkspaceRoute() {
   if (!initialTab) {
     return <Navigate to="/admin" replace />;
   }
-  return <PlatformAdminPage initialTab={initialTab} />;
+  return <PlatformAdminPage key={workspace} initialTab={initialTab} />;
 }
