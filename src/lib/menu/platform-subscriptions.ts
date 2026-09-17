@@ -37,8 +37,8 @@ export type PlatformSubscriptionAudit = {
   tenantId: string | null;
   action: string;
   reason: string;
-  beforeState: Record<string, unknown>;
-  afterState: Record<string, unknown>;
+  beforeState: string;
+  afterState: string;
   createdAt: string;
 };
 
@@ -327,8 +327,8 @@ export const getPlatformSubscriptionAudit = createServerFn({ method: "GET" })
         tenantId: row.tenant_id ? String(row.tenant_id) : null,
         action: String(row.action),
         reason: String(row.reason ?? ""),
-        beforeState: (row.before_state ?? {}) as Record<string, unknown>,
-        afterState: (row.after_state ?? {}) as Record<string, unknown>,
+        beforeState: JSON.stringify(row.before_state ?? {}),
+        afterState: JSON.stringify(row.after_state ?? {}),
         createdAt: new Date(String(row.created_at)).toISOString(),
       })) };
     } catch (error) {
