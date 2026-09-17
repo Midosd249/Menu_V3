@@ -46,9 +46,12 @@ Historical product decision recorded in the lifecycle plan:
 
 ### PH-04 — Platform Admin Subscription & Account Control
 
-STATUS: IN_PROGRESS
+STATUS: DONE / VERIFIED / MERGED
 
-Scope:
+Merged PR: #163
+Merge commit: `f98f1f6efdf6feac200eeb679fb947dd030d39a5`
+
+Scope completed:
 
 1. **PH-04.1 — Plan Control**
    - Platform Owner can change an active tenant subscription plan.
@@ -74,7 +77,9 @@ Scope:
    - Audit data is RLS-enabled and direct client access is revoked.
 
 6. **PH-04.6 — Verification Gate**
-   - Typecheck, tests, lint, build, auth/security checks, migration checks, browser QA, and final diff review.
+   - Typecheck, tests, lint, build, route generation, migration-related coverage, and browser QA passed in Quality Run `35179073375`.
+   - W9 Orders QA passed in run `35179073395`.
+   - A focused serializability defect found by CI was corrected before merge.
    - No production deployment is part of PH-04 implementation.
 
 ### PH-05 — Invoice Generation + WhatsApp Sharing
@@ -94,4 +99,8 @@ TODO. Do not start automatically after PH-04.
 
 LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER/VISUAL QA → TESTS → CI QUALITY GATES → DIFF REVIEW → ONE RELEASE BATCH → MAIN → ONE PRODUCTION DEPLOYMENT → REAL-DEVICE QA.
 
-PH-04 must stop after its verification gate. No PH-05 work is started automatically.
+PH-04 is complete and stops here. PH-05 must not be started automatically.
+
+## Current deployment note
+
+PH-04 was merged to `main`, but production deployment is **NOT VERIFIED**. The earlier Vercel deployment attempt on PR #163 was blocked by the free-tier deployment rate limit (`api-deployments-free-per-day`).
