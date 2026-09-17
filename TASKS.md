@@ -116,7 +116,7 @@ No new implementation task is authorized by this continuity update. Await the ow
 
 ## Platform Admin Customer Notifications — IN PROGRESS
 
-Branch: feat/platform-new-customer-notifications
+Branch: feat/platform-new-customer-notifications-ready
 
 ### Verified decision
 - New customer registration is now self-serve and direct.
