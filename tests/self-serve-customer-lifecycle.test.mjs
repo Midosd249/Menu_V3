@@ -37,5 +37,6 @@ test("legacy request data is retired and no longer generated", () => {
   assert.match(migration, /delete from menu_v3\.customer_requests/);
   assert.match(migration, /delete from public\.service_requests/);
   assert.match(migration, /delete from menu_v3\.leads/);
+  assert.match(migration, /create trigger tenants_platform_customer_request/);
   assert.match(migration, /CUSTOMER_WORKSPACE_PROVISIONING_REQUIRED/);
 });
