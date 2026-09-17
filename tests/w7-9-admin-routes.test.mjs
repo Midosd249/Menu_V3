@@ -86,8 +86,9 @@ test("Admin does not fabricate retired request data", () => {
   assert.ok(!/health score|security events|revenue trend|predicted/i.test(admin));
 });
 
-test("Admin navigation remains URL-based", () => {
+test("Admin navigation remains URL-based through the dynamic workspace adapter", () => {
   assert.ok(admin.includes("function selectTab(next: Tab) { setTab(next);"));
-  assert.ok(admin.includes("navigate({ to: ADMIN_ROUTES[next] })"));
+  assert.ok(admin.includes('navigate({ to: "/admin/$workspace", params: { workspace }'));
+  assert.ok(admin.includes('navigate({ to: "/admin" })'));
   assert.ok(admin.includes('aria-current={tab === item.id ? "page"'));
 });
