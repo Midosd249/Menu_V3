@@ -45,8 +45,15 @@ Commercial lifecycle / subscription billing document / tenant-scoped server auth
 - `src/lib/menu/billing.test.ts`
 - `src/routes/studio/billing.tsx`
 - `src/routes/studio/settings.tsx`
+- `src/routeTree.gen.ts` — regenerated/committed after the initial CI freshness failure.
 - `package.json`
 - `docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md`
+
+## CI correction
+
+The first PH-05 Quality run `35180395811` and W9 run `35180395925` did not reach substantive verification because the committed `src/routeTree.gen.ts` was stale after adding `/studio/billing`. The generated diff was verified from the GitHub Actions log and the route tree was then regenerated and committed on the PH-05 branch. The temporary generation helper was removed immediately after the generated artifact was committed; it is not part of the final PH-05 scope.
+
+The next verification cycle must run against the final human-authored branch head and must pass route generation before the remaining quality gates are considered valid.
 
 ## Vercel handling
 
@@ -70,3 +77,4 @@ No Vercel deployment or retry is part of PH-05 implementation. Continue developm
 
 - PH-01.4 PR #161 remains separately open with its existing browser-selector CI exception; PH-05 does not modify or close it.
 - Current repository pricing catalog remains the code source of truth. PH-05 does not silently change pricing.
+- Vercel continues to report the known free-tier `api-deployments-free-per-day` limit on PR #165; this is deployment infrastructure status, not a PH-05 implementation failure.
