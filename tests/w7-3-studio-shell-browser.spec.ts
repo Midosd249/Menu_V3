@@ -260,3 +260,130 @@ test("PH-01.3 self-serve setup provisions safely and hands off to Studio in Arab
     }
   }
 });
+
+test("PH-01.4 real Better Auth customer can return to an existing workspace through login", async ({ page }) => {
+  test.setTimeout(180_000);
+  const databaseUrl = process.env.CUSTOMER_LIFECYCLE_DATABASE_URL ?? (process.env.CI === "true" ? "postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_customer_ci" : "");
+  if (!databaseUrl) throw new Error("CUSTOMER_LIFECYCLE_DATABASE_URL is required for PH-01.4 browser QA");
+  const migration = readFileSync("migrations/20260917100000_self_serve_workspace_provisioning.sql", "utf8");
+  const migrationPool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
+  try { await migrationPool.query(migration); } finally { await migrationPool.end(); }
+
+  const port = "8087";
+  const base = `http://127.0.0.1:${port}`;
+  const server = spawn(
+    "node",
+    ["scripts/with-app-env.mjs", "./node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", port],
+    {
+      env: {
+        ...process.env,
+        VITE_AUTH_ENABLED: "true",
+        BETTER_AUTH_SECRET: "ph-01-4-browser-test-secret",
+        BETTER_AUTH_URL: base,
+        DATABASE_URL: databaseUrl,
+        SUPABASE_DB_URL: "",
+        POSTGRES_URL: "",
+        POSTGRES_PRISMA_URL: "",
+        POSTGRES_URL_NON_POOLING: "",
+      },
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+  server.stdout?.pipe(createWriteStream(".grok/ph-01-4-browser.log"));
+  server.stderr?.pipe(createWriteStream(".grok/ph-01-4-browser.error.log"));
+
+  const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  const email = `ph-01-4-${suffix}@example.test`;
+  const phone = `05${String(Date.now()).slice(-8)}`;
+  const password = "MenuV3-Test-Password-123!";
+  let userId = "";
+
+  async function waitForServer() {
+    for (let attempt = 1; attempt <= 120; attempt += 1) {
+      try {
+        const response = await fetch(`${base}/login`);
+        if (response.ok) return;
+      } catch {
+        if (attempt === 120) throw new Error("PH-01.4 browser fixture did not start");
+      }
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new Error("PH-01.4 browser fixture did not start");
+  }
+
+  try {
+    await waitForServer();
+    await page.setViewportSize({ width: 1280, height: 800 });
+
+    await page.goto(`${base}/login?mode=signup`, { waitUntil: "domcontentloaded" });
+    await page.getByRole("textbox", { name: "الاسم الكامل" }).fill("PH-01.4 Existing Customer");
+    await page.getByRole("textbox", { name: "اسم البراند أو المطعم" }).fill("عميل تسجيل الدخول للاختبار");
+    await page.getByRole("textbox", { name: "رقم الجوال السعودي" }).fill(phone);
+    await page.getByRole("textbox", { name: "البريد الإلكتروني" }).fill(email);
+    await page.getByLabel("كلمة المرور").fill(password);
+    await page.getByLabel("تأكيد كلمة المرور").fill(password);
+    await page.getByRole("button", { name: "إنشاء الحساب" }).click();
+    await expect(page).toHaveURL(/\/onboarding$/);
+    await expect(page.getByRole("heading", { name: "جهّز مساحة عملك" })).toBeVisible();
+
+    const brand = "PH-01.4 Workspace";
+    await page.getByRole("textbox").nth(0).fill(brand);
+    await page.getByRole("button", { name: "كافيه" }).click();
+    await page.getByRole("textbox").nth(1).fill("PH-01.4 Workspace");
+    await page.getByRole("textbox").nth(2).fill("Existing customer login verification workspace");
+    await page.getByRole("button", { name: "إنشاء مساحة العمل والمتابعة" }).click();
+    await expect(page).toHaveURL(/\/studio$/, { timeout: 15_000 });
+    await expect(page.getByText(brand, { exact: true })).toBeVisible();
+
+    const database = new pg.Pool({ connectionString: databaseUrl, max: 1 });
+    try {
+      const userRows = await database.query<{ id: string }>('select "id" from "user" where "email" = $1 limit 1', [email]);
+      userId = userRows.rows[0]?.id ?? "";
+      expect(userId).not.toBe("");
+      const membershipRows = await database.query<{ tenant_id: string; user_id: string; role: string }>(
+        "select tenant_id, user_id, role from tenant_members where user_id = $1 and is_active = true limit 1",
+        [userId],
+      );
+      expect(membershipRows.rows).toHaveLength(1);
+      expect(membershipRows.rows[0]?.user_id).toBe(userId);
+      expect(membershipRows.rows[0]?.role).toBe("owner");
+    } finally { await database.end(); }
+
+    await page.goto(`${base}/login`, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(/\/studio$/);
+    await expect(page.getByRole("textbox", { name: "البريد الإلكتروني" })).toHaveCount(0);
+    await expect(page.getByRole("textbox", { name: "الاسم الكامل" })).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page).toHaveURL(/\/$/);
+
+    await page.goto(`${base}/login`, { waitUntil: "domcontentloaded" });
+    await page.getByRole("textbox", { name: "البريد الإلكتروني" }).fill(email);
+    await page.getByLabel("كلمة المرور").fill(password);
+    await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+    await expect(page).toHaveURL(/\/studio$/, { timeout: 15_000 });
+    await expect(page.getByText(brand, { exact: true })).toBeVisible();
+
+    await page.context().clearCookies();
+    await page.goto(`${base}/studio`, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(/\/login$/);
+    await expect(page.getByRole("textbox", { name: "البريد الإلكتروني" })).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "الاسم الكامل" })).toHaveCount(0);
+
+    await page.getByRole("textbox", { name: "البريد الإلكتروني" }).fill(email);
+    await page.getByLabel("كلمة المرور").fill(password);
+    await page.getByRole("button", { name: "تسجيل الدخول" }).click();
+    await expect(page).toHaveURL(/\/studio$/, { timeout: 15_000 });
+    await expect(page.getByText(brand, { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+  } finally {
+    server.kill("SIGTERM");
+    if (userId) {
+      const cleanup = new pg.Pool({ connectionString: databaseUrl, max: 1 });
+      try {
+        await cleanup.query("delete from tenants where owner_user_id = $1", [userId]);
+        await cleanup.query('delete from "user" where "id" = $1', [userId]);
+      } finally { await cleanup.end(); }
+    }
+  }
+});
