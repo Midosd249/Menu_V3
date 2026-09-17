@@ -60,6 +60,7 @@ DECLARE
   v_after JSONB;
   v_plan_id UUID;
   v_actor_is_admin BOOLEAN;
+  v_account_status TEXT;
 BEGIN
   SELECT EXISTS (
     SELECT 1 FROM menu_v3.platform_admins pa
@@ -71,7 +72,10 @@ BEGIN
     RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_INVALID_ACTION';
   END IF;
 
-  PERFORM 1 FROM menu_v3.tenants t WHERE t.id = p_tenant_id FOR UPDATE;
+  SELECT t.account_status INTO v_account_status
+  FROM menu_v3.tenants t
+  WHERE t.id = p_tenant_id
+  FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_TENANT_NOT_FOUND'; END IF;
 
   PERFORM 1 FROM menu_v3.tenant_subscriptions ts WHERE ts.tenant_id = p_tenant_id FOR UPDATE;
@@ -112,13 +116,16 @@ BEGIN
     WHERE tenant_id = p_tenant_id AND status = 'trialing';
     IF NOT FOUND THEN RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_TRIAL_NOT_ACTIVE'; END IF;
   ELSIF p_action = 'freeze_account' THEN
+    IF v_account_status = 'blocked' THEN RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_ACCOUNT_BLOCKED'; END IF;
     UPDATE menu_v3.tenants
       SET account_status = 'frozen', is_active = false, updated_at = now()
-    WHERE id = p_tenant_id;
+    WHERE id = p_tenant_id AND account_status IN ('active', 'frozen');
   ELSIF p_action = 'unfreeze_account' THEN
+    IF v_account_status = 'blocked' THEN RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_ACCOUNT_BLOCKED'; END IF;
     UPDATE menu_v3.tenants
       SET account_status = 'active', is_active = true, updated_at = now()
-    WHERE id = p_tenant_id;
+    WHERE id = p_tenant_id AND account_status = 'frozen';
+    IF NOT FOUND AND v_account_status <> 'active' THEN RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_ACCOUNT_NOT_FROZEN'; END IF;
   ELSIF p_action = 'set_subscription_status' THEN
     IF p_subscription_status NOT IN ('trialing','active','past_due','cancelled') THEN
       RAISE EXCEPTION 'ADMIN_SUBSCRIPTION_INVALID_STATUS';
