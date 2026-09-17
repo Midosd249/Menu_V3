@@ -8,9 +8,10 @@
 
 ## Current Verified Main
 - VERIFIED: `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392` as verified from GitHub on 2026-09-17.
-- VERIFIED: PR #172 is merged and fixes the public homepage `React.Children.only` runtime crash.
+- VERIFIED: PR #170 is merged into `main`.
+- VERIFIED: PR #172 is merged into `main` and fixes the public homepage `React.Children.only` runtime crash.
 - VERIFIED: Quality and W9 Orders QA passed for PR #172.
-- VERIFIED: no backend, database, authentication, RLS, tenant-isolation, pricing, theme-renderer, or deployment-configuration changes were introduced by the fix.
+- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
 
 ## PH Lifecycle — Completed / Deferred Boundary
 
@@ -28,15 +29,37 @@ Commercial Launch                                         NOT STARTED / DEFERRED
 
 The owner has explicitly decided NOT to implement Payment Provider Integration or Commercial Launch now. Do not create a PH-07 placeholder and do not start either deferred area without explicit authorization.
 
+## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
+
+PR #170 — `fix: retire legacy customer approval and request flows`
+
+Merge commit:
+`7e91778bfafa67b24efd1edf4387e1f3014fae9d`
+
+### Final contract
+- New customer: Home → Registration → secure workspace provisioning → Studio.
+- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
+- New customer access no longer depends on manual approval/request gating.
+- `/admin/users` remains the server-authorized customer-control surface.
+- Legacy Leads and Service Requests are retired from the active lifecycle/admin surface.
+- Tenant isolation, branch isolation, server authorization, fail-closed provisioning, and security boundaries remain protected.
+
+### Documentation / verification provenance
+- GitHub directly verifies PR #170 merged at `7e91778...`.
+- Manus reported successful repository Quality gates, W9 Orders QA, and Vercel deployment for the completed batch.
+- A local TypeScript/baseUrl check was reported by Manus as a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged implementation.
+
 ## Homepage Runtime Fix — CLOSED / VERIFIED
-- PR #172 — `fix: prevent homepage React.Children.only crash`.
-- Root cause: `Button asChild` received a `Link` plus a sibling `ArrowUpLeft` icon; Radix Slot requires a slottable child for multi-child composition.
-- Final solution: `Button` uses `Slottable` with the first child as the interactive slotted element and preserves trailing content.
-- Regression contract added to `tests/public-pages-themes-contract.test.mjs`.
-- GitHub Actions Quality run `35266109690` passed all configured gates.
-- GitHub Actions W9 Orders QA run `35266109691` passed.
-- Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`.
-- Vercel PR deployment was rate-limited by the known free daily deployment quota; it was not retried.
+
+PR #172 — `fix: prevent homepage React.Children.only crash`
+
+- Root cause: `Button asChild` received a `Link` plus a sibling `ArrowUpLeft` icon; Radix Slot requires `Slottable` for this multi-child composition pattern.
+- Fix: `src/components/ui/button.tsx` now preserves the first child as the slotted interactive element and preserves trailing sibling content using `Slottable`.
+- Regression protection: `tests/public-pages-themes-contract.test.mjs` verifies the homepage pattern and Button `Slottable` contract.
+- VERIFIED: Quality run `35266109690` passed typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance/diagnostic stages, and cleanup.
+- VERIFIED: W9 Orders QA run `35266109691` passed.
+- VERIFIED: merge commit `8050d2f08a2904f5ee2d9085454c47bdba601392` is on `main`.
+- UNKNOWN: physical real-device Production QA for the latest `main`.
 
 ## Completed Strategic Milestones
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -44,7 +67,12 @@ The owner has explicitly decided NOT to implement Payment Provider Integration o
 - Permanent visual/functional/research quality workflow — DONE / VERIFIED.
 - P0 Public Order Hardening — DONE / VERIFIED.
 - P1 Production/Continuity Hardening — DONE / VERIFIED for implemented scope.
+- P1-H1 package/lockfile reconciliation — CLOSED / VERIFIED.
+- P1-H2 main protection — CLOSED / VERIFIED.
 - P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
+- Platform Approval Center — CLOSED / VERIFIED.
+- Registration-link rendering — CLOSED / VERIFIED.
+- Onboarding Creation Recovery — CLOSED / VERIFIED / MERGED.
 - R2.1–R2.7 Menu Intelligence — CLOSED / VERIFIED.
 - R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
 - R5 Growth Extensions — CLOSED / VERIFIED.
@@ -54,6 +82,7 @@ The owner has explicitly decided NOT to implement Payment Provider Integration o
 - R9 Guest CRM / Loyalty / Campaigns / Feedback / Retention — CLOSED / VERIFIED / MERGED.
 - AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
+- Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
 - W7.1–W7.12 — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
 - W8 Internal Visual System — DONE / VERIFIED for implemented scope; existing draft PR history remains separate and protected.
 
@@ -63,9 +92,8 @@ STATUS: DEFERRED / NOT STARTED.
 Do not begin R10 without explicit authorization.
 
 ## Production / Release Readiness
-- VERIFIED: repository-side product work through the completed PH lifecycle plus the homepage runtime fix is present in `main`.
-- VERIFIED: CI quality and W9 Orders QA passed for the homepage fix.
-- UNKNOWN: physical Android/iOS production QA for the latest `main`.
+- VERIFIED: repository-side product work through PH-06 plus the homepage runtime fix is present in `main`.
+- UNKNOWN: physical Android/iOS production QA.
 - UNKNOWN: current production environment-variable values.
 - Do not use Vercel as the development iteration loop.
 

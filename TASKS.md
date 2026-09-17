@@ -3,10 +3,46 @@
 ## Current State — 2026-09-17
 
 - VERIFIED: `main` = `8050d2f08a2904f5ee2d9085454c47bdba601392`.
+- VERIFIED: PR #170 is CLOSED / MERGED.
 - VERIFIED: PR #172 is CLOSED / MERGED.
 - VERIFIED: the public homepage `React.Children.only` runtime regression is fixed.
 - VERIFIED: Quality and W9 Orders QA passed for PR #172.
-- VERIFIED: Vercel PR deployment was rate-limited by the known free daily deployment quota; no retry was performed.
+- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
+
+## PH Lifecycle
+
+```text
+PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
+PH-02 Customer Lifecycle Visibility                      DONE / VERIFIED / MERGED
+PH-03 Subscription Plans + Paid 14-Day Trial             DONE / VERIFIED / MERGED
+PH-04 Platform Admin Subscription & Account Control     DONE / VERIFIED / MERGED
+PH-05 Invoice Generation + WhatsApp Sharing              DONE / VERIFIED / MERGED
+PH-06 Commercial Activation                               DONE / VERIFIED / MERGED
+
+Payment Provider Integration                              NOT STARTED / DEFERRED
+Commercial Launch                                         NOT STARTED / DEFERRED
+```
+
+Do not start Payment Provider Integration or Commercial Launch without explicit owner authorization. Do not invent PH-07.
+
+## PH-01 — CLOSED / VERIFIED / MERGED
+
+PR #170: `fix: retire legacy customer approval and request flows`
+
+Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
+
+### Acceptance state
+- New customer: Home → Registration → secure workspace provisioning → Studio.
+- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
+- New customers no longer depend on manual approval/request gating.
+- `/admin/users` remains the server-authorized customer-control surface.
+- Legacy Leads and Service Requests are retired from the active Platform Admin lifecycle surface.
+- Tenant/branch isolation, fail-closed provisioning, auth, authorization, and server-side trust boundaries remain protected.
+
+### Verification provenance
+- GitHub confirms PR #170 merged into `main` at `7e91778...`.
+- Manus reported successful Quality and W9 Orders QA gates.
+- Manus reported the remaining local TypeScript/baseUrl check was a local toolchain/version mismatch rather than an application failure.
 
 ## Homepage Runtime Fix — CLOSED / VERIFIED / MERGED
 
@@ -32,23 +68,8 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - W9 Orders QA run `35266109691` — SUCCESS.
 - Physical production device QA — UNKNOWN / release-stage pending.
 
-## PH Lifecycle
-
-```text
-PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
-PH-02 Customer Lifecycle Visibility                      DONE / VERIFIED / MERGED
-PH-03 Subscription Plans + Paid 14-Day Trial             DONE / VERIFIED / MERGED
-PH-04 Platform Admin Subscription & Account Control     DONE / VERIFIED / MERGED
-PH-05 Invoice Generation + WhatsApp Sharing              DONE / VERIFIED / MERGED
-PH-06 Commercial Activation                               DONE / VERIFIED / MERGED
-
-Payment Provider Integration                              NOT STARTED / DEFERRED
-Commercial Launch                                         NOT STARTED / DEFERRED
-```
-
-Do not start Payment Provider Integration or Commercial Launch without explicit owner authorization. Do not invent PH-07.
-
 ## Completed Strategic Tasks
+
 - P0 Public Order Hardening — CLOSED / VERIFIED.
 - P1 Production/Continuity Hardening — CLOSED / VERIFIED.
 - P2 Growth & Differentiation — CLOSED / VERIFIED / DEPLOYED.
@@ -73,6 +94,13 @@ Do not start Payment Provider Integration or Commercial Launch without explicit 
 ## R10 — DEFERRED / NOT STARTED
 
 Do not begin R10 without explicit authorization.
+
+## Production / Commercial Readiness
+
+- Repository-side implementation through the completed PH lifecycle plus the homepage runtime fix is present in `main`.
+- Physical Android/iOS production QA remains UNKNOWN / release-stage pending.
+- Current production environment-variable values remain UNKNOWN from repository evidence.
+- Do not use Vercel as the development iteration loop.
 
 ## Protected Scope
 
