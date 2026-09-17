@@ -1,9 +1,9 @@
 # PH-05 — Invoice Generation + WhatsApp Sharing
 
 Date: 2026-09-17
-Status: IN_PROGRESS
+Status: DONE / VERIFIED / MERGED
 Branch: `ph-05-invoice-whatsapp`
-Base main: `633c1ef00806fb7c7f3e6d0dab767eb5b01477cc`
+Final main merge: `f093fcfc445e08849e41b3e965e36f40a1c23b8b`
 
 ## Request classification
 
@@ -22,8 +22,8 @@ Commercial lifecycle / subscription billing document / tenant-scoped server auth
 - PH-04 merge commit: `f98f1f6efdf6feac200eeb679fb947dd030d39a5`.
 - PH-04 documentation closeout PR #164 was merged to `main` at `633c1ef00806fb7c7f3e6d0dab767eb5b01477cc`.
 - PR #164 Quality run `35179579783` and W9 run `35179579700` passed.
-- Production deployment remains NOT VERIFIED because the known Vercel free-tier deployment-rate limit is still a separate release blocker.
-- PH-05 is the next authorized milestone; PH-06/R10 and unrelated work are not started.
+- Production deployment remained NOT VERIFIED because of the known Vercel free-tier deployment-rate limit.
+- PH-05 was the only authorized active milestone; PH-06/R10 was not started.
 
 ## PH-05 design boundary
 
@@ -38,43 +38,60 @@ Commercial lifecycle / subscription billing document / tenant-scoped server auth
 9. Invoice messages explicitly state they are not proof of payment or electronic collection.
 10. No payment gateway, automatic charging, webhook payment state, refund flow, or payment-success inference is introduced.
 
-## Implemented in this branch
+## Implemented
 
 - `migrations/20260917150000_ph05_invoices.sql`
 - `src/lib/menu/billing.ts`
+- `src/lib/menu/billing-whatsapp.ts`
 - `src/lib/menu/billing.test.ts`
 - `src/routes/studio/billing.tsx`
 - `src/routes/studio/settings.tsx`
-- `src/routeTree.gen.ts` — regenerated/committed after the initial CI freshness failure.
+- `src/routeTree.gen.ts`
 - `package.json`
 - `docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md`
 
-## CI correction
+## Verification
 
-The first PH-05 Quality run `35180395811` and W9 run `35180395925` did not reach substantive verification because the committed `src/routeTree.gen.ts` was stale after adding `/studio/billing`. The generated diff was verified from the GitHub Actions log and the route tree was then regenerated and committed on the PH-05 branch. The temporary generation helper was removed immediately after the generated artifact was committed; it is not part of the final PH-05 scope.
+Final Quality Run: `35181146973` — PASSED.
 
-The next verification cycle must run against the final human-authored branch head and must pass route generation before the remaining quality gates are considered valid.
+Passed gates:
+- route generation and generated-tree freshness;
+- typecheck;
+- full test suite;
+- PH-05 billing/WhatsApp tests;
+- W7.4–W7.10 contract tests;
+- lint;
+- production build;
+- Playwright/Chromium installation;
+- all-theme browser template QA;
+- Customer Lifecycle browser fixture;
+- Studio shell/home/menu/growth/customers responsive browser QA;
+- Platform Admin browser fixture and responsive browser QA;
+- browser performance diagnostics.
+
+Final W9 Orders QA: `35181146952` — PASSED.
+
+The first PH-05 test cycle exposed a server-bootstrap side effect because the pure billing test imported the server billing module. The fix isolated the pure WhatsApp helpers in `src/lib/menu/billing-whatsapp.ts`; the final full test suite then passed.
+
+The first CI cycle also exposed a stale generated route tree after adding `/studio/billing`. The generated artifact was regenerated and committed, and the temporary generation helper was removed from the final scope.
+
+## Merge
+
+PR #165 was merged successfully.
+
+Final `main` merge commit:
+`f093fcfc445e08849e41b3e965e36f40a1c23b8b`
 
 ## Vercel handling
 
-No Vercel deployment or retry is part of PH-05 implementation. Continue development and GitHub Actions verification locally/remotely. A future production deployment must remain a single release batch after all PH-05 gates pass and after the actual Vercel Usage/Billing limit is resolved.
+No deployment or deployment retry was used to unblock PH-05 development. GitHub verification completed successfully without relying on Vercel. Production deployment remains a separate release-stage action and is not claimed from this merge.
 
-## Verification plan
+## Exceptions preserved
 
-- Focused billing contract tests.
-- Route generation/freshness.
-- Typecheck.
-- Full repository tests.
-- W7.4–W7.10 contract coverage.
-- Lint.
-- Production build.
-- Migration/schema verification.
-- Auth/security checks.
-- Playwright/Chromium and relevant Studio browser QA.
-- Diff review and continuity update before merge.
+- PH-01.4 PR #161 remains a separate open verification exception and was not modified by PH-05.
+- Repository pricing catalog remains the source of truth; PH-05 did not silently change pricing.
 
-## Known exceptions
+## Completion state
 
-- PH-01.4 PR #161 remains separately open with its existing browser-selector CI exception; PH-05 does not modify or close it.
-- Current repository pricing catalog remains the code source of truth. PH-05 does not silently change pricing.
-- Vercel continues to report the known free-tier `api-deployments-free-per-day` limit on PR #165; this is deployment infrastructure status, not a PH-05 implementation failure.
+PH-05 is DONE / VERIFIED / MERGED.
+No PH-06/R10 work is started automatically.
