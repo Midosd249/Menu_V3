@@ -12,22 +12,24 @@ const invoice: SubscriptionInvoice = {
   planCode: "pro",
   planNameAr: "احترافي",
   planNameEn: "Pro",
-  amountSar: 149,
+  amountSar: 1490,
   currency: "SAR",
+  billingInterval: "annual",
   periodStart: "2026-09-01T00:00:00.000Z",
-  periodEnd: "2026-10-01T00:00:00.000Z",
+  periodEnd: "2027-09-01T00:00:00.000Z",
   status: "issued",
   issuedAt: "2026-09-17T00:00:00.000Z",
 };
 
-test("PH-05 invoice WhatsApp message is explicit about issued status", () => {
+test("PH-06 annual invoice WhatsApp message is explicit about issued status and interval", () => {
   const message = buildInvoiceWhatsAppMessage(invoice, "ar");
   assert.match(message, /INV-20260917-ABC123/);
-  assert.match(message, /149\.00 SAR/);
+  assert.match(message, /1490\.00 SAR/);
+  assert.match(message, /سنوية/);
   assert.match(message, /لا تمثل هذه الرسالة إثبات دفع/);
 });
 
-test("PH-05 invoice WhatsApp URL uses click-to-chat only", () => {
+test("PH-05 invoice WhatsApp URL remains click-to-chat only", () => {
   const url = buildInvoiceWhatsAppUrl(invoice, "en");
   assert.ok(url.startsWith("https://wa.me/?text="));
   assert.equal(url.includes(invoice.tenantId), false);

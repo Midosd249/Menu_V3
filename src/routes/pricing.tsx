@@ -1,13 +1,15 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowUpLeft } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { useLang } from "@/lib/lang";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
 
 export const Route = createFileRoute("/pricing")({ component: Pricing });
 
 function Pricing() {
   const { lang } = useLang();
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
   const features = COMMERCIAL_FEATURES[lang];
 
   return (
@@ -23,27 +25,34 @@ function Pricing() {
         <section className="mx-auto max-w-4xl px-5 pb-10 pt-14 text-center lg:pt-20">
           <p className="text-sm font-semibold text-accent">{lang === "ar" ? "أسعار واضحة بلا تعقيد" : "Clear pricing, without the noise"}</p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">{lang === "ar" ? "اختر الباقة التي تناسب حجم مطعمك" : "Choose the plan that fits your restaurant"}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-ink-soft">{lang === "ar" ? "كل الباقات تستخدم نفس تجربة المنيو والثيمات. الفرق الأساسي هو حدود الفروع والأصناف وأعضاء الفريق." : "Every plan uses the same menu experience and theme catalog. The core difference is the limits for branches, items, and team members."}</p>
-          <p className="mx-auto mt-4 max-w-2xl text-xs leading-6 text-muted">{lang === "ar" ? "الأسعار شهرية بالريال السعودي. الدفع الإلكتروني غير مفعل بعد؛ الترقية تتم عبر طلب مباشر حتى لا نعد بمسار دفع غير موجود." : "Prices are monthly in SAR. Online payment is not enabled yet; upgrades are handled by direct request rather than an unsupported checkout flow."}</p>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-ink-soft">{lang === "ar" ? "نفس تجربة المنيو والثيمات في كل الباقات. الفرق الأساسي هو حدود التشغيل والسعر حسب دورة الفوترة." : "Every plan uses the same menu experience and theme catalog. The difference is operational limits and billing cadence."}</p>
+          <div className="mx-auto mt-7 inline-flex rounded-2xl border border-line bg-sand/30 p-1" role="group" aria-label={lang === "ar" ? "دورة الفوترة" : "Billing interval"}>
+            <button type="button" onClick={() => setBillingInterval("monthly")} className={`rounded-xl px-4 py-2 text-sm font-medium ${billingInterval === "monthly" ? "bg-ink text-paper" : "text-muted"}`}>{lang === "ar" ? "شهري" : "Monthly"}</button>
+            <button type="button" onClick={() => setBillingInterval("annual")} className={`rounded-xl px-4 py-2 text-sm font-medium ${billingInterval === "annual" ? "bg-ink text-paper" : "text-muted"}`}>{lang === "ar" ? "سنوي — شهران مجاناً" : "Annual — 2 months free"}</button>
+          </div>
+          <p className="mx-auto mt-4 max-w-2xl text-xs leading-6 text-muted">{lang === "ar" ? "الأسعار بالريال السعودي. الدفع الإلكتروني غير مفعل بعد؛ لا نعرض Checkout غير موجود. الترقية الحالية تتم عبر طلب مباشر." : "Prices are in SAR. Online payment is not enabled yet; there is no unsupported checkout. Upgrades are currently handled by direct request."}</p>
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-4 px-5 pb-16 md:grid-cols-3 lg:pb-24">
           {COMMERCIAL_PLANS.map((plan) => {
             const name = lang === "ar" ? plan.nameAr : plan.nameEn;
+            const price = getCommercialPrice(plan, billingInterval);
+            const annualDiscount = getAnnualDiscountPercent(plan);
             return (
               <article key={plan.code} className={`relative flex flex-col rounded-3xl border p-6 shadow-sm ${plan.recommended ? "border-ink bg-ink text-paper shadow-xl shadow-ink/10" : "border-line bg-paper"}`}>
                 {plan.recommended ? <span className="absolute -top-3 start-5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-paper">{lang === "ar" ? "الأكثر توازناً" : "Best fit"}</span> : null}
-                <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-2xl font-semibold">{name}</h2><p className={`mt-1 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{plan.code === "free" ? (lang === "ar" ? "للبداية" : "For getting started") : plan.code === "starter" ? (lang === "ar" ? "للمطاعم النامية" : "For growing restaurants") : (lang === "ar" ? "للمطاعم متعددة الفروع" : "For scaling restaurants")}</p></div></div>
-                <div className="mt-6"><span className="font-display text-4xl font-semibold">{plan.monthlyPriceSar === 0 ? (lang === "ar" ? "مجاناً" : "Free") : plan.monthlyPriceSar}</span>{plan.monthlyPriceSar > 0 ? <span className={`ms-2 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{lang === "ar" ? "ر.س / شهر" : "SAR / month"}</span> : null}</div>
+                <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-2xl font-semibold">{name}</h2><p className={`mt-1 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{plan.code === "free" ? (lang === "ar" ? "للبداية" : "For getting started") : plan.code === "starter" ? (lang === "ar" ? "للمطاعم النامية" : "For growing restaurants") : (lang === "ar" ? "للمطاعم المتوسعة" : "For scaling restaurants")}</p></div></div>
+                <div className="mt-6"><span className="font-display text-4xl font-semibold">{price === 0 ? (lang === "ar" ? "مجاناً" : "Free") : price}</span>{price > 0 ? <span className={`ms-2 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{lang === "ar" ? `ر.س / ${billingInterval === "annual" ? "سنة" : "شهر"}` : `SAR / ${billingInterval === "annual" ? "year" : "month"}`}</span> : null}</div>
+                {billingInterval === "annual" && annualDiscount > 0 ? <p className={`mt-2 text-xs font-medium ${plan.recommended ? "text-paper/70" : "text-accent"}`}>{lang === "ar" ? `خصم ${annualDiscount}% سنوياً` : `${annualDiscount}% annual saving`}</p> : null}
                 <div className={`mt-6 grid gap-3 border-t pt-5 text-sm ${plan.recommended ? "border-paper/15" : "border-line"}`}>
                   <Limit label={lang === "ar" ? "الفروع" : "Branches"} value={plan.maxBranches} />
-                  <Limit label={lang === "ar" ? "الأصناف" : "Menu items"} value={plan.maxProducts} />
+                  <Limit label={lang === "ar" ? "الأصناف" : "Menu items"} value={plan.maxProducts} unlimited={plan.code === "pro"} />
                   <Limit label={lang === "ar" ? "أعضاء الفريق" : "Team members"} value={plan.maxTeamMembers} />
                 </div>
                 <ul className="mt-6 grid gap-3 text-sm">
                   {features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-accent" /><span>{feature}</span></li>)}
                 </ul>
-                <Link to="/" className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
+                <Link to="/" search={{ plan: plan.code, interval: billingInterval } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
                   {plan.code === "free" ? (lang === "ar" ? "ابدأ مجاناً" : "Start free") : (lang === "ar" ? "اطلب الترقية" : "Request upgrade")}
                   <ArrowUpLeft className="size-4" />
                 </Link>
@@ -63,6 +72,6 @@ function Pricing() {
   );
 }
 
-function Limit({ label, value }: { label: string; value: number }) {
-  return <div className="flex items-center justify-between gap-3"><span className="text-muted">{label}</span><strong className="tabular">{value.toLocaleString()}</strong></div>;
+function Limit({ label, value, unlimited = false }: { label: string; value: number | null; unlimited?: boolean }) {
+  return <div className="flex items-center justify-between gap-3"><span className="text-muted">{label}</span><strong className="tabular">{unlimited ? ("∞") : value?.toLocaleString()}</strong></div>;
 }

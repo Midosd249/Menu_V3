@@ -9,7 +9,7 @@ Only one PH milestone may be `IN_PROGRESS` at a time. Completed work is preserve
 
 ## Lifecycle
 
-`ابدأ مجانًا` → Account Registration → Workspace Setup/Provisioning → Studio → Plan/Trial lifecycle → Platform Admin control → Invoice/WhatsApp.
+`ابدأ مجانًا` → Account Registration → Workspace Setup/Provisioning → Studio → Plan/Trial lifecycle → Platform Admin control → Invoice/WhatsApp → Commercial activation/payment boundary.
 
 New self-serve registration does not use the retired `self_serve_registration_grants` path. Workspace provisioning is server-authoritative and tenant-isolated.
 
@@ -36,12 +36,12 @@ RECORDED AS COMPLETED IN PRIOR CONTINUITY. Existing repository evidence includes
 
 RECORDED AS COMPLETED IN PRIOR CONTINUITY.
 
-The current repository also contains the subscription foundation (`subscription_plans`, `tenant_subscriptions`, server-side entitlement checks, and commercial UX). Current `main` remains the code source of truth for the actual configured catalog; historical conversation pricing must not be treated as current code unless verified.
+The subscription foundation includes `subscription_plans`, `tenant_subscriptions`, server-side entitlement checks, and commercial UX.
 
 Historical product decision recorded in the lifecycle plan:
 - Free: no trial.
 - Paid plans: 14-day trial after paid-plan selection.
-- Annual discount: deferred to PH-03 commercial/billing decision where applicable.
+- Annual discount: implemented in PH-06 as a first-class billing catalog contract.
 - Invoice + WhatsApp: PH-05.
 
 ### PH-04 — Platform Admin Subscription & Account Control
@@ -115,21 +115,49 @@ Scope completed:
 - W9 Orders QA run `35181146952` passed.
 - The first CI cycle exposed and corrected a stale generated route tree and a server-bootstrap side effect in the pure billing test; the final verification cycle passed.
 
+### PH-06 — Commercial Activation: Catalog Reconciliation + Annual Billing Foundation
+
+STATUS: IN_PROGRESS — implementation branch `codex/ph-06-commercial-activation`
+
+Scope:
+
+#### PH-06.1 — Canonical commercial catalog reconciliation
+- Approved monthly catalog: Free 0 SAR, Growth 49 SAR, Pro 149 SAR.
+- Free has no trial.
+- Paid plans retain the 14-day trial boundary.
+- Pro has unlimited products at the server entitlement boundary.
+- Five protected themes remain available across plans; no theme entitlement gate was introduced.
+
+#### PH-06.2 — Annual billing foundation
+- Annual catalog: Growth 490 SAR/year and Pro 1490 SAR/year.
+- This represents 16.67% savings versus twelve monthly payments (two months free).
+- `tenant_subscriptions.billing_interval` is server-authoritative and limited to `monthly` / `annual`.
+- Invoices snapshot the selected interval while preserving historical invoice amounts.
+
+#### PH-06.3 — Payment boundary
+- Provider-neutral server-side payment contract derives the payable amount from the canonical catalog.
+- Client-supplied amount, tenant identity, entitlement, and payment state are not trusted.
+- No payment provider, automatic charging, webhook, or payment-success state is introduced.
+
+#### PH-06.4 — Verification gate
+- Migration portability, typecheck, tests, lint, build, auth/security, subscription/entitlement, invoice regression, and bilingual pricing browser checks are required before merge.
+- Vercel is not a development dependency.
+
 ## Security boundaries
 
 - Customer billing reads and mutations require authenticated server context plus an active owner/admin tenant membership.
 - Tenant identity is resolved server-side; the billing client never supplies a tenant id.
-- Plan, price, invoice amount, and subscription state are read from server-side database records.
+- Plan, price, invoice amount, subscription state, and billing interval are resolved from server-side records.
 - Historical invoices store a server-generated snapshot and cannot be rewritten through the customer UI.
 - Invoice data has RLS enabled and no direct client grants/policies are added.
-- No payment gateway, automatic charging, webhook-driven payment state, or payment-success claim is introduced in PH-05.
+- No payment gateway, automatic charging, webhook-driven payment state, or payment-success claim is introduced in PH-05/PH-06.
 
 ## Release boundary
 
 LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER/VISUAL QA → TESTS → CI QUALITY GATES → DIFF REVIEW → ONE RELEASE BATCH → MAIN → ONE PRODUCTION DEPLOYMENT → REAL-DEVICE QA.
 
-Vercel remains outside the normal development loop. The PH-05 GitHub verification gate passed without requiring a deployment retry.
+Vercel remains outside the normal development loop. PH-06 implementation is verified through repository evidence and GitHub Actions; production deployment remains a separate release-stage state.
 
 ## Current deployment note
 
-PH-05 is merged to `main` at `f093fcfc445e08849e41b3e965e36f40a1c23b8b`. Production deployment is **NOT VERIFIED**. The Vercel status on the merged commit remains a separate release-stage concern; do not claim production deployed from the GitHub merge alone.
+PH-05 is merged to `main` at `f093fcfc445e08849e41b3e965e36f40a1c23b8b`. PH-06 is not yet merged. Production deployment is **NOT VERIFIED**.

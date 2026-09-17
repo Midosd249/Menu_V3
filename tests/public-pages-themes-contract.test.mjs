@@ -21,8 +21,10 @@ test("homepage exposes canonical pricing and plan selection", () => {
   assert.match(home, /Plan: \{selectedPlan\}/);
   for (const plan of expectedPlans) assert.match(catalog, new RegExp(`code: "${plan}"`));
   assert.match(catalog, /monthlyPriceSar: 0/);
-  assert.match(catalog, /monthlyPriceSar: 99/);
-  assert.match(catalog, /monthlyPriceSar: 199/);
+  assert.match(catalog, /monthlyPriceSar: 49/);
+  assert.match(catalog, /monthlyPriceSar: 149/);
+  assert.match(catalog, /annualPriceSar: 490/);
+  assert.match(catalog, /annualPriceSar: 1490/);
 });
 
 test("homepage exposes all protected themes without a premium gate", () => {

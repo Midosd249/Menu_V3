@@ -7,7 +7,7 @@ import { LangToggle } from "@/components/lang-toggle";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useLang } from "@/lib/lang";
 import { deletePlatformUser, getPlatformUsers, setPlatformUserBan, verifyPlatformUserPhone, type PlatformUser } from "@/lib/menu/platform-users";
-import { changePlatformSubscriptionPlan, getPlatformSubscriptionAudit, getPlatformSubscriptions, managePlatformTrial, setPlatformAccountFrozen, setPlatformSubscriptionStatus, type PlatformSubscription, type PlatformSubscriptionAudit } from "@/lib/menu/platform-subscriptions";
+import { changePlatformSubscriptionPlan, getPlatformSubscriptionAudit, getPlatformSubscriptions, managePlatformTrial, setPlatformAccountFrozen, setPlatformBillingInterval, setPlatformSubscriptionStatus, type PlatformSubscription, type PlatformSubscriptionAudit } from "@/lib/menu/platform-subscriptions";
 
 export const Route = createFileRoute("/admin/users")({ component: PlatformUsersPage });
 
@@ -111,6 +111,14 @@ function PlatformUsersPage() {
     } finally { setBusyId(null); }
   }
 
+  async function changeBillingInterval(subscription: PlatformSubscription, billingInterval: PlatformSubscription["billingInterval"]) {
+    setBusyId(subscription.tenantId); setError("");
+    try {
+      const result = await setPlatformBillingInterval({ data: { tenantId: subscription.tenantId, billingInterval, reason: lang === "ar" ? "تغيير دورة الفوترة من مالك المنصة" : "Billing interval change by Platform Owner" } });
+      if (!result.ok) setError(result.error); else setSubscriptions((current) => current.map((x) => x.tenantId === subscription.tenantId ? result.data : x));
+    } finally { setBusyId(null); }
+  }
+
   async function trialAction(subscription: PlatformSubscription, action: "extend" | "end") {
     setBusyId(subscription.tenantId); setError("");
     try {
@@ -178,18 +186,19 @@ function PlatformUsersPage() {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2"><strong className="text-lg">{subscription.tenantName || subscription.tenantSlug}</strong><span className="rounded-full bg-sand px-2 py-1 text-[11px]">{subscription.planNameAr}</span><span className="rounded-full bg-sand px-2 py-1 text-[11px]" dir="ltr">{subscription.status}</span>{subscription.accountFrozen ? <span className="rounded-full bg-bad/10 px-2 py-1 text-[11px] text-bad">{lang === "ar" ? "الحساب مجمد" : "Account frozen"}</span> : null}</div>
               <div className="mt-1 grid gap-1 text-sm text-muted md:grid-cols-3"><span>{subscription.ownerName || "—"}</span><span dir="ltr">{subscription.ownerEmail || "—"}</span><span dir="ltr">{subscription.tenantSlug || "—"}</span></div>
-              <div className="mt-3 grid gap-1 text-xs text-muted md:grid-cols-4"><span>{subscription.branchCount}/{subscription.maxBranches} {lang === "ar" ? "فروع" : "branches"}</span><span>{subscription.productCount}/{subscription.maxProducts} {lang === "ar" ? "منتجات" : "products"}</span><span>{subscription.teamMemberCount}/{subscription.maxTeamMembers} {lang === "ar" ? "أعضاء" : "members"}</span><span dir="ltr">{subscription.monthlyPriceSar} SAR/mo</span></div>
+              <div className="mt-3 grid gap-1 text-xs text-muted md:grid-cols-4"><span>{subscription.branchCount}/{subscription.maxBranches} {lang === "ar" ? "فروع" : "branches"}</span><span>{subscription.productCount}/{subscription.productsUnlimited ? "∞" : subscription.maxProducts} {lang === "ar" ? "منتجات" : "products"}</span><span>{subscription.teamMemberCount}/{subscription.maxTeamMembers} {lang === "ar" ? "أعضاء" : "members"}</span><span dir="ltr">{subscription.billingInterval === "annual" ? `${subscription.annualPriceSar} SAR/yr` : `${subscription.monthlyPriceSar} SAR/mo`}</span></div>
             </div>
             <Button variant="outline" disabled={busyId === `audit:${subscription.tenantId}`} onClick={() => void showAudit(subscription)}><History className="size-4" />{lang === "ar" ? "سجل التدقيق" : "Audit log"}</Button>
           </div>
 
           <div className="grid gap-3 rounded-2xl border border-line bg-sand/20 p-3 md:grid-cols-2 lg:grid-cols-4">
-            <label className="grid gap-1 text-xs text-muted"><span>{lang === "ar" ? "الخطة" : "Plan"}</span><select className="h-10 rounded-md border border-line bg-paper px-3 text-sm text-ink" value={subscription.planCode} disabled={busy} onChange={(e) => void changePlan(subscription, e.target.value)}><option value="free">Free</option><option value="starter">Starter</option><option value="pro">Pro</option></select></label>
+            <label className="grid gap-1 text-xs text-muted"><span>{lang === "ar" ? "الخطة" : "Plan"}</span><select className="h-10 rounded-md border border-line bg-paper px-3 text-sm text-ink" value={subscription.planCode} disabled={busy} onChange={(e) => void changePlan(subscription, e.target.value)}><option value="free">Free</option><option value="starter">Growth</option><option value="pro">Pro</option></select></label>
+            <label className="grid gap-1 text-xs text-muted"><span>{lang === "ar" ? "دورة الفوترة" : "Billing interval"}</span><select className="h-10 rounded-md border border-line bg-paper px-3 text-sm text-ink" value={subscription.billingInterval} disabled={busy || subscription.planCode === "free"} onChange={(e) => void changeBillingInterval(subscription, e.target.value as PlatformSubscription["billingInterval"])}><option value="monthly">{lang === "ar" ? "شهري" : "Monthly"}</option><option value="annual">{lang === "ar" ? "سنوي" : "Annual"}</option></select></label>
             <label className="grid gap-1 text-xs text-muted"><span>{lang === "ar" ? "حالة الاشتراك" : "Subscription status"}</span><select className="h-10 rounded-md border border-line bg-paper px-3 text-sm text-ink" value={subscription.status} disabled={busy} onChange={(e) => void changeStatus(subscription, e.target.value as PlatformSubscription["status"])}>{["active","trialing","past_due","cancelled","suspended"].map((status) => <option key={status} value={status}>{status}</option>)}</select></label>
             <div className="flex flex-wrap items-end gap-2"><Button variant="outline" disabled={busy || subscription.planCode === "free"} onClick={() => void trialAction(subscription, "extend")}>{lang === "ar" ? "تمديد التجربة" : "Extend trial"}</Button><Button variant="outline" disabled={busy || subscription.planCode === "free" || subscription.status !== "trialing"} onClick={() => void trialAction(subscription, "end")}>{lang === "ar" ? "إنهاء التجربة" : "End trial"}</Button></div>
-            <div className="flex flex-wrap items-end gap-2"><Button variant="outline" disabled={busy} onClick={() => void toggleAccountFreeze(subscription)}>{subscription.accountFrozen ? <UserRound className="size-4" /> : <UserX className="size-4" />}{subscription.accountFrozen ? (lang === "ar" ? "إلغاء تجميد" : "Unfreeze") : (lang === "ar" ? "تجميد الحساب" : "Freeze account")}</Button></div>
           </div>
 
+          <div className="flex flex-wrap items-end gap-2"><Button variant="outline" disabled={busy} onClick={() => void toggleAccountFreeze(subscription)}>{subscription.accountFrozen ? <UserRound className="size-4" /> : <UserX className="size-4" />}{subscription.accountFrozen ? (lang === "ar" ? "إلغاء تجميد" : "Unfreeze") : (lang === "ar" ? "تجميد الحساب" : "Freeze account")}</Button></div>
           {subscription.trialEndsAt ? <p className="text-xs text-muted">{lang === "ar" ? "نهاية التجربة:" : "Trial ends:"} <span dir="ltr">{subscription.trialEndsAt}</span></p> : null}
           {audit.length ? <div className="grid gap-2 rounded-2xl border border-line p-3"><strong className="text-sm">{lang === "ar" ? "آخر تغييرات الإدارة" : "Recent administrative changes"}</strong>{audit.slice(0, 5).map((entry) => <div key={entry.id} className="grid gap-1 border-t border-line pt-2 text-xs text-muted md:grid-cols-[auto_1fr_auto]"><span dir="ltr">{entry.action}</span><span>{entry.reason || "—"}</span><span dir="ltr">{entry.createdAt}</span></div>)}</div> : null}
         </article>;

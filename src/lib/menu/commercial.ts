@@ -10,7 +10,7 @@ export type { CommercialPlan } from "./commercial-catalog";
 export type CommercialSnapshot = SubscriptionSummary & {
   limits: {
     branches: number;
-    products: number;
+    products: number | null;
     teamMembers: number;
   };
 };
