@@ -6,12 +6,12 @@
 - Canonical branch: `main`.
 - Source of truth: `main`.
 
-## Current Verified Main
-- VERIFIED: `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392` as verified from GitHub on 2026-09-17.
-- VERIFIED: PR #170 is merged into `main`.
-- VERIFIED: PR #172 is merged into `main` and fixes the public homepage `React.Children.only` runtime crash.
-- VERIFIED: Quality and W9 Orders QA passed for PR #172.
-- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
+## Current Verified Main — 2026-09-18
+- VERIFIED: `main` = `8939474e705459e7e5757d93b053593a2ee1d4b2`.
+- VERIFIED: PR #175 is merged and fixes the public homepage login entrypoint.
+- VERIFIED: Quality run `35275468483` passed.
+- VERIFIED: W9 Orders QA run `35275468364` passed.
+- BLOCKED / NON-BLOCKING: PR #175 Vercel deployment was rate-limited by the known free daily deployment quota; no retry was performed.
 
 ## PH Lifecycle — Completed / Deferred Boundary
 
@@ -29,37 +29,18 @@ Commercial Launch                                         NOT STARTED / DEFERRED
 
 The owner has explicitly decided NOT to implement Payment Provider Integration or Commercial Launch now. Do not create a PH-07 placeholder and do not start either deferred area without explicit authorization.
 
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
+## Homepage Login Entrypoint — CLOSED / VERIFIED / MERGED
+PR #175 — `fix: make public homepage use login entrypoint`
 
-PR #170 — `fix: retire legacy customer approval and request flows`
-
-Merge commit:
-`7e91778bfafa67b24efd1edf4387e1f3014fae9d`
-
-### Final contract
-- New customer: Home → Registration → secure workspace provisioning → Studio.
-- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
-- New customer access no longer depends on manual approval/request gating.
-- `/admin/users` remains the server-authorized customer-control surface.
-- Legacy Leads and Service Requests are retired from the active lifecycle/admin surface.
-- Tenant isolation, branch isolation, server authorization, fail-closed provisioning, and security boundaries remain protected.
-
-### Documentation / verification provenance
-- GitHub directly verifies PR #170 merged at `7e91778...`.
-- Manus reported successful repository Quality gates, W9 Orders QA, and Vercel deployment for the completed batch.
-- A local TypeScript/baseUrl check was reported by Manus as a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged implementation.
-
-## Homepage Runtime Fix — CLOSED / VERIFIED
-
-PR #172 — `fix: prevent homepage React.Children.only crash`
-
-- Root cause: `Button asChild` received a `Link` plus a sibling `ArrowUpLeft` icon; Radix Slot requires `Slottable` for this multi-child composition pattern.
-- Fix: `src/components/ui/button.tsx` now preserves the first child as the slotted interactive element and preserves trailing sibling content using `Slottable`.
-- Regression protection: `tests/public-pages-themes-contract.test.mjs` verifies the homepage pattern and Button `Slottable` contract.
-- VERIFIED: Quality run `35266109690` passed typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance/diagnostic stages, and cleanup.
-- VERIFIED: W9 Orders QA run `35266109691` passed.
-- VERIFIED: merge commit `8050d2f08a2904f5ee2d9085454c47bdba601392` is on `main`.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
+- Merge commit: `8939474e705459e7e5757d93b053593a2ee1d4b2`.
+- The homepage header now exposes a stable `/login` entrypoint for all visitors.
+- Auth-state-dependent `SignedIn` / `SignedOut` Studio gating was removed from the homepage header.
+- Existing `/login` email/phone + password and signup mode were preserved.
+- A contract test protects the stable login entrypoint.
+- No auth logic, tenant/RLS, pricing, database, payment-provider, or deployment configuration changes were introduced.
+- VERIFIED: Quality run `35275468483` passed all configured route, typecheck, test, contract, lint, build, browser QA, and diagnostic stages.
+- VERIFIED: W9 Orders QA `35275468364` passed.
+- UNKNOWN: physical real-device Production QA for latest `main`.
 
 ## Completed Strategic Milestones
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -84,34 +65,18 @@ PR #172 — `fix: prevent homepage React.Children.only crash`
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
 - Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
 - W7.1–W7.12 — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
-- W8 Internal Visual System — DONE / VERIFIED for implemented scope; existing draft PR history remains separate and protected.
+- W8 Internal Visual System — DONE / VERIFIED for implemented scope.
 
 ## R10
 STATUS: DEFERRED / NOT STARTED.
-
 Do not begin R10 without explicit authorization.
 
 ## Production / Release Readiness
-- VERIFIED: repository-side product work through PH-06 plus the homepage runtime fix is present in `main`.
+- VERIFIED: repository-side product work through PH-06 plus the homepage login-entrypoint fix is present in `main`.
 - UNKNOWN: physical Android/iOS production QA.
 - UNKNOWN: current production environment-variable values.
+- BLOCKED / NON-BLOCKING: Vercel deployment for PR #175 was rejected by the free daily deployment quota.
 - Do not use Vercel as the development iteration loop.
 
-## Product Direction
-Menu V3 remains a premium Arabic-first restaurant platform:
-
-```text
-Live Menu
-→ Guest Experience
-→ Menu Intelligence
-→ Owner Intelligence
-→ Growth Extensions
-→ Experiments
-→ Guest Relationships
-→ Self-Serve Customer Lifecycle
-```
-
-The product is intentionally paused before payment-provider integration and commercial launch.
-
 ## Exact Next Task
-Await the owner's next explicitly scoped task. No payment provider work, commercial-launch work, or PH-07 work is authorized by this plan.
+Await the owner's next explicitly scoped task. No payment-provider work, commercial-launch work, PH-07 work, or R10 work is authorized automatically.
