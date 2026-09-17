@@ -1,15 +1,14 @@
 # TASKS
 
-## Current State — 2026-09-17
+## Current State — 2026-09-18
 
-- VERIFIED: `main` = `8050d2f08a2904f5ee2d9085454c47bdba601392`.
-- VERIFIED: PR #170 is CLOSED / MERGED.
-- VERIFIED: PR #172 is CLOSED / MERGED.
-- VERIFIED: the public homepage `React.Children.only` runtime regression is fixed.
-- VERIFIED: Quality and W9 Orders QA passed for PR #172.
-- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
+- VERIFIED: `main` = `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
+- UNKNOWN: physical real-device Production QA for latest `main`.
 
-## PH Lifecycle
+## PH Lifecycle## PH Lifecycle
 
 ```text
 PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
@@ -109,7 +108,7 @@ Do not begin R10 without explicit authorization.
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
-## Exact Next Task
+## Historical Next Task
 
 No new implementation task is authorized by this continuity update. Await the owner's next explicitly scoped request.
 
@@ -144,3 +143,21 @@ Main: 18ca4f243b39640ebd7ed77541b268240b54cefd
 
 ### Exact next task
 Complete verification, create PR, and review CI. Do not remove order-management surfaces.
+
+
+## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
+
+### Current Git History
+- VERIFIED: PR #179 → `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 → `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+
+### Stale PR Classification Against Current `main`
+- PR #161 — OBSOLETE: PH-01.4 existing-customer-login work is already implemented/completed in current `main`; the open branch is historical and diverged.
+- PR #174 — SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work and protected by the current homepage contract test.
+- PR #176 — SUPERSEDED: its documentation-only reconciliation targets an older state and is superseded by PR #179/#180 and this synchronized state.
+
+### Scope Boundary
+Documentation-only reconciliation. No runtime code, themes, auth, payments, deployment, or refactoring changes.
+
+## Exact Next Task
+Owner must explicitly authorize the next atomic task. Do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.

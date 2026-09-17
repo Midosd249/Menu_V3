@@ -7,17 +7,16 @@
 - Source of truth: `main`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
-## Current Verified Position — 2026-09-17
-- VERIFIED: canonical `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392`.
-- VERIFIED: this is the GitHub merge commit for PR #172: `fix: prevent homepage React.Children.only crash`.
-- VERIFIED: PR #172 is CLOSED / MERGED.
-- VERIFIED: PR #171 continuity reconciliation was merged before PR #172.
-- VERIFIED: PH-01 corrective customer lifecycle work is complete.
-- VERIFIED: Payment Provider Integration is NOT STARTED.
-- VERIFIED: Commercial Launch is NOT STARTED.
-- VERIFIED: no PH-07 milestone is defined or authorized.
+## Current Verified Position — 2026-09-18
+- VERIFIED: canonical `main` is `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: current `main` includes both PR #179 and PR #180.
+- VERIFIED: no runtime code changes are part of this continuity reconciliation.
+- UNKNOWN: physical real-device Production QA for the latest `main`.
+- UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Current Decision
+## PH Lifecycle — Current Decision## PH Lifecycle — Current Decision
 The owner has explicitly decided to stop before payment-provider integration and commercial launch. Do not implement either unless explicitly authorized in a future task.
 
 ```text
@@ -135,7 +134,7 @@ At the end of every atomic task:
 - UNKNOWN: physical real-device Production QA for the latest main.
 - Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
 
-## Exact Next Task
+## Historical Next Task
 No new PH implementation is authorized by this reconciliation. Await the owner's next explicitly scoped product task. Payment Provider Integration and Commercial Launch remain deferred and must not be started automatically.
 
 
@@ -150,3 +149,17 @@ No new PH implementation is authorized by this reconciliation. Await the owner's
 - Merge: PR #179 → 18ca4f243b39640ebd7ed77541b268240b54cefd.
 - Status: DONE / VERIFIED / MERGED.
 - Exact next task: complete verification and review PR for the customer-notification enhancement.
+
+
+## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
+
+- VERIFIED: canonical `main` = `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #161 — OBSOLETE: PH-01.4 existing-customer-login work is already recorded as implemented/completed in current `main`; its head is historical and diverged.
+- VERIFIED: PR #174 — SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work, including the stable-login contract test.
+- VERIFIED: PR #176 — SUPERSEDED: its continuity documentation targets an older repository state and is superseded by PR #179/#180 plus this reconciliation.
+- No runtime code, themes, auth, payments, or deployment configuration changed in this task.
+
+## Exact Next Task
+Owner must explicitly authorize the next atomic task. Do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
