@@ -8,7 +8,7 @@
 - VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
 - UNKNOWN: physical real-device Production QA for latest `main`.
 
-## PH Lifecycle## PH Lifecycle
+## PH Lifecycle
 
 ```text
 PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
