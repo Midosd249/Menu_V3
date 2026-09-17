@@ -1,4 +1,5 @@
 import { test, expect } from "playwright/test";
+import { ensurePlatformAdminSubscriptionSchema } from "./admin-browser-fixture.mjs";
 
 const baseURL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 const adminNav = 'aside[aria-label="تنقل إدارة المنصة"]';
@@ -15,6 +16,10 @@ const activeRoutes = [
   "/admin/system",
 ] as const;
 const retiredRoutes = ["/admin/leads", "/admin/service-requests"] as const;
+
+test.beforeAll(async () => {
+  await ensurePlatformAdminSubscriptionSchema();
+});
 
 for (const route of activeRoutes) {
   test(`W7.9 authorized Admin route ${route} renders the real workspace`, async ({ page }) => {
