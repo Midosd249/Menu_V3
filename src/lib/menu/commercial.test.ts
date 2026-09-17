@@ -4,11 +4,11 @@ import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCom
 
 test("commercial plans mirror the approved monthly and annual catalog", () => {
   assert.deepEqual(
-    COMMERCIAL_PLANS.map((plan) => [plan.code, plan.monthlyPriceSar, plan.annualPriceSar, plan.maxBranches, plan.maxProducts, plan.maxTeamMembers]),
+    COMMERCIAL_PLANS.map((plan) => [plan.code, plan.monthlyPriceSar, plan.annualPriceSar, plan.maxBranches, plan.maxTeamMembers]),
     [
-      ["free", 0, 0, 1, 50, 3],
-      ["starter", 49, 490, 3, 300, 10],
-      ["pro", 149, 1490, 10, null, 25],
+      ["free", 0, 0, 1, 3],
+      ["starter", 49, 490, 3, 10],
+      ["pro", 149, 1490, 10, 25],
     ],
   );
 });
@@ -31,5 +31,7 @@ test("commercial catalog has one recommended plan and bilingual copy", () => {
 test("commercial plan limits are ordered and Pro products are explicitly unlimited", () => {
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxBranches), [1, 3, 10]);
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxTeamMembers), [3, 10, 25]);
-  assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxProducts), [50, 300, null]);
+  assert.equal(COMMERCIAL_PLANS[0].maxProducts, 50);
+  assert.equal(COMMERCIAL_PLANS[1].maxProducts, 300);
+  assert.equal(COMMERCIAL_PLANS[2].maxProducts, Number.MAX_SAFE_INTEGER);
 });
