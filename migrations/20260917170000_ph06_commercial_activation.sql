@@ -66,6 +66,42 @@ $$;
 REVOKE ALL ON FUNCTION menu_v3.ensure_default_tenant_subscription() FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION menu_v3.ensure_default_tenant_subscription() TO postgres;
 
+-- Paid plan selection starts the approved 14-day trial at the database trust boundary.
+CREATE OR REPLACE FUNCTION menu_v3.enforce_paid_plan_trial_on_selection()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = menu_v3, pg_catalog
+AS $$
+DECLARE
+  old_code text;
+  new_code text;
+BEGIN
+  SELECT code INTO old_code FROM menu_v3.subscription_plans WHERE id = OLD.plan_id;
+  SELECT code INTO new_code FROM menu_v3.subscription_plans WHERE id = NEW.plan_id;
+
+  IF new_code = 'free' THEN
+    NEW.status := 'active';
+    NEW.trial_ends_at := NULL;
+    NEW.billing_interval := 'monthly';
+  ELSIF old_code = 'free' AND new_code <> 'free' THEN
+    NEW.status := 'trialing';
+    NEW.trial_ends_at := now() + interval '14 days';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION menu_v3.enforce_paid_plan_trial_on_selection() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION menu_v3.enforce_paid_plan_trial_on_selection() TO postgres;
+
+DROP TRIGGER IF EXISTS trg_ph06_paid_plan_trial ON menu_v3.tenant_subscriptions;
+CREATE TRIGGER trg_ph06_paid_plan_trial
+BEFORE UPDATE OF plan_id ON menu_v3.tenant_subscriptions
+FOR EACH ROW
+EXECUTE FUNCTION menu_v3.enforce_paid_plan_trial_on_selection();
+
 -- Keep the database entitlement boundary server-authoritative and make the paid Pro product limit effectively unlimited.
 CREATE OR REPLACE FUNCTION menu_v3.enforce_subscription_entitlement()
 RETURNS trigger
