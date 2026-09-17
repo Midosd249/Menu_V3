@@ -1,5 +1,17 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ADMIN_WORKSPACE_TABS, PlatformAdminPage, type Tab } from "@/routes/admin";
+import { PlatformAdminPage, type Tab } from "@/routes/admin";
+
+const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
+  restaurants: "tenants",
+  orders: "orders",
+  clients: "clients",
+  branches: "branches",
+  projects: "projects",
+  subscriptions: "subscriptions",
+  analytics: "analytics",
+  activity: "activity",
+  system: "system",
+};
 
 export const Route = createFileRoute("/admin/$workspace")({
   beforeLoad: ({ params }) => {
