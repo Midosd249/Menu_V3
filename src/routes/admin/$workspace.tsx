@@ -13,5 +13,5 @@ export const Route = createFileRoute("/admin/$workspace")({
 function PlatformAdminWorkspaceRoute() {
   const { workspace } = Route.useParams();
   const initialTab = ADMIN_WORKSPACE_TABS[workspace] as Tab;
-  return <PlatformAdminPage initialTab={initialTab} />;
+  return <PlatformAdminPage key={workspace} initialTab={initialTab} />;
 }
