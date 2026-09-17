@@ -7,11 +7,11 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `7e91778bfafa67b24efd1edf4387e1f3014fae9d` as verified from GitHub on 2026-09-17.
+- VERIFIED: `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392` as verified from GitHub on 2026-09-17.
 - VERIFIED: PR #170 is merged into `main`.
-- VERIFIED: PH-01 corrective self-serve customer lifecycle work is closed and merged.
-- VERIFIED FROM GITHUB: Vercel status for the same merge SHA is successful.
-- VERIFIED BY MANUS REPORT: Quality, W9 Orders QA, and Vercel deployment completed successfully for the PH-01 corrective batch.
+- VERIFIED: PR #172 is merged into `main` and fixes the public homepage `React.Children.only` runtime crash.
+- VERIFIED: Quality and W9 Orders QA passed for PR #172.
+- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
 
 ## PH Lifecycle — Completed / Deferred Boundary
 
@@ -46,9 +46,20 @@ Merge commit:
 
 ### Documentation / verification provenance
 - GitHub directly verifies PR #170 merged at `7e91778...`.
-- GitHub directly reports successful Vercel deployment status for that SHA.
 - Manus reported successful repository Quality gates, W9 Orders QA, and Vercel deployment for the completed batch.
 - A local TypeScript/baseUrl check was reported by Manus as a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged implementation.
+
+## Homepage Runtime Fix — CLOSED / VERIFIED
+
+PR #172 — `fix: prevent homepage React.Children.only crash`
+
+- Root cause: `Button asChild` received a `Link` plus a sibling `ArrowUpLeft` icon; Radix Slot requires `Slottable` for this multi-child composition pattern.
+- Fix: `src/components/ui/button.tsx` now preserves the first child as the slotted interactive element and preserves trailing sibling content using `Slottable`.
+- Regression protection: `tests/public-pages-themes-contract.test.mjs` verifies the homepage pattern and Button `Slottable` contract.
+- VERIFIED: Quality run `35266109690` passed typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance/diagnostic stages, and cleanup.
+- VERIFIED: W9 Orders QA run `35266109691` passed.
+- VERIFIED: merge commit `8050d2f08a2904f5ee2d9085454c47bdba601392` is on `main`.
+- UNKNOWN: physical real-device Production QA for the latest `main`.
 
 ## Completed Strategic Milestones
 - Premium Theme System — DONE / VERIFIED / MERGED.
@@ -81,8 +92,7 @@ STATUS: DEFERRED / NOT STARTED.
 Do not begin R10 without explicit authorization.
 
 ## Production / Release Readiness
-- VERIFIED: repository-side product work through PH-06 is present in `main`.
-- VERIFIED FROM GITHUB: Vercel deployment status for PH-01 merge SHA is successful.
+- VERIFIED: repository-side product work through PH-06 plus the homepage runtime fix is present in `main`.
 - UNKNOWN: physical Android/iOS production QA.
 - UNKNOWN: current production environment-variable values.
 - Do not use Vercel as the development iteration loop.

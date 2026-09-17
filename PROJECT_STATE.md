@@ -8,11 +8,10 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-17
-- VERIFIED: canonical `main` is `7e91778bfafa67b24efd1edf4387e1f3014fae9d`.
-- VERIFIED: this is the GitHub merge commit for PR #170: `fix: retire legacy customer approval and request flows`.
-- VERIFIED: PR #170 is CLOSED / MERGED.
-- VERIFIED FROM GITHUB: Vercel status for the same SHA is `success` with `Deployment has completed`.
-- VERIFIED BY MANUS REPORT: repository Quality gates, W9 Orders QA, and Vercel deployment completed successfully for the PH-01 corrective batch.
+- VERIFIED: canonical `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392`.
+- VERIFIED: this is the GitHub merge commit for PR #172: `fix: prevent homepage React.Children.only crash`.
+- VERIFIED: PR #172 is CLOSED / MERGED.
+- VERIFIED: PR #171 continuity reconciliation was merged before PR #172.
 - VERIFIED: PH-01 corrective customer lifecycle work is complete.
 - VERIFIED: Payment Provider Integration is NOT STARTED.
 - VERIFIED: Commercial Launch is NOT STARTED.
@@ -58,7 +57,7 @@ Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 ### Verification
 - VERIFIED BY MANUS REPORT: Quality gates passed for the final PH-01 batch.
 - VERIFIED BY MANUS REPORT: W9 Orders QA passed.
-- VERIFIED FROM GITHUB: merge commit is verified and Vercel status for the same SHA is successful.
+- VERIFIED FROM GITHUB: merge commit is verified.
 - Manus reported that a prior local TypeScript/baseUrl check failed because of a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged batch.
 
 ## Completed Protected Product Work
@@ -95,9 +94,10 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 
 ## Production / Release Gates
 - VERIFIED: GitHub `main` contains the PH-01 merge and protected prior work.
-- VERIFIED FROM GITHUB: merge commit `7e91778...` has successful Vercel deployment status.
-- UNKNOWN: physical real-device Production QA.
-- UNKNOWN: current Production environment-variable values not exposed through repository evidence.
+- VERIFIED: GitHub `main` now contains PR #172 homepage runtime fix.
+- UNKNOWN: physical real-device Production QA for the latest `main`.
+- UNKNOWN: current Production environment-variable values.
+- BLOCKED / NON-BLOCKING: the PR #172 Vercel deployment attempt was rate-limited by the known free daily deployment quota; no retry was performed.
 - Do not use Vercel as an iteration loop or trigger unnecessary deployment retries.
 
 ## Current Strategic Direction
@@ -124,6 +124,16 @@ At the end of every atomic task:
 3. update continuity files when canonical state changes;
 4. record exactly one next authorized task;
 5. never infer authorization for deferred payment/commercial work.
+
+## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
+- VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
+- VERIFIED: root cause was multi-child `Button asChild` composition: `Link` plus trailing `ArrowUpLeft` icon.
+- VERIFIED: `src/components/ui/button.tsx` now uses Radix `Slottable` for multi-child `asChild` composition.
+- VERIFIED: `tests/public-pages-themes-contract.test.mjs` contains regression protection.
+- VERIFIED: Quality run `35266109690` and W9 Orders QA `35266109691` passed.
+- VERIFIED: merge commit is `8050d2f08a2904f5ee2d9085454c47bdba601392`.
+- UNKNOWN: physical real-device Production QA for the latest main.
+- Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
 
 ## Exact Next Task
 No new PH implementation is authorized by this reconciliation. Await the owner's next explicitly scoped product task. Payment Provider Integration and Commercial Launch remain deferred and must not be started automatically.
