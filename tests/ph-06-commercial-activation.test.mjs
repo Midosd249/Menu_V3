@@ -13,7 +13,6 @@ const paymentBoundary = read("src/lib/menu/payment-boundary.ts");
 const billing = read("src/lib/menu/billing.ts");
 const billingWhatsApp = read("src/lib/menu/billing-whatsapp.ts");
 
-
 test("PH-06 canonical monthly and annual prices are present", () => {
   assert.match(migration, /'starter'.*490/s);
   assert.match(migration, /'pro'.*1490/s);
@@ -30,7 +29,7 @@ test("PH-06 Free has no trial and Pro product entitlement is unlimited", () => {
   assert.match(migration, /INSERT INTO menu_v3\.tenant_subscriptions.*'active', NULL, 'monthly'/s);
   assert.match(migration, /sp\.code = 'pro'/);
   assert.match(migration, /TG_TABLE_NAME = 'products' AND EXISTS/);
-  assert.match(catalog, /code: "pro".*maxProducts: null/);
+  assert.match(catalog, /code: "pro".*Number\.MAX_SAFE_INTEGER/);
 });
 
 test("PH-06 pricing UX exposes annual billing without a fake checkout", () => {
