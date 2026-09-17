@@ -11,6 +11,9 @@ const authServer = readFileSync("src/lib/auth/server.ts", "utf8");
 const login = readFileSync("src/routes/login.tsx", "utf8");
 const home = readFileSync("src/routes/index.tsx", "utf8");
 const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
+const studioOwner = readFileSync("src/lib/menu/owner.ts", "utf8");
+const authMiddleware = readFileSync("src/lib/auth/middleware.ts", "utf8");
+const authorization = readFileSync("src/lib/auth/authorization.server.ts", "utf8");
 const lifecycle = readFileSync("src/lib/menu/customer-lifecycle.ts", "utf8");
 
 
@@ -100,4 +103,35 @@ test("Studio remains gated by active tenant membership", () => {
 test("public CTA still opens account registration", () => {
   assert.match(home, /ابدأ مجانًا/);
   assert.match(home, /mode: "signup"/);
+});
+
+test("PH-01.4 login route sends authenticated users to Studio without rendering registration fields", () => {
+  assert.match(login, /if \(user\) return <Navigate to="\/studio" \/>/);
+  assert.match(login, /if \(user && invite\) return <Navigate to="\/invite\/\$token"/);
+  assert.match(login, /authClient\.signIn\.email/);
+  assert.match(login, /authClient\.signIn\.phoneNumber/);
+  assert.doesNotMatch(login, /if \(user\)[\s\S]*render.*signup/i);
+});
+
+test("PH-01.4 Studio access resolves tenant membership from the verified session user", () => {
+  assert.match(authMiddleware, /const userId = await requireUserId\(context\.bearerToken\)/);
+  assert.match(studioOwner, /membershipOf\(sql, context\.userId\)/);
+  assert.match(studioOwner, /where user_id = \$\{userId\} and is_active = true/);
+  assert.match(studioOwner, /loadSnapshot\(sql, member\.tenant_id, member\.role\)/);
+  assert.match(authorization, /where user_id = \$\{userId\} and is_active = true/);
+});
+
+test("PH-01.4 invalid or missing session remains fail-closed at the Studio boundary", () => {
+  assert.match(studio, /if \(sessionError && !user\) return <ErrorState/);
+  assert.match(studio, /if \(!user\) return <RedirectToSignIn \/>/);
+  assert.match(authMiddleware, /assertSameSiteRequest\(\)/);
+  assert.match(authMiddleware, /requireUserId\(context\.bearerToken\)/);
+});
+
+test("PH-01.4 tenant resources remain scoped to the resolved membership tenant", () => {
+  assert.match(studioOwner, /where id = \$\{tenantId\} limit 1/);
+  assert.match(studioOwner, /where tenant_id = \$\{tenantId\} order by created_at/);
+  assert.match(studioOwner, /where tenant_id = \$\{tenantId\} order by sort_order, created_at/);
+  assert.match(studioOwner, /where tenant_id = \$\{tenantId\} and is_active = true/);
+  assert.match(authorization, /tenant_id = \$\{membership\.tenantId\}/);
 });
