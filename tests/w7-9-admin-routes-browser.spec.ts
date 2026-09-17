@@ -10,11 +10,28 @@ const routes = [
   "/admin/projects", "/admin/service-requests", "/admin/subscriptions", "/admin/analytics", "/admin/activity", "/admin/system",
 ] as const;
 
-test.beforeAll(async () => {
+ test.beforeAll(async () => {
   const migrations = [
+    "migrations/0001_auth.sql",
+    "migrations/0002_menu_v3.sql",
+    "migrations/0003_leads_admin.sql",
+    "migrations/0004_demo_visuals.sql",
+    "migrations/0005_demo_product_photos.sql",
+    "migrations/0008_menu_product_options.sql",
+    "migrations/0009_orders.sql",
+    "migrations/20260903003000_branch_scope_authorization.sql",
+    "migrations/20260903005000_team_invitations.sql",
+    "migrations/20260903008000_roles_permissions_foundation.sql",
     "migrations/20260909230000_lead_onboarding.sql",
     "migrations/20260903025817_subscription_plans.sql",
+    "migrations/20260913020000_guest_intelligence_foundation.sql",
+    "migrations/20260913030000_r9_guest_relationships.sql",
+    "migrations/20260916020000_customer_phone_and_account_controls.sql",
     "migrations/20260916100000_customer_activation_lifecycle.sql",
+    "migrations/20260916110000_retire_self_serve_workspace.sql",
+    "migrations/20260916120000_harden_legacy_approval_decision.sql",
+    "migrations/20260916130000_fix_activation_function_edge_cases.sql",
+    "migrations/20260916140000_make_activation_retries_strictly_idempotent.sql",
     "migrations/20260917120000_platform_admin_subscription_control.sql",
   ];
   const pool = new pg.Pool({ connectionString: databaseUrl, max: 1 });
