@@ -7,13 +7,14 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `8050d2f08a2904f5ee2d9085454c47bdba601392` as verified from GitHub on 2026-09-17.
-- VERIFIED: PR #170 is merged into `main`.
-- VERIFIED: PR #172 is merged into `main` and fixes the public homepage `React.Children.only` runtime crash.
-- VERIFIED: Quality and W9 Orders QA passed for PR #172.
-- BLOCKED / NON-BLOCKING: Vercel PR deployment for #172 was rate-limited by the known free daily deployment quota; no retry was performed.
+- VERIFIED: `main` is `e8677a9d20c19ab03eff84d39358a66918b932b2` as verified from GitHub on 2026-09-18.
+- VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
+- VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
+- UNKNOWN: physical real-device Production QA for the latest `main`.
+- UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Completed / Deferred Boundary
+## PH Lifecycle — Completed / Deferred Boundary## PH Lifecycle — Completed / Deferred Boundary
 
 ```text
 PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
@@ -113,7 +114,7 @@ Live Menu
 
 The product is intentionally paused before payment-provider integration and commercial launch.
 
-## Exact Next Task
+## Historical Next Task
 Await the owner's next explicitly scoped task. No payment provider work, commercial-launch work, or PH-07 work is authorized by this plan.
 
 
@@ -126,3 +127,21 @@ Await the owner's next explicitly scoped task. No payment provider work, commerc
 - Scope: notification bell + unread badge + in-app toast + recent customers + optional browser notifications, backed by server-authorized polling.
 - Not in scope: Supabase Realtime migration, push infrastructure, customer lifecycle redesign, order removal, payment-provider work, commercial launch, or PH-07.
 - Exact next task: verify the focused notification change, create the PR, and stop before unrelated work.
+
+
+## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
+
+### Current Git History
+- VERIFIED: PR #179 → `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 → `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+
+### Stale PR Classification Against Current `main`
+- PR #161 — OBSOLETE. Its PH-01.4 existing-customer-login scope is already implemented/completed in current `main`; the open branch is historical and diverged.
+- PR #174 — SUPERSEDED. Its homepage login-entrypoint scope is already represented by later merged work on current `main`, including the stable-login contract test.
+- PR #176 — SUPERSEDED. It is a documentation reconciliation for an older state and is superseded by PR #179/#180 and this synchronized continuity state.
+
+### Scope Boundary
+Documentation-only reconciliation. No runtime code, themes, auth, payments, deployment, or refactoring changes.
+
+## Exact Next Task
+Owner must explicitly authorize the next atomic task. Do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
