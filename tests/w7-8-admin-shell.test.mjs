@@ -6,33 +6,32 @@ const admin = await readFile(new URL("../src/routes/admin.tsx", import.meta.url)
 const platform = await readFile(new URL("../src/lib/menu/platform.ts", import.meta.url), "utf8");
 const auth = await readFile(new URL("../src/lib/auth/platform-admin.server.ts", import.meta.url), "utf8");
 
-test("W7.8 Admin keeps the existing route and all current tab capabilities", () => {
+test("Admin keeps the active route and capability set", () => {
   assert.match(admin, /createFileRoute\("\/admin"\)/);
-  for (const id of ["overview", "tenants", "orders", "clients", "branches", "leads", "projects", "requests", "subscriptions", "analytics", "activity", "system"]) {
-    assert.match(admin, new RegExp(`\\"${id}\\"`));
-  }
+  for (const id of ["overview", "tenants", "orders", "clients", "branches", "projects", "subscriptions", "analytics", "activity", "system"]) assert.match(admin, new RegExp(`\\"${id}\\"`));
+  for (const retired of ["leads", "requests", "service-requests"]) assert.doesNotMatch(admin, new RegExp(`\\"${retired}\\"`));
 });
 
-test("W7.8 Admin navigation is grouped around real capabilities only", () => {
-  for (const label of ["نظرة عامة", "العملاء", "التجارة والتشغيل", "المبيعات", "الذكاء التشغيلي", "النظام"]) assert.match(admin, new RegExp(label));
+test("Admin navigation is grouped around active capabilities", () => {
+  for (const label of ["نظرة عامة", "العملاء", "التجارة والتشغيل", "الذكاء التشغيلي", "النظام"]) assert.match(admin, new RegExp(label));
+  assert.doesNotMatch(admin, /المبيعات/);
   assert.match(admin, /aria-current=\{tab === item\.id \? "page"/);
-  assert.match(admin, /W7\.9 يحوّل هذه المساحات إلى روابط URL حقيقية/);
-  for (const unsupported of ["Security مستقلة", "Platform Health مستقلة", "Configuration مستقلة"]) assert.match(admin, new RegExp(unsupported));
 });
 
-test("W7.8 preserves existing Admin operations and authorization boundaries", () => {
-  for (const operation of ["getPlatformDashboard", "getPlatformOrders", "updatePlatformOrderStatus", "archivePlatformOrder", "updatePlatformTenantStatus", "getAdminDashboard", "updateLead", "approveLead"]) assert.match(admin, new RegExp(operation));
+test("Admin preserves server-side authorization and current operations", () => {
+  for (const operation of ["getPlatformDashboard", "getPlatformOrders", "updatePlatformOrderStatus", "archivePlatformOrder", "updatePlatformTenantStatus"]) assert.match(admin, new RegExp(operation));
+  for (const retired of ["getAdminDashboard", "updateLead", "approveLead"]) assert.doesNotMatch(admin, new RegExp(retired));
   assert.match(platform, /assertPlatformAdmin\(context\.userId\)/);
   assert.match(platform, /requirePlatformAdmin\(userId\)/);
   assert.match(auth, /requirePlatformAdmin/);
 });
 
-test("W7.8 contains no fabricated Admin destinations or platform claims", () => {
+test("Admin contains no fabricated destinations or platform claims", () => {
   assert.doesNotMatch(admin, /href="\/admin\/(security|health|configuration)"/);
   assert.doesNotMatch(admin, /fake|sample data|demo data/i);
   assert.doesNotMatch(admin, /health score|security events|revenue trend|predicted/i);
 });
 
-test("W7.8 reuses internal design-system presentation primitives", () => {
+test("Admin reuses internal design-system presentation primitives", () => {
   for (const primitive of ["PageHeader", "SectionHeader", "MetricRow", "LoadingState", "ErrorState"]) assert.match(admin, new RegExp(primitive));
 });

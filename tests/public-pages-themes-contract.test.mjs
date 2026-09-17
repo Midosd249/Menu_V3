@@ -13,12 +13,12 @@ const registry = read("src/lib/theme/registry.ts");
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
 
-test("homepage exposes canonical pricing and plan selection", () => {
+test("homepage exposes canonical pricing and direct self-serve signup", () => {
   assert.match(home, /COMMERCIAL_PLANS\.map/);
   assert.match(home, /id="pricing"/);
-  assert.match(home, /Choose plan|اختر الباقة/);
-  assert.match(home, /selectedPlan/);
-  assert.match(home, /Plan: \{selectedPlan\}/);
+  assert.match(home, /mode: "signup"/);
+  assert.match(home, /ابدأ مجانًا|Start free/);
+  assert.doesNotMatch(home, /submitLead\(|selectedPlan|referenceId/);
   for (const plan of expectedPlans) assert.match(catalog, new RegExp(`code: "${plan}"`));
   assert.match(catalog, /monthlyPriceSar: 0/);
   assert.match(catalog, /monthlyPriceSar: 49/);
@@ -42,11 +42,8 @@ test("theme preview remains connected to the canonical Menu V3 renderer", () => 
   assert.doesNotMatch(preview, /theme-preview\.html/);
 });
 
-test("new-customer request flow remains on the existing lead contract", () => {
-  assert.match(home, /submitLead\(/);
-  assert.match(home, /businessName/);
-  assert.match(home, /contactPhone/);
-  assert.match(home, /NEW CUSTOMER REQUEST|طلب عميل جديد/);
-  assert.match(home, /referenceId/);
-  assert.match(home, /result\.data\.id/);
+test("new-customer request flow is retired in favor of direct signup", () => {
+  assert.doesNotMatch(home, /submitLead\(/);
+  assert.doesNotMatch(home, /businessName|contactPhone|NEW CUSTOMER REQUEST|طلب عميل جديد/);
+  assert.match(home, /mode: "signup"/);
 });
