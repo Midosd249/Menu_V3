@@ -4,15 +4,19 @@ import { assertLimit, type PlanResource } from "./subscription-limits";
 export type { PlanResource } from "./subscription-limits";
 export { PlanLimitError, assertLimit } from "./subscription-limits";
 
+export type BillingInterval = "monthly" | "annual";
+
 export type SubscriptionSummary = {
   code: string;
   nameAr: string;
   nameEn: string;
   status: "trialing" | "active" | "past_due" | "cancelled";
   maxBranches: number;
-  maxProducts: number;
+  maxProducts: number | null;
   maxTeamMembers: number;
   monthlyPriceSar: number;
+  annualPriceSar: number;
+  billingInterval: BillingInterval;
   trialEndsAt: string | null;
   currentPeriodEnd: string | null;
 };
@@ -24,9 +28,11 @@ export async function getSubscription(sql: Sql, tenantId: string): Promise<Subsc
     name_en: string;
     status: SubscriptionSummary["status"];
     max_branches: number;
-    max_products: number;
+    max_products: number | null;
     max_team_members: number;
     monthly_price_sar: string | number;
+    annual_price_sar: string | number;
+    billing_interval: BillingInterval;
     trial_ends_at: string | null;
     current_period_end: string | null;
   }>`
@@ -39,6 +45,8 @@ export async function getSubscription(sql: Sql, tenantId: string): Promise<Subsc
       sp.max_products,
       sp.max_team_members,
       sp.monthly_price_sar,
+      sp.annual_price_sar,
+      ts.billing_interval,
       ts.trial_ends_at,
       ts.current_period_end
     from menu_v3.tenant_subscriptions ts
@@ -56,9 +64,11 @@ export async function getSubscription(sql: Sql, tenantId: string): Promise<Subsc
     nameEn: row.name_en,
     status: row.status,
     maxBranches: Number(row.max_branches),
-    maxProducts: Number(row.max_products),
+    maxProducts: row.max_products == null ? null : Number(row.max_products),
     maxTeamMembers: Number(row.max_team_members),
     monthlyPriceSar: Number(row.monthly_price_sar),
+    annualPriceSar: Number(row.annual_price_sar),
+    billingInterval: row.billing_interval,
     trialEndsAt: row.trial_ends_at,
     currentPeriodEnd: row.current_period_end,
   };
@@ -71,7 +81,7 @@ export async function assertWithinPlanLimit(
 ) {
   const rows = await sql<{
     max_branches: number;
-    max_products: number;
+    max_products: number | null;
     max_team_members: number;
     current_branches: number;
     current_products: number;
@@ -94,6 +104,8 @@ export async function assertWithinPlanLimit(
 
   const row = rows[0];
   if (!row) throw new Error("SUBSCRIPTION_REQUIRED");
+
+  if (resource === "products" && row.max_products == null) return;
 
   const limits: Record<PlanResource, [number, number]> = {
     branches: [Number(row.current_branches), Number(row.max_branches)],
