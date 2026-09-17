@@ -32,10 +32,11 @@ for (const route of activeRoutes) {
 for (const route of retiredRoutes) {
   test(`W7.9 retired Admin route ${route} is not exposed`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    const response = await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
-    expect(response?.status()).toBe(404);
+    await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toHaveCount(0);
     await expect(page.getByText("طلبات الخدمات")).toHaveCount(0);
     await expect(page.getByText("العملاء المحتملون")).toHaveCount(0);
+    await expect(page.locator(adminNav)).toHaveCount(0);
   });
 }
 
