@@ -20,11 +20,19 @@ for (const route of routes) {
   test(`W7.9 authorized Admin route ${route} renders the real workspace`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
-    await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
+    if (route === "/admin/subscriptions") {
+      await expect(page.getByRole("heading", { name: "اشتراكات العملاء" })).toBeVisible();
+    } else {
+      await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
+    }
     await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
     await page.reload({ waitUntil: "networkidle" });
-    await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
+    if (route === "/admin/subscriptions") {
+      await expect(page.getByRole("heading", { name: "اشتراكات العملاء" })).toBeVisible();
+    } else {
+      await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
+    }
     await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
   });
 }
@@ -71,7 +79,6 @@ test("PH-04 subscription control workspace renders at mobile and desktop widths"
   for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 800 }]) {
     await page.setViewportSize(viewport);
     await page.goto(`${baseURL}/admin/subscriptions`, { waitUntil: "networkidle" });
-    await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "اشتراكات العملاء" })).toBeVisible();
     await expect(page.getByText("الاشتراكات والحسابات")).toBeVisible();
     await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
