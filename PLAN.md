@@ -14,7 +14,7 @@
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Completed / Deferred Boundary## PH Lifecycle — Completed / Deferred Boundary
+## PH Lifecycle — Completed / Deferred Boundary
 
 ```text
 PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
