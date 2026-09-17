@@ -2,22 +2,21 @@ import { test, expect } from "playwright/test";
 
 const baseURL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 const adminNav = 'aside[aria-label="تنقل إدارة المنصة"]';
-const routes = [
+const activeRoutes = [
   "/admin",
   "/admin/restaurants",
   "/admin/orders",
   "/admin/clients",
   "/admin/branches",
-  "/admin/leads",
   "/admin/projects",
-  "/admin/service-requests",
   "/admin/subscriptions",
   "/admin/analytics",
   "/admin/activity",
   "/admin/system",
 ] as const;
+const retiredRoutes = ["/admin/leads", "/admin/service-requests"] as const;
 
-for (const route of routes) {
+for (const route of activeRoutes) {
   test(`W7.9 authorized Admin route ${route} renders the real workspace`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
@@ -27,6 +26,16 @@ for (const route of routes) {
     await page.reload({ waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
     await expect(page.locator(`${adminNav} [aria-current='page']`)).toHaveCount(1);
+  });
+}
+
+for (const route of retiredRoutes) {
+  test(`W7.9 retired Admin route ${route} is not exposed`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const response = await page.goto(`${baseURL}${route}`, { waitUntil: "networkidle" });
+    expect(response?.status()).toBe(404);
+    await expect(page.getByText("طلبات الخدمات")).toHaveCount(0);
+    await expect(page.getByText("العملاء المحتملون")).toHaveCount(0);
   });
 }
 
