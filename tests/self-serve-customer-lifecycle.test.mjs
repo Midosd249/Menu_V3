@@ -11,7 +11,7 @@ const adminUsers = await readFile(new URL("../src/routes/admin/users.tsx", impor
 const migration = await readFile(new URL("../migrations/20260917160000_retire_legacy_customer_request_flows.sql", import.meta.url), "utf8");
 
 test("new customer path is self-serve and does not expose approval UI", () => {
-  assert.match(home, /mode: \"signup\"/);
+  assert.match(home, /mode: "signup"/);
   assert.doesNotMatch(home, /submitLead|request-service|إرسال الطلب|طلب عميل جديد/);
   assert.match(login, /authClient\.signUp\.email/);
   assert.match(login, /saveCustomerRegistrationPhone/);
