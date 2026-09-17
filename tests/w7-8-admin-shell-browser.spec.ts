@@ -72,11 +72,11 @@ test("W7.8 Platform Admin shell browser QA", async ({ page }) => {
   ] as const;
 
   for (const [label, route] of items) {
-    await nav.getByRole("button", { name: label }).click();
+    await nav.getByRole("link", { name: label }).click();
     await expect(page).toHaveURL(new RegExp(`${route.replaceAll("/", "\\/")}$`));
-    await expect(nav.getByRole("button", { name: label })).toHaveAttribute("aria-current", "page");
+    await expect(nav.getByRole("link", { name: label })).toHaveAttribute("aria-current", "page");
   }
 
-  await nav.getByRole("button", { name: "النظام والأمان" }).focus();
-  await expect(nav.getByRole("button", { name: "النظام والأمان" })).toBeFocused();
+  await nav.getByRole("link", { name: "النظام والأمان" }).focus();
+  await expect(nav.getByRole("link", { name: "النظام والأمان" })).toBeFocused();
 });
