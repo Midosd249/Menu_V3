@@ -1,4 +1,5 @@
 import { expect, test } from "playwright/test";
+import { ensurePlatformAdminSubscriptionSchema } from "./admin-browser-fixture.mjs";
 
 const BASE_URL = process.env.ADMIN_BASE_URL ?? "http://127.0.0.1:8083";
 const VIEWPORTS = [
@@ -10,6 +11,10 @@ const ROUTES = [
   "/admin", "/admin/restaurants", "/admin/clients", "/admin/branches", "/admin/orders", "/admin/subscriptions",
   "/admin/projects", "/admin/analytics", "/admin/activity", "/admin/system",
 ] as const;
+
+test.beforeAll(async () => {
+  await ensurePlatformAdminSubscriptionSchema();
+});
 
 test("Platform Admin responsive route matrix", async ({ page }) => {
   test.setTimeout(240_000);
