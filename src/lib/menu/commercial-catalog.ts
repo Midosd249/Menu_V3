@@ -7,17 +7,19 @@ export type CommercialPlan = {
   monthlyPriceSar: number;
   annualPriceSar: number;
   maxBranches: number;
-  maxProducts: number | null;
+  maxProducts: number;
   maxTeamMembers: number;
   recommended?: boolean;
 };
 
 // Canonical commercial display contract. Database migration mirrors these values;
 // runtime entitlement enforcement remains server/database-authoritative.
+// Pro's product limit is represented by a display-safe sentinel because the database
+// entitlement boundary explicitly bypasses the product limit for the Pro plan.
 export const COMMERCIAL_PLANS: readonly CommercialPlan[] = [
   { code: "free", nameAr: "مجاني", nameEn: "Free", monthlyPriceSar: 0, annualPriceSar: 0, maxBranches: 1, maxProducts: 50, maxTeamMembers: 3 },
   { code: "starter", nameAr: "نمو", nameEn: "Growth", monthlyPriceSar: 49, annualPriceSar: 490, maxBranches: 3, maxProducts: 300, maxTeamMembers: 10 },
-  { code: "pro", nameAr: "احترافي", nameEn: "Pro", monthlyPriceSar: 149, annualPriceSar: 1490, maxBranches: 10, maxProducts: null, maxTeamMembers: 25, recommended: true },
+  { code: "pro", nameAr: "احترافي", nameEn: "Pro", monthlyPriceSar: 149, annualPriceSar: 1490, maxBranches: 10, maxProducts: Number.MAX_SAFE_INTEGER, maxTeamMembers: 25, recommended: true },
 ];
 
 export const COMMERCIAL_FEATURES = {
