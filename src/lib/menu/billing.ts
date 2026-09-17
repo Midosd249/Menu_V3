@@ -9,12 +9,16 @@ import type { FnResult, Role } from "./types.ts";
 export type { SubscriptionInvoice } from "./billing-whatsapp.ts";
 export { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl } from "./billing-whatsapp.ts";
 
+export type BillingInterval = "monthly" | "annual";
+
 export type BillingSummary = {
   planCode: string;
   planNameAr: string;
   planNameEn: string;
   status: "trialing" | "active" | "past_due" | "cancelled" | "suspended";
   monthlyPriceSar: number;
+  annualPriceSar: number;
+  billingInterval: BillingInterval;
   currentPeriodEnd: string | null;
   trialEndsAt: string | null;
   tenantName: string;
@@ -53,6 +57,7 @@ function mapInvoice(row: Record<string, unknown>): SubscriptionInvoice {
     planNameEn: String(row.plan_name_en),
     amountSar: Number(row.amount_sar ?? 0),
     currency: "SAR",
+    billingInterval: row.billing_interval === "annual" ? "annual" : "monthly",
     periodStart: new Date(String(row.period_start)).toISOString(),
     periodEnd: new Date(String(row.period_end)).toISOString(),
     status: row.status === "void" ? "void" : "issued",
@@ -70,6 +75,8 @@ async function loadBilling(sql: Sql, tenantId: string): Promise<BillingSummary |
       sp.name_ar as plan_name_ar,
       sp.name_en as plan_name_en,
       sp.monthly_price_sar,
+      sp.annual_price_sar,
+      ts.billing_interval,
       ts.status,
       ts.current_period_end,
       ts.trial_ends_at
@@ -94,6 +101,7 @@ async function loadBilling(sql: Sql, tenantId: string): Promise<BillingSummary |
       i.plan_name_ar,
       i.plan_name_en,
       i.amount_sar,
+      i.billing_interval,
       i.period_start,
       i.period_end,
       i.status,
@@ -111,6 +119,8 @@ async function loadBilling(sql: Sql, tenantId: string): Promise<BillingSummary |
     planNameEn: String(row.plan_name_en),
     status: String(row.status) as BillingSummary["status"],
     monthlyPriceSar: Number(row.monthly_price_sar ?? 0),
+    annualPriceSar: Number(row.annual_price_sar ?? 0),
+    billingInterval: row.billing_interval === "annual" ? "annual" : "monthly",
     currentPeriodEnd: row.current_period_end ? new Date(String(row.current_period_end)).toISOString() : null,
     trialEndsAt: row.trial_ends_at ? new Date(String(row.trial_ends_at)).toISOString() : null,
     tenantName: String(row.tenant_name ?? ""),
@@ -158,6 +168,8 @@ export const issueSubscriptionInvoice = createServerFn({ method: "POST" })
           sp.name_ar as plan_name_ar,
           sp.name_en as plan_name_en,
           sp.monthly_price_sar,
+          sp.annual_price_sar,
+          ts.billing_interval,
           ts.status,
           ts.current_period_end
         from tenants t
@@ -170,7 +182,8 @@ export const issueSubscriptionInvoice = createServerFn({ method: "POST" })
       const subscription = subscriptionRows[0];
       if (!subscription) return { ok: false, code: "not_found", error: "بيانات الاشتراك غير موجودة" };
       const status = String(subscription.status);
-      const amountSar = Number(subscription.monthly_price_sar ?? 0);
+      const billingInterval: BillingInterval = subscription.billing_interval === "annual" ? "annual" : "monthly";
+      const amountSar = Number(billingInterval === "annual" ? subscription.annual_price_sar : subscription.monthly_price_sar);
       if (String(subscription.plan_code) === "free" || amountSar <= 0) {
         return { ok: false, code: "conflict", error: "لا تحتاج الخطة المجانية إلى فاتورة اشتراك" };
       }
@@ -181,27 +194,27 @@ export const issueSubscriptionInvoice = createServerFn({ method: "POST" })
       const now = new Date();
       const periodEnd = subscription.current_period_end
         ? new Date(String(subscription.current_period_end))
-        : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
+        : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + (billingInterval === "annual" ? 12 : 1), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
       const periodStart = new Date(periodEnd);
-      periodStart.setUTCMonth(periodStart.getUTCMonth() - 1);
+      periodStart.setUTCMonth(periodStart.getUTCMonth() - (billingInterval === "annual" ? 12 : 1));
       const invoiceNumber = `INV-${now.toISOString().slice(0, 10).replaceAll("-", "")}-${newId().replaceAll("-", "").slice(0, 10).toUpperCase()}`;
 
       const rows = await sql<Record<string, unknown>>`
         insert into subscription_invoices (
           tenant_id, invoice_number, plan_code, plan_name_ar, plan_name_en,
-          amount_sar, currency, period_start, period_end, status, issued_at, created_by_user_id
+          amount_sar, currency, billing_interval, period_start, period_end, status, issued_at, created_by_user_id
         ) values (
           ${membership.tenant_id}, ${invoiceNumber}, ${String(subscription.plan_code)},
           ${String(subscription.plan_name_ar)}, ${String(subscription.plan_name_en)},
-          ${amountSar}, 'SAR', ${periodStart.toISOString()}, ${periodEnd.toISOString()},
+          ${amountSar}, 'SAR', ${billingInterval}, ${periodStart.toISOString()}, ${periodEnd.toISOString()},
           'issued', now(), ${context.userId}
         )
         returning id, invoice_number, tenant_id, plan_code, plan_name_ar, plan_name_en,
-          amount_sar, period_start, period_end, status, issued_at
+          amount_sar, billing_interval, period_start, period_end, status, issued_at
       `;
       const invoice = rows[0];
       if (!invoice) return { ok: false, code: "unavailable", error: "تعذر إنشاء الفاتورة" };
-      if (data.note) console.info("PH-05 invoice note", { invoiceId: invoice.id, note: data.note });
+      if (data.note) console.info("PH-06 invoice note", { invoiceId: invoice.id, note: data.note });
 
       return {
         ok: true,
