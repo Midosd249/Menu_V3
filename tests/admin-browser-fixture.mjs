@@ -24,6 +24,22 @@ export async function ensurePlatformAdminSubscriptionSchema() {
       await client.query("rollback");
       throw error;
     }
+
+    // The legacy website-project surface is still read by the Platform Admin
+    // dashboard for compatibility, but it is not part of the active self-serve
+    // customer lifecycle and receives no new records.
+    await client.query(`
+      create table if not exists public.website_projects (
+        id uuid primary key,
+        tenant_id uuid null,
+        name_ar text null,
+        status text null,
+        contact_name text null,
+        contact_phone text null,
+        city text null,
+        created_at timestamptz not null default now()
+      )
+    `);
   } finally {
     client.release();
     await pool.end();
