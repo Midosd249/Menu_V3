@@ -5,6 +5,7 @@ import fs from "node:fs";
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
 const home = read("src/routes/index.tsx");
+const button = read("src/components/ui/button.tsx");
 const themes = read("src/routes/themes/index.tsx");
 const preview = read("src/routes/themes/preview.tsx");
 const catalog = read("src/lib/menu/commercial-catalog.ts");
@@ -25,6 +26,16 @@ test("homepage exposes canonical pricing and direct self-serve signup", () => {
   assert.match(catalog, /monthlyPriceSar: 149/);
   assert.match(catalog, /annualPriceSar: 490/);
   assert.match(catalog, /annualPriceSar: 1490/);
+});
+
+test("homepage signup buttons keep Link as the slotted element when icons are present", () => {
+  assert.match(home, /<Button asChild size="lg">\{signup\}<ArrowUpLeft/);
+  assert.match(home, /<Button asChild className="mt-5 w-full" variant="outline">\{signup\}<\/Button>/);
+  assert.match(home, /<Button asChild className="mt-7 w-full">\{signup\}<\/Button>/);
+  assert.match(home, /<Button asChild size="lg">\{signup\}<ArrowUpLeft/);
+  assert.match(button, /import \{ Slot, Slottable \} from "@radix-ui\/react-slot";/);
+  assert.match(button, /Children\.toArray\(children\)/);
+  assert.match(button, /<Slottable>\{firstChild\}<\/Slottable>/);
 });
 
 test("homepage exposes all protected themes without a premium gate", () => {

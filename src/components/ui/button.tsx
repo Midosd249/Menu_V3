@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { Slot } from "@radix-ui/react-slot";
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Children, forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -29,11 +29,28 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & { asChild?: boolean };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant, size, asChild, ...props },
+  { className, variant, size, asChild, children, ...props },
   ref,
 ) {
   const Comp = asChild ? Slot : "button";
-  return <Comp ref={ref} className={cn(buttonVariants({ variant, size }), className)} {...props} />;
+  const childArray = asChild ? Children.toArray(children) : [];
+  const firstChild = childArray[0];
+  const trailingChildren = childArray.slice(1);
+  const slottedChildren =
+    asChild && childArray.length > 1 ? (
+      <>
+        <Slottable>{firstChild}</Slottable>
+        {trailingChildren}
+      </>
+    ) : (
+      children
+    );
+
+  return (
+    <Comp ref={ref} className={cn(buttonVariants({ variant, size }), className)} {...props}>
+      {slottedChildren}
+    </Comp>
+  );
 });
 
 Button.displayName = "Button";
