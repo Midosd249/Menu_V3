@@ -58,7 +58,7 @@ function BillingPage() {
   const intervalLabel = billing?.billingInterval === "annual"
     ? (lang === "ar" ? "سنوية" : "Annual")
     : (lang === "ar" ? "شهرية" : "Monthly");
-  const currentPrice = billing?.billingInterval === "annual'" ? billing.annualPriceSar : billing?.monthlyPriceSar;
+  const currentPrice = billing?.billingInterval === "annual" ? billing.annualPriceSar : billing?.monthlyPriceSar;
 
   if (loading) return <div className="grid min-h-[50vh] place-items-center text-sm text-muted">{lang === "ar" ? "جارٍ تحميل الفوترة…" : "Loading billing…"}</div>;
 
