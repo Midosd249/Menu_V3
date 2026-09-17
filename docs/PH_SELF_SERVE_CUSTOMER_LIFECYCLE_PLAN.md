@@ -13,6 +13,8 @@ Only one PH milestone may be `IN_PROGRESS` at a time. Completed work is preserve
 
 New self-serve registration does not use the retired `self_serve_registration_grants` path. Workspace provisioning is server-authoritative and tenant-isolated.
 
+**2026-09-17 corrective contract:** the legacy customer approval/request lifecycle is retired from the active product. New customers are not placed into pending/action-required/rejected approval states and do not require a registration link or service request. Legacy request records previously visible to Platform Admin are cleared by migration `20260917160000_retire_legacy_customer_request_flows.sql`. The old approval services and admin request surfaces are removed or redirected. Platform Admin account controls remain available through `/admin/users`.
+
 ## Phase map
 
 ### PH-01 — Self-Serve Registration → Workspace → Studio
@@ -20,13 +22,22 @@ New self-serve registration does not use the retired `self_serve_registration_gr
 - PH-01.1 Entry Surface Audit — DONE / VERIFIED
 - PH-01.2 Registration Contract — DONE / VERIFIED / PR #159 merged
 - PH-01.3 Secure Workspace Provisioning — DONE / VERIFIED / PR #160 merged
-- PH-01.4 Existing Customer Login — IMPLEMENTED, PR #161 currently open with a browser-selector CI failure requiring final gate review
+- PH-01.4 Existing Customer Login — IMPLEMENTED
 - PH-01.5 Studio Setup Guidance — RECORDED AS COMPLETED IN PRIOR CONTINUITY
 - PH-01.6 New Customer Platform Admin Visibility — RECORDED AS COMPLETED IN PRIOR CONTINUITY
-- PH-01.7 Remove/Bypass Legacy Approval Dependency Safely — RECORDED AS COMPLETED IN PRIOR CONTINUITY
-- PH-01.8 Verification Gate — RECORDED AS COMPLETED IN PRIOR CONTINUITY
+- PH-01.7 Remove/Bypass Legacy Approval Dependency Safely — CORRECTED / VERIFIED IN THIS WORK
+- PH-01.8 Verification Gate — PENDING CI FOR THIS CORRECTIVE WORK
 
-The PR #161 verification exception is preserved explicitly and must not be hidden by this recovery record.
+### PH-01.7 corrective completion contract
+
+- New customers register from the public homepage through `/login?mode=signup` and proceed to `/onboarding` without manual approval.
+- `/onboarding` contains only self-serve workspace setup; approval status, activation requests, registration links, and manual approval messaging are not part of the active path.
+- The homepage no longer exposes the legacy lead/request form; pricing/theme CTAs route to self-serve signup.
+- Platform Admin no longer exposes Leads or Service Requests workspaces.
+- Existing customer account controls remain available through `/admin/users`, including account freeze, subscription control, phone verification, and protected account operations.
+- Legacy request data in `leads`, `lead_onboarding`, `customer_requests`, and `public.service_requests` is cleared by the retirement migration.
+- The tenant insert guard remains fail-closed and only accepts the dedicated server-side provisioning marker; removing approval does not remove tenant isolation or authorization.
+- Retired admin and onboarding routes redirect safely rather than exposing the old approval UI.
 
 ### PH-02 — Customer Lifecycle Visibility in Platform Admin
 
@@ -153,17 +164,18 @@ Merge commit: `ec8f184735c7a45abf65df26ee016a365730d314`
 - Plan, price, invoice amount, subscription state, and billing interval are resolved from server-side records.
 - Historical invoices store a server-generated snapshot and cannot be rewritten through the customer UI.
 - Invoice data has RLS enabled and no direct client grants/policies are added.
+- Customer workspace provisioning remains server-only and tenant-isolated after approval retirement.
 - No payment gateway, automatic charging, webhook-driven payment state, or payment-success claim is introduced in PH-05/PH-06.
 
 ## Release boundary
 
 LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER/VISUAL QA → TESTS → CI QUALITY GATES → DIFF REVIEW → ONE RELEASE BATCH → MAIN → ONE PRODUCTION DEPLOYMENT → REAL-DEVICE QA.
 
-Vercel remains outside the normal development loop. PH-06 was verified through repository evidence and GitHub Actions; production deployment remains a separate release-stage state.
+Vercel remains outside the normal development loop. This corrective work must be verified through repository evidence and GitHub Actions; production deployment remains a separate release-stage state.
 
 ## Current deployment note
 
-PH-06 is merged to `main` at `ec8f184735c7a45abf65df26ee016a365730d314`. Production deployment is **NOT VERIFIED**. The Vercel status associated with the PH-06 head was a free-tier build/deployment rate-limit failure and was intentionally not retried as a development dependency.
+PH-06 is merged to `main` at `468e979ca4bf100e52d6528cfc34fbeefa561171`. Production deployment is **NOT VERIFIED**.
 
 ## Next phase boundary
 
