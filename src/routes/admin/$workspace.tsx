@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { PlatformAdminPage, type Tab } from "@/routes/admin";
 
 const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
@@ -14,20 +14,16 @@ const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
 };
 
 export const Route = createFileRoute("/admin/$workspace")({
-  beforeLoad: ({ params }) => {
-    if (!ADMIN_WORKSPACE_TABS[params.workspace]) {
-      throw notFound();
-    }
-  },
   component: PlatformAdminWorkspaceRoute,
 });
 
 function PlatformAdminWorkspaceRoute() {
   const { workspace } = Route.useParams();
-  const initialTab = ADMIN_WORKSPACE_TABS[workspace] as Tab;
-  return <PlatformAdminWorkspaceView key={workspace} initialTab={initialTab} />;
-}
+  const initialTab = ADMIN_WORKSPACE_TABS[workspace];
 
-function PlatformAdminWorkspaceView({ initialTab }: { initialTab: Tab }) {
-  return <PlatformAdminPage initialTab={initialTab} />;
+  if (!initialTab) {
+    return <Navigate to="/admin" replace />;
+  }
+
+  return <PlatformAdminPage key={workspace} initialTab={initialTab} />;
 }
