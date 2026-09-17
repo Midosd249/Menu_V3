@@ -114,9 +114,9 @@ Do not begin R10 without explicit authorization.
 No new implementation task is authorized by this continuity update. Await the owner's next explicitly scoped request.
 
 
-## Platform Admin Customer Notifications — IN PROGRESS
+## Platform Admin Customer Notifications — DONE / VERIFIED / MERGED
 
-Branch: feat/platform-new-customer-notifications-ready
+Main: 18ca4f243b39640ebd7ed77541b268240b54cefd
 
 ### Verified decision
 - New customer registration is now self-serve and direct.
