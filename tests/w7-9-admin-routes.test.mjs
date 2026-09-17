@@ -65,11 +65,11 @@ test("legacy tab compatibility safely redirects retired workspaces", () => {
 });
 
 test("child route remains a protected adapter over the verified workspace mapping", () => {
-  assert.ok(workspaceRoute.includes("ADMIN_WORKSPACE_TABS[params.workspace]"));
-  assert.ok(workspaceRoute.includes("if (!ADMIN_WORKSPACE_TABS[params.workspace]"));
-  assert.ok(workspaceRoute.includes("throw notFound()"));
-  assert.ok(workspaceRoute.includes("const initialTab = ADMIN_WORKSPACE_TABS[workspace] as Tab"));
-  assert.ok(workspaceRoute.includes("return <PlatformAdminPage initialTab={initialTab} />"));
+  assert.ok(workspaceRoute.includes("const ADMIN_WORKSPACE_TABS: Record<string, Tab>"));
+  assert.ok(workspaceRoute.includes("const { workspace } = Route.useParams()"));
+  assert.ok(workspaceRoute.includes("if (!initialTab)"));
+  assert.ok(workspaceRoute.includes('Navigate to="/admin" replace'));
+  assert.ok(workspaceRoute.includes("return <PlatformAdminPage key={workspace} initialTab={initialTab} />"));
 });
 
 test("Platform Admin authorization remains server-side", () => {
