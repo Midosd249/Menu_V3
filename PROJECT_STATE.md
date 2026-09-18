@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `8b6a6d6ff751705338ea1ca887a3c05de07642b1`.
+- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -21,7 +21,7 @@
 
 PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
 
-## PH-01 — Self-Serve Customer Lifecycle — — CLOSED / VERIFIED / MERGED
+## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
 PR: #170
 Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 

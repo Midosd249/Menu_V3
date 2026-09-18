@@ -2,7 +2,7 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: `main` = `8b6a6d6ff751705338ea1ca887a3c05de07642b1`.
+- VERIFIED: `main` = `909935165d10fd7e8fccce6182fd88717ad478e6`.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.

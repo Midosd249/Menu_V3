@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `8b6a6d6ff751705338ea1ca887a3c05de07642b1` as verified from GitHub on 2026-09-18.
+- VERIFIED: `main` is `909935165d10fd7e8fccce6182fd88717ad478e6` as verified from GitHub on 2026-09-18.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
@@ -18,7 +18,7 @@
 
 PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
 
-## PH-01 — Self-Serve Customer Lifecycle — — CLOSED / VERIFIED / MERGED
+## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
 
 PR #170 — `fix: retire legacy customer approval and request flows`
 
