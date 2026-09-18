@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main — 2026-09-18
-- VERIFIED: `main` = `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: `main` = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #179 merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 merged at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: current repository contains the completed PH-01–PH-06 work and the protected product systems listed in `PROJECT_STATE.md`.
