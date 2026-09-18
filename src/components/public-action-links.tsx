@@ -27,7 +27,6 @@ export function PublicActionLinks({ tenant, branch, lang, preview = false, class
   }, [preview]);
 
   if (!actions.length) return null;
-  const sessionId = getGuestSessionId();
 
   return (
     <nav aria-label={lang === "ar" ? "تواصل ومعلومات الفرع" : "Contact and branch information"} className={cn("flex flex-wrap items-center gap-2", className)}>
@@ -45,7 +44,7 @@ export function PublicActionLinks({ tenant, branch, lang, preview = false, class
             rel={action.external ? "noopener noreferrer" : undefined}
             onClick={() => {
               if (!preview && action.key === "whatsapp") {
-                void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "whatsapp", lang, sessionId } });
+                void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "whatsapp", lang } });
               }
             }}
             className={cn(
