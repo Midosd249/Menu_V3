@@ -7,30 +7,18 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `503832ff7928c91c8183061fe383de447dbc558c` as verified from GitHub on 2026-09-18.
+- VERIFIED: `main` is `8b6a6d6ff751705338ea1ca887a3c05de07642b1` as verified from GitHub on 2026-09-18.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Completed / Deferred Boundary
+## PH Lifecycle — Completed
 
-```text
-PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
-PH-02 Customer Lifecycle Visibility                      DONE / VERIFIED / MERGED
-PH-03 Subscription Plans + Paid 14-Day Trial             DONE / VERIFIED / MERGED
-PH-04 Platform Admin Subscription & Account Control     DONE / VERIFIED / MERGED
-PH-05 Invoice Generation + WhatsApp Sharing              DONE / VERIFIED / MERGED
-PH-06 Commercial Activation                               DONE / VERIFIED / MERGED
+PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
 
-Payment Provider Integration                              NOT STARTED / DEFERRED
-Commercial Launch                                         NOT STARTED / DEFERRED
-```
-
-The owner has explicitly decided NOT to implement Payment Provider Integration or Commercial Launch now. Do not create a PH-07 placeholder and do not start either deferred area without explicit authorization.
-
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
+## PH-01 — Self-Serve Customer Lifecycle — — CLOSED / VERIFIED / MERGED
 
 PR #170 — `fix: retire legacy customer approval and request flows`
 
@@ -87,11 +75,6 @@ PR #172 — `fix: prevent homepage React.Children.only crash`
 - W7.1–W7.12 — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
 - W8 Internal Visual System — DONE / VERIFIED for implemented scope; existing draft PR history remains separate and protected.
 
-## R10
-STATUS: DEFERRED / NOT STARTED.
-
-Do not begin R10 without explicit authorization.
-
 ## Production / Release Readiness
 - VERIFIED: repository-side product work through PH-06 plus the homepage runtime fix is present in `main`.
 - UNKNOWN: physical Android/iOS production QA.
@@ -112,42 +95,7 @@ Live Menu
 → Self-Serve Customer Lifecycle
 ```
 
-The product is intentionally paused before payment-provider integration and commercial launch.
+The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
 
 ## Historical Next Task
-Await the owner's next explicitly scoped task. No payment provider work, commercial-launch work, or PH-07 work is authorized by this plan.
-
-
-## 2026-09-18 — Platform Admin Customer Notifications
-
-- VERIFIED: current main = 18ca4f243b39640ebd7ed77541b268240b54cefd.
-- VERIFIED: direct self-serve signup is active; new customers are provisioned into their workspace without the retired approval/request queue.
-- VERIFIED: /admin/orders remains a real operational order-management surface and is separate from customer onboarding.
-- DONE / VERIFIED / MERGED: Platform Admin new-customer notification center is merged into main.
-- Scope: notification bell + unread badge + in-app toast + recent customers + optional browser notifications, backed by server-authorized polling.
-- Not in scope: Supabase Realtime migration, push infrastructure, customer lifecycle redesign, order removal, payment-provider work, commercial launch, or PH-07.
-- Exact next task: verify the focused notification change, create the PR, and stop before unrelated work.
-
-
-## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
-
-### Current Git History
-- VERIFIED: PR #179 → `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 → `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-
-### Stale PR Classification Against Current `main`
-- PR #161 — CLOSED / OBSOLETE. Its PH-01.4 existing-customer-login scope is already implemented/completed in current `main`; the branch was historical and diverged.
-- PR #174 — CLOSED / SUPERSEDED. Its homepage login-entrypoint scope is already represented by later merged work on current `main` and regression protection.
-- PR #176 — CLOSED / SUPERSEDED. It was a documentation reconciliation for an older state and is superseded by PR #179/#180 and this synchronized continuity state.
-
-### Scope Boundary
-Documentation-only reconciliation. No runtime code, themes, auth, payments, deployment, or refactoring changes.
-
-## 2026-09-18 — Studio Activation First-Value Path
-
-- VERIFIED: PR #184 is CLOSED / MERGED at `503832ff7928c91c8183061fe383de447dbc558c`.
-- VERIFIED: Studio Home first-value activation guidance is now merged and derives progress from existing Studio state.
-- VERIFIED: Quality run `35293859444` passed; W9 Orders QA run `35293859519` passed.
-- VERIFIED: no production deployment was triggered.
-- UNKNOWN: physical real-device Production QA for the new Studio activation surface.
-- Exact Next Task: owner authorization for the next atomic Activation task — audit and, only if needed, improve the existing `/studio/menu` first-item/category empty-state flow.
+Await the owner's next explicitly scoped request. No implementation task is automatically authorized.

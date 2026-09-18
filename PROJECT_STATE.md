@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `503832ff7928c91c8183061fe383de447dbc558c`.
+- VERIFIED: canonical `main` is `8b6a6d6ff751705338ea1ca887a3c05de07642b1`.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -17,22 +17,11 @@
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Current Decision
-The owner has explicitly decided to stop before payment-provider integration and commercial launch. Do not implement either unless explicitly authorized in a future task.
+## PH Lifecycle — Completed
 
-```text
-PH-01 Self-Serve Registration → Workspace → Studio       DONE / VERIFIED / MERGED
-PH-02 Customer Lifecycle Visibility                      DONE / VERIFIED / MERGED
-PH-03 Subscription Plans + Paid 14-Day Trial             DONE / VERIFIED / MERGED
-PH-04 Platform Admin Subscription & Account Control     DONE / VERIFIED / MERGED
-PH-05 Invoice Generation + WhatsApp Sharing              DONE / VERIFIED / MERGED
-PH-06 Commercial Activation                               DONE / VERIFIED / MERGED
+PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
 
-Payment Provider Integration                              NOT STARTED / DEFERRED
-Commercial Launch                                         NOT STARTED / DEFERRED
-```
-
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
+## PH-01 — Self-Serve Customer Lifecycle — — CLOSED / VERIFIED / MERGED
 PR: #170
 Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 
@@ -87,11 +76,6 @@ Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 - W7.1–W7.12 internal product experience work — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
 - W8 Internal Visual System — DONE / VERIFIED for implemented scope; its draft PR history remains protected separately.
 
-## R10
-STATUS: DEFERRED / NOT STARTED
-
-R10 is intentionally not started. Do not begin R10 until the owner explicitly authorizes it.
-
 ## Production / Release Gates
 - VERIFIED: GitHub `main` contains the PH-01 merge and protected prior work.
 - VERIFIED: GitHub `main` now contains PR #172 homepage runtime fix.
@@ -101,7 +85,7 @@ R10 is intentionally not started. Do not begin R10 until the owner explicitly au
 - Do not use Vercel as an iteration loop or trigger unnecessary deployment retries.
 
 ## Current Strategic Direction
-The owner has explicitly chosen to pause before payment-provider integration and commercial launch. Keep the product focused on its implemented restaurant platform scope.
+The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
 
 ```text
 Live Menu
@@ -136,45 +120,4 @@ At the end of every atomic task:
 - Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
 
 ## Historical Next Task
-No new PH implementation is authorized by this reconciliation. Await the owner's next explicitly scoped product task. Payment Provider Integration and Commercial Launch remain deferred and must not be started automatically.
-
-
-## Session Log — 2026-09-18 — Platform Admin Customer Notifications
-
-- VERIFIED: current main is 18ca4f243b39640ebd7ed77541b268240b54cefd (PR #175 merge).
-- VERIFIED: self-serve customer lifecycle is direct: registration → workspace provisioning → Studio; legacy approval/request flows are retired.
-- VERIFIED: Platform Admin already shows newly created customer accounts in its Clients/Admin Users surfaces.
-- VERIFIED: /admin/orders is an operational order-management surface backed by real orders data and status/archive mutations; it is not part of the retired customer approval flow.
-- IMPLEMENTED / VERIFIED: Platform Admin new-customer notification center is merged using an authenticated server function, 10-second polling, persisted last-read timestamp, in-app toast/badge, and optional browser notifications.
-- PROTECTED: do not remove /admin/orders or /studio/orders; customer signup and order operations are separate product capabilities.
-- Merge: PR #179 → 18ca4f243b39640ebd7ed77541b268240b54cefd.
-- Status: DONE / VERIFIED / MERGED.
-- Exact next task: complete verification and review PR for the customer-notification enhancement.
-
-
-## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
-
-- VERIFIED: canonical `main` = `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
-- VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: PR #161 — CLOSED / OBSOLETE: PH-01.4 existing-customer-login work is already implemented in current `main`; its head is historical and diverged.
-- VERIFIED: PR #174 — CLOSED / SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work and regression protection.
-- VERIFIED: PR #176 — CLOSED / SUPERSEDED: its documentation-only reconciliation targeted an older repository state and is superseded by PR #179/#180 and this synchronized state.
-- No runtime code, themes, auth, payments, or deployment configuration changed in this task.
-
-## 2026-09-18 — Studio Activation First-Value Path
-
-- VERIFIED: PR #184 `feat: add Studio activation first-value path` is CLOSED / MERGED.
-- VERIFIED: merge commit = `503832ff7928c91c8183061fe383de447dbc558c`.
-- VERIFIED: implementation commit = `c1b8773254eac941ab7bb5e4b147db6e38abee5b`; follow-up regression-test fix = `425c71d7cb8be184459fc8bfd7b84a966eae5a7b`.
-- VERIFIED: Studio Home now exposes an owner-facing first-value path using existing tenant/category/product/publish state; no new persistence, analytics, schema, auth, RLS, entitlement, theme architecture, or deployment configuration was introduced.
-- VERIFIED: GitHub Quality run `35293859444` passed, including typecheck, full tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance diagnostics, and cleanup.
-- VERIFIED: W9 Orders QA run `35293859519` passed.
-- VERIFIED: the initial CI failure was a stale browser assertion that assumed one progressbar; the activation card introduced a second legitimate progressbar. The assertion was narrowed to the existing Studio Home target and the rerun passed.
-- VERIFIED: Vercel preview for the feature was READY; no production deployment was triggered.
-- UNKNOWN: physical real-device Production QA for the new Studio activation surface.
-- UNKNOWN: current Production environment-variable values.
-- Status: DONE / VERIFIED / MERGED.
-
-## Exact Next Task
-Owner authorization is required for the next atomic Activation task: audit and, only if needed, improve the existing `/studio/menu` first-item/category empty-state flow so a newly registered restaurant can add its first real menu content with minimal friction. Do not start payment-provider, commercial-launch, PH-07, or R10 work.
+Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
