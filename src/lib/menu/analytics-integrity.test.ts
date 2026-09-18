@@ -119,7 +119,8 @@ test("A.3 anonymous sessions are server-issued, tenant-bound, and cookie-only", 
   assert.match(sessionSource, /sameSite: "lax"/);
   assert.match(sessionSource, /path: "\/"/);
   assert.match(sessionSource, /where id = \$\{cookie\}/);
-  assert.match(sessionSource, /session\.tenant_id === tenantId/);\n  assert.match(sessionSource, /SESSION_ID_RE = \/\^\[0-9a-f\]\{64\}\$\/i/);
+  assert.match(sessionSource, /session\.tenant_id === tenantId/);
+  assert.match(sessionSource, /SESSION_ID_RE = \/\^\[0-9a-f\]\{64\}\$\/i/);
   assert.match(sessionSource, /expires_at.*Date\.now/);
   assert.match(sessionSource, /revoked_at/);
   assert.doesNotMatch(sessionSource, /console\.(log|info|warn|error).*id/);
