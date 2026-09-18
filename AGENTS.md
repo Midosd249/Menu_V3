@@ -53,11 +53,15 @@ For every future public-menu, template, theme, SEO, customer-action, or conversi
 - Record material research in `docs/design-research-log.md` with source, date, category, VERIFIED finding, transferable principle, relevance, limitation, confidence, and what must not be copied.
 
 ### Research and Connected Tools
-For consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work, invoke the workflow in `docs/agents/research-connected-tools-agent.md`.
+Before every meaningful task, invoke the Research and Connected-Tools preflight. Use repository/project-memory evidence for familiar low-risk work and expand to connected/public research only when it materially improves the decision. Follow `docs/agents/research-connected-tools-agent.md`.
 
 The workflow must begin with repository evidence, dynamically inspect all currently available connected tools/apps/plugins/connectors, and use every relevant authorized source that materially improves the decision.
 
 Do not hard-code a provider list. Do not use irrelevant tools. Do not claim unavailable access. Prefer read/search/analysis actions and require explicit user authorization for external side-effect actions.
+
+### Internal Agent Registry
+
+The complete permanent specialist set and responsibilities are defined in `docs/agents/agent-registry.md`. The Principal Engineer automatically routes requests to relevant workflows; the user never needs to name agents. Marketing/Growth and Research are permanent workflows, with Research preflight mandatory before meaningful work. Role boundaries, evidence rules, and the one-task stop rule apply to every specialist.
 
 ### Automatic Specialist Routing
 For every meaningful user request, the Principal Engineer automatically classifies the request, reads repository continuity and project memory, identifies the relevant internal AI workflows, and routes the work without requiring the user to name agents.
