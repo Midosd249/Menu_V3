@@ -122,8 +122,8 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - Public orders attach nullable `anonymous_session_id` only from a valid tenant-bound server session.
 - Composite database foreign key enforces tenant/session consistency.
 - Existing order validation, pricing, rate limiting, idempotency, R9 boundaries, and public themes were preserved.
-- GitHub Quality run `35343668159` passed.
-- GitHub W9 Orders QA run `35343668111` passed.
+- GitHub Quality run `35344719541` passed after the final R6 experiment-session alignment correction.
+- GitHub W9 Orders QA run `35344719500` passed.
 - No production deployment occurred.
 - Vercel PR status failed due to the connected account's build/deployment rate limit; no retry was performed.
 
