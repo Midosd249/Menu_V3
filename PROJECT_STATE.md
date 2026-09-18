@@ -109,11 +109,12 @@ At the end of every atomic task:
 4. record exactly one next authorized task;
 5. never infer authorization for deferred payment/commercial work.
 
-## 2026-09-18 — A.3 Implementation — IN PROGRESS
+## 2026-09-18 — A.3 Implementation — CLOSED / VERIFIED
 - VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: current `main` remains `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: final implementation head is `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- VERIFIED: current `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: no production deployment was performed.
-- IN_PROGRESS: GitHub CI verification and final diff review.
+- VERIFIED: GitHub Quality and W9 Orders QA passed.
 
 ## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
 - VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
@@ -145,16 +146,25 @@ At the end of every atomic task:
 - Focused regression coverage was added for the server contract and all live public renderer families.
 - Quality and W9 Orders CI passed on the final head.
 
-## A.3 — Server-Controlled Anonymous Session → Order Attribution — IMPLEMENTATION IN PROGRESS
-- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18` is based directly on current `main` `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
-- VERIFIED: approved A.3 design is preserved; runtime scope is limited to server-controlled anonymous sessions, canonical event attribution, public-order attribution, tenant-safe database constraints, and focused regression tests.
-- VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, and server-validated.
-- VERIFIED: `orders.anonymous_session_id` is nullable and tenant-consistent through a composite foreign key.
-- VERIFIED: client-supplied `sessionId` was removed from canonical public event calls.
-- IN_PROGRESS: CI and final diff verification remain.
-- UNKNOWN: production deployment and real-device QA; deployment is out of scope.
-- UNKNOWN: live production cookie behavior until release-stage browser/device verification.
-- BLOCKED: no merge/deployment is authorized by this task.
+## A.3 — Server-Controlled Anonymous Session → Order Attribution — CLOSED / VERIFIED BY CI
+- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
+- VERIFIED: final implementation head is `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: PR #192 is OPEN / non-draft / not merged.
+- VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
+- VERIFIED: canonical `menu_events` now receives the server-resolved session; public event calls no longer accept client-supplied `sessionId`.
+- VERIFIED: public orders attach `anonymous_session_id` only from a valid server-issued tenant-bound session.
+- VERIFIED: tenant/session consistency is enforced by a composite foreign key at the database boundary.
+- VERIFIED: historical orders/events remain untouched; no retroactive relinking was introduced.
+- VERIFIED: existing order validation, pricing, rate limiting, idempotency, and status-event flow remain protected.
+- VERIFIED: GitHub Quality run `35343668159` passed.
+- VERIFIED: GitHub W9 Orders QA run `35343668111` passed.
+- VERIFIED: typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages passed in Quality.
+- VERIFIED: no production deployment occurred.
+- UNKNOWN: physical real-device QA and live production cookie behavior.
+- BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
+## Exact Next Task
+Human review and merge authorization for PR #192 only. Do not deploy, close/merge PRs, or begin A.4 automatically.
 ## Exact Next Task
 A.3 — Finish verification of server-controlled anonymous session → order attribution, review the final diff, and close the implementation task without deployment.
