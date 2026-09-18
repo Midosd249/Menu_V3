@@ -113,13 +113,13 @@ test("A.2 public renderers emit the new journey events", () => {
 
 test("A.3 anonymous sessions are server-issued, tenant-bound, and cookie-only", () => {
   assert.match(sessionSource, /ANONYMOUS_SESSION_COOKIE = "__Host-menu_v3_sid"/);
-  assert.match(sessionSource, /randomUUID\(\)/);
+  assert.match(sessionSource, /randomBytes\(32\)\.toString\("hex"\)/);
   assert.match(sessionSource, /httpOnly: true/);
   assert.match(sessionSource, /secure: true/);
   assert.match(sessionSource, /sameSite: "lax"/);
   assert.match(sessionSource, /path: "\/"/);
   assert.match(sessionSource, /where id = \$\{cookie\}/);
-  assert.match(sessionSource, /session\.tenant_id === tenantId/);
+  assert.match(sessionSource, /session\.tenant_id === tenantId/);\n  assert.match(sessionSource, /SESSION_ID_RE = \/\^\[0-9a-f\]\{64\}\$\/i/);
   assert.match(sessionSource, /expires_at.*Date\.now/);
   assert.match(sessionSource, /revoked_at/);
   assert.doesNotMatch(sessionSource, /console\.(log|info|warn|error).*id/);
