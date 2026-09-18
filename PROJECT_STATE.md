@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -109,6 +109,13 @@ At the end of every atomic task:
 4. record exactly one next authorized task;
 5. never infer authorization for deferred payment/commercial work.
 
+## 2026-09-18 — A.3 Implementation — CLOSED / VERIFIED
+- VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
+- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
+- VERIFIED: current `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: no production deployment was performed.
+- VERIFIED: GitHub Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
+
 ## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
 - VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
 - VERIFIED: root cause was multi-child `Button asChild` composition: `Link` plus trailing `ArrowUpLeft` icon.
@@ -119,5 +126,43 @@ At the end of every atomic task:
 - UNKNOWN: physical real-device Production QA for the latest main.
 - Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## A.1 — Customer Journey & Event Truth Audit — CLOSED / VERIFIED
+- VERIFIED: audit completed against repository baseline `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27` and live Supabase.
+- VERIFIED: no runtime code, schema, auth/RLS, theme, or deployment changes were made.
+- VERIFIED: audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
+- VERIFIED: A.2 implementation is on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
+- VERIFIED: PR #191 is OPEN / DRAFT and targets `main`.
+- VERIFIED: A.2 adds canonical `search`, `category_view`, and `add_to_cart` events to `menu_events` with tenant-scoped category validation/storage.
+- VERIFIED: GitHub Quality run `35340567488` passed; W9 Orders QA run `35340567487` passed.
+- VERIFIED: no production deployment or synthetic traffic was used.
+- VERIFIED: remaining gaps are authoritative event → order linkage, cart-open measurement, and the existing `menu_events.session_id` nullability mismatch.
+- BLOCKED: Supabase security advisor reports RLS disabled on six live tables; separate security task required.
+- UNKNOWN: physical Production device QA, current Production environment values, sufficient real R6 exposure.
+
+## A.2 — Minimal Journey Instrumentation — CLOSED / VERIFIED BY CI
+- Scope was limited to search/category/add-to-cart measurement.
+- Canonical `menu_events` was extended; no parallel analytics stream was introduced.
+- Existing tenant/branch validation, product ownership validation, R6 experiment semantics, Owner Analytics, Growth, Reports, R2–R9, and public-menu architecture were preserved.
+- Focused regression coverage was added for the server contract and all live public renderer families.
+- Quality and W9 Orders CI passed on the final head.
+
+## A.3 — Server-Controlled Anonymous Session → Order Attribution — CLOSED / VERIFIED BY CI
+- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
+- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
+- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: PR #192 is OPEN / non-draft / not merged.
+- VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
+- VERIFIED: canonical `menu_events` now receives the server-resolved session; public event calls no longer accept client-supplied `sessionId`.
+- VERIFIED: public orders attach `anonymous_session_id` only from a valid server-issued tenant-bound session.
+- VERIFIED: tenant/session consistency is enforced by a composite foreign key at the database boundary.
+- VERIFIED: historical orders/events remain untouched; no retroactive relinking was introduced.
+- VERIFIED: existing order validation, pricing, rate limiting, idempotency, and status-event flow remain protected.
+- VERIFIED: GitHub Quality run `35344719541` passed after the final R6 experiment-session alignment correction.
+- VERIFIED: GitHub W9 Orders QA run `35344719500` passed.
+- VERIFIED: typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages passed in Quality.
+- VERIFIED: no production deployment occurred.
+- UNKNOWN: physical real-device QA and live production cookie behavior.
+- BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
+
+## Exact Next Task
+Human review and merge authorization for PR #192 only. Do not deploy, close/merge PRs, or begin A.4 automatically.

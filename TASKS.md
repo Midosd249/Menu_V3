@@ -2,10 +2,13 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: `main` = `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: canonical `main` = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
+- VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
+- VERIFIED: PR #191 is OPEN / DRAFT against `main`.
+- VERIFIED: Quality run `35340567488` passed and W9 Orders QA run `35340567487` passed.
+- VERIFIED: no production deployment or synthetic traffic was used.
 - UNKNOWN: physical real-device Production QA for latest `main`.
 
 ## PH Lifecycle — Completed
@@ -92,5 +95,29 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## A.1 — CLOSED / VERIFIED
+- Customer Journey & Event Truth Audit completed.
+- Audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
+- No runtime/schema/deployment changes.
+- Verified gaps: search/category/add-to-cart measurement and direct anonymous session → order linkage.
+- Live RLS-disabled tables are recorded as a separate security blocker.
+
+## A.2 — CLOSED / VERIFIED BY CI
+- Search measurement added with session-level duplicate protection.
+- Category selection measurement added with tenant-scoped `category_id` validation/storage.
+- Add-to-cart measurement added to all active public renderer families.
+- Focused regression coverage added.
+- Existing analytics, R6, order, theme, and security boundaries preserved.
+
+## A.3 — CLOSED / VERIFIED BY CI — Server-Controlled Anonymous Session → Order Attribution
+- Implementation complete on `feat/a3-session-order-attribution-2026-09-18`.
+- Final head: `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
+- PR #192 is OPEN / non-draft / not merged.
+- Server-controlled `__Host-menu_v3_sid`, tenant-bound `anonymous_sessions`, server-side event attribution, and tenant-safe order attribution are implemented.
+- Client-supplied canonical event session IDs are removed.
+- Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
+- No production deployment occurred.
+- Vercel preview status is rate-limit failure only; no retry was performed.
+
+## Exact Next Task
+Human review and merge authorization for PR #192 only. Do not deploy or begin A.4 automatically.

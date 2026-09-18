@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
+import { resolveAnonymousSession } from "./session.server";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
 const selectedSchema = z.object({
@@ -89,6 +90,9 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       `;
       const branchId = branchRows[0]?.id;
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
+
+      const anonymousSession = await resolveAnonymousSession(sql, String(tenant.id));
+      const anonymousSessionId = anonymousSession.fromValidCookie ? anonymousSession.id : null;
 
       const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
       const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
@@ -227,8 +231,8 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
 
       const created = await sql<{ id: string; order_number: number }>`
         with new_order as (
-          insert into orders (id, tenant_id, branch_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
-          values (${orderId}, ${tenant.id}, ${branchId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
+          insert into orders (id, tenant_id, branch_id, anonymous_session_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
+          values (${orderId}, ${tenant.id}, ${branchId}, ${anonymousSessionId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
           returning id, order_number
         ),
         inserted_items as (

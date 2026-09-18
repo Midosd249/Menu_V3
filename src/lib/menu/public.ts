@@ -1,10 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
+import { setResponseHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import { mapBranch, mapCategory, mapHour, mapProduct, mapPublicTenant } from "./map";
 import { DEMO_MENU } from "./demo";
 import { ACTIVE_EXPERIMENT, getExperimentVariant } from "./experiment";
+import { resolveAnonymousSession } from "./session.server";
 import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOptions, ProductVariant, PublicMenu } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -142,41 +144,103 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
 
 export const getPublicMenu = createServerFn({ method: "GET" })
   .validator(z.object({ slug: slugSchema, branch: z.string().max(63).optional() }))
-  .handler(async ({ data }) => loadPublicMenu(data.slug, data.branch));
+  .handler(async ({ data }) => {
+    setResponseHeader("Cache-Control", "private, no-store");
+    const result = await loadPublicMenu(data.slug, data.branch);
+    if (!result.ok) return result;
+
+    const sql = await getSql();
+    const tenants = await sql<{ id: string; whatsapp: string | null }>`
+      select id, whatsapp from tenants
+      where slug = ${data.slug} and is_active = true and is_published = true
+      limit 1
+    `;
+    const tenant = tenants[0];
+    if (!tenant) return result;
+
+    const session = await resolveAnonymousSession(sql, String(tenant.id));
+    const experimentVariant = tenant.whatsapp?.trim()
+      ? getExperimentVariant(session.id)
+      : "control" as const;
+
+    return {
+      ok: true,
+      data: { ...result.data, experimentVariant },
+    };
+  });
 
 export const recordPublicEvent = createServerFn({ method: "POST" })
   .validator(z.object({
     slug: slugSchema,
     branchSlug: z.string().max(63).optional(),
     productId: z.string().max(80).optional(),
-    eventType: z.enum(["visit", "product_view", "qr_scan", "whatsapp"]),
+    categoryId: z.string().max(80).optional(),
+    eventType: z.enum(["visit", "product_view", "qr_scan", "whatsapp", "search", "category_view", "add_to_cart"]),
     lang: z.enum(["ar", "en"]).optional(),
-    sessionId: z.string().min(8).max(80),
   }))
   .handler(async ({ data }): Promise<FnResult<{ recorded: boolean }>> => {
     try {
       const sql = await getSql();
-      const tenants = await sql<{ id: string; whatsapp: string }>`select id, whatsapp from tenants where slug = ${data.slug} and is_active = true and is_published = true limit 1`;
-      const tenantId = tenants[0]?.id as string | undefined;
+      const tenants = await sql<{ id: string; whatsapp: string | null }>`
+        select id, whatsapp from tenants
+        where slug = ${data.slug} and is_active = true and is_published = true
+        limit 1
+      `;
+      const tenantId = tenants[0]?.id;
       if (!tenantId) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
+
       let branchId: string | null = null;
       if (data.branchSlug) {
-        const b = await sql`select id from branches where tenant_id = ${tenantId} and slug = ${data.branchSlug} and is_active = true limit 1`;
-        branchId = (b[0]?.id as string) ?? null;
+        const branches = await sql<{ id: string }>`
+          select id from branches
+          where tenant_id = ${tenantId} and slug = ${data.branchSlug} and is_active = true
+          limit 1
+        `;
+        branchId = branches[0]?.id ?? null;
       }
-      if (data.eventType === "product_view") {
-        if (!data.productId) return { ok: false, code: "invalid", error: "صنف غير صالح" };
+
+      const isProductEvent = data.eventType === "product_view" || data.eventType === "add_to_cart";
+      const isCategoryEvent = data.eventType === "category_view";
+
+      if (isProductEvent) {
+        if (!data.productId || data.categoryId) return { ok: false, code: "invalid", error: "بيانات الصنف غير صالحة" };
         const p = await sql`select id from products where id = ${data.productId} and tenant_id = ${tenantId} limit 1`;
         if (!p[0]) return { ok: false, code: "invalid", error: "صنف غير صالح" };
+      } else if (isCategoryEvent) {
+        if (!data.categoryId || data.productId) return { ok: false, code: "invalid", error: "بيانات التصنيف غير صالحة" };
+        const category = await sql`select id from categories where id = ${data.categoryId} and tenant_id = ${tenantId} and is_active = true limit 1`;
+        if (!category[0]) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+      } else if (data.productId || data.categoryId) {
+        return { ok: false, code: "invalid", error: "بيانات الحدث غير صالحة" };
       }
-      if (data.eventType === "visit" || data.eventType === "qr_scan") {
-        const recent = await sql`select id from menu_events where tenant_id = ${tenantId} and session_id = ${data.sessionId} and event_type = ${data.eventType} and created_at > now() - interval '30 minutes' limit 1`;
+
+      const session = await resolveAnonymousSession(sql, String(tenantId));
+
+      if (data.eventType === "visit" || data.eventType === "qr_scan" || data.eventType === "search") {
+        const recent = await sql`
+          select id from menu_events
+          where tenant_id = ${tenantId}
+            and session_id = ${session.id}
+            and event_type = ${data.eventType}
+            and created_at > now() - interval '30 minutes'
+          limit 1
+        `;
         if (recent[0]) return { ok: true, data: { recorded: false } };
       }
+
       const experimentKey = tenants[0]?.whatsapp?.trim() ? ACTIVE_EXPERIMENT : null;
-      const experimentVariant = experimentKey ? getExperimentVariant(data.sessionId) : null;
+      const experimentVariant = experimentKey ? getExperimentVariant(session.id) : null;
       const eventType: EventType = data.eventType;
-      await sql`insert into menu_events (id, tenant_id, branch_id, product_id, event_type, lang, session_id, experiment_key, experiment_variant) values (${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${eventType}, ${data.lang ?? null}, ${data.sessionId}, ${experimentKey}, ${experimentVariant})`;
+      await sql`
+        insert into menu_events (
+          id, tenant_id, branch_id, product_id, category_id, event_type, lang,
+          session_id, experiment_key, experiment_variant
+        )
+        values (
+          ${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${data.categoryId ?? null},
+          ${eventType}, ${data.lang ?? null}, ${session.id}, ${experimentKey}, ${experimentVariant}
+        )
+      `;
       return { ok: true, data: { recorded: true } };
     } catch (err) {
       console.error("recordPublicEvent failed", err);

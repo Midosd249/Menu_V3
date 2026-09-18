@@ -6,7 +6,7 @@ export type AccessRole = "tenant_owner" | "branch_manager" | "staff" | "editor";
 
 export function accessRoleToRole(accessRole: AccessRole): Role { switch (accessRole) { case "tenant_owner": return "owner"; case "branch_manager": return "admin"; case "editor": return "editor"; case "staff": return "staff"; } }
 export function roleToAccessRole(role: Role): AccessRole { switch (role) { case "owner": return "tenant_owner"; case "admin": return "branch_manager"; case "editor": return "editor"; case "staff": return "staff"; } }
-export type EventType = "visit" | "product_view" | "qr_scan" | "whatsapp";
+export type EventType = "visit" | "product_view" | "qr_scan" | "whatsapp" | "search" | "category_view" | "add_to_cart";
 export type FnOk<T> = { ok: true; data: T };
 export type FnErr = { ok: false; error: string; code: "not_found" | "unauthorized" | "forbidden" | "unavailable" | "invalid" | "conflict" };
 export type FnResult<T> = FnOk<T> | FnErr;
@@ -22,7 +22,7 @@ export type ModifierGroup = { id: string; tenantId: string; nameAr: string; name
 export type ModifierOption = { id: string; tenantId: string; groupId: string; nameAr: string; nameEn: string; priceDelta: number; sortOrder: number; isAvailable: boolean };
 export type ProductOptions = { variants: ProductVariant[]; groups: ModifierGroup[]; options: ModifierOption[] };
 export type Membership = { tenantId: string; userId: string; role: Role };
-export type PublicMenu = { tenant: PublicTenant; branch: Branch; branches: Branch[]; hours: BranchHour[]; categories: Category[]; products: Product[]; productOptions?: Record<string, ProductOptions> };
+export type PublicMenu = { tenant: PublicTenant; branch: Branch; branches: Branch[]; hours: BranchHour[]; categories: Category[]; products: Product[]; productOptions?: Record<string, ProductOptions>; experimentVariant?: "control" | "prominent" };
 export type AttentionItem = { key: string; severity: "high" | "medium" | "low"; titleAr: string; titleEn: string; href: string };
 export type HealthDimension = { key: "publishing" | "content" | "translation" | "visual" | "organization" | "commercial" | "availability"; score: number; applicable: boolean; labelAr: string; labelEn: string };
 export type MenuHealth = { score: number; dimensions: HealthDimension[]; checks: Array<{ key: string; ok: boolean; labelAr: string; labelEn: string }>; attention: AttentionItem[] };

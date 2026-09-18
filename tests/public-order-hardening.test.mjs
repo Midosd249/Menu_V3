@@ -5,6 +5,7 @@ import test from "node:test";
 const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
 const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_security_definer_rpc_grants.sql", "utf8");
+const attributionMigration = await readFile("migrations/20260918020000_anonymous_session_order_attribution.sql", "utf8");
 
 test("public orders enforce a bounded database-backed rate limit", () => {
   assert.match(orderSource, /public_order_rate_limits/);
@@ -36,4 +37,13 @@ test("legacy security-definer RPCs are not executable by public client roles", (
     assert.match(rpcMigration, new RegExp(`revoke execute on function public\\.${name}`));
   }
   assert.match(rpcMigration, /set search_path = public, pg_temp/);
+});
+
+
+test("public orders attach only a valid server-controlled tenant session", () => {
+  assert.match(orderSource, /resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
+  assert.match(orderSource, /fromValidCookie/);
+  assert.match(orderSource, /anonymous_session_id/);
+  assert.doesNotMatch(orderSource, /anonymous_session_id.*data\./);
+  assert.match(attributionMigration, /foreign key \(tenant_id, anonymous_session_id\)\s+references anonymous_sessions \(tenant_id, id\)/);
 });
