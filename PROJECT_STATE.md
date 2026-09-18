@@ -109,6 +109,12 @@ At the end of every atomic task:
 4. record exactly one next authorized task;
 5. never infer authorization for deferred payment/commercial work.
 
+## 2026-09-18 — A.3 Implementation — IN PROGRESS
+- VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
+- VERIFIED: current `main` remains `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: no production deployment was performed.
+- IN_PROGRESS: GitHub CI verification and final diff review.
+
 ## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
 - VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
 - VERIFIED: root cause was multi-child `Button asChild` composition: `Link` plus trailing `ArrowUpLeft` icon.
@@ -139,16 +145,16 @@ At the end of every atomic task:
 - Focused regression coverage was added for the server contract and all live public renderer families.
 - Quality and W9 Orders CI passed on the final head.
 
-## A.3 — Server-Controlled Anonymous Session → Order Attribution Design — CLOSED / VERIFIED
-- VERIFIED: design completed against canonical repository code and A.2 state.
-- VERIFIED: no runtime code, database migration, auth/RLS, theme, or deployment change was made.
-- VERIFIED: recommended architecture is server-issued opaque anonymous session + tenant-bound server record + nullable `orders.anonymous_session_id`.
-- VERIFIED: existing `menu_events` remains the canonical analytics stream.
-- VERIFIED: existing order rate limiting and idempotency remain protected.
-- PROPOSED: browser `localStorage` session must stop being authoritative.
-- PROPOSED: historical events/orders remain intact and are not retroactively relinked.
-- UNKNOWN: installed TanStack Start cookie API/version and any production cookie restrictions.
-- BLOCKED: implementation requires explicit authorization.
+## A.3 — Server-Controlled Anonymous Session → Order Attribution — IMPLEMENTATION IN PROGRESS
+- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18` is based directly on current `main` `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: approved A.3 design is preserved; runtime scope is limited to server-controlled anonymous sessions, canonical event attribution, public-order attribution, tenant-safe database constraints, and focused regression tests.
+- VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, and server-validated.
+- VERIFIED: `orders.anonymous_session_id` is nullable and tenant-consistent through a composite foreign key.
+- VERIFIED: client-supplied `sessionId` was removed from canonical public event calls.
+- IN_PROGRESS: CI and final diff verification remain.
+- UNKNOWN: production deployment and real-device QA; deployment is out of scope.
+- UNKNOWN: live production cookie behavior until release-stage browser/device verification.
+- BLOCKED: no merge/deployment is authorized by this task.
 
 ## Exact Next Task
-A.3 — Implement server-controlled anonymous session → order attribution. Implementation only; preserve the approved design and do not expand scope.
+A.3 — Finish verification of server-controlled anonymous session → order attribution, review the final diff, and close the implementation task without deployment.
