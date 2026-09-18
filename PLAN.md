@@ -7,11 +7,11 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
-- VERIFIED: PR #191 is OPEN / DRAFT against `main`.
+- VERIFIED: PR #191 is CLOSED / SUPERSEDED by PR #192.
 - VERIFIED: GitHub Quality `35340567488` and W9 Orders QA `35340567487` both passed on the final head.
 - VERIFIED: no production deployment or synthetic traffic was used.
 - UNKNOWN: physical real-device Production QA for the latest `main`.
@@ -122,10 +122,10 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - Public orders attach nullable `anonymous_session_id` only from a valid tenant-bound server session.
 - Composite database foreign key enforces tenant/session consistency.
 - Existing order validation, pricing, rate limiting, idempotency, R9 boundaries, and public themes were preserved.
-- GitHub Quality run `35344719541` passed after the final R6 experiment-session alignment correction.
-- GitHub W9 Orders QA run `35344719500` passed.
+- GitHub Quality run `35353500574` passed after the final R6 experiment-session alignment correction.
+- GitHub W9 Orders QA run `35353500533` passed.
 - No production deployment occurred.
 - Vercel PR status failed due to the connected account's build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-Human review and merge authorization for PR #192 only. Do not deploy or begin A.4 automatically.
+Await the owner's next explicitly scoped task. Do not deploy or begin A.4 automatically.
