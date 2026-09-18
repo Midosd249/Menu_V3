@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is the current canonical post-A.3 continuity head.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -150,7 +150,7 @@ At the end of every atomic task:
 - VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
 - VERIFIED: final implementation head before squash merge is `e1d406edb4def53355d7e6c623b70108a5940a9d`.
 - VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
-- VERIFIED: PR #192 is CLOSED / MERGED at `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
+- VERIFIED: PR #192 is CLOSED / MERGED at `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
 - VERIFIED: canonical `menu_events` now receives the server-resolved session; public event calls no longer accept client-supplied `sessionId`.
 - VERIFIED: public orders attach `anonymous_session_id` only from a valid server-issued tenant-bound session.
