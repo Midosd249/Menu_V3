@@ -39,7 +39,7 @@ test("owner analytics keeps every aggregation tenant-scoped", () => {
 
 test("public product views reject missing or cross-tenant products", () => {
   assert.match(publicSource, /const isProductEvent = data\.eventType === "product_view" \|\| data\.eventType === "add_to_cart"/);
-  assert.match(publicSource, /if \(!data\.productId\) return \{ ok: false, code: "invalid"/);
+  assert.match(publicSource, /if \(!data\.productId \|\| data\.categoryId\) return \{ ok: false, code: "invalid"/);
   assert.match(
     publicSource,
     /select id from products where id = \$\{data\.productId\} and tenant_id = \$\{tenantId\} limit 1/,
