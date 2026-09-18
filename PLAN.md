@@ -10,7 +10,7 @@
 - VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
-- VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `75b191677a16c84240db609d6d920c02d66cb781`.
+- VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
 - VERIFIED: PR #191 is OPEN / DRAFT against `main`.
 - VERIFIED: GitHub Quality `35340567488` and W9 Orders QA `35340567487` both passed on the final head.
 - VERIFIED: no production deployment or synthetic traffic was used.

@@ -5,7 +5,7 @@
 - VERIFIED: canonical `main` = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `75b191677a16c84240db609d6d920c02d66cb781`.
+- VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
 - VERIFIED: PR #191 is OPEN / DRAFT against `main`.
 - VERIFIED: Quality run `35340567488` passed and W9 Orders QA run `35340567487` passed.
 - VERIFIED: no production deployment or synthetic traffic was used.

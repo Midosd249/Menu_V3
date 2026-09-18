@@ -4,7 +4,7 @@
 - Status: DONE / IMPLEMENTATION COMPLETE / VERIFIED BY CI
 - Date: 2026-09-18
 - Baseline main: `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`
-- Final branch head: `75b191677a16c84240db609d6d920c02d66cb781`
+- Final branch head: `fb3b27218fcd8f732b0a2472ff72b2420e067b02`
 - Branch: `feat/a2-minimal-journey-instrumentation-2026-09-18`
 - PR: #191 — OPEN / DRAFT
 - Scope: minimal journey instrumentation only.
@@ -76,7 +76,7 @@ Updated `src/lib/menu/analytics-integrity.test.ts` to verify:
   - Studio browser QA: PASS
   - Platform Admin browser QA: PASS
 - VERIFIED: W9 Orders QA run `35340567487` passed, including browser QA.
-- VERIFIED: final branch head is `75b191677a16c84240db609d6d920c02d66cb781`.
+- VERIFIED: final branch head is `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
 - VERIFIED: final PR diff contains A.1 continuity/audit records plus the A.2 implementation.
 - NOT RUN LOCALLY: local test/typecheck/build/browser commands were not available through the GitHub connector environment; GitHub CI is the direct execution evidence.
 - NOT DEPLOYED: no merge to `main` and no production deployment occurred.
