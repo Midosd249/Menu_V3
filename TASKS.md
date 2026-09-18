@@ -2,14 +2,15 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: canonical `main` = `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`; this is the current canonical post-A.3 continuity head.
-- VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
-- VERIFIED: PR #191 is CLOSED / SUPERSEDED by PR #192.
-- VERIFIED: Quality run `35340567488` passed and W9 Orders QA run `35340567487` passed.
-- VERIFIED: no production deployment or synthetic traffic was used.
-- UNKNOWN: physical real-device Production QA for latest `main`.
+- VERIFIED: release-stage operational verification completed against verified main b78b69ea0921571a1ca454c30ca81a43e5cf20b5 before this documentation batch.
+- VERIFIED: Vercel Production deployment was READY and matched GitHub commit b78b69ea0921571a1ca454c30ca81a43e5cf20b5 at verification time.
+- VERIFIED: production root returned HTTP 200.
+- VERIFIED: invalid public menu probe returned HTTP 404.
+- VERIFIED: invalid branch variant returned HTTP 404.
+- VERIFIED: no error/fatal runtime logs were found for the checked production deployment in the inspected 2-hour window.
+- VERIFIED: production theme-testing override is hard-disabled server-side in production; no code change is justified.
+- UNKNOWN: exact production environment-variable secret values.
+- UNKNOWN / EXTERNAL: physical Android/iOS production QA.
 
 ## PH Lifecycle — Completed
 
@@ -130,9 +131,9 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - UNKNOWN: direct production HTTP 404 verification for invalid public menu URLs.
 
 ## Exact Next Task
-**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
-Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
+Do not begin product/category deep links or native Web Share automatically.
 
 ## A.5 — CLOSED / VERIFIED — Public Shareability / Deep-Link Audit
 - VERIFIED: A.5 audit completed against canonical `main` at `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`.
@@ -157,6 +158,6 @@ Do not deploy automatically. Do not begin product/category deep links or native 
 - UNKNOWN: direct production HTTP 404 verification and physical device QA.
 
 ## Exact Next Task
-**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
-Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
+Do not begin product/category deep links or native Web Share automatically.
