@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -111,10 +111,10 @@ At the end of every atomic task:
 
 ## 2026-09-18 — A.3 Implementation — CLOSED / VERIFIED
 - VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
-- VERIFIED: current `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: final implementation head before squash merge is `e1d406edb4def53355d7e6c623b70108a5940a9d`.
+- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - VERIFIED: no production deployment was performed.
-- VERIFIED: GitHub Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
+- VERIFIED: GitHub Quality run `35344719541` and W9 Orders QA run `35353500533` passed.
 
 ## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
 - VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
@@ -131,7 +131,7 @@ At the end of every atomic task:
 - VERIFIED: no runtime code, schema, auth/RLS, theme, or deployment changes were made.
 - VERIFIED: audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
 - VERIFIED: A.2 implementation is on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
-- VERIFIED: PR #191 is OPEN / DRAFT and targets `main`.
+- VERIFIED: PR #191 is CLOSED / SUPERSEDED by PR #192.
 - VERIFIED: A.2 adds canonical `search`, `category_view`, and `add_to_cart` events to `menu_events` with tenant-scoped category validation/storage.
 - VERIFIED: GitHub Quality run `35340567488` passed; W9 Orders QA run `35340567487` passed.
 - VERIFIED: no production deployment or synthetic traffic was used.
@@ -148,21 +148,21 @@ At the end of every atomic task:
 
 ## A.3 — Server-Controlled Anonymous Session → Order Attribution — CLOSED / VERIFIED BY CI
 - VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
-- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
-- VERIFIED: PR #192 is OPEN / non-draft / not merged.
+- VERIFIED: final implementation head before squash merge is `e1d406edb4def53355d7e6c623b70108a5940a9d`.
+- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
+- VERIFIED: PR #192 is CLOSED / MERGED at `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
 - VERIFIED: canonical `menu_events` now receives the server-resolved session; public event calls no longer accept client-supplied `sessionId`.
 - VERIFIED: public orders attach `anonymous_session_id` only from a valid server-issued tenant-bound session.
 - VERIFIED: tenant/session consistency is enforced by a composite foreign key at the database boundary.
 - VERIFIED: historical orders/events remain untouched; no retroactive relinking was introduced.
 - VERIFIED: existing order validation, pricing, rate limiting, idempotency, and status-event flow remain protected.
-- VERIFIED: GitHub Quality run `35344719541` passed after the final R6 experiment-session alignment correction.
-- VERIFIED: GitHub W9 Orders QA run `35344719500` passed.
+- VERIFIED: GitHub Quality run `35353500574` passed after the final R6 experiment-session alignment correction.
+- VERIFIED: GitHub W9 Orders QA run `35353500533` passed.
 - VERIFIED: typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages passed in Quality.
 - VERIFIED: no production deployment occurred.
 - UNKNOWN: physical real-device QA and live production cookie behavior.
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-Human review and merge authorization for PR #192 only. Do not deploy, close/merge PRs, or begin A.4 automatically.
+Await the owner's next explicitly scoped task. Do not deploy or begin A.4 automatically.

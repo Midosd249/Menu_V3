@@ -2,11 +2,11 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: canonical `main` = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` = `42f0a7e3caf8939b28672685ac2d578578c9d90c`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
-- VERIFIED: PR #191 is OPEN / DRAFT against `main`.
+- VERIFIED: PR #191 is CLOSED / SUPERSEDED by PR #192.
 - VERIFIED: Quality run `35340567488` passed and W9 Orders QA run `35340567487` passed.
 - VERIFIED: no production deployment or synthetic traffic was used.
 - UNKNOWN: physical real-device Production QA for latest `main`.
@@ -112,12 +112,12 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 ## A.3 — CLOSED / VERIFIED BY CI — Server-Controlled Anonymous Session → Order Attribution
 - Implementation complete on `feat/a3-session-order-attribution-2026-09-18`.
 - Final head: `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
-- PR #192 is OPEN / non-draft / not merged.
+- PR #192 is CLOSED / MERGED at `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - Server-controlled `__Host-menu_v3_sid`, tenant-bound `anonymous_sessions`, server-side event attribution, and tenant-safe order attribution are implemented.
 - Client-supplied canonical event session IDs are removed.
-- Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
+- Quality run `35344719541` and W9 Orders QA run `35353500533` passed.
 - No production deployment occurred.
 - Vercel preview status is rate-limit failure only; no retry was performed.
 
 ## Exact Next Task
-Human review and merge authorization for PR #192 only. Do not deploy or begin A.4 automatically.
+Await the owner's next explicitly scoped task. Do not deploy or begin A.4 automatically.
