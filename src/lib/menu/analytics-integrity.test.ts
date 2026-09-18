@@ -9,6 +9,7 @@ const ownerSource = readFileSync(join(here, "owner.ts"), "utf8");
 const publicSource = readFileSync(join(here, "public.ts"), "utf8");
 const typesSource = readFileSync(join(here, "types.ts"), "utf8");
 const disclosureMigration = readFileSync(join(here, "../../../migrations/20260913001000_saudifood_disclosure.sql"), "utf8");
+const journeyMigration = readFileSync(join(here, "../../../migrations/20260918010000_journey_event_instrumentation.sql"), "utf8");
 
 test("owner analytics accepts only the supported 7/30 day ranges", () => {
   assert.match(
@@ -61,4 +62,25 @@ test("Saudi disclosure keeps nutrition values nullable and derives high salt fro
   assert.match(disclosureMigration, /add column if not exists sodium_mg/);
   assert.match(disclosureMigration, /add column if not exists caffeine_mg/);
   assert.match(disclosureMigration, /caffeine_basis in \('per_100ml', 'per_cup'\)/);
+});
+
+
+test("A.2 canonical public events include search, category selection, and add-to-cart", () => {
+  assert.match(typesSource, /EventType = .*search.*category_view.*add_to_cart/);
+  assert.match(publicSource, /eventType: z\.enum\(\["visit", "product_view", "qr_scan", "whatsapp", "search", "category_view", "add_to_cart"\]\)/);
+  assert.match(publicSource, /categoryId: z\.string\(\)\.max\(80\)\.optional\(\)/);
+  assert.match(publicSource, /eventType === "product_view" \|\| data\.eventType === "add_to_cart"/);
+  assert.match(publicSource, /eventType === "category_view"/);
+  assert.match(publicSource, /and tenant_id = \$\{tenantId\} and is_active = true limit 1/);
+  assert.match(publicSource, /eventType === "visit" \|\| data\.eventType === "qr_scan" \|\| data\.eventType === "search"/);
+  assert.match(publicSource, /category_id, event_type/);
+});
+
+test("A.2 migration extends menu_events without replacing the canonical stream", () => {
+  assert.match(journeyMigration, /add column if not exists category_id text references categories\(id\) on delete set null/);
+  assert.match(journeyMigration, /drop constraint if exists menu_events_type_ck/);
+  assert.match(journeyMigration, /'search'/);
+  assert.match(journeyMigration, /'category_view'/);
+  assert.match(journeyMigration, /'add_to_cart'/);
+  assert.match(journeyMigration, /menu_events_category_idx/);
 });
