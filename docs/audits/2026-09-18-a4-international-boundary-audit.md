@@ -35,7 +35,7 @@ W3C defines internationalization as designing/developing so software can adapt t
 CLDR provides locale data for numbers, currencies, dates, times, time zones, and related regional conventions. Currency formatting must be driven by the currency/locale context rather than manually concatenating a single market's currency representation. CLDR also documents bidi considerations for currency/number formatting. Sources: Unicode CLDR — https://cldr.unicode.org/translation/number-currency-formats/number-symbols, https://cldr.unicode.org/translation/number-currency-formats/number-and-currency-patterns, and https://www.unicode.org/reports/tr35/dev/tr35-numbers.html
 
 ### VERIFIED — JavaScript Intl
-`Intl.NumberFormat` supports ISO 4217 currency codes and locale-sensitive currency display. `Intl.DateTimeFormat` supports explicit locale and IANA time-zone selection; when a time zone is omitted, the runtime's time zone is used. citeturn0search10turn1search0turn1search1
+`Intl.NumberFormat` supports ISO 4217 currency codes and locale-sensitive currency display. `Intl.DateTimeFormat` supports explicit locale and IANA time-zone selection; when a time zone is omitted, the runtime's time zone is used. Sources: MDN Intl.NumberFormat and Intl.DateTimeFormat — https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 
 ## Audit matrix
 
@@ -76,7 +76,7 @@ The mapper defaults missing tenant country to `SA` and missing currency to `SAR`
 ### A4-F3 — Currency formatting should become currency-driven, not SAR-driven
 **VERIFIED**
 
-The repository already stores currency on the tenant/product/order model in the relevant paths, while `formatSar()` still assumes SAR. `Intl.NumberFormat` supports an ISO 4217 currency input and localized display. citeturn0search10turn0search1
+The repository already stores currency on the tenant/product/order model in the relevant paths, while `formatSar()` still assumes SAR. `Intl.NumberFormat` supports an ISO 4217 currency input and localized display. Sources: MDN Intl.NumberFormat and Unicode CLDR currency patterns — https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat and https://cldr.unicode.org/translation/number-currency-formats/number-and-currency-patterns
 
 **Required future direction:** introduce a generic formatter such as `formatCurrency(amount, currency, locale)`, preserve SAR as the default market configuration, and migrate callers only where evidence shows the generic boundary is required.
 
@@ -85,7 +85,7 @@ The repository already stores currency on the tenant/product/order model in the 
 ### A4-F4 — Time-zone behavior is the largest correctness gap
 **VERIFIED**
 
-Only selected billing paths explicitly use `Asia/Riyadh`. Other date/time formatting paths use `Intl.DateTimeFormat` without a `timeZone` option. MDN documents that the default time zone is the runtime time zone. citeturn1search0turn1search1
+Only selected billing paths explicitly use `Asia/Riyadh`. Other date/time formatting paths use `Intl.DateTimeFormat` without a `timeZone` option. MDN documents that the default time zone is the runtime time zone. Source: MDN Intl.DateTimeFormat — https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 
 **Risk:** an owner or guest in another time zone can see dates/times converted to their device/runtime zone instead of the restaurant/branch's operational zone.
 
