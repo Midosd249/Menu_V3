@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is the current canonical post-A.3 continuity head.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -112,7 +112,7 @@ At the end of every atomic task:
 ## 2026-09-18 — A.3 Implementation — CLOSED / VERIFIED
 - VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
 - VERIFIED: final implementation head before squash merge is `e1d406edb4def53355d7e6c623b70108a5940a9d`.
-- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
+- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
 - VERIFIED: no production deployment was performed.
 - VERIFIED: GitHub Quality run `35344719541` and W9 Orders QA run `35353500533` passed.
 
@@ -149,7 +149,7 @@ At the end of every atomic task:
 ## A.3 — Server-Controlled Anonymous Session → Order Attribution — CLOSED / VERIFIED BY CI
 - VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
 - VERIFIED: final implementation head before squash merge is `e1d406edb4def53355d7e6c623b70108a5940a9d`.
-- VERIFIED: canonical `main` is `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
+- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
 - VERIFIED: PR #192 is CLOSED / MERGED at `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
 - VERIFIED: canonical `menu_events` now receives the server-resolved session; public event calls no longer accept client-supplied `sessionId`.
@@ -165,4 +165,17 @@ At the end of every atomic task:
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-Await the owner's next explicitly scoped task. Do not deploy or begin A.4 automatically.
+**A.5 — Public Shareability / Deep-Link Audit.**
+
+Do not deploy or begin Release Evidence automatically. A.5 is the next explicitly authorized atomic task.
+
+## 2026-09-18 — A.4 International Boundary Audit — CLOSED / VERIFIED
+- VERIFIED: A.4 was authorized explicitly and audited against canonical `main` at `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
+- VERIFIED: audit record: `docs/audits/2026-09-18-a4-international-boundary-audit.md`.
+- VERIFIED: no runtime, schema, auth, RLS, theme, or deployment changes were made.
+- VERIFIED: Menu V3 is Saudi-first but not fundamentally Saudi-architected; tenant country/currency are represented as data, while several formatting and lifecycle seams remain Saudi-bound.
+- VERIFIED: largest technical gap identified is inconsistent explicit time-zone handling; reusable currency formatting also remains SAR-specific.
+- VERIFIED: Saudi self-serve phone onboarding is an intentional commercial/security boundary and was not broadened.
+- VERIFIED: external i18n research covered W3C Internationalization, Unicode CLDR, and JavaScript Intl guidance.
+- UNKNOWN: local runtime/browser/device behavior for any future implementation derived from A.4.
+- BLOCKED: no blocker for the audit itself; production deployment was not part of A.4.
