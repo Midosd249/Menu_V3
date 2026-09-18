@@ -4,10 +4,10 @@
 Repository-side release evidence for current `main` before any production deployment decision. This record does not authorize or perform deployment.
 
 ## Release identity
-- VERIFIED: repository `Midosd249/Menu_V3`, canonical branch `main`, current SHA `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9`.
+- VERIFIED: repository `Midosd249/Menu_V3`, canonical branch `main`, current SHA `99cc9338257b7ae6125a30579c445504fdfeaaaa`.
 - VERIFIED: PR #195 merged at `d244706d2532d9ff70429b6369cfbe13e58978d6`.
 - VERIFIED: PR #196 merged at `b98e3e1ae832c389157de2205979be4801fce63b`.
-- VERIFIED: PR #197 merged at `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9`.
+- VERIFIED: PR #197 merged at `99cc9338257b7ae6125a30579c445504fdfeaaaa`.
 
 ## GitHub quality evidence
 - VERIFIED: Quality run `35364239274` succeeded.
@@ -40,5 +40,13 @@ Repository-side release evidence for current `main` before any production deploy
 - PROPOSED: ready for a separate authorized release-stage operational verification.
 - NOT VERIFIED: production deployment state, physical-device production evidence, and full commercial-launch readiness.
 
+## Final repository evidence status
+- VERIFIED: release evidence was merged to `main` through PR #198.
+- VERIFIED: final `main` after this continuity reconciliation is `99cc9338257b7ae6125a30579c445504fdfeaaaa`.
+- VERIFIED: PR #198 is CLOSED / MERGED.
+- VERIFIED: no production deployment was performed by this task.
+
 ## Exact follow-up
-Obtain direct Vercel Production evidence when authorized/available, then perform the remaining real-device and production HTTP checks. Do not deploy automatically from this record.
+**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+
+Do not deploy automatically from this record.
