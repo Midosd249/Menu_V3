@@ -3,7 +3,6 @@ import { Plus, Search, ShoppingBag } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuMedia, MenuPrice } from "@/components/menu";
 import { useLang } from "@/lib/lang";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { recordPublicEvent } from "@/lib/menu/public";
 import type { Lang, Product, PublicMenu } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
@@ -29,24 +28,24 @@ export function FastCasualTemplate({ menu, preview = false }: { menu: PublicMenu
   }, [categoryId, query, visible]);
 
   useEffect(() => {
-    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "visit", lang, sessionId: getGuestSessionId() } });
+    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "visit", lang } });
   }, [branch.slug, lang, preview, tenant.slug]);
   useEffect(() => {
     if (preview || searchTrackedRef.current || !query.trim()) return;
     searchTrackedRef.current = true;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
 
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all") {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang } });
     }
   };
   const trackAddToCart = (product: Product) => {
     setCartCount((count) => Math.min(99, count + 1));
     if (!preview) {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "add_to_cart", lang } });
     }
   };
 
