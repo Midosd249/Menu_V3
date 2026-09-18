@@ -8,46 +8,17 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
-- VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
-- VERIFIED: current `main` includes both PR #179 and PR #180.
-- VERIFIED: no runtime code changes are part of this continuity reconciliation.
+- VERIFIED: canonical `main` resolves to `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
+- VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #161, #174, and #176 are CLOSED as obsolete/superseded historical work.
+- VERIFIED: current strategy documentation was prepared from current repository evidence and external research.
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
+- UNKNOWN: representative real-production funnel values.
 
 ## PH Lifecycle — Completed
-
-PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
-
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
-PR: #170
-Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
-
-### Customer lifecycle contract
-- New customer: Home → Registration → secure workspace provisioning → Studio.
-- New customers do not depend on a manual approval/request queue before entering the product.
-- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
-- Platform Admin customer control remains centered on `/admin/users` and is server-authorized.
-- Tenant and branch isolation, fail-closed provisioning, authentication, authorization, and server-side trust boundaries remain protected.
-
-### Legacy retirement
-- Legacy Leads / Service Requests are removed from the active Platform Admin customer lifecycle surface.
-- The previous approval/request gating dependency was retired rather than merely hidden.
-- Legacy request-record/trigger cleanup included in PR #170 is recorded as completed in the PR scope.
-- No replacement approval queue was introduced.
-
-### Platform Admin
-- `/admin/users` remains the supported customer-control surface.
-- Legacy Service Requests / Leads are not the customer lifecycle control surface.
-- Admin navigation and route behavior were corrected and verified during the PR work.
-
-### Verification
-- VERIFIED BY MANUS REPORT: Quality gates passed for the final PH-01 batch.
-- VERIFIED BY MANUS REPORT: W9 Orders QA passed.
-- VERIFIED FROM GITHUB: merge commit is verified.
-- Manus reported that a prior local TypeScript/baseUrl check failed because of a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged batch.
+PH-01 through PH-06 are completed historical milestones. No additional PH milestone is defined by this strategy task.
 
 ## Completed Protected Product Work
 - G1–G7.2 — CLOSED / VERIFIED.
@@ -66,7 +37,7 @@ Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 - R2.1–R2.7 Menu Intelligence — CLOSED / VERIFIED.
 - R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
 - R5 Growth Extensions — CLOSED / VERIFIED.
-- R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for activation/measurement implementation; outcome remains pending meaningful real exposure.
+- R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for implementation; outcome pending meaningful real exposure.
 - R7 evidence review — IN PROGRESS / NON-BLOCKING while exposure remains insufficient.
 - R8.1–R8.5 Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED.
 - R9 Guest CRM / Loyalty / Campaigns / Feedback / Retention — CLOSED / VERIFIED / MERGED.
@@ -74,32 +45,28 @@ Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
 - Grounded Guest Menu Assistant — CLOSED / VERIFIED.
 - Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
 - W7.1–W7.12 internal product experience work — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
-- W8 Internal Visual System — DONE / VERIFIED for implemented scope; its draft PR history remains protected separately.
+- W8 Internal Visual System — DONE / VERIFIED for implemented scope.
+
+## Strategic Blueprint — 2026-09-18
+- DONE / VERIFIED as documentation: `docs/customer-product-master-blueprint.md`.
+- Direction: evolve Menu V3 toward a restaurant-owned guest experience, direct-commerce, relationship, and decision-intelligence platform.
+- PROPOSED execution sequence:
+  1. Measurement Truth.
+  2. Guest Friction Elimination.
+  3. Commerce Intelligence.
+  4. Guest Relationship Loop.
+  5. Growth Optimization.
+  6. Internationalization Core.
+  7. Platform Scale.
+- PROPOSED international principle: Saudi Arabia is a market configuration, not the core product identity.
+- PROTECTED: do not restart, re-theme, or replace completed capabilities.
+- PROTECTED: do not turn Menu V3 into a generic chatbot, full POS, accounting suite, delivery fleet, or autonomous restaurant operator.
 
 ## Production / Release Gates
-- VERIFIED: GitHub `main` contains the PH-01 merge and protected prior work.
-- VERIFIED: GitHub `main` now contains PR #172 homepage runtime fix.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
-- UNKNOWN: current Production environment-variable values.
-- BLOCKED / NON-BLOCKING: the PR #172 Vercel deployment attempt was rate-limited by the known free daily deployment quota; no retry was performed.
-- Do not use Vercel as an iteration loop or trigger unnecessary deployment retries.
-
-## Current Strategic Direction
-The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
-
-```text
-Live Menu
-→ Guest Experience
-→ Menu Intelligence
-→ Owner Intelligence
-→ Growth Extensions
-→ Experiments
-→ Guest Relationships
-→ Customer Self-Serve Lifecycle
-→ Existing implemented commercial/admin capabilities
-```
-
-Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
+- UNKNOWN: physical real-device Production QA for latest `main`.
+- UNKNOWN: current production environment-variable values.
+- BLOCKED / NON-BLOCKING: prior Vercel deployment attempts encountered the known free daily deployment quota; no unnecessary retry is authorized.
+- Do not use Vercel as an iteration loop.
 
 ## Continuity Rule
 At the end of every atomic task:
@@ -109,15 +76,5 @@ At the end of every atomic task:
 4. record exactly one next authorized task;
 5. never infer authorization for deferred payment/commercial work.
 
-## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
-- VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
-- VERIFIED: root cause was multi-child `Button asChild` composition: `Link` plus trailing `ArrowUpLeft` icon.
-- VERIFIED: `src/components/ui/button.tsx` now uses Radix `Slottable` for multi-child `asChild` composition.
-- VERIFIED: `tests/public-pages-themes-contract.test.mjs` contains regression protection.
-- VERIFIED: Quality run `35266109690` and W9 Orders QA `35266109691` passed.
-- VERIFIED: merge commit is `8050d2f08a2904f5ee2d9085454c47bdba601392`.
-- UNKNOWN: physical real-device Production QA for the latest main.
-- Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
-
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## Exact Next Task
+PROPOSED / awaiting explicit implementation authorization: Phase A.1 — Customer Journey & Event Truth Audit. Inspect current event emitters, schemas, metrics, order linkage, session identity, privacy boundaries, and tests; produce a gap matrix. No UI redesign, schema change, or Vercel deployment is implied.
