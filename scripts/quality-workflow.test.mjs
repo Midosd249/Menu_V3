@@ -111,8 +111,8 @@ test("public menu keeps below-the-fold product media lazy-loaded and low-priorit
 
 
 test("public menu routes convert not-found data into router-level 404s", () => {
-  assert.match(PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\/tanstack\/react-router"/);
+  assert.ok(PUBLIC_MENU_ROUTE.includes('import { createFileRoute, notFound } from "@tanstack/react-router";'));
   assert.match(PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
-  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\/tanstack\/react-router"/);
+  assert.ok(BRANCH_PUBLIC_MENU_ROUTE.includes('import { createFileRoute, notFound } from "@tanstack/react-router";'));
   assert.match(BRANCH_PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
 });
