@@ -2,7 +2,7 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: A.1 audit baseline = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- VERIFIED: canonical `main` = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
