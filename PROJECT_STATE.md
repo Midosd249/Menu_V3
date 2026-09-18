@@ -165,9 +165,9 @@ At the end of every atomic task:
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-**A.5 Remediation — unify public discovery ownership and establish a verified HTTP 404 contract for public menu routes.**
+**Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
 
-Do not deploy, begin product/category deep links, add native share UI, or begin Release Evidence automatically.
+Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
 
 ## 2026-09-18 — A.4 International Boundary Audit — CLOSED / VERIFIED
 - VERIFIED: A.4 was authorized explicitly and audited against canonical `main` at `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`.
@@ -192,3 +192,19 @@ Do not deploy, begin product/category deep links, add native share UI, or begin 
 - DEFERRED: product/category deep links and native Web Share API are growth opportunities, not part of the remediation gate.
 - UNKNOWN: current production HTTP behavior for invalid routes because runtime/device execution was not available in this audit.
 - Exact next task: **A.5 Remediation — unify public discovery ownership and establish a verified HTTP 404 contract for public menu routes.**
+
+
+## 2026-09-18 — A.5 Remediation — CLOSED / VERIFIED
+- VERIFIED: PR #196 `fix: unify public discovery and establish route-level 404s` merged into `main` at `b98e3e1ae832c389157de2205979be4801fce63b`.
+- VERIFIED: `server/middleware/seo-discovery.ts` is the sole active owner of `/robots.txt` and `/sitemap.xml`; superseded `src/lib/seo/crawl.ts` and PWA ownership were removed.
+- VERIFIED: canonical sitemap retains locale-aware branch URLs, reciprocal `hreflang` alternates where English content exists, and deterministic duplicate suppression.
+- VERIFIED: both public route variants now throw TanStack Router `notFound()` for `getPublicMenu` `not_found` results.
+- VERIFIED: Quality run `35363323737` passed; W9 Orders QA run `35363323728` passed.
+- BLOCKED / NON-BLOCKING: Vercel remains rate-limited; no deployment or retry was performed.
+- UNKNOWN: direct production HTTP verification of invalid public URLs and physical real-device QA remain release-stage evidence.
+- Protected public themes, ordering, analytics, tenant/branch isolation, auth/RLS boundaries, and deployment policy were not redesigned or weakened.
+
+## Exact Next Task
+**Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
+
+Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
