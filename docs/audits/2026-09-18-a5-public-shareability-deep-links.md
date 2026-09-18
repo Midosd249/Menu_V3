@@ -304,8 +304,38 @@ A.5 does not:
 - Vercel deployment status is not used as evidence of current production behavior.
 - The likely 404 gap must be confirmed by a runtime/HTTP test before implementation is finalized.
 
-## Exact next task
 
-**A.5 Remediation — unify public discovery ownership and establish a verified HTTP 404 contract for public menu routes.**
+## A5-R1 — Remediation closeout — CLOSED / VERIFIED
 
-This is one atomic remediation task. Product/category deep links and native Web Share remain deferred.
+**VERIFIED:** PR #196 merged into `main` at `b98e3e1ae832c389157de2205979be4801fce63b`.
+
+The two P0 findings are resolved at repository/CI level:
+- `server/middleware/seo-discovery.ts` is the sole active owner of `/robots.txt` and `/sitemap.xml`.
+- Superseded `src/lib/seo/crawl.ts` was removed and `server/middleware/grok-pwa.ts` no longer serves crawler discovery responses.
+- Canonical sitemap generation retains locale-aware branch URLs, reciprocal `hreflang` where English content exists, and deterministic duplicate suppression.
+- `src/routes/m.$slug.tsx` and `src/routes/m.$slug.$branch.tsx` now throw router-level `notFound()` for `not_found` menu resolution.
+
+**VERIFIED:** Quality run `35363323737` passed all configured stages, including build, browser QA, and performance cleanup.
+
+**VERIFIED:** W9 Orders QA run `35363323728` passed.
+
+**UNKNOWN:** direct production HTTP requests for nonexistent tenant/branch URLs were not executed.
+
+**BLOCKED / NON-BLOCKING:** Vercel remains rate-limited; no deployment or retry was performed.
+
+### Remediation acceptance
+- [x] Single active robots/sitemap owner.
+- [x] Superseded crawl implementation removed.
+- [x] Canonical sitemap regression coverage updated.
+- [x] Tenant public route uses router-level `notFound()`.
+- [x] Branch public route uses router-level `notFound()`.
+- [x] Quality CI passed.
+- [x] W9 Orders QA passed.
+- [x] Final diff reviewed.
+- [ ] Direct production HTTP 404 verification — UNKNOWN / release-stage.
+- [ ] Physical real-device QA — UNKNOWN / release-stage.
+
+### Exact next task
+**Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
+
+Product/category deep links and native Web Share remain deferred.
