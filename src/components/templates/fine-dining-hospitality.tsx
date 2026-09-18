@@ -1,5 +1,5 @@
 import { LangToggle } from "@/components/lang-toggle";
-import { MenuMedia, MenuPrice } from "@/components/menu";
+import { MenuMedia } from "@/components/menu";
 import { PublicMenuView } from "@/components/public-menu";
 import { useLang } from "@/lib/lang";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
@@ -10,7 +10,6 @@ export function FineDiningHospitalityTemplate({ menu, preview = false }: { menu:
   const { lang } = useLang();
   const { tenant, branch, products } = menu;
   const visible = preview ? products : products.filter((product) => product.isAvailable);
-  const signature = visible.filter((product) => product.isFeatured);
   const tagline = text(lang, tenant.taglineAr, tenant.taglineEn);
 
   return <div className="noir-template-shell min-h-dvh">
