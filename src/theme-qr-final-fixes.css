@@ -1,0 +1,83 @@
+/*
+ * Menu V3 — QR/public theme regression fixes — 2026-09-19
+ *
+ * Narrow presentation corrections for the real public renderer. Business
+ * behavior, tenant data, ordering, analytics, and theme architecture remain
+ * unchanged.
+ */
+
+/* Editorial: keep Arabic names readable and visually separated from item numbers. */
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-topline {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  column-gap: 0.65rem !important;
+  row-gap: 0.3rem !important;
+  align-items: baseline;
+}
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-number {
+  min-width: 2ch;
+  margin-inline-end: 0.05rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-name,
+html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-title {
+  min-width: 0;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  white-space: normal !important;
+  line-height: 1.45;
+}
+html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell .editorial-product-name {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  letter-spacing: -0.015em;
+}
+@media (max-width: 520px) {
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-topline {
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    column-gap: 0.65rem !important;
+    row-gap: 0.28rem !important;
+  }
+  html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-price {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0.05rem;
+  }
+  html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell .editorial-product-price {
+    justify-self: end;
+  }
+}
+
+/* Taste / مذاق: the configured restaurant logo is part of the public hero identity. */
+html[data-menu-theme="heritage"] .taste-page .taste-hero-logo-wrap {
+  display: flex;
+  align-items: center;
+  min-height: 3.75rem;
+  margin-block-end: 1rem;
+}
+html[data-menu-theme="heritage"] .taste-page .taste-hero-logo {
+  display: block;
+  width: clamp(4.25rem, 18vw, 6.5rem);
+  height: clamp(4.25rem, 18vw, 6.5rem);
+  object-fit: contain;
+  object-position: center;
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.92);
+  padding: 0.55rem;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.18);
+}
+html[dir="rtl"][data-menu-theme="heritage"] .taste-page .taste-hero-logo-wrap {
+  justify-content: flex-start;
+}
+
+/* Keep the logo safe on very narrow screens without crowding the hero copy. */
+@media (max-width: 380px) {
+  html[data-menu-theme="heritage"] .taste-page .taste-hero-logo {
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 0.8rem;
+  }
+  html[data-menu-theme="heritage"] .taste-page .taste-hero-logo-wrap {
+    margin-block-end: 0.75rem;
+  }
+}
