@@ -51,7 +51,7 @@ test("public visit and QR events retain the 30-minute duplicate suppression", ()
   assert.match(publicSource, /data\.eventType === "visit" \|\| data\.eventType === "qr_scan"/);
   assert.match(
     publicSource,
-    /where tenant_id = \\$\{tenantId\}\\s+and session_id = \\$\{session\.id\}\\s+and event_type = \\$\{data\.eventType\}\\s+and created_at > now\\(\\) - interval '30 minutes'/,
+    /where tenant_id = \$\{tenantId\}\s+and session_id = \$\{session\.id\}\s+and event_type = \$\{data\.eventType\}\s+and created_at > now\(\) - interval '30 minutes'/,
   );
   assert.match(publicSource, /if \(recent\[0\]\) return \{ ok: true, data: \{ recorded: false \} \};/);
 });
