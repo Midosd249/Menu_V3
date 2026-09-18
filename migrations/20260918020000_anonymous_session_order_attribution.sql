@@ -1,4 +1,5 @@
 -- A.3 server-controlled anonymous sessions and order attribution.
+set search_path to menu_v3, public;
 -- The session is tenant-bound; orders enforce tenant/session consistency at the database boundary.
 
 create table if not exists anonymous_sessions (
@@ -33,7 +34,7 @@ alter table orders
   add constraint orders_anonymous_session_tenant_fkey
   foreign key (tenant_id, anonymous_session_id)
   references anonymous_sessions (tenant_id, id)
-  on delete set null;
+  on delete set null (anonymous_session_id);
 
 create index if not exists anonymous_sessions_tenant_last_seen_idx
   on anonymous_sessions (tenant_id, last_seen_at desc);
