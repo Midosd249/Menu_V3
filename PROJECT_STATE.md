@@ -8,8 +8,8 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9` after PR #197 merge.
-- VERIFIED: PR #197 is CLOSED / MERGED at `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9`.
+- VERIFIED: canonical `main` is `99cc9338257b7ae6125a30579c445504fdfeaaaa` after PR #197 merge.
+- VERIFIED: PR #197 is CLOSED / MERGED at `99cc9338257b7ae6125a30579c445504fdfeaaaa`.
 - VERIFIED: Quality run `35364239274` passed all configured quality, browser, and performance stages.
 - VERIFIED: W9 Orders QA run `35364239435` passed.
 - VERIFIED: GitHub combined status for current `main` contains only the Vercel `failure` context caused by the documented build/deployment rate-limit surface; this is not CI Quality failure.
@@ -174,7 +174,7 @@ At the end of every atomic task:
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-**Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
+**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
 
 Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
 
@@ -214,6 +214,6 @@ Do not deploy automatically. Do not begin product/category deep links or native 
 - Protected public themes, ordering, analytics, tenant/branch isolation, auth/RLS boundaries, and deployment policy were not redesigned or weakened.
 
 ## Exact Next Task
-**Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
+**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
 
 Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
