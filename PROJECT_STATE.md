@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #179 and PR #180 are merged; PR #161/#174/#176 are obsolete/superseded historical work.
 - VERIFIED: PH-01 through PH-06 and the protected product systems are present in the current repository.
 - VERIFIED: a gap-only repository audit was completed against current code, routes, libraries, components, migrations, tests, scripts, and continuity evidence.
