@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Clock3, MapPin, Minus, Plus, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
@@ -94,6 +94,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   const { tenant, branch, branches, hours, categories, products } = menu;
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState("all");
+  const searchTrackedRef = useRef(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
@@ -114,6 +115,11 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   useEffect(() => {
     if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } });
   }, [tenant.slug, branch.slug, lang, preview]);
+  useEffect(() => {
+    if (preview || searchTrackedRef.current || !query.trim()) return;
+    searchTrackedRef.current = true;
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+  }, [branch.slug, lang, preview, query, tenant.slug]);
   const openProduct = (product: Product) => {
     setSelectedId(product.id);
     if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } });
@@ -151,7 +157,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
       </header>
 
       <section className="taste-category-rail" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>
-        <div className="taste-category-inner"><label className="taste-search"><Search className="size-5" /><input id="taste-search" value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text(lang, "ابحث عن صنف أو مكوّن...", "Search menu...")} aria-label={text(lang, "البحث في المنيو", "Search menu")} /></label><div className="taste-category-scroll"><button type="button" className={cn("taste-category", categoryId === "all" && "is-active")} aria-pressed={categoryId === "all"} onClick={() => setCategoryId("all")}>{text(lang, "الكل", "All")}</button>{groupedCategories.map((category) => <button type="button" key={category.id} className={cn("taste-category", categoryId === category.id && "is-active")} aria-pressed={categoryId === category.id} onClick={() => setCategoryId(category.id)}>{text(lang, category.nameAr, category.nameEn)}</button>)}</div></div>
+        <div className="taste-category-inner"><label className="taste-search"><Search className="size-5" /><input id="taste-search" value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={text(lang, "ابحث عن صنف أو مكوّن...", "Search menu...")} aria-label={text(lang, "البحث في المنيو", "Search menu")} /></label><div className="taste-category-scroll"><button type="button" className={cn("taste-category", categoryId === "all" && "is-active")} aria-pressed={categoryId === "all"} onClick={() => trackCategory("all")}>{text(lang, "الكل", "All")}</button>{groupedCategories.map((category) => <button type="button" key={category.id} className={cn("taste-category", categoryId === category.id && "is-active")} aria-pressed={categoryId === category.id} onClick={() => trackCategory(category.id)}>{text(lang, category.nameAr, category.nameEn)}</button>)}</div></div>
       </section>
 
       <main id="taste-menu" className="taste-main">
