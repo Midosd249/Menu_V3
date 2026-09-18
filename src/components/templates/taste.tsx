@@ -124,6 +124,13 @@ export function TasteTemplate({ menu, preview = false }: Props) {
     setSelectedId(product.id);
     if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } });
   };
+  const trackCategory = (nextCategoryId: string) => {
+    setCategoryId(nextCategoryId);
+    if (!preview && nextCategoryId !== "all") {
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+    }
+  };
+
   const add = (item: CartItem) => setCart((current) => {
     const existing = current.find((entry) => entry.key === item.key);
     return existing ? current.map((entry) => entry.key === item.key ? { ...entry, quantity: Math.min(20, entry.quantity + 1) } : entry) : [...current, item];
