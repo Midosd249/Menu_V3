@@ -109,5 +109,13 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - Focused regression coverage added.
 - Existing analytics, R6, order, theme, and security boundaries preserved.
 
+## A.3 — CLOSED / VERIFIED — Design
+- Completed the server-controlled anonymous session → order attribution design.
+- Recommended tenant-bound server session model and cookie contract documented.
+- Recommended `orders.anonymous_session_id` relationship documented.
+- LocalStorage session remains legacy and non-authoritative.
+- Existing analytics/order/idempotency/security boundaries preserved.
+- No implementation or deployment was performed.
+
 ## Exact Next Task
-A.3 — Server-Controlled Anonymous Session → Order Attribution Design. Design only; do not implement until explicitly authorized.
+A.3 — Implement server-controlled anonymous session → order attribution. Design is approved as the implementation boundary; do not expand scope.

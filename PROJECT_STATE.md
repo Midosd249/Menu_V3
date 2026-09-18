@@ -139,5 +139,16 @@ At the end of every atomic task:
 - Focused regression coverage was added for the server contract and all live public renderer families.
 - Quality and W9 Orders CI passed on the final head.
 
+## A.3 — Server-Controlled Anonymous Session → Order Attribution Design — CLOSED / VERIFIED
+- VERIFIED: design completed against canonical repository code and A.2 state.
+- VERIFIED: no runtime code, database migration, auth/RLS, theme, or deployment change was made.
+- VERIFIED: recommended architecture is server-issued opaque anonymous session + tenant-bound server record + nullable `orders.anonymous_session_id`.
+- VERIFIED: existing `menu_events` remains the canonical analytics stream.
+- VERIFIED: existing order rate limiting and idempotency remain protected.
+- PROPOSED: browser `localStorage` session must stop being authoritative.
+- PROPOSED: historical events/orders remain intact and are not retroactively relinked.
+- UNKNOWN: installed TanStack Start cookie API/version and any production cookie restrictions.
+- BLOCKED: implementation requires explicit authorization.
+
 ## Exact Next Task
-A.3 — Server-Controlled Anonymous Session → Order Attribution Design. Design only; do not implement until explicitly authorized.
+A.3 — Implement server-controlled anonymous session → order attribution. Implementation only; preserve the approved design and do not expand scope.

@@ -116,5 +116,15 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - Preserved R6, existing analytics consumers, themes, order flow, and tenant/branch boundaries.
 - CI Quality and W9 Orders QA passed.
 
+## A.3 — CLOSED / VERIFIED — Design
+- Server-controlled anonymous session → order attribution design completed.
+- Recommended model: server-issued opaque cookie + tenant-bound `anonymous_sessions` record + nullable `orders.anonymous_session_id`.
+- `menu_events` remains the canonical analytics stream.
+- No runtime/schema/auth/RLS/theme/deployment changes were made.
+- Browser `localStorage` remains legacy only and must not become authoritative.
+- Cross-tenant attribution reuse is explicitly prohibited.
+- Existing public order validation, rate limiting, idempotency, and R9 guest relationship boundaries remain protected.
+- Implementation is intentionally deferred to the next atomic task.
+
 ## Exact Next Task
-A.3 — Server-Controlled Anonymous Session → Order Attribution Design. Design only; do not implement until explicitly authorized.
+A.3 — Implement server-controlled anonymous session → order attribution. Preserve the approved A.3 design; no unrelated analytics, cart, theme, RLS, or deployment work.
