@@ -111,7 +111,7 @@ At the end of every atomic task:
 
 ## 2026-09-18 — A.3 Implementation — IN PROGRESS
 - VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: current `main` remains `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: current `main` remains `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: no production deployment was performed.
 - IN_PROGRESS: GitHub CI verification and final diff review.
 
@@ -146,7 +146,7 @@ At the end of every atomic task:
 - Quality and W9 Orders CI passed on the final head.
 
 ## A.3 — Server-Controlled Anonymous Session → Order Attribution — IMPLEMENTATION IN PROGRESS
-- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18` is based directly on current `main` `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18` is based directly on current `main` `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: approved A.3 design is preserved; runtime scope is limited to server-controlled anonymous sessions, canonical event attribution, public-order attribution, tenant-safe database constraints, and focused regression tests.
 - VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, and server-validated.
 - VERIFIED: `orders.anonymous_session_id` is nullable and tenant-consistent through a composite foreign key.
