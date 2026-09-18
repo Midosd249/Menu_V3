@@ -10,7 +10,10 @@ test("Noir hardening keeps one presentation shell and stable product media", asy
   assert.match(template, /<PublicMenuView menu=\{menu\} preview=\{preview\}/);
   assert.doesNotMatch(template, /recordPublicEvent|getGuestSessionId/);
   assert.match(styles, /noir-template-menu > \.menu-public-shell > header[\s\S]*display:\s*none\s*!important/);
-  assert.match(styles, /section:has\(> #featured-heading\)[\s\S]*display:\s*none\s*!important/);
+  assert.doesNotMatch(styles, /noir-template-menu > \.menu-public-shell > main > section:has\(> #featured-heading\)[\s\S]*display:\s*none\s*!important/);
+  assert.match(template, /className="noir-template-hero-image"/);
+  assert.doesNotMatch(template, /className="noir-template-featured"/);
+  assert.match(styles, /noir-template-hero-image[\s\S]*object-fit:\s*cover/);
   assert.match(styles, /aspect-ratio:\s*4\s*\/\s*3/);
   assert.match(styles, /transform:\s*none\s*!important/);
   assert.match(styles, /animation:\s*none\s*!important/);
