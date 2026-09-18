@@ -2,7 +2,7 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: `main` = `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: A.1 audit baseline = `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
@@ -92,5 +92,12 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## A.1 — CLOSED / VERIFIED
+- Customer Journey & Event Truth Audit completed.
+- Audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
+- No runtime/schema/deployment changes.
+- Verified gaps: search/category/add-to-cart measurement and direct anonymous session → order linkage.
+- Live RLS-disabled tables are recorded as a separate security blocker.
+
+## Exact Next Task
+A.2 — Minimal Journey Instrumentation. Record only; do not start automatically.
