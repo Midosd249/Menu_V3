@@ -7,7 +7,9 @@ import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml } from "
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
-const DISCOVERY_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/seo-discovery.ts"), "utf8");\nconst PWA_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");\nconst BRANCH_PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.$branch.tsx"), "utf8");
+const DISCOVERY_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/seo-discovery.ts"), "utf8");
+const PWA_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
+const BRANCH_PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.$branch.tsx"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "utf8");
 const ROOT_ROUTE = readFileSync(join(ROOT, "src/routes/__root.tsx"), "utf8");
