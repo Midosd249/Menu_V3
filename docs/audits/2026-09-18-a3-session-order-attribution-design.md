@@ -328,3 +328,30 @@ Production deployment is out of scope for the design task.
 - UNKNOWN: whether production traffic/client privacy settings intentionally disable or restrict first-party cookies for this deployment.
 - UNKNOWN: whether any existing analytics/reporting query assumes `menu_events.session_id` is a browser-generated localStorage value.
 - BLOCKED for implementation until explicit implementation authorization after this design is reviewed.
+
+
+## Implementation Closeout — 2026-09-18
+
+### VERIFIED
+- Implementation branch: `feat/a3-session-order-attribution-2026-09-18`.
+- Canonical `main` at task start: `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
+- PR #192 is OPEN, non-draft, not merged.
+- Server session cookie: `__Host-menu_v3_sid`, generated server-side with `randomUUID()`, HttpOnly, Secure, SameSite=Lax, Path=/, bounded Max-Age.
+- Session lookup is tenant-bound and rejects revoked/expired/wrong-tenant identifiers before creating a replacement.
+- Canonical public events no longer accept a client-supplied `sessionId`; the server resolves `menu_events.session_id`.
+- Public order attribution is server-derived and only attached when the incoming cookie resolves to a valid tenant-bound session.
+- Database tenant consistency is enforced by the composite foreign key `orders(tenant_id, anonymous_session_id) → anonymous_sessions(tenant_id, id)`.
+- Existing order validation, pricing, rate limiting, idempotency, and status-event flow were preserved.
+- Focused regression coverage was added for cookie/session invariants, tenant-safe attribution, and removal of client session authority.
+- GitHub Quality run `35343668159` — SUCCESS.
+- GitHub W9 Orders QA run `35343668111` — SUCCESS.
+- Typecheck, full test suite, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance workflow stages completed successfully in the Quality run.
+- No production deployment was performed.
+
+### Verification caveat
+- Vercel status for PR #192 is FAILURE because the connected Vercel account hit its build/deployment rate limit. This is preview/deployment-provider status only and was not retried.
+- Physical real-device QA remains release-stage evidence and was not performed.
+- Live production cookie behavior remains UNKNOWN until authorized release-stage browser/device verification.
+
+### Decision
+A.3 implementation is complete at repository/CI level. Merge and deployment remain separate authorization gates.
