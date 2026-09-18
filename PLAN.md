@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is the current canonical post-A.3 continuity head.
+- VERIFIED: canonical `main` is `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`; this is the current canonical post-A.3 continuity head.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
@@ -128,6 +128,19 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - Vercel PR status failed due to the connected account's build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-**A.5 — Public Shareability / Deep-Link Audit.**
+**A.5 Remediation — unify public discovery ownership and establish a verified HTTP 404 contract for public menu routes.**
 
-Do not deploy or begin Release Evidence automatically. A.5 is the next explicitly authorized atomic task.
+Do not deploy, begin product/category deep links, add native share UI, or begin Release Evidence automatically.
+
+
+## A.5 — CLOSED / VERIFIED — Public Shareability / Deep-Link Audit
+- VERIFIED: A.5 audit completed against canonical `main` at `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`.
+- VERIFIED: audit record: `docs/audits/2026-09-18-a5-public-shareability-deep-links.md`.
+- VERIFIED: public tenant and branch routes are structurally direct-addressable and server-resolved.
+- VERIFIED: QR URLs, locale state, canonical URLs, hreflang, theme-preview noindex behavior, tenant/branch isolation, and all-theme route architecture were inspected.
+- VERIFIED: competing robots/sitemap implementations exist across `src/lib/menu/seo-discovery.ts` + `server/middleware/seo-discovery.ts` and `src/lib/seo/crawl.ts` + `server/middleware/grok-pwa.ts`.
+- GAP: invalid public-menu handling returns an application-level `not_found` result rather than a proven route-level HTTP 404; runtime confirmation is still required.
+- GAP: `/m/:slug` has first-active-branch ambiguity for multi-branch tenants; branch-specific sharing is deterministic via `/m/:slug/:branch`.
+- DEFERRED: product/category deep links and native Web Share API are growth opportunities, not part of the remediation gate.
+- UNKNOWN: current production HTTP behavior for invalid routes because runtime/device execution was not available in this audit.
+- Exact next task: **A.5 Remediation — unify public discovery ownership and establish a verified HTTP 404 contract for public menu routes.**
