@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6` as verified from GitHub on 2026-09-18.
+- VERIFIED: `main` is `503832ff7928c91c8183061fe383de447dbc558c` as verified from GitHub on 2026-09-18.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
@@ -143,13 +143,11 @@ Await the owner's next explicitly scoped task. No payment provider work, commerc
 ### Scope Boundary
 Documentation-only reconciliation. No runtime code, themes, auth, payments, deployment, or refactoring changes.
 
-## Exact Next Task
-Owner authorization is required for the next atomic task; do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
+## 2026-09-18 — Studio Activation First-Value Path
 
-
-## 2026-09-18 — Stale PR Closure and Main Reconciliation
-- VERIFIED: GitHub `main` at reconciliation start was `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
-- VERIFIED: PR #161, #174, and #176 were closed as obsolete/superseded.
-- VERIFIED: documentation-only scope; no runtime code or deployment configuration changes.
-- UNKNOWN: physical real-device Production QA for the latest main.
-- Exact next task: owner authorization for the next atomic task only.
+- VERIFIED: PR #184 is CLOSED / MERGED at `503832ff7928c91c8183061fe383de447dbc558c`.
+- VERIFIED: Studio Home first-value activation guidance is now merged and derives progress from existing Studio state.
+- VERIFIED: Quality run `35293859444` passed; W9 Orders QA run `35293859519` passed.
+- VERIFIED: no production deployment was triggered.
+- UNKNOWN: physical real-device Production QA for the new Studio activation surface.
+- Exact Next Task: owner authorization for the next atomic Activation task — audit and, only if needed, improve the existing `/studio/menu` first-item/category empty-state flow.

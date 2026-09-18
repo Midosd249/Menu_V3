@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
+- VERIFIED: canonical `main` is `503832ff7928c91c8183061fe383de447dbc558c`.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -162,14 +162,19 @@ No new PH implementation is authorized by this reconciliation. Await the owner's
 - VERIFIED: PR #176 — CLOSED / SUPERSEDED: its documentation-only reconciliation targeted an older repository state and is superseded by PR #179/#180 and this synchronized state.
 - No runtime code, themes, auth, payments, or deployment configuration changed in this task.
 
+## 2026-09-18 — Studio Activation First-Value Path
+
+- VERIFIED: PR #184 `feat: add Studio activation first-value path` is CLOSED / MERGED.
+- VERIFIED: merge commit = `503832ff7928c91c8183061fe383de447dbc558c`.
+- VERIFIED: implementation commit = `c1b8773254eac941ab7bb5e4b147db6e38abee5b`; follow-up regression-test fix = `425c71d7cb8be184459fc8bfd7b84a966eae5a7b`.
+- VERIFIED: Studio Home now exposes an owner-facing first-value path using existing tenant/category/product/publish state; no new persistence, analytics, schema, auth, RLS, entitlement, theme architecture, or deployment configuration was introduced.
+- VERIFIED: GitHub Quality run `35293859444` passed, including typecheck, full tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance diagnostics, and cleanup.
+- VERIFIED: W9 Orders QA run `35293859519` passed.
+- VERIFIED: the initial CI failure was a stale browser assertion that assumed one progressbar; the activation card introduced a second legitimate progressbar. The assertion was narrowed to the existing Studio Home target and the rerun passed.
+- VERIFIED: Vercel preview for the feature was READY; no production deployment was triggered.
+- UNKNOWN: physical real-device Production QA for the new Studio activation surface.
+- UNKNOWN: current Production environment-variable values.
+- Status: DONE / VERIFIED / MERGED.
+
 ## Exact Next Task
-Owner authorization is required for the next atomic task; do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
-
-
-## 2026-09-18 — Stale PR Closure and Main Reconciliation
-- VERIFIED: GitHub `main` at reconciliation start was `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
-- VERIFIED: PR #161, #174, and #176 were explicitly closed after classification as obsolete/superseded.
-- VERIFIED: no runtime code, auth, database, theme, payment, or deployment configuration changed.
-- VERIFIED: Vercel status on the baseline main was a rate-limit/build-quota failure; no deployment retry was performed.
-- UNKNOWN: physical real-device Production QA for the latest main.
-- Exact next task: owner authorization for the next atomic task only.
+Owner authorization is required for the next atomic Activation task: audit and, only if needed, improve the existing `/studio/menu` first-item/category empty-state flow so a newly registered restaurant can add its first real menu content with minimal friction. Do not start payment-provider, commercial-launch, PH-07, or R10 work.
