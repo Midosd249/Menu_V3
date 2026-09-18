@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: `main` is `909935165d10fd7e8fccce6182fd88717ad478e6` as verified from GitHub on 2026-09-18.
+- VERIFIED: A.1 audit baseline is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
@@ -97,5 +97,12 @@ Live Menu
 
 The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## A.1 Closeout — VERIFIED
+- Audit-only task completed.
+- Audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
+- No runtime implementation, migration, UI redesign, or deployment.
+- Main gaps: search/category/add-to-cart measurement and authoritative event → order linkage.
+- Existing `menu_events`, Owner Analytics, Growth, Reports, R2–R9, and R6 experiment contracts remain protected.
+
+## Exact Next Task
+A.2 — Minimal Journey Instrumentation. Dependency: A.1 audit evidence. Do not start automatically.
