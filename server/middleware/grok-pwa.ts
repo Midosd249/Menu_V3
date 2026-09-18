@@ -8,8 +8,7 @@
  *   static output on Vercel and not readable from the function).
  * - `/__grok/manifest.webmanifest` → per-app-named manifest (kept out of
  *   public/ so this dynamic response is the only one).
- * - `/robots.txt` and `/sitemap.xml` → crawl-control responses generated from
- *   the current public publication state.
+ * - `/robots.txt` and `/sitemap.xml` are owned by the dedicated SEO discovery middleware.
  * - Other HTML documents → stream-inject PWA + OG head tags at `</head>`.
  *   OG identity is baked via `virtual:grok-og-identity` at `vite build`
  *   (this function cannot read `src/lib/og/site.json` or `public/og.jpg`).
