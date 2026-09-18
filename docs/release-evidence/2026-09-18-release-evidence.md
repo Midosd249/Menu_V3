@@ -46,7 +46,18 @@ Repository-side release evidence for current `main` before any production deploy
 - VERIFIED: PR #198 is CLOSED / MERGED.
 - VERIFIED: no production deployment was performed by this task.
 
-## Exact follow-up
-**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+## Release-stage operational verification — 2026-09-18
+- VERIFIED: verification base was `b78b69ea0921571a1ca454c30ca81a43e5cf20b5` on `main`.
+- VERIFIED: Vercel Production deployment was READY and Git metadata matched `b78b69ea0921571a1ca454c30ca81a43e5cf20b5` at verification time.
+- VERIFIED: Production root HTTP 200.
+- VERIFIED: valid-but-nonexistent public menu route HTTP 404.
+- VERIFIED: valid-but-nonexistent branch variant HTTP 404.
+- VERIFIED: no error/fatal runtime logs for the checked production deployment in the inspected 2-hour window.
+- VERIFIED: server-side theme testing override is disabled whenever `VERCEL_ENV=production`; current repository evidence does not justify removing the bounded helper.
+- UNKNOWN: exact production environment-variable secret values.
+- UNKNOWN / EXTERNAL: physical Android/iOS QA.
 
-Do not deploy automatically from this record.
+## Exact follow-up
+**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
+
+Do not begin product/category deep links or native Web Share automatically.

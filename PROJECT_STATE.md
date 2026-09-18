@@ -1,30 +1,23 @@
 # PROJECT STATE
 
 ## Identity
-- Status: IN_PROGRESS.
+- Status: RELEASE_STAGE_VERIFIED_WITH_DEVICE_QA_PENDING.
 - Repository: `Midosd249/Menu_V3`.
 - Canonical branch: `main`.
 - Source of truth: `main`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `99cc9338257b7ae6125a30579c445504fdfeaaaa` after PR #197 merge.
-- VERIFIED: PR #197 is CLOSED / MERGED at `99cc9338257b7ae6125a30579c445504fdfeaaaa`.
-- VERIFIED: Quality run `35364239274` passed all configured quality, browser, and performance stages.
-- VERIFIED: W9 Orders QA run `35364239435` passed.
-- VERIFIED: GitHub combined status for current `main` contains only the Vercel `failure` context caused by the documented build/deployment rate-limit surface; this is not CI Quality failure.
-- UNKNOWN: direct Vercel Production deployment identity/configuration for this `main`.
-- UNKNOWN: physical real-device production QA.
-- UNKNOWN: direct production HTTP 404 verification for invalid public menu URLs.
-
-- VERIFIED: canonical `main` is `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`; this is the current canonical post-A.3 continuity head.
-- VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
-- VERIFIED: current `main` includes both PR #179 and PR #180.
-- VERIFIED: no runtime code changes are part of this continuity reconciliation.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
-- UNKNOWN: current Production environment-variable values.
+- VERIFIED: release-stage operational verification was completed against main b78b69ea0921571a1ca454c30ca81a43e5cf20b5 before this documentation batch.
+- VERIFIED: Vercel Production deployment for the verified release batch was READY and matched GitHub main commit b78b69ea0921571a1ca454c30ca81a43e5cf20b5 at verification time.
+- VERIFIED: Production alias: `menu-v3-kohl.vercel.app`.
+- VERIFIED: Production root returned HTTP 200.
+- VERIFIED: valid-but-nonexistent public menu probe returned HTTP 404.
+- VERIFIED: valid-but-nonexistent branch variant returned HTTP 404.
+- VERIFIED: current production deployment runtime error logs for the checked deployment showed no error/fatal logs in the inspected 2-hour window.
+- VERIFIED: production theme-testing override is hard-disabled when `VERCEL_ENV=production` by server-side code; no removal is justified by current evidence.
+- UNKNOWN: exact production environment-variable secret values remain unreadable through the available connector surface.
+- UNKNOWN / EXTERNAL: physical Android/iOS device QA cannot be performed by the connected repository/Vercel surfaces.
 
 ## PH Lifecycle — Completed
 
@@ -174,9 +167,9 @@ At the end of every atomic task:
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
-Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
+Do not begin product/category deep links or native Web Share automatically.
 
 ## 2026-09-18 — A.4 International Boundary Audit — CLOSED / VERIFIED
 - VERIFIED: A.4 was authorized explicitly and audited against canonical `main` at `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`.
@@ -214,6 +207,6 @@ Do not deploy automatically. Do not begin product/category deep links or native 
 - Protected public themes, ordering, analytics, tenant/branch isolation, auth/RLS boundaries, and deployment policy were not redesigned or weakened.
 
 ## Exact Next Task
-**Release-stage operational verification @GitHub/Vercel — verify the current Production deployment identity/configuration and, when authorized and available, complete direct HTTP 404 and real-device QA.**
+**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
-Do not deploy automatically. Do not begin product/category deep links or native Web Share automatically.
+Do not begin product/category deep links or native Web Share automatically.
