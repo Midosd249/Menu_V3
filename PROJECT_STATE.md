@@ -1,123 +1,90 @@
 # PROJECT STATE
 
 ## Identity
+
 - Status: IN_PROGRESS.
-- Repository: `Midosd249/Menu_V3`.
-- Canonical branch: `main`.
-- Source of truth: `main`.
+- Repository: Midosd249/Menu_V3.
+- Canonical branch: main.
+- Source of truth: main.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
+## Durable Continuity Contract
+
+- VERIFIED: detailed execution methodology, recovery procedure, phase dependencies, anti-regression rules, research rules, verification gates, Git/PR discipline, and release policy are documented in docs/master-execution-plan.md.
+- VERIFIED: PLAN.md and TASKS.md act as concise active-state indexes and must remain synchronized with the master plan.
+- RULE: a new chat must recover from repository evidence and the master plan, not from conversational memory.
+
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
-- VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
-- VERIFIED: current `main` includes both PR #179 and PR #180.
-- VERIFIED: no runtime code changes are part of this continuity reconciliation.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
+
+- VERIFIED: canonical main is c3afb623559ea1d6e015a5abeb6a59ebc26a4f27.
+- VERIFIED: PR #179 and PR #180 are merged; PR #161/#174/#176 are obsolete/superseded historical work.
+- VERIFIED: PH-01 through PH-06 and protected product systems are present.
+- VERIFIED: a current-code gap audit identified a small set of real remaining gaps.
+- UNKNOWN: physical real-device Production QA for latest main.
 - UNKNOWN: current Production environment-variable values.
-
-## PH Lifecycle — Completed
-
-PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
-
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
-PR: #170
-Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
-
-### Customer lifecycle contract
-- New customer: Home → Registration → secure workspace provisioning → Studio.
-- New customers do not depend on a manual approval/request queue before entering the product.
-- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
-- Platform Admin customer control remains centered on `/admin/users` and is server-authorized.
-- Tenant and branch isolation, fail-closed provisioning, authentication, authorization, and server-side trust boundaries remain protected.
-
-### Legacy retirement
-- Legacy Leads / Service Requests are removed from the active Platform Admin customer lifecycle surface.
-- The previous approval/request gating dependency was retired rather than merely hidden.
-- Legacy request-record/trigger cleanup included in PR #170 is recorded as completed in the PR scope.
-- No replacement approval queue was introduced.
-
-### Platform Admin
-- `/admin/users` remains the supported customer-control surface.
-- Legacy Service Requests / Leads are not the customer lifecycle control surface.
-- Admin navigation and route behavior were corrected and verified during the PR work.
-
-### Verification
-- VERIFIED BY MANUS REPORT: Quality gates passed for the final PH-01 batch.
-- VERIFIED BY MANUS REPORT: W9 Orders QA passed.
-- VERIFIED FROM GITHUB: merge commit is verified.
-- Manus reported that a prior local TypeScript/baseUrl check failed because of a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged batch.
+- UNKNOWN: sufficient real R6 exposure for directional outcome evaluation.
 
 ## Completed Protected Product Work
-- G1–G7.2 — CLOSED / VERIFIED.
-- Premium Theme System — DONE / VERIFIED / MERGED.
-- Essential, Editorial, Noir, Heritage/Taste, Gallery — protected.
-- Visual/Functional Quality System — DONE / VERIFIED / MERGED.
-- P0 Public Order Hardening — DONE / VERIFIED.
-- P1 Production/Continuity Hardening — DONE / VERIFIED for implemented scope.
-- P1-H1 package/lockfile reconciliation — CLOSED / VERIFIED.
-- P1-H2 main protection — CLOSED / VERIFIED.
-- P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
-- Platform Approval Center — CLOSED / VERIFIED.
-- Registration-link rendering — CLOSED / VERIFIED.
-- Onboarding Creation Recovery — CLOSED / VERIFIED / MERGED.
-- Menu Intelligence V5 Report Center — CLOSED / VERIFIED / MERGED.
-- R2.1–R2.7 Menu Intelligence — CLOSED / VERIFIED.
-- R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
-- R5 Growth Extensions — CLOSED / VERIFIED.
-- R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for activation/measurement implementation; outcome remains pending meaningful real exposure.
-- R7 evidence review — IN PROGRESS / NON-BLOCKING while exposure remains insufficient.
-- R8.1–R8.5 Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED.
-- R9 Guest CRM / Loyalty / Campaigns / Feedback / Retention — CLOSED / VERIFIED / MERGED.
-- AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
-- Grounded Guest Menu Assistant — CLOSED / VERIFIED.
-- Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
-- W7.1–W7.12 internal product experience work — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
-- W8 Internal Visual System — DONE / VERIFIED for implemented scope; its draft PR history remains protected separately.
 
-## Production / Release Gates
-- VERIFIED: GitHub `main` contains the PH-01 merge and protected prior work.
-- VERIFIED: GitHub `main` now contains PR #172 homepage runtime fix.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
-- UNKNOWN: current Production environment-variable values.
-- BLOCKED / NON-BLOCKING: the PR #172 Vercel deployment attempt was rate-limited by the known free daily deployment quota; no retry was performed.
-- Do not use Vercel as an iteration loop or trigger unnecessary deployment retries.
+- G1–G7.2, PH-01–PH-06 — CLOSED / VERIFIED.
+- Essential, Editorial, Noir, Heritage/Taste, Gallery — protected.
+- Public menu, search/category/product/cart/Quick Add/Item Notes/order flow — protected.
+- Public order hardening, Studio Orders, notifications and payment boundary — protected.
+- R2/R4/R5/R8 intelligence/growth work — protected.
+- R9 Guest CRM/Loyalty/Campaigns/Feedback/Retention — protected.
+- AI provider routing, multimodal ingestion, menu AI and grounded Guest Assistant — protected.
+- Self-serve lifecycle, subscriptions/entitlements, Platform Admin, branches, teams, import, billing, QR — protected.
+- SEO/local discovery, accessibility/performance contracts and release-only Vercel workflow — protected.
+- R6 implementation is protected; meaningful real exposure remains insufficient for outcome judgment.
+
+## Current Gap Findings
+
+See docs/current-product-gap-audit-2026-09-18.md when present on the current branch/release.
+
+### VERIFIED gaps
+
+1. Public telemetry currently covers visit, qr_scan, product_view, and whatsapp; search/category/cart actions are not in the public event contract.
+2. Public order submission is not linked to the anonymous menu sessionId, preventing a clean end-to-end anonymous journey from menu engagement to order outcome.
+3. Existing experiment infrastructure is real, but the broader analytics taxonomy is not yet a single canonical end-to-end journey contract.
+4. International presentation exists, but market-dependent boundaries are not yet proven as a complete adapter/configuration model; SAR-specific fallbacks exist in current code.
+5. Public menu-level SEO/shareability exists; dedicated product/category deep-link capability is not proven by the current route inventory.
+6. Owner intelligence/growth systems exist; stronger action → metric → outcome linkage remains an integration gap.
+7. Real-world evidence remains incomplete: meaningful R6 exposure and physical device Production QA are pending.
 
 ## Current Strategic Direction
-The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
 
-```text
-Live Menu
-→ Guest Experience
-→ Menu Intelligence
-→ Owner Intelligence
-→ Growth Extensions
-→ Experiments
-→ Guest Relationships
-→ Customer Self-Serve Lifecycle
-→ Existing implemented commercial/admin capabilities
-```
+Gap closure, not feature expansion:
 
-Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
+Journey truth → minimal missing instrumentation → outcome-linked intelligence → international boundary audit → shareability audit → release evidence.
 
-## Continuity Rule
-At the end of every atomic task:
-1. reconcile Git head against GitHub `main`;
-2. distinguish implementation, CI, deployment, and device evidence;
-3. update continuity files when canonical state changes;
-4. record exactly one next authorized task;
-5. never infer authorization for deferred payment/commercial work.
+Do not turn the product into a generic AI chatbot, POS, accounting system, autonomous restaurant operator, Saudi-only architecture, or unrelated feature platform.
 
-## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
-- VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
-- VERIFIED: root cause was multi-child `Button asChild` composition: `Link` plus trailing `ArrowUpLeft` icon.
-- VERIFIED: `src/components/ui/button.tsx` now uses Radix `Slottable` for multi-child `asChild` composition.
-- VERIFIED: `tests/public-pages-themes-contract.test.mjs` contains regression protection.
-- VERIFIED: Quality run `35266109690` and W9 Orders QA `35266109691` passed.
-- VERIFIED: merge commit is `8050d2f08a2904f5ee2d9085454c47bdba601392`.
-- UNKNOWN: physical real-device Production QA for the latest main.
-- Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
+## Continuity / Anti-Regression Rules
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+1. Start every task from the actual current main SHA.
+2. Read the master execution plan before meaningful work.
+3. Prove an existing capability is absent before adding it.
+4. Extend existing contracts instead of creating parallel systems.
+5. Add focused regression tests with every runtime change.
+6. Preserve tenant/branch isolation, server authorization, price/entitlement trust and fail-closed behavior.
+7. One atomic task per session.
+8. No Vercel iteration loop.
+9. At task end, reconcile Git/CI/deployment/device evidence and record exactly one next task.
+10. If chat context is lost, use docs/master-execution-plan.md plus current Git/code evidence to recover.
+
+## Exact Next Task
+
+A.1 — Customer Journey & Event Truth Audit.
+
+Boundary: audit only; no runtime implementation, no schema migration, no UI redesign, no deployment, no unrelated refactor.
+
+## Session Log
+
+### 2026-09-18 — Master Execution Plan Hardened
+
+- VERIFIED: detailed master plan added to docs/master-execution-plan.md.
+- VERIFIED: active continuity indexes point to the master plan.
+- VERIFIED: no runtime code, database schema, auth/RLS, theme, or deployment behavior changed by this documentation task.
+- VERIFIED: documentation changes are being carried on branch docs/current-product-gap-audit-2026-09-18 for PR #190.
+- UNKNOWN: whether PR #190 has been merged into main; current PR state must be checked before claiming the master plan is on main.
+- Next task: A.1 — Customer Journey & Event Truth Audit, after the documentation baseline is available on the authoritative branch or otherwise explicitly authorized.

@@ -21,23 +21,46 @@ For every meaningful request:
 
 Use `VERIFIED`, `INFERRED`, `PROPOSED`, `UNKNOWN`, and `BLOCKED` for findings and decisions.
 
-## 3. Automatic routing matrix
+## 3. Specialist registry and routing matrix
+
+The permanent specialist set is defined in `docs/agents/agent-registry.md`. The registry is authoritative for role existence; this document is authoritative for routing behavior.
+
+Every meaningful task invokes Research & Connected-Tools Agent first. Other workflows are selected automatically from the request.
+
+| Workflow | Primary responsibility |
+|---|---|
+| Product Analyst | Journey, requirements, customer/business outcomes |
+| UI/UX & Design Agent | Public visual/UI, themes, responsive UX, RTL/LTR |
+| Content & Localization Agent | Arabic/English content and localization |
+| Marketing & Growth Agent | Positioning, acquisition, activation, conversion, retention |
+| Frontend Implementation Agent | Minimal frontend implementation |
+| Backend & Data Agent | Data, migrations, Supabase, RLS boundaries |
+| Auth & Security Agent | Auth, authorization, privacy, input and boundary safety |
+| SEO Agent | Technical/local/public SEO |
+| Menu Intelligence / Growth / Relationships Guardian | Protect completed R2–R9 capabilities |
+| QA & Verification Agent | Automated/manual verification and regression |
+| Code Audit & Hygiene Guardian | Changed-line hygiene and scope review |
+| Documentation & Continuity Agent | Continuity and evidence records |
+| Release & Deployment Agent | Release-only Vercel and deployment evidence |
+| Risk & Continuity Guardian | Drift, invariants, blockers, long-term continuity |
+
+## 3A. Automatic routing matrix
 
 | Task type | Automatically selected internal workflows |
 |---|---|
-| **A. Themes, public menus, images, product cards, typography, RTL/LTR, mobile, responsive UI, restaurant website design** | Project Memory; Research and Connected-Tools Agent when research is materially useful; Design Agent; QA/regression workflow; Security/data workflow when customer actions, cart, ordering, user input, public links, external URLs, phone, WhatsApp, map, or social links change; Release/reliability workflow only after verified implementation and only when release action is authorized. |
+| **A. Themes, public menus, images, product cards, typography, RTL/LTR, mobile, responsive UI, restaurant website design** | Project Memory; Research and Connected-Tools Agent (mandatory preflight; external research only when useful); Design Agent; QA/regression workflow; Security/data workflow when customer actions, cart, ordering, user input, public links, external URLs, phone, WhatsApp, map, or social links change; Release/reliability workflow only after verified implementation and only when release action is authorized. |
 | **B. Cart, ordering, product options, checkout, pricing, WhatsApp, phone, map, social actions** | Project Memory; Principal Engineer implementation workflow; Research and Connected-Tools Agent when materially useful; Design Agent for action hierarchy, placement, mobile UX, feedback, RTL/LTR, and safe-area behavior; Security/data workflow for validation, tenant/branch ownership, price integrity, input safety, URL safety, privacy, and server-side enforcement; QA/regression workflow; Release/reliability workflow only when authorized. |
-| **C. Authentication, authorization, permissions, tenant isolation, branch isolation, subscriptions, entitlements** | Project Memory; Principal Engineer architecture workflow; Research and Connected-Tools Agent with official documentation where needed; Security/data workflow; QA/regression workflow; rollback plan before implementation; explicit acceptance criteria and risk review before broad changes. |
-| **D. Database, migrations, Supabase, data models, persistence** | Project Memory; Principal Engineer architecture workflow; Research and Connected-Tools Agent using official database/platform documentation when useful; Security/data workflow; migration safety plan; rollback strategy; data-integrity and isolation tests; QA/regression workflow. |
-| **E. Bugs, browser inconsistencies, rendering flash, caching, background mismatch, performance, Vercel, CI, build issues** | Project Memory; reproduce-and-isolate workflow; source/configuration/test/Git/CI/deployment evidence review; Research and Connected-Tools Agent for official platform/browser documentation when useful; Design Agent when the defect is visual; QA/regression workflow; Release/reliability workflow when infrastructure, CI, Vercel, environment, deployment, cache, or build behavior is involved. |
-| **F. SEO, structured data, metadata, public-menu discoverability, public content quality** | Project Memory; repository/page/route audit; Research and Connected-Tools Agent using official search-engine and Schema.org references when useful; Design Agent when content hierarchy or UX is affected; QA/regression workflow for rendered-page verification; Security/data workflow if public data exposure could change. |
+| **C. Authentication, authorization, permissions, tenant isolation, branch isolation, subscriptions, entitlements** | Project Memory; Principal Engineer architecture workflow; Research and Connected-Tools Agent (mandatory preflight; official documentation when needed); Security/data workflow; QA/regression workflow; rollback plan before implementation; explicit acceptance criteria and risk review before broad changes. |
+| **D. Database, migrations, Supabase, data models, persistence** | Project Memory; Principal Engineer architecture workflow; Research and Connected-Tools Agent (mandatory preflight; official database/platform documentation when useful); Security/data workflow; migration safety plan; rollback strategy; data-integrity and isolation tests; QA/regression workflow. |
+| **E. Bugs, browser inconsistencies, rendering flash, caching, background mismatch, performance, Vercel, CI, build issues** | Project Memory; reproduce-and-isolate workflow; source/configuration/test/Git/CI/deployment evidence review; Research and Connected-Tools Agent (mandatory preflight; official platform/browser documentation when useful); Design Agent when the defect is visual; QA/regression workflow; Release/reliability workflow when infrastructure, CI, Vercel, environment, deployment, cache, or build behavior is involved. |
+| **F. SEO, structured data, metadata, public-menu discoverability, public content quality** | Project Memory; repository/page/route audit; Research and Connected-Tools Agent (mandatory preflight; official search-engine and Schema.org references when useful); Design Agent when content hierarchy or UX is affected; QA/regression workflow for rendered-page verification; Security/data workflow if public data exposure could change. |
 | **G. Release, production, Vercel, CI, rollback, monitoring, reliability** | Project Memory; release-only Vercel workflow; current Git/CI/deployment evidence; relevant quality gates; Research and Connected-Tools Agent when external platform behavior must be understood; Security/data review when release includes sensitive data/auth changes; no deployment claim without direct evidence; no production deployment without explicit user authorization. |
 
 The routing matrix is a decision aid, not permission to change scope. Only workflows relevant to the actual request are invoked.
 
-## 4. Automatic research policy
+## 4. Research preflight policy
 
-Research is automatic when it materially improves a consequential, unfamiliar, high-risk, external-knowledge-dependent, browser-specific, market-specific, security-sensitive, or major design decision.
+Research preflight is mandatory before every meaningful task. The Research and Connected-Tools Agent always runs a proportional preflight; broad external research is used only when it materially improves the decision.
 
 Research starts with repository evidence.
 

@@ -1,101 +1,120 @@
 # Menu V3 — Active Plan
 
-## Status
-- Status: IN_PROGRESS.
-- Repository: `Midosd249/Menu_V3`.
-- Canonical branch: `main`.
-- Source of truth: `main`.
+## Canonical Execution Contract
 
-## Current Verified Main
-- VERIFIED: `main` is `909935165d10fd7e8fccce6182fd88717ad478e6` as verified from GitHub on 2026-09-18.
-- VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
-- VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
+The detailed, durable execution methodology is maintained in:
+
+- docs/master-execution-plan.md
+
+That document is the primary continuity/runbook for future sessions. This file is the concise active-plan index. If this file and the master plan appear inconsistent, verify against current main/code/Git first, then reconcile documentation before implementation.
+
+## Status
+
+- Status: IN_PROGRESS.
+- Repository: Midosd249/Menu_V3.
+- Canonical branch: main.
+- Source of truth: main.
+
+## Current Verified Main — 2026-09-18
+
+- VERIFIED: main = c3afb623559ea1d6e015a5abeb6a59ebc26a4f27.
+- VERIFIED: PR #179 merged at 18ca4f243b39640ebd7ed77541b268240b54cefd.
+- VERIFIED: PR #180 merged at e8677a9d20c19ab03eff84d39358a66918b932b2.
+- VERIFIED: current repository contains completed PH-01–PH-06 work and the protected product systems listed in PROJECT_STATE.md.
+- UNKNOWN: physical real-device Production QA for latest main.
 - UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Completed
+## Protected / Completed — Do Not Rebuild
 
-PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
+- Public bilingual menu, five themes, search/category/product/cart/order flows, Quick Add, Item Notes, configured actions.
+- Public order hardening, idempotency, rate limits, server-side price/options validation, order status/notifications.
+- Menu Intelligence, Owner Intelligence, Growth Engine, Reports, evidence-based upsell.
+- Guest profiles, loyalty, campaigns, feedback and retention.
+- AI provider routing, multimodal ingestion, menu AI assistance and grounded Guest Assistant.
+- Self-serve registration/provisioning/recovery, subscriptions/entitlements, Platform Admin, teams/branches/import/billing.
+- SEO/local discovery, accessibility/performance contracts, CI and release-only Vercel workflow.
 
-## PH-01 — Self-Serve Customer Lifecycle — CLOSED / VERIFIED / MERGED
+## Gap-Only Product Plan
 
-PR #170 — `fix: retire legacy customer approval and request flows`
+The dependency chain is:
 
-Merge commit:
-`7e91778bfafa67b24efd1edf4387e1f3014fae9d`
+A.1 Journey & Event Truth Audit
+→ A.2 Minimal Journey Instrumentation
+→ A.3 Outcome-Linked Owner Intelligence
 
-### Final contract
-- New customer: Home → Registration → secure workspace provisioning → Studio.
-- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
-- New customer access no longer depends on manual approval/request gating.
-- `/admin/users` remains the server-authorized customer-control surface.
-- Legacy Leads and Service Requests are retired from the active lifecycle/admin surface.
-- Tenant isolation, branch isolation, server authorization, fail-closed provisioning, and security boundaries remain protected.
+A.4 International Boundary Audit and A.5 Public Shareability/Deep-Link Audit are separate audit tracks dependent on the relevant evidence.
 
-### Documentation / verification provenance
-- GitHub directly verifies PR #170 merged at `7e91778...`.
-- Manus reported successful repository Quality gates, W9 Orders QA, and Vercel deployment for the completed batch.
-- A local TypeScript/baseUrl check was reported by Manus as a local toolchain/version mismatch; official CI was the authoritative quality gate for the merged implementation.
+Release evidence is separate from feature implementation.
 
-## Homepage Runtime Fix — CLOSED / VERIFIED
+### A.1 — Customer Journey & Event Truth Audit
 
-PR #172 — `fix: prevent homepage React.Children.only crash`
+STATUS: READY_FOR_AUTHORIZATION
 
-- Root cause: `Button asChild` received a `Link` plus a sibling `ArrowUpLeft` icon; Radix Slot requires `Slottable` for this multi-child composition pattern.
-- Fix: `src/components/ui/button.tsx` now preserves the first child as the slotted interactive element and preserves trailing sibling content using `Slottable`.
-- Regression protection: `tests/public-pages-themes-contract.test.mjs` verifies the homepage pattern and Button `Slottable` contract.
-- VERIFIED: Quality run `35266109690` passed typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, performance/diagnostic stages, and cleanup.
-- VERIFIED: W9 Orders QA run `35266109691` passed.
-- VERIFIED: merge commit `8050d2f08a2904f5ee2d9085454c47bdba601392` is on `main`.
-- UNKNOWN: physical real-device Production QA for the latest `main`.
+Boundary: audit only. No runtime implementation, schema migration, UI redesign, deployment, or unrelated refactor.
 
-## Completed Strategic Milestones
-- Premium Theme System — DONE / VERIFIED / MERGED.
-- Essential, Editorial, Noir, Heritage/Taste, Gallery — protected.
-- Permanent visual/functional/research quality workflow — DONE / VERIFIED.
-- P0 Public Order Hardening — DONE / VERIFIED.
-- P1 Production/Continuity Hardening — DONE / VERIFIED for implemented scope.
-- P1-H1 package/lockfile reconciliation — CLOSED / VERIFIED.
-- P1-H2 main protection — CLOSED / VERIFIED.
-- P2 Growth & Differentiation — DONE / VERIFIED / DEPLOYED.
-- Platform Approval Center — CLOSED / VERIFIED.
-- Registration-link rendering — CLOSED / VERIFIED.
-- Onboarding Creation Recovery — CLOSED / VERIFIED / MERGED.
-- R2.1–R2.7 Menu Intelligence — CLOSED / VERIFIED.
-- R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
-- R5 Growth Extensions — CLOSED / VERIFIED.
-- R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for implementation; outcome pending meaningful real exposure.
-- R7 initial evidence review — IN PROGRESS / NON-BLOCKING while exposure remains insufficient.
-- R8.1–R8.5 Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED.
-- R9 Guest CRM / Loyalty / Campaigns / Feedback / Retention — CLOSED / VERIFIED / MERGED.
-- AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
-- Grounded Guest Menu Assistant — CLOSED / VERIFIED.
-- Gallery + Noir theme hardening — CLOSED / VERIFIED / MERGED.
-- W7.1–W7.12 — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
-- W8 Internal Visual System — DONE / VERIFIED for implemented scope; existing draft PR history remains separate and protected.
+The exact 32-step procedure and acceptance criteria are in docs/master-execution-plan.md.
 
-## Production / Release Readiness
-- VERIFIED: repository-side product work through PH-06 plus the homepage runtime fix is present in `main`.
-- UNKNOWN: physical Android/iOS production QA.
-- UNKNOWN: current production environment-variable values.
-- Do not use Vercel as the development iteration loop.
+Required outputs:
+- complete event/emitter/consumer inventory;
+- journey-step matrix;
+- session/order linkage finding;
+- duplicate/failure/privacy finding;
+- minimal canonical event proposal only where evidence requires it;
+- exact A.2 implementation boundary.
 
-## Product Direction
-Menu V3 remains a premium Arabic-first restaurant platform:
+### A.2 — Minimal Journey Instrumentation
 
-```text
-Live Menu
-→ Guest Experience
-→ Menu Intelligence
-→ Owner Intelligence
-→ Growth Extensions
-→ Experiments
-→ Guest Relationships
-→ Self-Serve Customer Lifecycle
-```
+DEPENDENCY: A.1 complete.
 
-The current Activation workstream is closed; the repository is awaiting the owner's next explicitly scoped task.
+Only implement missing events/linkage proven by A.1. Preserve R6 and existing analytics infrastructure. No wholesale analytics rewrite.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+### A.3 — Outcome-Linked Owner Intelligence
+
+DEPENDENCY: A.2 complete.
+
+Connect existing owner actions/recommendations to measurable outcomes without creating another dashboard unless a real workflow gap is proven.
+
+### A.4 — International Boundary Audit
+
+DEPENDENCY: A.1; implementation only after explicit authorization.
+
+Audit currency, pricing, phone, locale/direction, timezone/business hours, tax, payments, messaging, maps, compliance adapters, and market-specific defaults.
+
+No broad international implementation during the audit.
+
+### A.5 — Public Shareability / Deep-Link Audit
+
+DEPENDENCY: A.1.
+
+Verify current public routes, query state, canonical/hreflang, structured data, QR destinations, product/category sharing and indexing before adding routes.
+
+## Permanent Execution Rules
+
+- Repository-first; current code/Git/tests outrank chat memory.
+- Prove absence before adding capability.
+- Extend existing contracts; do not create parallel architectures.
+- One atomic task per session.
+- Preserve auth, authorization, RLS, tenant/branch isolation, entitlements, pricing, validation and privacy.
+- Use relevant specialist workflows automatically.
+- Use proportional repository-first research.
+- Record material evidence and uncertainty.
+- Run relevant verification before DONE.
+- Review the final diff.
+- Update continuity at task end.
+- Never claim deployment without direct Vercel evidence.
+- Follow the release-only Vercel workflow.
+- Stop after the current atomic task.
+
+## Release Evidence Track
+
+- R6 meaningful real exposure: UNKNOWN/pending.
+- Physical Android/iOS Production QA: UNKNOWN/pending.
+- Current Production configuration evidence: UNKNOWN/pending.
+- No synthetic experiment traffic.
+- No Vercel iteration loop.
+
+## Exact Next Task
+
+A.1 — Customer Journey & Event Truth Audit.
+
+Boundary: audit only. No UI redesign, schema migration, runtime implementation, deployment, or unrelated refactor.
