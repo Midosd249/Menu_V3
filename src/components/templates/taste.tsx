@@ -131,10 +131,15 @@ export function TasteTemplate({ menu, preview = false }: Props) {
     }
   };
 
-  const add = (item: CartItem) => setCart((current) => {
-    const existing = current.find((entry) => entry.key === item.key);
-    return existing ? current.map((entry) => entry.key === item.key ? { ...entry, quantity: Math.min(20, entry.quantity + 1) } : entry) : [...current, item];
-  });
+  const add = (item: CartItem) => {
+    setCart((current) => {
+      const existing = current.find((entry) => entry.key === item.key);
+      return existing ? current.map((entry) => entry.key === item.key ? { ...entry, quantity: Math.min(20, entry.quantity + 1) } : entry) : [...current, item];
+    });
+    if (!preview) {
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+    }
+  };
   const addSimpleProduct = (product: Product) => {
     if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return;
     add({ key: quickAddKey(product.id), product, options: { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], note: "", unitPrice: product.price, quantity: 1 });
