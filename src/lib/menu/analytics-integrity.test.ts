@@ -87,7 +87,7 @@ test("A.2 canonical public events include search, category selection, and add-to
 test("public events reject identifiers unrelated to the event type", () => {
   assert.match(publicSource, /if \(!data\.productId \|\| data\.categoryId\) return \{ ok: false, code: "invalid"/);
   assert.match(publicSource, /if \(!data\.categoryId \|\| data\.productId\) return \{ ok: false, code: "invalid"/);
-  assert.match(publicSource, /else if \(data\.productId \|\| data\.categoryId\) return \{ ok: false, code: "invalid"/);
+  assert.match(publicSource, /else if \\(data\\.productId \\|\\| data\\.categoryId\\) \\{\\s*return \\{ ok: false, code: "invalid"/);
 });
 
 test("A.2 migration extends menu_events without replacing the canonical stream", () => {
