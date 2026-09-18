@@ -10,6 +10,7 @@ import { useStudio } from "@/lib/menu/studio";
 import { canWriteSettings } from "@/lib/auth/permissions";
 import type { OwnerAnalytics } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
+import { StudioActivationChecklist } from "@/components/studio-activation-checklist";
 
 const ORDER_STATUS: Record<AdminOrder["status"], { ar: string; en: string; tone: "success" | "warning" | "danger" | "info" | "neutral" }> = {
   new: { ar: "جديد", en: "New", tone: "info" },
@@ -109,6 +110,8 @@ export function StudioHome() {
         description={lang === "ar" ? "هذه الصفحة تلخص ما يحدث الآن، وما يحتاج انتباهك، والخطوة العملية التالية." : "A concise operational view of what is happening, what needs attention, and what to do next."}
         actions={<div className="flex flex-wrap gap-2">{tenant.isPublished ? <StatusBadge status="success">{lang === "ar" ? "منشور" : "Published"}</StatusBadge> : <StatusBadge status="warning">{lang === "ar" ? "غير منشور" : "Unpublished"}</StatusBadge>}{currentBranch ? <StatusBadge status="neutral"><MapPin className="me-1 size-3.5" aria-hidden />{lang === "ar" ? currentBranch.nameAr || currentBranch.nameEn : currentBranch.nameEn || currentBranch.nameAr}</StatusBadge> : null}</div>}
       />
+
+      <StudioActivationChecklist />
 
       <section aria-labelledby="home-attention-title" className="grid gap-3">
         <SectionHeader title={<span id="home-attention-title">{lang === "ar" ? "يحتاج انتباهك" : "Needs your attention"}</span>} description={lang === "ar" ? "مشكلات قابلة للتنفيذ مستخرجة من حالة المنيو الحالية." : "Actionable issues derived from the current menu state."} />
