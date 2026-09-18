@@ -181,11 +181,11 @@ export function TasteTemplate({ menu, preview = false }: Props) {
         <section className="taste-info-grid">
           <article><Clock3 className="taste-info-icon" /><span>{text(lang, "المعلومات", "Information")}</span><h2>{text(lang, "ساعات العمل", "Opening hours")}</h2><div className="taste-hours">{dayHours.map((hour) => <div key={hour.weekday}><strong>{weekdayLabel(hour.weekday, lang)}</strong><span>{hour.isClosed ? text(lang, "مغلق", "Closed") : `${hour.opensAt ?? "—"} – ${hour.closesAt ?? "—"}`}</span></div>)}</div></article>
           <article><MapPin className="taste-info-icon" /><span>{text(lang, "الموقع", "Location")}</span><h2>{text(lang, "فروعنا", "Our branches")}</h2><div className="taste-branches">{branches.filter((item) => item.isActive).map((item) => <div key={item.id}><strong>{text(lang, item.nameAr, item.nameEn)}</strong><p>{text(lang, item.addressAr, item.addressEn)}</p>{item.mapsUrl ? <a href={item.mapsUrl} target="_blank" rel="noopener noreferrer">{text(lang, "فتح الخريطة", "Open map")}</a> : null}</div>)}</div></article>
-          <article><Sparkles className="taste-info-icon" /><span>{text(lang, "هوية", "Experience")}</span><h2>{text(lang, "تفاصيل المطعم", "Restaurant details")}</h2><p>{text(lang, tenant.taglineAr, tenant.taglineEn)}</p><div className="taste-action-links"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} /></div></article>
+          <article><Sparkles className="taste-info-icon" /><span>{text(lang, "هوية", "Experience")}</span><h2>{text(lang, "تفاصيل المطعم", "Restaurant details")}</h2><p>{text(lang, tenant.taglineAr, tenant.taglineEn)}</p><div className="taste-action-links"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></div></article>
         </section>
       </main>
 
-      <section className="taste-actions-section"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} /></section>
+      <section className="taste-actions-section"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></section>
       <footer className="taste-footer"><div><strong>{text(lang, "تنبيه الحساسية", "Allergy notice")}</strong><p>{text(lang, "قد تحتوي أطباقنا على مسببات حساسية. يرجى سؤال فريق الخدمة عن المكونات قبل الطلب.", "Our dishes may contain allergens. Please ask the team about ingredients before ordering.")}</p></div></footer>
 
       {cartCount ? <div className="taste-floating-cart"><button type="button" onClick={() => setCartOpen(true)}><ShoppingBag className="size-5" /><span>{text(lang, "السلة", "Cart")} · {cartCount}</span><strong>{formatSar(cartTotal, lang)}</strong></button></div> : null}
