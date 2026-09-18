@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { setResponseHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
@@ -143,7 +144,30 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
 
 export const getPublicMenu = createServerFn({ method: "GET" })
   .validator(z.object({ slug: slugSchema, branch: z.string().max(63).optional() }))
-  .handler(async ({ data }) => loadPublicMenu(data.slug, data.branch));
+  .handler(async ({ data }) => {
+    setResponseHeader("Cache-Control", "private, no-store");
+    const result = await loadPublicMenu(data.slug, data.branch);
+    if (!result.ok) return result;
+
+    const sql = await getSql();
+    const tenants = await sql<{ id: string; whatsapp: string | null }>`
+      select id, whatsapp from tenants
+      where slug = ${data.slug} and is_active = true and is_published = true
+      limit 1
+    `;
+    const tenant = tenants[0];
+    if (!tenant) return result;
+
+    const session = await resolveAnonymousSession(sql, String(tenant.id));
+    const experimentVariant = tenant.whatsapp?.trim()
+      ? getExperimentVariant(session.id)
+      : "control" as const;
+
+    return {
+      ok: true,
+      data: { ...result.data, experimentVariant },
+    };
+  });
 
 export const recordPublicEvent = createServerFn({ method: "POST" })
   .validator(z.object({
