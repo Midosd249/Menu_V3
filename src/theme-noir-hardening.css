@@ -237,10 +237,6 @@ html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > nav[aria
   display: none !important;
 }
 
-html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > main > section:has(> #featured-heading) {
-  display: none !important;
-}
-
 html[data-menu-theme="noir"] .noir-template-menu > .menu-public-shell > .sticky {
   position: sticky;
   top: 0;
