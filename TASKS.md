@@ -2,7 +2,7 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: `main` = `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: `main` = `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
@@ -141,7 +141,7 @@ Main: 18ca4f243b39640ebd7ed77541b268240b54cefd
 - Typecheck, full tests, lint, and production build required before merge.
 - Production deployment is not part of this implementation task.
 
-### Exact next task
+### Historical next task
 Complete verification, create PR, and review CI. Do not remove order-management surfaces.
 
 
@@ -152,12 +152,20 @@ Complete verification, create PR, and review CI. Do not remove order-management 
 - VERIFIED: PR #180 → `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 
 ### Stale PR Classification Against Current `main`
-- PR #161 — OBSOLETE: PH-01.4 existing-customer-login work is already implemented/completed in current `main`; the open branch is historical and diverged.
-- PR #174 — SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work and protected by the current homepage contract test.
-- PR #176 — SUPERSEDED: its documentation-only reconciliation targets an older state and is superseded by PR #179/#180 and this synchronized state.
+- PR #161 — CLOSED / OBSOLETE: PH-01.4 existing-customer-login work is already implemented/completed in current `main`; the branch was historical and diverged.
+- PR #174 — CLOSED / SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work and protected by the current homepage contract test.
+- PR #176 — CLOSED / SUPERSEDED: its documentation-only reconciliation targeted an older state and is superseded by PR #179/#180 and this synchronized state.
 
 ### Scope Boundary
 Documentation-only reconciliation. No runtime code, themes, auth, payments, deployment, or refactoring changes.
 
 ## Exact Next Task
-Owner must explicitly authorize the next atomic task. Do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
+Owner authorization is required for the next atomic task; do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
+
+
+## 2026-09-18 — Stale PR Closure and Main Reconciliation
+- VERIFIED: GitHub `main` at reconciliation start was `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
+- VERIFIED: PR #161, #174, and #176 were closed as obsolete/superseded.
+- VERIFIED: documentation-only scope; no runtime code or deployment configuration changes.
+- UNKNOWN: physical real-device Production QA for the latest main.
+- Exact next task: owner authorization for the next atomic task only.

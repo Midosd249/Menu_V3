@@ -8,9 +8,10 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: canonical `main` is `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
 - VERIFIED: current `main` includes both PR #179 and PR #180.
 - VERIFIED: no runtime code changes are part of this continuity reconciliation.
 - UNKNOWN: physical real-device Production QA for the latest `main`.
@@ -153,13 +154,22 @@ No new PH implementation is authorized by this reconciliation. Await the owner's
 
 ## 2026-09-18 — Repository Continuity & Stale-PR Reconciliation
 
-- VERIFIED: canonical `main` = `e8677a9d20c19ab03eff84d39358a66918b932b2`.
+- VERIFIED: canonical `main` = `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: PR #161 — OBSOLETE: PH-01.4 existing-customer-login work is already recorded as implemented/completed in current `main`; its head is historical and diverged.
-- VERIFIED: PR #174 — SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work, including the stable-login contract test.
-- VERIFIED: PR #176 — SUPERSEDED: its continuity documentation targets an older repository state and is superseded by PR #179/#180 plus this reconciliation.
+- VERIFIED: PR #161 — CLOSED / OBSOLETE: PH-01.4 existing-customer-login work is already implemented in current `main`; its head is historical and diverged.
+- VERIFIED: PR #174 — CLOSED / SUPERSEDED: homepage login-entrypoint behavior is already present on current `main` through later merged work and regression protection.
+- VERIFIED: PR #176 — CLOSED / SUPERSEDED: its documentation-only reconciliation targeted an older repository state and is superseded by PR #179/#180 and this synchronized state.
 - No runtime code, themes, auth, payments, or deployment configuration changed in this task.
 
 ## Exact Next Task
-Owner must explicitly authorize the next atomic task. Do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
+Owner authorization is required for the next atomic task; do not infer PH-07, Payment Provider Integration, Commercial Launch, or R10.
+
+
+## 2026-09-18 — Stale PR Closure and Main Reconciliation
+- VERIFIED: GitHub `main` at reconciliation start was `a5cda50e7ebfbd708fc11cc8b060e5134ddef4c6`.
+- VERIFIED: PR #161, #174, and #176 were explicitly closed after classification as obsolete/superseded.
+- VERIFIED: no runtime code, auth, database, theme, payment, or deployment configuration changed.
+- VERIFIED: Vercel status on the baseline main was a rate-limit/build-quota failure; no deployment retry was performed.
+- UNKNOWN: physical real-device Production QA for the latest main.
+- Exact next task: owner authorization for the next atomic task only.
