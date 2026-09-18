@@ -43,3 +43,18 @@ test("W7.4 Home is Arabic-first and responsive by construction", () => {
   assert.match(page, /aria-labelledby/);
   assert.match(page, /role="progressbar"/);
 });
+
+
+test("Studio activation guides a new owner toward first value without inventing completion data", () => {
+  const activation = fs.readFileSync("src/components/studio-activation-checklist.tsx", "utf8");
+  assert.match(page, /StudioActivationChecklist/);
+  assert.match(activation, /\/studio\/menu/);
+  assert.match(activation, /\/studio\/design/);
+  assert.match(activation, /\/studio\/settings/);
+  assert.match(activation, /\/studio\/qr/);
+  assert.match(activation, /tenant\.isPublished/);
+  assert.match(activation, /categories\.some/);
+  assert.match(activation, /products\.length/);
+  assert.match(activation, /role="progressbar"/);
+  assert.doesNotMatch(activation, /Math\.random\(|faker|99,999|sample revenue/i);
+});
