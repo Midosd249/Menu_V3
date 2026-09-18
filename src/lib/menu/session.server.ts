@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import type { getSql } from "@/lib/db";
 
@@ -18,7 +18,7 @@ export type AnonymousSessionResolution = {
   fromValidCookie: boolean;
 };
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const SESSION_ID_RE = /^[0-9a-f]{64}$/i;
 
 function setAnonymousSessionCookie(id: string): void {
   setCookie(ANONYMOUS_SESSION_COOKIE, id, {
@@ -36,7 +36,7 @@ export async function resolveAnonymousSession(
 ): Promise<AnonymousSessionResolution> {
   const cookie = getCookie(ANONYMOUS_SESSION_COOKIE)?.trim() ?? null;
 
-  if (cookie && UUID_RE.test(cookie)) {
+  if (cookie && SESSION_ID_RE.test(cookie)) {
     const rows = await sql<AnonymousSessionRow>`
       select id, tenant_id, expires_at, revoked_at
       from anonymous_sessions
@@ -59,7 +59,7 @@ export async function resolveAnonymousSession(
     }
   }
 
-  const id = randomUUID();
+  const id = randomBytes(32).toString("hex");
   await sql`
     insert into anonymous_sessions (id, tenant_id, expires_at)
     values (${id}, ${tenantId}, now() + interval '30 days')
