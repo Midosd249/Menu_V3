@@ -15,6 +15,7 @@ export function FineDiningHospitalityTemplate({ menu, preview = false }: { menu:
 
   return <div className="noir-template-shell min-h-dvh">
     <header className="noir-template-hero">
+      <MenuMedia src={tenant.coverUrl} alt="" className="noir-template-hero-image" eager fallback={<span aria-hidden="true" />} />
       <div className="noir-template-hero-inner">
         <div className="noir-template-identity">
           <div className="noir-template-brand">
@@ -32,23 +33,6 @@ export function FineDiningHospitalityTemplate({ menu, preview = false }: { menu:
     </header>
 
     <main className="noir-template-main">
-      <section className="noir-template-featured" aria-labelledby="noir-featured-heading">
-        <div className="noir-template-section-heading">
-          <p>{text(lang, "مختارات", "Featured")}</p>
-          <h2 id="noir-featured-heading">{text(lang, "أطباق مختارة", "Selected dishes")}</h2>
-        </div>
-        {signature.length ? <div className="noir-template-featured-grid">
-          {signature.map((product) => <article key={product.id} className="noir-template-featured-card">
-            <MenuMedia src={product.imageUrl} alt={text(lang, product.nameAr, product.nameEn)} className="noir-template-featured-image" />
-            <div className="noir-template-featured-copy">
-              <h3>{text(lang, product.nameAr, product.nameEn)}</h3>
-              {product.descriptionAr || product.descriptionEn ? <p dir="auto">{text(lang, product.descriptionAr, product.descriptionEn)}</p> : null}
-              <MenuPrice price={product.price} currency={product.currency} lang={lang} className="noir-template-featured-price" />
-            </div>
-          </article>)}
-        </div> : <p className="noir-template-featured-empty">{text(lang, "اكتشف القائمة بالأسفل.", "Explore the menu below.")}</p>}
-      </section>
-
       <section className="noir-template-menu" aria-label={text(lang, "القائمة الكاملة", "Full menu")}>
         <PublicMenuView menu={menu} preview={preview} />
       </section>
