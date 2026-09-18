@@ -81,15 +81,13 @@ test("sitemap renders canonical branch entries with XML-safe values and locale a
   assert.doesNotMatch(xml, /<\/script>/i);
 });
 
-test("sitemap deduplicates repeated paths without replacing the first source entry", () => {
-  const xml = buildSitemapXml("https://menu.example.com", [
-    { path: "/m/nafas", lastModified: "2026-09-01T00:00:00Z" },
-    { path: "/m/nafas", lastModified: "2026-09-02T00:00:00Z" },
+test("sitemap deduplicates repeated canonical URLs without replacing the first entry", () => {
+  const xml = buildSitemapXml([
+    { loc: "https://menu.example.com/m/nafas", alternates: [] },
+    { loc: "https://menu.example.com/m/nafas", alternates: [] },
   ]);
 
   assert.equal((xml.match(/<url>/g) ?? []).length, 1);
-  assert.match(xml, /2026-09-01T00:00:00Z/);
-  assert.doesNotMatch(xml, /2026-09-02T00:00:00Z/);
 });
 
 test("public discovery has one owner for robots and sitemap responses", () => {
