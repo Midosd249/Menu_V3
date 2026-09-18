@@ -4,7 +4,6 @@ import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
@@ -113,21 +112,21 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   const englishAvailable = Boolean(tenant.nameEn || tenant.taglineEn || products.some((product) => product.nameEn));
   const groupedCategories = categories.filter((category) => category.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
   useEffect(() => {
-    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } });
+    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang } });
   }, [tenant.slug, branch.slug, lang, preview]);
   useEffect(() => {
     if (preview || searchTrackedRef.current || !query.trim()) return;
     searchTrackedRef.current = true;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
   const openProduct = (product: Product) => {
     setSelectedId(product.id);
-    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } });
+    if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang } });
   };
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all") {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang } });
     }
   };
 
@@ -137,7 +136,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
       return existing ? current.map((entry) => entry.key === item.key ? { ...entry, quantity: Math.min(20, entry.quantity + 1) } : entry) : [...current, item];
     });
     if (!preview) {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang } });
     }
   };
   const addSimpleProduct = (product: Product) => {
