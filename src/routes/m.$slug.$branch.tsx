@@ -15,7 +15,10 @@ export const Route = createFileRoute("/m/$slug/$branch")({
   loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {
     const result = await getPublicMenu({ data: { slug: params.slug, branch: params.branch } });
-    if (!result.ok) {\n      if (result.code === "not_found") throw notFound();\n      return result;\n    }
+    if (!result.ok) {
+      if (result.code === "not_found") throw notFound();
+      return result;
+    }
     const requestedLocale = deps.lang ?? "ar";
     const locale = resolvePublicMenuLocale(result.data, requestedLocale);
     const previewTheme = deps.theme ? normalizeThemeKey(deps.theme) ?? undefined : undefined;
