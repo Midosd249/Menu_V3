@@ -10,6 +10,11 @@ const publicSource = readFileSync(join(here, "public.ts"), "utf8");
 const typesSource = readFileSync(join(here, "types.ts"), "utf8");
 const disclosureMigration = readFileSync(join(here, "../../../migrations/20260913001000_saudifood_disclosure.sql"), "utf8");
 const journeyMigration = readFileSync(join(here, "../../../migrations/20260918010000_journey_event_instrumentation.sql"), "utf8");
+const publicMenuSource = readFileSync(join(here, "../../components/public-menu.tsx"), "utf8");
+const tasteSource = readFileSync(join(here, "../../components/templates/taste.tsx"), "utf8");
+const contemporarySource = readFileSync(join(here, "../../components/templates/contemporary-restaurant.tsx"), "utf8");
+const specialtySource = readFileSync(join(here, "../../components/templates/specialty-cafe.tsx"), "utf8");
+const fastCasualSource = readFileSync(join(here, "../../components/templates/fast-casual.tsx"), "utf8");
 
 test("owner analytics accepts only the supported 7/30 day ranges", () => {
   assert.match(
@@ -83,4 +88,15 @@ test("A.2 migration extends menu_events without replacing the canonical stream",
   assert.match(journeyMigration, /'category_view'/);
   assert.match(journeyMigration, /'add_to_cart'/);
   assert.match(journeyMigration, /menu_events_category_idx/);
+});
+
+
+test("A.2 public renderers emit the new journey events", () => {
+  for (const source of [publicMenuSource, tasteSource, contemporarySource, specialtySource, fastCasualSource]) {
+    assert.match(source, /eventType: "search"/);
+    assert.match(source, /eventType: "category_view"/);
+    assert.match(source, /eventType: "add_to_cart"/);
+  }
+  assert.match(publicMenuSource, /categoryId: nextCategoryId/);
+  assert.match(publicMenuSource, /productId: item\.product\.id/);
 });
