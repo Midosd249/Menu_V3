@@ -8,7 +8,7 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-18
-- VERIFIED: canonical `main` is `909935165d10fd7e8fccce6182fd88717ad478e6`.
+- VERIFIED: A.1 audit baseline is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #179 `feat: add platform new-customer notifications` is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 `docs: close platform notification continuity` is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: PR #161, #174, and #176 are now CLOSED as obsolete/superseded historical work.
@@ -119,5 +119,13 @@ At the end of every atomic task:
 - UNKNOWN: physical real-device Production QA for the latest main.
 - Durable incident record: `docs/project-memory/2026-09-17-homepage-react-children-only.md`.
 
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+## A.1 — Customer Journey & Event Truth Audit — CLOSED / VERIFIED
+- VERIFIED: audit completed against repository baseline `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27` and live Supabase.
+- VERIFIED: no runtime code, schema, auth/RLS, theme, or deployment changes were made.
+- VERIFIED: audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
+- VERIFIED: gaps are search/category/add-to-cart measurement and authoritative event → order linkage.
+- BLOCKED: Supabase security advisor reports RLS disabled on six live tables; separate security task required.
+- UNKNOWN: physical Production device QA, current Production environment values, sufficient real R6 exposure.
+
+## Exact Next Task
+A.2 — Minimal Journey Instrumentation. Recorded only; not started automatically.
