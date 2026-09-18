@@ -10,6 +10,9 @@ const publicSource = readFileSync(join(here, "public.ts"), "utf8");
 const typesSource = readFileSync(join(here, "types.ts"), "utf8");
 const disclosureMigration = readFileSync(join(here, "../../../migrations/20260913001000_saudifood_disclosure.sql"), "utf8");
 const journeyMigration = readFileSync(join(here, "../../../migrations/20260918010000_journey_event_instrumentation.sql"), "utf8");
+const sessionSource = readFileSync(join(here, "session.server.ts"), "utf8");
+const attributionMigration = readFileSync(join(here, "../../../migrations/20260918020000_anonymous_session_order_attribution.sql"), "utf8");
+const orderSource = readFileSync(join(here, "order-public.ts"), "utf8");
 const publicMenuSource = readFileSync(join(here, "../../components/public-menu.tsx"), "utf8");
 const tasteSource = readFileSync(join(here, "../../components/templates/taste.tsx"), "utf8");
 const contemporarySource = readFileSync(join(here, "../../components/templates/contemporary-restaurant.tsx"), "utf8");
@@ -99,4 +102,38 @@ test("A.2 public renderers emit the new journey events", () => {
   }
   assert.match(publicMenuSource, /categoryId: nextCategoryId/);
   assert.match(publicMenuSource, /productId: item\.product\.id/);
+});
+
+
+test("A.3 anonymous sessions are server-issued, tenant-bound, and cookie-only", () => {
+  assert.match(sessionSource, /ANONYMOUS_SESSION_COOKIE = "__Host-menu_v3_sid"/);
+  assert.match(sessionSource, /randomUUID\(\)/);
+  assert.match(sessionSource, /httpOnly: true/);
+  assert.match(sessionSource, /secure: true/);
+  assert.match(sessionSource, /sameSite: "lax"/);
+  assert.match(sessionSource, /path: "\/"/);
+  assert.match(sessionSource, /where id = \$\{cookie\}/);
+  assert.match(sessionSource, /session\.tenant_id === tenantId/);
+  assert.match(sessionSource, /expires_at.*Date\.now/);
+  assert.match(sessionSource, /revoked_at/);
+  assert.doesNotMatch(sessionSource, /console\.(log|info|warn|error).*id/);
+});
+
+test("A.3 order attribution is database-enforced by tenant and never client-supplied", () => {
+  assert.match(attributionMigration, /create table if not exists anonymous_sessions/);
+  assert.match(attributionMigration, /tenant_id text not null references tenants\(id\)/);
+  assert.match(attributionMigration, /unique \(tenant_id, id\)/);
+  assert.match(attributionMigration, /alter table orders\s+add column if not exists anonymous_session_id text/);
+  assert.match(attributionMigration, /foreign key \(tenant_id, anonymous_session_id\)\s+references anonymous_sessions \(tenant_id, id\)\s+on delete set null \(anonymous_session_id\)/);
+  assert.match(orderSource, /resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
+  assert.match(orderSource, /const anonymousSessionId = anonymousSession\.fromValidCookie \? anonymousSession\.id : null/);
+  assert.match(orderSource, /anonymous_session_id/);
+  assert.doesNotMatch(orderSource, /anonymousSessionId:\s*z\./);
+});
+
+test("A.3 public event renderers no longer submit a client session id", () => {
+  for (const source of [publicMenuSource, tasteSource, contemporarySource, specialtySource, fastCasualSource]) {
+    assert.doesNotMatch(source, /sessionId:\s*getGuestSessionId\(\)/);
+  }
+  assert.doesNotMatch(publicSource, /sessionId:\s*z\.string/);
 });
