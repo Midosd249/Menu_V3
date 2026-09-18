@@ -119,6 +119,16 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - No production deployment occurred.
 - Vercel preview status is rate-limit failure only; no retry was performed.
 
+## Release Evidence — 2026-09-18 — IN_PROGRESS / REPOSITORY EVIDENCE ASSEMBLED
+- VERIFIED: canonical `main` is `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9` after PR #197 merge.
+- VERIFIED: PR #197 is CLOSED / MERGED at `1a09cfeb92105b2e01ae0d4db223b1bfbda6caf9`.
+- VERIFIED: Quality run `35364239274` passed all configured quality, browser, and performance stages.
+- VERIFIED: W9 Orders QA run `35364239435` passed.
+- VERIFIED: GitHub combined status for current `main` contains only the Vercel `failure` context caused by the documented build/deployment rate-limit surface; this is not CI Quality failure.
+- UNKNOWN: direct Vercel Production deployment identity/configuration for this `main`.
+- UNKNOWN: physical real-device production QA.
+- UNKNOWN: direct production HTTP 404 verification for invalid public menu URLs.
+
 ## Exact Next Task
 **Release Evidence @GitHub — assemble and verify the repository-side release evidence batch before any production deployment decision.**
 
