@@ -123,9 +123,21 @@ At the end of every atomic task:
 - VERIFIED: audit completed against repository baseline `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27` and live Supabase.
 - VERIFIED: no runtime code, schema, auth/RLS, theme, or deployment changes were made.
 - VERIFIED: audit: `docs/audits/2026-09-18-a1-customer-journey-event-truth-audit.md`.
-- VERIFIED: gaps are search/category/add-to-cart measurement and authoritative event → order linkage.
+- VERIFIED: A.2 implementation is on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `75b191677a16c84240db609d6d920c02d66cb781`.
+- VERIFIED: PR #191 is OPEN / DRAFT and targets `main`.
+- VERIFIED: A.2 adds canonical `search`, `category_view`, and `add_to_cart` events to `menu_events` with tenant-scoped category validation/storage.
+- VERIFIED: GitHub Quality run `35340567488` passed; W9 Orders QA run `35340567487` passed.
+- VERIFIED: no production deployment or synthetic traffic was used.
+- VERIFIED: remaining gaps are authoritative event → order linkage, cart-open measurement, and the existing `menu_events.session_id` nullability mismatch.
 - BLOCKED: Supabase security advisor reports RLS disabled on six live tables; separate security task required.
 - UNKNOWN: physical Production device QA, current Production environment values, sufficient real R6 exposure.
 
+## A.2 — Minimal Journey Instrumentation — CLOSED / VERIFIED BY CI
+- Scope was limited to search/category/add-to-cart measurement.
+- Canonical `menu_events` was extended; no parallel analytics stream was introduced.
+- Existing tenant/branch validation, product ownership validation, R6 experiment semantics, Owner Analytics, Growth, Reports, R2–R9, and public-menu architecture were preserved.
+- Focused regression coverage was added for the server contract and all live public renderer families.
+- Quality and W9 Orders CI passed on the final head.
+
 ## Exact Next Task
-A.2 — Minimal Journey Instrumentation. Recorded only; not started automatically.
+A.3 — Server-Controlled Anonymous Session → Order Attribution Design. Design only; do not implement until explicitly authorized.

@@ -10,7 +10,10 @@
 - VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`; this is also the A.1 audit baseline.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
-- VERIFIED: this reconciliation changes documentation only; no runtime code or deployment configuration is changed.
+- VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `75b191677a16c84240db609d6d920c02d66cb781`.
+- VERIFIED: PR #191 is OPEN / DRAFT against `main`.
+- VERIFIED: GitHub Quality `35340567488` and W9 Orders QA `35340567487` both passed on the final head.
+- VERIFIED: no production deployment or synthetic traffic was used.
 - UNKNOWN: physical real-device Production QA for the latest `main`.
 - UNKNOWN: current Production environment-variable values.
 
@@ -104,5 +107,14 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - Main gaps: search/category/add-to-cart measurement and authoritative event → order linkage.
 - Existing `menu_events`, Owner Analytics, Growth, Reports, R2–R9, and R6 experiment contracts remain protected.
 
+## A.2 — CLOSED / VERIFIED BY CI
+- Added `search`, `category_view`, and `add_to_cart` to the canonical `menu_events` event contract.
+- Added tenant-scoped `category_id` storage and server-side category ownership validation.
+- Added 30-minute duplicate suppression for `search`.
+- Instrumented `PublicMenuView`, Taste/Heritage, Editorial, Specialty Cafe, and Fast Casual renderers.
+- Added focused regression tests.
+- Preserved R6, existing analytics consumers, themes, order flow, and tenant/branch boundaries.
+- CI Quality and W9 Orders QA passed.
+
 ## Exact Next Task
-A.2 — Minimal Journey Instrumentation. Dependency: A.1 audit evidence. Do not start automatically.
+A.3 — Server-Controlled Anonymous Session → Order Attribution Design. Design only; do not implement until explicitly authorized.
