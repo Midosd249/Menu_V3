@@ -92,12 +92,15 @@ test("sitemap deduplicates repeated paths without replacing the first source ent
   assert.doesNotMatch(xml, /2026-09-02T00:00:00Z/);
 });
 
-test("sitemap middleware exposes only published active tenants and active branches", () => {
-  assert.match(CRAWL_MIDDLEWARE, /path === "\/sitemap\.xml"/);
-  assert.match(CRAWL_MIDDLEWARE, /from tenants t/);
-  assert.match(CRAWL_MIDDLEWARE, /join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
-  assert.match(CRAWL_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
-  assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
+test("public discovery has one owner for robots and sitemap responses", () => {
+  assert.match(DISCOVERY_MIDDLEWARE, /pathname === "\/robots\.txt"/);
+  assert.match(DISCOVERY_MIDDLEWARE, /pathname !== "\/sitemap\.xml"/);
+  assert.match(DISCOVERY_MIDDLEWARE, /from tenants t/);
+  assert.match(DISCOVERY_MIDDLEWARE, /join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
+  assert.match(DISCOVERY_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
+  assert.match(DISCOVERY_MIDDLEWARE, /order by t\.slug, b\.created_at/);
+  assert.doesNotMatch(PWA_MIDDLEWARE, /path === "\/robots\.txt"/);
+  assert.doesNotMatch(PWA_MIDDLEWARE, /path === "\/sitemap\.xml"/);
 });
 
 test("public menu keeps below-the-fold product media lazy-loaded and low-priority", () => {
@@ -105,9 +108,11 @@ test("public menu keeps below-the-fold product media lazy-loaded and low-priorit
   assert.match(PUBLIC_MENU, /decoding="async"/);
   assert.match(PUBLIC_MENU, /fetchPriority="low"/);
 });
-\n\ntest("public menu routes convert not-found data into router-level 404s", () => {
-  assert.match(PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\\/tanstack\\/react-router"/);
+
+
+test("public menu routes convert not-found data into router-level 404s", () => {
+  assert.match(PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\/tanstack\/react-router"/);
   assert.match(PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
-  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\\/tanstack\\/react-router"/);
+  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\/tanstack\/react-router"/);
   assert.match(BRANCH_PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
-});\n
+});
