@@ -31,8 +31,8 @@ test("Taste QR rendering exposes the configured restaurant logo in the hero", as
 test("QR print opens from the click path before async QR generation and supports batch sheets", async () => {
   const source = await readFile("src/routes/studio/qr.tsx", "utf8");
 
-  assert.match(source, /function printQr\(url, restaurant, branch\) \{\s*const w = window\.open\("", "menu-v3-qr-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
-  assert.match(source, /function printQrBatch\(url, restaurant, branch, copies\) \{[\s\S]*const w = window\.open\("", "menu-v3-qr-batch-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
+  assert.match(source, /function printQr\(url: string, restaurant: string, branch: string\) \{\s*const w = window\.open\("", "menu-v3-qr-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
+  assert.match(source, /function printQrBatch\(url: string, restaurant: string, branch: string, copies: number\) \{[\s\S]*const w = window\.open\("", "menu-v3-qr-batch-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
   assert.match(source, /DEFAULT_BATCH_COPIES = 8/);
   assert.match(source, /MAX_BATCH_COPIES = 40/);
   assert.match(source, /for \(let offset = 0; offset < safeCopies; offset \+= 8\)/);
