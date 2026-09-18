@@ -3,7 +3,6 @@ import { Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { useLang } from "@/lib/lang";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
@@ -63,22 +62,22 @@ export function SpecialtyCafeTemplate({ menu, preview = false }: { menu: PublicM
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<number | null>(null); const searchTrackedRef = useRef(false);
   const visible = preview ? products : products.filter((p) => p.isAvailable); const featured = visible.filter((p) => p.isFeatured);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
-  useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "visit", lang, sessionId: getGuestSessionId() } }); }, [tenant.slug, branch.slug, lang, preview]);
+  useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "visit", lang } }); }, [tenant.slug, branch.slug, lang, preview]);
   useEffect(() => {
     if (preview || searchTrackedRef.current || !query.trim()) return;
     searchTrackedRef.current = true;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all") {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang } });
     }
   };
   const add = (item: CartItem) => {
     setCart((current) => { const found = current.find((x) => x.key === item.key); return found ? current.map((x) => x.key === item.key ? { ...x, quantity: Math.min(20, x.quantity + 1) } : x) : [...current, item]; });
     if (!preview) {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang } });
     }
   };
   const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => { setSubmitting(true); setError(""); const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((x) => ({ productId: x.product.id, quantity: x.quantity, selected: { variantId: x.variantId || null, modifierOptionIds: x.modifierOptionIds } })) } }); setSubmitting(false); if (!result.ok) { setError(result.error); return; } setCart([]); setCartOpen(false); setSuccess(result.data.orderNumber); };
