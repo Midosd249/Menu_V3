@@ -7,7 +7,7 @@
 - Source of truth: `main`.
 
 ## Current Verified Main
-- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` is `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is the current canonical post-A.3 continuity head.
 - VERIFIED: PR #179 is merged at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is merged at `e8677a9d20c19ab03eff84d39358a66918b932b2` and is the current continuity closeout.
 - VERIFIED: A.2 is implemented on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
