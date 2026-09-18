@@ -199,15 +199,19 @@ export const recordPublicEvent = createServerFn({ method: "POST" })
         branchId = branches[0]?.id ?? null;
       }
 
-      if (data.eventType === "product_view" || data.eventType === "add_to_cart") {
-        if (!data.productId) return { ok: false, code: "invalid", error: "صنف غير صالح" };
+      const isProductEvent = data.eventType === "product_view" || data.eventType === "add_to_cart";
+      const isCategoryEvent = data.eventType === "category_view";
+
+      if (isProductEvent) {
+        if (!data.productId || data.categoryId) return { ok: false, code: "invalid", error: "بيانات الصنف غير صالحة" };
         const p = await sql`select id from products where id = ${data.productId} and tenant_id = ${tenantId} limit 1`;
         if (!p[0]) return { ok: false, code: "invalid", error: "صنف غير صالح" };
-      }
-      if (data.eventType === "category_view") {
-        if (!data.categoryId) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+      } else if (isCategoryEvent) {
+        if (!data.categoryId || data.productId) return { ok: false, code: "invalid", error: "بيانات التصنيف غير صالحة" };
         const category = await sql`select id from categories where id = ${data.categoryId} and tenant_id = ${tenantId} and is_active = true limit 1`;
         if (!category[0]) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+      } else if (data.productId || data.categoryId) {
+        return { ok: false, code: "invalid", error: "بيانات الحدث غير صالحة" };
       }
 
       const session = await resolveAnonymousSession(sql, String(tenantId));
