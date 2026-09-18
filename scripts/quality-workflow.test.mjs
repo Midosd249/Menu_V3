@@ -3,11 +3,11 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { buildRobotsTxt, buildSitemapXml, publicMenuSitemapEntries } from "../src/lib/seo/crawl.ts";
+import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml } from "../src/lib/menu/seo-discovery.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
-const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
+const DISCOVERY_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/seo-discovery.ts"), "utf8");\nconst PWA_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");\nconst BRANCH_PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.$branch.tsx"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "utf8");
 const ROOT_ROUTE = readFileSync(join(ROOT, "src/routes/__root.tsx"), "utf8");
@@ -69,16 +69,15 @@ test("robots.txt allows public pages, protects private surfaces, and declares th
   assert.match(robots, /^Sitemap: https:\/\/menu\.example\.com\/sitemap\.xml$/m);
 });
 
-test("sitemap renders public menu and branch entries with XML-safe values", () => {
-  const entries = publicMenuSitemapEntries([
-    { slug: "nafas", branchSlug: "olaya", updatedAt: "2026-09-03T14:00:00Z" },
-  ]);
-  const xml = buildSitemapXml("https://menu.example.com", entries);
+test("sitemap renders canonical branch entries with XML-safe values and locale alternates", () => {
+  const entries = buildPublicMenuSitemapEntries([
+    { slug: "nafas", branchSlug: "olaya", nameEn: "Nafas", branchNameEn: "Olaya" },
+  ], "https://menu.example.com");
+  const xml = buildSitemapXml(entries);
 
   assert.equal((xml.match(/<url>/g) ?? []).length, 2);
-  assert.match(xml, /https:\/\/menu\.example\.com\/m\/nafas/);
   assert.match(xml, /https:\/\/menu\.example\.com\/m\/nafas\/olaya/);
-  assert.match(xml, /<lastmod>2026-09-03T14:00:00Z<\/lastmod>/);
+  assert.match(xml, /hreflang="en" href="https:\/\/menu\.example\.com\/m\/nafas\/olaya\?lang=en"/);
   assert.doesNotMatch(xml, /<\/script>/i);
 });
 
@@ -106,3 +105,9 @@ test("public menu keeps below-the-fold product media lazy-loaded and low-priorit
   assert.match(PUBLIC_MENU, /decoding="async"/);
   assert.match(PUBLIC_MENU, /fetchPriority="low"/);
 });
+\n\ntest("public menu routes convert not-found data into router-level 404s", () => {
+  assert.match(PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\\/tanstack\\/react-router"/);
+  assert.match(PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
+  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /import \{ createFileRoute, notFound \} from "@\\/tanstack\\/react-router"/);
+  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
+});\n
