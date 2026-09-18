@@ -111,10 +111,10 @@ At the end of every atomic task:
 
 ## 2026-09-18 — A.3 Implementation — CLOSED / VERIFIED
 - VERIFIED: runtime implementation is on `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: final implementation head is `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
 - VERIFIED: current `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: no production deployment was performed.
-- VERIFIED: GitHub Quality and W9 Orders QA passed.
+- VERIFIED: GitHub Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
 
 ## 2026-09-17 — Homepage Runtime Regression — CLOSED / VERIFIED
 - VERIFIED: PR #172 fixed the public homepage `React.Children.only` crash.
@@ -148,7 +148,7 @@ At the end of every atomic task:
 
 ## A.3 — Server-Controlled Anonymous Session → Order Attribution — CLOSED / VERIFIED BY CI
 - VERIFIED: implementation branch `feat/a3-session-order-attribution-2026-09-18`.
-- VERIFIED: final implementation head is `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- VERIFIED: final implementation head is `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
 - VERIFIED: canonical `main` is `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`.
 - VERIFIED: PR #192 is OPEN / non-draft / not merged.
 - VERIFIED: server-issued `__Host-menu_v3_sid` is opaque, HttpOnly, Secure, SameSite=Lax, host-only, bounded, and server-validated.
@@ -157,8 +157,8 @@ At the end of every atomic task:
 - VERIFIED: tenant/session consistency is enforced by a composite foreign key at the database boundary.
 - VERIFIED: historical orders/events remain untouched; no retroactive relinking was introduced.
 - VERIFIED: existing order validation, pricing, rate limiting, idempotency, and status-event flow remain protected.
-- VERIFIED: GitHub Quality run `35343668159` passed.
-- VERIFIED: GitHub W9 Orders QA run `35343668111` passed.
+- VERIFIED: GitHub Quality run `35344719541` passed after the final R6 experiment-session alignment correction.
+- VERIFIED: GitHub W9 Orders QA run `35344719500` passed.
 - VERIFIED: typecheck, full tests, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages passed in Quality.
 - VERIFIED: no production deployment occurred.
 - UNKNOWN: physical real-device QA and live production cookie behavior.
@@ -166,5 +166,3 @@ At the end of every atomic task:
 
 ## Exact Next Task
 Human review and merge authorization for PR #192 only. Do not deploy, close/merge PRs, or begin A.4 automatically.
-## Exact Next Task
-A.3 — Finish verification of server-controlled anonymous session → order attribution, review the final diff, and close the implementation task without deployment.
