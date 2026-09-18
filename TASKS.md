@@ -111,11 +111,11 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 
 ## A.3 — CLOSED / VERIFIED BY CI — Server-Controlled Anonymous Session → Order Attribution
 - Implementation complete on `feat/a3-session-order-attribution-2026-09-18`.
-- Final head: `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- Final head: `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
 - PR #192 is OPEN / non-draft / not merged.
 - Server-controlled `__Host-menu_v3_sid`, tenant-bound `anonymous_sessions`, server-side event attribution, and tenant-safe order attribution are implemented.
 - Client-supplied canonical event session IDs are removed.
-- Quality run `35343668159` and W9 Orders QA run `35343668111` passed.
+- Quality run `35344719541` and W9 Orders QA run `35344719500` passed.
 - No production deployment occurred.
 - Vercel preview status is rate-limit failure only; no retry was performed.
 
