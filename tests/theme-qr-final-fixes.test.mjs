@@ -27,3 +27,28 @@ test("Taste QR rendering exposes the configured restaurant logo in the hero", as
   assert.match(template, /className="taste-hero-logo"/);
   assert.match(styles, /taste-hero-logo[\s\S]*object-fit:\s*contain/);
 });
+
+test("QR print opens from the click path before async QR generation and supports batch sheets", async () => {
+  const source = await readFile("src/routes/studio/qr.tsx", "utf8");
+
+  assert.match(source, /function printQr\(url, restaurant, branch\) \{\s*const w = window\.open\("", "menu-v3-qr-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
+  assert.match(source, /function printQrBatch\(url, restaurant, branch, copies\) \{[\s\S]*const w = window\.open\("", "menu-v3-qr-batch-print"\);[\s\S]*const QR = await import\("qrcode"\)/);
+  assert.match(source, /DEFAULT_BATCH_COPIES = 8/);
+  assert.match(source, /MAX_BATCH_COPIES = 40/);
+  assert.match(source, /for \(let offset = 0; offset < safeCopies; offset \+= 8\)/);
+  assert.match(source, /grid-template-columns:repeat\(2,minmax\(0,1fr\)/);
+  assert.match(source, /grid-template-rows:repeat\(4,minmax\(0,1fr\)/);
+});
+
+test("Decorative theme header labels removed from Noir and Editorial", async () => {
+  const noir = await readFile("src/theme-noir.css", "utf8");
+  const noirHardening = await readFile("src/theme-noir-hardening.css", "utf8");
+  const noirRefinements = await readFile("src/theme-refinements.css", "utf8");
+  const editorialRefinements = await readFile("src/theme-refinements-v2.css", "utf8");
+
+  for (const source of [noir, noirHardening, noirRefinements, editorialRefinements]) {
+    assert.doesNotMatch(source, /NOIR \/ 03/);
+    assert.doesNotMatch(source, /N \/ 03/);
+    assert.doesNotMatch(source, /ISSUE \/ 03/);
+  }
+});
