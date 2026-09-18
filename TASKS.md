@@ -2,7 +2,7 @@
 
 ## Current State — 2026-09-18
 
-- VERIFIED: canonical `main` = `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is also the A.1 audit baseline.
+- VERIFIED: canonical `main` = `39793ecaa51d64dfa34df7a632fd0c956f4c7268`; this is the current canonical post-A.3 continuity head.
 - VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
 - VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
 - VERIFIED: A.2 implementation is complete on branch `feat/a2-minimal-journey-instrumentation-2026-09-18` at `fb3b27218fcd8f732b0a2472ff72b2420e067b02`.
@@ -112,7 +112,7 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 ## A.3 — CLOSED / VERIFIED BY CI — Server-Controlled Anonymous Session → Order Attribution
 - Implementation complete on `feat/a3-session-order-attribution-2026-09-18`.
 - Final head: `3dfda5e9b4dc93f4f33855595993e1ce568210a5`.
-- PR #192 is CLOSED / MERGED at `39793ecaa51d64dfa34df7a632fd0c956f4c7268`.
+- PR #192 is CLOSED / MERGED at `42f0a7e3caf8939b28672685ac2d578578c9d90c`.
 - Server-controlled `__Host-menu_v3_sid`, tenant-bound `anonymous_sessions`, server-side event attribution, and tenant-safe order attribution are implemented.
 - Client-supplied canonical event session IDs are removed.
 - Quality run `35344719541` and W9 Orders QA run `35353500533` passed.
