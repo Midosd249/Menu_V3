@@ -5,7 +5,6 @@ import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
@@ -42,23 +41,23 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed) return h?.isClosed ? false : null; if (!h.opensAt || !h.closesAt) return null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const englishAvailable = isPublicMenuLocaleAvailable(menu, "en");
-  useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } }); }, [tenant.slug, branch.slug, lang, preview]);
+  useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang } }); }, [tenant.slug, branch.slug, lang, preview]);
   useEffect(() => {
     if (preview || searchTrackedRef.current || !query.trim()) return;
     searchTrackedRef.current = true;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
-  const selectProduct = (product: Product) => { setSelectedId(product.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } }); };
+  const selectProduct = (product: Product) => { setSelectedId(product.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang } }); };
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all") {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang } });
     }
   };
   const addToCart = (item: CartItem) => {
     setCart((current) => { const existing = current.find((x) => x.key === item.key); return existing ? current.map((x) => x.key === item.key ? { ...x, quantity: Math.min(20, x.quantity + 1) } : x) : [...current, item]; });
     if (!preview) {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang } });
     }
   };
   const addSimpleProduct = (product: Product) => { if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return; addToCart({ key: quickAddKey(product.id), product, options: menu.productOptions?.[product.id] ?? { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], unitPrice: product.price, quantity: 1 }); };
