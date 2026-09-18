@@ -109,13 +109,15 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - Focused regression coverage added.
 - Existing analytics, R6, order, theme, and security boundaries preserved.
 
-## A.3 — CLOSED / VERIFIED — Design
-- Completed the server-controlled anonymous session → order attribution design.
-- Recommended tenant-bound server session model and cookie contract documented.
-- Recommended `orders.anonymous_session_id` relationship documented.
-- LocalStorage session remains legacy and non-authoritative.
-- Existing analytics/order/idempotency/security boundaries preserved.
-- No implementation or deployment was performed.
+## A.3 — CLOSED / VERIFIED BY CI — Server-Controlled Anonymous Session → Order Attribution
+- Implementation complete on `feat/a3-session-order-attribution-2026-09-18`.
+- Final head: `a7adc2bb6802c7abac65d34007bfba2c71a6295e`.
+- PR #192 is OPEN / non-draft / not merged.
+- Server-controlled `__Host-menu_v3_sid`, tenant-bound `anonymous_sessions`, server-side event attribution, and tenant-safe order attribution are implemented.
+- Client-supplied canonical event session IDs are removed.
+- Quality run `35343668159` and W9 Orders QA run `35343668111` passed.
+- No production deployment occurred.
+- Vercel preview status is rate-limit failure only; no retry was performed.
 
 ## Exact Next Task
-A.3 — Implement server-controlled anonymous session → order attribution. Design is approved as the implementation boundary; do not expand scope.
+Human review and merge authorization for PR #192 only. Do not deploy or begin A.4 automatically.
