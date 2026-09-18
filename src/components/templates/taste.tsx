@@ -90,7 +90,7 @@ function CartSheet({ lang, items, setItems, close, submit, error, submitting }: 
 
 export function TasteTemplate({ menu, preview = false }: Props) {
   const { lang } = useLang();
-  const { tenant, branch, branches, hours, categories, products } = menu;
+  const { tenant, branch, branches, hours, categories, products, experimentVariant } = menu;
   const [query, setQuery] = useState("");
   const [categoryId, setCategoryId] = useState("all");
   const searchTrackedRef = useRef(false);
