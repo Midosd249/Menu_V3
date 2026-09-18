@@ -343,8 +343,8 @@ Production deployment is out of scope for the design task.
 - Database tenant consistency is enforced by the composite foreign key `orders(tenant_id, anonymous_session_id) → anonymous_sessions(tenant_id, id)`.
 - Existing order validation, pricing, rate limiting, idempotency, and status-event flow were preserved.
 - Focused regression coverage was added for cookie/session invariants, tenant-safe attribution, and removal of client session authority.
-- GitHub Quality run `35343668159` — SUCCESS.
-- GitHub W9 Orders QA run `35343668111` — SUCCESS.
+- GitHub Quality run `35344719541` — SUCCESS after the final R6 experiment-session alignment correction.
+- GitHub W9 Orders QA run `35344719500` — SUCCESS.
 - Typecheck, full test suite, lint, production build, public all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance workflow stages completed successfully in the Quality run.
 - No production deployment was performed.
 
@@ -354,4 +354,4 @@ Production deployment is out of scope for the design task.
 - Live production cookie behavior remains UNKNOWN until authorized release-stage browser/device verification.
 
 ### Decision
-A.3 implementation is complete at repository/CI level. Merge and deployment remain separate authorization gates.
+A.3 implementation is complete at repository/CI level. Final diff review is complete against `main`; merge and deployment remain separate authorization gates.
