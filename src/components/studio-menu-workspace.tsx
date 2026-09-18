@@ -161,10 +161,26 @@ export function StudioMenuWorkspace({
         </div>
 
         {snapshot.categories.length === 0 ? (
-          <div className="rounded-2xl border border-line bg-sand/40 p-5">
-            <h3 className="font-medium">{lang === "ar" ? "ابدأ ببناء هيكل القائمة" : "Start with your menu structure"}</h3>
-            <p className="mt-1 text-sm leading-6 text-muted">{lang === "ar" ? "أضف تصنيفاً أولاً، ثم أنشئ الأصناف داخله. لا توجد بيانات افتراضية معروضة هنا." : "Add a category first, then create items inside it. No sample production data is shown here."}</p>
-            <Button type="button" className="mt-3" variant="outline" onClick={onAddCategory}>{t(copy.studio.addCategory, lang)}</Button>
+          <div className="rounded-2xl border border-line bg-sand/40 p-5 sm:p-6">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">{lang === "ar" ? "الخطوة الأولى" : "First step"}</p>
+              <h3 className="mt-2 font-display text-xl font-semibold">{lang === "ar" ? "أنشئ أول تصنيف لقائمتك" : "Create your first menu category"}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{lang === "ar" ? "ابدأ بهيكل بسيط مثل المقبلات أو الأطباق الرئيسية أو المشروبات. بعد حفظ التصنيف، يمكنك إضافة أول صنف إليه. لا نعرض بيانات تجريبية تلقائياً." : "Start with a simple structure such as starters, mains, or drinks. After saving the category, add your first item to it. We never create sample production data automatically."}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button type="button" onClick={onAddCategory}>{t(copy.studio.addCategory, lang)}</Button>
+                <Link to="/studio/import" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-paper px-4 text-sm font-medium text-ink-soft hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{lang === "ar" ? "لدي قائمة جاهزة؟ استوردها" : "Already have a menu? Import it"}</Link>
+              </div>
+            </div>
+          </div>
+        ) : snapshot.products.length === 0 ? (
+          <div className="rounded-2xl border border-line bg-sand/40 p-5 sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">{lang === "ar" ? "الخطوة الثانية" : "Second step"}</p>
+            <h3 className="mt-2 font-display text-xl font-semibold">{lang === "ar" ? "أضف أول صنف حقيقي" : "Add your first real item"}</h3>
+            <p className="mt-2 text-sm leading-6 text-muted">{lang === "ar" ? "التصنيفات جاهزة. أضف اسماً وسعراً على الأقل، ثم أكمل الوصف والصورة وبقية التفاصيل متى أردت." : "Your categories are ready. Add at least a name and price, then complete the description, image, and other details when ready."}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button type="button" onClick={onAddProduct}>{t(copy.studio.addProduct, lang)}</Button>
+              <Link to="/studio/import" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-paper px-4 text-sm font-medium text-ink-soft hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{lang === "ar" ? "استيراد قائمة جاهزة" : "Import an existing menu"}</Link>
+            </div>
           </div>
         ) : products.length === 0 ? (
           <div className="rounded-2xl border border-line p-5">

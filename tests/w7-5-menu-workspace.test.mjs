@@ -36,9 +36,16 @@ test("Menu Workspace exposes only verified real menu destinations", () => {
   }
 });
 
-test("Menu Workspace has honest empty/error/permission boundaries and accessibility structure", () => {
+test("Menu Workspace separates first-use states from filtered-empty states", () => {
+  assert.match(workspace, /Create your first menu category|أنشئ أول تصنيف لقائمتك/);
+  assert.match(workspace, /Add your first real item|أضف أول صنف حقيقي/);
+  assert.match(workspace, /Already have a menu\? Import it|لدي قائمة جاهزة\? استوردها/);
   assert.match(workspace, /No matching items|لا توجد أصناف مطابقة/);
-  assert.match(workspace, /Start with your menu structure|ابدأ ببناء هيكل القائمة/);
+  assert.match(workspace, /snapshot\.products\.length === 0/);
+  assert.match(workspace, /No sample production data|لا نعرض بيانات تجريبية/);
+});
+
+test("Menu Workspace has honest empty/error/permission boundaries and accessibility structure", () => {
   assert.match(workspace, /aria-label/);
   assert.match(workspace, /aria-pressed/);
   assert.match(workspace, /scope="col"/);
