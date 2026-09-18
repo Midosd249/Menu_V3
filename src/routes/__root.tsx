@@ -27,6 +27,7 @@ import priceConsistencyCss from "../theme-price-consistency.css?url";
 import galleryCanvaParityCss from "../theme-gallery-canva-parity.css?url";
 import w16MobileQrHardeningCss from "../theme-w16-mobile-qr-hardening.css?url";
 import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?url";
+import qrFinalFixesCss from "../theme-qr-final-fixes.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -71,6 +72,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: galleryCanvaParityCss },
       { rel: "stylesheet", href: w16MobileQrHardeningCss },
       { rel: "stylesheet", href: finalThemeVisualHardeningCss },
+      { rel: "stylesheet", href: qrFinalFixesCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
