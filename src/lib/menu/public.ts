@@ -149,7 +149,8 @@ export const recordPublicEvent = createServerFn({ method: "POST" })
     slug: slugSchema,
     branchSlug: z.string().max(63).optional(),
     productId: z.string().max(80).optional(),
-    eventType: z.enum(["visit", "product_view", "qr_scan", "whatsapp"]),
+    categoryId: z.string().max(80).optional(),
+    eventType: z.enum(["visit", "product_view", "qr_scan", "whatsapp", "search", "category_view", "add_to_cart"]),
     lang: z.enum(["ar", "en"]).optional(),
     sessionId: z.string().min(8).max(80),
   }))
@@ -164,19 +165,24 @@ export const recordPublicEvent = createServerFn({ method: "POST" })
         const b = await sql`select id from branches where tenant_id = ${tenantId} and slug = ${data.branchSlug} and is_active = true limit 1`;
         branchId = (b[0]?.id as string) ?? null;
       }
-      if (data.eventType === "product_view") {
+      if (data.eventType === "product_view" || data.eventType === "add_to_cart") {
         if (!data.productId) return { ok: false, code: "invalid", error: "صنف غير صالح" };
         const p = await sql`select id from products where id = ${data.productId} and tenant_id = ${tenantId} limit 1`;
         if (!p[0]) return { ok: false, code: "invalid", error: "صنف غير صالح" };
       }
-      if (data.eventType === "visit" || data.eventType === "qr_scan") {
+      if (data.eventType === "category_view") {
+        if (!data.categoryId) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+        const category = await sql`select id from categories where id = ${data.categoryId} and tenant_id = ${tenantId} and is_active = true limit 1`;
+        if (!category[0]) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+      }
+      if (data.eventType === "visit" || data.eventType === "qr_scan" || data.eventType === "search") {
         const recent = await sql`select id from menu_events where tenant_id = ${tenantId} and session_id = ${data.sessionId} and event_type = ${data.eventType} and created_at > now() - interval '30 minutes' limit 1`;
         if (recent[0]) return { ok: true, data: { recorded: false } };
       }
       const experimentKey = tenants[0]?.whatsapp?.trim() ? ACTIVE_EXPERIMENT : null;
       const experimentVariant = experimentKey ? getExperimentVariant(data.sessionId) : null;
       const eventType: EventType = data.eventType;
-      await sql`insert into menu_events (id, tenant_id, branch_id, product_id, event_type, lang, session_id, experiment_key, experiment_variant) values (${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${eventType}, ${data.lang ?? null}, ${data.sessionId}, ${experimentKey}, ${experimentVariant})`;
+      await sql`insert into menu_events (id, tenant_id, branch_id, product_id, category_id, event_type, lang, session_id, experiment_key, experiment_variant) values (${newId()}, ${tenantId}, ${branchId}, ${data.productId ?? null}, ${data.categoryId ?? null}, ${eventType}, ${data.lang ?? null}, ${data.sessionId}, ${experimentKey}, ${experimentVariant})`;
       return { ok: true, data: { recorded: true } };
     } catch (err) {
       console.error("recordPublicEvent failed", err);
