@@ -1,96 +1,71 @@
 # TASKS
 
 ## Current State — 2026-09-18
-
 - VERIFIED: `main` = `909935165d10fd7e8fccce6182fd88717ad478e6`.
-- VERIFIED: PR #179 is CLOSED / MERGED at `18ca4f243b39640ebd7ed77541b268240b54cefd`.
-- VERIFIED: PR #180 is CLOSED / MERGED at `e8677a9d20c19ab03eff84d39358a66918b932b2`.
-- VERIFIED: this task is documentation-only; no runtime code or deployment configuration changed.
+- VERIFIED: PH-01–PH-06 and protected product systems remain completed.
+- VERIFIED: current repository audit found substantial existing implementation; the new plan is gap-only.
 - UNKNOWN: physical real-device Production QA for latest `main`.
+- UNKNOWN: current Production environment-variable values.
 
-## PH Lifecycle — Completed
+## Completed / Protected
+Do not repeat these without reproducible regression evidence:
+- Public menu + five themes + bilingual/RTL/LTR behavior.
+- Search/category/product/cart/Quick Add/Item Notes/order flows.
+- Public order hardening and Studio Orders.
+- Menu/Owner Intelligence and Growth Engine.
+- Upsell evidence/approval, reports, experiments.
+- Guest CRM/loyalty/campaigns/feedback/retention.
+- AI provider routing/multimodal ingestion/grounded assistant.
+- Self-serve customer lifecycle, subscriptions/entitlements, Platform Admin.
+- Branch/team/import/billing/QR/SEO/accessibility/performance/release workflow.
 
-PH-01 through PH-06 are completed historical milestones. No additional PH milestone is currently defined.
+## Current Gap Program
 
-## PH-01 — CLOSED / VERIFIED / MERGED
+### A.1 — Customer Journey & Event Truth Audit
+STATUS: READY_FOR_AUTHORIZATION
 
-PR #170: `fix: retire legacy customer approval and request flows`
+Verify against current code:
+- all public event emitters and event consumers;
+- search/category/product/cart actions;
+- anonymous session lifecycle;
+- order/session linkage;
+- order outcome linkage;
+- metric and experiment consumers;
+- duplicate-event and failure semantics;
+- privacy/tenant/branch boundaries.
 
-Merge commit: `7e91778bfafa67b24efd1edf4387e1f3014fae9d`
+Output:
+- gap matrix;
+- exact missing contracts;
+- minimal implementation sequence;
+- no runtime implementation unless separately authorized.
 
-### Acceptance state
-- New customer: Home → Registration → secure workspace provisioning → Studio.
-- Existing customer: Home → Login → email OR phone + password → existing workspace / Studio.
-- New customers no longer depend on manual approval/request gating.
-- `/admin/users` remains the server-authorized customer-control surface.
-- Legacy Leads and Service Requests are retired from the active Platform Admin lifecycle surface.
-- Tenant/branch isolation, fail-closed provisioning, auth, authorization, and server-side trust boundaries remain protected.
+### A.2 — Minimal Journey Instrumentation
+DEPENDENCY: A.1
+Only implement events/linkage proven missing by A.1.
+No wholesale analytics rewrite.
 
-### Verification provenance
-- GitHub confirms PR #170 merged into `main` at `7e91778...`.
-- Manus reported successful Quality and W9 Orders QA gates.
-- Manus reported the remaining local TypeScript/baseUrl check was a local toolchain/version mismatch rather than an application failure.
+### A.3 — Outcome-Linked Intelligence
+DEPENDENCY: A.2
+Extend existing Growth/Owner Intelligence so recommendations/actions can be evaluated against observed outcomes.
 
-## Homepage Runtime Fix — CLOSED / VERIFIED / MERGED
+### A.4 — International Boundary Audit
+DEPENDENCY: A.1
+Audit market-dependent currency, phone, locale, timezone, tax, payments, messaging, maps and compliance boundaries.
+No broad international feature build until boundaries are verified.
 
-PR #172: `fix: prevent homepage React.Children.only crash`
+### A.5 — Public Shareability / Deep-Link Audit
+DEPENDENCY: A.1
+Verify existing public URLs, QR destinations, SEO, canonical/hreflang and product/category sharing before adding routes.
 
-Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
+## Release Evidence — Separate
+- R6 meaningful real exposure remains pending.
+- Physical Android/iOS Production QA remains pending.
+- Production configuration evidence remains pending.
+- No synthetic experiment traffic.
+- No Vercel iteration loop.
 
-### Acceptance state
-- Public homepage signup CTAs no longer crash when `Button asChild` contains a Link plus an icon.
-- Radix `Slottable` keeps the Link as the slotted interactive element while preserving sibling content.
-- Regression contract covers the homepage multi-child `asChild` pattern.
-- No backend, database, authentication, RLS, tenant isolation, pricing, theme renderer, or deployment configuration changes were introduced.
+## Exact Next Task
+**A.1 — Customer Journey & Event Truth Audit**
 
-### Verification
-- GitHub Actions Quality run `35266109690` — SUCCESS.
-- Typecheck — SUCCESS.
-- Full repository tests — SUCCESS.
-- Lint — SUCCESS.
-- Production build — SUCCESS.
-- Public all-theme browser QA — SUCCESS.
-- Studio browser QA — SUCCESS.
-- Platform Admin browser QA — SUCCESS.
-- W9 Orders QA run `35266109691` — SUCCESS.
-- Physical production device QA — UNKNOWN / release-stage pending.
-
-## Completed Strategic Tasks
-
-- P0 Public Order Hardening — CLOSED / VERIFIED.
-- P1 Production/Continuity Hardening — CLOSED / VERIFIED.
-- P2 Growth & Differentiation — CLOSED / VERIFIED / DEPLOYED.
-- Platform Approval Center — CLOSED / VERIFIED.
-- Registration-link rendering — CLOSED / VERIFIED.
-- Onboarding Creation Recovery — CLOSED / VERIFIED / MERGED.
-- Menu Intelligence V5 Report Center — CLOSED / VERIFIED / MERGED.
-- AI Provider Routing & Multimodal Fallback — CLOSED / VERIFIED / MERGED.
-- Grounded Guest Menu Assistant — CLOSED / VERIFIED.
-- Gallery + Noir Theme Hardening — CLOSED / VERIFIED / MERGED.
-- Continuity reconciliation — CLOSED / VERIFIED / MERGED.
-- R2.1–R2.7 Menu Intelligence — CLOSED / VERIFIED.
-- R4.1–R4.5 Owner Intelligence — CLOSED / VERIFIED.
-- R5 Growth Extensions — CLOSED / VERIFIED.
-- R6 bounded WhatsApp CTA experiment — CLOSED / VERIFIED for implementation; outcome pending meaningful real exposure.
-- R7 evidence review — IN PROGRESS / NON-BLOCKING while exposure remains insufficient.
-- R8.1–R8.5 Closed-Loop Menu Growth Engine — CLOSED / VERIFIED / MERGED.
-- R9 Guest CRM / Loyalty / Campaigns / Feedback / Retention — CLOSED / VERIFIED / MERGED.
-- W7.1–W7.12 — CLOSED / VERIFIED for implemented scope; physical Android/iOS QA remains release-stage evidence.
-- W8 Internal Visual System — DONE / VERIFIED for implemented scope; existing draft PR history remains separate.
-
-## Production / Commercial Readiness
-
-- Repository-side implementation through the completed PH lifecycle plus the homepage runtime fix is present in `main`.
-- Physical Android/iOS production QA remains UNKNOWN / release-stage pending.
-- Current production environment-variable values remain UNKNOWN from repository evidence.
-- Do not use Vercel as the development iteration loop.
-
-## Protected Scope
-
-- Essential, Editorial, Noir, Heritage/Taste, and Gallery.
-- Public menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls.
-- Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
-- Do not repeat completed work without current reproducible regression evidence.
-
-## Historical Next Task
-Await the owner's next explicitly scoped request. No implementation task is automatically authorized.
+Boundary: audit only. No UI redesign, schema migration, deployment, or unrelated refactor.
