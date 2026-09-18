@@ -5,7 +5,6 @@ import { EmptyState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import { hasHighSalt, type Lang, type Product, type ProductOptions, type PublicMenu } from "@/lib/menu/types";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
@@ -141,23 +140,23 @@ export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; pr
   const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = openNow(hours); const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  useEffect(() => { if (preview) return; void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang, sessionId: getGuestSessionId() } }); }, [tenant.slug, branch.slug, lang, preview]);
+  useEffect(() => { if (preview) return; void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang } }); }, [tenant.slug, branch.slug, lang, preview]);
   useEffect(() => {
     if (preview || searchTrackedRef.current || !query.trim()) return;
     searchTrackedRef.current = true;
-    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang, sessionId: getGuestSessionId() } });
+    void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
-  const trackProduct = (p: Product) => { setSelectedId(p.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: p.id, eventType: "product_view", lang, sessionId: getGuestSessionId() } }); };
+  const trackProduct = (p: Product) => { setSelectedId(p.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: p.id, eventType: "product_view", lang } }); };
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all") {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, categoryId: nextCategoryId, eventType: "category_view", lang } });
     }
   };
   const addToCart = (item: CartItem) => {
     setCart((current) => { const existing = current.find((x) => x.key === item.key); return existing ? current.map((x) => x.key === item.key ? { ...x, quantity: Math.min(20, x.quantity + 1) } : x) : [...current, item]; });
     if (!preview) {
-      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang, sessionId: getGuestSessionId() } });
+      void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: item.product.id, eventType: "add_to_cart", lang } });
     }
   };
   const addSimpleProduct = (product: Product) => { if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return; addToCart({ key: quickAddKey(product.id), product, options: menu.productOptions?.[product.id] ?? { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], unitPrice: product.price, quantity: 1 }); };
