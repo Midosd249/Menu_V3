@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
 import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
@@ -34,7 +34,10 @@ export const Route = createFileRoute("/m/$slug")({
   loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {
     const result = await getPublicMenu({ data: { slug: params.slug, branch: deps.branch } });
-    if (!result.ok) return result;
+    if (!result.ok) {
+      if (result.code === "not_found") throw notFound();
+      return result;
+    }
     const requestedLocale = deps.lang ?? "ar";
     const locale = resolvePublicMenuLocale(result.data, requestedLocale);
     const previewTheme = deps.theme ? normalizeThemeKey(deps.theme) ?? undefined : undefined;

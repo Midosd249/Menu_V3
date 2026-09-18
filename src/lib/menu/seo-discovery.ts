@@ -34,7 +34,14 @@ export function buildSitemapXml(entries: SitemapEntry[]): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 
-  const urls = entries.map((entry) => {
+  const seen = new Set<string>();
+  const uniqueEntries = entries.filter((entry) => {
+    if (seen.has(entry.loc)) return false;
+    seen.add(entry.loc);
+    return true;
+  });
+
+  const urls = uniqueEntries.map((entry) => {
     const links = (entry.alternates ?? [])
       .map((alternate) => `<xhtml:link rel="alternate" hreflang="${escapeXml(alternate.hreflang)}" href="${escapeXml(alternate.href)}"/>`)
       .join("");

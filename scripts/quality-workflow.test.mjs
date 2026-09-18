@@ -3,11 +3,13 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { buildRobotsTxt, buildSitemapXml, publicMenuSitemapEntries } from "../src/lib/seo/crawl.ts";
+import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml } from "../src/lib/menu/seo-discovery.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORKFLOW = readFileSync(join(ROOT, ".github/workflows/quality.yml"), "utf8");
-const CRAWL_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
+const DISCOVERY_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/seo-discovery.ts"), "utf8");
+const PWA_MIDDLEWARE = readFileSync(join(ROOT, "server/middleware/grok-pwa.ts"), "utf8");
+const BRANCH_PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.$branch.tsx"), "utf8");
 const PUBLIC_MENU = readFileSync(join(ROOT, "src/components/public-menu.tsx"), "utf8");
 const PUBLIC_MENU_ROUTE = readFileSync(join(ROOT, "src/routes/m.$slug.tsx"), "utf8");
 const ROOT_ROUTE = readFileSync(join(ROOT, "src/routes/__root.tsx"), "utf8");
@@ -69,40 +71,48 @@ test("robots.txt allows public pages, protects private surfaces, and declares th
   assert.match(robots, /^Sitemap: https:\/\/menu\.example\.com\/sitemap\.xml$/m);
 });
 
-test("sitemap renders public menu and branch entries with XML-safe values", () => {
-  const entries = publicMenuSitemapEntries([
-    { slug: "nafas", branchSlug: "olaya", updatedAt: "2026-09-03T14:00:00Z" },
-  ]);
-  const xml = buildSitemapXml("https://menu.example.com", entries);
+test("sitemap renders canonical branch entries with XML-safe values and locale alternates", () => {
+  const entries = buildPublicMenuSitemapEntries([
+    { slug: "nafas", branchSlug: "olaya", nameEn: "Nafas", branchNameEn: "Olaya" },
+  ], "https://menu.example.com");
+  const xml = buildSitemapXml(entries);
 
   assert.equal((xml.match(/<url>/g) ?? []).length, 2);
-  assert.match(xml, /https:\/\/menu\.example\.com\/m\/nafas/);
   assert.match(xml, /https:\/\/menu\.example\.com\/m\/nafas\/olaya/);
-  assert.match(xml, /<lastmod>2026-09-03T14:00:00Z<\/lastmod>/);
+  assert.match(xml, /hreflang="en" href="https:\/\/menu\.example\.com\/m\/nafas\/olaya\?lang=en"/);
   assert.doesNotMatch(xml, /<\/script>/i);
 });
 
-test("sitemap deduplicates repeated paths without replacing the first source entry", () => {
-  const xml = buildSitemapXml("https://menu.example.com", [
-    { path: "/m/nafas", lastModified: "2026-09-01T00:00:00Z" },
-    { path: "/m/nafas", lastModified: "2026-09-02T00:00:00Z" },
+test("sitemap deduplicates repeated canonical URLs without replacing the first entry", () => {
+  const xml = buildSitemapXml([
+    { loc: "https://menu.example.com/m/nafas", alternates: [] },
+    { loc: "https://menu.example.com/m/nafas", alternates: [] },
   ]);
 
   assert.equal((xml.match(/<url>/g) ?? []).length, 1);
-  assert.match(xml, /2026-09-01T00:00:00Z/);
-  assert.doesNotMatch(xml, /2026-09-02T00:00:00Z/);
 });
 
-test("sitemap middleware exposes only published active tenants and active branches", () => {
-  assert.match(CRAWL_MIDDLEWARE, /path === "\/sitemap\.xml"/);
-  assert.match(CRAWL_MIDDLEWARE, /from tenants t/);
-  assert.match(CRAWL_MIDDLEWARE, /join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
-  assert.match(CRAWL_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
-  assert.match(CRAWL_MIDDLEWARE, /order by t\.slug, b\.created_at/);
+test("public discovery has one owner for robots and sitemap responses", () => {
+  assert.match(DISCOVERY_MIDDLEWARE, /pathname === "\/robots\.txt"/);
+  assert.match(DISCOVERY_MIDDLEWARE, /pathname !== "\/sitemap\.xml"/);
+  assert.match(DISCOVERY_MIDDLEWARE, /from tenants t/);
+  assert.match(DISCOVERY_MIDDLEWARE, /join branches b on b\.tenant_id = t\.id and b\.is_active = true/);
+  assert.match(DISCOVERY_MIDDLEWARE, /where t\.is_active = true and t\.is_published = true/);
+  assert.match(DISCOVERY_MIDDLEWARE, /order by t\.slug, b\.created_at/);
+  assert.doesNotMatch(PWA_MIDDLEWARE, /path === "\/robots\.txt"/);
+  assert.doesNotMatch(PWA_MIDDLEWARE, /path === "\/sitemap\.xml"/);
 });
 
 test("public menu keeps below-the-fold product media lazy-loaded and low-priority", () => {
   assert.match(PUBLIC_MENU, /loading="lazy"/);
   assert.match(PUBLIC_MENU, /decoding="async"/);
   assert.match(PUBLIC_MENU, /fetchPriority="low"/);
+});
+
+
+test("public menu routes convert not-found data into router-level 404s", () => {
+  assert.ok(PUBLIC_MENU_ROUTE.includes('import { createFileRoute, notFound } from "@tanstack/react-router";'));
+  assert.match(PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
+  assert.ok(BRANCH_PUBLIC_MENU_ROUTE.includes('import { createFileRoute, notFound } from "@tanstack/react-router";'));
+  assert.match(BRANCH_PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
 });

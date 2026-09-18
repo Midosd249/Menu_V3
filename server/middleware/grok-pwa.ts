@@ -8,8 +8,7 @@
  *   static output on Vercel and not readable from the function).
  * - `/__grok/manifest.webmanifest` → per-app-named manifest (kept out of
  *   public/ so this dynamic response is the only one).
- * - `/robots.txt` and `/sitemap.xml` → crawl-control responses generated from
- *   the current public publication state.
+ * - `/robots.txt` and `/sitemap.xml` are owned by the dedicated SEO discovery middleware.
  * - Other HTML documents → stream-inject PWA + OG head tags at `</head>`.
  *   OG identity is baked via `virtual:grok-og-identity` at `vite build`
  *   (this function cannot read `src/lib/og/site.json` or `public/og.jpg`).
@@ -27,8 +26,6 @@ import {
   renderInstallPageHtml,
   renderWebManifest,
 } from "../../scripts/grok-pwa-shared.mjs";
-import { getSql } from "../../src/lib/db";
-import { buildRobotsTxt, buildSitemapXml, publicMenuSitemapEntries } from "../../src/lib/seo/crawl";
 
 interface GrokPwaEvent {
   url: URL;
@@ -65,26 +62,6 @@ function injectHeadStreaming(response: Response, host: string): Response {
   });
 }
 
-async function renderSitemap(event: GrokPwaEvent): Promise<Response> {
-  const sql = await getSql();
-  const rows = await sql.query<{ slug: string; branch_slug: string | null }>(`
-    select t.slug, b.slug as branch_slug
-    from tenants t
-    join branches b on b.tenant_id = t.id and b.is_active = true
-    where t.is_active = true and t.is_published = true
-    order by t.slug, b.created_at
-  `);
-  const entries = publicMenuSitemapEntries(
-    rows.map((row) => ({ slug: row.slug, branchSlug: row.branch_slug })),
-  );
-  return new Response(buildSitemapXml(event.url.origin, entries), {
-    headers: {
-      "content-type": "application/xml; charset=utf-8",
-      "cache-control": "public, max-age=300, stale-while-revalidate=600",
-    },
-  });
-}
-
 export default async function grokPwaMiddleware(
   event: GrokPwaEvent,
   next: () => unknown | Promise<unknown>,
@@ -94,17 +71,6 @@ export default async function grokPwaMiddleware(
 
   const path = event.url.pathname;
   const urlWithQuery = path + event.url.search;
-
-  if (path === "/robots.txt") {
-    return new Response(buildRobotsTxt(event.url.origin), {
-      headers: {
-        "content-type": "text/plain; charset=utf-8",
-        "cache-control": "public, max-age=300, stale-while-revalidate=600",
-      },
-    });
-  }
-
-  if (path === "/sitemap.xml") return renderSitemap(event);
 
   if (path === "/__grok/manifest.webmanifest" || path === "/__grok/manifest.json") {
     return new Response(renderWebManifest(requestHost(event)), {
