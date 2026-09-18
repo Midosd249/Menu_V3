@@ -26,7 +26,7 @@ test("W7.4 Studio Home browser QA", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: /استوديو|صباح الخير|مساء الخير|Good / }).first()).toBeVisible();
-  await expect(page.getByRole("progressbar")).toHaveAttribute("aria-valuemax", "100");
+  await expect(page.getByRole("progressbar").first()).toHaveAttribute("aria-valuemax", "100");
 
   const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
   await languageGroup.getByRole("button", { name: "EN" }).click();
