@@ -29,10 +29,10 @@ This audit does **not** authorize a global launch, new locales, payment infrastr
 ## External research
 
 ### VERIFIED — W3C Internationalization
-W3C defines internationalization as designing/developing so software can adapt to users from different cultures, regions, and languages, including dates, numbers, names, directionality, and other cultural conventions. This supports treating market configuration as a first-class boundary rather than embedding one region into every formatting path. citeturn0search2turn0search8
+W3C defines internationalization as designing/developing so software can adapt to users from different cultures, regions, and languages, including dates, numbers, names, directionality, and other cultural conventions. This supports treating market configuration as a first-class boundary rather than embedding one region into every formatting path. Sources: W3C Internationalization — https://www.w3.org/mission/internationalization/ and https://www.w3.org/International/i18n-drafts/nav/about
 
 ### VERIFIED — Unicode CLDR
-CLDR provides locale data for numbers, currencies, dates, times, time zones, and related regional conventions. Currency formatting must be driven by the currency/locale context rather than manually concatenating a single market's currency representation. CLDR also documents bidi considerations for currency/number formatting. citeturn0search0turn0search1turn0search4
+CLDR provides locale data for numbers, currencies, dates, times, time zones, and related regional conventions. Currency formatting must be driven by the currency/locale context rather than manually concatenating a single market's currency representation. CLDR also documents bidi considerations for currency/number formatting. Sources: Unicode CLDR — https://cldr.unicode.org/translation/number-currency-formats/number-symbols, https://cldr.unicode.org/translation/number-currency-formats/number-and-currency-patterns, and https://www.unicode.org/reports/tr35/dev/tr35-numbers.html
 
 ### VERIFIED — JavaScript Intl
 `Intl.NumberFormat` supports ISO 4217 currency codes and locale-sensitive currency display. `Intl.DateTimeFormat` supports explicit locale and IANA time-zone selection; when a time zone is omitted, the runtime's time zone is used. citeturn0search10turn1search0turn1search1
