@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MenuLoader, createThemeBootstrapScript } from "./m.$slug";
 import { getPublicMenu } from "@/lib/menu/public";
 import { getNotFoundMenuSeo, getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/m/$slug/$branch")({
   loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {
     const result = await getPublicMenu({ data: { slug: params.slug, branch: params.branch } });
-    if (!result.ok) return result;
+    if (!result.ok) {\n      if (result.code === "not_found") throw notFound();\n      return result;\n    }
     const requestedLocale = deps.lang ?? "ar";
     const locale = resolvePublicMenuLocale(result.data, requestedLocale);
     const previewTheme = deps.theme ? normalizeThemeKey(deps.theme) ?? undefined : undefined;
