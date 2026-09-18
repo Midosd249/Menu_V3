@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import { Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
 import { recordPublicEvent } from "@/lib/menu/public";
-import { getGuestSessionId } from "@/lib/menu/session";
-import { ACTIVE_EXPERIMENT, getExperimentVariant, type ExperimentVariant } from "@/lib/menu/experiment";
+import { ACTIVE_EXPERIMENT } from "@/lib/menu/experiment";
 import { getPublicActions } from "@/lib/menu/public-actions";
 import type { Branch, Lang, PublicTenant } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
@@ -13,18 +11,13 @@ type PublicActionLinksProps = {
   lang: Lang;
   preview?: boolean;
   className?: string;
+  experimentVariant?: "control" | "prominent";
 };
 
 const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagram: Instagram };
 
-export function PublicActionLinks({ tenant, branch, lang, preview = false, className }: PublicActionLinksProps) {
+export function PublicActionLinks({ tenant, branch, lang, preview = false, className, experimentVariant = "control" }: PublicActionLinksProps) {
   const actions = getPublicActions(tenant, branch, lang);
-  const [experimentVariant, setExperimentVariant] = useState<ExperimentVariant>("control");
-
-  useEffect(() => {
-    if (preview) return;
-    setExperimentVariant(getExperimentVariant(getGuestSessionId()));
-  }, [preview]);
 
   if (!actions.length) return null;
 
