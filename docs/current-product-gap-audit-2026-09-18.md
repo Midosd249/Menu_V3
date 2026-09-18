@@ -1,6 +1,6 @@
 # Menu V3 — Current Product Gap Audit
 Date: 2026-09-18
-Baseline: main `909935165d10fd7e8fccce6182fd88717ad478e6`
+Baseline: main `c3afb623559ea1d6e015a5abeb6a59ebc26a4f27`
 
 ## Audit purpose
 Reconcile the strategic product direction with the implementation that actually exists in the repository. This is a gap audit, not a redesign proposal.
