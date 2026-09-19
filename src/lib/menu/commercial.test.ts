@@ -6,7 +6,7 @@ test("commercial plans mirror the approved monthly and annual catalog", () => {
   assert.deepEqual(
     COMMERCIAL_PLANS.map((plan) => [plan.code, plan.monthlyPriceSar, plan.annualPriceSar, plan.maxBranches, plan.maxTeamMembers]),
     [
-      ["free", 0, 0, 1, 3],
+      ["free", 0, 0, 1, 2],
       ["starter", 49, 490, 3, 10],
       ["pro", 149, 1490, 10, 25],
     ],
