@@ -323,3 +323,26 @@ Owner supplies the two final homepage images and places them at the documented p
 ### Exact Next Task
 
 Release-stage verification of merged `main` for the homepage, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not automatically begin another homepage redesign.
+
+
+## 2026-09-20 — Live Digital Menu Homepage Closeout — VERIFIED
+
+- VERIFIED FROM GITHUB: PR #215 `feat: publish live digital menu homepage` is CLOSED / MERGED into `main`.
+- VERIFIED FROM GITHUB: merge commit is `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`.
+- VERIFIED FROM GITHUB: PR #215 changed only `src/routes/index.tsx` and `src/routes/index.css`.
+- VERIFIED FROM GITHUB: the homepage phone mockup was replaced by a live digital-menu presentation containing restaurant identity, status/location, categories, product cards, search/cart affordances, order CTA, and bilingual AR/EN content.
+- VERIFIED FROM GITHUB: the merged commit has a successful Vercel status on the PR.
+- REPORTED BY MANUS / OWNER: Manus performed its quality verification and the owner independently tested the resulting homepage. These are owner-reported/manual evidence, not a substitute for direct CI or production evidence where those are still UNKNOWN.
+- VERIFIED FROM PR #215: the implementation report states local typecheck, 25 contract tests, and production build passed before merge.
+- VERIFIED FROM GITHUB: no unresolved review threads or submitted review blockers are present on PR #215.
+- UNKNOWN: direct current Vercel Production deployment identity for `a2e5e17178c4095f8a61def2af3e0eef8074f4fa` is not established by the available GitHub evidence.
+- UNKNOWN: physical Android/iOS production verification of the latest `main`, including QR scanning, theme rendering, ordering, RTL/LTR, and print preview.
+- NON-BLOCKING: R7 experiment evidence remains pending meaningful real exposure.
+- SEPARATE SECURITY WORK: the historical A.2 record still identifies six live RLS-disabled tables as a separate security/data task; this was not changed by PR #215.
+- DEFERRED BY OWNER DIRECTION: Payment Provider, Commercial Launch, PH-07, and R10 are not prerequisites for the current activation/release sequence.
+
+### Exact Next Task
+
+**Release-stage verification of current `main` at `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks.**
+
+Do not start another homepage redesign, theme redesign, product/category deep-link work, or native Web Share work before this release/device evidence is closed.
