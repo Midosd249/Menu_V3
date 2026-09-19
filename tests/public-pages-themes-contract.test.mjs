@@ -34,14 +34,21 @@ test("homepage keeps a stable login entrypoint for both anonymous and authentica
   assert.doesNotMatch(home, /<Link to="\/studio">\{lang === "ar" \? "الاستوديو" : "Studio"\}<\/Link>/);
 });
 
-test("homepage signup buttons keep Link as the slotted element when icons are present", () => {
+test("homepage keeps multi-child signup CTAs compatible with the slotted Button contract", () => {
   assert.match(home, /<Button asChild size="lg">\{signup\}<ArrowUpLeft/);
-  assert.match(home, /<Button asChild className="mt-5 w-full" variant="outline">\{signup\}<\/Button>/);
   assert.match(home, /<Button asChild className="mt-7 w-full">\{signup\}<\/Button>/);
-  assert.match(home, /<Button asChild size="lg">\{signup\}<ArrowUpLeft/);
   assert.match(button, /import \{ Slot, Slottable \} from "@radix-ui\/react-slot";/);
   assert.match(button, /Children\.toArray\(children\)/);
   assert.match(button, /<Slottable>\{firstChild\}<\/Slottable>/);
+});
+
+test("homepage presents product proof instead of a generic feature-only hero", () => {
+  assert.match(home, /id="journey"/);
+  assert.match(home, /id="presence"/);
+  assert.match(home, /id="control"/);
+  assert.match(home, /Guest signals|إشارات الضيوف/);
+  assert.match(home, /Arabic.*translation layer|العربية ليست طبقة ترجمة/);
+  assert.match(home, /MENU_THEMES\.map/);
 });
 
 test("homepage exposes all protected themes without a premium gate", () => {
