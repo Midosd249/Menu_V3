@@ -198,3 +198,18 @@ Do not begin product/category deep links or native Web Share automatically.
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device, and include the QR single-print + multi-copy print-preview checks.**
 
 Do not begin product/category deep links or native Web Share automatically.
+
+
+## 2026-09-19 — Homepage Implementation Slice — IN PROGRESS
+
+- VERIFIED: implementation authorized by owner after the documented homepage execution plan.
+- VERIFIED: permanent Research, Innovation & Creative Intelligence workflow is now stored in `docs/agents/research-innovation-creative-agent.md` and routed by `docs/automatic-specialist-routing.md`.
+- VERIFIED: PR #206 implements the homepage information architecture around guest journey, restaurant presence, Studio control, Arabic-first proof, pricing, FAQ, and CTA.
+- VERIFIED: implementation uses existing `MENU_THEMES` and `COMMERCIAL_PLANS`; no parallel product data or backend contract was introduced.
+- VERIFIED: no new external images are required for this slice.
+- UNKNOWN: local/browser visual verification and GitHub Quality execution for PR #206.
+- BLOCKED / NON-BLOCKING: Vercel remains rate-limited; no deployment was performed.
+
+### Exact Next Task
+
+Review PR #206 quality evidence and final diff; if clean, prepare one controlled merge to `main`. Production deployment remains a separate release-stage action.

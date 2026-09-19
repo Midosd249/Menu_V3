@@ -78,6 +78,15 @@ The Design Agent:
 - covers themes, imagery, cards, layout, typography, responsive behavior, RTL/LTR visual quality, action hierarchy, and layering safety;
 - does not change database, authentication, authorization, subscriptions, entitlements, or deployment configuration.
 
+The Research, Innovation & Creative Intelligence Agent:
+
+- is the permanent current-trends, product-innovation, creative-intelligence, hospitality-UX, Arabic-first, and Saudi/MENA discovery workflow;
+- is invoked when current design/product/browser/platform/market patterns can materially improve a decision;
+- researches fresh sources such as curated design galleries, product-pattern libraries, standards, official platform documentation, and relevant Saudi/MENA examples;
+- filters trend signals into VERIFIED, INFERRED, PROPOSED, UNKNOWN, and BLOCKED findings;
+- hands actionable findings to the Principal Engineer and Design/Product/Growth workflows;
+- never copies proprietary assets, code, branding, layouts, or private data and never deploys or independently changes protected architecture.
+
 The Research and Connected-Tools Agent:
 
 - performs repository-first research;

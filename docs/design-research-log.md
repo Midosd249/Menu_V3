@@ -260,3 +260,55 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - Limitation: exact visual quality still depends on real content and device font rendering.
 - Confidence: HIGH
 - Must not copy: no external visual styling.
+
+
+## 2026-09-19 — Homepage Innovation / Current Design Intelligence
+
+### Repository evidence — current homepage
+- Source: `Midosd249/Menu_V3` `main`, `src/routes/index.tsx`, `src/routes/index.css`
+- Access date: 2026-09-19
+- Category: repository evidence
+- VERIFIED finding: the homepage currently uses a conventional SaaS landing structure with a text-led hero, abstract CSS food visuals, generic feature cards, theme cards, three-step explanation, pricing, FAQ, and CTA. The existing repository already contains the real theme registry and commercial catalog that can support stronger product proof without introducing a new backend.
+- Transferable principle: homepage redesign should expose the real product journey and existing capabilities instead of inventing new product claims or parallel data.
+- Relevance: direct scope for the homepage redesign.
+- Limitation: source inspection cannot prove rendered visual quality.
+- Confidence: HIGH
+- Must not copy: no external implementation.
+
+### Land-book — current design discovery surface
+- Source: https://land-book.com/ and https://land-book.com/design/website/food-and-drinks
+- Access date: 2026-09-19
+- Category: current design intelligence
+- VERIFIED finding: Land-book currently organizes inspiration by industry, style, type, typography, color, and other attributes, and its 2026 changelog added Motion previews, Headlines, and OG Image discovery. Food & Drinks is an active category with current examples.
+- Transferable principle: evaluate homepage inspiration by section, headline, motion, and content purpose rather than copying complete pages.
+- Relevance: supports the permanent innovation workflow and the homepage's editorial/product-proof direction.
+- Limitation: curated inspiration is not user-behavior evidence.
+- Confidence: MEDIUM
+- Must not copy: proprietary layouts, branding, screenshots, text, or assets.
+
+### W3C — Arabic/RTL and mixed-direction content
+- Sources: https://www.w3.org/International/tutorials/bidi-xhtml/index ; https://www.w3.org/International/articles/inline-bidi-markup/index.en.html ; https://www.w3.org/TR/alreq/
+- Access date: 2026-09-19
+- Category: authoritative internationalization guidance
+- VERIFIED finding: Arabic-first interfaces need an explicit base direction and careful handling of mixed RTL/LTR runs; inline opposite-direction phrases should be isolated with appropriate directional markup. W3C's Arabic & Persian Layout Requirements remains an active standards-oriented reference.
+- Transferable principle: homepage content must be designed and tested with Arabic, English, numbers, SAR prices, and mixed-direction strings as first-class content—not as a translation afterthought.
+- Relevance: typography, bilingual hero proof, pricing, navigation, and product UI previews.
+- Limitation: W3C guidance does not prescribe Menu V3's visual style.
+- Confidence: HIGH
+- Must not copy: no external visual treatment.
+
+### Google Search Central — page experience
+- Source: https://developers.google.com/search/docs/appearance/page-experience
+- Access date: 2026-09-19
+- Category: authoritative SEO/performance guidance
+- VERIFIED finding: Google recommends an overall good page experience, including Core Web Vitals, mobile presentation, secure delivery, and avoiding intrusive interference with main content.
+- Transferable principle: homepage innovation must not trade away mobile clarity, performance, or content accessibility for visual novelty.
+- Relevance: image/motion decisions and responsive implementation.
+- Limitation: page experience guidance is not a conversion guarantee.
+- Confidence: HIGH
+- Must not copy: no competitor implementation.
+
+### Current innovation decision
+- VERIFIED: the new permanent Research, Innovation & Creative Intelligence Agent is now part of the repository's specialist-routing contract.
+- PROPOSED: use fresh design intelligence as a filter for ideas, not as a reason to continuously redesign completed product areas.
+- PROPOSED: prioritize real product proof, editorial hospitality composition, strong Arabic typography, restrained motion, and current section-level inspiration over generic SaaS gradients or decorative 3D.

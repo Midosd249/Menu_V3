@@ -191,3 +191,21 @@ Do not begin product/category deep links or native Web Share automatically.
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device, and include the QR single-print + multi-copy print-preview checks.**
 
 Do not begin product/category deep links or native Web Share automatically.
+
+
+## 2026-09-19 — Homepage Redesign + Innovation Workflow — IN PROGRESS
+
+- VERIFIED: owner authorized implementation of the prepared homepage redesign.
+- VERIFIED: PR #206 `feat: redesign homepage and add permanent innovation research workflow` is open.
+- VERIFIED: homepage proof now covers guest journey, restaurant presence/themes, Studio/control, intelligence/growth framing, Arabic/English/mixed-direction proof, pricing, FAQ, and CTA.
+- VERIFIED: permanent innovation research workflow added and connected to specialist routing.
+- VERIFIED: protected backend/auth/theme/business boundaries remain untouched.
+- UNKNOWN: local typecheck/lint/build/browser verification.
+- UNKNOWN: GitHub Actions Quality run for PR #206; no workflow run is currently visible through the connector.
+- BLOCKED / NON-BLOCKING: Vercel build-rate-limit status; no deployment or retry.
+- Implementation status: `IMPLEMENTATION_IN_PROGRESS`.
+- Deployment status: `DEPLOYMENT_BLOCKED` / not deployed.
+
+### Exact Next Task
+
+Review PR #206 quality evidence and final diff; if clean, prepare one controlled merge to `main` without deploying.
