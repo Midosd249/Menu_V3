@@ -245,3 +245,26 @@ Release-stage production verification of the merged homepage, then physical Andr
 **Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
 
 Do not begin another homepage redesign or commercial packaging redesign before this release verification is complete.
+
+## 2026-09-19 — Theme Preview / Guest Flow / Performance Refinement — CLOSED / VERIFIED
+
+- VERIFIED: PR #211 `feat: make theme previews guest-realistic and smoother` merged into `main` at `022a98add3debb48deb9dc3f5ee4936c4ebed0bc`.
+- VERIFIED: anonymous `/themes/preview?theme=<key>` now uses deterministic local `DEMO_MENU` data instead of a public-menu server round-trip; authenticated owner previews retain the owner-preview path.
+- VERIFIED: the demo restaurant now includes bilingual identity, local logo, branch/contact/hours, WhatsApp, nutrition/caffeine, availability, multiple categories, and a real variant/modifier example.
+- VERIFIED: every theme card exposes the real guest destination `/m/nafas?theme=<key>&src=theme-preview` and an on-demand QR generator for that exact URL.
+- VERIFIED: theme gallery imagery is lazy-loaded below the first card with async decoding and stable geometry.
+- VERIFIED: the canonical five-theme `ThemeRenderer` architecture and protected backend/auth/RLS/tenant/order/subscription boundaries were preserved.
+- VERIFIED: Quality #2110 passed route generation, typecheck, tests, W7.4–W7.10 contracts, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages.
+- VERIFIED: W9 Orders QA #366 passed.
+- BLOCKED / NON-BLOCKING: Picsart generation for the two homepage owner images was attempted but the connected account returned zero available credits; no fake placeholder was substituted.
+- UNKNOWN: final owner artwork files at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp` are still not verified as present.
+- UNKNOWN: direct production deployment identity for `022a98add3debb48deb9dc3f5ee4936c4ebed0bc`.
+- BLOCKED / NON-BLOCKING: Vercel preview/deployment status remains subject to the existing build/deployment rate-limit surface.
+- Implementation status: `DONE`.
+- Deployment status: `UNKNOWN` for this merged commit.
+
+## Exact Next Task
+
+**Place the two final homepage owner images at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`, then perform one controlled release verification and the physical Android/iOS/QR/theme/order/RTL smoke matrix.**
+
+Do not redesign the homepage or theme architecture again before this evidence is collected.

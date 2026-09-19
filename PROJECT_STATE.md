@@ -284,25 +284,44 @@ Release-stage production verification of the merged homepage on the permitted de
 ## 2026-09-19 — Commercial Packaging + Arabic Homepage Refinement — CLOSED / VERIFIED
 
 - VERIFIED: PR #208 merged into `main` at `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.
-- VERIFIED: Free commercial limit is now 20 products, 1 branch, and 2 team members.
-- VERIFIED: Growth remains 49 SAR/month, 490 SAR/year, 3 branches, 300 products, and 10 team members.
-- VERIFIED: Pro remains 149 SAR/month, 1,490 SAR/year, 10 branches, unlimited products, and 25 team members.
-- VERIFIED: plan-specific commercial feature packaging is now represented by `COMMERCIAL_PLAN_FEATURES` and surfaced on the public homepage and `/pricing`.
-- VERIFIED: the homepage no longer exposes the Pro `Number.MAX_SAFE_INTEGER` sentinel; Pro is displayed as unlimited products.
-- VERIFIED: Arabic homepage menu proof was refined to restaurant-native wording: `كبسة لحم نجدية`, a specific culinary description, and a more natural second dish example.
-- VERIFIED: two owner-supplied homepage image paths are wired with CSS fallbacks:
-  - `public/homepage/menu-cover.webp`
-  - `public/homepage/menu-dish.webp`
-- VERIFIED: database migration `migrations/20260919050000_commercial_packaging_correction.sql` updates the Free limits at the server/database boundary.
-- VERIFIED: server-side subscription fallback values were aligned to 20 products / 2 team members.
-- VERIFIED: Quality run #2103 passed typecheck, tests, W7 contract suites, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and responsive QA.
-- VERIFIED: W9 Orders QA run #361 passed.
-- VERIFIED: the first Quality run #2102 failed only because one existing commercial test still expected the old Free team limit of 3; the test was corrected and run #2103 passed.
-- UNKNOWN: the two final owner artwork files have not been added to the repository yet.
-- UNKNOWN: direct production deployment identity for `df2569e92e25380c6fc4957eba8b2d96353bd1f9` is not claimed by this task; no Vercel deployment was intentionally triggered.
+- VERIFIED: Free = 20 products / 1 branch / 2 team members.
+- VERIFIED: Growth = 49 SAR monthly / 490 SAR annual / 300 products / 3 branches / 10 team members.
+- VERIFIED: Pro = 149 SAR monthly / 1,490 SAR annual / unlimited products / 10 branches / 25 team members.
+- VERIFIED: plan-specific feature packaging is surfaced in homepage and `/pricing`.
+- VERIFIED: Pro unlimited display no longer exposes the numeric sentinel.
+- VERIFIED: Arabic menu examples were refined using Saudi restaurant-native wording after competitor research.
+- VERIFIED: image slots are wired to `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`.
+- VERIFIED: Quality #2103 passed all configured quality/browser stages.
+- VERIFIED: W9 Orders QA #361 passed.
+- UNKNOWN: final owner artwork files are not yet present.
+- UNKNOWN: production deployment of this merged commit has not been performed/verified by this task.
+
+## Exact Next Task
+
+**Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
+
+Do not begin another homepage redesign or commercial packaging redesign before this release verification is complete.
+
+## 2026-09-19 — Theme Preview / Guest Flow / Performance Refinement — CLOSED / VERIFIED
+
+- VERIFIED: PR #211 `feat: make theme previews guest-realistic and smoother` merged into `main` at `022a98add3debb48deb9dc3f5ee4936c4ebed0bc`.
+- VERIFIED: anonymous `/themes/preview?theme=<key>` now uses deterministic local `DEMO_MENU` data instead of a public-menu server round-trip; authenticated owner previews retain the owner-preview path.
+- VERIFIED: the demo restaurant now includes bilingual identity, local logo, branch/contact/hours, WhatsApp, nutrition/caffeine, availability, multiple categories, and a real variant/modifier example.
+- VERIFIED: every theme card exposes the real guest destination `/m/nafas?theme=<key>&src=theme-preview` and an on-demand QR generator for that exact URL.
+- VERIFIED: theme gallery imagery is lazy-loaded below the first card with async decoding and stable geometry.
+- VERIFIED: the canonical five-theme `ThemeRenderer` architecture and protected backend/auth/RLS/tenant/order/subscription boundaries were preserved.
+- VERIFIED: Quality #2110 passed route generation, typecheck, tests, W7.4–W7.10 contracts, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance stages.
+- VERIFIED: W9 Orders QA #366 passed.
+- BLOCKED / NON-BLOCKING: Picsart generation for the two homepage owner images was attempted but the connected account returned zero available credits; no fake placeholder was substituted.
+- UNKNOWN: final owner artwork files at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp` are still not verified as present.
+- UNKNOWN: direct production deployment identity for `022a98add3debb48deb9dc3f5ee4936c4ebed0bc`.
+- BLOCKED / NON-BLOCKING: Vercel preview/deployment status remains subject to the existing build/deployment rate-limit surface.
 - Implementation status: `DONE`.
-- Deployment status: `UNKNOWN` / no deployment performed by this task.
+- Deployment status: `UNKNOWN` for this merged commit.
 
-### Exact Next Task
+## Exact Next Task
 
-Owner supplies the two final homepage images and places them at the documented paths, then perform one controlled release verification against the merged `main` commit. Do not redesign the homepage again.
+**Place the two final homepage owner images at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`, then perform one controlled release verification and the physical Android/iOS/QR/theme/order/RTL smoke matrix.**
+
+Do not redesign the homepage or theme architecture again before this evidence is collected.
+
