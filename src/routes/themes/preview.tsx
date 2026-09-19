@@ -7,7 +7,7 @@ import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getOwnerPreviewMenu } from "@/lib/menu/owner";
-import { getPublicMenu } from "@/lib/menu/public";
+import { DEMO_MENU } from "@/lib/menu/demo";
 import { getTheme, isThemeKey, type ThemeKey } from "@/lib/theme";
 import type { PublicMenu } from "@/lib/menu/types";
 
@@ -27,8 +27,11 @@ function ThemePreviewPage() {
   useEffect(() => {
     setTheme(readPreviewTheme());
     if (isPending) return;
-    const request = user ? getOwnerPreviewMenu({ data: {} }) : getPublicMenu({ data: { slug: "nafas" } });
-    request.then((result) => {
+    if (!user) {
+      setState({ status: "ok", menu: DEMO_MENU });
+      return;
+    }
+    getOwnerPreviewMenu({ data: {} }).then((result) => {
       if (!result.ok) setState({ status: "error", message: result.error }); else setState({ status: "ok", menu: result.data });
     }).catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : "تعذر تحميل المعاينة" }));
   }, [user, isPending]);
@@ -45,7 +48,13 @@ function ThemePreviewPage() {
         <div className="hidden text-center sm:block"><strong className="block text-sm">{ar ? definition.name.ar : definition.name.en}</strong><span className="text-[11px] text-muted">{ar ? definition.promise.ar : definition.promise.en}</span></div>
         <a href={`/?theme=${encodeURIComponent(effectiveTheme)}#request-service`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-ink px-3 text-sm font-medium text-paper">{ar ? "استخدم هذا التصميم" : "Use this theme"}<ArrowUpLeft className="size-4" /></a>
       </div>
-      <div className="pt-16"><MenuThemeController theme={effectiveTheme} preview /><ThemeRenderer menu={previewMenu} preview /></div>
+      <div className="pt-16">
+        <div className="mx-auto max-w-7xl px-4 py-3 text-center text-xs text-muted sm:px-6">
+          {ar ? "هذه معاينة أصلية لبيانات تجريبية مصممة لتُظهر تجربة الضيف الفعلية. افتحها كضيف لرؤية المنيو بدون شريط المعاينة." : "This is a real guest-flow preview powered by original demo data. Open it as a guest to see the menu without the preview toolbar."}
+        </div>
+        <MenuThemeController theme={effectiveTheme} preview />
+        <ThemeRenderer menu={previewMenu} preview />
+      </div>
     </>
   );
 }
