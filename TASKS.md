@@ -209,3 +209,18 @@ Do not begin product/category deep links or native Web Share automatically.
 ### Exact Next Task
 
 Review PR #206 quality evidence and final diff; if clean, prepare one controlled merge to `main` without deploying.
+
+
+## 2026-09-19 — Homepage Redesign + Innovation Workflow — COMPLETE
+
+- VERIFIED: PR #206 merged into `main` at `0f2f145b64d41f670ee2508582f76e2196b53b67`.
+- VERIFIED: Quality run #2097 passed.
+- VERIFIED: W9 Orders QA run #357 passed.
+- VERIFIED: permanent Research, Innovation & Creative Intelligence workflow is now part of the repository routing contract.
+- BLOCKED / NON-BLOCKING: Vercel deployment remains blocked by the free daily deployment limit; no deployment was performed.
+- Implementation status: `DONE`.
+- Deployment status: `DEPLOYMENT_BLOCKED`.
+
+### Exact Next Task
+
+Release-stage production verification of the merged homepage, then physical Android/iOS/QR/theme/order/RTL smoke QA.
