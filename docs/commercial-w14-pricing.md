@@ -10,7 +10,7 @@ The existing subscription foundation was already the source of truth for plan li
 
 ## Canonical commercial decision — PH-06
 
-- `free`: 0 SAR/month, 0 SAR/year, 1 branch, 50 products, 3 team members, no trial.
+- `free`: 0 SAR/month, 0 SAR/year, 1 branch, 20 products, 2 team members, no trial.
 - `starter` / customer-facing **Growth**: 49 SAR/month, 490 SAR/year, 3 branches, 300 products, 10 team members, 14-day trial.
 - `pro`: 149 SAR/month, 1,490 SAR/year, 10 branches, unlimited products, 25 team members, 14-day trial.
 - Annual paid pricing is two months free versus twelve monthly payments: 16.67% savings.
@@ -75,3 +75,12 @@ Full release verification remains the repository Quality Gate: route generation,
 - https://tableqr.co/pricing/
 
 These sources are market context only. Menu V3 pricing is governed by the repository commercial contract above.
+
+
+## 2026-09-19 — Commercial packaging refinement
+
+- VERIFIED: Free is intentionally limited to 20 products and 2 team members.
+- VERIFIED: Growth remains 49 SAR/month, 490 SAR/year, 3 branches, 300 products, 10 team members.
+- VERIFIED: Pro remains 149 SAR/month, 1,490 SAR/year, 10 branches, unlimited products, 25 team members.
+- PROPOSED / COMMERCIAL UX: feature differentiation is presented as Free → Growth → Pro, with Free focused on menu basics, Growth on Intelligence/Growth/CRM capabilities, and Pro on cross-branch and advanced growth/AI capabilities.
+- IMPORTANT: server/database entitlement enforcement remains authoritative; feature-copy changes do not create client-side authorization.
