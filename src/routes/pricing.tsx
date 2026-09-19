@@ -3,15 +3,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowUpLeft } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { useLang } from "@/lib/lang";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
+import { COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
 
 export const Route = createFileRoute("/pricing")({ component: Pricing });
 
 function Pricing() {
   const { lang } = useLang();
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
-  const features = COMMERCIAL_FEATURES[lang];
-
   return (
     <div className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
@@ -50,7 +48,12 @@ function Pricing() {
                   <Limit label={lang === "ar" ? "أعضاء الفريق" : "Team members"} value={plan.maxTeamMembers} />
                 </div>
                 <ul className="mt-6 grid gap-3 text-sm">
-                  {features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-accent" /><span>{feature}</span></li>)}
+                  {COMMERCIAL_PLAN_FEATURES[plan.code].map((feature) => (
+                    <li key={feature.en} className="flex items-start gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-accent" />
+                      <span>{lang === "ar" ? feature.ar : feature.en}</span>
+                    </li>
+                  ))}
                 </ul>
                 <Link to="/" search={{ plan: plan.code, interval: billingInterval } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
                   {plan.code === "free" ? (lang === "ar" ? "ابدأ مجاناً" : "Start free") : (lang === "ar" ? "اطلب الترقية" : "Request upgrade")}

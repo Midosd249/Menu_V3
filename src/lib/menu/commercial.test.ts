@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice } from "./commercial-catalog.ts";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice } from "./commercial-catalog.ts";
 
 test("commercial plans mirror the approved monthly and annual catalog", () => {
   assert.deepEqual(
     COMMERCIAL_PLANS.map((plan) => [plan.code, plan.monthlyPriceSar, plan.annualPriceSar, plan.maxBranches, plan.maxTeamMembers]),
     [
-      ["free", 0, 0, 1, 3],
+      ["free", 0, 0, 1, 2],
       ["starter", 49, 490, 3, 10],
       ["pro", 149, 1490, 10, 25],
     ],
@@ -26,12 +26,17 @@ test("commercial catalog has one recommended plan and bilingual copy", () => {
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.code), ["free", "starter", "pro"]);
   assert.equal(COMMERCIAL_FEATURES.ar.length, COMMERCIAL_FEATURES.en.length);
   assert.ok(COMMERCIAL_FEATURES.ar.length >= 5);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.free.length, 6);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.starter.length, 6);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.pro.length, 6);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.free[3].ar, "حتى 20 صنفًا وفرع واحد");
+  assert.equal(COMMERCIAL_PLAN_FEATURES.pro[1].ar, "أصناف غير محدودة و10 فروع و25 عضوًا");
 });
 
 test("commercial plan limits are ordered and Pro products are explicitly unlimited", () => {
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxBranches), [1, 3, 10]);
-  assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxTeamMembers), [3, 10, 25]);
-  assert.equal(COMMERCIAL_PLANS[0].maxProducts, 50);
+  assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxTeamMembers), [2, 10, 25]);
+  assert.equal(COMMERCIAL_PLANS[0].maxProducts, 20);
   assert.equal(COMMERCIAL_PLANS[1].maxProducts, 300);
   assert.equal(COMMERCIAL_PLANS[2].maxProducts, Number.MAX_SAFE_INTEGER);
 });

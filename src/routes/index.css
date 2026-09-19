@@ -188,6 +188,7 @@
   padding: 1rem;
   color: white;
   background:
+    url("/homepage/menu-cover.webp") center / cover no-repeat,
     radial-gradient(circle at 68% 35%, #dca35e 0 12%, transparent 13%),
     radial-gradient(circle at 52% 52%, #9f4f31 0 18%, transparent 19%),
     linear-gradient(145deg, #264f43, #b26f38 55%, #f0d9ae);
@@ -256,7 +257,9 @@
 }
 
 .menuq-dish-red {
-  background: radial-gradient(circle at 50% 42%, #d66a4b 0 16%, #e4a94e 17% 30%, #f5e5ca 31% 37%, #934b32 38% 56%, #fff9ed 57%);
+  background:
+    url("/homepage/menu-dish.webp") center / cover no-repeat,
+    radial-gradient(circle at 50% 42%, #d66a4b 0 16%, #e4a94e 17% 30%, #f5e5ca 31% 37%, #934b32 38% 56%, #fff9ed 57%);
 }
 
 .menuq-dish-green {

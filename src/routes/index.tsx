@@ -20,7 +20,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
 import { MENU_THEMES } from "@/lib/theme";
 import "./index.css";
 
@@ -258,7 +258,7 @@ function Home() {
                   <span className="menuq-open-dot">● {lang === "ar" ? "مفتوح" : "Open"}</span>
                 </div>
                 <div className="menuq-cover-art">
-                  <span>{lang === "ar" ? "نكهة محلية، عرض معاصر" : "Local flavor, contemporary presentation"}</span>
+                  <span>{lang === "ar" ? "نكهة نجدية، بتقديم معاصر" : "Najdi flavor, contemporary presentation"}</span>
                 </div>
                 <div className="menuq-category-row">
                   <span className="active">{lang === "ar" ? "الأكثر طلبًا" : "Popular"}</span>
@@ -268,16 +268,16 @@ function Home() {
                 <div className="menuq-product-row">
                   <div className="menuq-dish menuq-dish-red" />
                   <div>
-                    <strong>{lang === "ar" ? "كبسة لحم" : "Lamb Kabsa"}</strong>
-                    <p>{lang === "ar" ? "أرز بسمتي، لحم مطهو ببطء" : "Basmati rice, slow-cooked lamb"}</p>
+                    <strong>{lang === "ar" ? "كبسة لحم نجدية" : "Najdi Lamb Kabsa"}</strong>
+                    <p>{lang === "ar" ? "أرز بسمتي مع لحم ضأن مطهو على مهل، متبّل بالبهارات السعودية ومزيّن باللوز المحمّص." : "Basmati rice with slow-cooked lamb, seasoned with Saudi spices and finished with toasted almonds."}</p>
                     <b>68 {lang === "ar" ? "ر.س" : "SAR"}</b>
                   </div>
                 </div>
                 <div className="menuq-product-row">
                   <div className="menuq-dish menuq-dish-green" />
                   <div>
-                    <strong>{lang === "ar" ? "سلطة موسمية" : "Seasonal salad"}</strong>
-                    <p>{lang === "ar" ? "أعشاب طازجة وتتبيلة ليمون" : "Fresh herbs, lemon dressing"}</p>
+                    <strong>{lang === "ar" ? "سلطة جرجير بالرمان" : "Arugula & Pomegranate Salad"}</strong>
+                    <p>{lang === "ar" ? "جرجير طازج، رمان، جبن أبيض وتتبيلة ليمون" : "Fresh arugula, pomegranate, white cheese, and lemon dressing"}</p>
                     <b>32 {lang === "ar" ? "ر.س" : "SAR"}</b>
                   </div>
                 </div>
@@ -529,16 +529,24 @@ function Home() {
                 </div>
                 <ul className="mt-6 space-y-3 text-sm">
                   <li><Check size={17} />{lang === "ar" ? `${plan.maxBranches} فرع` : `${plan.maxBranches} branch${plan.maxBranches === 1 ? "" : "es"}`}</li>
-                  <li><Check size={17} />{lang === "ar" ? `${plan.maxProducts.toLocaleString("ar-SA")} صنف` : `${plan.maxProducts.toLocaleString("en-US")} products`}</li>
+                  <li><Check size={17} />{plan.code === "pro" ? (lang === "ar" ? "أصناف غير محدودة" : "Unlimited products") : (lang === "ar" ? `${plan.maxProducts.toLocaleString("ar-SA")} صنف` : `${plan.maxProducts.toLocaleString("en-US")} products`)}</li>
                   <li><Check size={17} />{lang === "ar" ? `${plan.maxTeamMembers} أعضاء فريق` : `${plan.maxTeamMembers} team members`}</li>
                 </ul>
+                <div className="mt-5 grid gap-2 border-t pt-5">
+                  {COMMERCIAL_PLAN_FEATURES[plan.code].slice(0, 4).map((feature) => (
+                    <div key={feature.en} className="flex gap-2 text-xs leading-5 text-muted-foreground">
+                      <Check size={14} className="mt-0.5 shrink-0" />
+                      <span>{lang === "ar" ? feature.ar : feature.en}</span>
+                    </div>
+                  ))}
+                </div>
                 <Button asChild className="mt-7 w-full">{signup}</Button>
               </article>
             ))}
           </div>
 
           <div className="menuq-card mt-8">
-            <p className="font-medium">{lang === "ar" ? "موجود في منظومة المنيو" : "Inside the menu system"}</p>
+            <p className="font-medium">{lang === "ar" ? "المميزات الأساسية في جميع الباقات" : "Core features in every plan"}</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {COMMERCIAL_FEATURES[lang].map((feature) => (
                 <div key={feature} className="flex gap-2 text-sm text-muted-foreground">

@@ -14,6 +14,18 @@ const registry = read("src/lib/theme/registry.ts");
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
 
+test("homepage uses the commercial feature tiers and never renders the Pro sentinel", () => {
+  const home = read("src/routes/index.tsx");
+  const catalog = read("src/lib/menu/commercial-catalog.ts");
+  assert.match(home, /COMMERCIAL_PLAN_FEATURES/);
+  assert.match(home, /أصناف غير محدودة/);
+  assert.match(home, /plan\.code === "pro" \? \(lang === "ar" \? "أصناف غير محدودة"/);
+  assert.match(catalog, /maxProducts: 20, maxTeamMembers: 2/);
+  assert.match(catalog, /حتى 20 صنفًا وفرع واحد/);
+  assert.match(catalog, /تحليلات أعمق وMenu Intelligence/);
+  assert.match(catalog, /تحليلات موحدة عبر الفروع/);
+});
+
 test("homepage exposes canonical pricing and direct self-serve signup", () => {
   assert.match(home, /COMMERCIAL_PLANS\.map/);
   assert.match(home, /id="pricing"/);
