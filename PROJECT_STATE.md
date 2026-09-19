@@ -306,3 +306,20 @@ Release-stage production verification of the merged homepage on the permitted de
 ### Exact Next Task
 
 Owner supplies the two final homepage images and places them at the documented paths, then perform one controlled release verification against the merged `main` commit. Do not redesign the homepage again.
+
+
+## 2026-09-19 — Homepage Realistic Visuals — CLOSED / VERIFIED
+
+- VERIFIED: PR #213 `feat: add realistic homepage menu and analytics visuals` merged into canonical `main`.
+- VERIFIED: merge commit: `ccf25a80f9f3f6000cebed8c2b3d8162edfd3f24`.
+- VERIFIED: homepage visual assets were added by the merged PR, including the menu cover/dish imagery, realistic analytics preview, and five theme preview WebP assets.
+- VERIFIED: homepage source wiring changed in `src/routes/index.tsx` and `src/routes/index.css`; protected backend/auth/RLS/tenant/branch/order boundaries were not part of the PR diff.
+- VERIFIED: PR head had successful Vercel status before merge; no unresolved review threads were present.
+- UNKNOWN: physical-device visual QA of the merged homepage.
+- UNKNOWN: exact current Vercel Production deployment commit.
+- Implementation status: `DONE`.
+- Deployment status: `UNKNOWN` / no production deployment performed by this task.
+
+### Exact Next Task
+
+Release-stage verification of merged `main` for the homepage, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not automatically begin another homepage redesign.

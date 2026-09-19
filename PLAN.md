@@ -225,3 +225,19 @@ Review PR #206 quality evidence and final diff; if clean, prepare one controlled
 ### Exact Next Task
 
 Release-stage production verification of the merged homepage, then physical Android/iOS/QR/theme/order/RTL smoke QA.
+
+## 2026-09-19 — Homepage Realistic Visuals — CLOSED / VERIFIED
+
+- VERIFIED: PR #213 `feat: add realistic homepage menu and analytics visuals` was merged into canonical `main`.
+- VERIFIED: merge commit: `ccf25a80f9f3f6000cebed8c2b3d8162edfd3f24`.
+- VERIFIED: PR #213 changed only homepage presentation/assets: realistic menu cover/dish imagery, realistic Studio analytics preview, theme preview imagery, and related homepage wiring in `src/routes/index.tsx` / `src/routes/index.css`.
+- VERIFIED: GitHub combined status for PR head reported `Vercel: success` before merge.
+- VERIFIED: PR diff was ahead of the prior `main` by 2 commits and included the expected homepage asset/source changes.
+- UNKNOWN: physical-device visual QA of the merged homepage.
+- UNKNOWN: current Vercel Production deployment identity for merge commit `ccf25a80f9f3f6000cebed8c2b3d8162edfd3f24`.
+- Implementation status: `DONE`.
+- Deployment status: `UNKNOWN` / no production deployment performed by this task.
+
+### Exact Next Task
+
+Release-stage verification of the merged homepage when the deployment window is available, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not redesign the homepage again before verification.
