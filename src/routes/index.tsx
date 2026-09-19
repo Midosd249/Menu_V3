@@ -404,7 +404,7 @@ function Home() {
           <div className="menuq-studio-frame" aria-label={lang === "ar" ? "معاينة مساحة التحكم" : "Studio workspace preview"}>
             <div className="menuq-studio-top">
               <span>Studio</span>
-              <span>{lang === "ar" ? "مساحة المطعم" : "Restaurant workspace"}</span>
+              <span>{lang === "ar" ? "معاينة توضيحية" : "Illustrative preview"}</span>
             </div>
             <div className="menuq-studio-body">
               <aside>
@@ -422,9 +422,9 @@ function Home() {
                   <span className="menuq-live-pill">● Live</span>
                 </div>
                 <div className="menuq-metric-grid">
-                  <div><span>{lang === "ar" ? "زيارات" : "Visits"}</span><strong>2,480</strong></div>
-                  <div><span>{lang === "ar" ? "مشاهدات أصناف" : "Product views"}</span><strong>1,736</strong></div>
-                  <div><span>{lang === "ar" ? "فروع" : "Branches"}</span><strong>03</strong></div>
+                  <div><span>{lang === "ar" ? "زيارات" : "Visits"}</span><strong>—</strong></div>
+                  <div><span>{lang === "ar" ? "مشاهدات أصناف" : "Product views"}</span><strong>—</strong></div>
+                  <div><span>{lang === "ar" ? "فروع" : "Branches"}</span><strong>—</strong></div>
                 </div>
                 <div className="menuq-chart">
                   <span className="h-7" />
