@@ -29,7 +29,7 @@ test("homepage exposes canonical pricing and direct self-serve signup", () => {
 });
 
 test("homepage keeps a stable login entrypoint for both anonymous and authenticated visitors", () => {
-  assert.match(home, /<Button asChild size="sm"><Link to="\/login">\{lang === "ar" \? "دخول" : "Sign in"\}<\/Link><\/Button>/);
+  assert.match(home, /<Button asChild size="sm">\s*<Link to="\/login">\s*\{lang === "ar" \? "دخول" : "Sign in"\}\s*<\/Link>\s*<\/Button>/);
   assert.doesNotMatch(home, /<SignedIn>|<SignedOut>/);
   assert.doesNotMatch(home, /<Link to="\/studio">\{lang === "ar" \? "الاستوديو" : "Studio"\}<\/Link>/);
 });
