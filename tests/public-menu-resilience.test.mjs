@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -16,10 +17,11 @@ test("public menu hides the hours status chip when no schedule exists", async ()
   assert.match(source, /\{hours\.length \? <section[\s\S]*Opening hours/);
 });
 
+const read = (path) => readFileSync(path, "utf8");
 const publicServer = read("src/lib/menu/public.ts");
 assert.match(publicServer, /resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
 const demo = read("src/lib/menu/demo.ts");
-assert.match(demo, /nameEn: "Double Espresso"[\\s\\S]*imageUrl: "\/homepage\/menu-dish\\.webp"/);
+assert.match(demo, /nameEn: "Double Espresso"[\s\S]*imageUrl: "\/homepage\/menu-dish\.webp"/);
 const image = read("src/lib/menu/image.ts");
 assert.match(image, /MAX_IMAGE_DATA_URL_LENGTH = 450_000/);
 assert.match(image, /image\/webp/);
