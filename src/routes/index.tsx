@@ -10,9 +10,11 @@ import {
   Layers3,
   Menu,
   QrCode,
+  Search,
   ScanLine,
   Sparkles,
   Smartphone,
+  ShoppingBag,
   Store,
   X,
 } from "lucide-react";
@@ -245,51 +247,54 @@ function Home() {
             </div>
           </div>
 
-          <div className="menuq-hero-stage" aria-label={lang === "ar" ? "معاينة تجربة المنيو" : "Menu experience preview"}>
-            <div className="menuq-stage-note menuq-stage-note-top">
-              <QrCode size={15} />
-              {lang === "ar" ? "QR → المنيو → الإجراء التالي" : "QR → menu → next action"}
-            </div>
+          <div className="menuq-hero-stage" aria-label={lang === "ar" ? "معاينة منيو إلكتروني حقيقي" : "Real digital menu preview"}>
+            <div className="menuq-live-menu">
+              <header className="menuq-live-header">
+                <div className="menuq-live-brand">
+                  <div className="menuq-live-logo">نَ</div>
+                  <div>
+                    <strong>نَفَس</strong>
+                    <span>{lang === "ar" ? "قهوة مختصة ومخبوزات يومية" : "Specialty coffee & daily pastry"}</span>
+                  </div>
+                </div>
+                <div className="menuq-live-actions">
+                  <button aria-label={lang === "ar" ? "بحث" : "Search"}><Search size={16} /></button>
+                  <button aria-label={lang === "ar" ? "السلة" : "Cart"} className="menuq-cart-button"><ShoppingBag size={16} /><b>0</b></button>
+                </div>
+              </header>
 
-            <div className="menuq-phone menuq-phone-large">
-              <div className="menuq-phone-screen">
-                <div className="menuq-menu-top">
-                  <div>
-                    <span className="menuq-mini-label">نَفَس / NAFAS</span>
-                    <strong>{lang === "ar" ? "قائمة نَفَس" : "Nafas menu"}</strong>
-                  </div>
-                  <span className="menuq-open-dot">● {lang === "ar" ? "مفتوح" : "Open"}</span>
+              <div className="menuq-live-intro">
+                <div>
+                  <span className="menuq-live-kicker"><span className="menuq-live-status" /> {lang === "ar" ? "مفتوح الآن · العليا" : "Open now · Al Olaya"}</span>
+                  <h3>{lang === "ar" ? "أهلاً بك في نَفَس" : "Welcome to Nafas"}</h3>
+                  <p>{lang === "ar" ? "خذ لحظتك. اختر قهوتك. واستمتع بتفاصيل صُنعت بهدوء." : "Take your moment. Choose your coffee. Enjoy the details."}</p>
                 </div>
-                <div className="menuq-cover-art">
-                  <span>{lang === "ar" ? "قهوة مختصة ومخبوزات يومية" : "Specialty coffee & daily pastry"}</span>
-                </div>
-                <div className="menuq-category-row">
-                  <span className="active">{lang === "ar" ? "الكل" : "All"}</span>
-                  <span>{lang === "ar" ? "القهوة" : "Coffee"}</span>
-                  <span>{lang === "ar" ? "التوقيع" : "Signature"}</span>
-                </div>
-                <div className="menuq-product-row">
-                  <div className="menuq-dish menuq-dish-red" />
-                  <div>
-                    <strong>{lang === "ar" ? "إسبريسو مزدوج" : "Double Espresso"}</strong>
-                    <p>{lang === "ar" ? "قهوة مركزة بنهاية شوكولاتية ناعمة." : "A concentrated cup with a soft chocolate finish."}</p>
-                    <b>16 {lang === "ar" ? "ر.س" : "SAR"}</b>
-                  </div>
-                </div>
-                <div className="menuq-product-row">
-                  <div className="menuq-dish menuq-dish-green" />
-                  <div>
-                    <strong>{lang === "ar" ? "لاتيه نَفَس" : "Nafas Latte"}</strong>
-                    <p>{lang === "ar" ? "إسبريسو، حليب مبخر ولمسة فانيلا محمصة." : "Espresso, steamed milk and toasted vanilla."}</p>
-                    <b>22 {lang === "ar" ? "ر.س" : "SAR"}</b>
-                  </div>
-                </div>
+                <div className="menuq-live-meta"><Store size={15} /> {lang === "ar" ? "العليا، الرياض" : "Al Olaya, Riyadh"}</div>
               </div>
-            </div>
 
-            <div className="menuq-stage-note menuq-stage-note-bottom">
-              <Smartphone size={15} />
-              {lang === "ar" ? "مصمم للجوال أولاً" : "Mobile-first by design"}
+              <nav className="menuq-live-nav" aria-label={lang === "ar" ? "تصنيفات المنيو" : "Menu categories"}>
+                <span className="active">{lang === "ar" ? "الكل" : "All"}</span>
+                <span>{lang === "ar" ? "القهوة" : "Coffee"}</span>
+                <span>{lang === "ar" ? "التوقيع" : "Signature"}</span>
+                <span>{lang === "ar" ? "المخبوزات والحلى" : "Pastry & Dessert"}</span>
+              </nav>
+
+              <div className="menuq-live-body">
+                <div className="menuq-live-products">
+                  <div className="menuq-live-section-title"><div><span>{lang === "ar" ? "اختياراتنا" : "OUR PICKS"}</span><h4>{lang === "ar" ? "أطباق تستحق التجربة" : "Worth discovering"}</h4></div><small>8 {lang === "ar" ? "أصناف" : "items"}</small></div>
+                  <div className="menuq-live-product-grid">
+                    <article className="menuq-live-product"><div className="menuq-live-product-image menuq-live-product-espresso" /><div><h5>{lang === "ar" ? "إسبريسو مزدوج" : "Double Espresso"}</h5><p>{lang === "ar" ? "قهوة مركزة بنهاية شوكولاتية ناعمة." : "Soft chocolate finish."}</p><strong>16 {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? "إضافة إسبريسو" : "Add espresso"}>+</button></div></article>
+                    <article className="menuq-live-product"><div className="menuq-live-product-image menuq-live-product-latte" /><div><h5>{lang === "ar" ? "لاتيه نَفَس" : "Nafas Latte"}</h5><p>{lang === "ar" ? "حليب مبخر وفانيلا محمصة." : "Steamed milk, toasted vanilla."}</p><strong>22 {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? "إضافة لاتيه" : "Add latte"}>+</button></div></article>
+                  </div>
+                </div>
+                <aside className="menuq-live-order">
+                  <span className="menuq-live-order-icon"><ShoppingBag size={17} /></span>
+                  <strong>{lang === "ar" ? "سلتك جاهزة" : "Your order starts here"}</strong>
+                  <p>{lang === "ar" ? "أضف صنفًا لتبدأ طلبك بسهولة." : "Add an item to start your order."}</p>
+                  <button>{lang === "ar" ? "اطلب الآن" : "Order now"}<ArrowUpLeft size={14} /></button>
+                </aside>
+              </div>
+              <footer className="menuq-live-footer"><span><ScanLine size={14} /> {lang === "ar" ? "منيو رقمي · تجربة بلا انتظار" : "Digital menu · no waiting"}</span><span>{lang === "ar" ? "يفتح يوميًا 07:00" : "Open daily 07:00"}</span></footer>
             </div>
           </div>
         </div>
@@ -306,8 +311,8 @@ function Home() {
             </div>
             <p className="max-w-xl leading-7 text-muted-foreground">
               {lang === "ar"
-                ? "لا نعرض لك صورة هاتف فقط. نعرض المنطق الذي يجب أن يشعر به ضيفك: هوية واضحة، اكتشاف سريع، معلومات قابلة للقراءة، ثم إجراء واضح."
-                : "This is more than a phone mockup. It shows the logic your guest should feel: identity, discovery, readable information, then a clear next action."}
+                ? "لا نعرض لك صورة داخل جهاز. نعرض منيو إلكترونيًا حيًا: هوية واضحة، اكتشاف سريع، معلومات قابلة للقراءة، ثم إجراء طلب واضح."
+                : "This is not a device mockup. It is a living digital menu: clear identity, fast discovery, readable information, and an obvious order action."}
             </p>
           </div>
 
