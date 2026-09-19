@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { Flash } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
@@ -52,7 +52,7 @@ function BrandPage() {
     <div className="mx-auto grid max-w-2xl gap-6">
       <div>
         <h1 className="font-display text-2xl font-semibold">{t(copy.nav.brand, lang)}</h1>
-        <p className="text-sm text-muted">{lang === "ar" ? "ما يراه الضيف في رأس المنيو." : "What guests see at the top of the menu."}</p>
+        <p className="text-sm text-muted">{lang === "ar" ? "هوية المطعم والروابط التي يراها الضيف." : "Restaurant identity and guest-facing links."}</p>
       </div>
       <form
         className="grid gap-3"
@@ -82,7 +82,33 @@ function BrandPage() {
         <Field label={t(copy.studio.whatsappTpl, lang)}>
           <Textarea value={form.whatsappTemplate} onChange={(e) => set("whatsappTemplate", e.target.value)} />
         </Field>
-        <div className="grid gap-3 rounded-2xl border border-line bg-sand/30 p-4"><div><h2 className="text-sm font-semibold">{lang === "ar" ? "روابط الويب والشبكات الاجتماعية" : "Website & social links"}</h2><p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "أضف الروابط الكاملة. ستظهر للضيف فقط عندما تكون صالحة ومهيأة." : "Use full URLs. Guests only see links that are configured and valid."}</p></div><Field label={lang === "ar" ? "الموقع الإلكتروني" : "Website"}><Input value={form.websiteUrl} onChange={(e) => set("websiteUrl", e.target.value)} placeholder="https://example.com" inputMode="url" /></Field><Field label={t(copy.studio.instagram, lang)}><Input value={form.instagramUrl} onChange={(e) => set("instagramUrl", e.target.value)} placeholder="https://instagram.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "سناب شات" : "Snapchat"}><Input value={form.snapchatUrl} onChange={(e) => set("snapchatUrl", e.target.value)} placeholder="https://snapchat.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "فيسبوك" : "Facebook"}><Input value={form.facebookUrl} onChange={(e) => set("facebookUrl", e.target.value)} placeholder="https://facebook.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "تيك توك" : "TikTok"}><Input value={form.tiktokUrl} onChange={(e) => set("tiktokUrl", e.target.value)} placeholder="https://tiktok.com/@..." inputMode="url" /></Field></div>
+        <div className="grid gap-3 rounded-2xl border border-line bg-sand/30 p-4">
+          <div>
+            <h2 className="text-sm font-semibold">{lang === "ar" ? "روابط الويب والشبكات الاجتماعية" : "Website & social links"}</h2>
+            <p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "أضف الروابط الكاملة. ستظهر للضيف فقط عندما تكون صالحة ومهيأة." : "Use full URLs. Guests only see links that are configured and valid."}</p>
+          </div>
+          <Field label={lang === "ar" ? "الموقع الإلكتروني" : "Website"}>
+            <Input value={form.websiteUrl} onChange={(e) => set("websiteUrl", e.target.value)} placeholder="https://example.com" inputMode="url" />
+          </Field>
+          <Field label={t(copy.studio.instagram, lang)}>
+            <Input value={form.instagramUrl} onChange={(e) => set("instagramUrl", e.target.value)} placeholder="https://instagram.com/..." inputMode="url" />
+          </Field>
+          <Field label={lang === "ar" ? "سناب شات" : "Snapchat"}>
+            <Input value={form.snapchatUrl} onChange={(e) => set("snapchatUrl", e.target.value)} placeholder="https://snapchat.com/..." inputMode="url" />
+          </Field>
+          <Field label={lang === "ar" ? "فيسبوك" : "Facebook"}>
+            <Input value={form.facebookUrl} onChange={(e) => set("facebookUrl", e.target.value)} placeholder="https://facebook.com/..." inputMode="url" />
+          </Field>
+          <Field label={lang === "ar" ? "تيك توك" : "TikTok"}>
+            <Input value={form.tiktokUrl} onChange={(e) => set("tiktokUrl", e.target.value)} placeholder="https://tiktok.com/@..." inputMode="url" />
+          </Field>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-paper px-3 py-3 text-xs">
+            <span className="text-muted">{lang === "ar" ? "رابط الخريطة يُحفظ لكل فرع حتى يستطيع المطعم وضع موقع مختلف لكل فرع." : "Map links are branch-specific so each location can have its own destination."}</span>
+            <Link to="/studio/branches" className="font-semibold underline underline-offset-4">
+              {lang === "ar" ? "إدارة الفروع والخريطة" : "Manage branches & map"}
+            </Link>
+          </div>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label={t(copy.studio.primaryColor, lang)}>
             <Input type="color" value={form.primaryColor || "#171411"} onChange={(e) => set("primaryColor", e.target.value)} />
