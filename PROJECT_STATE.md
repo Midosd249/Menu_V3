@@ -240,3 +240,12 @@ Do not begin product/category deep links or native Web Share automatically.
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device, and include the QR single-print + multi-copy print-preview checks.**
 
 Do not begin product/category deep links or native Web Share automatically.
+
+
+## 2026-09-19 — Homepage Redesign Planning — DOCUMENTED / IMPLEMENTATION NOT STARTED
+- VERIFIED: execution plan: `docs/sessions/2026-09-19-homepage-redesign-execution-plan.md`.
+- VERIFIED: planning HEAD: `6c0ac3ffef3501698ecc2b93551d7d5f928896cb`.
+- VERIFIED: runtime code, schema, auth/RLS, themes, ordering, analytics, and deployment configuration were not changed by the planning task.
+- PROPOSED: after explicit owner approval, begin Phase 0 → Phase 1 only.
+- UNKNOWN: final typography, image assets, live visual/device evidence, and conversion baseline.
+- EXACT NEXT TASK: owner approval, then execute the first atomic homepage slice and verify it before broadening scope.
