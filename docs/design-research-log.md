@@ -236,3 +236,27 @@ For every material research activity record: source, access date, source categor
 
 ## Research decision rule
 Research is mandatory when the design choice is material, unfamiliar, consequential, or likely to affect accessibility, performance, SEO, conversion, or Saudi-market fit. Skip broad browsing when repository evidence already answers the question.
+
+## 2026-09-19 — QR printing and Arabic Editorial typography
+
+### MDN — printing, page layout, and user activation
+- Sources: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries/Printing ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40page ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/break-inside ; https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+- Access date: 2026-09-19
+- Category: authoritative web-platform documentation
+- VERIFIED finding: print-specific CSS can control page size and margins; `break-inside` can keep printed cards intact; `Window.open()` requires transient user activation and may be blocked when not opened directly from the user interaction.
+- Transferable principle: open the print browsing context synchronously from the print button, then perform asynchronous QR generation inside that already-open context; paginate the generated sheet with explicit print CSS.
+- Relevance: fixes the QR print action and provides the 2×4 multi-copy print-sheet contract.
+- Limitation: browser/device printer dialogs still require physical-device verification.
+- Confidence: HIGH
+- Must not copy: no external visual design or proprietary implementation.
+
+### MDN — Arabic-safe text wrapping and CSS Grid sizing
+- Sources: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-wrap ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/word-break ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-wrap ; https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids
+- Access date: 2026-09-19
+- Category: authoritative web-platform documentation
+- VERIFIED finding: normal word wrapping should be preferred over arbitrary character breaking; Grid `minmax(0, 1fr)` allows flexible text columns to absorb available width; `text-wrap` can improve typographic line composition.
+- Transferable principle: Editorial product names need a dedicated flexible title column, normal Arabic word boundaries, and a separate price row rather than competing number/title/price columns.
+- Relevance: closes the screenshot-observed Arabic title fragmentation and excessive vertical spacing.
+- Limitation: exact visual quality still depends on real content and device font rendering.
+- Confidence: HIGH
+- Must not copy: no external visual styling.
