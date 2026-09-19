@@ -19,7 +19,7 @@ test("homepage uses the commercial feature tiers and never renders the Pro senti
   const catalog = read("src/lib/menu/commercial-catalog.ts");
   assert.match(home, /COMMERCIAL_PLAN_FEATURES/);
   assert.match(home, /أصناف غير محدودة/);
-  assert.doesNotMatch(home, /plan\.maxProducts\.toLocaleString\("ar-SA"\)/);
+  assert.match(home, /plan\.code === "pro" \? \(lang === "ar" \? "أصناف غير محدودة"/);
   assert.match(catalog, /maxProducts: 20, maxTeamMembers: 2/);
   assert.match(catalog, /حتى 20 صنفًا وفرع واحد/);
   assert.match(catalog, /تحليلات أعمق وMenu Intelligence/);
