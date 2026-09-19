@@ -263,7 +263,9 @@
 }
 
 .menuq-dish-green {
-  background: radial-gradient(circle at 50% 42%, #a9c56a 0 15%, #5d8b49 16% 31%, #f4e7c9 32% 38%, #c68d4b 39% 56%, #fff9ed 57%);
+  background:
+    url("/homepage/menu-dish.webp") center / cover no-repeat,
+    radial-gradient(circle at 50% 42%, #a9c56a 0 15%, #5d8b49 16% 31%, #f4e7c9 32% 38%, #c68d4b 39% 56%, #fff9ed 57%);
 }
 
 .menuq-stage-note {
@@ -395,6 +397,24 @@
   line-height: 1.65;
 }
 
+.menuq-theme-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.85rem;
+  color: var(--mq-emerald);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.menuq-theme-link svg {
+  transition: transform 180ms ease;
+}
+
+.menuq-theme-card:hover .menuq-theme-link svg {
+  transform: translate(-2px, -2px);
+}
+
 .menuq-control-section {
   background: var(--mq-ivory);
 }
@@ -430,6 +450,20 @@
   border-radius: 1.8rem;
   background: #fdfdf9;
   box-shadow: 0 25px 80px rgba(25, 54, 44, 0.12);
+}
+
+.menuq-analytics-visual {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #132820;
+}
+
+.menuq-analytics-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .menuq-studio-top {
