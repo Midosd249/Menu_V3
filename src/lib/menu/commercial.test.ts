@@ -35,7 +35,7 @@ test("commercial catalog has one recommended plan and bilingual copy", () => {
 
 test("commercial plan limits are ordered and Pro products are explicitly unlimited", () => {
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxBranches), [1, 3, 10]);
-  assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxTeamMembers), [3, 10, 25]);
+  assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.maxTeamMembers), [2, 10, 25]);
   assert.equal(COMMERCIAL_PLANS[0].maxProducts, 20);
   assert.equal(COMMERCIAL_PLANS[1].maxProducts, 300);
   assert.equal(COMMERCIAL_PLANS[2].maxProducts, Number.MAX_SAFE_INTEGER);
