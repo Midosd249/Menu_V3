@@ -20,7 +20,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
-import { COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
 import { MENU_THEMES } from "@/lib/theme";
 import "./index.css";
 
