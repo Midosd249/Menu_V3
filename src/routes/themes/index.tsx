@@ -43,7 +43,7 @@ function ThemesPage() {
                   {qr[theme.key] ? <img src={qr[theme.key]} alt={lang === "ar" ? `رمز QR لمعاينة ${theme.name.ar}` : `QR code for ${theme.name.en} preview`} className="mx-auto size-28 rounded-lg bg-white p-2" /> : <button type="button" className="min-h-10 rounded-lg border border-line bg-paper text-xs font-medium" onClick={() => { void import("qrcode").then((QR) => QR.toDataURL(`${window.location.origin}/m/nafas?theme=${encodeURIComponent(theme.key)}&src=theme-preview`, { width: 420, margin: 2 })).then((data) => setQr((current) => ({ ...current, [theme.key]: data }))); }}>{lang === "ar" ? "إظهار رمز QR" : "Show QR code"}</button>}
                   <p className="text-[11px] leading-5 text-muted">{lang === "ar" ? "يفتح نفس المنيو التجريبية عبر مسار الضيف الحقيقي، وليس نسخة ثابتة." : "Opens the same demo menu through the real guest route, not a static mock."}</p>
                 </div>
-                <Link to="/" className="inline-flex h-10 items-center justify-center rounded-xl text-xs text-muted hover:text-ink">{lang === "ar" ? "اختيار من الرئيسية" : "Choose from home"}</Link></div>
+                <Link to="/" className="inline-flex h-10 items-center justify-center rounded-xl text-xs text-muted hover:text-ink">{lang === "ar" ? "اختيار من الرئيسية" : "Choose from home"}</Link>
               </div>
             </article>
           ))}
