@@ -30,3 +30,20 @@ test("theme preview uses the same canonical renderer", () => {
   assert.doesNotMatch(preview, /TasteTemplate/);
   assert.doesNotMatch(preview, /PublicMenuView/);
 });
+
+const demo = fs.readFileSync("src/lib/menu/demo.ts", "utf8");
+const themesIndex = fs.readFileSync("src/routes/themes/index.tsx", "utf8");
+
+test("anonymous theme previews use stable local demo data and a branded logo", () => {
+  assert.match(preview, /DEMO_MENU/);
+  assert.match(demo, /logoUrl: "\/demo\/nafas-logo\.svg"/);
+  assert.match(demo, /productOptions:/);
+  assert.match(demo, /hours:/);
+  assert.match(demo, /whatsapp:/);
+});
+
+test("theme gallery exposes the real guest route and on-demand QR", () => {
+  assert.match(themesIndex, /\/m\/nafas\?theme=/);
+  assert.match(themesIndex, /qrcode/);
+  assert.match(themesIndex, /Guest-flow QR|QR لتجربة الضيف/);
+});
