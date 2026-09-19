@@ -134,7 +134,7 @@ html[data-menu-theme="noir"] .menu-public-shell header {
   box-shadow: 0 50px 120px rgb(0 0 0 / .72);
 }
 html[data-menu-theme="noir"] .menu-public-shell header::after {
-  content: "N / 03";
+  content: none;
   color: var(--noir-hot);
   letter-spacing: .35em;
 }

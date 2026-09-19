@@ -26,15 +26,7 @@ html[data-menu-theme="noir"] .noir-template-hero {
 }
 
 html[data-menu-theme="noir"] .noir-template-hero::after {
-  content: "N / 03";
-  position: absolute;
-  inset-inline-end: clamp(1rem, 5vw, 2.5rem);
-  top: 1rem;
-  color: rgb(199 154 103 / 0.72);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  pointer-events: none;
+  content: none;
 }
 
 html[data-menu-theme="noir"] .noir-template-hero-inner {

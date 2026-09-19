@@ -15,10 +15,7 @@ html[data-menu-theme="editorial"] .menu-public-shell {
 }
 html[data-menu-theme="editorial"] .menu-public-shell header { position: relative; isolation: isolate; }
 html[data-menu-theme="editorial"] .menu-public-shell header::before {
-  content: "ISSUE / 03";
-  position: absolute; z-index: 3; inset-inline-end: 1.25rem; top: 1.25rem;
-  writing-mode: vertical-rl; color: rgb(255 255 255 / .76);
-  font: 700 .58rem/1 var(--font-sans); letter-spacing: .22em; pointer-events: none;
+  content: none;
 }
 html[data-menu-theme="editorial"] .menu-public-shell header > div {
   position: relative; min-height: inherit; display: flex; flex-direction: column; justify-content: flex-end;

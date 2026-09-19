@@ -74,14 +74,7 @@ html[data-menu-theme="noir"] .menu-public-shell header::before {
 }
 
 html[data-menu-theme="noir"] .menu-public-shell header::after {
-  content: "NOIR / 03";
-  position: absolute;
-  inset-inline-end: 1.25rem;
-  top: 1.2rem;
-  color: rgb(243 238 231 / 0.62);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.64rem;
-  letter-spacing: 0.20em;
+  content: none;
 }
 
 html[data-menu-theme="noir"] .menu-public-shell header img {
