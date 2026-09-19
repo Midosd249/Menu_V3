@@ -238,10 +238,10 @@ Release-stage production verification of the merged homepage, then physical Andr
 - VERIFIED: Quality #2103 passed all configured quality/browser stages.
 - VERIFIED: W9 Orders QA #361 passed.
 - UNKNOWN: final owner artwork files are not yet present.
-- UNKNOWN: production deployment of this merged commit has not been performed/verified by this task.
+- VERIFIED: Vercel production deployment `dpl_2UXTdNZKxjEUjBjYXdWJkG8pUFQM` is READY on main SHA `0dae1e27ee3bc813a7a683c2e48bd7bf09b2ba3f`; production HTTP returned 200.
 
 ## Exact Next Task
 
-**Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
+**Owner image placement at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`.**
 
 Do not begin another homepage redesign or commercial packaging redesign before this release verification is complete.
