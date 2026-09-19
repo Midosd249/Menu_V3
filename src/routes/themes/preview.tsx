@@ -46,7 +46,10 @@ function ThemePreviewPage() {
       <div className="fixed inset-x-0 top-0 z-[80] flex items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 py-3 text-ink shadow-sm backdrop-blur-md" dir={ar ? "rtl" : "ltr"}>
         <Link to="/themes" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line px-3 text-sm">← {ar ? "مقارنة التصاميم" : "Compare themes"}</Link>
         <div className="hidden text-center sm:block"><strong className="block text-sm">{ar ? definition.name.ar : definition.name.en}</strong><span className="text-[11px] text-muted">{ar ? definition.promise.ar : definition.promise.en}</span></div>
-        <a href={`/?theme=${encodeURIComponent(effectiveTheme)}#request-service`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-ink px-3 text-sm font-medium text-paper">{ar ? "استخدم هذا التصميم" : "Use this theme"}<ArrowUpLeft className="size-4" /></a>
+        <div className="flex items-center gap-2">
+          <a href={`/m/nafas?theme=${encodeURIComponent(effectiveTheme)}&src=theme-preview`} target="_blank" rel="noreferrer" className="hidden min-h-10 items-center gap-2 rounded-xl border border-line bg-paper px-3 text-sm font-medium sm:inline-flex">{ar ? "عرض كتجربة ضيف" : "Open as guest"}<ArrowUpLeft className="size-4" /></a>
+          <a href={`/?theme=${encodeURIComponent(effectiveTheme)}#request-service`} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-ink px-3 text-sm font-medium text-paper">{ar ? "استخدم هذا التصميم" : "Use this theme"}<ArrowUpLeft className="size-4" /></a>
+        </div>
       </div>
       <div className="pt-16">
         <div className="mx-auto max-w-7xl px-4 py-3 text-center text-xs text-muted sm:px-6">
