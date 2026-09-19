@@ -245,3 +245,22 @@ Release-stage production verification of the merged homepage, then physical Andr
 **Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
 
 Do not begin another homepage redesign or commercial packaging redesign before this release verification is complete.
+
+
+## 2026-09-19 — Homepage Realistic Visuals — CLOSED / VERIFIED
+
+- VERIFIED: PR #213 `feat: add realistic homepage menu and analytics visuals` merged into `main`.
+- VERIFIED: merge commit: `ccf25a80f9f3f6000cebed8c2b3d8162edfd3f24`.
+- VERIFIED: expected homepage assets are present in the merged PR diff, including `public/homepage/menu-cover.webp`, `public/homepage/menu-dish.webp`, and `public/homepage-analytics-real.png`, plus the new theme preview assets.
+- VERIFIED: `src/routes/index.tsx` and `src/routes/index.css` were the application source files changed by the homepage visual implementation.
+- VERIFIED: PR head had successful Vercel status before merge; no unresolved review threads were reported.
+- UNKNOWN: physical Android/iOS visual verification after merge.
+- UNKNOWN: direct current Production deployment identity.
+- Implementation status: `DONE`.
+- Deployment status: `UNKNOWN` / no production deployment performed by this task.
+
+## Exact Next Task
+
+**Release-stage verification of `main` after PR #213, then physical Android/iOS/QR/theme/order/RTL smoke QA.**
+
+Do not start another homepage redesign or replace these visuals again unless verification identifies a concrete defect.
