@@ -280,3 +280,29 @@ Review PR #206 quality evidence and final diff; if CI/browser gates are clean, p
 ### Exact Next Task
 
 Release-stage production verification of the merged homepage on the permitted deployment window, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not start another redesign before this verification.
+
+## 2026-09-19 — Commercial Packaging + Arabic Homepage Refinement — CLOSED / VERIFIED
+
+- VERIFIED: PR #208 merged into `main` at `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.
+- VERIFIED: Free commercial limit is now 20 products, 1 branch, and 2 team members.
+- VERIFIED: Growth remains 49 SAR/month, 490 SAR/year, 3 branches, 300 products, and 10 team members.
+- VERIFIED: Pro remains 149 SAR/month, 1,490 SAR/year, 10 branches, unlimited products, and 25 team members.
+- VERIFIED: plan-specific commercial feature packaging is now represented by `COMMERCIAL_PLAN_FEATURES` and surfaced on the public homepage and `/pricing`.
+- VERIFIED: the homepage no longer exposes the Pro `Number.MAX_SAFE_INTEGER` sentinel; Pro is displayed as unlimited products.
+- VERIFIED: Arabic homepage menu proof was refined to restaurant-native wording: `كبسة لحم نجدية`, a specific culinary description, and a more natural second dish example.
+- VERIFIED: two owner-supplied homepage image paths are wired with CSS fallbacks:
+  - `public/homepage/menu-cover.webp`
+  - `public/homepage/menu-dish.webp`
+- VERIFIED: database migration `migrations/20260919050000_commercial_packaging_correction.sql` updates the Free limits at the server/database boundary.
+- VERIFIED: server-side subscription fallback values were aligned to 20 products / 2 team members.
+- VERIFIED: Quality run #2103 passed typecheck, tests, W7 contract suites, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and responsive QA.
+- VERIFIED: W9 Orders QA run #361 passed.
+- VERIFIED: the first Quality run #2102 failed only because one existing commercial test still expected the old Free team limit of 3; the test was corrected and run #2103 passed.
+- UNKNOWN: the two final owner artwork files have not been added to the repository yet.
+- UNKNOWN: direct production deployment identity for `df2569e92e25380c6fc4957eba8b2d96353bd1f9` is not claimed by this task; no Vercel deployment was intentionally triggered.
+- Implementation status: `DONE`.
+- Deployment status: `UNKNOWN` / no deployment performed by this task.
+
+### Exact Next Task
+
+Owner supplies the two final homepage images and places them at the documented paths, then perform one controlled release verification against the merged `main` commit. Do not redesign the homepage again.

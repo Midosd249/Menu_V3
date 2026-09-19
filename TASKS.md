@@ -224,3 +224,24 @@ Review PR #206 quality evidence and final diff; if clean, prepare one controlled
 ### Exact Next Task
 
 Release-stage production verification of the merged homepage, then physical Android/iOS/QR/theme/order/RTL smoke QA.
+
+## 2026-09-19 — Commercial Packaging + Arabic Homepage Refinement — CLOSED / VERIFIED
+
+- VERIFIED: PR #208 merged into `main` at `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.
+- VERIFIED: Free = 20 products / 1 branch / 2 team members.
+- VERIFIED: Growth = 49 SAR monthly / 490 SAR annual / 300 products / 3 branches / 10 team members.
+- VERIFIED: Pro = 149 SAR monthly / 1,490 SAR annual / unlimited products / 10 branches / 25 team members.
+- VERIFIED: plan-specific feature packaging is surfaced in homepage and `/pricing`.
+- VERIFIED: Pro unlimited display no longer exposes the numeric sentinel.
+- VERIFIED: Arabic menu examples were refined using Saudi restaurant-native wording after competitor research.
+- VERIFIED: image slots are wired to `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`.
+- VERIFIED: Quality #2103 passed all configured quality/browser stages.
+- VERIFIED: W9 Orders QA #361 passed.
+- UNKNOWN: final owner artwork files are not yet present.
+- UNKNOWN: production deployment of this merged commit has not been performed/verified by this task.
+
+## Exact Next Task
+
+**Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
+
+Do not begin another homepage redesign or commercial packaging redesign before this release verification is complete.
