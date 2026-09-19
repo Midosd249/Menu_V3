@@ -1,4 +1,5 @@
-import { ArrowUpLeft, Check, Sparkles } from "lucide-react";
+import { ArrowUpLeft, Check, QrCode, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/lang";
 import { MENU_THEMES } from "@/lib/theme";
@@ -6,6 +7,7 @@ import { MENU_THEMES } from "@/lib/theme";
 export const Route = createFileRoute("/themes/")({ component: ThemesPage });
 
 function ThemesPage() {
+  const [qr, setQr] = useState<Record<string, string>>({});
   const { lang } = useLang();
   return (
     <main className="min-h-dvh bg-paper px-5 py-10 text-ink sm:py-16">
@@ -32,7 +34,16 @@ function ThemesPage() {
               <div className="grid gap-4 p-5">
                 <div><h2 className="font-semibold">{lang === "ar" ? theme.name.ar : theme.name.en}</h2><p className="mt-1 text-xs font-medium text-accent">{lang === "ar" ? theme.promise.ar : theme.promise.en}</p><p className="mt-2 text-sm leading-6 text-muted">{lang === "ar" ? theme.description.ar : theme.description.en}</p></div>
                 <div className="grid grid-cols-2 gap-2 text-xs"><span className="rounded-xl bg-sand px-3 py-2"><b className="block text-ink">{lang === "ar" ? "تقديم الأصناف" : "Product style"}</b>{theme.layout.productCard}</span><span className="rounded-xl bg-sand px-3 py-2"><b className="block text-ink">{lang === "ar" ? "الصور" : "Imagery"}</b>{theme.capabilities.imageFirst ? (lang === "ar" ? "صور أولاً" : "Image-led") : (lang === "ar" ? "مساندة" : "Supporting")}</span></div>
-                <div className="flex gap-2"><Link to="/themes/preview" search={{ theme: theme.key }} className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-line text-sm font-medium">{lang === "ar" ? "معاينة" : "Preview"}<ArrowUpLeft className="size-4" /></Link><Link to="/" className="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-ink text-sm font-medium text-paper">{lang === "ar" ? "اختيار من الرئيسية" : "Choose from home"}</Link></div>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Link to="/themes/preview" search={{ theme: theme.key }} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-line text-sm font-medium">{lang === "ar" ? "معاينة" : "Preview"}<ArrowUpLeft className="size-4" /></Link>
+                  <a href={`/m/nafas?theme=${encodeURIComponent(theme.key)}&src=theme-preview`} target="_blank" rel="noreferrer" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-ink text-sm font-medium text-paper">{lang === "ar" ? "فتح كتجربة ضيف" : "Open as guest"}<ArrowUpLeft className="size-4" /></a>
+                </div>
+                <div className="grid gap-2 rounded-xl border border-line bg-sand/35 p-3">
+                  <div className="flex items-center justify-between gap-2 text-xs font-semibold"><span>{lang === "ar" ? "QR لتجربة الضيف" : "Guest-flow QR"}</span><QrCode className="size-4 text-accent" /></div>
+                  {qr[theme.key] ? <img src={qr[theme.key]} alt={lang === "ar" ? `رمز QR لمعاينة ${theme.name.ar}` : `QR code for ${theme.name.en} preview`} className="mx-auto size-28 rounded-lg bg-white p-2" /> : <button type="button" className="min-h-10 rounded-lg border border-line bg-paper text-xs font-medium" onClick={() => { void import("qrcode").then((QR) => QR.toDataURL(`${window.location.origin}/m/nafas?theme=${encodeURIComponent(theme.key)}&src=theme-preview`, { width: 420, margin: 2 })).then((data) => setQr((current) => ({ ...current, [theme.key]: data }))); }}>{lang === "ar" ? "إظهار رمز QR" : "Show QR code"}</button>}
+                  <p className="text-[11px] leading-5 text-muted">{lang === "ar" ? "يفتح نفس المنيو التجريبية عبر مسار الضيف الحقيقي، وليس نسخة ثابتة." : "Opens the same demo menu through the real guest route, not a static mock."}</p>
+                </div>
+                <Link to="/" className="inline-flex h-10 items-center justify-center rounded-xl text-xs text-muted hover:text-ink">{lang === "ar" ? "اختيار من الرئيسية" : "Choose from home"}</Link></div>
               </div>
             </article>
           ))}
