@@ -1,4 +1,5 @@
-import { Instagram, MapPin, MessageCircle, Phone } from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { FacebookBrandIcon, InstagramBrandIcon, SnapchatBrandIcon, TikTokBrandIcon, WebsiteIcon } from "@/components/brand-icons";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { ACTIVE_EXPERIMENT } from "@/lib/menu/experiment";
 import { getPublicActions } from "@/lib/menu/public-actions";
@@ -14,7 +15,7 @@ type PublicActionLinksProps = {
   experimentVariant?: "control" | "prominent";
 };
 
-const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, instagram: Instagram };
+const ICONS = { whatsapp: MessageCircle, location: MapPin, phone: Phone, website: WebsiteIcon, instagram: InstagramBrandIcon, snapchat: SnapchatBrandIcon, facebook: FacebookBrandIcon, tiktok: TikTokBrandIcon };
 
 export function PublicActionLinks({ tenant, branch, lang, preview = false, className, experimentVariant = "control" }: PublicActionLinksProps) {
   const actions = getPublicActions(tenant, branch, lang);

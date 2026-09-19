@@ -74,7 +74,7 @@ export const DEMO_MENU: PublicMenu = {
       id: "demo-espresso", tenantId: DEMO_TENANT_ID, categoryId: "demo-coffee", sortOrder: 1,
       nameAr: "إسبريسو مزدوج", nameEn: "Double Espresso", descriptionAr: "قهوة مركزة بنهاية شوكولاتية ناعمة.",
       descriptionEn: "A concentrated cup with a soft chocolate finish.", price: 16, currency: "SAR",
-      imageUrl: image("photo-1514437215073-8b5b8f9b7a4a"), calories: 8, sodiumMg: 4, caffeineMg: 126, caffeineBasis: "per_cup", isAvailable: true, isFeatured: true,
+      imageUrl: "/homepage/menu-dish.webp", calories: 8, sodiumMg: 4, caffeineMg: 126, caffeineBasis: "per_cup", isAvailable: true, isFeatured: true,
       allergens: "", tags: ["coffee", "hot"], dietaryLabels: [],
     },
     {

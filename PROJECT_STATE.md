@@ -346,3 +346,15 @@ Release-stage verification of merged `main` for the homepage, followed by the pr
 **Release-stage verification of current `main` at `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks.**
 
 Do not start another homepage redesign, theme redesign, product/category deep-link work, or native Web Share work before this release/device evidence is closed.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — IN PROGRESS
+
+- VERIFIED: starting main `1a225a26651c84715f79d607b30767a8e95e9b52`.
+- VERIFIED: branch `fix/public-menu-social-images-performance-2026-09-20`.
+- VERIFIED: task scope contains only the four reported defects plus the required shared social/icon contracts.
+- IN PROGRESS: detailed 1–10 plan is saved in `docs/sessions/2026-09-20-public-menu-reliability-social-image-contract.md`.
+- UNKNOWN: final verification, CI, browser/device, and production deployment evidence.
+
+### Exact Next Task
+Complete verification and final diff review for this batch, then one PR; do not automatically begin another task.

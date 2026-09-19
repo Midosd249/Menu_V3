@@ -293,3 +293,36 @@ Do not begin another homepage redesign or commercial packaging redesign before t
 **Release-stage verification of `main` after PR #213, then physical Android/iOS/QR/theme/order/RTL smoke QA.**
 
 Do not start another homepage redesign or replace these visuals again unless verification identifies a concrete defect.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — IN PROGRESS
+
+### Scope
+- Double Espresso theme-preview image reliability.
+- Public customer QR/menu loading performance.
+- Studio website + Instagram + Snapchat + Facebook + TikTok registration.
+- Permanent image payload-size contract for logo/cover/product uploads.
+- Recognizable social brand marks and existing theme-appropriate action presentation.
+
+### Branch
+`fix/public-menu-social-images-performance-2026-09-20`
+
+### Exact Plan
+1. Boot/evidence.
+2. Theme preview media.
+3. Public-menu performance.
+4. Studio brand model.
+5. Image contract.
+6. Public social actions.
+7. Icon/placement system.
+8. Regression tests.
+9. Browser/mobile review.
+10. Release/continuity.
+
+### Status
+- Implementation: `IMPLEMENTATION_IN_PROGRESS`.
+- Deployment: no intentional Vercel/Production deployment during implementation.
+- UNKNOWN: final CI/browser/device/production evidence.
+
+### Exact Next Task
+Finish this same atomic batch, verify it, prepare one PR, and stop.

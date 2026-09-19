@@ -25,6 +25,10 @@ function BrandPage() {
     whatsapp: tenant.whatsapp,
     whatsappTemplate: tenant.whatsappTemplate,
     instagramUrl: tenant.instagramUrl,
+    websiteUrl: tenant.websiteUrl ?? "",
+    snapchatUrl: tenant.snapchatUrl ?? "",
+    facebookUrl: tenant.facebookUrl ?? "",
+    tiktokUrl: tenant.tiktokUrl ?? "",
     logoUrl: tenant.logoUrl,
     coverUrl: tenant.coverUrl,
     primaryColor: tenant.primaryColor,
@@ -78,9 +82,7 @@ function BrandPage() {
         <Field label={t(copy.studio.whatsappTpl, lang)}>
           <Textarea value={form.whatsappTemplate} onChange={(e) => set("whatsappTemplate", e.target.value)} />
         </Field>
-        <Field label={t(copy.studio.instagram, lang)}>
-          <Input value={form.instagramUrl} onChange={(e) => set("instagramUrl", e.target.value)} />
-        </Field>
+        <div className="grid gap-3 rounded-2xl border border-line bg-sand/30 p-4"><div><h2 className="text-sm font-semibold">{lang === "ar" ? "روابط الويب والشبكات الاجتماعية" : "Website & social links"}</h2><p className="mt-1 text-xs leading-5 text-muted">{lang === "ar" ? "أضف الروابط الكاملة. ستظهر للضيف فقط عندما تكون صالحة ومهيأة." : "Use full URLs. Guests only see links that are configured and valid."}</p></div><Field label={lang === "ar" ? "الموقع الإلكتروني" : "Website"}><Input value={form.websiteUrl} onChange={(e) => set("websiteUrl", e.target.value)} placeholder="https://example.com" inputMode="url" /></Field><Field label={t(copy.studio.instagram, lang)}><Input value={form.instagramUrl} onChange={(e) => set("instagramUrl", e.target.value)} placeholder="https://instagram.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "سناب شات" : "Snapchat"}><Input value={form.snapchatUrl} onChange={(e) => set("snapchatUrl", e.target.value)} placeholder="https://snapchat.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "فيسبوك" : "Facebook"}><Input value={form.facebookUrl} onChange={(e) => set("facebookUrl", e.target.value)} placeholder="https://facebook.com/..." inputMode="url" /></Field><Field label={lang === "ar" ? "تيك توك" : "TikTok"}><Input value={form.tiktokUrl} onChange={(e) => set("tiktokUrl", e.target.value)} placeholder="https://tiktok.com/@..." inputMode="url" /></Field></div>
         <div className="grid grid-cols-2 gap-3">
           <Field label={t(copy.studio.primaryColor, lang)}>
             <Input type="color" value={form.primaryColor || "#171411"} onChange={(e) => set("primaryColor", e.target.value)} />

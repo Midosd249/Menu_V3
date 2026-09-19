@@ -150,16 +150,8 @@ export const getPublicMenu = createServerFn({ method: "GET" })
     if (!result.ok) return result;
 
     const sql = await getSql();
-    const tenants = await sql<{ id: string; whatsapp: string | null }>`
-      select id, whatsapp from tenants
-      where slug = ${data.slug} and is_active = true and is_published = true
-      limit 1
-    `;
-    const tenant = tenants[0];
-    if (!tenant) return result;
-
-    const session = await resolveAnonymousSession(sql, String(tenant.id));
-    const experimentVariant = tenant.whatsapp?.trim()
+    const session = await resolveAnonymousSession(sql, result.data.tenant.id);
+    const experimentVariant = result.data.tenant.whatsapp?.trim()
       ? getExperimentVariant(session.id)
       : "control" as const;
 

@@ -266,3 +266,14 @@ Release-stage production verification of the merged homepage, then physical Andr
 ### Exact Next Task
 
 Release-stage verification of the merged homepage when the deployment window is available, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not redesign the homepage again before verification.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — IN PROGRESS
+
+- VERIFIED: starting main `1a225a26651c84715f79d607b30767a8e95e9b52`.
+- VERIFIED: scope is limited to Double Espresso preview media, public-menu performance, Studio website/social fields, image payload failures, and recognizable social actions.
+- IN PROGRESS: execution plan 1–10 is recorded in `docs/sessions/2026-09-20-public-menu-reliability-social-image-contract.md`.
+- UNKNOWN: final CI/browser/device/production evidence until verification completes.
+
+### Exact Next Task
+Complete this single release batch through verification and one PR; do not start unrelated work automatically.

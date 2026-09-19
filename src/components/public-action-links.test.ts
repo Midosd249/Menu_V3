@@ -5,7 +5,7 @@ import type { Branch, Tenant } from "../lib/menu/types.ts";
 
 const tenant: Tenant = {
   id: "t1", ownerUserId: "u1", slug: "restaurant", nameAr: "مطعم", nameEn: "Restaurant",
-  taglineAr: "", taglineEn: "", logoUrl: "", coverUrl: "", instagramUrl: "https://www.instagram.com/restaurant/",
+  taglineAr: "", taglineEn: "", logoUrl: "", coverUrl: "", instagramUrl: "https://www.instagram.com/restaurant/", websiteUrl: "https://restaurant.example.com/", snapchatUrl: "https://www.snapchat.com/add/restaurant", facebookUrl: "https://www.facebook.com/restaurant", tiktokUrl: "https://www.tiktok.com/@restaurant",
   whatsapp: "0551234567", whatsappTemplate: "Hello {restaurant} — {product}", primaryColor: "#111", accentColor: "#a2472f",
   themeKey: "editorial", currency: "SAR", city: "Riyadh", country: "SA", isPublished: true, isActive: true,
   createdAt: "", updatedAt: "",
@@ -35,7 +35,7 @@ test("WhatsApp URL is normalized and template values are encoded", () => {
 
 test("actions are data-driven and disappear when destinations are missing or invalid", () => {
   const actions = getPublicActions(tenant, branch, "ar");
-  assert.deepEqual(actions.map((action) => action.key), ["whatsapp", "location", "phone", "instagram"]);
-  const missing = getPublicActions({ ...tenant, whatsapp: "", instagramUrl: "javascript:alert(1)" }, { ...branch, mapsUrl: "", phone: "" }, "ar");
-  assert.deepEqual(missing, []);
+  assert.deepEqual(actions.map((action) => action.key), ["whatsapp", "website", "location", "phone", "instagram", "snapchat", "facebook", "tiktok"]);
+  const missing = getPublicActions({ ...tenant, whatsapp: "", websiteUrl: "javascript:alert(1)", instagramUrl: "javascript:alert(1)", snapchatUrl: "http://snapchat.com/x", facebookUrl: "https://facebook.com/x", tiktokUrl: "https://tiktok.com/@x" }, { ...branch, mapsUrl: "", phone: "" }, "ar");
+  assert.deepEqual(missing.map((action) => action.key), ["facebook", "tiktok"]);
 });
