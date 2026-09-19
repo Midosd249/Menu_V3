@@ -262,3 +262,21 @@ Do not begin product/category deep links or native Web Share automatically.
 ### Exact Next Task
 
 Review PR #206 quality evidence and final diff; if CI/browser gates are clean, prepare the homepage batch for one controlled merge to `main`. Do not deploy automatically.
+
+
+## 2026-09-19 — Homepage Redesign + Innovation Workflow — VERIFIED / MERGED
+
+- VERIFIED: PR #206 is merged into canonical `main`.
+- VERIFIED: merged `main` commit is `0f2f145b64d41f670ee2508582f76e2196b53b67`.
+- VERIFIED: `Menu V3 Quality` run #2097 passed: route generation, typecheck, 319 tests, W7 contract suites, lint, production build, Playwright/browser template QA, Studio/Platform Admin responsive browser QA.
+- VERIFIED: `Menu V3 W9 Orders QA` run #357 passed.
+- VERIFIED: the homepage implementation remains limited to presentation, focused regression coverage, permanent innovation workflow, research record, and continuity documentation; protected backend/auth/RLS/tenant/branch/order/theme boundaries were not changed.
+- VERIFIED: permanent `Research, Innovation & Creative Intelligence Agent` is now stored in the repository and wired into specialist routing.
+- BLOCKED / NON-BLOCKING: Vercel status remains rate-limited by `api-deployments-free-per-day`; no production deployment was performed.
+- UNKNOWN: physical-device production QA for the new homepage and the exact currently deployed production SHA.
+- Implementation status: `DONE` for the authorized homepage implementation slice.
+- Deployment status: `DEPLOYMENT_BLOCKED` / no deployment performed.
+
+### Exact Next Task
+
+Release-stage production verification of the merged homepage on the permitted deployment window, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not start another redesign before this verification.
