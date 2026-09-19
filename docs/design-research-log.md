@@ -312,3 +312,12 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - VERIFIED: the new permanent Research, Innovation & Creative Intelligence Agent is now part of the repository's specialist-routing contract.
 - PROPOSED: use fresh design intelligence as a filter for ideas, not as a reason to continuously redesign completed product areas.
 - PROPOSED: prioritize real product proof, editorial hospitality composition, strong Arabic typography, restrained motion, and current section-level inspiration over generic SaaS gradients or decorative 3D.
+
+
+## 2026-09-19 — Saudi competitor / Arabic menu research
+
+- VERIFIED: Menulisa publicly presents Free around a 20-item digital menu and scales limits/features as restaurants grow. citeturn2search0
+- VERIFIED: TableGreet's Saudi Arabic page uses restaurant-native Arabic dish naming and descriptions such as «كبسة الحاشي الملكية بالزعفران» and emphasizes native RTL presentation rather than literal translation. citeturn1search1
+- VERIFIED: Qayema positions Arabic-first bilingual menus, curated editorial templates, QR, WhatsApp ordering, analytics, and AI-assisted menu setup as a coherent restaurant workflow. citeturn1search0
+- INFERRED: Menu V3 homepage Arabic copy should use natural Saudi restaurant/menu language, specific dish naming, concise culinary descriptions, and visible plan progression instead of generic translated phrasing.
+- PROPOSED: the homepage hero preview supports two owner-supplied visual assets at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`.
