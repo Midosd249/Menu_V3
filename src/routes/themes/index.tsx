@@ -1,5 +1,5 @@
 import { ArrowUpLeft, Check, QrCode, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/lang";
 import { MENU_THEMES } from "@/lib/theme";
