@@ -48,11 +48,11 @@ test("Taste preserves data-driven customer action ownership", async () => {
   assert.match(actions, /key: "whatsapp"/);
   assert.match(actions, /key: "location"/);
   assert.match(actions, /key: "phone"/);
-  assert.match(actions, /key: "instagram"/);
-  assert.match(actions, /key: "website"/);
-  assert.match(actions, /key: "snapchat"/);
-  assert.match(actions, /key: "facebook"/);
-  assert.match(actions, /key: "tiktok"/);
+  assert.match(actions, /\["instagram", tenant\.instagramUrl\]/);
+  assert.match(actions, /\["website"/);
+  assert.match(actions, /\["snapchat"/);
+  assert.match(actions, /\["facebook"/);
+  assert.match(actions, /\["tiktok"/);
 });
 
 test("Taste mobile rows preserve compact image-to-copy geometry", async () => {
