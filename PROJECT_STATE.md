@@ -299,10 +299,10 @@ Release-stage production verification of the merged homepage on the permitted de
 - VERIFIED: W9 Orders QA run #361 passed.
 - VERIFIED: the first Quality run #2102 failed only because one existing commercial test still expected the old Free team limit of 3; the test was corrected and run #2103 passed.
 - UNKNOWN: the two final owner artwork files have not been added to the repository yet.
-- UNKNOWN: direct production deployment identity for `df2569e92e25380c6fc4957eba8b2d96353bd1f9` is not claimed by this task; no Vercel deployment was intentionally triggered.
+- VERIFIED: Vercel production deployment `dpl_2UXTdNZKxjEUjBjYXdWJkG8pUFQM` is READY and targets `production` at main SHA `0dae1e27ee3bc813a7a683c2e48bd7bf09b2ba3f`; production HTTP returned 200.
 - Implementation status: `DONE`.
-- Deployment status: `UNKNOWN` / no deployment performed by this task.
+- Deployment status: `DEPLOYED` — VERIFIED.
 
 ### Exact Next Task
 
-Owner supplies the two final homepage images and places them at the documented paths, then perform one controlled release verification against the merged `main` commit. Do not redesign the homepage again.
+Owner supplies the two final homepage images and places them at the documented paths. Do not redesign the homepage again.
