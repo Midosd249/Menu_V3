@@ -401,45 +401,18 @@ function Home() {
             </div>
           </div>
 
-          <div className="menuq-studio-frame" aria-label={lang === "ar" ? "معاينة مساحة التحكم" : "Studio workspace preview"}>
+          <div className="menuq-studio-frame" aria-label={lang === "ar" ? "معاينة مساحة التحليلات" : "Studio analytics preview"}>
             <div className="menuq-studio-top">
               <span>Studio</span>
               <span>{lang === "ar" ? "معاينة توضيحية" : "Illustrative preview"}</span>
             </div>
-            <div className="menuq-studio-body">
-              <aside>
-                <span className="active">{lang === "ar" ? "نظرة عامة" : "Overview"}</span>
-                <span>{lang === "ar" ? "المنيو" : "Menu"}</span>
-                <span>{lang === "ar" ? "الفروع" : "Branches"}</span>
-                <span>{lang === "ar" ? "الذكاء" : "Intelligence"}</span>
-              </aside>
-              <div className="menuq-studio-main">
-                <div className="menuq-studio-heading">
-                  <div>
-                    <span className="menuq-mini-label">{lang === "ar" ? "آخر 7 أيام" : "LAST 7 DAYS"}</span>
-                    <h3>{lang === "ar" ? "إشارات الضيوف" : "Guest signals"}</h3>
-                  </div>
-                  <span className="menuq-live-pill">● Live</span>
-                </div>
-                <div className="menuq-metric-grid">
-                  <div><span>{lang === "ar" ? "زيارات" : "Visits"}</span><strong>—</strong></div>
-                  <div><span>{lang === "ar" ? "مشاهدات أصناف" : "Product views"}</span><strong>—</strong></div>
-                  <div><span>{lang === "ar" ? "فروع" : "Branches"}</span><strong>—</strong></div>
-                </div>
-                <div className="menuq-chart">
-                  <span className="h-7" />
-                  <span className="h-12" />
-                  <span className="h-10" />
-                  <span className="h-16" />
-                  <span className="h-14" />
-                  <span className="h-20" />
-                  <span className="h-24" />
-                </div>
-                <div className="menuq-studio-note">
-                  <Sparkles size={16} />
-                  <span>{lang === "ar" ? "حوّل الإشارة إلى قرار محتوى قابل للاختبار." : "Turn a signal into a content decision you can test."}</span>
-                </div>
-              </div>
+            <div className="menuq-analytics-visual">
+              <span className="sr-only">Guest signals / إشارات الضيوف</span>
+              <img
+                src="/homepage-analytics.png"
+                alt={lang === "ar" ? "لوحة تحليلات تعرض الزيارات ومشاهدات المنتجات ومسح الرموز وأداء الفروع" : "Analytics dashboard showing visits, product views, QR scans, and branch performance"}
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
