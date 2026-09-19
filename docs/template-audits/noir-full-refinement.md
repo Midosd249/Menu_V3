@@ -140,3 +140,10 @@ Browser/visual:
 - Implementation: **IN_PROGRESS / awaiting automated browser verification**.
 - Deployment: **NOT DEPLOYED by this task; no Vercel deployment intentionally triggered**.
 - Remaining blocker: browser/device evidence and complete repository quality gate must run before visual closure.
+
+## 2026-09-19 — Label cleanup reconciliation
+
+- VERIFIED: the active Noir presentation no longer renders the decorative `N / 03` identifier.
+- VERIFIED: the active Noir presentation no longer renders the decorative `NOIR / 03` header label.
+- Decision: decorative numeric/header identifiers are not part of the current Noir acceptance contract; the hero remains data-driven and visually restrained without them.
+- This supersedes the earlier recommendation to preserve `N / 03` as a decorative accent.
