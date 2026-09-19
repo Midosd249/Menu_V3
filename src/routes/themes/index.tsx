@@ -27,8 +27,9 @@ function ThemesPage() {
         <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {MENU_THEMES.map((theme, index) => (
             <article key={theme.key} className="group overflow-hidden rounded-3xl border border-line bg-paper shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-              <div className={`menu-theme-preview ${theme.preview.className} relative min-h-[220px] overflow-hidden`} style={theme.preview.image ? { backgroundImage: `linear-gradient(180deg, rgb(0 0 0 / .08), rgb(0 0 0 / .68)), url(${theme.preview.image})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}>
-                <div className="absolute inset-0 bg-black/5 transition duration-500 group-hover:scale-105" />
+              <div className={`menu-theme-preview ${theme.preview.className} relative min-h-[220px] overflow-hidden`}>
+                {theme.preview.image ? <img src={theme.preview.image} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" fetchPriority={index === 0 ? "high" : "low"} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : null}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/70" />
                 <div className="relative z-10 flex h-full min-h-[220px] flex-col justify-between p-5 text-white"><div className="flex items-center justify-between gap-3"><span className="text-[10px] uppercase tracking-[.18em] opacity-80">{String(index + 1).padStart(2, "0")} · {theme.key}</span><span className="rounded-full border border-white/30 bg-black/20 px-2 py-1 text-[10px] font-semibold backdrop-blur">{lang === "ar" ? "متاح" : "Available"}</span></div><strong className="font-display text-3xl font-semibold drop-shadow-md">{lang === "ar" ? theme.name.ar : theme.name.en}</strong></div>
               </div>
               <div className="grid gap-4 p-5">
