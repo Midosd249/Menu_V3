@@ -134,7 +134,10 @@ const FAQS = [
 function Home() {
   const { lang } = useLang();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const themeCards = useMemo(() => MENU_THEMES.map((theme) => ({ ...theme })), []);
+  const themeCards = useMemo(
+    () => MENU_THEMES.map((theme) => ({ ...theme, preview: { ...theme.preview, image: `/homepage/themes/${theme.key}.webp` } })),
+    [],
+  );
   const signup = (
     <Link to="/login" search={{ mode: "signup" } as never}>
       {lang === "ar" ? "ابدأ مجانًا" : "Start free"}
@@ -252,33 +255,33 @@ function Home() {
               <div className="menuq-phone-screen">
                 <div className="menuq-menu-top">
                   <div>
-                    <span className="menuq-mini-label">مذاق / TASTE</span>
-                    <strong>{lang === "ar" ? "قائمة اليوم" : "Today's menu"}</strong>
+                    <span className="menuq-mini-label">نَفَس / NAFAS</span>
+                    <strong>{lang === "ar" ? "قائمة نَفَس" : "Nafas menu"}</strong>
                   </div>
                   <span className="menuq-open-dot">● {lang === "ar" ? "مفتوح" : "Open"}</span>
                 </div>
                 <div className="menuq-cover-art">
-                  <span>{lang === "ar" ? "نكهة نجدية، بتقديم معاصر" : "Najdi flavor, contemporary presentation"}</span>
+                  <span>{lang === "ar" ? "قهوة مختصة ومخبوزات يومية" : "Specialty coffee & daily pastry"}</span>
                 </div>
                 <div className="menuq-category-row">
-                  <span className="active">{lang === "ar" ? "الأكثر طلبًا" : "Popular"}</span>
-                  <span>{lang === "ar" ? "المقبلات" : "Starters"}</span>
-                  <span>{lang === "ar" ? "الأطباق" : "Mains"}</span>
+                  <span className="active">{lang === "ar" ? "الكل" : "All"}</span>
+                  <span>{lang === "ar" ? "القهوة" : "Coffee"}</span>
+                  <span>{lang === "ar" ? "التوقيع" : "Signature"}</span>
                 </div>
                 <div className="menuq-product-row">
                   <div className="menuq-dish menuq-dish-red" />
                   <div>
-                    <strong>{lang === "ar" ? "كبسة لحم نجدية" : "Najdi Lamb Kabsa"}</strong>
-                    <p>{lang === "ar" ? "أرز بسمتي مع لحم ضأن مطهو على مهل، متبّل بالبهارات السعودية ومزيّن باللوز المحمّص." : "Basmati rice with slow-cooked lamb, seasoned with Saudi spices and finished with toasted almonds."}</p>
-                    <b>68 {lang === "ar" ? "ر.س" : "SAR"}</b>
+                    <strong>{lang === "ar" ? "إسبريسو مزدوج" : "Double Espresso"}</strong>
+                    <p>{lang === "ar" ? "قهوة مركزة بنهاية شوكولاتية ناعمة." : "A concentrated cup with a soft chocolate finish."}</p>
+                    <b>16 {lang === "ar" ? "ر.س" : "SAR"}</b>
                   </div>
                 </div>
                 <div className="menuq-product-row">
                   <div className="menuq-dish menuq-dish-green" />
                   <div>
-                    <strong>{lang === "ar" ? "سلطة جرجير بالرمان" : "Arugula & Pomegranate Salad"}</strong>
-                    <p>{lang === "ar" ? "جرجير طازج، رمان، جبن أبيض وتتبيلة ليمون" : "Fresh arugula, pomegranate, white cheese, and lemon dressing"}</p>
-                    <b>32 {lang === "ar" ? "ر.س" : "SAR"}</b>
+                    <strong>{lang === "ar" ? "لاتيه نَفَس" : "Nafas Latte"}</strong>
+                    <p>{lang === "ar" ? "إسبريسو، حليب مبخر ولمسة فانيلا محمصة." : "Espresso, steamed milk and toasted vanilla."}</p>
+                    <b>22 {lang === "ar" ? "ر.س" : "SAR"}</b>
                   </div>
                 </div>
               </div>
@@ -356,19 +359,28 @@ function Home() {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {themeCards.map((theme) => (
               <article key={theme.key} className="menuq-theme-card">
-                <div className="menuq-theme-image">
-                  <img
-                    src={theme.preview.image}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                  <span>{theme.key}</span>
-                </div>
-                <div className="p-5">
-                  <h3>{lang === "ar" ? theme.name.ar : theme.name.en}</h3>
-                  <p>{lang === "ar" ? theme.promise.ar : theme.promise.en}</p>
-                </div>
+                <Link
+                  to="/themes/preview"
+                  search={{ theme: theme.key } as never}
+                  className="block"
+                  aria-label={lang === "ar" ? `استكشف تصميم ${theme.name.ar}` : `Explore the ${theme.name.en} theme`}
+                >
+                  <div className="menuq-theme-image">
+                    <img
+                      src={theme.preview.image}
+                      alt={lang === "ar" ? `صورة تعبر عن تصميم ${theme.name.ar}` : `${theme.name.en} theme visual`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span>{lang === "ar" ? theme.name.ar : theme.name.en}</span>
+                  </div>
+                  <div className="p-5">
+                    <h3>{lang === "ar" ? theme.name.ar : theme.name.en}</h3>
+                    <p>{lang === "ar" ? theme.promise.ar : theme.promise.en}</p>
+                    <span className="menuq-theme-link">{lang === "ar" ? "استكشف التصميم" : "Explore theme"} <ArrowUpLeft size={14} /></span>
+                  </div>
+                </Link>
               </article>
             ))}
           </div>
@@ -409,7 +421,7 @@ function Home() {
             <div className="menuq-analytics-visual">
               <span className="sr-only">Guest signals / إشارات الضيوف</span>
               <img
-                src="/homepage-analytics.png"
+                src="/homepage-analytics-real.png"
                 alt={lang === "ar" ? "لوحة تحليلات تعرض الزيارات ومشاهدات المنتجات ومسح الرموز وأداء الفروع" : "Analytics dashboard showing visits, product views, QR scans, and branch performance"}
                 loading="lazy"
               />
