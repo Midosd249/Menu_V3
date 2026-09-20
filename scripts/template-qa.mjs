@@ -140,7 +140,7 @@ try {
         );
       }
 
-      for (const [name, ok, detail] of checks {
+      for (const [name, ok, detail] of checks) {
         console.log(`${ok ? "PASS" : "FAIL"} ${theme} · ${viewport.name} · ${name} · ${detail}`);
         if (!ok) failures += 1;
       }
