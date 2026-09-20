@@ -421,3 +421,14 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - Limitation: the supplied standalone code contains demo content and browser-only dependencies that are not authoritative for Menu V3 architecture.
 - Confidence: HIGH
 - Must not copy: hard-coded demo restaurant data, standalone Tailwind CDN runtime, standalone cart/order implementation, or external demo phone/contact values.
+
+
+## 2026-09-20 — SIGNAL TABLE Redesign Research
+
+- VERIFIED repository baseline: main `6544be33126b13501b15b483ec56e997eaa44117` with PR #223 Canvas baseline.
+- VERIFIED architecture: existing ThemeRenderer routes the contemporary-restaurant family; SIGNAL TABLE stays inside this presentation boundary.
+- VERIFIED current risk pattern: recent Editorial/Atelier/Canvas work repeatedly addressed Arabic wrapping, fixed controls, stacking, and product geometry.
+- VERIFIED external guidance: MDN logical properties and text wrapping, W3C WCAG 2.2 target sizing, and Apple HIG layout/safe-area principles were reviewed for directional implementation guidance. citeturn0search4turn0search2turn0search1
+- VERIFIED tool validation: Font Pairing accepted Alexandria / Playfair Display / Readex Pro as the proposed trio; Color Designer retained the proposed porcelain/navy/cobalt/warm-signal palette. These are design validation results, not proof of runtime font licensing/performance.
+- EXCLUDED: AppDeploy/Replit/Base44/WebsitePublisher prototypes were not used because repository-native implementation was sufficient.
+- UNKNOWN: physical-device rendering and production deployment evidence until release-stage verification.
