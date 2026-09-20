@@ -159,7 +159,6 @@ try {
 
         await page.close();
       }
-      }
     }
   }
 } finally {
