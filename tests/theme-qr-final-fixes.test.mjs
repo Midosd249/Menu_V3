@@ -49,9 +49,9 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
 test("SIGNAL TABLE owns stable mobile information geometry and removes numbering", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
-  assert.match(styles, /signal-card-copy[\\s\\S]*grid-template-columns:/);
-  assert.match(styles, /signal-card-title[\\s\\S]*text-wrap:\s*balance/);
-  assert.match(styles, /signal-product-name[\\s\\S]*unicode-bidi:\s*plaintext/);
-  assert.match(styles, /signal-product-card[\\s\\S]*min-inline-size:\s*0/);
-  assert.doesNotMatch(template, /signal-(card-index|product-number)|VOL\\.\\s*03/);
+  assert.match(styles, /signal-card-copy[\s\S]*grid-template-columns:/);
+  assert.match(styles, /signal-card-title[\s\S]*text-wrap:\s*balance/);
+  assert.match(styles, /signal-product-name[\s\S]*unicode-bidi:\s*plaintext/);
+  assert.match(styles, /signal-product-card[\s\S]*min-inline-size:\s*0/);
+  assert.doesNotMatch(template, /signal-(card-index|product-number)|VOL\.\s*03/);
 });
