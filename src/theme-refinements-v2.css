@@ -1,5 +1,4 @@
 
-@keyframes editorial-image-reveal {
   0% { clip-path: inset(9% 5% 9% 5%); transform: scale(1.07); }
   45% { clip-path: inset(0); transform: scale(1.02); }
   100% { clip-path: inset(0); transform: scale(1); }
@@ -85,13 +84,7 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
 /* Mobile-first safety + interaction quality                                 */
 /* -------------------------------------------------------------------------- */
 @media (max-width: 700px) {
-  html[data-menu-theme="editorial"] .menu-public-shell header::before { display: none; }
   html[data-menu-theme="noir"] .menu-public-shell header > div::after { display: none; }
-  html[data-menu-theme="editorial"] .menu-public-shell main { padding-inline: .85rem; }
-  html[data-menu-theme="editorial"] .menu-public-shell main > section { padding-block: clamp(2.5rem, 11vw, 4rem); }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button { min-height: 0; }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child { height: clamp(11rem, 54vw, 17rem) !important; }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child { padding-block: .85rem 1.15rem; }
   html[data-menu-theme="noir"] .menu-public-shell main { padding-inline: .85rem; }
   html[data-menu-theme="noir"] .menu-public-shell main > section { padding-block: clamp(2.75rem, 10vw, 4.5rem); }
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button { min-height: 0; }
