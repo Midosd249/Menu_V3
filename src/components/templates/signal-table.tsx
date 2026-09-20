@@ -101,7 +101,37 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
       </div>
     </div>
     {preview ? <div className="signal-preview-banner">{text(lang, "معاينة القالب — هذه ليست النسخة المنشورة", "Template preview — this is not the published version")}</div> : null}
-    <header className="signal-hero" data-signal-layer="hero"><div className="signal-hero-media"><MenuMedia src={tenant.coverUrl} alt="" className="signal-cover" eager fallback={<span aria-hidden>{tenant.nameAr.slice(0, 1)}</span>} /></div><div className="signal-hero-shade" aria-hidden /><div className="signal-hero-inner"><div className="signal-kicker"><span>{text(lang, "المنيو", "MENU")}</span><span>{tenant.city}</span></div><div className="signal-brand-row"><MenuMedia src={tenant.logoUrl} alt="" eager fallback={tenant.nameAr.slice(0, 1)} className="signal-brand-logo" /><div className="min-w-0"><p className="signal-branch">{text(lang, branch.nameAr, branch.nameEn)}</p><h1>{text(lang, tenant.nameAr, tenant.nameEn)}</h1>{tenant.taglineAr || tenant.taglineEn ? <p className="signal-tagline">{text(lang, tenant.taglineAr, tenant.taglineEn)}</p> : null}</div></div><div className="signal-hero-meta">{status !== null ? <><span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span><span aria-hidden>•</span></> : null}<span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div></div></header>
+    <header className="signal-hero" data-signal-layer="signature">
+      <div className="signal-hero-copy">
+        <div className="signal-kicker"><span>{text(lang, "تجربة الضيافة", "Hospitality experience")}</span><span>{tenant.city}</span></div>
+        <div className="signal-brand-row">
+          <MenuMedia src={tenant.logoUrl} alt="" eager fallback={tenant.nameAr.slice(0, 1)} className="signal-brand-logo" />
+          <div className="min-w-0">
+            <p className="signal-branch">{text(lang, branch.nameAr, branch.nameEn)}</p>
+            <h1>{text(lang, tenant.nameAr, tenant.nameEn)}</h1>
+            {tenant.taglineAr || tenant.taglineEn ? <p className="signal-tagline">{text(lang, tenant.taglineAr, tenant.taglineEn)}</p> : null}
+          </div>
+        </div>
+        <div className="signal-hero-meta">{status !== null ? <span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span> : null}{branch.addressAr || branch.addressEn ? <span>{text(lang, branch.addressAr, branch.addressEn)}</span> : null}</div>
+      </div>
+      <div className="signal-hero-media">
+        {featured[0] ? (
+          <button type="button" onClick={() => selectProduct(featured[0])} className="signal-featured-stage">
+            <MenuMedia src={featured[0].imageUrl} alt={text(lang, featured[0].nameAr, featured[0].nameEn)} className="signal-featured-stage-image" eager fallback={text(lang, "صورة الطبق", "Dish image")} />
+            <span className="signal-featured-stage-copy">
+              <span className="signal-featured-stage-label">{text(lang, "اختيار اليوم", "Signature selection")}</span>
+              <span className="signal-featured-stage-name">{text(lang, featured[0].nameAr, featured[0].nameEn)}</span>
+              {featured[0].descriptionAr || featured[0].descriptionEn ? <span className="signal-featured-stage-description">{text(lang, featured[0].descriptionAr, featured[0].descriptionEn)}</span> : null}
+              <MenuPrice price={featured[0].price} currency={featured[0].currency} lang={lang} className="signal-featured-stage-price" />
+            </span>
+          </button>
+        ) : tenant.coverUrl ? (
+          <MenuMedia src={tenant.coverUrl} alt="" className="signal-cover" eager fallback={tenant.nameAr.slice(0, 1)} />
+        ) : (
+          <div className="signal-identity-fallback" aria-hidden="true">{tenant.nameAr.slice(0, 1)}</div>
+        )}
+      </div>
+    </header>
     <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /><LangToggle englishAvailable={englishAvailable} className="signal-lang-toggle" /></div>
     {branches.length > 1 ? <nav aria-label={text(lang, "الفروع", "Branches")} className="signal-branches"><div>{branches.map((item) => <a key={item.id} href={`/m/${tenant.slug}/${item.slug}`} className={cn("signal-branch-link", item.id === branch.id && "is-active")}>{text(lang, item.nameAr, item.nameEn)}</a>)}</div></nav> : null}
     <div className="signal-search" data-signal-layer="navigation"><div className="signal-search-inner"><label className="relative block flex-1"><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 start-3 text-muted" /><input id="signal-search-input" value={query} onChange={(e) => setQuery(e.target.value)} aria-label={text(lang, "البحث في المنيو", "Search menu")} placeholder={text(lang, "ابحث عن طبق أو مكوّن", "Search dishes or ingredients")} className="h-11 w-full rounded-full border border-line bg-paper pe-4 ps-10 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="signal-categories" role="tablist" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", text(lang, "الكل", "All")], ...categories.map((c) => [c.id, text(lang, c.nameAr, c.nameEn)])].map(([id, name]) => <button key={id} type="button" role="tab" aria-selected={categoryId === id} onClick={() => trackCategory(id)}>{name}</button>)}</div></div></div>
@@ -137,7 +167,7 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
         </div>
       </div>
     </footer>
-    {!preview ? <button type="button" onClick={() => setCartOpen(true)} aria-label={text(lang, `السلة ${cartCount} ${formatSar(cartTotal, lang)}`, `Cart ${cartCount} ${formatSar(cartTotal, lang)}`)} className="signal-cart-trigger"><ShoppingBag className="size-5" aria-hidden /><span>{text(lang, "الطلب", "Order")}</span><span className="signal-cart-count">{cartCount}</span><span>{formatSar(cartTotal, lang)}</span></button> : null}
+    {!preview && cartCount ? <button type="button" onClick={() => setCartOpen(true)} aria-label={text(lang, `السلة ${cartCount} ${formatSar(cartTotal, lang)}`, `Cart ${cartCount} ${formatSar(cartTotal, lang)}`)} className="signal-cart-trigger"><ShoppingBag className="size-5" aria-hidden /><span>{text(lang, "الطلب", "Order")}</span><span className="signal-cart-count">{cartCount}</span><span>{formatSar(cartTotal, lang)}</span></button> : null}
     {selected ? <ProductDialog lang={lang} product={selected} options={menu.productOptions?.[selected.id]} close={() => setSelectedId(null)} add={addToCart} submitting={submitting} /> : null}
     {cartOpen ? <CartDialog lang={lang} items={cart} setItems={setCart} close={() => setCartOpen(false)} submit={submit} submitting={submitting} error={error} /> : null}
     {success ? <div className="fixed inset-0 z-[70] grid place-items-center bg-black/55 p-4" role="presentation"><section role="dialog" aria-modal="true" aria-labelledby="signal-success-title" className="signal-success w-full max-w-sm bg-paper p-6 text-center shadow-2xl"><h2 id="signal-success-title" className="font-display text-xl font-semibold">{text(lang, "تم استلام طلبك", "Order received")}</h2><p className="mt-2 text-sm text-muted">{text(lang, "رقم الطلب", "Order number")} <strong className="text-ink">#{success.number}</strong></p><p className="mt-1 text-sm text-muted">{formatSar(success.total, lang)}</p><button type="button" onClick={() => setSuccess(null)} className="mt-5 h-11 w-full rounded-full bg-ink text-paper">{text(lang, "العودة للمنيو", "Back to menu")}</button></section></div> : null}
