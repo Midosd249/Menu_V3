@@ -1,26 +1,27 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-20
 
-- Canonical branch: `main`.
-- Current verified `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
-- Latest completed atomic task: PR #223 — `redesign: replace Editorial with Canva-derived Canvas menu`.
-- Implementation status: `DONE / MERGED / CI VERIFIED`.
-- GitHub Quality: SUCCESS.
-- W9 Orders browser QA: SUCCESS.
-- Production deployment identity for the current HEAD: `UNKNOWN`.
-- Physical production/device QA for the current HEAD: `UNKNOWN`.
+- Canonical branch: main.
+- Current verified main HEAD: 6544be33126b13501b15b483ec56e997eaa44117.
+- Latest completed atomic task: PR #224 — continuity reconciliation after PR #223.
+- Current visual baseline: Editorial Canvas.
+- Current redesign status: PROPOSED / AWAITING OWNER APPROVAL.
+- Master plan: docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md.
+- Production deployment identity for current HEAD: UNKNOWN.
+- Physical production/device QA for current HEAD: UNKNOWN.
 
 ## Exact Next Task
+**Owner approval of the SIGNAL TABLE master redesign plan; after approval, begin Phase A repository baseline and design freeze.**
 
-**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and QR/search/category/product/cart/order coverage.**
+## Current Design Decision
+The next public-menu visual system is SIGNAL TABLE. It is a clean presentation replacement, not another Canvas/Editorial/Atelier patch.
 
-## Following Queue — after visual/device evidence
+Hard visual constraint: menu products must not display numbers, sequence counters, numbered badges, or artificial numeric category labels.
 
-1. Record only evidence-backed visual defects, if any.
-2. Fix only confirmed Editorial Canvas regressions; do not reopen unrelated themes.
-3. Re-run continuity reconciliation after the single atomic QA/fix task.
-4. Continue R7 only when sufficient real exposure exists; no synthetic traffic.
-5. Treat the six RLS-disabled live tables as a separate security/data task.
-6. Preserve deferred boundaries: Payment Provider, Commercial Launch, PH-07, and R10 are not current prerequisites.
+## Master Plan
+Read docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md before implementation. It contains the visual contract, architecture boundary, connected-tools routing, research basis, implementation phases, QA matrix, acceptance criteria, protected boundaries, failure patterns, and new-chat continuity rules.
+
+## Connected Tools Registry
+The routing registry is docs/connected-tools-registry.md. It is currently verified on branch docs/connected-tools-registry-2026-09-20; a new session must inspect that branch/file if it is not present on main.
 
 # Menu V3 — Active Plan
 

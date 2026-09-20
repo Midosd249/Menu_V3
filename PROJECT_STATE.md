@@ -1,23 +1,35 @@
 # PROJECT STATE
 
 ## Identity
-- Status: RELEASE_STAGE_VERIFIED_WITH_DEVICE_QA_PENDING.
-- Repository: `Midosd249/Menu_V3`.
-- Canonical branch: `main`.
-- Source of truth: `main`.
+- Status: PROPOSED_PREMIUM_PUBLIC_MENU_REDESIGN_AWAITING_OWNER_APPROVAL.
+- Repository: Midosd249/Menu_V3.
+- Canonical branch: main.
+- Source of truth: main.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-20
-- VERIFIED: GitHub `main` is now at `be7b79e5dec7d569aed1828e4376f57a8cbf9507` after merged PR #223.
-- VERIFIED: PR #223 `redesign: replace Editorial with Canva-derived Canvas menu` was merged with squash after GitHub Quality and W9 Orders browser checks passed.
-- VERIFIED: Quality run for PR #223 passed route generation, typecheck, full tests, W7.4–W7.10 contracts, lint, production build, Playwright installation, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, performance diagnostics, and cleanup.
-- VERIFIED: W9 Orders browser QA for PR #223 passed.
-- VERIFIED: the previous Editorial/Atelier presentation was replaced rather than incrementally patched.
-- VERIFIED: the new Editorial Canvas system is data-driven and preserves tenant/branch data, search, category filtering, product details/options, cart/order, analytics, bilingual routing, and existing server-side trust boundaries.
-- VERIFIED: `src/theme-editorial-atelier.css` was retired and replaced by `src/theme-editorial-canvas.css`.
-- VERIFIED: Editorial now uses the owner-supplied warm-paper/ink/lime/copper visual direction, with mobile-safe product geometry and explicit Arabic/LTR wrapping rules.
-- UNKNOWN: physical Android/iOS rendering and QR camera evidence for this newly merged theme.
-- UNKNOWN: current Production deployment identity for `be7b79e5dec7d569aed1828e4376f57a8cbf9507`; no Production deployment was requested or performed in this task.
+- VERIFIED: GitHub main is at 6544be33126b13501b15b483ec56e997eaa44117.
+- VERIFIED: PR #223 replaced the prior Editorial/Atelier presentation with Editorial Canvas.
+- VERIFIED: PR #224 reconciled continuity after PR #223.
+- VERIFIED: current Canvas implementation has recorded GitHub Quality and W9 browser evidence before merge.
+- PROPOSED: next visual system is SIGNAL TABLE, documented in docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md.
+- PROPOSED: product numbering and artificial numeric category labels are prohibited.
+- UNKNOWN: physical Android/iOS visual QA for current Canvas baseline.
+- UNKNOWN: current Production deployment identity for 6544be33126b13501b15b483ec56e997eaa44117.
+
+## Current Redesign Boundary
+- Do not patch Editorial Canvas.
+- Do not create another compatibility layer over Canvas.
+- Do not start implementation until owner explicitly authorizes the master plan.
+- Once authorized, implementation remains presentation-scoped and preserves protected product/data/security contracts.
+
+## Connected Tools
+- VERIFIED: docs/connected-tools-registry.md exists on branch docs/connected-tools-registry-2026-09-20.
+- The registry is a routing guide and does not override repository architecture or security policy.
+- New sessions must inspect that branch/file before choosing design/research tools if it is not on main.
+
+## Current Exact Next Task
+**Owner approval of the SIGNAL TABLE master redesign plan; after approval, begin Phase A repository baseline and design freeze.**
 
 ## PH Lifecycle — Completed
 
@@ -425,3 +437,12 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 
 ### Exact Next Task
 **Physical Android QA of merged Atelier Editorial — repeat the owner's failing Arabic/English mobile cases and verify QR/public-menu rendering, RTL/LTR, title/price geometry, fixed actions, search/categories, cart/order, and configured external actions.**
+
+## 2026-09-20 — SIGNAL TABLE Master Plan — PROPOSED
+- VERIFIED: current main SHA was rechecked before this documentation task.
+- PROPOSED: complete replacement concept is SIGNAL TABLE.
+- PROPOSED: no product numbering, no numeric category labels, and no decorative counters.
+- PROPOSED: implementation preserves public-menu behavior, ordering, analytics, bilingual routing, tenant/branch isolation, auth/RLS, and SEO/discovery unless direct evidence requires a narrowly scoped change.
+- VERIFIED: master plan is docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md.
+- UNKNOWN: future implementation, CI, browser, device, and deployment evidence.
+- Exact next task: owner approval; no implementation before explicit authorization.

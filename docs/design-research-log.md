@@ -421,3 +421,39 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - Limitation: the supplied standalone code contains demo content and browser-only dependencies that are not authoritative for Menu V3 architecture.
 - Confidence: HIGH
 - Must not copy: hard-coded demo restaurant data, standalone Tailwind CDN runtime, standalone cart/order implementation, or external demo phone/contact values.
+
+## 2026-09-20 — SIGNAL TABLE Premium Public Menu Research
+Status: PROPOSED / research complete for planning; implementation not authorized.
+
+Repository evidence:
+- main verified at 6544be33126b13501b15b483ec56e997eaa44117.
+- Current visual baseline is Editorial Canvas from PR #223.
+- Recent history shows repeated presentation replacements and mobile-layout remediation.
+- docs/project-memory/problems-learned.md records recurring overflow, bidi/RTL, card geometry, stacking, fixed-control, and CSS-conflict risks.
+
+Design conclusions:
+- Use SIGNAL TABLE as the next visual system.
+- Treat the public menu as a premium hospitality interface, not a generic card grid.
+- Remove artificial product numbering and numeric category labels.
+- Use Arabic-first typography and flow-relative layout.
+- Keep identity, food, navigation, product information, and ordering actions distinct.
+- Keep fixed/sticky UI minimal and reserve document space.
+
+External evidence:
+- MDN logical properties: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Logical_properties_and_values
+- MDN text-wrap: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-wrap
+- W3C WCAG 2.2: https://www.w3.org/TR/WCAG22/
+- Apple HIG Layout: https://developer.apple.com/design/human-interface-guidelines/layout
+- Apple HIG Modality: https://developer.apple.com/design/human-interface-guidelines/modality
+- Apple HIG Designing for iOS: https://developer.apple.com/design/human-interface-guidelines/designing-for-ios/
+- Baymard 2026 benchmark: https://baymard.com/research-articles/food-delivery-and-takeout-ux-benchmark-2026
+- Baymard food-delivery research: https://baymard.com/research/online-food-delivery
+
+Connected tools:
+- Registry: docs/connected-tools-registry.md on branch docs/connected-tools-registry-2026-09-20.
+- Tool selection is dynamic; unknown capability/cost is not assumed free.
+- Prototype tools are not production architecture.
+
+Research limits:
+- No competitor branding, code, copy, assets, or exact layouts are to be copied.
+- Mockups/static scans are not runtime or device proof.
