@@ -1,31 +1,27 @@
 # CURRENT TASK STATE — 2026-09-20
 
 ## Current Position
-
-- `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
+- main HEAD: 6544be33126b13501b15b483ec56e997eaa44117.
 - PR #223: merged.
-- Editorial Canvas replacement: `DONE / MERGED / CI VERIFIED`.
-- GitHub Quality: passed.
-- W9 Orders browser QA: passed.
-- Production deployment match: `UNKNOWN`; no deployment was requested for this task.
-- Physical device/QR visual evidence: `UNKNOWN`.
+- PR #224: merged.
+- Current visual baseline: Editorial Canvas.
+- New premium redesign: PROPOSED / AWAITING OWNER APPROVAL.
+- Master plan: docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md.
+- Production deployment match: UNKNOWN.
+- Physical device/QR visual evidence: UNKNOWN.
 
 ## Exact Next Task
-
-**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and the QR/search/category/product/cart/order smoke path.**
+**Owner approval of the SIGNAL TABLE master redesign plan; after approval, begin Phase A repository baseline and design freeze.**
 
 ## Not Next
+- Do not patch Editorial Canvas.
+- Do not create another intermediate theme direction.
+- Do not introduce numbered product labels, product counters, or numbered category labels.
+- Do not change backend/database/auth/RLS/tenant isolation unless direct implementation evidence requires a narrowly scoped protected-boundary review.
+- Do not trigger Vercel deployment merely to inspect visual iteration.
 
-- No new theme rebuild.
-- No homepage redesign.
-- No product/category deep-link expansion.
-- No native Web Share implementation.
-- No Payment Provider / Commercial Launch / PH-07 / R10 work as a prerequisite.
-
-## Later Non-Blocking / Separate Work
-
-- R7 evidence review remains dependent on meaningful real exposure.
-- Six RLS-disabled live tables remain a separate security/data task from the A.2 audit.
+## Continuity Source
+Read docs/sessions/2026-09-20-premium-public-menu-redesign-master-plan.md as the master execution contract for the new redesign.
 
 # TASKS
 
