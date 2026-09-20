@@ -30,5 +30,14 @@ Focused public-menu performance, theme preview media, Studio brand/social settin
 ## Verification target
 `npm run typecheck`, `npm test`, `npm run lint`, `npm run build`, `npm run check:auth`, `npm run qa:template`, `npm run performance:audit`, final diff review.
 
+## Final verification
+- VERIFIED: final implementation head `b3bbf92c3fbaef52511162f2b340ea179878603d`.
+- VERIFIED: Quality run `35477401543` passed all configured quality, browser, and performance stages, including 319/319 tests, typecheck, lint, production build, all-theme browser QA, Studio browser QA, and Platform Admin/W7.10 browser QA.
+- VERIFIED: W9 Orders QA run `35477401542` passed.
+- VERIFIED: Vercel status is success.
+- VERIFIED: the requested Studio map capability already exists as branch-scoped `mapsUrl` in `/studio/branches`; `/studio/brand` now exposes a direct `Manage branches & map` link for discoverability.
+- VERIFIED: the implementation preserves tenant/branch isolation and does not duplicate map data at tenant level.
+- UNKNOWN: Production deployment identity and physical Android/iOS/QR/device evidence.
+
 ## Status
-IMPLEMENTATION_IN_PROGRESS
+PUSHED / VERIFIED — READY TO MERGE

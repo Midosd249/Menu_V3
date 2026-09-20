@@ -295,34 +295,27 @@ Do not begin another homepage redesign or commercial packaging redesign before t
 Do not start another homepage redesign or replace these visuals again unless verification identifies a concrete defect.
 
 
-## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — IN PROGRESS
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — VERIFIED / READY TO MERGE
 
 ### Scope
 - Double Espresso theme-preview image reliability.
-- Public customer QR/menu loading performance.
-- Studio website + Instagram + Snapchat + Facebook + TikTok registration.
+- Public customer QR/menu loading path efficiency.
+- Studio Website + Instagram + Snapchat + Facebook + TikTok registration.
 - Permanent image payload-size contract for logo/cover/product uploads.
-- Recognizable social brand marks and existing theme-appropriate action presentation.
+- Recognizable social brand marks and theme-compatible action presentation.
+- Explicit Studio discoverability for branch-scoped map management.
 
 ### Branch
 `fix/public-menu-social-images-performance-2026-09-20`
 
-### Exact Plan
-1. Boot/evidence.
-2. Theme preview media.
-3. Public-menu performance.
-4. Studio brand model.
-5. Image contract.
-6. Public social actions.
-7. Icon/placement system.
-8. Regression tests.
-9. Browser/mobile review.
-10. Release/continuity.
-
-### Status
-- Implementation: `IMPLEMENTATION_IN_PROGRESS`.
-- Deployment: no intentional Vercel/Production deployment during implementation.
-- UNKNOWN: final CI/browser/device/production evidence.
+### Verification
+- VERIFIED: final head `b3bbf92c3fbaef52511162f2b340ea179878603d`.
+- VERIFIED: Quality `35477401543` passed typecheck, 319/319 tests, W7.4–W7.10 contracts, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, and performance/cleanup stages.
+- VERIFIED: W9 Orders QA `35477401542` passed.
+- VERIFIED: Vercel status is success.
+- VERIFIED: no PR reviews or unresolved review threads.
+- VERIFIED: map URL capability exists at `/studio/branches`; `/studio/brand` now links directly to it without duplicating branch data.
+- UNKNOWN: Production deployment identity and physical-device QA.
 
 ### Exact Next Task
-Finish this same atomic batch, verify it, prepare one PR, and stop.
+Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage Production and physical Android/iOS/QR/theme/order/RTL smoke QA.
