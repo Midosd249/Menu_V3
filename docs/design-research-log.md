@@ -432,3 +432,14 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - VERIFIED tool validation: Font Pairing accepted Alexandria / Playfair Display / Readex Pro as the proposed trio; Color Designer retained the proposed porcelain/navy/cobalt/warm-signal palette. These are design validation results, not proof of runtime font licensing/performance.
 - EXCLUDED: AppDeploy/Replit/Base44/WebsitePublisher prototypes were not used because repository-native implementation was sufficient.
 - UNKNOWN: physical-device rendering and production deployment evidence until release-stage verification.
+
+
+### 2026-09-20 — SIGNAL TABLE mobile product-card structural remediation
+- Source: MDN CSS sizing/grid/flex/text wrapping guidance and W3C WCAG 2.2 target-size guidance, reviewed during the current repository remediation.
+- VERIFIED finding: flex/grid items can preserve intrinsic minimum sizing unless the flexible text item is explicitly allowed to shrink with `min-width: 0`; `minmax(0,1fr)` is the reliable flexible grid track pattern.
+- VERIFIED finding: writing direction changes grid start/end placement, so the RTL card can keep media at the inline-start side without physical left/right overrides.
+- VERIFIED finding: legacy `-webkit-line-clamp` remains the broadly interoperable truncation mechanism when paired with the required box/overflow setup.
+- Transferable principle: a menu card must have one fixed media track and one explicitly shrinkable content track; title, description, and price should be normal-flow siblings rather than competing grid columns.
+- Relevance: SIGNAL TABLE mobile Arabic/English product cards.
+- Limitation: external documentation validates the CSS model; it does not prove the user's physical device rendering.
+- Confidence: high for the structural diagnosis; browser/device result remains UNKNOWN until direct visual execution.

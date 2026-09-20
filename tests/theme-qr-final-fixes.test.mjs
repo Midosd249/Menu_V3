@@ -49,9 +49,31 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
 test("SIGNAL TABLE owns stable mobile information geometry and removes numbering", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
-  assert.match(styles, /signal-card-copy[\s\S]*grid-template-columns:/);
-  assert.match(styles, /signal-card-title[\s\S]*text-wrap:\s*balance/);
-  assert.match(styles, /signal-product-name[\s\S]*unicode-bidi:\s*plaintext/);
-  assert.match(styles, /signal-product-card[\s\S]*min-inline-size:\s*0/);
+  assert.match(styles, /signal-card-copy[\s\S]*flex-direction:\s*column/);
+  assert.match(styles, /signal-card-title[\s\S]*-webkit-line-clamp:\s*2/);
+  assert.match(styles, /signal-product-card[\s\S]*grid-template-columns:\s*92px\s+minmax\(0,1fr\)/);
+  assert.match(styles, /signal-product-image[\s\S]*aspect-ratio:\s*1\s*\/\s*1/);
+  assert.match(styles, /signal-product-copy[\s\S]*flex:\s*1\s+1\s+auto/);
+  assert.match(styles, /signal-product-name[\s\S]*-webkit-line-clamp:\s*2/);
+  assert.match(styles, /signal-product-description[\s\S]*-webkit-line-clamp:\s*2/);
+  assert.match(styles, /signal-product-price-row[\s\S]*display:\s*block/);
+  assert.match(styles, /signal-product-price[\s\S]*white-space:\s*nowrap/);
+  assert.doesNotMatch(styles, /signal-quick-add\{position:absolute/);
+  assert.doesNotMatch(styles, /signal-product-topline/);
   assert.doesNotMatch(template, /signal-(card-index|product-number)|VOL\.\s*03/);
+});
+
+test("SIGNAL TABLE menu-item DOM keeps title → description → price in one protected text column", async () => {
+  const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  const productIndex = template.indexOf('className="signal-product-card"');
+  const productEnd = template.indexOf('</button>', productIndex);
+  assert.ok(productIndex >= 0 && productEnd > productIndex);
+  const card = template.slice(productIndex, productEnd);
+  const title = card.indexOf('className="signal-product-name"');
+  const description = card.indexOf('className="signal-product-description"');
+  const price = card.indexOf('className="signal-product-price"');
+  const copy = card.indexOf('className="signal-product-copy"');
+  assert.ok(copy >= 0 && title > copy && description > title && price > description);
+  assert.doesNotMatch(card, /signal-product-topline/);
+  assert.doesNotMatch(card, /position:absolute/);
 });

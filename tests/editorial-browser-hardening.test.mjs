@@ -4,11 +4,17 @@ import test from "node:test";
 
 test("SIGNAL TABLE protects mobile geometry and mixed-direction values", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
+  const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
   assert.match(styles, /signal-hero[\s\S]*grid-template-columns:/);
   assert.match(styles, /signal-featured-stage-image[\s\S]*aspect-ratio:\s*4\s*\/\s*3/);
-  assert.match(styles, /signal-product-image[\s\S]*aspect-ratio:\s*1\s*\/\s*0\.78/);
-  assert.match(styles, /signal-product-topline[\s\S]*grid-template-columns:\s*minmax\(0,1fr\) auto/);
+  assert.match(styles, /signal-product-card[\s\S]*grid-template-columns:\s*92px\s+minmax\(0,1fr\)/);
+  assert.match(styles, /signal-product-image[\s\S]*aspect-ratio:\s*1\s*\/\s*1/);
+  assert.match(styles, /signal-product-name[\s\S]*inline-size:\s*100%/);
+  assert.match(styles, /signal-product-description[\s\S]*inline-size:\s*100%/);
   assert.match(styles, /signal-product-price[\s\S]*unicode-bidi:\s*isolate/);
+  assert.match(styles, /signal-product-price[\s\S]*white-space:\s*nowrap/);
+  assert.doesNotMatch(styles, /signal-product-topline/);
+  assert.doesNotMatch(template, /signal-product-topline/);
   assert.match(styles, /signal-main[\s\S]*safe-area-inset-bottom/);
 });
 
