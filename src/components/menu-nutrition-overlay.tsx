@@ -73,7 +73,7 @@ export function MenuNutritionOverlay({ products, lang }: { products: Product[]; 
       if (!match) return;
 
       hideNativeNutrition(candidate, match, lang);
-      const body = candidate.querySelector<HTMLElement>(".taste-dialog-body, [class*='dialog-body'], .editorial-dialog > div:not(.sticky), section[role='dialog'] > div:last-child") ?? candidate;
+      const body = candidate.querySelector<HTMLElement>(".taste-dialog-body, [class*='dialog-body'], [class*='signal-dialog'] > div:not(.sticky), section[role='dialog'] > div:last-child") ?? candidate;
       if (!host || host.parentElement !== body) {
         host?.remove();
         host = document.createElement("div");
