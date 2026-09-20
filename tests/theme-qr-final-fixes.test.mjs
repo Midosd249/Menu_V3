@@ -52,3 +52,22 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
     assert.doesNotMatch(source, /ISSUE \/ 03/);
   }
 });
+
+
+test("Editorial featured cards use a stable text-owned mobile layout", async () => {
+  const styles = await readFile("src/theme-qr-final-fixes.css", "utf8");
+
+  assert.match(styles, /editorial-featured-card[\s\S]*overflow:\s*visible\s*!important/);
+  assert.match(styles, /editorial-featured-image[\s\S]*height:\s*auto\s*!important/);
+  assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:[\s\S]*"index title price"/);
+  assert.match(styles, /editorial-card-copy[\s\S]*"\. price"/);
+  assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext\s*!important/);
+  assert.match(styles, /editorial-card-description[\s\S]*overflow:\s*visible\s*!important/);
+});
+
+test("Editorial product names are content-direction aware instead of forcing RTL", async () => {
+  const styles = await readFile("src/theme-qr-final-fixes.css", "utf8");
+
+  assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial\s*!important/);
+  assert.match(styles, /editorial-product-name[\s\S]*unicode-bidi:\s*plaintext\s*!important/);
+});
