@@ -73,26 +73,26 @@ html[data-menu-theme="essential"] .menu-public-shell {
 }
 
 
-/* Editorial / Atelier semantic adapter. Visual personality lives in theme-editorial-atelier.css. */
+/* Editorial / Canvas semantic adapter. Visual personality lives in theme-editorial-canvas.css. */
 html[data-menu-theme="editorial"] .menu-public-shell {
-  --color-surface-canvas: var(--atelier-bg);
-  --color-surface-primary: var(--atelier-surface);
-  --color-surface-secondary: var(--atelier-surface-soft);
-  --color-surface-elevated: #fffdf8;
-  --color-surface-inverse: var(--atelier-ink);
-  --color-content-primary: var(--atelier-ink);
-  --color-content-secondary: var(--atelier-ink-soft);
-  --color-content-muted: var(--atelier-muted);
-  --color-content-inverse: var(--atelier-white);
-  --color-border-subtle: var(--atelier-line);
-  --color-border-strong: var(--atelier-line-strong);
-  --color-action-primary: var(--atelier-olive);
-  --color-action-primary-hover: #3e4b3a;
-  --color-action-primary-foreground: #fff;
-  --color-action-secondary: var(--atelier-surface-soft);
-  --color-action-secondary-hover: #ded3c4;
-  --color-action-secondary-foreground: var(--atelier-ink);
-  --color-focus-ring: var(--atelier-terra);
+  --color-surface-canvas: var(--canvas-paper);
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: var(--canvas-mist);
+  --color-surface-elevated: #ffffff;
+  --color-surface-inverse: var(--canvas-ink);
+  --color-content-primary: var(--canvas-ink);
+  --color-content-secondary: var(--canvas-soft-ink);
+  --color-content-muted: var(--canvas-muted);
+  --color-content-inverse: var(--canvas-paper);
+  --color-border-subtle: var(--canvas-line);
+  --color-border-strong: rgb(26 22 16 / .28);
+  --color-action-primary: var(--canvas-ink);
+  --color-action-primary-hover: #2c261d;
+  --color-action-primary-foreground: var(--canvas-paper);
+  --color-action-secondary: var(--canvas-mist);
+  --color-action-secondary-hover: #eee7dc;
+  --color-action-secondary-foreground: var(--canvas-ink);
+  --color-focus-ring: var(--canvas-copper);
 }
 
 html[data-menu-theme="noir"] .menu-public-shell {

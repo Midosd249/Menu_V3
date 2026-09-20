@@ -341,3 +341,83 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - VERIFIED: Vercel GitHub status is successful for the merged implementation commit.
 - UNKNOWN: direct Production deployment identity and physical Android/iOS rendering.
 - Transferable principle: the Atelier presentation is intentionally single-owner and should not reintroduce distributed Editorial CSS patches; real-device evidence is the next gate.
+
+
+## 2026-09-20 — Editorial Canvas replacement preflight
+
+### W3C — WCAG 2.2 target size
+- Source: https://www.w3.org/TR/WCAG22/
+- Access date: 2026-09-20
+- Category: authoritative accessibility standard
+- VERIFIED finding: SC 2.5.8 sets a 24×24 CSS-pixel minimum target size for pointer inputs with defined exceptions; SC 2.5.5 uses 44×44 CSS pixels as the enhanced AAA target.
+- Transferable principle: mobile search, language, cart, category, modifier, close, and add controls should have practical touch-safe hit areas and spacing.
+- Relevance: Editorial Canvas top bar, category rail, fixed cart, and product actions.
+- Limitation: visual conformance still needs browser/device evidence.
+- Confidence: HIGH
+- Must not copy: no external visual treatment.
+
+### MDN — RTL logical properties and text wrapping
+- Sources: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Logical_properties_and_values ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-wrap ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-wrap
+- Access date: 2026-09-20
+- Category: authoritative web platform documentation
+- VERIFIED finding: logical properties map layout to writing direction; `overflow-wrap` prevents overflow without forcing character-level breaks; `text-wrap: balance/pretty` can improve short heading/paragraph wrapping.
+- Transferable principle: Editorial product cards must use flexible logical layout and normal word wrapping, not fixed physical offsets or `break-all`.
+- Relevance: direct fix for the Arabic fragmentation visible in the supplied screenshots.
+- Limitation: exact wrapping depends on actual font, copy, and viewport.
+- Confidence: HIGH
+- Must not copy: no external implementation.
+
+### MDN — responsive media geometry
+- Sources: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Box_sizing/Aspect_ratios ; https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit
+- Access date: 2026-09-20
+- Category: authoritative web platform documentation
+- VERIFIED finding: explicit aspect ratios reserve predictable media geometry and `object-fit: cover` fills a stable box without distorting the image.
+- Transferable principle: hero and dish media use explicit aspect ratios and bounded containers instead of content-driven/fixed-height mobile geometry.
+- Relevance: prevents the screenshot's unstable product image/card proportions.
+- Limitation: asset composition still needs visual review.
+- Confidence: HIGH
+- Must not copy: no external assets.
+
+### MDN — positioning and stacking contexts
+- Source: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position
+- Access date: 2026-09-20
+- Category: authoritative web platform documentation
+- VERIFIED finding: sticky/fixed elements create stacking contexts and can be affected by containing blocks and ancestor stacking contexts.
+- Transferable principle: use a small explicit layer hierarchy for the top bar, search rail, fixed cart, and dialogs; do not hide stacking defects with arbitrary z-index values.
+- Relevance: reported fixed/overlay interaction problems.
+- Limitation: runtime browser inspection remains required for final evidence.
+- Confidence: HIGH
+- Must not copy: no external implementation.
+
+### MDN — color contrast
+- Source: https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Perceivable/Color_contrast
+- Access date: 2026-09-20
+- Category: authoritative accessibility guidance
+- VERIFIED finding: WCAG AA contrast targets are 4.5:1 for body text, 3:1 for large text, and 3:1 for active UI components/graphics.
+- Transferable principle: the Canvas lime/copper accents are reserved for accents and controls; body copy stays on high-contrast paper/ink surfaces.
+- Relevance: preserves the supplied visual language without sacrificing readable body text.
+- Limitation: exact contrast must be checked against any tenant content/media overlays.
+- Confidence: HIGH
+- Must not copy: no external branding.
+
+### Exa — current Arabic-first digital-menu patterns
+- Source: current public search results for Arabic-first restaurant/digital-menu products.
+- Access date: 2026-09-20
+- Category: connected-tool product research
+- VERIFIED finding: current Arabic-first menu products emphasize true RTL mirroring, category discovery, search, imagery, and mobile ordering as first-class behavior.
+- Transferable principle: the visual redesign must remain a real mobile ordering surface rather than becoming a static poster.
+- Relevance: confirms preserving search/category/cart/order hierarchy while changing the visual system.
+- Limitation: vendor/product claims are not controlled usability studies.
+- Confidence: MEDIUM
+- Must not copy: no proprietary layouts, branding, code, or copy.
+
+### Owner-supplied Canva/HTML reference
+- Source: current task-provided reference code and screenshots.
+- Access date: 2026-09-20
+- Category: owner-provided design direction
+- VERIFIED finding: the requested direction is a warm-paper editorial system with strong ink typography, lime accent, copper accent, image-led hero, category rail, featured selection, readable product rows, cart, and footer.
+- Transferable principle: translate the visual language into Menu V3's existing data-driven renderer rather than replacing the SaaS architecture with standalone HTML.
+- Relevance: primary acceptance direction for this task.
+- Limitation: the supplied standalone code contains demo content and browser-only dependencies that are not authoritative for Menu V3 architecture.
+- Confidence: HIGH
+- Must not copy: hard-coded demo restaurant data, standalone Tailwind CDN runtime, standalone cart/order implementation, or external demo phone/contact values.

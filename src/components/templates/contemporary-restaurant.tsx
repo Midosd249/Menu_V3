@@ -63,16 +63,80 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
   const addSimpleProduct = (product: Product) => { if (getQuickAddDecision(product, menu.productOptions?.[product.id]) !== "eligible") return; addToCart({ key: quickAddKey(product.id), product, options: menu.productOptions?.[product.id] ?? { variants: [], groups: [], options: [] }, variantId: "", modifierOptionIds: [], unitPrice: product.price, quantity: 1 }); };
   const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => { setSubmitting(true); setError(""); const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds } })) } }); setSubmitting(false); if (!result.ok) { setError(result.error); return; } setCart([]); setCartOpen(false); setSuccess({ number: result.data.orderNumber, total: result.data.total }); };
   return <div className="menu-public-shell min-h-dvh bg-paper text-ink" data-editorial-root="true" style={{ "--menu-accent": tenant.accentColor, "--menu-ink": tenant.primaryColor } as React.CSSProperties}>
+    <div className="editorial-topbar">
+      <div className="editorial-topbar-inner">
+        <button
+          type="button"
+          className="editorial-icon-button"
+          onClick={() => document.getElementById("editorial-search-input")?.focus()}
+          aria-label={text(lang, "فتح البحث", "Open search")}
+        >
+          <Search className="size-4" aria-hidden="true" />
+        </button>
+        <div className="editorial-topbar-brand">
+          <MenuMedia
+            src={tenant.logoUrl}
+            alt=""
+            eager
+            fallback={tenant.nameAr.slice(0, 1)}
+            className="editorial-topbar-logo"
+          />
+          <span>{text(lang, tenant.nameAr, tenant.nameEn)}</span>
+        </div>
+        <div className="editorial-topbar-actions">
+          <LangToggle englishAvailable={englishAvailable} className="editorial-topbar-lang" />
+          {!preview ? (
+            <button
+              type="button"
+              className="editorial-topbar-cart"
+              onClick={() => setCartOpen(true)}
+              aria-label={text(lang, "فتح السلة", "Open cart")}
+            >
+              <ShoppingBag className="size-4" aria-hidden="true" />
+              <span className="editorial-topbar-cart-count">{cartCount}</span>
+              <span>{formatSar(cartTotal, lang)}</span>
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </div>
     {preview ? <div className="editorial-preview-banner">{text(lang, "معاينة القالب — هذه ليست النسخة المنشورة", "Template preview — this is not the published version")}</div> : null}
     <header className="editorial-hero" data-editorial-layer="hero"><div className="editorial-hero-media"><MenuMedia src={tenant.coverUrl} alt="" className="editorial-cover" eager fallback={<span aria-hidden>{tenant.nameAr.slice(0, 1)}</span>} /></div><div className="editorial-hero-shade" aria-hidden /><div className="editorial-hero-inner"><div className="editorial-kicker"><span>{text(lang, "المنيو", "MENU")}</span><span>VOL. 03</span><span>{tenant.city}</span></div><div className="editorial-brand-row"><MenuMedia src={tenant.logoUrl} alt="" eager fallback={tenant.nameAr.slice(0, 1)} className="editorial-brand-logo" /><div className="min-w-0"><p className="editorial-branch">{text(lang, branch.nameAr, branch.nameEn)}</p><h1>{text(lang, tenant.nameAr, tenant.nameEn)}</h1>{tenant.taglineAr || tenant.taglineEn ? <p className="editorial-tagline">{text(lang, tenant.taglineAr, tenant.taglineEn)}</p> : null}</div></div><div className="editorial-hero-meta">{status !== null ? <><span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span><span aria-hidden>•</span></> : null}<span>{tenant.city || text(lang, "السعودية", "Saudi Arabia")}</span></div></div></header>
     <div className="editorial-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /><LangToggle englishAvailable={englishAvailable} className="editorial-lang-toggle" /></div>
     {branches.length > 1 ? <nav aria-label={text(lang, "الفروع", "Branches")} className="editorial-branches"><div>{branches.map((item) => <a key={item.id} href={`/m/${tenant.slug}/${item.slug}`} className={cn("editorial-branch-link", item.id === branch.id && "is-active")}>{text(lang, item.nameAr, item.nameEn)}</a>)}</div></nav> : null}
-    <div className="editorial-search" data-editorial-layer="navigation"><div className="editorial-search-inner"><label className="relative block flex-1"><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 start-3 text-muted" /><input value={query} onChange={(e) => setQuery(e.target.value)} aria-label={text(lang, "البحث في المنيو", "Search menu")} placeholder={text(lang, "ابحث عن طبق أو مكوّن", "Search dishes or ingredients")} className="h-11 w-full rounded-full border border-line bg-paper pe-4 ps-10 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="editorial-categories" role="tablist" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", text(lang, "الكل", "All")], ...categories.map((c) => [c.id, text(lang, c.nameAr, c.nameEn)])].map(([id, name]) => <button key={id} type="button" role="tab" aria-selected={categoryId === id} onClick={() => trackCategory(id)}>{name}</button>)}</div></div></div>
+    <div className="editorial-search" data-editorial-layer="navigation"><div className="editorial-search-inner"><label className="relative block flex-1"><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 start-3 text-muted" /><input id="editorial-search-input" value={query} onChange={(e) => setQuery(e.target.value)} aria-label={text(lang, "البحث في المنيو", "Search menu")} placeholder={text(lang, "ابحث عن طبق أو مكوّن", "Search dishes or ingredients")} className="h-11 w-full rounded-full border border-line bg-paper pe-4 ps-10 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="editorial-categories" role="tablist" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", text(lang, "الكل", "All")], ...categories.map((c) => [c.id, text(lang, c.nameAr, c.nameEn)])].map(([id, name]) => <button key={id} type="button" role="tab" aria-selected={categoryId === id} onClick={() => trackCategory(id)}>{name}</button>)}</div></div></div>
     <main className="editorial-main">
       {featured.length && categoryId === "all" && !query ? <section className="editorial-selection" aria-labelledby="editorial-selection-title"><div className="editorial-section-heading"><div><span>01</span><p>{text(lang, "مختارات المحرر", "Editor's selection")}</p><h2 id="editorial-selection-title">{text(lang, "ابدأ بهذه الأطباق", "Start with these")}</h2></div><span className="editorial-heading-rule" /></div><div className="editorial-featured-grid">{featured.slice(0, 6).map((p, index) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <article key={p.id} className={cn("editorial-featured-card-wrap", index === 0 && "is-lead")}><button type="button" onClick={() => selectProduct(p)} className={cn("editorial-featured-card", index === 0 && "is-lead")}><MenuMedia src={p.imageUrl} alt="" className="editorial-featured-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><span className="editorial-card-copy"><span className="editorial-card-index">{String(index + 1).padStart(2, "0")}</span><span className="editorial-card-title">{text(lang, p.nameAr, p.nameEn)}</span><MenuPrice price={p.price} currency={p.currency} lang={lang} className="editorial-card-price" /><span className="editorial-card-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add editorial-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف", "Add")}</button> : null}</article>; })}</div></section> : null}
       {filtered.length === 0 ? <section className="editorial-empty"><EmptyState title={text(lang, "لا توجد أصناف مطابقة", "No matching items")} /></section> : (categoryId === "all" ? categories : categories.filter((c) => c.id === categoryId)).map((category, categoryIndex) => { const items = filtered.filter((p) => p.categoryId === category.id); if (!items.length) return null; return <section key={category.id} id={`category-${category.id}`} className="editorial-category" aria-labelledby={`category-${category.id}-title`}><div className="editorial-section-heading"><div><span>{String(categoryIndex + 2).padStart(2, "0")}</span><p>{text(lang, "قسم", "Section")}</p><h2 id={`category-${category.id}-title`}>{text(lang, category.nameAr, category.nameEn)}</h2></div><span className="editorial-heading-rule" /></div><ul>{items.map((p, index) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <li key={p.id} className="editorial-product-row"><div className="editorial-product-card-wrap"><button type="button" disabled={!p.isAvailable && !preview} onClick={() => selectProduct(p)} className="editorial-product-card"><MenuMedia src={p.imageUrl} alt="" className="editorial-product-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><span className="editorial-product-copy"><span className="editorial-product-topline"><span className="editorial-product-number">{String(index + 1).padStart(2, "0")}</span><span className="editorial-product-name">{text(lang, p.nameAr, p.nameEn)}</span><MenuPrice price={p.price} currency={p.currency} lang={lang} className="editorial-product-price" /></span>{p.descriptionAr || p.descriptionEn ? <span className="editorial-product-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span> : null}<span className="editorial-product-tags">{p.dietaryLabels.slice(0, 3).map((x) => <MenuBadge key={x} tone="muted">{x}</MenuBadge>)}{!p.isAvailable ? <MenuBadge tone="accent">{text(lang, "غير متوفر", "Unavailable")}</MenuBadge> : null}</span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add editorial-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف للسلة", "Add to cart")}</button> : null}{!preview && decision === "requires-options" ? <button type="button" onClick={() => selectProduct(p)} className="public-menu-options-action editorial-quick-add" aria-label={text(lang, "اختيار خيارات " + text(lang, p.nameAr, p.nameEn), "Choose options for " + text(lang, p.nameAr, p.nameEn))}>{text(lang, "اختر الخيارات", "Choose options")}</button> : null}</div></li>; })}</ul></section>; })}
       {hours.length ? <section className="editorial-hours" aria-labelledby="editorial-hours-title"><div className="editorial-section-heading"><div><span>99</span><p>{text(lang, "المعلومات", "Information")}</p><h2 id="editorial-hours-title">{text(lang, "ساعات العمل", "Opening hours")}</h2></div><span className="editorial-heading-rule" /></div><div className="editorial-hours-grid">{[0,1,2,3,4,5,6].map((day) => { const h = hours.find((x) => x.weekday === day); return <div key={day}><span>{weekdayLabel(day, lang)}</span><span>{!h || h.isClosed ? text(lang, "مغلق", "Closed") : `${h.opensAt} – ${h.closesAt}`}</span></div>; })}</div>{branch.addressAr || branch.addressEn ? <p className="editorial-address"><MapPin className="size-4" aria-hidden />{text(lang, branch.addressAr, branch.addressEn)}</p> : null}</section> : null}
     </main>
+    <footer className="editorial-footer">
+      <div className="editorial-footer-inner">
+        <p className="editorial-footer-eyebrow">{text(lang, "من القلب إلى المائدة", "From the heart to the table")}</p>
+        <h2 className="editorial-footer-title">{text(lang, tenant.nameAr, tenant.nameEn)}</h2>
+        <p className="editorial-footer-copy">
+          {text(
+            lang,
+            tenant.taglineAr || "تجربة طعام واضحة، جميلة، ومصممة للطلب بسهولة من الهاتف.",
+            tenant.taglineEn || "A clear, beautiful dining experience designed for confident mobile ordering.",
+          )}
+        </p>
+        <div className="editorial-footer-grid">
+          <div>
+            <p className="editorial-footer-label">{text(lang, "الفرع", "Branch")}</p>
+            <p>{text(lang, branch.nameAr, branch.nameEn)}</p>
+          </div>
+          <div>
+            <p className="editorial-footer-label">{text(lang, "الموقع", "Location")}</p>
+            <p>{text(lang, branch.addressAr, branch.addressEn) || tenant.city}</p>
+          </div>
+          <div>
+            <p className="editorial-footer-label">{text(lang, "الحالة", "Status")}</p>
+            <p>{status === null ? text(lang, "ساعات العمل", "Opening hours") : status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق حالياً", "Currently closed")}</p>
+          </div>
+        </div>
+      </div>
+    </footer>
     {!preview ? <button type="button" onClick={() => setCartOpen(true)} aria-label={text(lang, `السلة ${cartCount} ${formatSar(cartTotal, lang)}`, `Cart ${cartCount} ${formatSar(cartTotal, lang)}`)} className="editorial-cart-trigger"><ShoppingBag className="size-5" aria-hidden /><span>{text(lang, "الطلب", "Order")}</span><span className="editorial-cart-count">{cartCount}</span><span>{formatSar(cartTotal, lang)}</span></button> : null}
     {selected ? <ProductDialog lang={lang} product={selected} options={menu.productOptions?.[selected.id]} close={() => setSelectedId(null)} add={addToCart} submitting={submitting} /> : null}
     {cartOpen ? <CartDialog lang={lang} items={cart} setItems={setCart} close={() => setCartOpen(false)} submit={submit} submitting={submitting} error={error} /> : null}

@@ -2,22 +2,22 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Atelier protects mobile geometry and mixed-direction values", async () => {
-  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
-  assert.match(styles, /editorial-hero[\s\S]*min-height:min\(66dvh,690px\)/);
-  assert.match(styles, /editorial-featured-image[\s\S]*aspect-ratio:4\/3/);
-  assert.match(styles, /editorial-product-image[\s\S]*min-height:0/);
-  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:auto minmax\(0,1fr\) auto/);
-  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:isolate/);
+test("Editorial Canvas protects mobile geometry and mixed-direction values", async () => {
+  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
+  assert.match(styles, /editorial-hero[\s\S]*min-height:\s*clamp\(30rem, 72dvh, 47rem\)/);
+  assert.match(styles, /editorial-featured-image[\s\S]*aspect-ratio:\s*4 \/ 3/);
+  assert.match(styles, /editorial-product-image[\s\S]*min-height:\s*0/);
+  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:\s*auto\s+minmax\(0, 1fr\)\s+auto/);
+  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:\s*isolate/);
   assert.match(styles, /editorial-main[\s\S]*safe-area-inset-bottom/);
 });
 
-test("Atelier product cards reject legacy oversized mobile geometry", async () => {
-  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
-  assert.match(styles, /editorial-product-card[\s\S]*min-height:0/);
-  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:minmax\(7rem,22%\) minmax\(0,1fr\)/);
-  assert.match(styles, /editorial-product-card[\s\S]*transform:none!important/);
-  assert.match(styles, /editorial-featured-card[\s\S]*overflow:visible!important/);
+test("Editorial Canvas product cards reject legacy oversized mobile geometry", async () => {
+  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
+  assert.match(styles, /editorial-product-card[\s\S]*min-height:\s*0/);
+  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\(7\.25rem, 23%\)\s+minmax\(0, 1fr\)/);
+  assert.match(styles, /editorial-product-card[\s\S]*transform:\s*none\s*!important/);
+  assert.match(styles, /editorial-featured-card[\s\S]*transform:\s*none\s*!important/);
 });
 
 test("Editorial omits unknown opening status instead of inventing a state", async () => {
@@ -28,10 +28,19 @@ test("Editorial omits unknown opening status instead of inventing a state", asyn
   assert.doesNotMatch(source, /status == null \? text\(lang, "ساعات العمل", "Opening hours"\)/);
 });
 
-test("Atelier is the only Editorial stylesheet loaded by the root", async () => {
+test("Editorial Canvas is the only Editorial stylesheet loaded by the root", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
-  assert.match(source, /import editorialAtelierCss from "\.\.\/theme-editorial-atelier\.css\?url"/);
+  assert.match(source, /import editorialCanvasCss from "\.\.\/theme-editorial-canvas\.css\?url"/);
+  assert.doesNotMatch(source, /theme-editorial-atelier\.css\?url/);
   assert.doesNotMatch(source, /theme-editorial\.css\?url/);
-  assert.doesNotMatch(source, /theme-editorial-hardening\.css\?url/);
-  assert.match(source, /href: editorialAtelierCss/);
+  assert.match(source, /href: editorialCanvasCss/);
+});
+
+test("Editorial Canvas keeps semantic topbar, footer, search, and cart entry points", async () => {
+  const source = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
+  assert.match(source, /className="editorial-topbar"/);
+  assert.match(source, /className="editorial-topbar-cart"/);
+  assert.match(source, /id="editorial-search-input"/);
+  assert.match(source, /className="editorial-footer"/);
+  assert.match(source, /className="editorial-cart-trigger"/);
 });
