@@ -358,3 +358,22 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 
 ### Exact Next Task
 **Run GitHub Quality/browser checks, review the final diff, then test Atelier Editorial on a real Android viewport using the owner's failing cases.**
+
+
+
+## 2026-09-20 — Editorial Atelier Replacement — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: PR #221 `redesign: replace Editorial with Atelier premium system` was merged into `main`.
+- VERIFIED: merge commit / current `main` HEAD at implementation closeout: `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.
+- VERIFIED: the prior Editorial presentation stack was replaced by the scoped `src/theme-editorial-atelier.css` owner while ThemeKey `editorial` and the existing `contemporary-restaurant` renderer were preserved.
+- VERIFIED: legacy Editorial presentation files `src/theme-editorial.css` and `src/theme-editorial-hardening.css` were removed; Editorial selectors were removed from shared legacy layers.
+- VERIFIED: Quality run `35490043010` succeeded on retry attempt 2, including typecheck, tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance/diagnostic stages.
+- VERIFIED: W9 Orders QA run `35489610007` succeeded on the Atelier implementation head before merge.
+- VERIFIED: PR #221 had no unresolved review threads.
+- VERIFIED: GitHub combined status for the implementation merge commit is successful; Vercel reports success for `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.
+- UNKNOWN: whether that successful Vercel deployment is the current Production deployment identity versus a non-production deployment; no direct Production identity was established here.
+- UNKNOWN / EXTERNAL: physical Android/iOS QA of the merged Atelier public menu, including QR scanning and real-device typography, remains unverified.
+- Note: the first Quality attempt failed in an unrelated Studio responsive Playwright run with an execution-context-destroyed navigation race; the failed job was rerun without code changes and passed completely.
+
+### Exact Next Task
+**Physical Android QA of merged Atelier Editorial — repeat the owner's failing Arabic/English mobile cases and verify QR/public-menu rendering, RTL/LTR, title/price geometry, fixed actions, search/categories, cart/order, and configured external actions.**

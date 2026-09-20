@@ -29,3 +29,16 @@ Replace the accumulated Editorial presentation with **Atelier** while keeping Th
 
 ## Exact next task
 Run repository Quality/browser checks for this branch and inspect the resulting visual evidence.
+
+
+
+## Closeout — 2026-09-20
+- Status: CLOSED / VERIFIED / MERGED for repository implementation.
+- Merge commit: `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.
+- PR: #221.
+- Quality: run `35490043010`, retry attempt 2, SUCCESS.
+- W9 Orders QA: run `35489610007`, SUCCESS.
+- Review: no unresolved review threads.
+- Vercel: GitHub status SUCCESS for the merged implementation commit; Production identity remains UNKNOWN.
+- Device: physical Android/iOS QA remains UNKNOWN / external.
+- Exact next task: physical Android QA of merged Atelier Editorial using the owner's failing Arabic/English cases and the public-menu/QR/order interaction matrix.
