@@ -293,3 +293,29 @@ Do not begin another homepage redesign or commercial packaging redesign before t
 **Release-stage verification of `main` after PR #213, then physical Android/iOS/QR/theme/order/RTL smoke QA.**
 
 Do not start another homepage redesign or replace these visuals again unless verification identifies a concrete defect.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — VERIFIED / READY TO MERGE
+
+### Scope
+- Double Espresso theme-preview image reliability.
+- Public customer QR/menu loading path efficiency.
+- Studio Website + Instagram + Snapchat + Facebook + TikTok registration.
+- Permanent image payload-size contract for logo/cover/product uploads.
+- Recognizable social brand marks and theme-compatible action presentation.
+- Explicit Studio discoverability for branch-scoped map management.
+
+### Branch
+`fix/public-menu-social-images-performance-2026-09-20`
+
+### Verification
+- VERIFIED: final head `b3bbf92c3fbaef52511162f2b340ea179878603d`.
+- VERIFIED: Quality `35477401543` passed typecheck, 319/319 tests, W7.4–W7.10 contracts, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, and performance/cleanup stages.
+- VERIFIED: W9 Orders QA `35477401542` passed.
+- VERIFIED: Vercel status is success.
+- VERIFIED: no PR reviews or unresolved review threads.
+- VERIFIED: map URL capability exists at `/studio/branches`; `/studio/brand` now links directly to it without duplicating branch data.
+- UNKNOWN: Production deployment identity and physical-device QA.
+
+### Exact Next Task
+Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage Production and physical Android/iOS/QR/theme/order/RTL smoke QA.

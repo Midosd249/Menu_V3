@@ -72,7 +72,6 @@ test("Saudi disclosure keeps nutrition values nullable and derives high salt fro
   assert.match(disclosureMigration, /caffeine_basis in \('per_100ml', 'per_cup'\)/);
 });
 
-
 test("A.2 canonical public events include search, category selection, and add-to-cart", () => {
   assert.match(typesSource, /EventType = .*search.*category_view.*add_to_cart/);
   assert.match(publicSource, /eventType: z\.enum\(\["visit", "product_view", "qr_scan", "whatsapp", "search", "category_view", "add_to_cart"\]\)/);
@@ -99,7 +98,6 @@ test("A.2 migration extends menu_events without replacing the canonical stream",
   assert.match(journeyMigration, /menu_events_category_idx/);
 });
 
-
 test("A.2 public renderers emit the new journey events", () => {
   for (const source of [publicMenuSource, tasteSource, contemporarySource, specialtySource, fastCasualSource]) {
     assert.match(source, /eventType: "search"/);
@@ -109,7 +107,6 @@ test("A.2 public renderers emit the new journey events", () => {
   assert.match(publicMenuSource, /categoryId: nextCategoryId/);
   assert.match(publicMenuSource, /productId: item\.product\.id/);
 });
-
 
 test("A.3 anonymous sessions are server-issued, tenant-bound, and cookie-only", () => {
   assert.match(sessionSource, /ANONYMOUS_SESSION_COOKIE = "__Host-menu_v3_sid"/);
@@ -145,12 +142,11 @@ test("A.3 public event renderers no longer submit a client session id", () => {
   assert.doesNotMatch(publicSource, /sessionId:\s*z\.string/);
 });
 
-
 test("A.3 R6 experiment assignment uses the same server session as analytics", () => {
   const actionLinks = readFileSync(join(here, "../../components/public-action-links.tsx"), "utf8");
   assert.match(publicSource, /setResponseHeader\("Cache-Control", "private, no-store"\)/);
-  assert.match(publicSource, /const session = await resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
-  assert.match(publicSource, /const experimentVariant = tenant\.whatsapp\?\.trim\(\)\s+\? getExperimentVariant\(session\.id\)/);
+  assert.match(publicSource, /const session = await resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
+  assert.match(publicSource, /const experimentVariant = result\.data\.tenant\.whatsapp\?\.trim\(\)\s+\? getExperimentVariant\(session\.id\)/);
   assert.match(actionLinks, /experimentVariant\?: "control" \| "prominent"/);
   assert.doesNotMatch(actionLinks, /getGuestSessionId|getExperimentVariant/);
   assert.match(actionLinks, /data-experiment-variant/);

@@ -346,3 +346,22 @@ Release-stage verification of merged `main` for the homepage, followed by the pr
 **Release-stage verification of current `main` at `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks.**
 
 Do not start another homepage redesign, theme redesign, product/category deep-link work, or native Web Share work before this release/device evidence is closed.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — VERIFIED / READY TO MERGE
+
+- VERIFIED: implementation branch `fix/public-menu-social-images-performance-2026-09-20` final head `b3bbf92c3fbaef52511162f2b340ea179878603d`.
+- VERIFIED: Double Espresso uses repository-owned `/homepage/menu-dish.webp`; public menu removes the redundant tenant lookup while preserving server session/tenant boundaries.
+- VERIFIED: Studio supports Website, Instagram, Snapchat, Facebook, and TikTok tenant links with server-side safe URL handling.
+- VERIFIED: branch maps are already supported by `/studio/branches`; Brand now explicitly links to that surface and explains why map data is branch-scoped.
+- VERIFIED: image uploads use a 450,000-character client/server contract with adaptive WebP compression.
+- VERIFIED: local recognizable social SVG marks are used without a runtime/CDN dependency.
+- VERIFIED: GitHub Quality `35477401543` passed all configured quality/browser/performance stages; W9 Orders QA `35477401542` passed.
+- VERIFIED: Vercel status for the final head is success; PR #217 has no unresolved review threads or submitted reviews.
+- UNKNOWN: Production deployment identity and physical Android/iOS/QR/device evidence.
+- Implementation status: `PUSHED` / `VERIFIED_LOCALLY` equivalent evidence is supplied by CI; not yet merged.
+- Deployment status: `UNKNOWN` / no Production deployment by this task.
+
+### Exact Next Task
+
+**Merge PR #217 once at verified head `b3bbf92c3fbaef52511162f2b340ea179878603d`, then verify resulting `main` and release-stage Production/device evidence.**

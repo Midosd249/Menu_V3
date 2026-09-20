@@ -266,3 +266,19 @@ Release-stage production verification of the merged homepage, then physical Andr
 ### Exact Next Task
 
 Release-stage verification of the merged homepage when the deployment window is available, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not redesign the homepage again before verification.
+
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — VERIFIED / READY TO MERGE
+
+- VERIFIED: implementation is complete on branch `fix/public-menu-social-images-performance-2026-09-20`.
+- VERIFIED: final head `b3bbf92c3fbaef52511162f2b340ea179878603d`.
+- VERIFIED: GitHub Quality run `35477401543` passed typecheck, full tests (319/319), W7.4–W7.10 contracts, lint, production build, Playwright/Chromium, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, performance diagnostics, and cleanup.
+- VERIFIED: W9 Orders QA run `35477401542` passed.
+- VERIFIED: Vercel status for final head is `success`.
+- VERIFIED: final diff and PR #217 were reviewed; no unresolved review threads or submitted reviews.
+- VERIFIED: branch map links remain branch-scoped in `/studio/branches`; Brand now provides an explicit navigation link to `Manage branches & map` instead of duplicating branch location data.
+- UNKNOWN: Production deployment identity and physical Android/iOS/QR/device evidence until release-stage verification.
+
+### Exact Next Task
+
+Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878603d`, then verify the resulting `main` SHA and release-stage Production/device evidence.

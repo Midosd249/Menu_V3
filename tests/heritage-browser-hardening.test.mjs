@@ -45,10 +45,10 @@ test("Taste preserves data-driven customer action ownership", async () => {
   const actions = await readFile("src/lib/menu/public-actions.ts", "utf8");
   assert.match(source, /getPublicActions\(tenant, branch, lang\)/);
   assert.match(source, /data-action-key=\{action\.key\}/);
-  assert.match(actions, /whatsapp \? \{ key: "whatsapp"/);
-  assert.match(actions, /maps \? \{ key: "location"/);
-  assert.match(actions, /phone \? \{ key: "phone"/);
-  assert.match(actions, /instagram \? \{ key: "instagram"/);
+  assert.match(actions, /key: "whatsapp"/);
+  assert.match(actions, /key: "location"/);
+  assert.match(actions, /key: "phone"/);
+  assert.match(actions, /PublicActionKey = "whatsapp".*website.*instagram.*snapchat.*facebook.*tiktok/);
 });
 
 test("Taste mobile rows preserve compact image-to-copy geometry", async () => {
