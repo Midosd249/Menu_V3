@@ -4,20 +4,20 @@ import test from "node:test";
 
 test("Editorial Canvas protects mobile geometry and mixed-direction values", async () => {
   const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
-  assert.match(styles, /editorial-hero[\s\S]*min-height:\s*clamp\\(30rem, 72dvh, 47rem\\)/);
-  assert.match(styles, /editorial-featured-image[\s\S]*aspect-ratio:4 \/ 3/);
+  assert.match(styles, /editorial-hero[\s\S]*min-height:\s*clamp\(30rem, 72dvh, 47rem\)/);
+  assert.match(styles, /editorial-featured-image[\s\S]*aspect-ratio:\s*4 \/ 3/);
   assert.match(styles, /editorial-product-image[\s\S]*min-height:\s*0/);
-  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:\s*auto\s+minmax\\(0, 1fr\\)\s+auto/);
-  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:isolate/);
+  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:\s*auto\s+minmax\(0, 1fr\)\s+auto/);
+  assert.match(styles, /editorial-product-price[\s\S]*unicode-bidi:\s*isolate/);
   assert.match(styles, /editorial-main[\s\S]*safe-area-inset-bottom/);
 });
 
 test("Editorial Canvas product cards reject legacy oversized mobile geometry", async () => {
   const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
-  assert.match(styles, /editorial-product-card[\s\S]*min-height:0/);
-  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\\(7\\.25rem, 23%\\)\s+minmax\\(0, 1fr\\)/);
-  assert.match(styles, /editorial-product-card[\s\S]*transform:none !important/);
-  assert.match(styles, /editorial-featured-card[\s\S]*transform:none !important/);
+  assert.match(styles, /editorial-product-card[\s\S]*min-height:\s*0/);
+  assert.match(styles, /editorial-product-card[\s\S]*grid-template-columns:\s*minmax\(7\.25rem, 23%\)\s+minmax\(0, 1fr\)/);
+  assert.match(styles, /editorial-product-card[\s\S]*transform:\s*none\s*!important/);
+  assert.match(styles, /editorial-featured-card[\s\S]*transform:\s*none\s*!important/);
 });
 
 test("Editorial omits unknown opening status instead of inventing a state", async () => {
