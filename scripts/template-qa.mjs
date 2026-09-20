@@ -95,6 +95,7 @@ try {
           return {
             mediaSquare: Boolean(mediaRect && Math.abs(mediaRect.width - 92) <= 1 && Math.abs(mediaRect.height - 92) <= 1),
             copyProtected: Boolean(copyRect && copyRect.width >= 130 && getComputedStyle(copy).minInlineSize === "0px"),
+            mediaTextGap: Boolean(mediaRect && copyRect && Math.max(mediaRect.left - copyRect.right, copyRect.left - mediaRect.right) >= 11.5 && Math.max(mediaRect.left - copyRect.right, copyRect.left - mediaRect.right) <= 12.5),
             titleReadableWidth: Boolean(titleRect && titleRect.width >= 130),
             priceBelowDescription: Boolean(!descriptionRect || !priceRect || priceRect.top >= descriptionRect.bottom - 1),
             priceNoWrap: Boolean(priceStyle?.whiteSpace === "nowrap" && priceRect && copyRect && priceRect.width <= copyRect.width + 1),
@@ -134,6 +135,7 @@ try {
           ["SIGNAL TABLE product cards present", cards.length > 0, String(cards.length)],
           ["SIGNAL TABLE fixed square media", cards.every((card) => card.mediaSquare), String(cards.filter((card) => !card.mediaSquare).length)],
           ["SIGNAL TABLE protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), String(cards.filter((card) => !card.copyProtected || !card.titleReadableWidth).length)],
+          ["SIGNAL TABLE image-to-text gap", cards.every((card) => card.mediaTextGap), String(cards.filter((card) => !card.mediaTextGap).length)],
           ["SIGNAL TABLE price below description", cards.every((card) => card.priceBelowDescription), String(cards.filter((card) => !card.priceBelowDescription).length)],
           ["SIGNAL TABLE price no-wrap", cards.every((card) => card.priceNoWrap), String(cards.filter((card) => !card.priceNoWrap).length)],
           ["SIGNAL TABLE action does not overlap", cards.every((card) => card.actionDoesNotOverlapCard), String(cards.filter((card) => !card.actionDoesNotOverlapCard).length)],
