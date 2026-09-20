@@ -2,7 +2,7 @@ import { PublicMenuView } from "@/components/public-menu";
 import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
 import { MenuNutritionOverlay } from "@/components/menu-nutrition-overlay";
 import { TasteTemplate } from "@/components/templates/taste";
-import { ContemporaryRestaurantTemplate } from "@/components/templates/contemporary-restaurant";
+import { SignalTableTemplate } from "@/components/templates/signal-table";
 import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
 import { FineDiningHospitalityTemplate } from "@/components/templates/fine-dining-hospitality";
 import { SmallMenuTemplate } from "@/components/templates/small-menu";
@@ -23,7 +23,7 @@ export function ThemeRenderer({ menu, preview = false }: Props) {
 
   let content;
   if (theme === "heritage") content = <TasteTemplate menu={menu} preview={preview} />;
-  else if (family === "contemporary-restaurant") content = <ContemporaryRestaurantTemplate menu={menu} preview={preview} />;
+  else if (family === "contemporary-restaurant") content = <SignalTableTemplate menu={menu} preview={preview} />;
   else if (family === "bakery-dessert") content = <BakeryDessertTemplate menu={menu} />;
   else if (family === "fine-dining-hospitality") content = <FineDiningHospitalityTemplate menu={menu} preview={preview} />;
   else if (family === "small-menu") content = <SmallMenuTemplate menu={menu} preview={preview} />;
