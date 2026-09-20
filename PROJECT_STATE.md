@@ -7,17 +7,17 @@
 - Source of truth: `main`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
-## Current Verified Position — 2026-09-18
-- VERIFIED: release-stage operational verification was completed against main b78b69ea0921571a1ca454c30ca81a43e5cf20b5 before this documentation batch.
-- VERIFIED: Vercel Production deployment for the verified release batch was READY and matched GitHub main commit b78b69ea0921571a1ca454c30ca81a43e5cf20b5 at verification time.
-- VERIFIED: Production alias: `menu-v3-kohl.vercel.app`.
-- VERIFIED: Production root returned HTTP 200.
-- VERIFIED: valid-but-nonexistent public menu probe returned HTTP 404.
-- VERIFIED: valid-but-nonexistent branch variant returned HTTP 404.
-- VERIFIED: current production deployment runtime error logs for the checked deployment showed no error/fatal logs in the inspected 2-hour window.
-- VERIFIED: production theme-testing override is hard-disabled when `VERCEL_ENV=production` by server-side code; no removal is justified by current evidence.
-- UNKNOWN: exact production environment-variable secret values remain unreadable through the available connector surface.
-- UNKNOWN / EXTERNAL: physical Android/iOS device QA cannot be performed by the connected repository/Vercel surfaces.
+## Current Verified Position — 2026-09-20
+- VERIFIED: GitHub `main` is now at `be7b79e5dec7d569aed1828e4376f57a8cbf9507` after merged PR #223.
+- VERIFIED: PR #223 `redesign: replace Editorial with Canva-derived Canvas menu` was merged with squash after GitHub Quality and W9 Orders browser checks passed.
+- VERIFIED: Quality run for PR #223 passed route generation, typecheck, full tests, W7.4–W7.10 contracts, lint, production build, Playwright installation, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, performance diagnostics, and cleanup.
+- VERIFIED: W9 Orders browser QA for PR #223 passed.
+- VERIFIED: the previous Editorial/Atelier presentation was replaced rather than incrementally patched.
+- VERIFIED: the new Editorial Canvas system is data-driven and preserves tenant/branch data, search, category filtering, product details/options, cart/order, analytics, bilingual routing, and existing server-side trust boundaries.
+- VERIFIED: `src/theme-editorial-atelier.css` was retired and replaced by `src/theme-editorial-canvas.css`.
+- VERIFIED: Editorial now uses the owner-supplied warm-paper/ink/lime/copper visual direction, with mobile-safe product geometry and explicit Arabic/LTR wrapping rules.
+- UNKNOWN: physical Android/iOS rendering and QR camera evidence for this newly merged theme.
+- UNKNOWN: current Production deployment identity for `be7b79e5dec7d569aed1828e4376f57a8cbf9507`; no Production deployment was requested or performed in this task.
 
 ## PH Lifecycle — Completed
 
@@ -167,9 +167,9 @@ At the end of every atomic task:
 - BLOCKED / NON-BLOCKING: Vercel PR status failed because the connected Vercel account hit its build/deployment rate limit; no retry was performed.
 
 ## Exact Next Task
-**Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
+**Owner visual/device QA of the merged Editorial Canvas theme — inspect the Arabic mobile menu first (360–430px), then desktop and English LTR, with QR entry, search/category, product details/options, cart/order, and fixed-cart coverage.**
 
-Do not begin product/category deep links or native Web Share automatically.
+Do not deploy to Production automatically and do not begin another redesign until this QA is reviewed.
 
 ## 2026-09-18 — A.4 International Boundary Audit — CLOSED / VERIFIED
 - VERIFIED: A.4 was authorized explicitly and audited against canonical `main` at `1cb3cce08f544e295ab550fa70e8123bf2fc7b1a`.
