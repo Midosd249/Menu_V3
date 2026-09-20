@@ -52,6 +52,7 @@ test("SIGNAL TABLE owns stable mobile information geometry and removes numbering
   assert.match(styles, /signal-card-copy[\s\S]*flex-direction:\s*column/);
   assert.match(styles, /signal-card-title[\s\S]*-webkit-line-clamp:\s*2/);
   assert.match(styles, /signal-product-card[\s\S]*grid-template-columns:\s*92px\s+minmax\(0,1fr\)/);
+  assert.match(styles, /signal-product-card[\s\S]*column-gap:\s*\.75rem/);
   assert.match(styles, /signal-product-image[\s\S]*aspect-ratio:\s*1\s*\/\s*1/);
   assert.match(styles, /signal-product-copy[\s\S]*flex:\s*1\s+1\s+auto/);
   assert.match(styles, /signal-product-name[\s\S]*-webkit-line-clamp:\s*2/);
