@@ -22,6 +22,13 @@ test("SIGNAL TABLE contains no product or category numbering", async () => {
   }
 });
 
+test("SIGNAL TABLE owns the direct public menu route for the contemporary restaurant family", async () => {
+  const route = await readFile("src/routes/m.$slug.tsx", "utf8");
+  assert.match(route, /import \{ SignalTableTemplate \} from "@\/components\/templates\/signal-table"/);
+  assert.match(route, /family === "contemporary-restaurant" \? <SignalTableTemplate/);
+  assert.doesNotMatch(route, /<ContemporaryRestaurantTemplate/);
+});
+
 test("SIGNAL TABLE uses one presentation owner and preserves configured actions", async () => {
   const renderer = await readFile("src/components/theme-renderer.tsx", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
