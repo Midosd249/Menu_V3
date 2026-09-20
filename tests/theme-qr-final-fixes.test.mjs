@@ -46,8 +46,8 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
 });
 
 
-test("Editorial Atelier owns stable mobile information geometry", async () => {
-  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
+test("Editorial Canvas owns stable mobile information geometry", async () => {
+  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
   assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:/);
   assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext/);
   assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial/);
