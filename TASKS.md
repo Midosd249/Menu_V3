@@ -377,3 +377,17 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 
 ### Exact Next Task
 **Physical Android QA of merged Atelier Editorial — repeat the owner's failing Arabic/English mobile cases and verify QR/public-menu rendering, RTL/LTR, title/price geometry, fixed actions, search/categories, cart/order, and configured external actions.**
+
+
+## 2026-09-20 — Editorial Canvas replacement — IN PROGRESS
+
+- VERIFIED: owner authorized a complete Editorial presentation replacement using the supplied Canva/HTML direction.
+- VERIFIED: implementation is isolated to the Editorial renderer/theme/semantic adapter and regression contracts; shared order/cart/data architecture remains unchanged.
+- VERIFIED: branch `redesign/editorial-canvas-menu-2026-09-20` created from main `65dd5944f64203b74c80924098adf68fa15ccbce`.
+- VERIFIED: the prior Atelier stylesheet has been replaced and renamed to `src/theme-editorial-canvas.css`.
+- UNKNOWN: GitHub Quality and browser QA for this branch until CI executes.
+- UNKNOWN: physical Android/iOS rendering; not part of this implementation verification.
+- Deployment: NOT REQUESTED / NOT PERFORMED.
+
+### Exact Next
+Complete CI/browser verification for the Editorial Canvas branch, review the final diff, then merge only if all required quality gates pass.
