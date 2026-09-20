@@ -450,3 +450,18 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 
 ### Exact Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
+
+
+## 2026-09-21 — SIGNAL TABLE Mobile Product Card Remediation — DONE
+
+- VERIFIED: PR #227 merged successfully into `main`.
+- VERIFIED: implementation SHA `dd8db716d0170543590b875f15e3dec99d8cba4c`.
+- VERIFIED: PR Quality, W9 Orders QA, and main Quality run #2187 passed.
+- VERIFIED: responsive browser matrix passed for SIGNAL TABLE in Arabic RTL and English LTR; all-theme browser QA passed.
+- VERIFIED: shared legacy price-layout conflict was removed from SIGNAL TABLE's presentation path.
+- UNKNOWN: physical Android/iOS/QR evidence and standalone `npm run check:auth`; the connected Quality workflow does not run the standalone auth command and no local runtime is available here.
+- Deployment status: NOT_REQUESTED / NOT_PERFORMED.
+
+### Exact Next Task
+
+**Execute physical Android/iOS public-menu QA against `main` `dd8db716d0170543590b875f15e3dec99d8cba4c`, then record the real-device result without starting another implementation task automatically.**

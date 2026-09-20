@@ -5,8 +5,8 @@
 - Classification: public-menu visual regression / structural layout remediation
 - Theme identifier: `editorial` compatibility key → SIGNAL TABLE presentation
 - Scope: `src/components/templates/signal-table.tsx` and `src/theme-signal-table.css` only, plus targeted regression contracts and continuity documentation.
-- Implementation status: IN_PROGRESS
-- Evidence status: repository-verified; physical-device visual rendering remains UNKNOWN until directly observed.
+- Implementation status: CLOSED / MERGED / VERIFIED
+- Evidence status: repository + CI/browser verified; physical-device visual rendering remains UNKNOWN until directly observed.
 
 ## Acceptance failure
 
@@ -47,3 +47,15 @@ The supplied mobile screenshot shows Arabic product names collapsing into a narr
 - GitHub Quality and W9 Orders QA.
 - Browser visual verification at 320/375/430px Arabic RTL plus English LTR.
 - Physical Android/iOS verification remains UNKNOWN until directly observed.
+
+
+## Final Verification — 2026-09-21
+
+- VERIFIED: PR #227 merged into `main` as `dd8db716d0170543590b875f15e3dec99d8cba4c`.
+- VERIFIED: final Quality gate passed after isolating the shared legacy `theme-price-consistency.css` selectors from SIGNAL TABLE.
+- VERIFIED: main Quality run #2187 (`35539242443`) passed.
+- VERIFIED: W9 Orders QA passed on the final implementation head.
+- VERIFIED: Browser template QA passed all themes across 320/360/375/390/430/768/1024/1280/1440; SIGNAL TABLE passed Arabic RTL and English LTR.
+- VERIFIED: price-below-description, price no-wrap, fixed square media, and protected text-width checks passed.
+- UNKNOWN: physical Android/iOS pixel evidence, real-device QR evidence, and standalone local `npm run check:auth`.
+- Deployment status: NOT_REQUESTED / NOT_PERFORMED.

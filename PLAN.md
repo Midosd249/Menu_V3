@@ -399,3 +399,18 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 
 ### Exact Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
+
+
+## 2026-09-21 — SIGNAL TABLE Mobile Product Card Remediation — CLOSED
+
+- VERIFIED: PR #227 merged into `main` as `dd8db716d0170543590b875f15e3dec99d8cba4c`.
+- VERIFIED: PR Quality, W9 Orders QA, and main Quality run #2187 passed.
+- VERIFIED: browser template QA covered all five themes and the full responsive matrix; SIGNAL TABLE passed Arabic RTL and English LTR.
+- VERIFIED: the shared legacy price-layout conflict was isolated from SIGNAL TABLE, restoring one clear presentation owner for its card geometry.
+- VERIFIED: card contract is 92px square media + protected text column + title → description → price + non-wrapping price + in-flow actions.
+- UNKNOWN: local npm execution and physical-device evidence.
+- Deployment status: NOT_REQUESTED / NOT_PERFORMED.
+
+### Exact Next Task
+
+**Physical Android/iOS QA on `main` `dd8db716d0170543590b875f15e3dec99d8cba4c`; do not start another redesign or CSS iteration before that evidence is closed.**
