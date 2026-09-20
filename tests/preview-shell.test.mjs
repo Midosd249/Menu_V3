@@ -101,8 +101,8 @@ test("Editorial template uses dedicated semantic regions and a single action hie
   assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
 });
 
-test("Editorial refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
-  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
+test("Editorial Canvas refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
+  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
   const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
   assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
   assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
