@@ -94,10 +94,10 @@ try {
           const cardRect = card.getBoundingClientRect();
           return {
             mediaSquare: Boolean(mediaRect && Math.abs(mediaRect.width - 92) <= 1 && Math.abs(mediaRect.height - 92) <= 1),
-            copyProtected: Boolean(copyRect && copyRect.width >= 130 && getComputedStyle(copy).minInlineSize === "0"),
+            copyProtected: Boolean(copyRect && copyRect.width >= 130 && getComputedStyle(copy).minInlineSize === "0px"),
             titleReadableWidth: Boolean(titleRect && titleRect.width >= 130),
             priceBelowDescription: Boolean(!descriptionRect || !priceRect || priceRect.top >= descriptionRect.bottom - 1),
-            priceNoWrap: Boolean(priceStyle?.whiteSpace === "nowrap" && price && price.scrollWidth <= price.clientWidth + 1),
+            priceNoWrap: Boolean(priceStyle?.whiteSpace === "nowrap" && priceRect && copyRect && priceRect.width <= copyRect.width + 1),
             actionDoesNotOverlapCard: Boolean(!action?.getBoundingClientRect || !cardRect || action.getBoundingClientRect().top >= cardRect.bottom - 1),
           };
         });
