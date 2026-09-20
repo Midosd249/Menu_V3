@@ -109,7 +109,8 @@ test("Editorial refinement prevents hero logo hijacking, unstable card transform
   assert.doesNotMatch(styles, /animation:\s*[^;]*editorial/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
   assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
-  assert.match(styles, /editorial-dialog[^}]*border:/);\n  assert.match(styles, /editorial-cart-trigger[^}]*border:/);
+  assert.match(styles, /editorial-dialog[^}]*border:/);
+  assert.match(styles, /editorial-cart-trigger[^}]*border:/);
   assert.match(template, /fixed inset-0 z-\[60\]/);
   assert.match(template, /fixed inset-0 z-\[70\]/);
   assert.match(styles, /safe-area-inset-bottom/);
