@@ -37,12 +37,12 @@ const definitions: readonly ThemeDefinition[] = [
     capabilities: { dark: false, imageFirst: false, compact: false, immersive: false, featuredComposition: false, decorativeSurfaces: false, motion: false }, motion: "quiet", preview: { className: "preview-essential", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1400&q=88" },
   },
   {
-    key: "editorial", family: "contemporary-restaurant", tier: "free", name: { ar: "أتيليه", en: "Atelier" },
-    description: { ar: "هوية ضيافة تحريرية معاصرة، دافئة ودقيقة، صُممت للقراءة السريعة والطلب على الهاتف.", en: "A contemporary hospitality editorial identity designed for fast mobile scanning and confident ordering." },
-    promise: { ar: "منيو بريميوم يوازن الصورة، المعلومة والهوية بدون فوضى.", en: "A premium menu balancing imagery, information, and brand character without visual noise." },
-    tags: [{ ar: "مجاني", en: "Free" }, { ar: "أتيليه", en: "Atelier" }, { ar: "بريميوم", en: "Premium" }],
+    key: "editorial", family: "contemporary-restaurant", tier: "free", name: { ar: "إديتوريال", en: "Editorial" },
+    description: { ar: "تصميم إديتوريال مستوحى من مرجع Canva: ورق دافئ، حبر قوي، صور بارزة وتسلسل واضح للقراءة والطلب على الهاتف.", en: "A Canva-derived editorial system with warm paper, strong ink, image-led hierarchy, and confident mobile ordering." },
+    promise: { ar: "منيو بصري مميز يحافظ على الصورة، الاسم، الوصف والسعر دون تكديس أو التفاف مكسور.", en: "A premium image-led menu that keeps name, description, and price readable without visual crowding." },
+    tags: [{ ar: "مجاني", en: "Free" }, { ar: "Canva", en: "Canva" }, { ar: "بريميوم", en: "Premium" }],
     tokens: { ...baseTokens, colors: { ...baseTokens.colors, background: "#f4efe7", surface: "#fffdf9", surfaceMuted: "#e9dfd2", border: "#d7c8b7", accent: "#9b5134" }, typography: { ...baseTokens.typography, headingWeight: 700, lineHeight: "1.52", letterSpacing: "-0.012em" }, shape: { ...baseTokens.shape, radiusLg: "0.5rem", radiusXl: "0.875rem" }, spacing: { page: "1.25rem", section: "3.5rem", card: "1rem", gap: "1rem" }, effects: { ...baseTokens.effects, shadow: "0 1px 0 rgb(23 20 17 / .08)", shadowHover: "0 22px 50px rgb(23 20 17 / .14)" } },
-    layout: { header: "hero", productGrid: "list", productCard: "editorial", categoryNav: "sticky", imageRatio: "portrait" }, capabilities: { dark: false, imageFirst: true, compact: false, immersive: false, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "editorial", preview: { className: "preview-editorial", image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1400&q=88" },
+    layout: { header: "hero", productGrid: "list", productCard: "editorial", categoryNav: "sticky", imageRatio: "portrait" }, capabilities: { dark: false, imageFirst: true, compact: false, immersive: false, featuredComposition: true, decorativeSurfaces: true, motion: true }, motion: "editorial", preview: { className: "preview-editorial", image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1400&q=88" },
   },
   {
     key: "noir", family: "fine-dining-hospitality", tier: "free", name: { ar: "نوار", en: "Noir" },
