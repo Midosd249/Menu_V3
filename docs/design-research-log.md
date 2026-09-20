@@ -330,3 +330,14 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - IMPLEMENTED: Atelier uses warm mineral paper, deep olive, restrained brass, terracotta indexing, controlled photography, and explicit information geometry.
 - VERIFIED: AppDeploy prototype `Menu V3 Atelier Editorial` is ready with no frontend/backend errors.
 - UNKNOWN: production CI/browser/device rendering until the GitHub branch is checked.
+
+
+
+## 2026-09-20 — Editorial Atelier verification closeout
+- VERIFIED: Atelier implementation merged to `main` at `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.
+- VERIFIED: Quality run `35490043010` succeeded on retry attempt 2 after a transient Studio Playwright navigation-context failure on attempt 1.
+- VERIFIED: automated all-theme, Studio, Platform Admin, typecheck, tests, lint, build, and performance stages passed.
+- VERIFIED: W9 Orders QA `35489610007` passed before merge.
+- VERIFIED: Vercel GitHub status is successful for the merged implementation commit.
+- UNKNOWN: direct Production deployment identity and physical Android/iOS rendering.
+- Transferable principle: the Atelier presentation is intentionally single-owner and should not reintroduce distributed Editorial CSS patches; real-device evidence is the next gate.
