@@ -71,3 +71,11 @@ test("Editorial product names are content-direction aware instead of forcing RTL
   assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial\s*!important/);
   assert.match(styles, /editorial-product-name[\s\S]*unicode-bidi:\s*plaintext\s*!important/);
 });
+
+test("Editorial Atelier owns stable mobile information geometry", async () => {
+  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
+  assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:/);
+  assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext/);
+  assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial/);
+  assert.match(styles, /editorial-product-card[\s\S]*overflow:\s*visible/);
+});
