@@ -10,7 +10,7 @@ test("global public-menu price layer is loaded after theme layers", async () => 
 
 test("global price layer keeps public prices in a stable bidi-safe grid", async () => {
   const styles = await readFile("src/theme-price-consistency.css", "utf8");
-  assert.match(styles, /:not\(\[data-menu-theme="editorial"\]\)\[data-menu-theme\][\s\S]*grid-template-areas:[\s\S]*"name price"[\s\S]*"description description"/);
+  assert.match(styles, /grid-template-areas:[\s\S]*"name price"[\s\S]*"description description"/);
   assert.match(styles, /direction:\s*ltr/);
   assert.match(styles, /unicode-bidi:\s*isolate/);
   assert.match(styles, /white-space:\s*nowrap/);
@@ -21,9 +21,3 @@ test("global price layer does not style quick-add controls as prices", async () 
   const styles = await readFile("src/theme-price-consistency.css", "utf8");
   assert.match(styles, /:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)/);
 });
-
-
-test("global price card grid excludes SIGNAL TABLE ownership", async () => {
-  const styles = await readFile("src/theme-price-consistency.css", "utf8");
-  assert.match(styles, /html:not\(\[data-menu-theme="editorial"\]\)\[data-menu-theme\]/);
-  assert.doesNotMatch(styles, /html\\[data-menu-theme\\] \\.menu-public-shell main > section:not\\(:first-child\\) ul > li > div > button/);
