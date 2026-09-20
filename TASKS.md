@@ -432,3 +432,21 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 
 ### Exact Next Task
 **Merge PR #226 once, verify the resulting `main` SHA, then stop. Production deployment and physical-device QA remain release-stage work and are not to be started automatically.**
+
+
+## 2026-09-20 — SIGNAL TABLE Mobile Product Card Structural Remediation
+
+- VERIFIED: current `main` before this task is `fb4dc99b1d8275cde9fddbd8256f3f3046285496`.
+- VERIFIED: the supplied screenshot demonstrates a public-menu mobile product-card failure in the SIGNAL TABLE presentation.
+- VERIFIED: current source had a `signal-product-topline` that placed title and price in competing grid columns; this violated the required hierarchy.
+- VERIFIED: current source also used a proportional media track and absolute quick-add positioning.
+- IMPLEMENTED: product-card DOM now keeps image + protected text column, with title → description → price in normal document flow.
+- IMPLEMENTED: media is fixed `92px × 92px` on mobile; text column is explicitly shrinkable; title and description are clamped to two lines; price is isolated and non-wrapping.
+- IMPLEMENTED: featured-card information flow was aligned to title → description → price as well.
+- IMPLEMENTED: quick-add/options are in-flow rather than absolutely overlaid.
+- IMPLEMENTED: targeted regression contracts now assert the structural hierarchy and reject the obsolete topline.
+- UNKNOWN: local execution of npm commands and physical browser/device screenshots because this session does not have the repository working tree/browser runtime.
+- Deployment: NOT_REQUESTED / NOT_PERFORMED.
+
+### Exact Next Task
+**Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
