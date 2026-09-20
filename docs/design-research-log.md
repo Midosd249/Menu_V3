@@ -321,3 +321,12 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - VERIFIED: Qayema positions Arabic-first bilingual menus, curated editorial templates, QR, WhatsApp ordering, analytics, and AI-assisted menu setup as a coherent restaurant workflow. citeturn1search0
 - INFERRED: Menu V3 homepage Arabic copy should use natural Saudi restaurant/menu language, specific dish naming, concise culinary descriptions, and visible plan progression instead of generic translated phrasing.
 - PROPOSED: the homepage hero preview supports two owner-supplied visual assets at `public/homepage/menu-cover.webp` and `public/homepage/menu-dish.webp`.
+
+
+## 2026-09-20 — Editorial Atelier replacement
+- VERIFIED: current Android screenshots still show severe Editorial text fragmentation after PR #220.
+- VERIFIED: Editorial presentation ownership was distributed across multiple CSS layers.
+- VERIFIED: current 2026 hospitality/menu references emphasize readable bilingual hierarchy, stable price anchors, strong food imagery, and restrained premium material systems. citeturn6search0turn6search1turn6search2turn6search4
+- IMPLEMENTED: Atelier uses warm mineral paper, deep olive, restrained brass, terracotta indexing, controlled photography, and explicit information geometry.
+- VERIFIED: AppDeploy prototype `Menu V3 Atelier Editorial` is ready with no frontend/backend errors.
+- UNKNOWN: production CI/browser/device rendering until the GitHub branch is checked.

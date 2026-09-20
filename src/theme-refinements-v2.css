@@ -1,64 +1,3 @@
-/*
- * Menu V3 — second visual direction pass for Premium Themes 2–3.
- * Essential intentionally keeps its original visual system.
- */
-
-/* -------------------------------------------------------------------------- */
-/* 01 — EDITORIAL / kinetic food magazine                                    */
-/* -------------------------------------------------------------------------- */
-html[data-menu-theme="editorial"] .menu-public-shell {
-  --m-ink: #11100e;
-  --m-paper: #f1eadf;
-  --m-red: #b33b25;
-  --m-rule: rgb(17 16 14 / .18);
-  background: linear-gradient(90deg, transparent calc(50% - .5px), var(--m-rule) calc(50% - .5px), var(--m-rule) calc(50% + .5px), transparent calc(50% + .5px)), var(--m-paper);
-}
-html[data-menu-theme="editorial"] .menu-public-shell header { position: relative; isolation: isolate; }
-html[data-menu-theme="editorial"] .menu-public-shell header::before {
-  content: none;
-}
-html[data-menu-theme="editorial"] .menu-public-shell header > div {
-  position: relative; min-height: inherit; display: flex; flex-direction: column; justify-content: flex-end;
-}
-html[data-menu-theme="editorial"] .menu-public-shell header h1 { text-wrap: balance; max-width: 7ch; font-variation-settings: "wght" 760; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section { position: relative; overflow: clip; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section > h2 { text-wrap: balance; max-width: 10ch; font-variation-settings: "wght" 760; }
-html[data-menu-theme="editorial"] .menu-public-shell main > section > h2::after {
-  content: ""; display: inline-block; width: 3.25rem; height: .12em; margin-inline-start: .75rem;
-  background: var(--m-red); vertical-align: .18em;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li { position: relative; min-width: 0; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button {
-  position: relative; isolation: isolate; overflow: clip; transition: background-color 260ms ease;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button::before {
-  content: ""; position: absolute; z-index: 2; inset: .65rem;
-  border: 1px solid rgb(255 255 255 / .35); mix-blend-mode: screen; opacity: 0; transform: scale(.985);
-  transition: opacity 280ms ease, transform 450ms cubic-bezier(.16,1,.3,1); pointer-events: none;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child { position: relative; overflow: hidden; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img {
-  transform: scale(1.025); transition: transform 900ms cubic-bezier(.16,1,.3,1), filter 500ms ease;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible { background: rgb(179 59 37 / .075); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover::before,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible::before { opacity: 1; transform: scale(1); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover img,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:focus-visible img { transform: scale(1.075) translateY(-1.5%); filter: saturate(.94) contrast(1.08); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 2) > button { border-inline-start: 2px solid var(--m-ink); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(4n + 4) > button { border-inline-end: 2px solid var(--m-red); }
-@supports (animation-timeline: view()) {
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
-    animation: editorial-image-reveal linear both; animation-timeline: view(block 18% 8%);
-  }
-}
-@keyframes editorial-image-reveal {
-  0% { clip-path: inset(9% 5% 9% 5%); transform: scale(1.07); }
-  45% { clip-path: inset(0); transform: scale(1.02); }
-  100% { clip-path: inset(0); transform: scale(1); }
-}
-
 /* -------------------------------------------------------------------------- */
 /* 02 — NOIR / cinematic light + glass                                      */
 /* -------------------------------------------------------------------------- */
@@ -139,13 +78,7 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
 /* Mobile-first safety + interaction quality                                 */
 /* -------------------------------------------------------------------------- */
 @media (max-width: 700px) {
-  html[data-menu-theme="editorial"] .menu-public-shell header::before { display: none; }
   html[data-menu-theme="noir"] .menu-public-shell header > div::after { display: none; }
-  html[data-menu-theme="editorial"] .menu-public-shell main { padding-inline: .85rem; }
-  html[data-menu-theme="editorial"] .menu-public-shell main > section { padding-block: clamp(2.5rem, 11vw, 4rem); }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button { min-height: 0; }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child { height: clamp(11rem, 54vw, 17rem) !important; }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child { padding-block: .85rem 1.15rem; }
   html[data-menu-theme="noir"] .menu-public-shell main { padding-inline: .85rem; }
   html[data-menu-theme="noir"] .menu-public-shell main > section { padding-block: clamp(2.75rem, 10vw, 4.5rem); }
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button { min-height: 0; }
@@ -154,11 +87,10 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible { transform: none; }
 }
 @media (hover: none) {
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover,
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme="editorial"] .menu-public-shell *, html[data-menu-theme="noir"] .menu-public-shell * {
+  html[data-menu-theme="noir"] .menu-public-shell * {
     animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }

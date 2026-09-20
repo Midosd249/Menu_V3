@@ -2,14 +2,6 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("Editorial QR rendering keeps item numbers separated from readable Arabic names", async () => {
-  const styles = await readFile("src/theme-qr-final-fixes.css", "utf8");
-  assert.match(styles, /editorial-product-topline[\s\S]*grid-template-columns:\s*auto\s+minmax\(0,\s*1fr\)\s+auto/);
-  assert.match(styles, /editorial-product-topline[\s\S]*column-gap:\s*0\.65rem/);
-  assert.match(styles, /editorial-product-name[\s\S]*word-break:\s*normal/);
-  assert.match(styles, /editorial-product-name[\s\S]*hyphens:\s*none/);
-});
-
 test("Noir QR rendering uses the configured restaurant cover", async () => {
   const template = await readFile("src/components/templates/fine-dining-hospitality.tsx", "utf8");
   const styles = await readFile("src/theme-noir-hardening.css", "utf8");
@@ -54,20 +46,10 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
 });
 
 
-test("Editorial featured cards use a stable text-owned mobile layout", async () => {
-  const styles = await readFile("src/theme-qr-final-fixes.css", "utf8");
-
-  assert.match(styles, /editorial-featured-card[\s\S]*overflow:\s*visible\s*!important/);
-  assert.match(styles, /editorial-featured-image[\s\S]*height:\s*auto\s*!important/);
-  assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:[\s\S]*"index title price"/);
-  assert.match(styles, /editorial-card-copy[\s\S]*"\. price"/);
-  assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext\s*!important/);
-  assert.match(styles, /editorial-card-description[\s\S]*overflow:\s*visible\s*!important/);
-});
-
-test("Editorial product names are content-direction aware instead of forcing RTL", async () => {
-  const styles = await readFile("src/theme-qr-final-fixes.css", "utf8");
-
-  assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial\s*!important/);
-  assert.match(styles, /editorial-product-name[\s\S]*unicode-bidi:\s*plaintext\s*!important/);
+test("Editorial Atelier owns stable mobile information geometry", async () => {
+  const styles = await readFile("src/theme-editorial-atelier.css", "utf8");
+  assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:/);
+  assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext/);
+  assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial/);
+  assert.match(styles, /editorial-product-card[\s\S]*overflow:\s*visible/);
 });

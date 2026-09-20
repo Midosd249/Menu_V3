@@ -72,25 +72,27 @@ html[data-menu-theme="essential"] .menu-public-shell {
   --color-focus-ring: var(--essential-accent-strong);
 }
 
+
+/* Editorial / Atelier semantic adapter. Visual personality lives in theme-editorial-atelier.css. */
 html[data-menu-theme="editorial"] .menu-public-shell {
-  --color-surface-canvas: var(--editorial-paper);
-  --color-surface-primary: var(--editorial-white);
-  --color-surface-secondary: var(--editorial-paper-deep);
-  --color-surface-elevated: #fffdf9;
-  --color-surface-inverse: var(--editorial-ink);
-  --color-content-primary: var(--editorial-ink);
-  --color-content-secondary: #4f4841;
-  --color-content-muted: var(--editorial-muted);
-  --color-content-inverse: var(--editorial-white);
-  --color-border-subtle: var(--editorial-rule);
-  --color-border-strong: rgb(23 21 19 / 0.28);
-  --color-action-primary: #8c3824;
-  --color-action-primary-hover: #762e1e;
-  --color-action-primary-foreground: #fffaf3;
-  --color-action-secondary: var(--editorial-paper-deep);
-  --color-action-secondary-hover: #ddd0c1;
-  --color-action-secondary-foreground: var(--editorial-ink);
-  --color-focus-ring: #8c3824;
+  --color-surface-canvas: var(--atelier-bg);
+  --color-surface-primary: var(--atelier-surface);
+  --color-surface-secondary: var(--atelier-surface-soft);
+  --color-surface-elevated: #fffdf8;
+  --color-surface-inverse: var(--atelier-ink);
+  --color-content-primary: var(--atelier-ink);
+  --color-content-secondary: var(--atelier-ink-soft);
+  --color-content-muted: var(--atelier-muted);
+  --color-content-inverse: var(--atelier-white);
+  --color-border-subtle: var(--atelier-line);
+  --color-border-strong: var(--atelier-line-strong);
+  --color-action-primary: var(--atelier-olive);
+  --color-action-primary-hover: #3e4b3a;
+  --color-action-primary-foreground: #fff;
+  --color-action-secondary: var(--atelier-surface-soft);
+  --color-action-secondary-hover: #ded3c4;
+  --color-action-secondary-foreground: var(--atelier-ink);
+  --color-focus-ring: var(--atelier-terra);
 }
 
 html[data-menu-theme="noir"] .menu-public-shell {

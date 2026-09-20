@@ -15,8 +15,6 @@ import noirThemeCss from "../theme-noir.css?url";
 import themeRefinementsCss from "../theme-refinements.css?url";
 import themeRefinementsV2Css from "../theme-refinements-v2.css?url";
 import noirHardeningCss from "../theme-noir-hardening.css?url";
-import editorialThemeCss from "../theme-editorial.css?url";
-import editorialHardeningCss from "../theme-editorial-hardening.css?url";
 import heritageThemeCss from "../theme-heritage.css?url";
 import galleryThemeCss from "../theme-gallery.css?url";
 import galleryHardeningCss from "../theme-gallery-hardening.css?url";
@@ -28,6 +26,7 @@ import galleryCanvaParityCss from "../theme-gallery-canva-parity.css?url";
 import w16MobileQrHardeningCss from "../theme-w16-mobile-qr-hardening.css?url";
 import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?url";
 import qrFinalFixesCss from "../theme-qr-final-fixes.css?url";
+import editorialAtelierCss from "../theme-editorial-atelier.css?url";
 
 const APP_NAME = "منيو";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -60,8 +59,6 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: themeRefinementsCss },
       { rel: "stylesheet", href: themeRefinementsV2Css },
       { rel: "stylesheet", href: noirHardeningCss },
-      { rel: "stylesheet", href: editorialThemeCss },
-      { rel: "stylesheet", href: editorialHardeningCss },
       { rel: "stylesheet", href: galleryThemeCss },
       { rel: "stylesheet", href: galleryHardeningCss },
       { rel: "stylesheet", href: publicThemeQualityRecoveryCss },
@@ -73,6 +70,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: w16MobileQrHardeningCss },
       { rel: "stylesheet", href: finalThemeVisualHardeningCss },
       { rel: "stylesheet", href: qrFinalFixesCss },
+      { rel: "stylesheet", href: editorialAtelierCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],

@@ -348,3 +348,13 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 ### Exact Next Task
 
 **Physical Android/iOS production QA — execute the prepared QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks, against `main` `1fcb287072c47746e5f0a7a4a376a87783ab74e5`.**
+
+
+## 2026-09-20 — Editorial Atelier Replacement — IN PROGRESS
+- VERIFIED: branch `redesign/editorial-atelier-premium-2026-09-20` created from current main.
+- VERIFIED: AppDeploy prototype is ready with no frontend/backend errors.
+- IMPLEMENTED: Atelier is the new single-owner Editorial presentation direction.
+- BLOCKED: repository CI/browser and real-device evidence remain outstanding.
+
+### Exact Next Task
+**Run GitHub Quality/browser checks, review the final diff, then test Atelier Editorial on a real Android viewport using the owner's failing cases.**

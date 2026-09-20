@@ -1,122 +1,4 @@
-/*
- * Menu V3 visual refinement layer
- *
- * Presentation-only premium refinements. Essential keeps its original theme
- * system; Editorial and Noir receive their art-direction enhancements.
- */
 
-/* 02 — EDITORIAL / Food Magazine
-   Material: ink, cream and vermilion. Composition: cover → columns → pull quotes. */
-html[data-menu-theme="editorial"] .menu-public-shell {
-  --mag-ink: #11100e;
-  --mag-paper: #f1eadf;
-  --mag-red: #b33b25;
-  background:
-    linear-gradient(90deg, transparent 0 49.7%, rgb(17 16 14 / .08) 49.7% 49.8%, transparent 49.8%),
-    var(--mag-paper);
-}
-html[data-menu-theme="editorial"] .menu-public-shell header {
-  min-height: 88dvh;
-  border-radius: 0;
-  padding: 0;
-  box-shadow: none;
-}
-html[data-menu-theme="editorial"] .menu-public-shell header::after {
-  content: "";
-  inset-inline-start: 1rem;
-  inset-inline-end: auto;
-  top: 1.25rem;
-  letter-spacing: .28em;
-}
-html[data-menu-theme="editorial"] .menu-public-shell header > div {
-  border: 0;
-  border-radius: 0;
-  padding: clamp(1.25rem, 5vw, 3.5rem);
-  background: linear-gradient(180deg, transparent, rgb(10 9 8 / .82));
-  box-shadow: none;
-}
-html[data-menu-theme="editorial"] .menu-public-shell header h1 {
-  max-width: 8ch;
-  font-size: clamp(3.3rem, 17vw, 8rem);
-  line-height: .83;
-  letter-spacing: -.08em;
-}
-html[dir="rtl"][data-menu-theme="editorial"] .menu-public-shell header h1 {
-  max-width: 9ch;
-  line-height: .96;
-  letter-spacing: -.055em;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main {
-  max-width: 76rem;
-  padding-inline: clamp(1rem, 5vw, 4rem);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section {
-  padding-block: clamp(3rem, 9vw, 7rem);
-  border-top: 2px solid var(--mag-ink);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section > h2 {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  align-items: end;
-  font-size: clamp(2rem, 8vw, 4.5rem);
-  line-height: .9;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section > h2::before {
-  content: counter(section);
-  counter-increment: section;
-  font-family: Georgia, serif;
-  font-size: .7rem;
-  letter-spacing: .12em;
-  color: var(--mag-red);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main { counter-reset: section; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
-  border-top: 1px solid rgb(17 16 14 / .18);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button {
-  grid-template-columns: 1fr;
-  min-height: 21rem;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  border-bottom: 1px solid rgb(17 16 14 / .18);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button { min-height: 28rem; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :first-child {
-  grid-row: 1;
-  height: 13rem;
-  border-radius: 0;
-  overflow: hidden;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button > :first-child { height: 20rem; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button img {
-  min-height: 0;
-  height: 100%;
-  filter: saturate(.86) contrast(1.08);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button > :last-child {
-  padding: 1rem 0 1.25rem;
-  align-self: end;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h3,
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button h4 {
-  max-width: 14ch;
-  font-size: clamp(1.2rem, 3.8vw, 1.75rem);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover {
-  transform: none;
-  background: rgb(179 59 37 / .055);
-}
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button:hover img { transform: scale(1.055); }
-@media (max-width: 640px) {
-  html[data-menu-theme="editorial"] .menu-public-shell main ul { grid-template-columns: 1fr; }
-  html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 1) > button { min-height: 25rem; }
-}
 
 /* 03 — NOIR / Cinematic Atelier
    Material: charcoal, bronze and spotlight. Composition: film stills + light pools. */
@@ -225,16 +107,10 @@ html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
 @media (max-width: 640px) {
   html[data-menu-theme="noir"] .menu-public-shell main ul { grid-template-columns: 1fr; }
   html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button { transform: none; }
-}
-
-/* Shared premium polish — no content blocking and reduced-motion safe. */
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > button,
-html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+}html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
   contain: layout paint;
 }
-@media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme="editorial"] .menu-public-shell *,
-  html[data-menu-theme="noir"] .menu-public-shell * {
+@media (prefers-reduced-motion: reduce) {html[data-menu-theme="noir"] .menu-public-shell * {
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
     scroll-behavior: auto !important;
