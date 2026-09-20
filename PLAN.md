@@ -282,3 +282,17 @@ Release-stage verification of the merged homepage when the deployment window is 
 ### Exact Next Task
 
 Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878603d`, then verify the resulting `main` SHA and release-stage Production/device evidence.
+
+## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — MERGED / RELEASE-STAGE PENDING
+
+- VERIFIED: PR #217 merged successfully into `main` at `679f72aca993f5a8001ef5f158877b2c48b79265` from verified head `e82d2652a1cc9f4d69f1e73ff9efc6dbf9a8a98b`.
+- VERIFIED: Quality rerun `35477790515` completed successfully; typecheck, tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, performance diagnostics, and cleanup all passed.
+- VERIFIED: PR #217 had no unresolved review threads and no submitted reviews.
+- VERIFIED: GitHub reports Vercel status `pending` for merged `main`; this is not Production deployment evidence.
+- UNKNOWN: direct Production deployment identity/status and physical Android/iOS/QR/theme/order/RTL verification.
+- Implementation status: `PUSHED` / merged to `main`.
+- Deployment status: `UNKNOWN` / release-stage verification pending.
+
+### Exact Next Task
+
+**Release-stage verification of `main` at `679f72aca993f5a8001ef5f158877b2c48b79265`, then the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not start another redesign or feature task before this evidence is closed.**
