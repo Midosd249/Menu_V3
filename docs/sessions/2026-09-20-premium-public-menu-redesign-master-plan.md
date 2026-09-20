@@ -357,3 +357,21 @@ The owner explicitly authorized implementation on 2026-09-20. The master plan pl
 
 ## Exact Next Action
 Review GitHub Quality run #2160 and W9 Orders QA run #403 to completion, resolve any failures, then perform the final diff/release gate for PR #226.
+
+
+## 2026-09-21 — Mobile Card Remediation Closeout
+
+- VERIFIED: SIGNAL TABLE implementation is merged into canonical `main` at `dd8db716d0170543590b875f15e3dec99d8cba4c`.
+- VERIFIED: PR #227 resolved the recurring mobile product-card failure structurally rather than by adding another overlay/patch layer.
+- VERIFIED: shared legacy `theme-price-consistency.css` generic card rules were excluded from the SIGNAL TABLE `editorial` compatibility key; SIGNAL TABLE's scoped stylesheet is authoritative for its card geometry.
+- VERIFIED: product-card contract is fixed 92px media + protected text column + title → description → price + in-flow actions.
+- VERIFIED: PR Quality, W9 Orders QA, and main Quality #2187 passed; browser QA covered all themes and the full responsive matrix.
+- VERIFIED: no SIGNAL TABLE numbering/counter implementation remains.
+- UNKNOWN: physical Android/iOS and QR/device evidence; standalone local `check:auth`.
+- Deployment: NOT_REQUESTED / NOT_PERFORMED.
+
+### Current State
+
+Implementation: **DONE / MERGED / VERIFIED**
+Canonical main: **`dd8db716d0170543590b875f15e3dec99d8cba4c`**
+Next task: **Physical Android/iOS public-menu QA only; do not begin another redesign automatically.**

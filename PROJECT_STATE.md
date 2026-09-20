@@ -484,3 +484,20 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 
 ### Exact Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
+
+
+## 2026-09-21 — SIGNAL TABLE Mobile Product Card Remediation — MERGED / VERIFIED
+
+- VERIFIED: canonical `main` is `dd8db716d0170543590b875f15e3dec99d8cba4c` after merged PR #227.
+- VERIFIED: PR #227 `fix: stabilize SIGNAL TABLE mobile product cards` merged by squash.
+- VERIFIED: final PR Quality and W9 Orders QA passed; main Quality run #2187 (`35539242443`) also passed.
+- VERIFIED: browser template QA passed all five themes across 320/360/375/390/430/768/1024/1280/1440; SIGNAL TABLE passed Arabic RTL and English LTR.
+- VERIFIED: the recurring failure was caused in part by shared legacy `theme-price-consistency.css` selectors competing with SIGNAL TABLE presentation ownership. The shared layout layer is now excluded from the `editorial` compatibility key.
+- VERIFIED: SIGNAL TABLE owns the product-card geometry: fixed 92px square media, protected text column, title → description → price, non-wrapping price, and in-flow actions.
+- VERIFIED: no SIGNAL TABLE product/category numbering selectors or CSS counters remain.
+- UNKNOWN: direct local npm execution and physical Android/iOS/QR evidence.
+- Deployment status: NOT_REQUESTED / NOT_PERFORMED.
+
+### Exact Next Task
+
+**Physical Android/iOS QA of `main` `dd8db716d0170543590b875f15e3dec99d8cba4c` using the prepared public-menu QR/theme/order/RTL matrix, including the owner's Arabic mobile failure case and QR single/multi-copy print-preview checks.**
