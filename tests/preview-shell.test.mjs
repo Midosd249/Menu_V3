@@ -101,18 +101,18 @@ test("Editorial template uses dedicated semantic regions and a single action hie
   assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
 });
 
-test("Editorial Canvas refinement prevents hero logo hijacking, unstable card transforms, and scroll-driven reveal", async () => {
+test("Editorial Canvas replaces the prior visual hardening layer without scroll-driven animation", async () => {
   const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
   const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
-  assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
-  assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
-  assert.doesNotMatch(styles, /animation:\s*[^;]*editorial/);
-  assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
-  assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
+  assert.match(styles, /editorial-brand-logo[\\s\\S]*object-fit:\\s*contain/);
+  assert.match(styles, /editorial-product-card[\\s\\S]*transform:\\s*none\\s*!important/);
+  assert.doesNotMatch(styles, /animation:\\s*[^;]*editorial/);
+  assert.doesNotMatch(styles, /animation-timeline:\\s*view\\(/);
+  assert.match(styles, /editorial-cart-trigger[\\s\\S]*z-index:\\s*40/);
   assert.match(styles, /editorial-dialog[^}]*border:/);
   assert.match(styles, /editorial-cart-trigger[^}]*border:/);
-  assert.match(template, /fixed inset-0 z-\[60\]/);
-  assert.match(template, /fixed inset-0 z-\[70\]/);
+  assert.match(template, /fixed inset-0 z-\\[60\\]/);
+  assert.match(template, /fixed inset-0 z-\\[70\\]/);
   assert.match(styles, /safe-area-inset-bottom/);
 });
 
