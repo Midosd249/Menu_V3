@@ -2,23 +2,22 @@
 
 ## Current Position
 
-- `main` HEAD: `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`.
-- PR #215: merged.
-- Homepage live digital-menu implementation: `DONE`.
-- Manus quality verification: owner-reported passed.
-- Owner manual QA: owner-reported passed.
-- GitHub PR Vercel status: success.
-- Current Production deployment match: `UNKNOWN`.
-- Physical device/QR/print-preview evidence: `UNKNOWN`.
+- `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
+- PR #223: merged.
+- Editorial Canvas replacement: `DONE / MERGED / CI VERIFIED`.
+- GitHub Quality: passed.
+- W9 Orders browser QA: passed.
+- Production deployment match: `UNKNOWN`; no deployment was requested for this task.
+- Physical device/QR visual evidence: `UNKNOWN`.
 
 ## Exact Next Task
 
-**Release-stage verification of current `main` at `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`, followed by physical Android/iOS/QR/theme/order/RTL smoke QA, including QR single-print and multi-copy print-preview checks.**
+**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and the QR/search/category/product/cart/order smoke path.**
 
 ## Not Next
 
-- No new homepage redesign.
-- No theme rebuild.
+- No new theme rebuild.
+- No homepage redesign.
 - No product/category deep-link expansion.
 - No native Web Share implementation.
 - No Payment Provider / Commercial Launch / PH-07 / R10 work as a prerequisite.
@@ -27,6 +26,7 @@
 
 - R7 evidence review remains dependent on meaningful real exposure.
 - Six RLS-disabled live tables remain a separate security/data task from the A.2 audit.
+
 # TASKS
 
 ## Current State — 2026-09-18

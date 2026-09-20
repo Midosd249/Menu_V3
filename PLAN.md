@@ -1,27 +1,26 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-20
 
 - Canonical branch: `main`.
-- Current verified `main` HEAD: `a2e5e17178c4095f8a61def2af3e0eef8074f4fa`.
-- Latest homepage implementation: PR #215 — `feat: publish live digital menu homepage`.
-- Implementation status: `DONE`.
-- Manus quality verification: reported passed by owner.
-- Owner manual QA: reported completed by owner.
-- GitHub PR evidence: merged; Vercel PR status success; no unresolved review threads.
+- Current verified `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
+- Latest completed atomic task: PR #223 — `redesign: replace Editorial with Canva-derived Canvas menu`.
+- Implementation status: `DONE / MERGED / CI VERIFIED`.
+- GitHub Quality: SUCCESS.
+- W9 Orders browser QA: SUCCESS.
 - Production deployment identity for the current HEAD: `UNKNOWN`.
 - Physical production/device QA for the current HEAD: `UNKNOWN`.
 
 ## Exact Next Task
 
-**Release-stage verification of `a2e5e17178c4095f8a61def2af3e0eef8074f4fa` in Production, then physical Android/iOS/QR/theme/order/RTL QA with single-print and multi-copy print-preview checks.**
+**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and QR/search/category/product/cart/order coverage.**
 
-## Following Queue — after release/device evidence
+## Following Queue — after visual/device evidence
 
-1. Close only evidence-backed release gaps; do not redesign completed homepage/theme work.
-2. Reconcile any real-device defects found during the smoke matrix as narrowly scoped fixes.
-3. Continue R7 only when sufficient real exposure exists; no synthetic traffic.
-4. Treat the six RLS-disabled live tables identified in the A.2 audit as a separate security/data task; do not mix it into visual/release work.
-5. Preserve deferred boundaries: Payment Provider, Commercial Launch, PH-07, and R10 are not current prerequisites.
-6. Re-run continuity reconciliation after each atomic task and keep exactly one next task.
+1. Record only evidence-backed visual defects, if any.
+2. Fix only confirmed Editorial Canvas regressions; do not reopen unrelated themes.
+3. Re-run continuity reconciliation after the single atomic QA/fix task.
+4. Continue R7 only when sufficient real exposure exists; no synthetic traffic.
+5. Treat the six RLS-disabled live tables as a separate security/data task.
+6. Preserve deferred boundaries: Payment Provider, Commercial Launch, PH-07, and R10 are not current prerequisites.
 
 # Menu V3 — Active Plan
 
