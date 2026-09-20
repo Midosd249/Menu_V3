@@ -94,10 +94,6 @@ try {
           const cardRect = card.getBoundingClientRect();
           return {
             mediaSquare: Boolean(mediaRect && Math.abs(mediaRect.width - 92) <= 1 && Math.abs(mediaRect.height - 92) <= 1),
-            copyWidth: copyRect?.width ?? 0,
-            titleWidth: titleRect?.width ?? 0,
-            copyMinInlineSize: copy ? getComputedStyle(copy).minInlineSize : "missing",
-            cardGrid: getComputedStyle(card).gridTemplateColumns,
             copyProtected: Boolean(copyRect && copyRect.width >= 130 && getComputedStyle(copy).minInlineSize === "0px"),
             titleReadableWidth: Boolean(titleRect && titleRect.width >= 130),
             priceBelowDescription: Boolean(!descriptionRect || !priceRect || priceRect.top >= descriptionRect.bottom - 1),
@@ -137,7 +133,7 @@ try {
         checks.push(
           ["SIGNAL TABLE product cards present", cards.length > 0, String(cards.length)],
           ["SIGNAL TABLE fixed square media", cards.every((card) => card.mediaSquare), String(cards.filter((card) => !card.mediaSquare).length)],
-          ["SIGNAL TABLE protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), JSON.stringify(cards.map((card) => ({ copy: card.copyWidth, title: card.titleWidth, min: card.copyMinInlineSize, grid: card.cardGrid })))],
+          ["SIGNAL TABLE protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), String(cards.filter((card) => !card.copyProtected || !card.titleReadableWidth).length)],
           ["SIGNAL TABLE price below description", cards.every((card) => card.priceBelowDescription), String(cards.filter((card) => !card.priceBelowDescription).length)],
           ["SIGNAL TABLE price no-wrap", cards.every((card) => card.priceNoWrap), String(cards.filter((card) => !card.priceNoWrap).length)],
           ["SIGNAL TABLE action does not overlap", cards.every((card) => card.actionDoesNotOverlapCard), String(cards.filter((card) => !card.actionDoesNotOverlapCard).length)],
