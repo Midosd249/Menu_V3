@@ -21,3 +21,10 @@ test("global price layer does not style quick-add controls as prices", async () 
   const styles = await readFile("src/theme-price-consistency.css", "utf8");
   assert.match(styles, /:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)/);
 });
+
+
+test("global price layer is excluded from SIGNAL TABLE presentation ownership", async () => {
+  const styles = await readFile("src/theme-price-consistency.css", "utf8");
+  assert.match(styles, /html:not\(\[data-menu-theme="editorial"\]\)\[data-menu-theme\]/);
+  assert.doesNotMatch(styles, /html\[data-menu-theme\] \.menu-public-shell main/);
+});
