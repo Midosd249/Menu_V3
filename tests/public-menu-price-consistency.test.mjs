@@ -26,5 +26,4 @@ test("global price layer does not style quick-add controls as prices", async () 
 test("global price card grid excludes SIGNAL TABLE ownership", async () => {
   const styles = await readFile("src/theme-price-consistency.css", "utf8");
   assert.match(styles, /html:not\(\[data-menu-theme="editorial"\]\)\[data-menu-theme\]/);
-  assert.doesNotMatch(styles, /html\[data-menu-theme\] \.menu-public-shell main > section:not\(:first-child\) ul > li > div > button[^{]*\{[\s\S]*grid-template-columns/);
-});
+  assert.doesNotMatch(styles, /html\\[data-menu-theme\\] \\.menu-public-shell main > section:not\\(:first-child\\) ul > li > div > button/);
