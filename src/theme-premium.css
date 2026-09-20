@@ -30,9 +30,7 @@
 html[data-menu-theme="noir"] .menu-public-shell button,
 html[data-menu-theme="noir"] .menu-public-shell a {
   color-scheme: dark;
-}
-html[data-menu-theme="editorial"] .menu-public-shell main > section,
-html[data-menu-theme="heritage"] .menu-public-shell main > section,
+}html[data-menu-theme="heritage"] .menu-public-shell main > section,
 html[data-menu-theme="gallery"] .menu-public-shell main > section {
   content-visibility: auto;
   contain-intrinsic-size: auto 420px;

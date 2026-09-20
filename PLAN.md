@@ -311,3 +311,14 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 ### Exact Next Task
 
 **Physical Android/iOS production QA — execute the prepared QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks, against `main` `1fcb287072c47746e5f0a7a4a376a87783ab74e5`.**
+
+
+## 2026-09-20 — Editorial Atelier Replacement — IN PROGRESS
+- VERIFIED: main baseline is `5f7932df3cdf212cbf2f154b65c9c8abdf7cc2c2`.
+- VERIFIED: owner screenshots show unresolved Editorial runtime defects after PR #220.
+- VERIFIED: AppDeploy Atelier prototype is ready.
+- IMPLEMENTED: old Editorial presentation files were replaced by `src/theme-editorial-atelier.css`; legacy shared Editorial selectors are being removed.
+- UNKNOWN: GitHub Quality/browser/device verification.
+
+### Exact Next Task
+**Run GitHub Quality/browser checks for `redesign/editorial-atelier-premium-2026-09-20`, review the diff, then perform real-device Editorial Arabic/English QA before merge.**

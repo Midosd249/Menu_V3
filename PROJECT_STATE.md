@@ -394,3 +394,15 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 ### Exact Next Task
 
 **Physical Android/iOS production QA — execute the prepared QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks, against `main` `1fcb287072c47746e5f0a7a4a376a87783ab74e5`.**
+
+
+## 2026-09-20 — Editorial Atelier Replacement
+- Main baseline: `5f7932df3cdf212cbf2f154b65c9c8abdf7cc2c2`.
+- Branch: `redesign/editorial-atelier-premium-2026-09-20`.
+- Prototype: `https://menu-v3-atelier-editorial-h5h7es.v2.appdeploy.ai/`.
+- Decision: replace Editorial visual ownership with Atelier while preserving ThemeKey `editorial` and the existing renderer/business behavior.
+- Protected systems untouched: auth, DB/RLS, orders, analytics, tenant/branch isolation, SEO architecture, deployment configuration.
+- UNKNOWN: CI/browser/device verification until branch checks complete.
+
+### Exact Next Task
+**Run GitHub Quality/browser QA for the Atelier branch, review the diff, then perform physical Android Editorial QA before merge.**

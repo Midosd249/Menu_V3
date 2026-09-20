@@ -99,25 +99,12 @@ html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.tex
   unicode-bidi: isolate;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-}
-
-/* Preserve the deliberately art-directed Editorial / Heritage / Noir price
-   systems while enforcing the same bidi and flow guarantees. */
-html[data-menu-theme="editorial"] .menu-public-shell .editorial-card-price,
-html[data-menu-theme="editorial"] .menu-public-shell .editorial-product-price,
-html[data-menu-theme="heritage"] .menu-public-shell .editorial-card-price,
-html[data-menu-theme="heritage"] .menu-public-shell .editorial-product-price,
-html[data-menu-theme="noir"] .menu-public-shell .noir-template-featured-price {
+}html[data-menu-theme="noir"] .menu-public-shell .noir-template-featured-price {
   direction: ltr !important;
   unicode-bidi: isolate !important;
   white-space: nowrap !important;
   font-variant-numeric: tabular-nums;
-}
-
-/* Gallery card chrome is intentionally removed: image and typography should
-   read as an open editorial catalogue rather than boxed tiles. */
-html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button,
-html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
+}html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button {
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
@@ -181,20 +168,6 @@ html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > l
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;
-}
-
-/* Heritage uses the same stable bottom cart action surface as the other
-   non-Editorial themes. Keep it clear of the safe area and page content. */
-html[data-menu-theme="heritage"] .menu-public-shell .public-menu-bottom-bar {
-  position: fixed !important;
-  top: auto !important;
-  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
-  inset-inline: 0.75rem !important;
-  inset-block-start: auto !important;
-  width: auto !important;
-  max-width: 42rem;
-  margin-inline: auto !important;
-  z-index: 40 !important;
 }
 
 html[data-menu-theme="heritage"] .menu-public-shell main {

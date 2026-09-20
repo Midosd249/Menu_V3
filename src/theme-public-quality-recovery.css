@@ -279,9 +279,6 @@ html[data-menu-theme="gallery"] .menu-public-shell main ul > li:nth-child(4n + 3
 html[data-menu-theme="heritage"] .menu-public-shell main ul > li > div > button { border-width: 1px 1px 3px; border-radius: var(--menu-radius-md); background: rgb(251 246 236 / .9); }
 html[data-menu-theme="heritage"] .menu-public-shell main ul > li:nth-child(even) > div > button { border-radius: 2px var(--menu-radius-lg) 2px var(--menu-radius-lg); }
 html[data-menu-theme="heritage"] .menu-public-shell main ul > li > div > button > :first-child img { border-radius: 8px; }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li > div > button { border-radius: var(--menu-radius-lg); padding: .75rem; background: color-mix(in oklab, var(--menu-surface) 94%, var(--menu-background)); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > div > button { transform: translateX(4%); }
-html[data-menu-theme="editorial"] .menu-public-shell main ul > li:nth-child(3n + 2) > div > button:hover { transform: translate(4%, -3px); }
 html[data-menu-theme="noir"] .menu-public-shell main ul > li > div > button { background: #171311; color: #f6efe6; border-color: #3a2e27; border-radius: var(--menu-radius-lg); }
 
 .public-menu-quick-add,
@@ -302,8 +299,6 @@ html[data-menu-theme="noir"] .public-menu-options-action { background: #171311; 
 html[data-menu-theme="heritage"] .public-menu-quick-add { background: color-mix(in oklab, var(--menu-accent, #8f4e32) 88%, #5b3a22); border-color: #704c2b; }
 html[data-menu-theme="heritage"] .public-menu-options-action { background: rgb(251 246 236 / .92); border-color: rgb(117 75 40 / .34); }
 html[data-menu-theme="gallery"] .public-menu-quick-add { background: var(--menu-accent, #8f4e32); border-color: var(--menu-accent, #8f4e32); }
-html[data-menu-theme="editorial"] .editorial-cart-trigger { min-height: 52px; bottom: max(1rem, env(safe-area-inset-bottom)); }
 @media (max-width: 639px) {
   .public-menu-bottom-bar { inset-inline: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); }
-  .editorial-cart-trigger { inset-inline: .75rem; width: auto; bottom: max(.75rem, env(safe-area-inset-bottom)); }
 }

@@ -72,27 +72,6 @@ html[data-menu-theme="essential"] .menu-public-shell {
   --color-focus-ring: var(--essential-accent-strong);
 }
 
-html[data-menu-theme="editorial"] .menu-public-shell {
-  --color-surface-canvas: var(--editorial-paper);
-  --color-surface-primary: var(--editorial-white);
-  --color-surface-secondary: var(--editorial-paper-deep);
-  --color-surface-elevated: #fffdf9;
-  --color-surface-inverse: var(--editorial-ink);
-  --color-content-primary: var(--editorial-ink);
-  --color-content-secondary: #4f4841;
-  --color-content-muted: var(--editorial-muted);
-  --color-content-inverse: var(--editorial-white);
-  --color-border-subtle: var(--editorial-rule);
-  --color-border-strong: rgb(23 21 19 / 0.28);
-  --color-action-primary: #8c3824;
-  --color-action-primary-hover: #762e1e;
-  --color-action-primary-foreground: #fffaf3;
-  --color-action-secondary: var(--editorial-paper-deep);
-  --color-action-secondary-hover: #ddd0c1;
-  --color-action-secondary-foreground: var(--editorial-ink);
-  --color-focus-ring: #8c3824;
-}
-
 html[data-menu-theme="noir"] .menu-public-shell {
   color-scheme: dark;
   --color-surface-canvas: var(--noir-void);
