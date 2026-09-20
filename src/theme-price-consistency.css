@@ -8,7 +8,7 @@
  * Reference: Essential's restrained name/price hierarchy.
  */
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
@@ -20,29 +20,29 @@ html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > l
   min-width: 0;
 }
 
-html[dir="rtl"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+html[dir="rtl"]:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
   text-align: right;
 }
 
-html[dir="ltr"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+html[dir="ltr"]:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
   text-align: left;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:first-child {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:first-child {
   grid-area: name;
   min-width: 0;
   overflow-wrap: anywhere;
   line-height: 1.4;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span.line-clamp-2 {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span.line-clamp-2 {
   grid-area: description;
   min-width: 0;
   margin-top: 0.05rem;
   line-height: 1.5;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
   grid-area: price;
   justify-self: end;
   align-self: start;
@@ -59,17 +59,17 @@ html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > l
   font-variant-numeric: tabular-nums;
 }
 
-html[dir="ltr"][data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+html[dir="ltr"]:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
   justify-self: end;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:last-child {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > span:last-child {
   grid-area: meta;
   min-width: 0;
 }
 
 /* Featured cards use the same compact hierarchy without adding a badge or pill. */
-html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas: "name price";
@@ -78,14 +78,14 @@ html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.tex
   min-width: 0;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > span:first-child {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > span:first-child {
   grid-area: name;
   min-width: 0;
   overflow-wrap: anywhere;
   line-height: 1.4;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > bdi {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button > span > bdi {
   grid-area: price;
   justify-self: end;
   align-self: start;
@@ -123,17 +123,17 @@ html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button > :last
 }
 
 @media (max-width: 420px) {
-  html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
+  html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span {
     gap: 0.18rem 0.5rem;
   }
 
-  html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
+  html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > span > bdi {
     font-size: 0.76rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-menu-theme] .menu-public-shell main > section ul > li > div > button {
+  html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section ul > li > div > button {
     transition-duration: 0.01ms !important;
   }
 }
@@ -149,14 +149,14 @@ html[data-menu-theme] .menu-public-shell .public-menu-options-action {
 
 /* Keep the information row open to variable-length descriptions across every
    theme. Image geometry remains owned by each theme's media wrapper. */
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) {
   height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
   overflow: visible !important;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child {
   min-width: 0 !important;
   height: auto !important;
   min-height: 0 !important;
@@ -164,7 +164,7 @@ html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > l
   overflow: visible !important;
 }
 
-html[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child > * {
+html:not([data-menu-theme="editorial"])[data-menu-theme] .menu-public-shell main > section:not(:first-child) ul > li > div > button:not(.public-menu-quick-add):not(.public-menu-options-action) > :last-child > * {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;
