@@ -11,7 +11,7 @@ html[data-menu-theme="editorial"] .menu-public-shell[data-signal-root="true"] {
   --menu-body-font:"Readex Pro","IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;
   --menu-display-font:"Alexandria","Readex Pro","Segoe UI",system-ui,sans-serif;
   --menu-heading-weight:700; --menu-body-weight:400; --menu-line-height:1.7; --menu-letter-spacing:0;
-  min-width:0; overflow-x:clip; background:var(--signal-bg); color:var(--signal-ink); color-scheme:light; font-family:var(--menu-body-font);
+  min-width:0; background:var(--signal-bg); color:var(--signal-ink); color-scheme:light; font-family:var(--menu-body-font);
 }
 html[data-menu-theme="editorial"] .signal-topbar{position:sticky;inset-block-start:0;z-index:30;border-block-end:1px solid var(--signal-line);background:color-mix(in srgb,var(--signal-bg) 94%,transparent);backdrop-filter:blur(16px)}
 html[data-menu-theme="editorial"] .signal-topbar-inner{inline-size:min(100%,88rem);min-block-size:4rem;margin-inline:auto;padding-inline:clamp(.9rem,3vw,2rem);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.75rem}
@@ -36,6 +36,15 @@ html[data-menu-theme="editorial"] .signal-hero-meta{display:flex;flex-wrap:wrap;
 html[data-menu-theme="editorial"] .signal-hero-meta span:first-child{color:var(--signal-ink);font-weight:750}
 html[data-menu-theme="editorial"] .signal-hero-media{min-inline-size:0;aspect-ratio:4/3;overflow:hidden;border-radius:1.4rem;background:#eceef1}
 html[data-menu-theme="editorial"] .signal-cover{display:block;inline-size:100%;block-size:100%;object-fit:cover}
+html[data-menu-theme="editorial"] .signal-featured-stage{position:relative;display:grid;inline-size:100%;block-size:100%;min-inline-size:0;min-block-size:0;padding:0;border:0;border-radius:1.4rem;overflow:hidden;background:var(--signal-ink);color:#fff;text-align:start}
+html[data-menu-theme="editorial"] .signal-featured-stage-image{display:block;inline-size:100%;block-size:100%;min-block-size:0;aspect-ratio:4/3;object-fit:cover;filter:saturate(.92) contrast(1.02);transition:transform .16s ease,filter .16s ease}
+html[data-menu-theme="editorial"] .signal-featured-stage-copy{position:absolute;inset-inline:0;inset-block-end:0;display:grid;gap:.35rem;padding:clamp(1rem,3vw,1.5rem);background:linear-gradient(to top,rgb(16 24 39/.9),rgb(16 24 39/.04));color:#fff}
+html[data-menu-theme="editorial"] .signal-featured-stage-label{font-size:.68rem;font-weight:800;color:#f0a43c}
+html[data-menu-theme="editorial"] .signal-featured-stage-name{min-inline-size:0;font-family:var(--menu-display-font);font-size:clamp(1.2rem,3vw,2rem);font-weight:750;line-height:1.25;text-wrap:balance}
+html[data-menu-theme="editorial"] .signal-featured-stage-description{max-inline-size:52ch;color:rgb(255 255 255/.78);font-size:.76rem;line-height:1.7;overflow-wrap:break-word;word-break:normal}
+html[data-menu-theme="editorial"] .signal-featured-stage-price{justify-self:start;color:#fff!important;font-weight:800;direction:ltr!important;unicode-bidi:isolate;white-space:nowrap}
+html[data-menu-theme="editorial"] .signal-featured-stage:hover .signal-featured-stage-image,html[data-menu-theme="editorial"] .signal-featured-stage:focus-visible .signal-featured-stage-image{transform:scale(1.012);filter:saturate(1.02)}
+html[data-menu-theme="editorial"] .signal-identity-fallback{display:grid;place-items:center;inline-size:100%;block-size:100%;aspect-ratio:4/3;border-radius:1.4rem;background:var(--signal-ink);color:#fff;font-family:var(--menu-display-font);font-size:clamp(5rem,14vw,10rem)}
 html[data-menu-theme="editorial"] .signal-actions-wrap{inline-size:min(100%,88rem);margin-inline:auto;padding:.65rem clamp(.9rem,3vw,2rem);display:flex;align-items:center;justify-content:space-between;gap:.6rem;border-block-end:1px solid var(--signal-line);background:var(--signal-bg)}
 html[data-menu-theme="editorial"] .signal-actions-wrap a,html[data-menu-theme="editorial"] .signal-actions-wrap button{min-block-size:2.75rem;border:1px solid var(--signal-line);border-radius:999px;background:var(--signal-surface);color:var(--signal-ink)}
 html[data-menu-theme="editorial"] .signal-lang-toggle{display:none}
@@ -89,7 +98,7 @@ html[data-menu-theme="editorial"] .signal-footer-grid{display:grid;grid-template
 html[data-menu-theme="editorial"] .signal-footer-grid>div{min-inline-size:0;padding:1rem 0;border-block-end:1px solid rgb(255 255 255/.18)}
 html[data-menu-theme="editorial"] .signal-footer-label{margin:0;color:var(--signal-warm);font-size:.65rem;font-weight:800}
 html[data-menu-theme="editorial"] .signal-footer-grid p:last-child{margin:.45rem 0 0;color:rgb(255 255 255/.74);font-size:.78rem;line-height:1.8}
-html[data-menu-theme="editorial"] .signal-cart-trigger{position:fixed;z-index:35;inset-inline:50%;inset-block-end:max(.7rem,env(safe-area-inset-bottom));transform:translateX(-50%);display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-block-size:3.35rem;min-inline-size:min(90vw,24rem);padding:.45rem 1rem;border:1px solid var(--signal-ink);border-radius:999px;background:var(--signal-ink);color:#fff;box-shadow:0 18px 44px rgb(16 24 39/.22)}
+html[data-menu-theme="editorial"] .signal-cart-trigger{position:fixed;z-index:35;inset-inline-start:50%;inset-block-end:max(.7rem,env(safe-area-inset-bottom));transform:translateX(-50%);display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-block-size:3.35rem;min-inline-size:min(90vw,24rem);padding:.45rem 1rem;border:1px solid var(--signal-ink);border-radius:999px;background:var(--signal-ink);color:#fff;box-shadow:0 18px 44px rgb(16 24 39/.22)}
 html[data-menu-theme="editorial"] .signal-cart-count{min-inline-size:1.65rem;block-size:1.65rem;display:grid;place-items:center;border-radius:999px;background:var(--signal-warm);color:var(--signal-ink);font-size:.7rem;font-weight:850;font-variant-numeric:tabular-nums}
 html[data-menu-theme="editorial"] .signal-dialog,html[data-menu-theme="editorial"] .signal-cart,html[data-menu-theme="editorial"] .signal-success{border:1px solid var(--signal-line);border-radius:1rem;background:var(--signal-surface);color:var(--signal-ink)}
 html[data-menu-theme="editorial"] .signal-dialog-header{background:color-mix(in srgb,var(--signal-surface) 94%,transparent);backdrop-filter:blur(14px)}
