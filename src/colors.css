@@ -73,26 +73,26 @@ html[data-menu-theme="essential"] .menu-public-shell {
 }
 
 
-/* Editorial / Canvas semantic adapter. Visual personality lives in theme-editorial-canvas.css. */
+/* SIGNAL TABLE semantic adapter. Visual personality lives in theme-signal-table.css. */
 html[data-menu-theme="editorial"] .menu-public-shell {
-  --color-surface-canvas: var(--canvas-paper);
+  --color-surface-canvas: #f7f5f0;
   --color-surface-primary: #ffffff;
-  --color-surface-secondary: var(--canvas-mist);
+  --color-surface-secondary: #f0f1f3;
   --color-surface-elevated: #ffffff;
-  --color-surface-inverse: var(--canvas-ink);
-  --color-content-primary: var(--canvas-ink);
-  --color-content-secondary: var(--canvas-soft-ink);
-  --color-content-muted: var(--canvas-muted);
-  --color-content-inverse: var(--canvas-paper);
-  --color-border-subtle: var(--canvas-line);
-  --color-border-strong: rgb(26 22 16 / .28);
-  --color-action-primary: var(--canvas-ink);
-  --color-action-primary-hover: #2c261d;
-  --color-action-primary-foreground: var(--canvas-paper);
-  --color-action-secondary: var(--canvas-mist);
-  --color-action-secondary-hover: #eee7dc;
-  --color-action-secondary-foreground: var(--canvas-ink);
-  --color-focus-ring: var(--canvas-copper);
+  --color-surface-inverse: #101827;
+  --color-content-primary: #101827;
+  --color-content-secondary: #344054;
+  --color-content-muted: #667085;
+  --color-content-inverse: #ffffff;
+  --color-border-subtle: #e5e7ea;
+  --color-border-strong: #cdd1d6;
+  --color-action-primary: #315bff;
+  --color-action-primary-hover: #2449d8;
+  --color-action-primary-foreground: #ffffff;
+  --color-action-secondary: #f0f1f3;
+  --color-action-secondary-hover: #e5e7ea;
+  --color-action-secondary-foreground: #101827;
+  --color-focus-ring: #315bff;
 }
 
 html[data-menu-theme="noir"] .menu-public-shell {

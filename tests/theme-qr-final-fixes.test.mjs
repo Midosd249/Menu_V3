@@ -46,10 +46,12 @@ test("Decorative theme header labels removed from Noir and Editorial", async () 
 });
 
 
-test("Editorial Canvas owns stable mobile information geometry", async () => {
-  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
-  assert.match(styles, /editorial-card-copy[\s\S]*grid-template-areas:/);
-  assert.match(styles, /editorial-card-title[\s\S]*unicode-bidi:\s*plaintext/);
-  assert.match(styles, /editorial-product-name[\s\S]*direction:\s*initial/);
-  assert.match(styles, /editorial-product-card[\s\S]*overflow:\s*visible/);
+test("SIGNAL TABLE owns stable mobile information geometry and removes numbering", async () => {
+  const styles = await readFile("src/theme-signal-table.css", "utf8");
+  const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.match(styles, /signal-card-copy[\s\S]*grid-template-columns:/);
+  assert.match(styles, /signal-card-title[\s\S]*text-wrap:\s*balance/);
+  assert.match(styles, /signal-product-name[\s\S]*unicode-bidi:\s*plaintext/);
+  assert.match(styles, /signal-product-card[\s\S]*min-inline-size:\s*0/);
+  assert.doesNotMatch(template, /signal-(card-index|product-number)|VOL\.\s*03/);
 });

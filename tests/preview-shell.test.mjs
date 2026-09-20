@@ -89,28 +89,25 @@ test("Essential keeps touch targets and readable product hierarchy", async () =>
   assert.match(styles, /font-size:\s*0\.78rem/);
 });
 
-test("Editorial template uses dedicated semantic regions and a single action hierarchy", async () => {
-  const source = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
-  assert.match(source, /data-editorial-root="true"/);
-  assert.match(source, /className="editorial-hero"/);
-  assert.match(source, /className="editorial-actions-wrap"/);
+test("SIGNAL TABLE owns dedicated semantic regions and one public action hierarchy", async () => {
+  const source = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.match(source, /data-signal-root="true"/);
+  assert.match(source, /className="signal-hero"/);
+  assert.match(source, /className="signal-actions-wrap"/);
   assert.match(source, /<PublicActionLinks\s/);
-  assert.match(source, /className="editorial-search"/);
-  assert.match(source, /className="editorial-product-card"/);
-  assert.match(source, /className="editorial-cart-trigger"/);
+  assert.match(source, /className="signal-search"/);
+  assert.match(source, /className="signal-product-card"/);
+  assert.match(source, /className="signal-cart-trigger"/);
   assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
 });
 
-test("Editorial Canvas replaces the prior visual hardening layer without scroll-driven animation", async () => {
-  const styles = await readFile("src/theme-editorial-canvas.css", "utf8");
-  const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
-  assert.match(styles, /editorial-brand-logo[\s\S]*object-fit:\s*contain/);
-  assert.match(styles, /editorial-product-card[\s\S]*transform:\s*none\s*!important/);
-  assert.doesNotMatch(styles, /animation:\s*[^;]*editorial/);
+test("SIGNAL TABLE replaces the Canvas presentation without scroll-driven animation", async () => {
+  const styles = await readFile("src/theme-signal-table.css", "utf8");
+  const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.match(styles, /signal-brand-logo[\s\S]*object-fit:\s*contain/);
+  assert.match(styles, /signal-product-card[\s\S]*min-inline-size:\s*0/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
-  assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
-  assert.match(styles, /editorial-dialog[^}]*border:/);
-  assert.match(styles, /editorial-cart-trigger[^}]*border:/);
+  assert.doesNotMatch(styles, /counter-(reset|increment)/);
   assert.match(template, /fixed inset-0 z-\[60\]/);
   assert.match(template, /fixed inset-0 z-\[70\]/);
   assert.match(styles, /safe-area-inset-bottom/);

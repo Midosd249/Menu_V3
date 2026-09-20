@@ -391,3 +391,44 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 
 ### Exact Next
 Complete CI/browser verification for the Editorial Canvas branch, review the final diff, then merge only if all required quality gates pass.
+
+
+## 2026-09-20 — SIGNAL TABLE Public Menu Redesign — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: owner explicitly authorized the SIGNAL TABLE redesign execution.
+- VERIFIED: task baseline main SHA: `6544be33126b13501b15b483ec56e997eaa44117`.
+- VERIFIED: existing ThemeRenderer / contemporary-restaurant family is the presentation boundary; no new public-menu data/order/auth architecture was introduced.
+- IMPLEMENTED: `src/components/templates/signal-table.tsx` and `src/theme-signal-table.css` provide the new scoped presentation owner.
+- IMPLEMENTED: Editorial theme now renders through `SignalTableTemplate`; obsolete Canvas presentation stylesheet is removed.
+- IMPLEMENTED: Signature Stage, cuisine rail, menu stream, focused detail, conditional Order Bar, RTL/LTR direction handling, and existing configured actions are preserved within the current contracts.
+- IMPLEMENTED: no decorative product/category numbering or CSS counters exist in the new presentation.
+- VERIFIED: Font Pairing and Color Designer were used for typography/palette validation only; no paid/unknown-cost dependency was introduced.
+- UNKNOWN: local command execution, GitHub Quality/browser result, physical-device visual QA, accessibility/performance evidence, and production deployment identity.
+- Deployment status: UNKNOWN / not deployed by this implementation step.
+
+### Exact Next Task
+**Run GitHub Quality/browser/accessibility/performance verification for the SIGNAL TABLE branch, review the complete diff, resolve failures, then create the single coherent PR.**
+
+
+### Verification Update — PR #226
+- VERIFIED: PR #226 is open with current head `46ef771378fe77f62e24c83daff68c2c84ad0a71`.
+- IN_PROGRESS: GitHub Quality run `35529179532` (#2160) and W9 Orders QA run `35529179546` (#403).
+- UNKNOWN: final CI conclusions, physical-device visual QA, and production deployment identity.
+- Exact Next Task: **Review Quality #2160 and W9 #403 to completion, resolve failures, then perform the final diff/release gate for PR #226.**
+
+
+## 2026-09-20 — SIGNAL TABLE Final Verification Gate
+
+- VERIFIED: PR #226 head is `edf6ae157c9ce81e8d8148c2616058579ba6d91f`.
+- VERIFIED: GitHub Quality run #2169 completed successfully after one transient Studio browser navigation failure was rerun.
+- VERIFIED: W9 Orders QA run #412 completed successfully.
+- VERIFIED: Quality included typecheck, full tests, lint, production build, browser template QA, Studio/Platform browser QA, responsive QA, and performance baseline steps; all completed successfully on the final rerun.
+- VERIFIED: no unresolved pull-request review threads remain.
+- VERIFIED: Vercel status for the final head is successful; this is preview/status evidence only, not Production deployment evidence.
+- VERIFIED: final implementation enforces no product/category numbering and no CSS counters.
+- UNKNOWN: physical Android/iOS device QA and Production deployment identity.
+- Implementation status: READY_TO_MERGE.
+- Deployment status: NOT_RELEASED.
+
+### Exact Next Task
+**Merge PR #226 once, verify the resulting `main` SHA, then stop. Production deployment and physical-device QA remain release-stage work and are not to be started automatically.**
