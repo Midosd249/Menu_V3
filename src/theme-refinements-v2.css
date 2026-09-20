@@ -90,6 +90,7 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  html[data-menu-theme="noir"] .menu-public-shell * {
     animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }
