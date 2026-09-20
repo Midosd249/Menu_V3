@@ -1,9 +1,3 @@
-
-  0% { clip-path: inset(9% 5% 9% 5%); transform: scale(1.07); }
-  45% { clip-path: inset(0); transform: scale(1.02); }
-  100% { clip-path: inset(0); transform: scale(1); }
-}
-
 /* -------------------------------------------------------------------------- */
 /* 02 — NOIR / cinematic light + glass                                      */
 /* -------------------------------------------------------------------------- */
@@ -92,9 +86,10 @@ html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(3n + 3) >
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover,
   html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:focus-visible { transform: none; }
 }
-@media (hover: none) {html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { transform: none; }
+@media (hover: none) {
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover { transform: none; }
 }
-@media (prefers-reduced-motion: reduce) {html[data-menu-theme="noir"] .menu-public-shell * {
+@media (prefers-reduced-motion: reduce) {
     animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }
