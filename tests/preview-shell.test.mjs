@@ -106,7 +106,7 @@ test("Editorial refinement prevents hero logo hijacking, unstable card transform
   const template = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
   assert.match(styles, /\.editorial-brand-logo[\s\S]*position:\s*relative\s*!important/);
   assert.match(styles, /\.editorial-product-card[\s\S]*transform:\s*none\s*!important/);
-  assert.match(styles, /\.editorial-product-image[\s\S]*animation:\s*none\s*!important/);
+  assert.doesNotMatch(styles, /animation:\s*[^;]*editorial/);
   assert.doesNotMatch(styles, /animation-timeline:\s*view\(/);
   assert.match(styles, /editorial-cart-trigger[\s\S]*z-index:\s*40/);
   assert.match(styles, /editorial-dialog\s*,[\s\S]*editorial-cart[\s\S]*border:/);

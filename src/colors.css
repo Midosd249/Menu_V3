@@ -72,6 +72,29 @@ html[data-menu-theme="essential"] .menu-public-shell {
   --color-focus-ring: var(--essential-accent-strong);
 }
 
+
+/* Editorial / Atelier semantic adapter. Visual personality lives in theme-editorial-atelier.css. */
+html[data-menu-theme="editorial"] .menu-public-shell {
+  --color-surface-canvas: var(--atelier-bg);
+  --color-surface-primary: var(--atelier-surface);
+  --color-surface-secondary: var(--atelier-surface-soft);
+  --color-surface-elevated: #fffdf8;
+  --color-surface-inverse: var(--atelier-ink);
+  --color-content-primary: var(--atelier-ink);
+  --color-content-secondary: var(--atelier-ink-soft);
+  --color-content-muted: var(--atelier-muted);
+  --color-content-inverse: var(--atelier-white);
+  --color-border-subtle: var(--atelier-line);
+  --color-border-strong: var(--atelier-line-strong);
+  --color-action-primary: var(--atelier-olive);
+  --color-action-primary-hover: #3e4b3a;
+  --color-action-primary-foreground: #fff;
+  --color-action-secondary: var(--atelier-surface-soft);
+  --color-action-secondary-hover: #ded3c4;
+  --color-action-secondary-foreground: var(--atelier-ink);
+  --color-focus-ring: var(--atelier-terra);
+}
+
 html[data-menu-theme="noir"] .menu-public-shell {
   color-scheme: dark;
   --color-surface-canvas: var(--noir-void);
