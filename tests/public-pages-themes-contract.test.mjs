@@ -83,3 +83,14 @@ test("new-customer request flow is retired in favor of direct signup", () => {
   assert.doesNotMatch(home, /businessName|contactPhone|NEW CUSTOMER REQUEST|طلب عميل جديد/);
   assert.match(home, /mode: "signup"/);
 });
+
+
+test("shared marketing footer uses only real destinations and bilingual controls", () => {
+  const footer = read("src/components/marketing-footer.tsx");
+  assert.match(footer, /to="\/pricing"/);
+  assert.match(footer, /to="\/login"/);
+  assert.match(footer, /to="\/themes\/preview"/);
+  assert.match(footer, /href="\/#faq"/);
+  assert.match(footer, /<LangToggle \/>/);
+  assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
+});
