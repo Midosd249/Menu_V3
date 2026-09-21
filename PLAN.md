@@ -403,8 +403,8 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 
 ## 2026-09-21 — SIGNAL TABLE Mobile Language / Selection Cleanup — READY_TO_MERGE
 
-- VERIFIED: PR #230 head `cee1557997987d1917005fffec19e6b8d70d00e4`.
-- VERIFIED: Quality #2202 and W9 #442 passed.
+- VERIFIED: PR #230 head `8bbd22f28fc160359223a2902b6ae7c2ba944645`.
+- VERIFIED: Quality #2203 and W9 #443 passed.
 - VERIFIED: mobile language visibility defect was caused by an explicit mobile `display:none` rule and is corrected.
 - IMPLEMENTED: language control, selection/hero cleanup, dead CSS cleanup, and regression coverage.
 - UNKNOWN: physical device evidence and Production deployment identity.

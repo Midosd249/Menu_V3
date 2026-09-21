@@ -454,8 +454,8 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 
 ## 2026-09-21 — SIGNAL TABLE Mobile Language / Selection Cleanup — READY_TO_MERGE
 
-- VERIFIED: PR #230 head `cee1557997987d1917005fffec19e6b8d70d00e4`.
-- VERIFIED: Quality #2202 passed; W9 #442 passed.
+- VERIFIED: PR #230 head `8bbd22f28fc160359223a2902b6ae7c2ba944645`.
+- VERIFIED: Quality #2203 passed; W9 #443 passed.
 - VERIFIED: mobile language control is visible in the SIGNAL TABLE browser QA matrix.
 - IMPLEMENTED: removed obsolete featured-selection chrome and preserved product-card/cart/search/category/order contracts.
 - UNKNOWN: physical Android/iOS evidence and final Production deployment identity.

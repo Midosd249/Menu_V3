@@ -488,13 +488,13 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 
 ## 2026-09-21 — SIGNAL TABLE Mobile Language / Selection Cleanup — VERIFIED / READY_TO_MERGE
 
-- VERIFIED: PR #230 is open with head `cee1557997987d1917005fffec19e6b8d70d00e4`.
+- VERIFIED: PR #230 is open with head `8bbd22f28fc160359223a2902b6ae7c2ba944645`.
 - VERIFIED: root cause of the missing mobile language control was the Editorial mobile rule `.signal-topbar-lang{display:none}`; it has been removed.
 - IMPLEMENTED: SIGNAL TABLE now renders a dedicated bilingual language control with 🇸🇦 / 🇬🇧 target-language flags, accessible naming, preserved query state, and a mobile-safe target.
 - IMPLEMENTED: the obsolete “Editor's selection / Start with these” block and hero “Signature selection” product overlay were removed; the hero now uses the configured restaurant cover or the existing identity fallback.
 - IMPLEMENTED: dead SIGNAL TABLE featured-selection CSS was removed.
-- VERIFIED: GitHub Quality run #2202 (`35552561494`) passed all stages, including typecheck, full tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, and performance diagnostics.
-- VERIFIED: GitHub W9 Orders QA run #442 (`35552561500`) passed.
+- VERIFIED: GitHub Quality run #2202 (`35552996462`) passed all stages, including typecheck, full tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, and performance diagnostics.
+- VERIFIED: GitHub W9 Orders QA run #442 (`35552996512`) passed.
 - VERIFIED: final PR diff is limited to 5 task-scoped files; no unresolved review threads remain.
 - VERIFIED: Vercel status for the final PR head is successful preview/status evidence only.
 - UNKNOWN: physical Android/iOS QA and current Production deployment identity for the final head.
