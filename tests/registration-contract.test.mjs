@@ -19,7 +19,6 @@ test("registration exposes account fields; brand setup stays in onboarding", () 
     'name="confirmPassword"',
   ]) assert.ok(login.includes(field), `missing registration field: ${field}`);
   assert.match(contract, /fullName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(100\)/);
-  assert.match(contract, /brandName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(120\)/);
   assert.match(contract, /phone: z\.string\(\)\.trim\(\)\.min\(8\)\.max\(30\)/);
   assert.match(contract, /email: z\.string\(\)\.trim\(\)\.email\(\)\.max\(320\)/);
   assert.match(contract, /password: z\.string\(\)\.min\(8\)\.max\(128\)/);
