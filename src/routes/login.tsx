@@ -40,7 +40,6 @@ function Login() {
     const password = String(form.get("password") || "");
     const confirmPassword = String(form.get("confirmPassword") || "");
     const name = String(form.get("name") || "").trim();
-    const brandName = String(form.get("brandName") || "").trim();
     const phone = String(form.get("phone") || "").trim();
     setBusy(true); setError("");
     try {
@@ -48,7 +47,6 @@ function Login() {
         const email = identity.toLowerCase();
         const contract = customerRegistrationSchema.safeParse({
           fullName: name,
-          brandName,
           phone,
           email,
           password,
@@ -58,9 +56,6 @@ function Login() {
           const issue = contract.error.issues[0];
           if (issue?.path[0] === "confirmPassword") {
             throw new Error(lang === "ar" ? "كلمتا المرور غير متطابقتين." : "Passwords do not match.");
-          }
-          if (issue?.path[0] === "brandName") {
-            throw new Error(lang === "ar" ? "أدخل اسم البراند أو المطعم." : "Enter your brand or restaurant name.");
           }
           if (issue?.path[0] === "fullName") {
             throw new Error(lang === "ar" ? "أدخل اسمك الكامل." : "Enter your full name.");
@@ -114,13 +109,12 @@ function Login() {
   return <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
     <div className="w-full max-w-md grid gap-6">
       <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">{t(copy.brand, lang)}</Link><LangToggle /></div>
-      <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menu V3" : "Start with Menu V3"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أدخل بياناتك وبيانات البراند لإنشاء حسابك والبدء مع Menu V3." : "Enter your account and brand details to create your account and get started with Menu V3.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
+      <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menu V3" : "Start with Menu V3"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أدخل بيانات حسابك، ثم أكمل بيانات المطعم في الخطوة التالية." : "Enter your account details, then complete your restaurant setup in the next step.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
       {authEnabled ? <>
         {!signup && <><div className="grid gap-2">{GROK_PROVIDERS.map((p) => <Button key={p.providerId} type="button" variant="outline" disabled={busy} onClick={() => signIn(p.providerId, { callbackURL: invite ? `/invite/${encodeURIComponent(invite)}` : "/studio" })}>{t(copy.auth.google, lang)}</Button>)}</div><p className="text-center text-xs text-muted">{t(copy.auth.or, lang)}</p></>}
         <form className="grid gap-3" onSubmit={onSubmit}>
           {signup ? <Field label={lang === "ar" ? "الاسم الكامل" : "Full name"}><Input name="name" required minLength={2} maxLength={100} autoComplete="name" /></Field> : null}
-          {signup ? <Field label={lang === "ar" ? "اسم البراند أو المطعم" : "Brand / restaurant name"}><Input name="brandName" required minLength={2} maxLength={120} autoComplete="organization" /></Field> : null}
-          {signup ? <Field label={lang === "ar" ? "رقم الجوال السعودي" : "Saudi phone number"}><Input name="phone" type="tel" required minLength={8} maxLength={30} inputMode="tel" autoComplete="tel" placeholder="05XXXXXXXX" /></Field> : null}
+                    {signup ? <Field label={lang === "ar" ? "رقم الجوال السعودي" : "Saudi phone number"}><Input name="phone" type="tel" required minLength={8} maxLength={30} inputMode="tel" autoComplete="tel" placeholder="05XXXXXXXX" /></Field> : null}
           {mode === "in" ? <div className="grid grid-cols-2 gap-2 rounded-xl border border-line bg-sand/20 p-1"><button type="button" className={`rounded-lg px-3 py-2 text-sm ${loginMethod === "email" ? "bg-paper font-medium shadow-sm" : "text-muted"}`} onClick={() => setLoginMethod("email")} disabled={busy}>{lang === "ar" ? "بالبريد" : "Email"}</button><button type="button" className={`rounded-lg px-3 py-2 text-sm ${loginMethod === "phone" ? "bg-paper font-medium shadow-sm" : "text-muted"}`} onClick={() => setLoginMethod("phone")} disabled={busy}>{lang === "ar" ? "بالجوال" : "Phone"}</button></div> : null}
           <Field label={mode === "up" || !isPhoneLogin ? t(copy.auth.email, lang) : (lang === "ar" ? "رقم الجوال" : "Phone number")}><Input name="identity" type={mode === "up" || !isPhoneLogin ? "email" : "tel"} required autoComplete={mode === "up" || !isPhoneLogin ? "email" : "tel"} placeholder={isPhoneLogin ? "+9665XXXXXXXX" : undefined} /></Field>
           <Field label={t(copy.auth.password, lang)}><Input name="password" type="password" required minLength={8} autoComplete={signup ? "new-password" : "current-password"} /></Field>

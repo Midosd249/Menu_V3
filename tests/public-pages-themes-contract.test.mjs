@@ -94,3 +94,11 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /<LangToggle \/>/);
   assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
 });
+
+
+test("WhatsApp ordering is presented as a core capability in every commercial plan", () => {
+  assert.match(catalog, /الطلب عبر واتساب من المنيو/);
+  assert.match(catalog, /WhatsApp ordering from the menu/);
+  assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*الطلب عبر واتساب/);
+  assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*WhatsApp ordering/);
+});

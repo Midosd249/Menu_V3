@@ -513,3 +513,14 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 
 ### Exact Next Task
 Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
+
+
+## 2026-09-21 — Focused Public UX Follow-up — IMPLEMENTATION_IN_PROGRESS
+- VERIFIED: implementation branch `feat/focused-public-whatsapp-footer-2026-09-21` is based on `main` `91b7e8e6d6b3e5e9be2070a203c501b77bde7feb`.
+- IMPLEMENTED: Essential/Noir Featured cards now have explicit theme-owned title/price/copy hierarchy and a stable `#featured-heading` anchor.
+- IMPLEMENTED: WhatsApp ordering is explicitly described in Free, Growth, and Pro commercial plan copy; no entitlement gate or database change was introduced.
+- IMPLEMENTED: signup no longer collects brand name; `/onboarding` remains the single brand/workspace setup step.
+- UNKNOWN: final CI for this follow-up until GitHub checks complete; physical Android/iOS QA remains release-stage evidence.
+
+### Exact Next Task
+Run and review the final GitHub Quality/W9 checks for the follow-up, then merge PR #232 once if all gates pass. Do not deploy automatically from this implementation task.

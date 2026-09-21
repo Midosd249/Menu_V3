@@ -27,12 +27,13 @@ export const COMMERCIAL_PLANS: readonly CommercialPlan[] = [
 ];
 
 export const COMMERCIAL_FEATURES = {
-  ar: ["منيو رقمي ثنائي اللغة", "رمز QR ورابط عام", "الهوية والثيمات الخمسة", "تحليلات المنيو", "إدارة الفروع ضمن حد الباقة", "إدارة الفريق ضمن حد الباقة"],
-  en: ["Bilingual digital menu", "QR code and public link", "Branding and five themes", "Menu analytics", "Branch management within plan limit", "Team management within plan limit"],
+  ar: ["منيو رقمي ثنائي اللغة", "رمز QR ورابط عام", "الهوية والثيمات الخمسة", "تحليلات المنيو", "إدارة الفروع ضمن حد الباقة", "إدارة الفريق ضمن حد الباقة", "الطلب عبر واتساب"],
+  en: ["Bilingual digital menu", "QR code and public link", "Branding and five themes", "Menu analytics", "Branch management within plan limit", "Team management within plan limit", "WhatsApp ordering"],
 } as const;
 
 export const COMMERCIAL_PLAN_FEATURES: Record<CommercialPlan["code"], readonly CommercialPlanFeature[]> = {
   free: [
+    { ar: "الطلب عبر واتساب من المنيو", en: "WhatsApp ordering from the menu" },
     { ar: "منيو عربي وإنجليزي مع RTL/LTR", en: "Arabic & English menu with RTL/LTR" },
     { ar: "QR ورابط عام للمنيو", en: "QR code and public menu link" },
     { ar: "التصاميم الخمسة للمنيو", en: "All five menu themes" },
@@ -41,6 +42,7 @@ export const COMMERCIAL_PLAN_FEATURES: Record<CommercialPlan["code"], readonly C
     { ar: "مساعد الضيف الأساسي", en: "Core guest assistant" },
   ],
   starter: [
+    { ar: "الطلب عبر واتساب من المنيو", en: "WhatsApp ordering from the menu" },
     { ar: "كل ما في الباقة المجانية", en: "Everything in Free" },
     { ar: "حتى 300 صنف و3 فروع و10 أعضاء", en: "Up to 300 products, 3 branches, and 10 team members" },
     { ar: "تحليلات أعمق وMenu Intelligence", en: "Deeper analytics and Menu Intelligence" },
@@ -49,6 +51,7 @@ export const COMMERCIAL_PLAN_FEATURES: Record<CommercialPlan["code"], readonly C
     { ar: "استيراد وميزات ذكاء اصطناعي موسعة", en: "Import and expanded AI capabilities" },
   ],
   pro: [
+    { ar: "الطلب عبر واتساب من المنيو", en: "WhatsApp ordering from the menu" },
     { ar: "كل ما في باقة نمو", en: "Everything in Growth" },
     { ar: "أصناف غير محدودة و10 فروع و25 عضوًا", en: "Unlimited products, 10 branches, and 25 team members" },
     { ar: "تحليلات موحدة عبر الفروع", en: "Cross-branch analytics" },

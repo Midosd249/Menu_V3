@@ -3,7 +3,6 @@ import { z } from "zod";
 export const customerRegistrationSchema = z
   .object({
     fullName: z.string().trim().min(2).max(100),
-    brandName: z.string().trim().min(2).max(120),
     phone: z.string().trim().min(8).max(30),
     email: z.string().trim().email().max(320),
     password: z.string().min(8).max(128),

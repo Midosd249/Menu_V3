@@ -10,10 +10,9 @@ const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
 const owner = readFileSync("src/lib/menu/owner.ts", "utf8");
 
 
-test("registration exposes exactly the six approved contract fields", () => {
+test("registration exposes account fields; brand setup stays in onboarding", () => {
   for (const field of [
     'name="name"',
-    'name="brandName"',
     'name="phone"',
     'name="identity"',
     'name="password"',
@@ -29,8 +28,7 @@ test("registration exposes exactly the six approved contract fields", () => {
 
 test("required-field validation is enforced before signup", () => {
   assert.match(login, /required minLength=\{2\} maxLength=\{100\}/);
-  assert.ok(login.includes('name="brandName" required'));
-  assert.match(login, /name="phone"[^>]*required/);
+  assert.doesNotMatch(login, /name="brandName"/);\n  assert.match(login, /name="phone"[^>]*required/);
   assert.match(login, /name="identity"[^>]*required/);
   assert.match(login, /name="password"[^>]*required/);
   assert.match(login, /name="confirmPassword"[^>]*required/);
@@ -105,8 +103,6 @@ test("existing authenticated-user behavior remains protected by Studio membershi
 
 test("Arabic RTL and English LTR registration rendering remain explicit", () => {
   assert.match(login, /dir=\{lang === "ar" \? "rtl" : "ltr"\}/);
-  assert.match(login, /اسم البراند أو المطعم/);
-  assert.match(login, /Brand \/ restaurant name/);
-  assert.match(login, /رقم الجوال السعودي/);
+  assert.doesNotMatch(login, /اسم البراند أو المطعم/);\n  assert.doesNotMatch(login, /Brand \/ restaurant name/);\n  assert.match(login, /رقم الجوال السعودي/);
   assert.match(login, /Saudi phone number/);
 });

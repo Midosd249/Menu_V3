@@ -472,3 +472,12 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 
 ### Exact Next Task
 Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
+
+
+## 2026-09-21 — Focused Public UX Follow-up — IMPLEMENTATION_IN_PROGRESS
+- Scope: restore explicit Featured title/price hierarchy in Essential/Noir, remove the duplicate signup brand-name field, and expose truthful WhatsApp ordering copy in every commercial plan.
+- Protected: existing WhatsApp structured-order runtime, theme registry, tenant/branch isolation, server-side pricing/order validation, and onboarding workspace provisioning.
+- No migration or entitlement change.
+
+### Exact Next Task
+Review PR #232 checks and final diff; merge once after all gates pass, then use the single release batch for Production and real-device QA.

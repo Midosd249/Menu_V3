@@ -421,3 +421,14 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 
 ### Exact Next Task
 Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
+
+
+## 2026-09-21 — Focused Public UX Follow-up — IMPLEMENTATION_IN_PROGRESS
+- VERIFIED: task is scoped to Featured card information hierarchy, all-plan WhatsApp messaging, and duplicate brand-name removal from signup.
+- IMPLEMENTED: explicit Featured title/price classes and theme-owned surfaces for Essential/Noir; no new theme or z-index workaround.
+- IMPLEMENTED: WhatsApp ordering copy added to every commercial plan and core feature list.
+- IMPLEMENTED: signup brand-name field removed from account creation; onboarding remains the single collection point.
+- UNKNOWN: final CI for this follow-up until the current PR checks complete; physical-device evidence remains release-stage.
+
+### Exact Next Task
+Review PR #232 final checks and diff, merge once if green, then perform one release deployment and real-device QA.

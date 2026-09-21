@@ -40,3 +40,17 @@ test("homepage menu proof uses canonical bilingual demo data and stable image me
   assert.match(styles, /\.menuq-live-product-image[\s\S]*aspect-ratio:\s*4 \/ 3[\s\S]*object-fit:\s*cover/);
   assert.doesNotMatch(home, /<strong>نَفَس<\/strong>/);
 });
+
+
+test("featured cards keep explicit title and price markup with theme-owned surfaces", async () => {
+  const source = await readFile("src/components/public-menu.tsx", "utf8");
+  const essential = await readFile("src/theme-essential.css", "utf8");
+  const noir = await readFile("src/theme-noir-hardening.css", "utf8");
+  assert.match(source, /menu-featured-card-copy/);
+  assert.match(source, /menu-featured-card-title/);
+  assert.match(source, /menu-featured-card-price/);
+  assert.match(essential, /section:has\(> #featured-heading\)[\s\S]*menu-featured-card-title[\s\S]*menu-featured-card-price/);
+  assert.match(noir, /section:has\(> #featured-heading\)[\s\S]*menu-featured-card-title[\s\S]*menu-featured-card-price/);
+  assert.doesNotMatch(essential, /section:first-child:has\(> h2\.text-sm\)/);
+  assert.doesNotMatch(noir, /section:first-child:has\(> h2\.text-sm\)/);
+});
