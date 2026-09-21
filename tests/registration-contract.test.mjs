@@ -27,7 +27,8 @@ test("registration exposes account fields; brand setup stays in onboarding", () 
 
 test("required-field validation is enforced before signup", () => {
   assert.match(login, /required minLength=\{2\} maxLength=\{100\}/);
-  assert.doesNotMatch(login, /name="brandName"/);\n  assert.match(login, /name="phone"[^>]*required/);
+  assert.doesNotMatch(login, /name="brandName"/);
+  assert.match(login, /name="phone"[^>]*required/);
   assert.match(login, /name="identity"[^>]*required/);
   assert.match(login, /name="password"[^>]*required/);
   assert.match(login, /name="confirmPassword"[^>]*required/);
@@ -102,6 +103,8 @@ test("existing authenticated-user behavior remains protected by Studio membershi
 
 test("Arabic RTL and English LTR registration rendering remain explicit", () => {
   assert.match(login, /dir=\{lang === "ar" \? "rtl" : "ltr"\}/);
-  assert.doesNotMatch(login, /اسم البراند أو المطعم/);\n  assert.doesNotMatch(login, /Brand \/ restaurant name/);\n  assert.match(login, /رقم الجوال السعودي/);
+  assert.doesNotMatch(login, /اسم البراند أو المطعم/);
+  assert.doesNotMatch(login, /Brand \/ restaurant name/);
+  assert.match(login, /رقم الجوال السعودي/);
   assert.match(login, /Saudi phone number/);
 });
