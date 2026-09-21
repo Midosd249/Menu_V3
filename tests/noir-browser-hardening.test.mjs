@@ -46,3 +46,12 @@ test("Noir does not trap shared modals inside the public content stacking contex
   assert.match(styles, /\.menu-public-shell \[role="dialog"\][\s\S]*background: var\(--color-surface-primary\) !important/);
   assert.match(styles, /\.menu-public-shell \[role="dialog"\] \.text-ink[\s\S]*color: var\(--color-content-primary\) !important/);
 });
+
+
+test("Noir featured cards keep a complete surface and stable media geometry", async () => {
+  const template = await readFile("src/components/public-menu.tsx", "utf8");
+  const styles = await readFile("src/theme-noir-hardening.css", "utf8");
+  assert.match(template, /menu-featured-card-shell/);
+  assert.match(styles, /data-menu-theme="noir"[\s\S]*menu-featured-card-shell[\s\S]*display:\s*grid/);
+  assert.match(styles, /data-menu-theme="noir"[\s\S]*menu-featured-card-shell[\s\S]*aspect-ratio:\s*4 \/ 3/);
+});
