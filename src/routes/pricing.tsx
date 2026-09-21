@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowUpLeft } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
+import { MarketingFooter } from "@/components/marketing-footer";
 import { useLang } from "@/lib/lang";
 import { COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
 
@@ -71,6 +72,7 @@ function Pricing() {
           </div>
         </section>
       </main>
+      <MarketingFooter />
     </div>
   );
 }
