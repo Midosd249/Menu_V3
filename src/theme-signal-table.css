@@ -95,3 +95,29 @@ html[data-menu-theme="editorial"] :where(button,a,input,textarea,select):focus-v
 html[dir="rtl"][data-menu-theme="editorial"] .signal-card-title,html[dir="rtl"][data-menu-theme="editorial"] .signal-card-description,html[dir="rtl"][data-menu-theme="editorial"] .signal-product-name,html[dir="rtl"][data-menu-theme="editorial"] .signal-product-description{text-align:right;direction:rtl}
 html[dir="ltr"][data-menu-theme="editorial"] .signal-card-title,html[dir="ltr"][data-menu-theme="editorial"] .signal-card-description,html[dir="ltr"][data-menu-theme="editorial"] .signal-product-name,html[dir="ltr"][data-menu-theme="editorial"] .signal-product-description{text-align:left;direction:ltr}
 @media print{html[data-menu-theme="editorial"] .signal-topbar,html[data-menu-theme="editorial"] .signal-actions-wrap,html[data-menu-theme="editorial"] .signal-search,html[data-menu-theme="editorial"] .signal-cart-trigger{display:none!important}html[data-menu-theme="editorial"] .signal-main{padding-block-end:0}}
+
+/* SIGNAL TABLE — compact hero and owner-selected featured picks. */
+html[data-menu-theme="editorial"] .signal-featured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+html[data-menu-theme="editorial"] .signal-featured-card-wrap{min-inline-size:0}
+html[data-menu-theme="editorial"] .signal-featured-card{display:grid;grid-template-rows:auto 1fr;inline-size:100%;min-inline-size:0;padding:0;border:1px solid var(--signal-line);border-radius:1rem;overflow:hidden;background:var(--signal-surface);color:var(--signal-ink);text-align:start}
+html[data-menu-theme="editorial"] .signal-featured-image{display:block;inline-size:100%;aspect-ratio:4/3;object-fit:cover;background:#eceef1}
+html[data-menu-theme="editorial"] .signal-featured-card .signal-card-copy{padding:1rem}
+html[data-menu-theme="editorial"] .signal-featured-card:focus-visible{outline:2px solid var(--signal-blue);outline-offset:3px}
+@media (max-width: 700px){
+  html[data-menu-theme="editorial"] .signal-hero{grid-template-columns:1fr;gap:1rem;padding:1rem .9rem 1.25rem}
+  html[data-menu-theme="editorial"] .signal-hero-copy{order:1;padding-block:.35rem;gap:.75rem}
+  html[data-menu-theme="editorial"] .signal-brand-row{gap:.75rem}
+  html[data-menu-theme="editorial"] .signal-brand-logo{inline-size:3.75rem!important;block-size:3.75rem!important;min-inline-size:3.75rem!important;min-block-size:3.75rem!important;border-radius:.85rem}
+  html[data-menu-theme="editorial"] .signal-brand-row h1{font-size:clamp(2rem,10vw,3.25rem);max-inline-size:12ch}
+  html[data-menu-theme="editorial"] .signal-tagline{margin-top:.45rem;font-size:.8rem;line-height:1.65}
+  html[data-menu-theme="editorial"] .signal-hero-media{order:2;aspect-ratio:16/7;max-block-size:11rem;border-radius:1rem}
+  html[data-menu-theme="editorial"] .signal-featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+  html[data-menu-theme="editorial"] .signal-featured-card .signal-card-copy{padding:.75rem}
+}
+@media (max-width: 380px){
+  html[data-menu-theme="editorial"] .signal-featured-grid{grid-template-columns:1fr}
+}
+@media (min-width: 701px){
+  html[data-menu-theme="editorial"] .signal-hero-media{aspect-ratio:16/10}
+  html[data-menu-theme="editorial"] .signal-featured-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
