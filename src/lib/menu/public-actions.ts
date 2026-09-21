@@ -1,5 +1,7 @@
 import type { Branch, Lang, PublicTenant } from "./types";
 
+export type WhatsAppOrderLine = { name: string; quantity: number; lineTotal: number; options?: string[] };
+
 export type PublicActionKey = "whatsapp" | "location" | "phone" | "website" | "instagram" | "snapchat" | "facebook" | "tiktok";
 export type PublicAction = { key: PublicActionKey; href: string; label: string; external?: boolean };
 
@@ -33,6 +35,22 @@ export function buildWhatsAppUrl(tenant: PublicTenant, lang: Lang): string | nul
   const message = (tenant.whatsappTemplate || fallback).replaceAll("{restaurant}", restaurant).replaceAll("{product}", lang === "ar" ? "المنيو" : "the menu").trim();
   return "https://wa.me/" + digits + "?text=" + encodeURIComponent(message);
 }
+export function buildWhatsAppOrderUrl(tenant: PublicTenant, branch: Branch, lang: Lang, lines: WhatsAppOrderLine[], total: number, notes = ""): string | null {
+  const digits = normalizePhoneDigits(tenant.whatsapp, tenant.country);
+  if (!digits || !lines.length) return null;
+  const restaurant = lang === "ar" ? tenant.nameAr || tenant.nameEn : tenant.nameEn || tenant.nameAr;
+  const branchName = lang === "ar" ? branch.nameAr || branch.nameEn : branch.nameEn || branch.nameAr;
+  const body = lines.map((line, index) => {
+    const options = line.options?.filter(Boolean).join(" · ");
+    const suffix = options ? ` — ${options}` : "";
+    return `${index + 1}. ${line.name} × ${line.quantity} — ${line.lineTotal.toFixed(2)} ${lang === "ar" ? "ر.س" : "SAR"}${suffix}`;
+  }).join("\n");
+  const message = lang === "ar"
+    ? `مرحباً، أريد إرسال هذا الطلب من ${restaurant}\nالفرع: ${branchName}\n\n${body}\n\nالإجمالي: ${total.toFixed(2)} ر.س${notes.trim() ? `\nملاحظات: ${notes.trim()}` : ""}`
+    : `Hello, I would like to place this order with ${restaurant}\nBranch: ${branchName}\n\n${body}\n\nTotal: SAR ${total.toFixed(2)}${notes.trim() ? `\nNotes: ${notes.trim()}` : ""}`;
+  return "https://wa.me/" + digits + "?text=" + encodeURIComponent(message);
+}
+
 export function getPublicActions(tenant: PublicTenant, branch: Branch, lang: Lang): PublicAction[] {
   const label = (ar: string, en: string) => lang === "ar" ? ar : en;
   const actions: Array<PublicAction | null> = [
