@@ -115,6 +115,7 @@ function CartDrawer({ tenant, branch, lang, items, setItems, close, submit, subm
   const dialogRef = useRef<HTMLElement>(null); const closeRef = useRef<HTMLButtonElement>(null); useModalAccessibility(true, close, dialogRef, closeRef);
   const total = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const count = items.reduce((sum, item) => sum + item.quantity, 0);
   const whatsappOrder = buildWhatsAppOrderUrl(tenant, branch, lang, items.map((item) => ({ name: value(lang, item.product.nameAr, item.product.nameEn), quantity: item.quantity, lineTotal: item.unitPrice * item.quantity, options: [item.options.variants.find((v) => v.id === item.variantId), ...item.options.options.filter((o) => item.modifierOptionIds.includes(o.id))].filter(Boolean).map((option) => value(lang, option!.nameAr, option!.nameEn)) })), total, notes);
+  const trackWhatsApp = () => { void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "whatsapp", lang } }); };
   const changeQty = (key: string, delta: number) => setItems(items.flatMap((item) => item.key !== key ? [item] : item.quantity + delta <= 0 ? [] : [{ ...item, quantity: Math.min(20, item.quantity + delta) }]));
   return <div className="fixed inset-0 z-[60] bg-black/45" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
     <section ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="cart-title" className="ms-auto flex h-full w-full max-w-lg flex-col bg-paper shadow-2xl">
