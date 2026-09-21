@@ -481,3 +481,13 @@ Run the repository Quality/test/typecheck/lint/build and browser visual verifica
 
 ### Exact Next Task
 Review PR #232 checks and final diff; merge once after all gates pass, then use the single release batch for Production and real-device QA.
+
+## Final verification — 2026-09-21
+- VERIFIED: PR #232 final verified head is `6047080fcfa3e289d89538b6f28d520bbdfc7328`.
+- VERIFIED: GitHub Quality #2216 passed and GitHub W9 Orders QA #454 passed.
+- VERIFIED: Vercel PR status is SUCCESS preview evidence only; no Production deployment was triggered.
+- BLOCKED: server-authoritative plan-specific WhatsApp entitlement remains intentionally deferred.
+- UNKNOWN: physical Android/iOS QA remains release-stage evidence.
+
+### Exact Next Task
+Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
