@@ -150,6 +150,15 @@ test("W16 hardening protects Arabic word boundaries, Noir hours contrast, and Ga
   assert.match(styles, /overflow:\s*visible/);
 });
 
+test("SIGNAL TABLE keeps the mobile language control visible and removes featured-selection chrome", async () => {
+  const styles = await readFile("src/theme-signal-table.css", "utf8");
+  const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.doesNotMatch(styles, /signal-topbar-lang\{display:none\}/);
+  assert.doesNotMatch(signal, /className="signal-selection"/);
+  assert.doesNotMatch(signal, /signal-featured-stage/);
+  assert.match(signal, /className="signal-topbar-lang\s/);
+});
+
 test("W16 QR generation uses the configured production public origin and a stable language-control hook", async () => {
   const qr = await readFile("src/routes/studio/qr.tsx", "utf8");
   const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
@@ -157,6 +166,12 @@ test("W16 QR generation uses the configured production public origin and a stabl
   assert.match(qr, /setOrigin\(getPublicOrigin\(\) \|\| window\.location\.origin\)/);
   assert.match(qr, /menuUrl\(origin, snapshot\.tenant\.slug, b\.slug\)/);
   assert.match(toggle, /menu-lang-toggle/);
+  const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.match(signal, /SignalLanguageControl/);
+  assert.match(signal, /data-language-switcher="true"/);
+  assert.match(signal, /🇸🇦/);
+  assert.match(signal, /🇬🇧/);
+  assert.match(signal, /Switch to English/);
 });
 
 test("W16 removes the legacy Editorial volume label from the active refinement layer", async () => {

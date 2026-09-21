@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
-import { LangToggle } from "@/components/lang-toggle";
+import { Languages, MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
@@ -15,6 +14,23 @@ import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 type CartItem = { key: string; product: Product; options: ProductOptions; variantId: string; modifierOptionIds: string[]; unitPrice: number; quantity: number };
 type Props = { menu: PublicMenu; preview?: boolean };
+
+function SignalLanguageControl({ lang, englishAvailable }: { lang: Lang; englishAvailable: boolean }) {
+  const nextLang = lang === "ar" ? "en" : "ar";
+  const nextLabel = nextLang === "ar" ? "عربي" : "EN";
+  const nextFlag = nextLang === "ar" ? "🇸🇦" : "🇬🇧";
+  const disabled = nextLang === "en" && !englishAvailable;
+
+  const changeLang = () => {
+    if (disabled || typeof window === "undefined") return;
+    const nextUrl = new URL(window.location.href);
+    if (nextLang === "en") nextUrl.searchParams.set("lang", "en");
+    else nextUrl.searchParams.delete("lang");
+    window.location.replace(nextUrl.toString());
+  };
+
+  return <button type="button" data-language-switcher="true" aria-label={nextLang === "ar" ? "التبديل إلى العربية" : "Switch to English"} aria-disabled={disabled} disabled={disabled} title={disabled ? (lang === "ar" ? "النسخة الإنجليزية غير متاحة لهذا المطعم" : "English content is not available for this menu") : undefined} className="signal-topbar-lang menu-lang-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-line bg-paper px-2.5 text-xs font-semibold" onClick={changeLang}><Languages className="size-4 shrink-0" aria-hidden="true" /><span aria-hidden="true">{nextFlag}</span><span dir="ltr">{nextLabel}</span></button>;
+}
 
 function ProductDialog({ lang, product, options, close, add, submitting }: { lang: Lang; product: Product; options?: ProductOptions; close: () => void; add: (item: CartItem) => void; submitting: boolean }) {
   const variants = options?.variants.filter((v) => v.isAvailable) ?? [];
@@ -37,7 +53,7 @@ function CartDialog({ lang, items, setItems, close, submit, submitting, error }:
 export function SignalTableTemplate({ menu, preview = false }: Props) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products, experimentVariant } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<{ number: number; total: number } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed) return h?.isClosed ? false : null; if (!h.opensAt || !h.closesAt) return null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const englishAvailable = isPublicMenuLocaleAvailable(menu, "en");
@@ -84,7 +100,7 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
           <span>{text(lang, tenant.nameAr, tenant.nameEn)}</span>
         </div>
         <div className="signal-topbar-actions">
-          <LangToggle englishAvailable={englishAvailable} className="signal-topbar-lang" />
+          <SignalLanguageControl lang={lang} englishAvailable={englishAvailable} />
           {!preview ? (
             <button
               type="button"
@@ -115,28 +131,17 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
         <div className="signal-hero-meta">{status !== null ? <span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span> : null}{branch.addressAr || branch.addressEn ? <span>{text(lang, branch.addressAr, branch.addressEn)}</span> : null}</div>
       </div>
       <div className="signal-hero-media">
-        {featured[0] ? (
-          <button type="button" onClick={() => selectProduct(featured[0])} className="signal-featured-stage">
-            <MenuMedia src={featured[0].imageUrl} alt={text(lang, featured[0].nameAr, featured[0].nameEn)} className="signal-featured-stage-image" eager fallback={text(lang, "صورة الطبق", "Dish image")} />
-            <span className="signal-featured-stage-copy">
-              <span className="signal-featured-stage-label">{text(lang, "اختيار اليوم", "Signature selection")}</span>
-              <span className="signal-featured-stage-name">{text(lang, featured[0].nameAr, featured[0].nameEn)}</span>
-              {featured[0].descriptionAr || featured[0].descriptionEn ? <span className="signal-featured-stage-description">{text(lang, featured[0].descriptionAr, featured[0].descriptionEn)}</span> : null}
-              <MenuPrice price={featured[0].price} currency={featured[0].currency} lang={lang} className="signal-featured-stage-price" />
-            </span>
-          </button>
-        ) : tenant.coverUrl ? (
+        {tenant.coverUrl ? (
           <MenuMedia src={tenant.coverUrl} alt="" className="signal-cover" eager fallback={tenant.nameAr.slice(0, 1)} />
         ) : (
           <div className="signal-identity-fallback" aria-hidden="true">{tenant.nameAr.slice(0, 1)}</div>
         )}
       </div>
     </header>
-    <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /><LangToggle englishAvailable={englishAvailable} className="signal-lang-toggle" /></div>
+    <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></div>
     {branches.length > 1 ? <nav aria-label={text(lang, "الفروع", "Branches")} className="signal-branches"><div>{branches.map((item) => <a key={item.id} href={`/m/${tenant.slug}/${item.slug}`} className={cn("signal-branch-link", item.id === branch.id && "is-active")}>{text(lang, item.nameAr, item.nameEn)}</a>)}</div></nav> : null}
     <div className="signal-search" data-signal-layer="navigation"><div className="signal-search-inner"><label className="relative block flex-1"><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 start-3 text-muted" /><input id="signal-search-input" value={query} onChange={(e) => setQuery(e.target.value)} aria-label={text(lang, "البحث في المنيو", "Search menu")} placeholder={text(lang, "ابحث عن طبق أو مكوّن", "Search dishes or ingredients")} className="h-11 w-full rounded-full border border-line bg-paper pe-4 ps-10 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="signal-categories" role="tablist" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", text(lang, "الكل", "All")], ...categories.map((c) => [c.id, text(lang, c.nameAr, c.nameEn)])].map(([id, name]) => <button key={id} type="button" role="tab" aria-selected={categoryId === id} onClick={() => trackCategory(id)}>{name}</button>)}</div></div></div>
     <main className="signal-main">
-      {featured.length && categoryId === "all" && !query ? <section className="signal-selection" aria-labelledby="signal-selection-title"><div className="signal-section-heading"><div><p>{text(lang, "مختارات المحرر", "Editor's selection")}</p><h2 id="signal-selection-title">{text(lang, "ابدأ بهذه الأطباق", "Start with these")}</h2></div><span className="signal-heading-rule" /></div><div className="signal-featured-grid">{featured.slice(0, 6).map((p, index) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <article key={p.id} className={cn("signal-featured-card-wrap", index === 0 && "is-lead")}><button type="button" onClick={() => selectProduct(p)} className={cn("signal-featured-card", index === 0 && "is-lead")}><MenuMedia src={p.imageUrl} alt="" className="signal-featured-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><span className="signal-card-copy"><span className="signal-card-title">{text(lang, p.nameAr, p.nameEn)}</span><span className="signal-card-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span><span className="signal-card-price-row"><MenuPrice price={p.price} currency={p.currency} lang={lang} className="signal-card-price" /></span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add signal-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف", "Add")}</button> : null}</article>; })}</div></section> : null}
       {filtered.length === 0 ? <section className="signal-empty"><EmptyState title={text(lang, "لا توجد أصناف مطابقة", "No matching items")} /></section> : (categoryId === "all" ? categories : categories.filter((c) => c.id === categoryId)).map((category) => { const items = filtered.filter((p) => p.categoryId === category.id); if (!items.length) return null; return <section key={category.id} id={`category-${category.id}`} className="signal-category" aria-labelledby={`category-${category.id}-title`}><div className="signal-section-heading"><div><p>{text(lang, "قسم", "Section")}</p><h2 id={`category-${category.id}-title`}>{text(lang, category.nameAr, category.nameEn)}</h2></div><span className="signal-heading-rule" /></div><ul>{items.map((p) => { const decision = getQuickAddDecision(p, menu.productOptions?.[p.id]); return <li key={p.id} className="signal-product-row"><div className="signal-product-card-wrap"><button type="button" disabled={!p.isAvailable && !preview} onClick={() => selectProduct(p)} className="signal-product-card"><MenuMedia src={p.imageUrl} alt="" className="signal-product-image" fallback={text(lang, "صورة الطبق", "Dish image")} /><span className="signal-product-copy"><span className="signal-product-name">{text(lang, p.nameAr, p.nameEn)}</span>{p.descriptionAr || p.descriptionEn ? <span className="signal-product-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span> : null}<span className="signal-product-price-row"><MenuPrice price={p.price} currency={p.currency} lang={lang} className="signal-product-price" /></span><span className="signal-product-tags">{p.dietaryLabels.slice(0, 3).map((x) => <MenuBadge key={x} tone="muted">{x}</MenuBadge>)}{!p.isAvailable ? <MenuBadge tone="accent">{text(lang, "غير متوفر", "Unavailable")}</MenuBadge> : null}</span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add signal-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف للسلة", "Add to cart")}</button> : null}{!preview && decision === "requires-options" ? <button type="button" onClick={() => selectProduct(p)} className="public-menu-options-action signal-quick-add" aria-label={text(lang, "اختيار خيارات " + text(lang, p.nameAr, p.nameEn), "Choose options for " + text(lang, p.nameAr, p.nameEn))}>{text(lang, "اختر الخيارات", "Choose options")}</button> : null}</div></li>; })}</ul></section>; })}
       {hours.length ? <section className="signal-hours" aria-labelledby="signal-hours-title"><div className="signal-section-heading"><div><p>{text(lang, "المعلومات", "Information")}</p><h2 id="signal-hours-title">{text(lang, "ساعات العمل", "Opening hours")}</h2></div><span className="signal-heading-rule" /></div><div className="signal-hours-grid">{[0,1,2,3,4,5,6].map((day) => { const h = hours.find((x) => x.weekday === day); return <div key={day}><span>{weekdayLabel(day, lang)}</span><span>{!h || h.isClosed ? text(lang, "مغلق", "Closed") : `${h.opensAt} – ${h.closesAt}`}</span></div>; })}</div>{branch.addressAr || branch.addressEn ? <p className="signal-address"><MapPin className="size-4" aria-hidden />{text(lang, branch.addressAr, branch.addressEn)}</p> : null}</section> : null}
     </main>
