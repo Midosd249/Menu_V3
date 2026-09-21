@@ -28,3 +28,14 @@ assert.match(image, /image\/webp/);
 const owner = read("src/lib/menu/owner.ts");
 assert.match(owner, /coverUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
 assert.match(owner, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
+
+
+test("homepage menu proof uses canonical bilingual demo data and stable image media", async () => {
+  const home = await readFile("src/routes/index.tsx", "utf8");
+  const styles = await readFile("src/routes/index.css", "utf8");
+  assert.match(home, /DEMO_MENU\.tenant\.nameAr/);
+  assert.match(home, /DEMO_MENU\.tenant\.nameEn/);
+  assert.match(home, /DEMO_PREVIEW_PRODUCTS/);
+  assert.match(styles, /\.menuq-live-product-image[\s\S]*aspect-ratio:\s*4 \/ 3[\s\S]*object-fit:\s*cover/);
+  assert.doesNotMatch(home, /<strong>نَفَس<\/strong>/);
+});
