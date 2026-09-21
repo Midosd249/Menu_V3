@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "../lib/menu/public-actions.ts";
+import { buildWhatsAppOrderUrl, buildWhatsAppUrl, getPublicActions, normalizePhoneDigits, sanitizeExternalUrl } from "../lib/menu/public-actions.ts";
 import type { Branch, Tenant } from "../lib/menu/types.ts";
 
 const tenant: Tenant = {
@@ -38,4 +38,15 @@ test("actions are data-driven and disappear when destinations are missing or inv
   assert.deepEqual(actions.map((action) => action.key), ["whatsapp", "website", "location", "phone", "instagram", "snapchat", "facebook", "tiktok"]);
   const missing = getPublicActions({ ...tenant, whatsapp: "", websiteUrl: "javascript:alert(1)", instagramUrl: "javascript:alert(1)", snapchatUrl: "http://snapchat.com/x", facebookUrl: "https://facebook.com/x", tiktokUrl: "https://tiktok.com/@x" }, { ...branch, mapsUrl: "", phone: "" }, "ar");
   assert.deepEqual(missing.map((action) => action.key), ["facebook", "tiktok"]);
+});
+
+
+test("WhatsApp order links preserve item quantities, options, total, branch, and language", () => {
+  const url = buildWhatsAppOrderUrl(tenant, branch, "ar", [{ name: "لاتيه", quantity: 2, lineTotal: 52, options: ["كبير", "حليب الشوفان"] }], 52, "بدون سكر");
+  assert.ok(url?.startsWith("https://wa.me/966551234567?text="));
+  assert.match(decodeURIComponent(url ?? ""), /لاتيه/);
+  assert.match(decodeURIComponent(url ?? ""), /× 2/);
+  assert.match(decodeURIComponent(url ?? ""), /حليب الشوفان/);
+  assert.match(decodeURIComponent(url ?? ""), /الإجمالي: 52\.00 ر\.س/);
+  assert.match(decodeURIComponent(url ?? ""), /بدون سكر/);
 });
