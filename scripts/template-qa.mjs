@@ -78,7 +78,7 @@ try {
           modal: dialog.getAttribute("aria-modal"),
           labelledBy: dialog.getAttribute("aria-labelledby"),
         }));
-        const languageToggle = document.querySelector('[data-language-switcher="true"]');
+        const languageToggle = document.querySelector(".signal-topbar-lang");
         const languageToggleRect = languageToggle?.getBoundingClientRect();
         const languageToggleVisible = Boolean(languageToggleRect && languageToggleRect.width >= 40 && languageToggleRect.height >= 40 && getComputedStyle(languageToggle).display !== "none" && getComputedStyle(languageToggle).visibility !== "hidden");
         const productCards = [...document.querySelectorAll(".signal-product-card")].map((card) => {
