@@ -288,7 +288,7 @@ function Home() {
                   <div className="menuq-live-section-title"><div><span>{lang === "ar" ? "اختياراتنا" : "OUR PICKS"}</span><h4>{lang === "ar" ? "أطباق تستحق التجربة" : "Worth discovering"}</h4></div><small>8 {lang === "ar" ? "أصناف" : "items"}</small></div>
                   <div className="menuq-live-product-grid">
                     {DEMO_PREVIEW_PRODUCTS.map((product, index) => <article key={product.id} className="menuq-live-product"><img src={product.imageUrl || "/homepage/menu-dish.webp"} alt="" className="menuq-live-product-image" loading={index === 0 ? "eager" : "lazy"} decoding="async" fetchPriority={index === 0 ? "high" : "auto"} /><div><h5>{lang === "ar" ? product.nameAr : product.nameEn}</h5><p>{lang === "ar" ? product.descriptionAr : product.descriptionEn}</p><strong>{product.price} {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? `إضافة ${product.nameAr}` : `Add ${product.nameEn}`}>+</button></div></article>)}
-                  </div>v>
+                  </div>
                 </div>
                 <aside className="menuq-live-order">
                   <span className="menuq-live-order-icon"><ShoppingBag size={17} /></span>
