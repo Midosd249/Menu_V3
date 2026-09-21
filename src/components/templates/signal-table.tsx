@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Languages, MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
@@ -17,17 +16,17 @@ type CartItem = { key: string; product: Product; options: ProductOptions; varian
 type Props = { menu: PublicMenu; preview?: boolean };
 
 function SignalLanguageControl({ lang, englishAvailable }: { lang: Lang; englishAvailable: boolean }) {
-  const navigate = useNavigate();
-  const search = useRouterState({ select: (state) => state.location.search });
   const nextLang = lang === "ar" ? "en" : "ar";
   const nextLabel = nextLang === "ar" ? "عربي" : "EN";
   const nextFlag = nextLang === "ar" ? "🇸🇦" : "🇬🇧";
   const disabled = nextLang === "en" && !englishAvailable;
 
   const changeLang = () => {
-    if (disabled) return;
-    const currentSearch = search as Record<string, unknown>;
-    void navigate({ search: { ...currentSearch, lang: nextLang === "en" ? "en" : undefined } as never, replace: true });
+    if (disabled || typeof window === "undefined") return;
+    const nextUrl = new URL(window.location.href);
+    if (nextLang === "en") nextUrl.searchParams.set("lang", "en");
+    else nextUrl.searchParams.delete("lang");
+    window.location.replace(nextUrl.toString());
   };
 
   return <button type="button" data-language-switcher="true" aria-label={nextLang === "ar" ? "التبديل إلى العربية" : "Switch to English"} aria-disabled={disabled} disabled={disabled} title={disabled ? (lang === "ar" ? "النسخة الإنجليزية غير متاحة لهذا المطعم" : "English content is not available for this menu") : undefined} className="signal-topbar-lang menu-lang-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-line bg-paper px-2.5 text-xs font-semibold" onClick={changeLang}><Languages className="size-4 shrink-0" aria-hidden="true" /><span aria-hidden="true">{nextFlag}</span><span dir="ltr">{nextLabel}</span></button>;
