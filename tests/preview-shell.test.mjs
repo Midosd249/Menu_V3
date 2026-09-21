@@ -157,10 +157,12 @@ test("W16 QR generation uses the configured production public origin and a stabl
   assert.match(qr, /setOrigin\(getPublicOrigin\(\) \|\| window\.location\.origin\)/);
   assert.match(qr, /menuUrl\(origin, snapshot\.tenant\.slug, b\.slug\)/);
   assert.match(toggle, /menu-lang-toggle/);
-  assert.match(toggle, /compact = false/);
-  assert.match(toggle, /data-language-switcher="true"/);
-  assert.match(toggle, /🇸🇦/);
-  assert.match(toggle, /🇬🇧/);
+  const signal = read("src/components/templates/signal-table.tsx");
+  assert.match(signal, /SignalLanguageControl/);
+  assert.match(signal, /data-language-switcher="true"/);
+  assert.match(signal, /🇸🇦/);
+  assert.match(signal, /🇬🇧/);
+  assert.match(signal, /Switch to English/);
 });
 
 test("W16 removes the legacy Editorial volume label from the active refinement layer", async () => {
