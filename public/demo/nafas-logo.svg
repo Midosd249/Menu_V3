@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
-<title>Nafas</title><desc>Minimal Arabic-inspired coffee mark</desc>
-<rect width="160" height="160" rx="40" fill="#344331"/>
-<path d="M43 98c12-31 28-47 47-47 15 0 26 8 27 22 1 12-7 22-21 28-13 5-28 4-43-3" fill="none" stroke="#f6f0e5" stroke-width="9" stroke-linecap="round"/>
-<path d="M57 83c7-17 17-27 30-30" fill="none" stroke="#b78a42" stroke-width="7" stroke-linecap="round"/>
-<circle cx="112" cy="54" r="6" fill="#b78a42"/>
-</svg>

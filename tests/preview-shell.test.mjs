@@ -150,6 +150,14 @@ test("W16 hardening protects Arabic word boundaries, Noir hours contrast, and Ga
   assert.match(styles, /overflow:\s*visible/);
 });
 
+test("SIGNAL TABLE keeps the mobile language control visible and removes the old featured-selection block", async () => {
+  const styles = await readFile("src/theme-signal-table.css", "utf8");
+  const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  assert.doesNotMatch(styles, /@media\(max-width:760px\)[\s\S]*?\.signal-topbar-lang\{display:none\}/);
+  assert.doesNotMatch(signal, /className="signal-selection"/);
+  assert.match(signal, /className="signal-topbar-lang"/);
+});
+
 test("W16 QR generation uses the configured production public origin and a stable language-control hook", async () => {
   const qr = await readFile("src/routes/studio/qr.tsx", "utf8");
   const toggle = await readFile("src/components/lang-toggle.tsx", "utf8");
