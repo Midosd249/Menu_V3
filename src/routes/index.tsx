@@ -24,6 +24,8 @@ import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
 import { MENU_THEMES } from "@/lib/theme";
+import { DEMO_MENU } from "@/lib/menu/demo";
+import { MarketingFooter } from "@/components/marketing-footer";
 import "./index.css";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -99,6 +101,8 @@ const STEPS = [
     bodyEn: "Share the public link and QR, then use available signals to improve the experience.",
   },
 ] as const;
+
+const DEMO_PREVIEW_PRODUCTS = DEMO_MENU.products.filter((product) => product.isFeatured).slice(0, 2);
 
 const FAQS = [
   {
@@ -253,8 +257,8 @@ function Home() {
                 <div className="menuq-live-brand">
                   <div className="menuq-live-logo">نَ</div>
                   <div>
-                    <strong>نَفَس</strong>
-                    <span>{lang === "ar" ? "قهوة مختصة ومخبوزات يومية" : "Specialty coffee & daily pastry"}</span>
+                    <strong>{lang === "ar" ? DEMO_MENU.tenant.nameAr : DEMO_MENU.tenant.nameEn}</strong>
+                    <span>{lang === "ar" ? DEMO_MENU.tenant.taglineAr : DEMO_MENU.tenant.taglineEn}</span>
                   </div>
                 </div>
                 <div className="menuq-live-actions">
@@ -283,9 +287,8 @@ function Home() {
                 <div className="menuq-live-products">
                   <div className="menuq-live-section-title"><div><span>{lang === "ar" ? "اختياراتنا" : "OUR PICKS"}</span><h4>{lang === "ar" ? "أطباق تستحق التجربة" : "Worth discovering"}</h4></div><small>8 {lang === "ar" ? "أصناف" : "items"}</small></div>
                   <div className="menuq-live-product-grid">
-                    <article className="menuq-live-product"><img src="/homepage/menu-dish.webp" alt="" className="menuq-live-product-image menuq-live-product-espresso" loading="eager" decoding="async" fetchPriority="high" /><div><h5>{lang === "ar" ? "إسبريسو مزدوج" : "Double Espresso"}</h5><p>{lang === "ar" ? "قهوة مركزة بنهاية شوكولاتية ناعمة." : "Soft chocolate finish."}</p><strong>16 {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? "إضافة إسبريسو" : "Add espresso"}>+</button></div></article>
-                    <article className="menuq-live-product"><div className="menuq-live-product-image menuq-live-product-latte" /><div><h5>{lang === "ar" ? "لاتيه نَفَس" : "Nafas Latte"}</h5><p>{lang === "ar" ? "حليب مبخر وفانيلا محمصة." : "Steamed milk, toasted vanilla."}</p><strong>22 {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? "إضافة لاتيه" : "Add latte"}>+</button></div></article>
-                  </div>
+                    {DEMO_PREVIEW_PRODUCTS.map((product, index) => <article key={product.id} className="menuq-live-product"><img src={product.imageUrl || "/homepage/menu-dish.webp"} alt="" className="menuq-live-product-image" loading={index === 0 ? "eager" : "lazy"} decoding="async" fetchPriority={index === 0 ? "high" : "auto"} /><div><h5>{lang === "ar" ? product.nameAr : product.nameEn}</h5><p>{lang === "ar" ? product.descriptionAr : product.descriptionEn}</p><strong>{product.price} {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? `إضافة ${product.nameAr}` : `Add ${product.nameEn}`}>+</button></div></article>)}
+                  </div>v>
                 </div>
                 <aside className="menuq-live-order">
                   <span className="menuq-live-order-icon"><ShoppingBag size={17} /></span>
@@ -591,16 +594,6 @@ function Home() {
         </div>
       </section>
 
-      <footer className="border-t px-4 py-10 sm:px-6">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-foreground">Menu V3</span>
-          <span>{lang === "ar" ? "حضور رقمي عربي أولاً للمطاعم والكافيهات." : "Arabic-first digital restaurant presence."}</span>
-          <div className="flex gap-4">
-            <Link to="/themes/preview" className="hover:text-foreground">{lang === "ar" ? "التصاميم" : "Themes"}</Link>
-            <Link to="/pricing" className="hover:text-foreground">{lang === "ar" ? "الأسعار" : "Pricing"}</Link>
-          </div>
-        </div>
-      </footer>
-    </main>
+      <MarketingFooter />    </main>
   );
 }
