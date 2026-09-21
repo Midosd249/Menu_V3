@@ -35,3 +35,13 @@ Focused production-quality pass covering only homepage demo data/media, Essentia
 
 ## Exact Next Task
 Run repository Quality/test/typecheck/lint/build and browser visual verification for this branch, including 320/375/430px Arabic RTL and English LTR, Essential/Noir Featured states, homepage demo language/media, cart WhatsApp message flow, and marketing/account footer. Review the final PR diff and resolve only task-scoped failures.
+
+## Final verification — 2026-09-21
+- VERIFIED: PR #232 final verified head is `6047080fcfa3e289d89538b6f28d520bbdfc7328`.
+- VERIFIED: GitHub Quality #2216 passed and GitHub W9 Orders QA #454 passed.
+- VERIFIED: Vercel PR status is SUCCESS preview evidence only; no Production deployment was triggered.
+- BLOCKED: server-authoritative plan-specific WhatsApp entitlement remains intentionally deferred.
+- UNKNOWN: physical Android/iOS QA remains release-stage evidence.
+
+### Exact Next Task
+Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
