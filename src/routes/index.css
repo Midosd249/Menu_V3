@@ -218,9 +218,7 @@
 .menuq-live-section-title small { color: var(--mq-muted); font-size: 0.62rem; }
 .menuq-live-product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
 .menuq-live-product { overflow: hidden; border: 1px solid #e8e5dd; border-radius: 0.9rem; background: #fff; }
-.menuq-live-product-image { min-height: 7rem; background-position: center; background-size: cover; }
-.menuq-live-product-espresso { background-image: url("/homepage/menu-dish.webp"); }
-.menuq-live-product-latte { background-image: url("/homepage/menu-cover.webp"); background-position: 76% center; }
+.menuq-live-product-image { display: block; width: 100%; aspect-ratio: 4 / 3; min-height: 0; object-fit: cover; object-position: center; background: var(--mq-soft); }
 .menuq-live-product > div:last-child { position: relative; padding: 0.65rem; }
 .menuq-live-product h5 { color: var(--mq-ink); font-size: 0.75rem; }
 .menuq-live-product p { min-height: 2rem; margin-top: 0.25rem; color: var(--mq-muted); font-size: 0.58rem; line-height: 1.45; }
