@@ -654,3 +654,11 @@ html[data-menu-theme="essential"] .menu-public-shell .no-scrollbar {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Featured card geometry — keep the full card surface symmetrical when quick-add is present. */
+html[data-menu-theme="essential"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div { align-items: stretch; grid-auto-rows: minmax(0, 1fr); }
+html[data-menu-theme="essential"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > .menu-featured-card-shell { min-width: 0; min-height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto; overflow: hidden; background: var(--essential-surface); border-color: var(--essential-border); }
+html[data-menu-theme="essential"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > .menu-featured-card-shell > button:first-child { height: 100%; min-width: 0; }
+html[data-menu-theme="essential"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > .menu-featured-card-shell > button:first-child > :first-child { width: 100%; aspect-ratio: 4 / 3; min-height: 0; overflow: hidden; }
+html[data-menu-theme="essential"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > .menu-featured-card-shell > button:first-child img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
