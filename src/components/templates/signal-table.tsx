@@ -137,7 +137,6 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
           <div className="signal-identity-fallback" aria-hidden="true">{tenant.nameAr.slice(0, 1)}</div>
         )}
       </div>
-      </div>
     </header>
     <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></div>
     {branches.length > 1 ? <nav aria-label={text(lang, "الفروع", "Branches")} className="signal-branches"><div>{branches.map((item) => <a key={item.id} href={`/m/${tenant.slug}/${item.slug}`} className={cn("signal-branch-link", item.id === branch.id && "is-active")}>{text(lang, item.nameAr, item.nameEn)}</a>)}</div></nav> : null}
