@@ -10,6 +10,7 @@ import { Field, Input } from "@/components/ui/input";
 import { LoadingState, ErrorState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
+import { MarketingFooter } from "@/components/marketing-footer";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
@@ -132,6 +133,7 @@ function Login() {
         <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{signup ? (lang === "ar" ? "لدي حساب بالفعل" : "I already have an account") : t(copy.auth.noAccount, lang)}</button>
       </> : <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>}
       <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>
+      <MarketingFooter />
     </div>
   </main>;
 }
