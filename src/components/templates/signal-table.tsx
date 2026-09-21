@@ -53,7 +53,7 @@ function CartDialog({ lang, items, setItems, close, submit, submitting, error }:
 export function SignalTableTemplate({ menu, preview = false }: Props) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products, experimentVariant } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<{ number: number; total: number } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed) return h?.isClosed ? false : null; if (!h.opensAt || !h.closesAt) return null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const englishAvailable = isPublicMenuLocaleAvailable(menu, "en");
@@ -131,21 +131,12 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
         <div className="signal-hero-meta">{status !== null ? <span>{status ? text(lang, "مفتوح الآن", "Open now") : text(lang, "مغلق", "Closed")}</span> : null}{branch.addressAr || branch.addressEn ? <span>{text(lang, branch.addressAr, branch.addressEn)}</span> : null}</div>
       </div>
       <div className="signal-hero-media">
-        {featured[0] ? (
-          <button type="button" onClick={() => selectProduct(featured[0])} className="signal-featured-stage">
-            <MenuMedia src={featured[0].imageUrl} alt={text(lang, featured[0].nameAr, featured[0].nameEn)} className="signal-featured-stage-image" eager fallback={text(lang, "صورة الطبق", "Dish image")} />
-            <span className="signal-featured-stage-copy">
-              <span className="signal-featured-stage-label">{text(lang, "اختيار اليوم", "Signature selection")}</span>
-              <span className="signal-featured-stage-name">{text(lang, featured[0].nameAr, featured[0].nameEn)}</span>
-              {featured[0].descriptionAr || featured[0].descriptionEn ? <span className="signal-featured-stage-description">{text(lang, featured[0].descriptionAr, featured[0].descriptionEn)}</span> : null}
-              <MenuPrice price={featured[0].price} currency={featured[0].currency} lang={lang} className="signal-featured-stage-price" />
-            </span>
-          </button>
-        ) : tenant.coverUrl ? (
+        {tenant.coverUrl ? (
           <MenuMedia src={tenant.coverUrl} alt="" className="signal-cover" eager fallback={tenant.nameAr.slice(0, 1)} />
         ) : (
           <div className="signal-identity-fallback" aria-hidden="true">{tenant.nameAr.slice(0, 1)}</div>
         )}
+      </div>
       </div>
     </header>
     <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></div>

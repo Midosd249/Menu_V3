@@ -150,11 +150,12 @@ test("W16 hardening protects Arabic word boundaries, Noir hours contrast, and Ga
   assert.match(styles, /overflow:\s*visible/);
 });
 
-test("SIGNAL TABLE keeps the mobile language control visible and removes the old featured-selection block", async () => {
+test("SIGNAL TABLE keeps the mobile language control visible and removes featured-selection chrome", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
   const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
   assert.doesNotMatch(styles, /@media\(max-width:760px\)[\s\S]*?\.signal-topbar-lang\{display:none\}/);
   assert.doesNotMatch(signal, /className="signal-selection"/);
+  assert.doesNotMatch(signal, /signal-featured-stage/);
   assert.match(signal, /className="signal-topbar-lang"/);
 });
 

@@ -36,14 +36,6 @@ html[data-menu-theme="editorial"] .signal-hero-meta{display:flex;flex-wrap:wrap;
 html[data-menu-theme="editorial"] .signal-hero-meta span:first-child{color:var(--signal-ink);font-weight:750}
 html[data-menu-theme="editorial"] .signal-hero-media{min-inline-size:0;aspect-ratio:4/3;overflow:hidden;border-radius:1.4rem;background:#eceef1}
 html[data-menu-theme="editorial"] .signal-cover{display:block;inline-size:100%;block-size:100%;object-fit:cover}
-html[data-menu-theme="editorial"] .signal-featured-stage{position:relative;display:grid;inline-size:100%;block-size:100%;min-inline-size:0;min-block-size:0;padding:0;border:0;border-radius:1.4rem;overflow:hidden;background:var(--signal-ink);color:#fff;text-align:start}
-html[data-menu-theme="editorial"] .signal-featured-stage-image{display:block;inline-size:100%;block-size:100%;min-block-size:0;aspect-ratio:4/3;object-fit:cover;filter:saturate(.92) contrast(1.02);transition:transform .16s ease,filter .16s ease}
-html[data-menu-theme="editorial"] .signal-featured-stage-copy{position:absolute;inset-inline:0;inset-block-end:0;display:grid;gap:.35rem;padding:clamp(1rem,3vw,1.5rem);background:linear-gradient(to top,rgb(16 24 39/.9),rgb(16 24 39/.04));color:#fff}
-html[data-menu-theme="editorial"] .signal-featured-stage-label{font-size:.68rem;font-weight:800;color:#f0a43c}
-html[data-menu-theme="editorial"] .signal-featured-stage-name{min-inline-size:0;font-family:var(--menu-display-font);font-size:clamp(1.2rem,3vw,2rem);font-weight:750;line-height:1.25;text-wrap:balance}
-html[data-menu-theme="editorial"] .signal-featured-stage-description{max-inline-size:52ch;color:rgb(255 255 255/.78);font-size:.76rem;line-height:1.7;overflow-wrap:break-word;word-break:normal}
-html[data-menu-theme="editorial"] .signal-featured-stage-price{justify-self:start;color:#fff!important;font-weight:800;direction:ltr!important;unicode-bidi:isolate;white-space:nowrap}
-html[data-menu-theme="editorial"] .signal-featured-stage:hover .signal-featured-stage-image,html[data-menu-theme="editorial"] .signal-featured-stage:focus-visible .signal-featured-stage-image{transform:scale(1.012);filter:saturate(1.02)}
 html[data-menu-theme="editorial"] .signal-identity-fallback{display:grid;place-items:center;inline-size:100%;block-size:100%;aspect-ratio:4/3;border-radius:1.4rem;background:var(--signal-ink);color:#fff;font-family:var(--menu-display-font);font-size:clamp(5rem,14vw,10rem)}
 html[data-menu-theme="editorial"] .signal-actions-wrap{inline-size:min(100%,88rem);margin-inline:auto;padding:.65rem clamp(.9rem,3vw,2rem);display:flex;align-items:center;justify-content:space-between;gap:.6rem;border-block-end:1px solid var(--signal-line);background:var(--signal-bg)}
 html[data-menu-theme="editorial"] .signal-actions-wrap a,html[data-menu-theme="editorial"] .signal-actions-wrap button{min-block-size:2.75rem;border:1px solid var(--signal-line);border-radius:999px;background:var(--signal-surface);color:var(--signal-ink)}
