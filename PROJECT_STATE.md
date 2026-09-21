@@ -503,3 +503,13 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 ### Exact Next Task
 
 **Merge PR #230 once, verify the resulting `main` SHA, then perform the single authorized Vercel Production deployment and record the direct Production deployment identity before real-device QA.**
+
+
+## 2026-09-21 — Focused Public UX / WhatsApp / Footer Pass
+- VERIFIED: current task scope is recorded in docs/sessions/2026-09-21-focused-public-ux-whatsapp-footer.md.
+- IMPLEMENTED: homepage demo data/media bilingual correction, Essential/Noir Featured geometry hardening, structured WhatsApp cart-order messaging/click tracking, and shared marketing/account footer.
+- BLOCKED: plan-specific WhatsApp entitlement gating is deferred because the current public-menu contract does not expose a server-authoritative WhatsApp feature entitlement; no unsafe client-side gate was introduced.
+- UNKNOWN: local quality commands and physical-device visual QA; GitHub PR CI/browser verification remains required.
+
+### Exact Next Task
+Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
