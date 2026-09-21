@@ -84,7 +84,7 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
           <span>{text(lang, tenant.nameAr, tenant.nameEn)}</span>
         </div>
         <div className="signal-topbar-actions">
-          <LangToggle englishAvailable={englishAvailable} className="signal-topbar-lang" />
+          <LangToggle englishAvailable={englishAvailable} compact className="signal-topbar-lang" />
           {!preview ? (
             <button
               type="button"
@@ -132,7 +132,7 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
         )}
       </div>
     </header>
-    <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /><LangToggle englishAvailable={englishAvailable} className="signal-lang-toggle" /></div>
+    <div className="signal-actions-wrap"><PublicActionLinks tenant={tenant} branch={branch} lang={lang} preview={preview} experimentVariant={experimentVariant} /></div>
     {branches.length > 1 ? <nav aria-label={text(lang, "الفروع", "Branches")} className="signal-branches"><div>{branches.map((item) => <a key={item.id} href={`/m/${tenant.slug}/${item.slug}`} className={cn("signal-branch-link", item.id === branch.id && "is-active")}>{text(lang, item.nameAr, item.nameEn)}</a>)}</div></nav> : null}
     <div className="signal-search" data-signal-layer="navigation"><div className="signal-search-inner"><label className="relative block flex-1"><Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 start-3 text-muted" /><input id="signal-search-input" value={query} onChange={(e) => setQuery(e.target.value)} aria-label={text(lang, "البحث في المنيو", "Search menu")} placeholder={text(lang, "ابحث عن طبق أو مكوّن", "Search dishes or ingredients")} className="h-11 w-full rounded-full border border-line bg-paper pe-4 ps-10 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink" /></label><div className="signal-categories" role="tablist" aria-label={text(lang, "تصنيفات المنيو", "Menu categories")}>{[["all", text(lang, "الكل", "All")], ...categories.map((c) => [c.id, text(lang, c.nameAr, c.nameEn)])].map(([id, name]) => <button key={id} type="button" role="tab" aria-selected={categoryId === id} onClick={() => trackCategory(id)}>{name}</button>)}</div></div></div>
     <main className="signal-main">
