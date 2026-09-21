@@ -399,3 +399,15 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 
 ### Exact Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
+
+
+## 2026-09-21 — SIGNAL TABLE Mobile Language / Selection Cleanup — READY_TO_MERGE
+
+- VERIFIED: PR #230 head `cee1557997987d1917005fffec19e6b8d70d00e4`.
+- VERIFIED: Quality #2202 and W9 #442 passed.
+- VERIFIED: mobile language visibility defect was caused by an explicit mobile `display:none` rule and is corrected.
+- IMPLEMENTED: language control, selection/hero cleanup, dead CSS cleanup, and regression coverage.
+- UNKNOWN: physical device evidence and Production deployment identity.
+
+### Exact Next Task
+**Merge PR #230 once, verify `main`, then execute the single authorized Production deployment and record its verified SHA/identity.**

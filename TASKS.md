@@ -450,3 +450,15 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 
 ### Exact Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
+
+
+## 2026-09-21 — SIGNAL TABLE Mobile Language / Selection Cleanup — READY_TO_MERGE
+
+- VERIFIED: PR #230 head `cee1557997987d1917005fffec19e6b8d70d00e4`.
+- VERIFIED: Quality #2202 passed; W9 #442 passed.
+- VERIFIED: mobile language control is visible in the SIGNAL TABLE browser QA matrix.
+- IMPLEMENTED: removed obsolete featured-selection chrome and preserved product-card/cart/search/category/order contracts.
+- UNKNOWN: physical Android/iOS evidence and final Production deployment identity.
+
+### Exact Next Task
+**Merge PR #230 once, verify the resulting `main` SHA, then execute the single authorized Production deployment and record the direct Production identity.**
