@@ -1,0 +1,152 @@
+/* Menu V3 shared typography contract.
+ * IBM Plex web fonts are pinned to a Fontsource package version and delivered
+ * through jsDelivr's CORS-compatible font CDN. No runtime font package dependency is required.
+ */
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans-arabic@5.3.0/arabic-400-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans-arabic@5.3.0/arabic-500-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans-arabic@5.3.0/arabic-600-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans-arabic@5.3.0/arabic-700-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-400-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-500-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-600-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ibm-plex-sans@5.3.0/latin-700-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --type-display-family: "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --type-body-family: "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --type-code-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --type-display-weight: 700;
+  --type-heading-weight: 700;
+  --type-subheading-weight: 600;
+  --type-body-weight: 400;
+  --type-label-weight: 600;
+  --type-button-weight: 600;
+  --type-price-weight: 600;
+}
+
+html,
+body {
+  font-family: var(--type-body-family);
+  font-synthesis: none;
+}
+
+body {
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-feature-settings: "kern", "liga", "clig", "calt";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display,
+[data-type="display"] {
+  font-family: var(--type-display-family);
+  font-weight: var(--type-heading-weight);
+  text-wrap: balance;
+}
+
+button,
+[role="button"],
+label,
+input,
+textarea,
+select {
+  font-family: var(--type-body-family);
+}
+
+button,
+[role="button"] {
+  font-weight: var(--type-button-weight);
+}
+
+.price,
+[data-type="price"],
+.tabular,
+[data-type="numeric"] {
+  font-family: var(--type-body-family);
+  font-weight: var(--type-price-weight);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "kern", "liga", "calt";
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--type-code-family);
+}
+
+[dir="rtl"] [dir="ltr"],
+[dir="ltr"] [dir="rtl"] {
+  unicode-bidi: isolate;
+}
+
+[dir="rtl"] .bidi-isolate,
+[dir="ltr"] .bidi-isolate {
+  unicode-bidi: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}

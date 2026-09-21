@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/m/nafas",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 1404,
+      "bodyTextHash": "fb3ad4017ec48f6ca5fed38c51c0a2d1598bf18555192c773935af4234d6d4c6",
+      "bodyTextPrefix": "ن الرياض نَفَس عربي EN قهوة مختصة ومخبوزات يومية في العليا مغلق ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/public-menu.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "منيو",
+      "hasCanvas": false,
+      "bodyTextLen": 1404,
+      "bodyTextHash": "fb3ad4017ec48f6ca5fed38c51c0a2d1598bf18555192c773935af4234d6d4c6",
+      "bodyTextPrefix": "ن الرياض نَفَس عربي EN قهوة مختصة ومخبوزات يومية في العليا مغلق ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/public-menu-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/public-menu.json"
+}

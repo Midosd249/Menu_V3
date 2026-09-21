@@ -1,0 +1,37 @@
+/* Shared imagery contract. Components can opt into focal-point control with
+ * --media-focal-x / --media-focal-y without coupling imagery to a theme. */
+
+img.object-cover,
+img[data-media-role] {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
+  background: var(--surface-secondary, #f3f0eb);
+}
+
+img[data-media-role="hero"] {
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
+}
+
+img[data-media-role="dish"] {
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
+}
+
+img[data-media-role="brand"],
+img[data-media-role="branch"] {
+  object-position: var(--media-focal-x, 50%) var(--media-focal-y, 50%);
+}
+
+@media (max-width: 640px) {
+  img[data-media-role="hero"] {
+    object-position: var(--media-mobile-focal-x, var(--media-focal-x, 50%))
+      var(--media-mobile-focal-y, var(--media-focal-y, 50%));
+  }
+}
+
+@media (prefers-reduced-data: reduce) {
+  img[data-media-role="hero"] {
+    content-visibility: auto;
+  }
+}

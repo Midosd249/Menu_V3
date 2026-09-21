@@ -1,0 +1,118 @@
+
+
+/* 03 — NOIR / Cinematic Atelier
+   Material: charcoal, bronze and spotlight. Composition: film stills + light pools. */
+html[data-menu-theme="noir"] .menu-public-shell {
+  --noir-hot: #d8a76f;
+  --noir-black: #070706;
+  background:
+    radial-gradient(circle at 50% 12%, rgb(216 167 111 / .09), transparent 25rem),
+    radial-gradient(circle at 15% 65%, rgb(216 167 111 / .045), transparent 18rem),
+    var(--noir-black);
+}
+html[data-menu-theme="noir"] .menu-public-shell header {
+  min-height: 92dvh;
+  border: 0;
+  box-shadow: 0 50px 120px rgb(0 0 0 / .72);
+}
+html[data-menu-theme="noir"] .menu-public-shell header::after {
+  content: none;
+  color: var(--noir-hot);
+  letter-spacing: .35em;
+}
+html[data-menu-theme="noir"] .menu-public-shell header > div {
+  border: 0;
+  border-top: 1px solid rgb(216 167 111 / .42);
+  border-radius: 0;
+  background: linear-gradient(180deg, transparent, rgb(7 7 6 / .8));
+  backdrop-filter: none;
+}
+html[data-menu-theme="noir"] .menu-public-shell header > div::after {
+  content: "PRIVATE DINING / 2026";
+  position: absolute;
+  inset-inline-end: clamp(1rem, 5vw, 2.5rem);
+  top: -2rem;
+  color: rgb(216 167 111 / .7);
+  font-size: .55rem;
+  letter-spacing: .24em;
+}
+html[data-menu-theme="noir"] .menu-public-shell header h1 {
+  font-size: clamp(3rem, 15vw, 7.2rem);
+  text-shadow: 0 8px 45px rgb(0 0 0 / .8);
+}
+html[data-menu-theme="noir"] .menu-public-shell main {
+  max-width: 78rem;
+  padding-inline: clamp(1rem, 4vw, 3.5rem);
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+  border-top-color: rgb(216 167 111 / .14);
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2 {
+  font-size: clamp(1.8rem, 7vw, 3.6rem);
+  letter-spacing: -.055em;
+}
+html[data-menu-theme="noir"] .menu-public-shell main > section > h2::before {
+  width: 3rem;
+  background: var(--noir-hot);
+  box-shadow: 0 0 28px rgb(216 167 111 / .7);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+  grid-template-columns: 1fr;
+  min-height: 23rem;
+  padding: 0;
+  border-radius: .25rem;
+  border-color: rgb(216 167 111 / .14);
+  background: linear-gradient(155deg, #171411, #0d0c0a);
+  box-shadow: 0 22px 60px rgb(0 0 0 / .42), inset 0 1px 0 rgb(255 255 255 / .03);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button { transform: translateY(1rem); }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :first-child {
+  height: 14rem;
+  border-radius: 0;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button > :first-child { height: 18rem; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button img {
+  min-height: 0;
+  height: 100%;
+  filter: saturate(.68) contrast(1.14) brightness(.68);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button > :last-child {
+  padding: 1.1rem 1.15rem 1.35rem;
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h3,
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button h4 { font-size: 1.2rem; }
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgb(216 167 111 / .5);
+  box-shadow: 0 30px 80px rgb(0 0 0 / .62), 0 0 35px rgb(216 167 111 / .07);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button:hover img {
+  filter: saturate(.86) contrast(1.12) brightness(.82);
+}
+html[data-menu-theme="noir"] .menu-public-shell main ul > li > button [class*="text-accent"] {
+  color: var(--noir-hot);
+  text-shadow: 0 0 18px rgb(216 167 111 / .18);
+}
+html[data-menu-theme="noir"] .menu-public-shell [class*="sticky"] {
+  border-radius: 0;
+  border-color: rgb(216 167 111 / .16);
+  background: rgb(7 7 6 / .9);
+  box-shadow: 0 20px 50px rgb(0 0 0 / .5);
+}
+@media (max-width: 640px) {
+  html[data-menu-theme="noir"] .menu-public-shell main ul { grid-template-columns: 1fr; }
+  html[data-menu-theme="noir"] .menu-public-shell main ul > li:nth-child(4n + 1) > button { transform: none; }
+}html[data-menu-theme="noir"] .menu-public-shell main ul > li > button {
+  contain: layout paint;
+}
+@media (prefers-reduced-motion: reduce) {html[data-menu-theme="noir"] .menu-public-shell * {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

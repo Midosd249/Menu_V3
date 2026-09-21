@@ -1,0 +1,169 @@
+# AGENTS.md
+
+## Mission
+Menu V3 is an Arabic-first, bilingual, mobile-first, multi-tenant digital-menu SaaS for restaurants and cafes. `main` is the repository source of truth. Preserve completed capabilities and improve the existing product incrementally toward production readiness; never restart the project or rebuild completed work.
+
+## Release-Only Vercel Policy
+Vercel is a release platform, not the normal development or design-iteration environment. Normal work follows: **LOCAL DEVELOPMENT → LOCAL QA → LOCAL BROWSER / VISUAL QA → TESTS → GITHUB ACTIONS QUALITY GATES → DIFF REVIEW → ONE COHERENT RELEASE BATCH → MERGE TO MAIN → ONE VERCEL PRODUCTION DEPLOYMENT → REAL-DEVICE PRODUCTION QA → RECORD RESULT**. Visual CSS/theme iteration must not require a Vercel deployment. `main` must remain stable and deployable. Use milestone/release branches when a local workflow is available; local commits are safe checkpoints, not reasons to push every small implementation change. Preview Deployments are exceptions only when local verification cannot prove deployment-specific behavior. Before any future deployment-related decision, inspect the actual Vercel Usage/Billing page and identify the limiting resource if any. Production is deployed only after a complete verified release batch. Do not randomly retry Redeploy or failed builds. Keep implementation status separate from deployment status and use: `IMPLEMENTATION_IN_PROGRESS`, `VERIFIED_LOCALLY`, `READY_TO_PUSH`, `PUSHED`, `DEPLOYED`, `DEPLOYMENT_BLOCKED`, `IMPLEMENTATION_BLOCKED`, `DONE`. Never claim `DEPLOYED` without direct Vercel evidence. If Vercel is quota-limited, rate-limited, paused, or unavailable, do not retry randomly; record `DEPLOYMENT_BLOCKED`, do not claim Production equals `main`, and preserve verified work as `VERIFIED_LOCALLY` or `READY_TO_PUSH` when justified. Urgent production outages, critical security, privacy, or data-loss fixes are the only release-process exception and must be narrowly scoped and documented. If production breaks after a release, use Vercel Instant Rollback only when an eligible previous production deployment exists, record the target and reason, and fix forward through the normal verified release batch. See `docs/release-only-vercel-workflow.md` for the permanent operating procedure.
+
+## Source of Truth and Startup
+Before any coding task, read all applicable `AGENTS.md` files, then `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README/relevant documentation, source related to the task, tests, and configuration. Inspect repository status, recent history, relevant diffs, and CI/deployment evidence when available. Do not rely on chat memory.
+
+Repository facts must be labeled `VERIFIED`, `INFERRED`, `UNKNOWN`, or `BLOCKED`. Trust code, tests, documentation, and git evidence over stale continuity notes; reconcile discrepancies in the continuity files.
+
+## Product and Structure
+- `src/` — application source, routes, UI, and domain logic.
+- `src/routes/` — TanStack Start routes, including onboarding and Studio/Owner/Admin surfaces.
+- `src/lib/auth/` — authentication, authorization, permissions, and identity helpers.
+- `src/lib/menu/` — menu, team, invitations, subscriptions, and domain logic.
+- `migrations/` — database migrations.
+- `.github/workflows/quality.yml` — CI quality gates.
+- `package.json` — scripts and dependencies.
+- `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md` — continuity contract.
+
+## Verified Stack
+React 19, TypeScript, TanStack Start/Router, Vite, Tailwind CSS, Better Auth, PostgreSQL/PGLite-ready data layer, Supabase production integration, Vercel, and Node 24 CI. Use repository evidence before assuming any additional technology.
+
+## Operating Cycle
+**DISCOVER → AUDIT → SEGMENT → RESEARCH → DESIGN BRIEF → PLAN → IMPLEMENT → REAL-DATA TEST → VISUAL REVIEW → FUNCTIONAL REVIEW → VERIFY → DOCUMENT → STOP**
+
+1. Discover the exact unblocked TODO from repository evidence.
+2. Audit the complete relevant customer journey before material UI/template work.
+3. Segment the restaurant concept, target customer, business goal, and supported capabilities before choosing a visual direction.
+4. Research only when material; use repository evidence first, actually connected sources second, then authoritative public sources and credible Saudi/MENA examples.
+5. Prepare the design brief before material template/presentation changes.
+6. Plan one atomic task with acceptance criteria, risks, rollback, and verification commands.
+7. Implement the smallest complete, reversible solution inside the existing architecture.
+8. Test with realistic data, responsive states, and supported failure paths.
+9. Review visual hierarchy, interaction behavior, accessibility, performance, SEO, security/privacy, and regressions.
+10. Verify with direct evidence; document uncertainty instead of guessing.
+11. Update continuity records and stop after the atomic task.
+
+Only one task may be `IN_PROGRESS` in a session. Do not silently expand scope.
+
+## Premium Digital Menu Design, Visual, and Functional Quality
+For every future public-menu, template, theme, SEO, customer-action, or conversion-flow task, use the permanent workflow above and apply only the relevant expert lenses: restaurant product strategist, Saudi-market researcher, digital-menu UX/UI designer, mobile-first interaction designer, Arabic/RTL typography reviewer, design-system architect, frontend engineer, accessibility reviewer, performance reviewer, local SEO reviewer, QA/visual-regression reviewer, and security/privacy reviewer for customer actions and external links. Do not role-play; turn these lenses into concrete decisions and tests.
+
+### Permanent research rules
+- Repository code, data models, components, tests, Git history, and deployment evidence are the first source of truth.
+- Use connected GitHub/design/analytics/browser/deployment sources only when actually connected and accessible.
+- Use official framework/library documentation, W3C guidance, official search guidance, maintained open-source references, credible UX research, and relevant Saudi/MENA public examples when they materially improve a decision.
+- Do not claim broad competitor coverage.
+- Do not copy proprietary UI, assets, screenshots, text, branding, layouts, or source code.
+- Record material research in `docs/design-research-log.md` with source, date, category, VERIFIED finding, transferable principle, relevance, limitation, confidence, and what must not be copied.
+
+### Research and Connected Tools
+For consequential, unfamiliar, high-risk, external-knowledge-dependent, or major design work, invoke the workflow in `docs/agents/research-connected-tools-agent.md`.
+
+The workflow must begin with repository evidence, dynamically inspect all currently available connected tools/apps/plugins/connectors, and use every relevant authorized source that materially improves the decision.
+
+Do not hard-code a provider list. Do not use irrelevant tools. Do not claim unavailable access. Prefer read/search/analysis actions and require explicit user authorization for external side-effect actions.
+
+### Automatic Specialist Routing
+For every meaningful user request, the Principal Engineer automatically classifies the request, reads repository continuity and project memory, identifies the relevant internal AI workflows, and routes the work without requiring the user to name agents.
+
+Use `docs/automatic-specialist-routing.md` as the canonical routing and orchestration contract. The Principal Engineer must invoke the Research and Connected-Tools workflow when research can materially improve the result, the Design Agent for relevant visual/theme/UI work, and QA/regression, security/data, and release/reliability workflows when the task requires them. The Principal Engineer integrates findings, protects scope, implements only authorized work, verifies evidence, documents the result, and stops at the correct boundary.
+
+The routing system is dynamic: it does not hard-code a provider list or assume every connected tool is available. Connected capabilities are discovered per session and used only when available, authorized, relevant, safe, and materially useful. All specialist roles are internal AI workflows; the user remains the sole human owner and primary developer.
+
+### Permanent visual audit
+Before implementation, inspect the full relevant journey across supported small/standard/large mobile, tablet, and desktop states. Review Arabic RTL, English LTR, mixed-direction content, long names, long categories, long restaurant names, SAR price lengths, missing/poor images, varied image ratios, missing descriptions, sold-out/available items, modifiers/discounts when supported, sparse/dense categories, one/multiple branches, and loading/empty/error/offline/unavailable states when supported.
+
+Inspect first-screen clarity, restaurant identity, hero/header, typography, hierarchy, alignment, wrapping, clipping, overlap, contrast, spacing, card readability, category navigation, search, price/currency, image crop/fallbacks, sticky/fixed controls, safe areas, dialogs/bottom sheets, scroll behavior, RTL/LTR quality, mobile usability, and theme/restaurant fit. Never call a theme premium when decoration harms readability, scanability, contrast, or interaction.
+
+### Permanent functional UI audit
+Every existing button, icon, link, card, sticky control, and action must have a clear purpose, expected placement, adequate reachability, safe state behavior, accessible naming, visible focus where relevant, correct RTL/LTR placement, and clear feedback. Use at least 24×24 CSS pixels as the WCAG 2.2 pointer-target minimum baseline with applicable exceptions; prefer approximately 44×44 CSS pixels for important mobile controls when practical.
+
+Audit supported cart/order, WhatsApp, phone, map/location, social, search, and category actions. Show actions only when verified data/capabilities exist. Preserve ordering, pricing, tenant/branch isolation, authorization, privacy, and existing analytics semantics. Never invent checkout, payment, booking, contact, location, or other customer actions.
+
+### Real-data and quality gate
+No material template/public-menu change is complete until the applicable `docs/template-review-checklist.md` is satisfied, the design brief is current, realistic data states are tested, and evidence is documented. Browser/device visual claims require browser/device evidence when available; otherwise mark the visual portion `UNKNOWN` and state the exact evidence needed later. Do not use HTTP 200, source inspection, or unit tests as proof of visual success.
+
+## Design Agent — Visual, Image, Layout, and Theme Specialist
+
+Menu V3 has a separate specialized Design Agent defined in `docs/agents/design-agent.md`. It is a permanent visual-quality role, not a replacement for the main repository agent.
+
+Invoke the Design Agent workflow for any significant visual, layout, image, theme, or site-consistency task. The Design Agent is responsible for visual audits, image/art direction, layout, typography, hierarchy, theme identity, site-wide consistency, RTL/LTR presentation, mobile-first interaction, and visual aspects of accessibility/performance. It must read the project memory and the design-intelligence documents before relevant work, especially `docs/project-memory/problems-learned.md` when a theme has known visual issues.
+
+The Design Agent proposes visual changes and implements them only when explicitly authorized. The main agent remains responsible for architecture, data model, auth/authz, entitlements, subscriptions, tenant/branch isolation, CI/CD, Vercel, deployment, and general product logic. The Design Agent must not change those boundaries. It must preserve the implementation status of Essential, Editorial, Noir, Heritage, and Gallery unless explicit evidence and authorization require a change.
+
+For material theme/template work, the Design Agent must document major visual fixes in `docs/template-audits/`, use the repository's evidence labels, and follow `docs/agents/design-agent.md` methodology and audit rules. A small shared visual utility may be proposed only when backward-compatible, theme-safe, and documented.
+
+## Engineering Rules
+- Preserve existing architecture, routes, schemas, integrations, compatibility layers, naming, typing, and error-handling conventions.
+- Prefer small, focused, reversible changes; no unrelated refactors or rewrites.
+- Preserve backward compatibility unless the task explicitly requires a breaking change.
+- Reuse existing utilities and dependencies.
+- For UI work, consider semantic structure, RTL/mobile responsiveness, keyboard access, accessibility, and clear error/loading states.
+- For data/backend work, preserve tenant and branch isolation, validate external/user input, handle failure paths, and keep authorization server-side.
+
+## Security and Privacy
+- Never commit or expose secrets, credentials, tokens, private data, or sensitive logs.
+- Never trust client-supplied identity, tenant, role, or privilege.
+- Never weaken authentication, authorization, RLS, tenant isolation, branch isolation, validation, secrets, or privacy boundaries to make tests/builds pass.
+- Avoid telemetry or external data sharing unless required and reviewed.
+
+## Verification
+Repository-defined commands include:
+- `npm install --no-audit --no-fund`
+- `npm run typecheck`
+- `npm test`
+- `npm run test:platform`
+- `npm run lint`
+- `npm run build`
+- `npm run check:auth`
+- `npm run db:migrate`
+- `npm run qa:template`
+- `npm run performance:audit`
+
+If a check cannot run, record the exact command, reason, alternative evidence, and remaining risk. Never claim success without evidence.
+
+## Git and Change Discipline
+- `main` is canonical unless repository workflow explicitly requires another branch.
+- Keep commits task-focused and concise.
+- Inspect status, recent history, relevant diffs, and changed files before/after work when tooling permits.
+- Never rewrite history, force-push, or discard other work without explicit authorization.
+- Every changed line must belong to the current atomic task.
+
+## Project Ownership and Human Roles
+- The user is the sole human owner and primary developer of Menu V3.
+- Do not assume collaborators, teammates, contributors, or a development team.
+- Git commits, pull requests, branches, CI activity, and documentation history are repository evidence, not proof of multiple human developers.
+- Refer to prior work as prior repository work, prior sessions, historical commits, or user-authorized AI-assisted work unless the user explicitly confirms a human collaborator.
+- The user remains the only human authority for product, architecture, security, release, and deployment decisions.
+
+## Documentation Commit Batching
+- When remote-only repository tools create commits directly, prepare and review all documentation changes first.
+- Create one coherent documentation commit per documentation-only task whenever the available tool supports batching.
+- Do not create one commit per file unless batching is technically impossible.
+- If separate commits are technically unavoidable, state the limitation before writing and keep commits minimal.
+- Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
+- Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
+- A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
+
+## Continuity Contract
+At the end of every session, update `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`; update `SESSION_PROTOCOL.md` whenever workflow rules change. Append a dated session log to `PROJECT_STATE.md`. Record current commit/state, files changed, commands/results, known issues/blockers, uncertainty, and exactly one next task. Keep continuity files consistent. Do not mark `DONE` without direct evidence.
+
+## Project Memory and Learning System
+- `docs/project-memory/problems-learned.md` is the permanent repository memory of hard problems, root causes, failed or wasteful approaches, working solutions, lessons, anti-patterns, and detection checklists.
+- Read this file at the start of complex tasks and whenever current symptoms resemble a recorded problem pattern.
+- Before entering a long debugging or design-iteration loop, check `docs/project-memory/problems-learned.md` for similar patterns.
+- If current symptoms match a recorded problem, apply the recorded lessons and detection checklist before trying new approaches.
+- Avoid all recorded anti-patterns unless repository evidence proves that a narrowly scoped exception is necessary.
+- After any major incident or expensive milestone, propose an update to `docs/project-memory/problems-learned.md`; after resolving a new hard problem, add it with its root cause, lessons, and anti-patterns.
+- Keep memory evidence-based. Mark uncertain details `INFERRED` or `UNKNOWN`; do not turn guesses or chat recollection into repository facts.
+
+## Debugging and Incidents
+Reproduce when possible → isolate the smallest failing surface → inspect code/tests/config/logs/history → identify root cause → apply the smallest reversible fix → rerun the failing check → run broader applicable gates → review the diff. Treat visual covering layers as rendering/stacking problems first and inspect DOM structure, positioning/sizing, stacking contexts, pseudo-elements, animation/paint timing, responsive constraints, then targeted z-index changes.
+
+## Preserve Completed Work
+Completed functionality is protected. Do not rebuild, replace, remove, or regress completed features for convenience. Do not restart the project. Existing routes, server integrations, public preview paths, migrations, and compatibility paths remain protected unless the current task provides evidence that a targeted correction is required.
+
+## Definition of Done
+A task is `DONE` only when the requested behavior is implemented, the diff is task-scoped, relevant verification passes or an evidence-backed exception is documented, applicable security/privacy/performance/accessibility/maintainability review is complete, and continuity state is updated. No unresolved blocker or unknown may be hidden behind `DONE`.
+
+## Blockers and Ambiguity
+Do not guess. If blocked by missing information, permissions, dependencies, environment, or external services, mark `BLOCKED`. Missing facts are `UNKNOWN`; derived conclusions are `INFERRED`; recommendations are `PROPOSED`.
+
+## Session Triggers
+`[BOOT]` read state and inspect git → `[PROVE]` find evidence → `[SCOPE]` one atomic task → `[RESEARCH]` reliable sources → `[DESIGN]` compatible solution → `[BUILD]` focused implementation → `[TEST]` verify → `[SECURE]` review → `[DIFF]` inspect → `[STATE]` update continuity → `[STOP]` stop.

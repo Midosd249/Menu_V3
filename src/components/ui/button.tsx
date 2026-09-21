@@ -1,0 +1,56 @@
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot, Slottable } from "@radix-ui/react-slot";
+import { Children, forwardRef, type ButtonHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors duration-(--motion-quick) ease-(--ease-out) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40 [&_svg]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "bg-accent text-accent-foreground hover:bg-accent/90",
+        solid: "bg-ink text-paper hover:bg-ink/90",
+        outline: "border border-line bg-transparent text-ink hover:bg-sand",
+        ghost: "text-ink hover:bg-sand",
+        danger: "bg-bad text-paper hover:bg-bad/90",
+      },
+      size: {
+        default: "h-11 rounded-md px-4 text-sm",
+        sm: "h-9 rounded-sm px-3 text-sm",
+        lg: "h-12 rounded-lg px-5 text-base",
+        icon: "size-11 rounded-md",
+      },
+    },
+    defaultVariants: { variant: "default", size: "default" },
+  },
+);
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean };
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { className, variant, size, asChild, children, ...props },
+  ref,
+) {
+  const Comp = asChild ? Slot : "button";
+  const childArray = asChild ? Children.toArray(children) : [];
+  const firstChild = childArray[0];
+  const trailingChildren = childArray.slice(1);
+  const slottedChildren =
+    asChild && childArray.length > 1 ? (
+      <>
+        <Slottable>{firstChild}</Slottable>
+        {trailingChildren}
+      </>
+    ) : (
+      children
+    );
+
+  return (
+    <Comp ref={ref} className={cn(buttonVariants({ variant, size }), className)} {...props}>
+      {slottedChildren}
+    </Comp>
+  );
+});
+
+Button.displayName = "Button";
