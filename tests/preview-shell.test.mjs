@@ -156,7 +156,7 @@ test("SIGNAL TABLE keeps the mobile language control visible and removes feature
   assert.doesNotMatch(styles, /signal-topbar-lang\{display:none\}/);
   assert.doesNotMatch(signal, /className="signal-selection"/);
   assert.doesNotMatch(signal, /signal-featured-stage/);
-  assert.match(signal, /className="signal-topbar-lang"/);
+  assert.match(signal, /className="signal-topbar-lang\s/);
 });
 
 test("W16 QR generation uses the configured production public origin and a stable language-control hook", async () => {
