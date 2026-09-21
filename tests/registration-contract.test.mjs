@@ -10,17 +10,15 @@ const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
 const owner = readFileSync("src/lib/menu/owner.ts", "utf8");
 
 
-test("registration exposes exactly the six approved contract fields", () => {
+test("registration exposes account fields; brand setup stays in onboarding", () => {
   for (const field of [
     'name="name"',
-    'name="brandName"',
     'name="phone"',
     'name="identity"',
     'name="password"',
     'name="confirmPassword"',
   ]) assert.ok(login.includes(field), `missing registration field: ${field}`);
   assert.match(contract, /fullName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(100\)/);
-  assert.match(contract, /brandName: z\.string\(\)\.trim\(\)\.min\(2\)\.max\(120\)/);
   assert.match(contract, /phone: z\.string\(\)\.trim\(\)\.min\(8\)\.max\(30\)/);
   assert.match(contract, /email: z\.string\(\)\.trim\(\)\.email\(\)\.max\(320\)/);
   assert.match(contract, /password: z\.string\(\)\.min\(8\)\.max\(128\)/);
@@ -29,7 +27,7 @@ test("registration exposes exactly the six approved contract fields", () => {
 
 test("required-field validation is enforced before signup", () => {
   assert.match(login, /required minLength=\{2\} maxLength=\{100\}/);
-  assert.ok(login.includes('name="brandName" required'));
+  assert.doesNotMatch(login, /name="brandName"/);
   assert.match(login, /name="phone"[^>]*required/);
   assert.match(login, /name="identity"[^>]*required/);
   assert.match(login, /name="password"[^>]*required/);
@@ -105,8 +103,8 @@ test("existing authenticated-user behavior remains protected by Studio membershi
 
 test("Arabic RTL and English LTR registration rendering remain explicit", () => {
   assert.match(login, /dir=\{lang === "ar" \? "rtl" : "ltr"\}/);
-  assert.match(login, /اسم البراند أو المطعم/);
-  assert.match(login, /Brand \/ restaurant name/);
+  assert.doesNotMatch(login, /اسم البراند أو المطعم/);
+  assert.doesNotMatch(login, /Brand \/ restaurant name/);
   assert.match(login, /رقم الجوال السعودي/);
   assert.match(login, /Saudi phone number/);
 });

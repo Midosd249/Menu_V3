@@ -38,3 +38,12 @@ test("Public theme recovery is loaded after existing theme hardening", async () 
   assert.match(source, /import publicThemeQualityRecoveryCss from "\.\.\/theme-public-quality-recovery\.css\?url"/);
   assert.match(source, /href: galleryHardeningCss \},\s*\{ rel: "stylesheet", href: publicThemeQualityRecoveryCss \}/);
 });
+
+
+test("Essential featured cards keep full surfaces with the shared quick-add action", async () => {
+  const template = await readFile("src/components/public-menu.tsx", "utf8");
+  const styles = await readFile("src/theme-essential.css", "utf8");
+  assert.match(template, /menu-featured-card-shell/);
+  assert.match(styles, /data-menu-theme="essential"[\s\S]*menu-featured-card-shell[\s\S]*display:\s*grid/);
+  assert.match(styles, /data-menu-theme="essential"[\s\S]*menu-featured-card-shell[\s\S]*aspect-ratio:\s*4 \/ 3/);
+});

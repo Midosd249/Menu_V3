@@ -503,3 +503,34 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 ### Exact Next Task
 
 **Merge PR #230 once, verify the resulting `main` SHA, then perform the single authorized Vercel Production deployment and record the direct Production deployment identity before real-device QA.**
+
+
+## 2026-09-21 — Focused Public UX / WhatsApp / Footer Pass
+- VERIFIED: current task scope is recorded in docs/sessions/2026-09-21-focused-public-ux-whatsapp-footer.md.
+- IMPLEMENTED: homepage demo data/media bilingual correction, Essential/Noir Featured geometry hardening, structured WhatsApp cart-order messaging/click tracking, and shared marketing/account footer.
+- BLOCKED: plan-specific WhatsApp entitlement gating is deferred because the current public-menu contract does not expose a server-authoritative WhatsApp feature entitlement; no unsafe client-side gate was introduced.
+- UNKNOWN: local quality commands and physical-device visual QA; GitHub PR CI/browser verification remains required.
+
+### Exact Next Task
+Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
+
+
+## 2026-09-21 — Focused Public UX Follow-up — IMPLEMENTATION_IN_PROGRESS
+- VERIFIED: implementation branch `feat/focused-public-whatsapp-footer-2026-09-21` is based on `main` `91b7e8e6d6b3e5e9be2070a203c501b77bde7feb`.
+- IMPLEMENTED: Essential/Noir Featured cards now have explicit theme-owned title/price/copy hierarchy and a stable `#featured-heading` anchor.
+- IMPLEMENTED: WhatsApp ordering is explicitly described in Free, Growth, and Pro commercial plan copy; no entitlement gate or database change was introduced.
+- IMPLEMENTED: signup no longer collects brand name; `/onboarding` remains the single brand/workspace setup step.
+- UNKNOWN: final CI for this follow-up until GitHub checks complete; physical Android/iOS QA remains release-stage evidence.
+
+### Exact Next Task
+Run and review the final GitHub Quality/W9 checks for the follow-up, then merge PR #232 once if all gates pass. Do not deploy automatically from this implementation task.
+
+## Final verification — 2026-09-21
+- VERIFIED: PR #232 final verified head is `6047080fcfa3e289d89538b6f28d520bbdfc7328`.
+- VERIFIED: GitHub Quality #2216 passed and GitHub W9 Orders QA #454 passed.
+- VERIFIED: Vercel PR status is SUCCESS preview evidence only; no Production deployment was triggered.
+- BLOCKED: server-authoritative plan-specific WhatsApp entitlement remains intentionally deferred.
+- UNKNOWN: physical Android/iOS QA remains release-stage evidence.
+
+### Exact Next Task
+Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.

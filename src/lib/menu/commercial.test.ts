@@ -26,11 +26,12 @@ test("commercial catalog has one recommended plan and bilingual copy", () => {
   assert.deepEqual(COMMERCIAL_PLANS.map((plan) => plan.code), ["free", "starter", "pro"]);
   assert.equal(COMMERCIAL_FEATURES.ar.length, COMMERCIAL_FEATURES.en.length);
   assert.ok(COMMERCIAL_FEATURES.ar.length >= 5);
-  assert.equal(COMMERCIAL_PLAN_FEATURES.free.length, 6);
-  assert.equal(COMMERCIAL_PLAN_FEATURES.starter.length, 6);
-  assert.equal(COMMERCIAL_PLAN_FEATURES.pro.length, 6);
-  assert.equal(COMMERCIAL_PLAN_FEATURES.free[3].ar, "حتى 20 صنفًا وفرع واحد");
-  assert.equal(COMMERCIAL_PLAN_FEATURES.pro[1].ar, "أصناف غير محدودة و10 فروع و25 عضوًا");
+  assert.equal(COMMERCIAL_PLAN_FEATURES.free.length, 7);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.starter.length, 7);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.pro.length, 7);
+  assert.equal(COMMERCIAL_PLAN_FEATURES.free[0].ar, "الطلب عبر واتساب من المنيو");
+  assert.equal(COMMERCIAL_PLAN_FEATURES.free[4].ar, "حتى 20 صنفًا وفرع واحد");
+  assert.equal(COMMERCIAL_PLAN_FEATURES.pro[2].ar, "أصناف غير محدودة و10 فروع و25 عضوًا");
 });
 
 test("commercial plan limits are ordered and Pro products are explicitly unlimited", () => {
