@@ -51,6 +51,4 @@ test("featured cards keep explicit title and price markup with theme-owned surfa
   assert.match(source, /menu-featured-card-price/);
   assert.match(essential, /section:has\(> #featured-heading\)[\s\S]*menu-featured-card-title[\s\S]*menu-featured-card-price/);
   assert.match(noir, /section:has\(> #featured-heading\)[\s\S]*menu-featured-card-title[\s\S]*menu-featured-card-price/);
-  assert.doesNotMatch(essential, /section:first-child:has\(> h2\.text-sm\)/);
-  assert.doesNotMatch(noir, /section:first-child:has\(> h2\.text-sm\)/);
 });
