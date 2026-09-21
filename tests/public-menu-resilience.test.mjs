@@ -22,7 +22,7 @@ const publicServer = read("src/lib/menu/public.ts");
 assert.match(publicServer, /resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
 const demo = read("src/lib/menu/demo.ts");
 assert.match(demo, /nameEn: "Double Espresso"[\s\S]*imageUrl: "\/homepage\/menu-dish\.webp"/);
-assert.match(demo, /nameEn: "Nafas Latte"[\s\S]*imageUrl: "https:\/\/images\.unsplash\.com\//);
+assert.match(demo, /nameEn: "Nafas Latte"[\s\S]*imageUrl: image\("photo-1572442388796-11668a67e53d"\)/);
 const image = read("src/lib/menu/image.ts");
 assert.match(image, /MAX_IMAGE_DATA_URL_LENGTH = 450_000/);
 assert.match(image, /image\/webp/);
