@@ -78,6 +78,9 @@ try {
           modal: dialog.getAttribute("aria-modal"),
           labelledBy: dialog.getAttribute("aria-labelledby"),
         }));
+        const languageToggle = document.querySelector('[data-language-switcher="true"]');
+        const languageToggleRect = languageToggle?.getBoundingClientRect();
+        const languageToggleVisible = Boolean(languageToggleRect && languageToggleRect.width >= 40 && languageToggleRect.height >= 40 && getComputedStyle(languageToggle).display !== "none" && getComputedStyle(languageToggle).visibility !== "hidden");
         const productCards = [...document.querySelectorAll(".signal-product-card")].map((card) => {
           const media = card.querySelector(".signal-product-image");
           const copy = card.querySelector(".signal-product-copy");
@@ -113,6 +116,7 @@ try {
           dialogs,
           headingCount: document.querySelectorAll("h1, h2, h3, h4, h5, h6").length,
           productCards,
+          languageToggleVisible,
         };
       });
 
@@ -132,6 +136,7 @@ try {
       if (theme === "editorial") {
         const cards = result.productCards;
         checks.push(
+          ["SIGNAL TABLE language toggle visible", result.languageToggleVisible, String(result.languageToggleVisible)],
           ["SIGNAL TABLE product cards present", cards.length > 0, String(cards.length)],
           ["SIGNAL TABLE fixed square media", cards.every((card) => card.mediaSquare), String(cards.filter((card) => !card.mediaSquare).length)],
           ["SIGNAL TABLE protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), String(cards.filter((card) => !card.copyProtected || !card.titleReadableWidth).length)],
