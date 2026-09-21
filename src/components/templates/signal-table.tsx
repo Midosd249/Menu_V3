@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
-import { LangToggle } from "@/components/lang-toggle";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { Languages, MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
@@ -15,6 +15,23 @@ import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 type CartItem = { key: string; product: Product; options: ProductOptions; variantId: string; modifierOptionIds: string[]; unitPrice: number; quantity: number };
 type Props = { menu: PublicMenu; preview?: boolean };
+
+function SignalLanguageControl({ lang, englishAvailable }: { lang: Lang; englishAvailable: boolean }) {
+  const navigate = useNavigate();
+  const search = useRouterState({ select: (state) => state.location.search });
+  const nextLang = lang === "ar" ? "en" : "ar";
+  const nextLabel = nextLang === "ar" ? "عربي" : "EN";
+  const nextFlag = nextLang === "ar" ? "🇸🇦" : "🇬🇧";
+  const disabled = nextLang === "en" && !englishAvailable;
+
+  const changeLang = () => {
+    if (disabled) return;
+    const currentSearch = search as Record<string, unknown>;
+    void navigate({ search: { ...currentSearch, lang: nextLang === "en" ? "en" : undefined } as never, replace: true });
+  };
+
+  return <button type="button" data-language-switcher="true" aria-label={nextLang === "ar" ? "التبديل إلى العربية" : "Switch to English"} aria-disabled={disabled} disabled={disabled} title={disabled ? (lang === "ar" ? "النسخة الإنجليزية غير متاحة لهذا المطعم" : "English content is not available for this menu") : undefined} className="signal-topbar-lang menu-lang-toggle inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-line bg-paper px-2.5 text-xs font-semibold" onClick={changeLang}><Languages className="size-4 shrink-0" aria-hidden="true" /><span aria-hidden="true">{nextFlag}</span><span dir="ltr">{nextLabel}</span></button>;
+}
 
 function ProductDialog({ lang, product, options, close, add, submitting }: { lang: Lang; product: Product; options?: ProductOptions; close: () => void; add: (item: CartItem) => void; submitting: boolean }) {
   const variants = options?.variants.filter((v) => v.isAvailable) ?? [];
@@ -84,7 +101,7 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
           <span>{text(lang, tenant.nameAr, tenant.nameEn)}</span>
         </div>
         <div className="signal-topbar-actions">
-          <LangToggle englishAvailable={englishAvailable} compact className="signal-topbar-lang" />
+          <SignalLanguageControl lang={lang} englishAvailable={englishAvailable} />
           {!preview ? (
             <button
               type="button"
