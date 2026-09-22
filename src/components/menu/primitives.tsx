@@ -14,9 +14,10 @@ export type MenuMediaProps = {
   imageQuality?: number;
   imageFit?: "crop" | "max";
   sizes?: string;
+  fetchPriority?: "high" | "low" | "auto";
 };
 
-export function MenuMedia({ src, alt = "", className, eager = false, fallback, imageWidth, imageWidths, imageQuality, imageFit, sizes }: MenuMediaProps) {
+export function MenuMedia({ src, alt = "", className, eager = false, fallback, imageWidth, imageWidths, imageQuality, imageFit, sizes, fetchPriority }: MenuMediaProps) {
   const [failed, setFailed] = useState(false);
 
   if (!src || failed) {
@@ -29,7 +30,7 @@ export function MenuMedia({ src, alt = "", className, eager = false, fallback, i
     quality: imageQuality,
     fit: imageFit,
   });
-  return <img src={optimizedSrc} srcSet={srcSet} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" sizes={srcSet ? sizes : undefined} className={cn("object-cover", className)} onError={() => setFailed(true)} />;
+  return <img src={optimizedSrc} srcSet={srcSet} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" sizes={srcSet ? sizes : undefined} fetchPriority={fetchPriority} className={cn("object-cover", className)} onError={() => setFailed(true)} />;
 }
 
 export function MenuPrice({ price, currency, lang, className }: { price: number; currency?: string; lang: Lang; className?: string }) {

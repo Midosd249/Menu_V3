@@ -6,6 +6,7 @@ const imageSource = await readFile("src/lib/menu/image.ts", "utf8");
 const mediaSource = await readFile("src/components/menu/primitives.tsx", "utf8");
 const studioSource = await readFile("src/components/studio-menu-workspace.tsx", "utf8");
 const publicSource = await readFile("src/components/public-menu.tsx", "utf8");
+const editorialSource = await readFile("src/components/templates/contemporary-restaurant.tsx", "utf8");
 
 test("image delivery contract normalizes only known Unsplash sources", async () => {
   const { getOptimizedImageUrl, getResponsiveImageSources } = await import("../src/lib/menu/image.ts");
@@ -45,4 +46,12 @@ test("public product media remains lazy and no longer prefetches every Editorial
   assert.match(publicSource, /decoding="async"/);
   assert.match(publicSource, /fetchPriority="low"/);
   assert.doesNotMatch(publicSource, /new Image\(\)/);
+});
+
+
+test("Signal Table prioritizes only the first viewport product images", () => {
+  assert.match(editorialSource, /eager=\{index < 2\}/);
+  assert.match(editorialSource, /fetchPriority=\{index < 2 \? "high" : "auto"\}/);
+  assert.match(editorialSource, /eager=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query\}/);
+  assert.match(editorialSource, /fetchPriority=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query \? "high" : "auto"\}/);
 });
