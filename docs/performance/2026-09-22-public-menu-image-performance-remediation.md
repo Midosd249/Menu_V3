@@ -3,7 +3,7 @@
 ## Status
 
 - Date: 2026-09-22
-+ Status: PHASE 2 COMPLETE / SIGNAL TABLE QR PRIORITY COMPLETE / PHASE 3 READY
+- Status: PHASE 2 COMPLETE / SIGNAL TABLE QR PRIORITY COMPLETE / PHASE 3 READY
 - Canonical product: Menu V3
 - Target test tenant: `saudi-shopping-world`
 - Test owner account: `mido@hotmail.com` (test reference only; do not expose in product telemetry)
