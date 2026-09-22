@@ -45,6 +45,12004 @@ import { Route as ThemesIndexRouteImport } from './routes/themes/index'
 import { Route as ThemesPreviewRouteImport } from './routes/themes/preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MSlugBranchRouteImport } from './routes/m.$slug.$branch'
+import { Route as ApiMediaTenantSplatRouteImport } from './routes/api/media/tenant/
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+const ApiMediaTenantSplatRoute = ApiMediaTenantSplatRouteImport.update({
+  id: '/api/media/tenant/
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiMediaTenantSplatRoute: typeof ApiMediaTenantSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiMediaTenantSplatRoute: ApiMediaTenantSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  path: '/api/media/tenant/
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+: typeof ApiAuthSplatRoute
+  '/api/media/tenant/
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  path: '/api/media/tenant/
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+: typeof ApiMediaTenantSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  path: '/api/media/tenant/
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
+
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
+  id: '/$workspace',
+  path: '/$workspace',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOnboardingRoute = AdminOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const InviteTokenRoute = InviteTokenRouteImport.update({
+  id: '/invite/$token',
+  path: '/invite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugRoute = MSlugRouteImport.update({
+  id: '/m/$slug',
+  path: '/m/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingTokenRoute = OnboardingTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioAnalyticsRoute = StudioAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBillingRoute = StudioBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBranchesRoute = StudioBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioBrandRoute = StudioBrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioDesignRoute = StudioDesignRouteImport.update({
+  id: '/design',
+  path: '/design',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGrowthRoute = StudioGrowthRouteImport.update({
+  id: '/growth',
+  path: '/growth',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioGuestsRoute = StudioGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioImportRoute = StudioImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceRoute = StudioIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioIntelligenceActionsRoute =
+  StudioIntelligenceActionsRouteImport.update({
+    id: '/intelligence-actions',
+    path: '/intelligence-actions',
+    getParentRoute: () => StudioRoute,
+  } as any)
+const StudioMenuRoute = StudioMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOptionsRoute = StudioOptionsRouteImport.update({
+  id: '/options',
+  path: '/options',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioOrdersRoute = StudioOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioPreviewRoute = StudioPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioQrRoute = StudioQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioReportsRoute = StudioReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioSettingsRoute = StudioSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioTeamRoute = StudioTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => StudioRoute,
+} as any)
+const ThemesIndexRoute = ThemesIndexRouteImport.update({
+  id: '/themes/',
+  path: '/themes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThemesPreviewRoute = ThemesPreviewRouteImport.update({
+  id: '/themes/preview',
+  path: '/themes/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MSlugBranchRoute = MSlugBranchRouteImport.update({
+  id: '/$branch',
+  path: '/$branch',
+  getParentRoute: () => MSlugRoute,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+,
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio': typeof StudioIndexRoute
+  '/themes': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/owner': typeof OwnerRoute
+  '/pricing': typeof PricingRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/admin/$workspace': typeof AdminWorkspaceRoute
+  '/admin/onboarding': typeof AdminOnboardingRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/invite/$token': typeof InviteTokenRoute
+  '/m/$slug': typeof MSlugRouteWithChildren
+  '/onboarding/$token': typeof OnboardingTokenRoute
+  '/studio/analytics': typeof StudioAnalyticsRoute
+  '/studio/billing': typeof StudioBillingRoute
+  '/studio/branches': typeof StudioBranchesRoute
+  '/studio/brand': typeof StudioBrandRoute
+  '/studio/design': typeof StudioDesignRoute
+  '/studio/growth': typeof StudioGrowthRoute
+  '/studio/guests': typeof StudioGuestsRoute
+  '/studio/import': typeof StudioImportRoute
+  '/studio/intelligence': typeof StudioIntelligenceRoute
+  '/studio/intelligence-actions': typeof StudioIntelligenceActionsRoute
+  '/studio/menu': typeof StudioMenuRoute
+  '/studio/options': typeof StudioOptionsRoute
+  '/studio/orders': typeof StudioOrdersRoute
+  '/studio/preview': typeof StudioPreviewRoute
+  '/studio/qr': typeof StudioQrRoute
+  '/studio/reports': typeof StudioReportsRoute
+  '/studio/settings': typeof StudioSettingsRoute
+  '/studio/team': typeof StudioTeamRoute
+  '/themes/preview': typeof ThemesPreviewRoute
+  '/studio/': typeof StudioIndexRoute
+  '/themes/': typeof ThemesIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/m/$slug/$branch': typeof MSlugBranchRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio'
+    | '/themes'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/onboarding'
+    | '/owner'
+    | '/pricing'
+    | '/studio'
+    | '/admin/$workspace'
+    | '/admin/onboarding'
+    | '/admin/users'
+    | '/invite/$token'
+    | '/m/$slug'
+    | '/onboarding/$token'
+    | '/studio/analytics'
+    | '/studio/billing'
+    | '/studio/branches'
+    | '/studio/brand'
+    | '/studio/design'
+    | '/studio/growth'
+    | '/studio/guests'
+    | '/studio/import'
+    | '/studio/intelligence'
+    | '/studio/intelligence-actions'
+    | '/studio/menu'
+    | '/studio/options'
+    | '/studio/orders'
+    | '/studio/preview'
+    | '/studio/qr'
+    | '/studio/reports'
+    | '/studio/settings'
+    | '/studio/team'
+    | '/themes/preview'
+    | '/studio/'
+    | '/themes/'
+    | '/api/auth/$'
+    | '/m/$slug/$branch'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRouteWithChildren
+  OwnerRoute: typeof OwnerRoute
+  PricingRoute: typeof PricingRoute
+  StudioRoute: typeof StudioRouteWithChildren
+  InviteTokenRoute: typeof InviteTokenRoute
+  MSlugRoute: typeof MSlugRouteWithChildren
+  ThemesPreviewRoute: typeof ThemesPreviewRoute
+  ThemesIndexRoute: typeof ThemesIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/$workspace': {
+      id: '/admin/$workspace'
+      path: '/$workspace'
+      fullPath: '/admin/$workspace'
+      preLoaderRoute: typeof AdminWorkspaceRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/onboarding': {
+      id: '/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AdminOnboardingRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/invite/$token': {
+      id: '/invite/$token'
+      path: '/invite/$token'
+      fullPath: '/invite/$token'
+      preLoaderRoute: typeof InviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug': {
+      id: '/m/$slug'
+      path: '/m/$slug'
+      fullPath: '/m/$slug'
+      preLoaderRoute: typeof MSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding/$token': {
+      id: '/onboarding/$token'
+      path: '/$token'
+      fullPath: '/onboarding/$token'
+      preLoaderRoute: typeof OnboardingTokenRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/analytics': {
+      id: '/studio/analytics'
+      path: '/analytics'
+      fullPath: '/studio/analytics'
+      preLoaderRoute: typeof StudioAnalyticsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/billing': {
+      id: '/studio/billing'
+      path: '/billing'
+      fullPath: '/studio/billing'
+      preLoaderRoute: typeof StudioBillingRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/branches': {
+      id: '/studio/branches'
+      path: '/branches'
+      fullPath: '/studio/branches'
+      preLoaderRoute: typeof StudioBranchesRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/brand': {
+      id: '/studio/brand'
+      path: '/brand'
+      fullPath: '/studio/brand'
+      preLoaderRoute: typeof StudioBrandRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/design': {
+      id: '/studio/design'
+      path: '/design'
+      fullPath: '/studio/design'
+      preLoaderRoute: typeof StudioDesignRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/growth': {
+      id: '/studio/growth'
+      path: '/growth'
+      fullPath: '/studio/growth'
+      preLoaderRoute: typeof StudioGrowthRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/guests': {
+      id: '/studio/guests'
+      path: '/guests'
+      fullPath: '/studio/guests'
+      preLoaderRoute: typeof StudioGuestsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/import': {
+      id: '/studio/import'
+      path: '/import'
+      fullPath: '/studio/import'
+      preLoaderRoute: typeof StudioImportRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence': {
+      id: '/studio/intelligence'
+      path: '/intelligence'
+      fullPath: '/studio/intelligence'
+      preLoaderRoute: typeof StudioIntelligenceRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/intelligence-actions': {
+      id: '/studio/intelligence-actions'
+      path: '/intelligence-actions'
+      fullPath: '/studio/intelligence-actions'
+      preLoaderRoute: typeof StudioIntelligenceActionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/menu': {
+      id: '/studio/menu'
+      path: '/menu'
+      fullPath: '/studio/menu'
+      preLoaderRoute: typeof StudioMenuRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/options': {
+      id: '/studio/options'
+      path: '/options'
+      fullPath: '/studio/options'
+      preLoaderRoute: typeof StudioOptionsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/orders': {
+      id: '/studio/orders'
+      path: '/orders'
+      fullPath: '/studio/orders'
+      preLoaderRoute: typeof StudioOrdersRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/preview': {
+      id: '/studio/preview'
+      path: '/preview'
+      fullPath: '/studio/preview'
+      preLoaderRoute: typeof StudioPreviewRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/qr': {
+      id: '/studio/qr'
+      path: '/qr'
+      fullPath: '/studio/qr'
+      preLoaderRoute: typeof StudioQrRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/reports': {
+      id: '/studio/reports'
+      path: '/reports'
+      fullPath: '/studio/reports'
+      preLoaderRoute: typeof StudioReportsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/settings': {
+      id: '/studio/settings'
+      path: '/settings'
+      fullPath: '/studio/settings'
+      preLoaderRoute: typeof StudioSettingsRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/team': {
+      id: '/studio/team'
+      path: '/team'
+      fullPath: '/studio/team'
+      preLoaderRoute: typeof StudioTeamRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/themes/': {
+      id: '/themes/'
+      path: '/themes'
+      fullPath: '/themes/'
+      preLoaderRoute: typeof ThemesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/themes/preview': {
+      id: '/themes/preview'
+      path: '/themes/preview'
+      fullPath: '/themes/preview'
+      preLoaderRoute: typeof ThemesPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/m/$slug/$branch': {
+      id: '/m/$slug/$branch'
+      path: '/$branch'
+      fullPath: '/m/$slug/$branch'
+      preLoaderRoute: typeof MSlugBranchRouteImport
+      parentRoute: typeof MSlugRoute
+    }
+  }
+}
+
+interface AdminRouteChildren {
+  AdminWorkspaceRoute: typeof AdminWorkspaceRoute
+  AdminOnboardingRoute: typeof AdminOnboardingRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminWorkspaceRoute: AdminWorkspaceRoute,
+  AdminOnboardingRoute: AdminOnboardingRoute,
+  AdminUsersRoute: AdminUsersRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingTokenRoute: typeof OnboardingTokenRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingTokenRoute: OnboardingTokenRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
+interface StudioRouteChildren {
+  StudioAnalyticsRoute: typeof StudioAnalyticsRoute
+  StudioBillingRoute: typeof StudioBillingRoute
+  StudioBranchesRoute: typeof StudioBranchesRoute
+  StudioBrandRoute: typeof StudioBrandRoute
+  StudioDesignRoute: typeof StudioDesignRoute
+  StudioGrowthRoute: typeof StudioGrowthRoute
+  StudioGuestsRoute: typeof StudioGuestsRoute
+  StudioImportRoute: typeof StudioImportRoute
+  StudioIntelligenceRoute: typeof StudioIntelligenceRoute
+  StudioIntelligenceActionsRoute: typeof StudioIntelligenceActionsRoute
+  StudioMenuRoute: typeof StudioMenuRoute
+  StudioOptionsRoute: typeof StudioOptionsRoute
+  StudioOrdersRoute: typeof StudioOrdersRoute
+  StudioPreviewRoute: typeof StudioPreviewRoute
+  StudioQrRoute: typeof StudioQrRoute
+  StudioReportsRoute: typeof StudioReportsRoute
+  StudioSettingsRoute: typeof StudioSettingsRoute
+  StudioTeamRoute: typeof StudioTeamRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioAnalyticsRoute: StudioAnalyticsRoute,
+  StudioBillingRoute: StudioBillingRoute,
+  StudioBranchesRoute: StudioBranchesRoute,
+  StudioBrandRoute: StudioBrandRoute,
+  StudioDesignRoute: StudioDesignRoute,
+  StudioGrowthRoute: StudioGrowthRoute,
+  StudioGuestsRoute: StudioGuestsRoute,
+  StudioImportRoute: StudioImportRoute,
+  StudioIntelligenceRoute: StudioIntelligenceRoute,
+  StudioIntelligenceActionsRoute: StudioIntelligenceActionsRoute,
+  StudioMenuRoute: StudioMenuRoute,
+  StudioOptionsRoute: StudioOptionsRoute,
+  StudioOrdersRoute: StudioOrdersRoute,
+  StudioPreviewRoute: StudioPreviewRoute,
+  StudioQrRoute: StudioQrRoute,
+  StudioReportsRoute: StudioReportsRoute,
+  StudioSettingsRoute: StudioSettingsRoute,
+  StudioTeamRoute: StudioTeamRoute,
+  StudioIndexRoute: StudioIndexRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
+interface MSlugRouteChildren {
+  MSlugBranchRoute: typeof MSlugBranchRoute
+}
+
+const MSlugRouteChildren: MSlugRouteChildren = {
+  MSlugBranchRoute: MSlugBranchRoute,
+}
+
+const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRouteWithChildren,
+  OwnerRoute: OwnerRoute,
+  PricingRoute: PricingRoute,
+  StudioRoute: StudioRouteWithChildren,
+  InviteTokenRoute: InviteTokenRoute,
+  MSlugRoute: MSlugRouteWithChildren,
+  ThemesPreviewRoute: ThemesPreviewRoute,
+  ThemesIndexRoute: ThemesIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+}
+export const routeTree = rootRouteImport
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
+
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
