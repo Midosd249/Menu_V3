@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/state-panel";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
+import { getFeaturedProducts } from "@/lib/menu/presentation";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
@@ -53,7 +54,7 @@ function CartDialog({ lang, items, setItems, close, submit, submitting, error }:
 export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products, experimentVariant } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<{ number: number; total: number } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = (() => { const h = hours.find((x) => x.weekday === new Date().getDay()); if (!h || h.isClosed) return h?.isClosed ? false : null; if (!h.opensAt || !h.closesAt) return null; const mins = (v: string) => { const [a, b] = v.split(":").map(Number); return a * 60 + b; }; const now = new Date().getHours() * 60 + new Date().getMinutes(); const a = mins(h.opensAt); const b = mins(h.closesAt); return b <= a ? now >= a || now <= b : now >= a && now <= b; })();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0); const englishAvailable = isPublicMenuLocaleAvailable(menu, "en");
