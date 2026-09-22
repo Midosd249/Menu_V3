@@ -65,18 +65,21 @@ async function loadPublicOptions(sql: Awaited<ReturnType<typeof getSql>>, tenant
         where o.tenant_id = ${tenantId} and p.product_id = any(${productIds}) and o.is_available = true
         order by p.product_id, o.group_id, o.sort_order, o.created_at`,
   ]);
-  for (const id of productIds) out[id] = { variants: [], groups: [], options: [] };
+  const ensure = (id: string): ProductOptions => {
+    if (!out[id]) out[id] = { variants: [], groups: [], options: [] };
+    return out[id];
+  };
   for (const row of variants) {
     const id = String(row.product_id);
-    if (out[id]) out[id].variants.push(mapVariant(row as Record<string, unknown>));
+    ensure(id).variants.push(mapVariant(row as Record<string, unknown>));
   }
   for (const row of groups) {
     const id = String(row.product_id);
-    if (out[id]) out[id].groups.push(mapGroup(row as Record<string, unknown>));
+    ensure(id).groups.push(mapGroup(row as Record<string, unknown>));
   }
   for (const row of options) {
     const id = String(row.product_id);
-    if (out[id]) out[id].options.push(mapOption(row as Record<string, unknown>));
+    ensure(id).options.push(mapOption(row as Record<string, unknown>));
   }
   return out;
 }
@@ -105,12 +108,107 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
 
     const rows = await sql<PublicMenuRow>`
       select
-        to_jsonb(t) as tenant,
-        to_jsonb(b) as branch,
-        coalesce((select jsonb_agg(to_jsonb(b2) order by b2.created_at) from branches b2 where b2.tenant_id = t.id and b2.is_active = true), '[]'::jsonb) as branches,
-        coalesce((select jsonb_agg(to_jsonb(h) order by h.weekday) from branch_hours h where h.branch_id = b.id), '[]'::jsonb) as hours,
-        coalesce((select jsonb_agg(to_jsonb(c) order by c.sort_order, c.created_at) from categories c where c.tenant_id = t.id and c.is_active = true), '[]'::jsonb) as categories,
-        coalesce((select jsonb_agg(to_jsonb(p) order by p.sort_order, p.created_at) from products p where p.tenant_id = t.id), '[]'::jsonb) as products
+        jsonb_build_object(
+          'id', t.id,
+          'owner_user_id', t.owner_user_id,
+          'slug', t.slug,
+          'name_ar', t.name_ar,
+          'name_en', t.name_en,
+          'tagline_ar', t.tagline_ar,
+          'tagline_en', t.tagline_en,
+          'logo_url', t.logo_url,
+          'cover_url', t.cover_url,
+          'instagram_url', t.instagram_url,
+          'website_url', t.website_url,
+          'snapchat_url', t.snapchat_url,
+          'facebook_url', t.facebook_url,
+          'tiktok_url', t.tiktok_url,
+          'whatsapp', t.whatsapp,
+          'whatsapp_template', t.whatsapp_template,
+          'primary_color', t.primary_color,
+          'accent_color', t.accent_color,
+          'theme_key', t.theme_key,
+          'currency', t.currency,
+          'city', t.city,
+          'country', t.country,
+          'is_published', t.is_published,
+          'is_active', t.is_active,
+          'updated_at', t.updated_at
+        ) as tenant,
+        jsonb_build_object(
+          'id', b.id,
+          'tenant_id', b.tenant_id,
+          'slug', b.slug,
+          'name_ar', b.name_ar,
+          'name_en', b.name_en,
+          'address_ar', b.address_ar,
+          'address_en', b.address_en,
+          'maps_url', b.maps_url,
+          'phone', b.phone,
+          'is_active', b.is_active
+        ) as branch,
+        coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'id', b2.id,
+            'tenant_id', b2.tenant_id,
+            'slug', b2.slug,
+            'name_ar', b2.name_ar,
+            'name_en', b2.name_en,
+            'address_ar', b2.address_ar,
+            'address_en', b2.address_en,
+            'maps_url', b2.maps_url,
+            'phone', b2.phone,
+            'is_active', b2.is_active
+          ) order by b2.created_at)
+          from branches b2
+          where b2.tenant_id = t.id and b2.is_active = true
+        ), '[]'::jsonb) as branches,
+        coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'branch_id', h.branch_id,
+            'weekday', h.weekday,
+            'opens_at', h.opens_at,
+            'closes_at', h.closes_at,
+            'is_closed', h.is_closed
+          ) order by h.weekday)
+          from branch_hours h where h.branch_id = b.id
+        ), '[]'::jsonb) as hours,
+        coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'id', c.id,
+            'tenant_id', c.tenant_id,
+            'sort_order', c.sort_order,
+            'name_ar', c.name_ar,
+            'name_en', c.name_en,
+            'is_active', c.is_active
+          ) order by c.sort_order, c.created_at)
+          from categories c where c.tenant_id = t.id and c.is_active = true
+        ), '[]'::jsonb) as categories,
+        coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'id', p.id,
+            'tenant_id', p.tenant_id,
+            'category_id', p.category_id,
+            'sort_order', p.sort_order,
+            'name_ar', p.name_ar,
+            'name_en', p.name_en,
+            'description_ar', p.description_ar,
+            'description_en', p.description_en,
+            'price', p.price,
+            'currency', p.currency,
+            'image_url', p.image_url,
+            'calories', p.calories,
+            'sodium_mg', p.sodium_mg,
+            'caffeine_mg', p.caffeine_mg,
+            'caffeine_basis', p.caffeine_basis,
+            'is_available', p.is_available,
+            'is_featured', p.is_featured,
+            'allergens', p.allergens,
+            'tags', p.tags,
+            'dietary_labels', p.dietary_labels
+          ) order by p.sort_order, p.created_at)
+          from products p where p.tenant_id = t.id
+        ), '[]'::jsonb) as products
       from tenants t
       join lateral (
         select b0.* from branches b0
