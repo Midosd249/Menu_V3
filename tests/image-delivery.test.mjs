@@ -55,3 +55,27 @@ test("Signal Table prioritizes only the first viewport product images", () => {
   assert.match(editorialSource, /eager=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query\}/);
   assert.match(editorialSource, /fetchPriority=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query \? "high" : "auto"\}/);
 });
+
+
+test("tenant branding data URLs are removed from the public menu payload", async () => {
+  const { getPublicTenantMediaUrl } = await import("../src/lib/menu/image.ts");
+  const dataUrl = "data:image/webp;base64,abc";
+  assert.equal(
+    getPublicTenantMediaUrl(dataUrl, "tenant-1", "cover", "2026-09-22T17:00:00.000Z"),
+    "/api/media/tenant/tenant-1/cover?v=2026-09-22T17%3A00%3A00.000Z",
+  );
+  assert.equal(
+    getPublicTenantMediaUrl("https://images.example.com/logo.webp", "tenant-1", "logo"),
+    "https://images.example.com/logo.webp",
+  );
+});
+
+test("public tenant media route is cacheable and published-only", async () => {
+  const source = await readFile("src/routes/api/media/tenant/$.ts", "utf8");
+  assert.match(source, /is_active = true/);
+  assert.match(source, /is_published = true/);
+  assert.match(source, /Cache-Control.*immutable/);
+  assert.match(source, /Content-Type/);
+  assert.match(source, /nosniff/);
+  assert.match(source, /image\/webp/);
+});
