@@ -59,4 +59,4 @@ export function getOptimizedImageUrl(src: string | undefined, options: ImageTran
 
   return url.toString();
 }
-\n
+
