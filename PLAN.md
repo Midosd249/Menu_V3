@@ -14,8 +14,8 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
-- VERIFIED: Current `main` HEAD: `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
-- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and targets `main` at that exact commit.
+- VERIFIED: Current `main` HEAD: `8adde6f57063f3d4117465f4130cc134b48b5cd8`.
+- UNKNOWN: Production deployment for `8adde6f57063f3d4117465f4130cc134b48b5cd8`; no manual deployment was triggered.
 - VERIFIED: Production root returned HTTP 200.
 - VERIFIED: Valid-format nonexistent public menu slug returned HTTP 404.
 - VERIFIED: No runtime error clusters were found in the selected last-1-hour production window.
