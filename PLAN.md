@@ -549,3 +549,22 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+
+## 2026-09-22 — Phase 5 SSR / HTML Payload Reduction — VERIFIED COMPLETE
+
+- VERIFIED: PR #254 merged once by squash as `45552759054f11b4b37a89caacf73c795040a955`.
+- VERIFIED: PR #255 merged once by squash as `99a526dc875c1ad5bf50367632f78108681454af`; current `main` is `99a526dc875c1ad5bf50367632f78108681454af`.
+- IMPLEMENTED: public SSR SQL now projects only required tenant/branch/hour/category/product fields instead of serializing complete table rows.
+- IMPLEMENTED: public tenant mapping now returns only browser-required public fields; server-only lifecycle fields are no longer reintroduced into the public tenant payload.
+- IMPLEMENTED: public product option state is sparse; empty option containers are not preallocated for products without variants/groups/options.
+- IMPLEMENTED: the existing SSR `initialMenu` hydration path remains protected by regression coverage.
+- IMPLEMENTED: the performance audit now records document transfer bytes, encoded response bytes, and decoded/uncompressed HTML bytes for future golden-fixture comparison.
+- VERIFIED: Phase 5 changes did not modify schema, auth, RLS, tenant isolation, order/cart contracts, subscriptions, or deployment configuration.
+- VERIFIED: Phase 5 was completed without redoing Phase 1–4.
+- VERIFIED: Vercel combined status for the merged Phase 5 evidence commit is FAILURE only because of the documented build-rate-limit surface; this is not evidence of an application build failure.
+- UNKNOWN: real-device 320/375/390/430px waterfall/LCP and Production performance remain release-stage evidence.
+- Deployment status: NOT_PERFORMED by Phase 5.
+
+### Exact Next Task
+**Phase 6 — Golden Performance Fixture.** Establish a reproducible 30-product golden public-menu fixture and baseline document/image metrics using the new performance-audit instrumentation, then compare Phase 5 against that fixture. Do not re-implement Phase 1–5 unless measured evidence requires it.
