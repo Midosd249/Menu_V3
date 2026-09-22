@@ -310,6 +310,7 @@ export interface FileRoutesByTo {
   '/themes': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
+  '/api/media/tenant/$tenantId/$kind': typeof ApiMediaTenantTenantIdKindRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -349,6 +350,7 @@ export interface FileRoutesById {
   '/themes/': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
+  '/api/media/tenant/$tenantId/$kind': typeof ApiMediaTenantTenantIdKindRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -389,6 +391,7 @@ export interface FileRouteTypes {
     | '/themes/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
+    | '/api/media/tenant/$tenantId/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -426,6 +429,7 @@ export interface FileRouteTypes {
     | '/themes'
     | '/api/auth/$'
     | '/m/$slug/$branch'
+    | '/api/media/tenant/$tenantId/$kind'
   id:
     | '__root__'
     | '/'
