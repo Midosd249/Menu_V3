@@ -501,3 +501,17 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Complete PR #241 verification, resolve only task-scoped failures, review the final diff, merge once if all required gates are green, verify the resulting main SHA, then stop.**
+
+
+## 2026-09-22 — Public Menu Image Performance Phase 2 — VERIFIED COMPLETE
+
+- VERIFIED: PR #241 merged once by squash as `9c262f43970384ba71faab67f88d74fd62672bc3`.
+- VERIFIED: resulting `main` SHA is `9c262f43970384ba71faab67f88d74fd62672bc3`.
+- VERIFIED: Quality #2256 passed and W9 Orders QA #486 passed for the final PR head `41f07720621486472cdf04053fdf06f53add7f3e`.
+- VERIFIED: Vercel PR preview status is SUCCESS; this is preview evidence only.
+- VERIFIED: final diff remains scoped to responsive public image delivery, its contract tests, and continuity documentation; no database, auth, RLS, tenant-data, ordering, subscription, or Production deployment configuration change was introduced.
+- UNKNOWN: real-device 320/375/390/430px waterfall/LCP and Production performance for this image-delivery change.
+- Deployment status: NOT_PERFORMED by this task.
+
+### Exact Next Task
+**Run the dedicated real-device/public-menu performance evidence pass for the 30-item Saudi shopping world test menu, measuring Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not redesign or re-implement Phase 2 unless measured evidence requires it.**
