@@ -4,7 +4,7 @@
 
 - Date: 2026-09-22
 - Status: PHASE 4 VERIFIED / PHASE 5 READY
-- Current `main` after continuity merge: `b5e5e0f7fa000b1451b605e2fb9b484cde690170`
+- Current `main` after continuity merge: `5ad84abdae22efb223b5a2cf58f23b37bc36b9a7`
 - Canonical product: Menu V3
 - Target test tenant: `saudi-shopping-world`
 - Test owner account: `mido@hotmail.com` (test reference only; do not expose in product telemetry)
@@ -694,7 +694,7 @@ Status: VERIFIED COMPLETE / MERGED
 ## 21. Phase 4 Completion Evidence — 2026-09-22
 
 - VERIFIED: Phase 4 PR #249 merged once by squash as `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
-- VERIFIED: Phase 4 continuity documentation is merged in current `main` at `b5e5e0f7fa000b1451b605e2fb9b484cde690170`.
+- VERIFIED: Phase 4 continuity documentation is merged in current `main` at `5ad84abdae22efb223b5a2cf58f23b37bc36b9a7`.
 - VERIFIED: the dedicated Featured presentation now uses one shared `getFeaturedProducts()` contract with a maximum of 6 presentation items.
 - VERIFIED: the bound is applied across the protected public renderer families: PublicMenuView, ContemporaryRestaurantTemplate, FastCasualTemplate, SignalTableTemplate, SpecialtyCafeTemplate, and TasteTemplate.
 - VERIFIED: stored `isFeatured` truth is unchanged; all products remain in the normal category/menu discovery path.
