@@ -27,8 +27,8 @@ test("image delivery contract normalizes only known Unsplash sources", async () 
 
 test("shared MenuMedia exposes responsive image delivery controls", () => {
   assert.match(imageSource, /UNSPLASH_HOSTNAMES/);
-  assert.match(mediaSource, /getOptimizedImageUrl/);
-  assert.match(mediaSource, /sizes=\{sizes\}/);
+  assert.match(mediaSource, /getResponsiveImageSources/);
+  assert.match(mediaSource, /imageWidths/);
   assert.match(mediaSource, /imageWidth\?: number/);
 });
 
@@ -40,7 +40,7 @@ test("Studio product thumbnails are lazy, dimensioned, and optimized", () => {
 });
 
 test("public product media remains lazy and no longer prefetches every Editorial product image", () => {
-  assert.match(publicSource, /getOptimizedImageUrl\(product\.imageUrl/);
+  assert.match(publicSource, /getResponsiveImageSources/);
   assert.match(publicSource, /loading="lazy"/);
   assert.match(publicSource, /decoding="async"/);
   assert.match(publicSource, /fetchPriority="low"/);
