@@ -21,12 +21,11 @@ Do not repeat Phase 1–4. Measure first, then reduce only unnecessary SSR/HTML 
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
-- VERIFIED: Current `main` HEAD: `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
-- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and targets `main` at that exact commit.
-- VERIFIED: Production root returned HTTP 200.
-- VERIFIED: Valid-format nonexistent public menu slug returned HTTP 404.
-- VERIFIED: No runtime error clusters were found in the selected last-1-hour production window.
-- VERIFIED: GitHub Quality #2226 and W9 Orders QA #461 passed on the continuity batch.
+- VERIFIED: Current `main` HEAD: `b5e5e0f7fa000b1451b605e2fb9b484cde690170`.
+- VERIFIED: Phase 4 merge commit `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78` is the runtime/code parent of current `main`.
+- VERIFIED: Phase 4 Quality #2282 and W9 Orders QA #507 passed.
+- VERIFIED: Phase 4 was not deployed to Production; current Production identity/performance for this new head is UNKNOWN.
+- UNKNOWN: real-device waterfall/LCP for the 30-item golden tenant.
 - VERIFIED: 7-table RLS remediation remains applied and verified.
 - UNKNOWN: Physical Android/iOS/QR/device QA.
 - REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate from the closed RLS task.
