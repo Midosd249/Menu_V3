@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import type { Lang, Product } from "@/lib/menu/types";
 import { cn, formatSar } from "@/lib/utils";
+import { getOptimizedImageUrl } from "@/lib/menu/image";
 
 export type MenuMediaProps = {
   src?: string;
@@ -8,16 +9,21 @@ export type MenuMediaProps = {
   className?: string;
   eager?: boolean;
   fallback?: ReactNode;
+  imageWidth?: number;
+  imageQuality?: number;
+  imageFit?: "crop" | "max";
+  sizes?: string;
 };
 
-export function MenuMedia({ src, alt = "", className, eager = false, fallback }: MenuMediaProps) {
+export function MenuMedia({ src, alt = "", className, eager = false, fallback, imageWidth, imageQuality, imageFit, sizes }: MenuMediaProps) {
   const [failed, setFailed] = useState(false);
 
   if (!src || failed) {
     return <div className={cn("grid place-items-center bg-sand text-xs text-muted", className)} aria-hidden>{fallback ?? "Menu"}</div>;
   }
 
-  return <img src={src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("object-cover", className)} onError={() => setFailed(true)} />;
+  const optimizedSrc = getOptimizedImageUrl(src, { width: imageWidth, quality: imageQuality, fit: imageFit });
+  return <img src={optimizedSrc} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" sizes={sizes} className={cn("object-cover", className)} onError={() => setFailed(true)} />;
 }
 
 export function MenuPrice({ price, currency, lang, className }: { price: number; currency?: string; lang: Lang; className?: string }) {
@@ -50,7 +56,7 @@ export function MenuProductCard({ product, lang, onSelect, className }: { produc
   const unavailable = !product.isAvailable;
 
   return <article className={cn("grid min-w-0 grid-cols-[auto_1fr] gap-3 rounded-2xl border border-line bg-paper p-3", className)}>
-    <MenuMedia src={product.imageUrl} alt="" className="size-24 shrink-0 rounded-xl sm:size-28" />
+    <MenuMedia src={product.imageUrl} alt="" imageWidth={224} imageQuality={76} imageFit="crop" sizes="(min-width: 640px) 112px, 96px" className="size-24 shrink-0 rounded-xl sm:size-28" />
     <div className="grid min-w-0 content-start gap-2">
       <div className="flex min-w-0 items-start justify-between gap-3">
         <h3 className="min-w-0 break-words text-base font-semibold leading-6 text-ink">{name}</h3>

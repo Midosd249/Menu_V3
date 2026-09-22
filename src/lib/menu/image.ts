@@ -23,3 +23,40 @@ export async function compressImageFile(file: File): Promise<string> {
   } finally { bitmap.close(); }
   throw new Error("تعذر ضغط الصورة بالحجم المسموح. جرّب صورة أصغر أو أقل دقة.");
 }
+
+export type ImageTransformOptions = {
+  width?: number;
+  quality?: number;
+  fit?: "crop" | "max";
+};
+
+const UNSPLASH_HOSTNAMES = new Set(["images.unsplash.com"]);
+
+export function getOptimizedImageUrl(src: string | undefined, options: ImageTransformOptions = {}): string | undefined {
+  if (!src || src.startsWith("data:") || src.startsWith("blob:")) return src;
+
+  let url: URL;
+  try {
+    url = new URL(src);
+  } catch {
+    return src;
+  }
+
+  if (!UNSPLASH_HOSTNAMES.has(url.hostname)) return src;
+
+  const width = options.width;
+  const quality = options.quality;
+  const fit = options.fit;
+
+  if (width && Number.isFinite(width)) {
+    url.searchParams.set("w", String(Math.max(64, Math.min(2400, Math.round(width)))));
+  }
+  if (quality && Number.isFinite(quality)) {
+    url.searchParams.set("q", String(Math.max(40, Math.min(90, Math.round(quality)))));
+  }
+  if (fit) url.searchParams.set("fit", fit);
+  url.searchParams.set("auto", "format");
+
+  return url.toString();
+}
+

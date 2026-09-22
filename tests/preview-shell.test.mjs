@@ -45,13 +45,13 @@ test("public menu keeps an always-available cart entry point and shared quick ac
   assert.match(source, /branch\.phone/);
 });
 
-test("public menu keeps the lazy media baseline while Editorial prefetches product images", async () => {
+test("public menu keeps the lazy media baseline without all-product prefetch", async () => {
   const source = await readFile("src/components/public-menu.tsx", "utf8");
-  assert.match(source, /document\.documentElement\.dataset\.menuTheme === "editorial"/);
-  assert.match(source, /new Image\(\)/);
-  assert.match(source, /preload\.src = product\.imageUrl/);
   assert.match(source, /loading="lazy"/);
+  assert.match(source, /decoding="async"/);
   assert.match(source, /fetchPriority="low"/);
+  assert.doesNotMatch(source, /new Image\(\)/);
+  assert.doesNotMatch(source, /preload\.src = product\.imageUrl/);
 });
 
 test("preview menu cards keep a time-based visible final state", async () => {
