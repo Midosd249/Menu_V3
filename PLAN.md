@@ -1,3 +1,16 @@
+## 2026-09-22 — Signal Table QR Image Priority — CLOSED / VERIFIED
+
+- VERIFIED: PR #245 merged into `main` at `8adde6f57063f3d4117465f4130cc134b48b5cd8`.
+- VERIFIED: Quality #2260 passed and W9 Orders QA #488 passed.
+- VERIFIED: Vercel PR preview passed.
+- VERIFIED: only first-viewport Signal Table Featured/product images are eager/high priority; remaining product media remains lazy and responsive.
+- UNKNOWN: physical QR/device waterfall/LCP evidence.
+- UNKNOWN: Production deployment status for this commit; no deployment was triggered manually.
+
+## Exact Next Task
+
+**Phase 3 — Branding/Cover Media Decoupling:** audit `tenant.logo_url` / `tenant.cover_url` storage and establish the smallest safe path to remove large Base64 branding media from public SSR HTML while preserving legacy fallback and tenant isolation.
+
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
@@ -11,9 +24,9 @@
 - UNKNOWN: Physical Android/iOS/QR/device QA.
 - REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate from the closed RLS task.
 
-## Exact Next Task
+## Previous Release-Gate Next Task
 
-**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
+Physical Android/iOS/QR/theme/order/RTL smoke QA remains an external release-stage evidence requirement.
 
 ## Protected / Not Next
 
