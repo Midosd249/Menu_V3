@@ -1,3 +1,21 @@
+# CURRENT VERIFIED PERFORMANCE POSITION — 2026-09-22 — PHASE 7 CLOSED
+
+- VERIFIED: canonical `main` HEAD is `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`.
+- VERIFIED: Phase 0–6 are CLOSED.
+- VERIFIED: Phase 7 Five-Theme Regression is CLOSED / MERGED via PR #261.
+- VERIFIED: Quality #2313 / run `35766577618` passed typecheck, full tests, lint, production build, all-theme browser QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and performance diagnostics.
+- VERIFIED: W9 Orders QA #529 / run `35766577542` passed.
+- VERIFIED: all five protected themes were exercised in Arabic RTL and English LTR across the existing responsive browser matrix, including 320/375/390/430px.
+- VERIFIED: the Phase 6 golden 30-product performance fixture remained green during the Phase 7 Quality run.
+- VERIFIED: no Phase 1–6 reimplementation or protected architecture changes were introduced.
+- UNKNOWN: direct physical Android/iOS LCP/waterfall and Production performance for the real 30-item customer reproduction.
+- BLOCKED / NON-BLOCKING: Vercel preview status is rate-limited by the known free daily deployment quota; no retry was attempted.
+- Deployment status: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**Phase 8 — Production + Real Device QA.** Follow the release-only sequence: verify current `main` locally/CI, perform one authorized Production deployment, verify the exact deployed commit, then run the real Android/iOS/QR five-theme/RTL/LTR/performance smoke matrix. Do not reopen Phase 1–7 without new measured regression evidence.
+
 # CURRENT PERFORMANCE REMEDIATION POSITION — 2026-09-22
 
 - VERIFIED: canonical `main` HEAD is `99a526dc875c1ad5bf50367632f78108681454af`.
