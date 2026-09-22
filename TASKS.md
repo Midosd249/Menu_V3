@@ -2,31 +2,30 @@
 
 ## Current Position
 
-- VERIFIED: `main` HEAD is `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
-- VERIFIED: PR #235 merged the RLS security remediation.
-- VERIFIED: GitHub Quality #2224 passed.
-- VERIFIED: GitHub W9 Orders QA #460 passed.
-- VERIFIED: GitHub Vercel status for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` is SUCCESS.
-- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` applied successfully.
-- VERIFIED: all 7 audited server-only tables now have RLS enabled and no client policies.
-- VERIFIED: `anon` and `authenticated` have no table SELECT privileges on all 7; `postgres` SELECT access remains verified.
-- VERIFIED: live server-side reads succeeded for all 7 tables.
-- VERIFIED: GitHub Issue #233 is CLOSED / COMPLETED.
-- UNKNOWN: direct Production deployment identity for current `main`.
+- VERIFIED: `main` HEAD is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: PR #235 and PR #236 are merged.
+- VERIFIED: GitHub Quality #2226 passed.
+- VERIFIED: GitHub W9 Orders QA #461 passed.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets the exact current `main` commit.
+- VERIFIED: Production root HTTP 200.
+- VERIFIED: valid-format nonexistent public menu HTTP 404.
+- VERIFIED: no runtime error clusters in the selected last-1-hour Production window.
+- VERIFIED: all 7 audited RLS-disabled tables are now RLS-enabled and server-only.
+- VERIFIED: Issue #233 is CLOSED / COMPLETED.
 - UNKNOWN: physical Android/iOS/QR/device evidence.
 - REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate.
 
 ## Exact Next Task
 
-**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
 
 ## Not Next
 
 - No new theme or homepage redesign.
 - No unrelated feature work.
 - Do not reopen the completed RLS remediation without new evidence.
-- No claim that Production equals `main` without direct deployment evidence.
-- No Payment Provider / Commercial Launch / PH-07 / R10 prerequisite work.
+- Do not start Payment Provider / Commercial Launch / PH-07 / R10 prerequisite work.
+- Treat the two remaining Supabase warnings as separate scoped security tasks.
 
 # TASKS
 
