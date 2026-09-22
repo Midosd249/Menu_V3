@@ -228,11 +228,12 @@ const MSlugBranchRoute = MSlugBranchRouteImport.update({
   path: '/$branch',
   getParentRoute: () => MSlugRoute,
 } as any)
-const ApiMediaTenantTenantIdKindRoute = ApiMediaTenantTenantIdKindRouteImport.update({
-  id: '/api/media/tenant/$tenantId/$kind',
-  path: '/api/media/tenant/$tenantId/$kind',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const ApiMediaTenantTenantIdKindRoute =
+  ApiMediaTenantTenantIdKindRouteImport.update({
+    id: '/api/media/tenant/$tenantId/$kind',
+    path: '/api/media/tenant/$tenantId/$kind',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
