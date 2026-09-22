@@ -31,6 +31,10 @@ test("public tenant mapping excludes owner identity from the public response sha
   });
   assert.equal("ownerUserId" in publicTenant, false);
   assert.equal("public_content_version" in publicTenant, false);
+  assert.equal("isPublished" in publicTenant, false);
+  assert.equal("isActive" in publicTenant, false);
+  assert.equal("createdAt" in publicTenant, false);
+  assert.equal("updatedAt" in publicTenant, false);
 });
 
 test("public menu SEO derives Arabic title, absolute canonical, and structured restaurant/menu data", () => {
