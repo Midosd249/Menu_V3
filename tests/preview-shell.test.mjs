@@ -47,7 +47,7 @@ test("public menu keeps an always-available cart entry point and shared quick ac
 
 test("public menu keeps the lazy media baseline without all-product prefetch", async () => {
   const source = await readFile("src/components/public-menu.tsx", "utf8");
-  assert.match(source, /loading="lazy"/);
+  assert.match(source, /loading=\{eager \? "eager" : "lazy"\}/);
   assert.match(source, /decoding="async"/);
   assert.match(source, /fetchPriority="low"/);
   assert.doesNotMatch(source, /new Image\(\)/);
