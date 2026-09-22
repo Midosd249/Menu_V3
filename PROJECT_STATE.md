@@ -534,3 +534,19 @@ Run and review the final GitHub Quality/W9 checks for the follow-up, then merge 
 
 ### Exact Next Task
 Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
+
+## 2026-09-22 — Main Stabilization / Security Task Reconciliation
+
+- VERIFIED: canonical `main` is `84e0509da7de908aac3c863b093101ad4961aa81`; PR #232 is merged.
+- VERIFIED: GitHub reports Vercel SUCCESS for this commit.
+- UNKNOWN: direct Vercel Production deployment identity/match for this commit; no Production claim is made.
+- VERIFIED: live Supabase advisor currently reports 7 RLS-disabled `menu_v3` tables: `public_order_rate_limits`, `public_order_idempotency`, `lead_onboarding`, `ai_request_rate_limits`, `menu_upsell_recommendations`, `guest_profiles`, and `anonymous_sessions`.
+- VERIFIED: historical continuity records referring to six RLS-disabled tables are stale relative to the current live Supabase state.
+- VERIFIED: a dedicated security task was created as GitHub Issue #233.
+- VERIFIED: no RLS remediation SQL was applied; this is intentionally blocked until effective exposure, grants, and application paths are proven.
+- UNKNOWN: physical Android/iOS/QR/device QA.
+
+### Current Exact Next Task
+
+Execute GitHub Issue #233 — reconcile the 7 live RLS-disabled `menu_v3` tables, define the minimum safe policy/exposure contract, implement only evidence-backed remediation, and verify authorization/regression behavior.
+
