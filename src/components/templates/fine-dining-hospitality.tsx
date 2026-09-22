@@ -14,7 +14,16 @@ export function FineDiningHospitalityTemplate({ menu, preview = false }: { menu:
 
   return <div className="noir-template-shell min-h-dvh">
     <header className="noir-template-hero">
-      <MenuMedia src={tenant.coverUrl} alt="" className="noir-template-hero-image" eager fallback={<span aria-hidden="true" />} />
+      <MenuMedia
+      src={tenant.coverUrl}
+      alt=""
+      imageWidth={1600}
+      imageWidths={[640, 960, 1280, 1600]}
+      sizes="100vw"
+      className="noir-template-hero-image"
+      eager
+      fallback={<span aria-hidden="true" />}
+    />
       <div className="noir-template-hero-inner">
         <div className="noir-template-identity">
           <div className="noir-template-brand">

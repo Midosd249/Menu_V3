@@ -600,3 +600,20 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 ## 2026-09-22 — Final Phase 1 Continuity Update
 
 **Public Menu Image Performance Phase 1 is VERIFIED COMPLETE. PR #239 merged as `c33d3b308b76776ec69c65abec7221f534850317`. Quality #2242 and W9 #474 passed. Exact next task: Phase 2 — Public Image Geometry and Responsive Delivery. Production deployment is NOT claimed. Real-device waterfall/LCP remains UNKNOWN.**
+
+
+## 2026-09-22 — Public Menu Image Performance Phase 2 — IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
+
+- VERIFIED: Phase 1 is already merged on main at a5073612d162d6d7d6776de6df9e422c1d6dc43e; Phase 2 branch starts directly from that SHA.
+- VERIFIED: PR #241 is open against main.
+- IMPLEMENTED: responsive width-descriptor srcset generation for known Unsplash URLs, with safe passthrough for arbitrary/data/blob sources.
+- IMPLEMENTED: semantic media width profiles across the protected public-menu/theme surfaces, including product-card, featured-card, detail/dialog, hero/cover, and logo roles.
+- IMPLEMENTED: shared/public media now emits sizes only with responsive width candidates; existing lazy/async/low-priority behavior is preserved.
+- IMPLEMENTED: regression coverage for responsive source selection and updated media contracts.
+- VERIFIED: no database, auth, RLS, tenant data, ordering, subscription, or deployment configuration changes.
+- UNKNOWN: GitHub Quality/W9 workflow results for PR #241 are not yet exposed through the connected workflow surface; current combined status is Vercel PENDING.
+- UNKNOWN: real-device 320/375/390/430px waterfall/LCP and production performance for the new head.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+**Complete PR #241 verification, resolve only task-scoped failures, review the final diff, merge once if all required gates are green, verify the resulting main SHA, then stop. Do not deploy Production automatically.**

@@ -104,9 +104,9 @@ test("public discovery has one owner for robots and sitemap responses", () => {
 });
 
 test("public menu keeps below-the-fold product media lazy-loaded and low-priority", () => {
-  assert.match(PUBLIC_MENU, /loading="lazy"/);
+  assert.match(PUBLIC_MENU, /loading=\{eager \? "eager" : "lazy"\}/);
   assert.match(PUBLIC_MENU, /decoding="async"/);
-  assert.match(PUBLIC_MENU, /fetchPriority="low"/);
+  assert.match(PUBLIC_MENU, /fetchPriority=\{fetchPriority\}/);
 });
 
 
