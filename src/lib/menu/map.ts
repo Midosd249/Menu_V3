@@ -1,6 +1,6 @@
 import { isThemeKey, DEFAULT_THEME_KEY } from "../theme/index.ts";
 import { bool, num } from "../utils.ts";
-import { getPublicTenantMediaUrl } from "./image";
+import { getPublicTenantMediaUrl } from "./image.ts";
 import type { Branch, BranchHour, Category, CaffeineBasis, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
