@@ -1,33 +1,29 @@
-# CURRENT TASK STATE — 2026-09-20
+# CURRENT TASK STATE — 2026-09-22
 
 ## Current Position
 
-- `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
-- PR #223: merged.
-- Editorial Canvas replacement: `DONE / MERGED / CI VERIFIED`.
-- GitHub Quality: passed.
-- W9 Orders browser QA: passed.
-- Production deployment match: `UNKNOWN`; no deployment was requested for this task.
-- Physical device/QR visual evidence: `UNKNOWN`.
+- VERIFIED: `main` HEAD is `84e0509da7de908aac3c863b093101ad4961aa81`.
+- VERIFIED: PR #232 is merged.
+- VERIFIED: GitHub Vercel status for `84e0509da7de908aac3c863b093101ad4961aa81` is SUCCESS.
+- UNKNOWN: direct Production deployment identity/match for `84e0509da7de908aac3c863b093101ad4961aa81`.
+- VERIFIED: live Supabase advisor currently reports 7 RLS-disabled `menu_v3` tables.
+- VERIFIED: GitHub Issue #233 is the dedicated security/data task; no RLS remediation has been applied.
+- UNKNOWN: physical device/QR evidence.
 
 ## Exact Next Task
 
-**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and the QR/search/category/product/cart/order smoke path.**
+**Execute Issue #233 — reconcile the 7 live RLS-disabled `menu_v3` tables and implement only the evidence-backed security remediation.**
 
 ## Not Next
 
-- No new theme rebuild.
-- No homepage redesign.
-- No product/category deep-link expansion.
-- No native Web Share implementation.
-- No Payment Provider / Commercial Launch / PH-07 / R10 work as a prerequisite.
-
-## Later Non-Blocking / Separate Work
-
-- R7 evidence review remains dependent on meaningful real exposure.
-- Six RLS-disabled live tables remain a separate security/data task from the A.2 audit.
+- No new theme or homepage redesign.
+- No unrelated feature work.
+- No blind `ENABLE ROW LEVEL SECURITY` migration.
+- No claim that Production equals `main` without direct deployment evidence.
+- No Payment Provider / Commercial Launch / PH-07 / R10 prerequisite work.
 
 # TASKS
+
 
 ## Current State — 2026-09-18
 
@@ -159,7 +155,7 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 - UNKNOWN: physical real-device production QA.
 - UNKNOWN: direct production HTTP 404 verification for invalid public menu URLs.
 
-## Exact Next Task
+## Historical Next Task
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
 Do not begin product/category deep links or native Web Share automatically.
@@ -216,7 +212,7 @@ Do not begin product/category deep links or native Web Share automatically.
 - UNKNOWN: current Vercel Production deployment identity for this merged main; no Vercel production deployment was performed by this task.
 - NOTE: the GitHub browser suite verifies automated browser behavior across all themes; it does not replace physical-device QR scanning/printing evidence.
 
-## Exact Next Task
+## Historical Next Task
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device, and include the QR single-print + multi-copy print-preview checks.**
 
 Do not begin product/category deep links or native Web Share automatically.
@@ -235,7 +231,7 @@ Do not begin product/category deep links or native Web Share automatically.
 - Implementation status: `IMPLEMENTATION_IN_PROGRESS`.
 - Deployment status: `DEPLOYMENT_BLOCKED` / not deployed.
 
-### Exact Next Task
+### Historical Next Task
 
 Review PR #206 quality evidence and final diff; if clean, prepare one controlled merge to `main` without deploying.
 
@@ -250,7 +246,7 @@ Review PR #206 quality evidence and final diff; if clean, prepare one controlled
 - Implementation status: `DONE`.
 - Deployment status: `DEPLOYMENT_BLOCKED`.
 
-### Exact Next Task
+### Historical Next Task
 
 Release-stage production verification of the merged homepage, then physical Android/iOS/QR/theme/order/RTL smoke QA.
 
@@ -269,7 +265,7 @@ Release-stage production verification of the merged homepage, then physical Andr
 - UNKNOWN: final owner artwork files are not yet present.
 - UNKNOWN: production deployment of this merged commit has not been performed/verified by this task.
 
-## Exact Next Task
+## Historical Next Task
 
 **Owner image placement + one controlled release verification for `df2569e92e25380c6fc4957eba8b2d96353bd1f9`.**
 
@@ -288,7 +284,7 @@ Do not begin another homepage redesign or commercial packaging redesign before t
 - Implementation status: `DONE`.
 - Deployment status: `UNKNOWN` / no production deployment performed by this task.
 
-## Exact Next Task
+## Historical Next Task
 
 **Release-stage verification of `main` after PR #213, then physical Android/iOS/QR/theme/order/RTL smoke QA.**
 
@@ -317,7 +313,7 @@ Do not start another homepage redesign or replace these visuals again unless ver
 - VERIFIED: map URL capability exists at `/studio/branches`; `/studio/brand` now links directly to it without duplicating branch data.
 - UNKNOWN: Production deployment identity and physical-device QA.
 
-### Exact Next Task
+### Historical Next Task
 Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage Production and physical Android/iOS/QR/theme/order/RTL smoke QA.
 
 ## 2026-09-20 — Public Menu Reliability / Brand Social / Image Contract — MERGED / RELEASE-STAGE PENDING
@@ -330,7 +326,7 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 - Implementation status: `PUSHED` / merged to `main`.
 - Deployment status: `UNKNOWN` / release-stage verification pending.
 
-### Exact Next Task
+### Historical Next Task
 
 **Release-stage verification of `main` at `679f72aca993f5a8001ef5f158877b2c48b79265`, then the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not start another redesign or feature task before this evidence is closed.**
 
@@ -345,7 +341,7 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 - UNKNOWN: physical Android/iOS QR scanning, all-theme visual rendering, ordering, RTL/LTR, and QR print-preview evidence on real devices.
 - NOTE: direct deployment URL fetch is protected by Vercel authentication, so no anonymous HTTP page-content verification was claimed from that check.
 
-### Exact Next Task
+### Historical Next Task
 
 **Physical Android/iOS production QA — execute the prepared QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks, against `main` `1fcb287072c47746e5f0a7a4a376a87783ab74e5`.**
 
@@ -356,7 +352,7 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 - IMPLEMENTED: Atelier is the new single-owner Editorial presentation direction.
 - BLOCKED: repository CI/browser and real-device evidence remain outstanding.
 
-### Exact Next Task
+### Historical Next Task
 **Run GitHub Quality/browser checks, review the final diff, then test Atelier Editorial on a real Android viewport using the owner's failing cases.**
 
 
@@ -375,7 +371,7 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 - UNKNOWN / EXTERNAL: physical Android/iOS QA of the merged Atelier public menu, including QR scanning and real-device typography, remains unverified.
 - Note: the first Quality attempt failed in an unrelated Studio responsive Playwright run with an execution-context-destroyed navigation race; the failed job was rerun without code changes and passed completely.
 
-### Exact Next Task
+### Historical Next Task
 **Physical Android QA of merged Atelier Editorial — repeat the owner's failing Arabic/English mobile cases and verify QR/public-menu rendering, RTL/LTR, title/price geometry, fixed actions, search/categories, cart/order, and configured external actions.**
 
 
@@ -406,7 +402,7 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 - UNKNOWN: local command execution, GitHub Quality/browser result, physical-device visual QA, accessibility/performance evidence, and production deployment identity.
 - Deployment status: UNKNOWN / not deployed by this implementation step.
 
-### Exact Next Task
+### Historical Next Task
 **Run GitHub Quality/browser/accessibility/performance verification for the SIGNAL TABLE branch, review the complete diff, resolve failures, then create the single coherent PR.**
 
 
@@ -430,7 +426,7 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 - Implementation status: READY_TO_MERGE.
 - Deployment status: NOT_RELEASED.
 
-### Exact Next Task
+### Historical Next Task
 **Merge PR #226 once, verify the resulting `main` SHA, then stop. Production deployment and physical-device QA remain release-stage work and are not to be started automatically.**
 
 
@@ -448,7 +444,7 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 - UNKNOWN: local execution of npm commands and physical browser/device screenshots because this session does not have the repository working tree/browser runtime.
 - Deployment: NOT_REQUESTED / NOT_PERFORMED.
 
-### Exact Next Task
+### Historical Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
 
 
@@ -460,7 +456,7 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 - IMPLEMENTED: removed obsolete featured-selection chrome and preserved product-card/cart/search/category/order contracts.
 - UNKNOWN: physical Android/iOS evidence and final Production deployment identity.
 
-### Exact Next Task
+### Historical Next Task
 **Merge PR #230 once, verify the resulting `main` SHA, then execute the single authorized Production deployment and record the direct Production identity.**
 
 
@@ -470,7 +466,7 @@ Complete CI/browser verification for the Editorial Canvas branch, review the fin
 - BLOCKED: plan-specific WhatsApp entitlement gating is deferred because the current public-menu contract does not expose a server-authoritative WhatsApp feature entitlement; no unsafe client-side gate was introduced.
 - UNKNOWN: local quality commands and physical-device visual QA; GitHub PR CI/browser verification remains required.
 
-### Exact Next Task
+### Historical Next Task
 Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
 
 
@@ -479,7 +475,7 @@ Run the repository Quality/test/typecheck/lint/build and browser visual verifica
 - Protected: existing WhatsApp structured-order runtime, theme registry, tenant/branch isolation, server-side pricing/order validation, and onboarding workspace provisioning.
 - No migration or entitlement change.
 
-### Exact Next Task
+### Historical Next Task
 Review PR #232 checks and final diff; merge once after all gates pass, then use the single release batch for Production and real-device QA.
 
 ## Final verification — 2026-09-21
@@ -489,5 +485,5 @@ Review PR #232 checks and final diff; merge once after all gates pass, then use 
 - BLOCKED: server-authoritative plan-specific WhatsApp entitlement remains intentionally deferred.
 - UNKNOWN: physical Android/iOS QA remains release-stage evidence.
 
-### Exact Next Task
+### Historical Next Task
 Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.

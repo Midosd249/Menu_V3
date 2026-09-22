@@ -1,28 +1,28 @@
-# CURRENT CONTINUITY SNAPSHOT — 2026-09-20
+# CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
-- Canonical branch: `main`.
-- Current verified `main` HEAD: `be7b79e5dec7d569aed1828e4376f57a8cbf9507`.
-- Latest completed atomic task: PR #223 — `redesign: replace Editorial with Canva-derived Canvas menu`.
-- Implementation status: `DONE / MERGED / CI VERIFIED`.
-- GitHub Quality: SUCCESS.
-- W9 Orders browser QA: SUCCESS.
-- Production deployment identity for the current HEAD: `UNKNOWN`.
-- Physical production/device QA for the current HEAD: `UNKNOWN`.
+- VERIFIED: Canonical branch: `main`.
+- VERIFIED: Current `main` HEAD: `84e0509da7de908aac3c863b093101ad4961aa81`.
+- VERIFIED: PR #232 is merged into `main`.
+- VERIFIED: GitHub Vercel status for `84e0509da7de908aac3c863b093101ad4961aa81` is SUCCESS.
+- UNKNOWN: Direct Vercel Production deployment identity for `84e0509da7de908aac3c863b093101ad4961aa81`; the available GitHub status is not sufficient to claim Production matches `main`.
+- VERIFIED: Live Supabase security advisor currently reports **7** RLS-disabled `menu_v3` tables, not the historical 6.
+- VERIFIED: Dedicated security task created as GitHub Issue #233; no RLS remediation SQL has been applied.
+- UNKNOWN: Physical Android/iOS/QR/device QA.
 
 ## Exact Next Task
 
-**Owner visual/device QA of the merged Editorial Canvas theme — Arabic mobile first, then desktop/English LTR and QR/search/category/product/cart/order coverage.**
+**Execute GitHub Issue #233 — reconcile the 7 live `menu_v3` RLS-disabled tables: prove effective exposure/grants and application paths, define the minimum safe RLS/policy contract, implement only the proven remediation, then run negative authorization and regression verification.**
 
-## Following Queue — after visual/device evidence
+## Protected / Not Next
 
-1. Record only evidence-backed visual defects, if any.
-2. Fix only confirmed Editorial Canvas regressions; do not reopen unrelated themes.
-3. Re-run continuity reconciliation after the single atomic QA/fix task.
-4. Continue R7 only when sufficient real exposure exists; no synthetic traffic.
-5. Treat the six RLS-disabled live tables as a separate security/data task.
-6. Preserve deferred boundaries: Payment Provider, Commercial Launch, PH-07, and R10 are not current prerequisites.
+- Do not start another theme, homepage redesign, or unrelated feature.
+- Do not blindly enable RLS on the affected tables.
+- Do not treat GitHub Vercel SUCCESS as proof of Production deployment.
+- Payment Provider, Commercial Launch, PH-07, and R10 remain deferred boundaries.
+- R7 remains dependent on meaningful real exposure.
 
 # Menu V3 — Active Plan
+
 
 ## Status
 - Status: RELEASE_STAGE_VERIFIED_WITH_DEVICE_QA_PENDING.
@@ -161,7 +161,7 @@ The current Activation workstream is closed; the repository is awaiting the owne
 - UNKNOWN: physical real-device production QA.
 - UNKNOWN: direct production HTTP 404 verification for invalid public menu URLs.
 
-## Exact Next Task
+## Historical Next Task
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device and record the evidence.**
 
 Do not begin product/category deep links or native Web Share automatically.
@@ -218,7 +218,7 @@ Do not begin product/category deep links or native Web Share automatically.
 - UNKNOWN: current Vercel Production deployment identity for this merged main; no Vercel production deployment was performed by this task.
 - NOTE: the GitHub browser suite verifies automated browser behavior across all themes; it does not replace physical-device QR scanning/printing evidence.
 
-## Exact Next Task
+## Historical Next Task
 **Real-device production QA — execute the prepared Android/iOS/QR/theme/order/RTL smoke matrix on a physical device, and include the QR single-print + multi-copy print-preview checks.**
 
 Do not begin product/category deep links or native Web Share automatically.
@@ -234,7 +234,7 @@ Do not begin product/category deep links or native Web Share automatically.
 - UNKNOWN: local/browser visual verification and GitHub Quality execution for PR #206.
 - BLOCKED / NON-BLOCKING: Vercel remains rate-limited; no deployment was performed.
 
-### Exact Next Task
+### Historical Next Task
 
 Review PR #206 quality evidence and final diff; if clean, prepare one controlled merge to `main`. Production deployment remains a separate release-stage action.
 
@@ -246,7 +246,7 @@ Review PR #206 quality evidence and final diff; if clean, prepare one controlled
 - VERIFIED: homepage redesign and permanent innovation workflow are now in canonical `main`.
 - BLOCKED / NON-BLOCKING: Vercel deployment is still rate-limited; no deployment was performed.
 
-### Exact Next Task
+### Historical Next Task
 
 Release-stage production verification of the merged homepage, then physical Android/iOS/QR/theme/order/RTL smoke QA.
 
@@ -262,7 +262,7 @@ Release-stage production verification of the merged homepage, then physical Andr
 - Implementation status: `DONE`.
 - Deployment status: `UNKNOWN` / no production deployment performed by this task.
 
-### Exact Next Task
+### Historical Next Task
 
 Release-stage verification of the merged homepage when the deployment window is available, followed by the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not redesign the homepage again before verification.
 
@@ -278,7 +278,7 @@ Release-stage verification of the merged homepage when the deployment window is 
 - VERIFIED: branch map links remain branch-scoped in `/studio/branches`; Brand now provides an explicit navigation link to `Manage branches & map` instead of duplicating branch location data.
 - UNKNOWN: Production deployment identity and physical Android/iOS/QR/device evidence until release-stage verification.
 
-### Exact Next Task
+### Historical Next Task
 
 Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878603d`, then verify the resulting `main` SHA and release-stage Production/device evidence.
 
@@ -292,7 +292,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - Implementation status: `PUSHED` / merged to `main`.
 - Deployment status: `UNKNOWN` / release-stage verification pending.
 
-### Exact Next Task
+### Historical Next Task
 
 **Release-stage verification of `main` at `679f72aca993f5a8001ef5f158877b2c48b79265`, then the prepared physical Android/iOS/QR/theme/order/RTL smoke matrix. Do not start another redesign or feature task before this evidence is closed.**
 
@@ -307,7 +307,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - UNKNOWN: physical Android/iOS QR scanning, all-theme visual rendering, ordering, RTL/LTR, and QR print-preview evidence on real devices.
 - NOTE: direct deployment URL fetch is protected by Vercel authentication, so no anonymous HTTP page-content verification was claimed from that check.
 
-### Exact Next Task
+### Historical Next Task
 
 **Physical Android/iOS production QA — execute the prepared QR/theme/order/RTL smoke matrix, including QR single-print and multi-copy print-preview checks, against `main` `1fcb287072c47746e5f0a7a4a376a87783ab74e5`.**
 
@@ -319,7 +319,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - IMPLEMENTED: old Editorial presentation files were replaced by `src/theme-editorial-atelier.css`; legacy shared Editorial selectors are being removed.
 - UNKNOWN: GitHub Quality/browser/device verification.
 
-### Exact Next Task
+### Historical Next Task
 **Run GitHub Quality/browser checks for `redesign/editorial-atelier-premium-2026-09-20`, review the diff, then perform real-device Editorial Arabic/English QA before merge.**
 
 
@@ -338,7 +338,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - UNKNOWN / EXTERNAL: physical Android/iOS QA of the merged Atelier public menu, including QR scanning and real-device typography, remains unverified.
 - Note: the first Quality attempt failed in an unrelated Studio responsive Playwright run with an execution-context-destroyed navigation race; the failed job was rerun without code changes and passed completely.
 
-### Exact Next Task
+### Historical Next Task
 **Physical Android QA of merged Atelier Editorial — repeat the owner's failing Arabic/English mobile cases and verify QR/public-menu rendering, RTL/LTR, title/price geometry, fixed actions, search/categories, cart/order, and configured external actions.**
 
 
@@ -355,7 +355,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - UNKNOWN: local command execution, GitHub Quality/browser result, physical-device visual QA, accessibility/performance evidence, and production deployment identity.
 - Deployment status: UNKNOWN / not deployed by this implementation step.
 
-### Exact Next Task
+### Historical Next Task
 **Run GitHub Quality/browser/accessibility/performance verification for the SIGNAL TABLE branch, review the complete diff, resolve failures, then create the single coherent PR.**
 
 
@@ -379,7 +379,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - Implementation status: READY_TO_MERGE.
 - Deployment status: NOT_RELEASED.
 
-### Exact Next Task
+### Historical Next Task
 **Merge PR #226 once, verify the resulting `main` SHA, then stop. Production deployment and physical-device QA remain release-stage work and are not to be started automatically.**
 
 
@@ -397,7 +397,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - UNKNOWN: local execution of npm commands and physical browser/device screenshots because this session does not have the repository working tree/browser runtime.
 - Deployment: NOT_REQUESTED / NOT_PERFORMED.
 
-### Exact Next Task
+### Historical Next Task
 **Run the repository quality suite and browser visual QA for this branch at 320/375/430px Arabic RTL plus English LTR, then review the final diff and merge one coherent fix if all gates pass.**
 
 
@@ -409,7 +409,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - IMPLEMENTED: language control, selection/hero cleanup, dead CSS cleanup, and regression coverage.
 - UNKNOWN: physical device evidence and Production deployment identity.
 
-### Exact Next Task
+### Historical Next Task
 **Merge PR #230 once, verify `main`, then execute the single authorized Production deployment and record its verified SHA/identity.**
 
 
@@ -419,7 +419,7 @@ Merge PR #217 once using the verified head `b3bbf92c3fbaef52511162f2b340ea179878
 - BLOCKED: plan-specific WhatsApp entitlement gating is deferred because the current public-menu contract does not expose a server-authoritative WhatsApp feature entitlement; no unsafe client-side gate was introduced.
 - UNKNOWN: local quality commands and physical-device visual QA; GitHub PR CI/browser verification remains required.
 
-### Exact Next Task
+### Historical Next Task
 Run the repository Quality/test/typecheck/lint/build and browser visual verification for this branch at 320/375/430px Arabic RTL and English LTR, review the final diff, resolve only task-scoped failures, then stop.
 
 
@@ -430,7 +430,7 @@ Run the repository Quality/test/typecheck/lint/build and browser visual verifica
 - IMPLEMENTED: signup brand-name field removed from account creation; onboarding remains the single collection point.
 - UNKNOWN: final CI for this follow-up until the current PR checks complete; physical-device evidence remains release-stage.
 
-### Exact Next Task
+### Historical Next Task
 Review PR #232 final checks and diff, merge once if green, then perform one release deployment and real-device QA.
 
 ## Final verification — 2026-09-21
@@ -440,5 +440,5 @@ Review PR #232 final checks and diff, merge once if green, then perform one rele
 - BLOCKED: server-authoritative plan-specific WhatsApp entitlement remains intentionally deferred.
 - UNKNOWN: physical Android/iOS QA remains release-stage evidence.
 
-### Exact Next Task
+### Historical Next Task
 Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
