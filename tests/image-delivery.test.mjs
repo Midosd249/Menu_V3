@@ -53,5 +53,5 @@ test("Signal Table prioritizes only the first viewport product images", () => {
   assert.match(editorialSource, /eager=\{index < 2\}/);
   assert.match(editorialSource, /fetchPriority=\{index < 2 \? "high" : "auto"\}/);
   assert.match(editorialSource, /eager=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query\}/);
-  assert.match(editorialSource, /fetchPriority=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query" ? "high" : "auto"\}/);
+  assert.match(editorialSource, /fetchPriority=\{index < 2 && categoryIndex === 0 && categoryId === "all" && !query \? "high" : "auto"\}/);
 });
