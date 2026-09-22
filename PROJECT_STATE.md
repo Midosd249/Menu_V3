@@ -663,3 +663,18 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+
+## 2026-09-22 — Phase 5 SSR / HTML Payload Reduction — CLOSED
+
+- VERIFIED: `main` = `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: PR #254 = `45552759054f11b4b37a89caacf73c795040a955`.
+- VERIFIED: PR #255 = `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: public SSR payload is narrower at the SQL projection, mapper, and sparse option-state layers.
+- VERIFIED: SSR performance audit now exposes document transfer/encoded/decoded byte metrics.
+- VERIFIED: no schema/auth/RLS/order/subscription/deployment configuration changes.
+- UNKNOWN: physical-device and Production performance evidence.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+**Phase 6 — Golden Performance Fixture.**
