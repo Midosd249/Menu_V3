@@ -24,7 +24,7 @@ test("public tenant mapping has a distinct type that cannot carry owner identity
 
 test("public mapping strips operational revision fields as well as owner identity", () => {
   const types = read("src/lib/menu/types.ts"); const map = read("src/lib/menu/map.ts"); const publicMenu = read("src/lib/menu/public.ts");
-  assert.match(map, /mapPublicTenant/); assert.doesNotMatch(types.match(/export type PublicTenant = ([\s\S]*?);\n\nexport type PublicMenu/)?.[1] ?? "", /public_content_version/); assert.match(map, /ownerUserId: _ownerUserId/); assert.match(publicMenu, /mapPublicTenant\(row\.tenant\)/);
+  assert.match(map, /mapPublicTenant/); assert.doesNotMatch(types.match(/export type PublicTenant = ([\s\S]*?);\n\nexport type PublicMenu/)?.[1] ?? "", /public_content_version/); assert.doesNotMatch(map, /ownerUserId: _ownerUserId/); assert.match(publicMenu, /mapPublicTenant\(row\.tenant\)/);
 });
 
 test("authenticated menu server functions use the auth middleware chokepoint", () => {
