@@ -580,3 +580,17 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+
+## 2026-09-22 — Phase 5 SSR / HTML Payload Reduction — VERIFIED COMPLETE
+
+- VERIFIED: PR #254 merged once as `45552759054f11b4b37a89caacf73c795040a955`.
+- VERIFIED: PR #255 merged once as `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: current `main` SHA is `99a526dc875c1ad5bf50367632f78108681454af`.
+- IMPLEMENTED: explicit public SSR column projection, lean public tenant mapping, sparse product-options serialization, and SSR document-size instrumentation.
+- VERIFIED: no Phase 1–4 work was repeated.
+- UNKNOWN: physical-device performance and Production performance remain unreleased evidence.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+**Phase 6 — Golden Performance Fixture: create a deterministic 30-product fixture/baseline and record document transfer, decoded HTML, image request count/bytes, and FCP/LCP where the existing harness supports them.**
