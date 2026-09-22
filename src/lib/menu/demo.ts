@@ -23,10 +23,6 @@ export const DEMO_MENU: PublicMenu = {
     currency: "SAR",
     city: "Riyadh",
     country: "SA",
-    isPublished: true,
-    isActive: true,
-    createdAt: "2026-01-01T00:00:00.000Z",
-    updatedAt: "2026-09-19T00:00:00.000Z",
   },
   branch: {
     id: DEMO_BRANCH_ID,

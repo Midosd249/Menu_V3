@@ -10,7 +10,6 @@ const menu = {
     taglineAr: "أطباق نجدية بطابع معاصر", taglineEn: "Modern Najdi cuisine", logoUrl: "https://example.com/logo.png",
     coverUrl: "https://example.com/cover.jpg", instagramUrl: "", whatsapp: "+966500000000", whatsappTemplate: "",
     primaryColor: "#111", accentColor: "#eee", themeKey: "editorial", currency: "SAR", city: "الرياض", country: "SA",
-    isPublished: true, isActive: true, createdAt: "", updatedAt: "",
   },
   branch: {
     id: "b1", tenantId: "t1", slug: "olaya", nameAr: "فرع العليا", nameEn: "Olaya Branch", addressAr: "شارع العليا",
@@ -31,6 +30,10 @@ test("public tenant mapping excludes owner identity from the public response sha
   });
   assert.equal("ownerUserId" in publicTenant, false);
   assert.equal("public_content_version" in publicTenant, false);
+  assert.equal("isPublished" in publicTenant, false);
+  assert.equal("isActive" in publicTenant, false);
+  assert.equal("createdAt" in publicTenant, false);
+  assert.equal("updatedAt" in publicTenant, false);
 });
 
 test("public menu SEO derives Arabic title, absolute canonical, and structured restaurant/menu data", () => {

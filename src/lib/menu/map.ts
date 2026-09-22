@@ -45,11 +45,29 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
 }
 
 export function mapPublicTenant(row: Record<string, unknown>): PublicTenant {
-  const { ownerUserId: _ownerUserId, ...publicTenant } = mapTenant(row);
+  const tenant = mapTenant(row);
   return {
-    ...publicTenant,
-    logoUrl: getPublicTenantMediaUrl(publicTenant.logoUrl, publicTenant.id, "logo", publicTenant.updatedAt) ?? "",
-    coverUrl: getPublicTenantMediaUrl(publicTenant.coverUrl, publicTenant.id, "cover", publicTenant.updatedAt) ?? "",
+    id: tenant.id,
+    slug: tenant.slug,
+    nameAr: tenant.nameAr,
+    nameEn: tenant.nameEn,
+    taglineAr: tenant.taglineAr,
+    taglineEn: tenant.taglineEn,
+    logoUrl: getPublicTenantMediaUrl(tenant.logoUrl, tenant.id, "logo", tenant.updatedAt) ?? "",
+    coverUrl: getPublicTenantMediaUrl(tenant.coverUrl, tenant.id, "cover", tenant.updatedAt) ?? "",
+    instagramUrl: tenant.instagramUrl,
+    websiteUrl: tenant.websiteUrl,
+    snapchatUrl: tenant.snapchatUrl,
+    facebookUrl: tenant.facebookUrl,
+    tiktokUrl: tenant.tiktokUrl,
+    whatsapp: tenant.whatsapp,
+    whatsappTemplate: tenant.whatsappTemplate,
+    primaryColor: tenant.primaryColor,
+    accentColor: tenant.accentColor,
+    themeKey: tenant.themeKey,
+    currency: tenant.currency,
+    city: tenant.city,
+    country: tenant.country,
   };
 }
 
