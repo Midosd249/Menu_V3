@@ -114,6 +114,13 @@ try {
             loadEventMs: navigation.loadEventEnd,
           }
         : null,
+      document: navigation
+        ? {
+            transferBytes: Number(navigation.transferSize || 0),
+            encodedBytes: Number(navigation.encodedBodySize || 0),
+            decodedBytes: Number(navigation.decodedBodySize || 0),
+          }
+        : null,
       coreWebVitals: {
         lcpMs: lcp || null,
         cls,
