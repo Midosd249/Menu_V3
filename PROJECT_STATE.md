@@ -8,10 +8,10 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-22
-- VERIFIED: canonical `main` HEAD is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: canonical `main` HEAD is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
 - VERIFIED: PR #235 RLS remediation and PR #236 continuity reconciliation are merged.
 - VERIFIED: GitHub Quality #2226 passed; W9 Orders QA #461 passed.
-- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and built from the exact current `main` commit.
+- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and built from the exact current `main` commit.
 - VERIFIED: Production root returned HTTP 200.
 - VERIFIED: valid-format nonexistent public menu returned HTTP 404.
 - VERIFIED: no runtime error clusters were found in the selected last-1-hour Production window.
@@ -562,13 +562,13 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 - UNKNOWN: physical Android/iOS/QR/device QA.
 
 ### Current Exact Next Task
-**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
 
 
 ## 2026-09-22 — Release Verification — PRODUCTION VERIFIED / DEVICE QA PENDING
 
-- VERIFIED: canonical `main` is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
-- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY, target `production`, and built from `main` commit `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: canonical `main` is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
+- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY, target `production`, and built from `main` commit `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
 - VERIFIED: production alias `menu-v3-kohl.vercel.app` returned HTTP 200 for the root.
 - VERIFIED: a valid-format nonexistent public menu slug returned HTTP 404 in Production.
 - VERIFIED: Vercel reports no runtime error clusters in the selected last-1-hour production window.
@@ -576,4 +576,4 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 - REMAINING SECURITY WARNINGS: `menu_v3.sync_guest_profile_from_order` mutable `search_path` and Supabase Auth leaked-password protection remain separate scoped findings.
 
 ### Current Exact Next Task
-**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
