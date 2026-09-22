@@ -56,7 +56,7 @@ export function MenuProductCard({ product, lang, onSelect, className }: { produc
   const unavailable = !product.isAvailable;
 
   return <article className={cn("grid min-w-0 grid-cols-[auto_1fr] gap-3 rounded-2xl border border-line bg-paper p-3", className)}>
-    <MenuMedia src={product.imageUrl} alt="" imageWidth={224} imageQuality={76} imageFit="crop" sizes="96px, (min-width: 640px) 112px" className="size-24 shrink-0 rounded-xl sm:size-28" />
+    <MenuMedia src={product.imageUrl} alt="" imageWidth={224} imageQuality={76} imageFit="crop" sizes="(min-width: 640px) 112px, 96px" className="size-24 shrink-0 rounded-xl sm:size-28" />
     <div className="grid min-w-0 content-start gap-2">
       <div className="flex min-w-0 items-start justify-between gap-3">
         <h3 className="min-w-0 break-words text-base font-semibold leading-6 text-ink">{name}</h3>
