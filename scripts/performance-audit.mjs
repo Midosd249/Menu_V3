@@ -53,11 +53,17 @@ try {
 
   if (process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1") {
     await page.evaluate(async () => {
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const step = Math.max(300, Math.floor(window.innerHeight * 0.8));
+      const maxTop = document.documentElement.scrollHeight - window.innerHeight;
+      for (let top = 0; top <= maxTop; top += step) {
+        window.scrollTo({ top, behavior: "instant" });
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+      window.scrollTo({ top: maxTop, behavior: "instant" });
+      await new Promise((resolve) => setTimeout(resolve, 700));
       window.scrollTo({ top: 0, behavior: "instant" });
     });
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(700);
   }
 
   const result = await page.evaluate(({ initialImages, scrollAll }) => {
