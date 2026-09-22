@@ -110,7 +110,6 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
       select
         jsonb_build_object(
           'id', t.id,
-          'owner_user_id', t.owner_user_id,
           'slug', t.slug,
           'name_ar', t.name_ar,
           'name_en', t.name_en,
@@ -131,8 +130,6 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
           'currency', t.currency,
           'city', t.city,
           'country', t.country,
-          'is_published', t.is_published,
-          'is_active', t.is_active,
           'updated_at', t.updated_at
         ) as tenant,
         jsonb_build_object(
