@@ -609,3 +609,16 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+
+## 2026-09-22 — Phase 6 Golden Performance Fixture — CLOSED
+
+- VERIFIED: PR #259 final head `1d7cca3f49242378c8fcf678cbae450d54bbc505` passed Quality and W9.
+- VERIFIED: deterministic 30-product golden fixture and executable CI performance harness are in the repository.
+- VERIFIED: baseline evidence stored at `docs/performance/baselines/2026-09-22-phase6-golden-performance.json`.
+- VERIFIED: no Phase 1–5 reimplementation.
+- UNKNOWN: physical-device LCP and Production performance.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+**Phase 7 — Five-Theme Regression.**
