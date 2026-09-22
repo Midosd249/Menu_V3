@@ -4,6 +4,7 @@ import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
+import { getFeaturedProducts } from "@/lib/menu/presentation";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
@@ -108,7 +109,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   }, [visible, query, categoryId]);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  const featured = visible.filter((product) => product.isFeatured).slice(0, 3);
+  const featured = getFeaturedProducts(visible);
   const englishAvailable = Boolean(tenant.nameEn || tenant.taglineEn || products.some((product) => product.nameEn));
   const groupedCategories = categories.filter((category) => category.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
   useEffect(() => {

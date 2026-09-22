@@ -3,6 +3,7 @@ import { Clock, Instagram, MapPin, Minus, Phone, Plus, Search, ShoppingBag, X } 
 import { LangToggle } from "@/components/lang-toggle";
 import { EmptyState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
+import { getFeaturedProducts } from "@/lib/menu/presentation";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { buildWhatsAppOrderUrl, buildWhatsAppUrl } from "@/lib/menu/public-actions";
 import { submitPublicOrder } from "@/lib/menu/order-public";
@@ -168,7 +169,7 @@ function openNow(hours: PublicMenu["hours"]) {
 export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; preview?: boolean }) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [orderError, setOrderError] = useState(""); const [successOrder, setSuccessOrder] = useState<{ number: number; total: number; currency: string } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = visible.filter((p) => p.isFeatured);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   const status = openNow(hours); const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); const cartTotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   useEffect(() => { if (preview) return; void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr_scan" : "visit", lang } }); }, [tenant.slug, branch.slug, lang, preview]);

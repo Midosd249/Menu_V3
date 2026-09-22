@@ -3,6 +3,7 @@ import { Plus, Search, ShoppingBag } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuMedia, MenuPrice } from "@/components/menu";
 import { useLang } from "@/lib/lang";
+import { getFeaturedProducts } from "@/lib/menu/presentation";
 import { recordPublicEvent } from "@/lib/menu/public";
 import type { Lang, Product, PublicMenu } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,7 @@ export function FastCasualTemplate({ menu, preview = false }: { menu: PublicMenu
   const searchTrackedRef = useRef(false);
   const [cartCount, setCartCount] = useState(0);
   const visible = preview ? products : products.filter((product) => product.isAvailable);
-  const featured = visible.filter((product) => product.isFeatured).slice(0, 4);
+  const featured = getFeaturedProducts(visible);
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return visible.filter((product) => {
