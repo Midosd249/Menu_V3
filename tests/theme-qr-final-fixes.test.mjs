@@ -5,7 +5,7 @@ import test from "node:test";
 test("Noir QR rendering uses the configured restaurant cover", async () => {
   const template = await readFile("src/components/templates/fine-dining-hospitality.tsx", "utf8");
   const styles = await readFile("src/theme-noir-hardening.css", "utf8");
-  assert.match(template, /MenuMedia src=\{tenant\.coverUrl\}/);
+  assert.match(template, /MenuMedia\s+src=\{tenant\.coverUrl\}/);
   assert.match(template, /className="noir-template-hero-image"/);
   assert.doesNotMatch(template, /className="noir-template-featured"/);
   assert.doesNotMatch(styles, /noir-template-menu > \.menu-public-shell > main > section:has\(> #featured-heading\)[\s\S]*display:\s*none !important/);
