@@ -23,7 +23,7 @@
 - REMAINING SECURITY WARNINGS: Supabase reports one mutable function `search_path` warning and one Auth leaked-password-protection warning; these are separate from completed Issue #233 and are not silently changed.
 
 ## Current Release Boundary
-The RLS remediation task is closed. No new feature/theme work is authorized by continuity. Release-stage production identity and physical-device QA remain separate evidence gates.
+The RLS remediation is closed and the current `main` is now directly verified in Vercel Production. Physical Android/iOS/QR/device QA remains the only active release-stage evidence gap. Separate Supabase warnings are documented and not silently changed.
 
 ## Current Verified Position — 2026-09-20
 - VERIFIED: GitHub `main` is now at `be7b79e5dec7d569aed1828e4376f57a8cbf9507` after merged PR #223.
@@ -565,23 +565,18 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 - UNKNOWN: physical Android/iOS/QR/device QA.
 
 ### Current Exact Next Task
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
 
-Execute GitHub Issue #233 — reconcile the 7 live RLS-disabled `menu_v3` tables, define the minimum safe policy/exposure contract, implement only evidence-backed remediation, and verify authorization/regression behavior.
 
+## 2026-09-22 — Release Verification — PRODUCTION VERIFIED / DEVICE QA PENDING
 
-## 2026-09-22 — RLS Security Remediation — CLOSED / VERIFIED
-
-- VERIFIED: PR #235 merged into `main` at `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
-- VERIFIED: migration `20260922080000_harden_server_only_rls_tables.sql` is present in canonical `main` and applied to Supabase project `ublxptcqefujkbeepylc`.
-- VERIFIED: `public_order_rate_limits`, `public_order_idempotency`, `lead_onboarding`, `ai_request_rate_limits`, `menu_upsell_recommendations`, `guest_profiles`, and `anonymous_sessions` now have RLS enabled.
-- VERIFIED: no RLS policies were added because these tables are intentionally server-only; RLS therefore remains default-deny for roles that do not bypass it.
-- VERIFIED: `anon` and `authenticated` table access checks are false for all seven; `postgres` access is true.
-- VERIFIED: live server-side reads succeeded across all seven tables.
-- VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
-- VERIFIED: GitHub Issue #233 is closed as completed.
-- UNKNOWN: direct Vercel Production identity for current `main`.
-- UNKNOWN: physical Android/iOS/QR/device evidence.
-- REMAINING SECURITY WARNINGS: `menu_v3.sync_guest_profile_from_order` has mutable `search_path`; Supabase Auth leaked-password protection is disabled. These require separate scoped work if authorized.
+- VERIFIED: canonical `main` is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY, target `production`, and built from `main` commit `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: production alias `menu-v3-kohl.vercel.app` returned HTTP 200 for the root.
+- VERIFIED: a valid-format nonexistent public menu slug returned HTTP 404 in Production.
+- VERIFIED: Vercel reports no runtime error clusters in the selected last-1-hour production window.
+- UNKNOWN: physical Android/iOS/QR/device QA.
+- REMAINING SECURITY WARNINGS: `menu_v3.sync_guest_profile_from_order` mutable `search_path` and Supabase Auth leaked-password protection remain separate scoped findings.
 
 ### Current Exact Next Task
-**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
