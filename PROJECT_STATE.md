@@ -1,3 +1,22 @@
+## Current Performance Remediation Position — 2026-09-22
+
+- VERIFIED: canonical `main` HEAD is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Phase 1 and Phase 2 are complete and must not be reimplemented.
+- VERIFIED: Phase 3 is complete / merged as `fb4c5dba311d5f77c3bcb943f13e35cb92ab8584`.
+- VERIFIED: Phase 4 is complete / merged as `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Phase 4 uses a shared six-item Featured presentation bound across protected public renderer families.
+- VERIFIED: Quality #2282 passed; W9 Orders QA #507 passed.
+- VERIFIED: no tenant data, schema, auth/RLS, order, pricing, subscription, or deployment configuration was changed by Phase 4.
+- VERIFIED: no Production deployment was performed.
+- UNKNOWN: real-device waterfall/LCP and Production performance for the 30-item golden tenant.
+
+### Exact Next Task
+
+**Phase 5 — Public HTML / SSR Payload Reduction for the 30-item `saudi-shopping-world` golden case.**
+
+Do not repeat Phase 1–4. Measure current HTML/SSR payload first and make only evidence-backed reductions.
+
+
 # PROJECT STATE
 
 ## Identity

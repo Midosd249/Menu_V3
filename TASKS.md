@@ -1,3 +1,22 @@
+## Performance Remediation — Current Task State — 2026-09-22
+
+- VERIFIED: `main` HEAD is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Phase 0 Evidence Lock — CLOSED.
+- VERIFIED: Phase 1 Shared Image Delivery Foundation — COMPLETE / MERGED.
+- VERIFIED: Phase 2 Responsive Public Media — COMPLETE / MERGED.
+- VERIFIED: Phase 3 Branding / Cover Decoupling — COMPLETE / MERGED, PR #247, merge `fb4c5dba311d5f77c3bcb943f13e35cb92ab8584`.
+- VERIFIED: Phase 4 Featured Presentation Bound — COMPLETE / MERGED, PR #249, merge `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Quality #2282 passed; W9 Orders QA #507 passed.
+- VERIFIED: Vercel preview failed only on the documented build-rate-limit surface; no retry and no Production deployment.
+- UNKNOWN: real-device/Production performance evidence.
+
+## Exact Next Task
+
+**Phase 5 — Public HTML / SSR Payload Reduction.**
+
+Measure the golden 30-item menu first. Identify repeated serialized media and unnecessary SSR payload; make only evidence-backed reductions; preserve hydration, SEO, structured data, and all product/order semantics.
+
+
 # CURRENT TASK STATE — 2026-09-22
 
 ## Current Position

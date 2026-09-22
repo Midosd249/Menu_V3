@@ -3,7 +3,7 @@
 ## Status
 
 - Date: 2026-09-22
-- Status: PHASE 1 VERIFIED / PHASE 2 READY
+- Status: PHASE 4 VERIFIED / PHASE 5 READY
 - Canonical product: Menu V3
 - Target test tenant: `saudi-shopping-world`
 - Test owner account: `mido@hotmail.com` (test reference only; do not expose in product telemetry)
@@ -281,7 +281,7 @@ Acceptance criteria:
 
 ### Phase 3 — Branding/Cover Media Decoupling
 
-Status: TODO.
+Status: VERIFIED COMPLETE / MERGED.
 
 Objective:
 
@@ -307,7 +307,7 @@ Acceptance criteria:
 
 ### Phase 4 — Featured Presentation Bound
 
-Status: TODO.
+Status: VERIFIED COMPLETE / MERGED.
 
 Objective:
 
@@ -677,3 +677,44 @@ Status: VERIFIED COMPLETE / MERGED
 
 ### Exact Next Task
 **Run the dedicated real-device/public-menu performance evidence pass for the 30-item Saudi shopping world test menu, measuring Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px.**
+
+
+## 20. Phase 3 Completion Evidence — 2026-09-22
+
+- VERIFIED: Phase 3 PR #247 merged once by squash as `fb4c5dba311d5f77c3bcb943f13e35cb92ab8584`.
+- VERIFIED: public tenant `logo_url` / `cover_url` Base64 media is no longer embedded directly in the public tenant payload; public mapping uses versioned tenant-media URLs.
+- VERIFIED: tenant media endpoint is active/published gated, tenant-scoped, raster-only, cacheable, and protected with `nosniff`.
+- VERIFIED: Studio tenant media values remain unchanged.
+- VERIFIED: no schema/auth/RLS/order/subscription/deployment configuration changes were introduced.
+- VERIFIED: GitHub Quality #2276 and W9 Orders QA #503 passed on the final Phase 3 head.
+- UNKNOWN: real-device 320/375/390/430px waterfall/LCP and Production performance for the 30-item test menu.
+- Deployment status: NOT_PERFORMED by Phase 3.
+
+## 21. Phase 4 Completion Evidence — 2026-09-22
+
+- VERIFIED: Phase 4 PR #249 merged once by squash as `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: the dedicated Featured presentation now uses one shared `getFeaturedProducts()` contract with a maximum of 6 presentation items.
+- VERIFIED: the bound is applied across the protected public renderer families: PublicMenuView, ContemporaryRestaurantTemplate, FastCasualTemplate, SignalTableTemplate, SpecialtyCafeTemplate, and TasteTemplate.
+- VERIFIED: stored `isFeatured` truth is unchanged; all products remain in the normal category/menu discovery path.
+- VERIFIED: the 30-featured-product golden case is protected by regression tests.
+- VERIFIED: Quality #2282 passed typecheck, tests, W7.4–W7.10 contracts, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin/W7.10 browser QA, and performance diagnostics.
+- VERIFIED: W9 Orders QA #507 passed.
+- VERIFIED: Vercel preview status is FAILURE because of the documented build-rate-limit surface; no retry or Production deployment was performed.
+- VERIFIED: final Phase 4 diff was limited to featured presentation bounding and regression contracts.
+- Deployment status: NOT_PERFORMED.
+
+## 22. Exact Current Execution Task
+
+**Phase 5 — Public HTML / SSR Payload Reduction.**
+
+Scope:
+1. Measure current HTML before/after evidence for the 30-item `saudi-shopping-world` golden case using the merged Phase 1–4 architecture.
+2. Identify repeated/duplicated serialized media and other unnecessary public SSR payload.
+3. Reduce only unnecessary initial document payload while preserving deterministic hydration.
+4. Preserve SEO metadata and structured data.
+5. Verify no duplicate public-menu network fetch is introduced.
+6. Record document transfer size, uncompressed HTML size, FCP/LCP, image transfer bytes, initial image-request count, and relevant JS/decode impact where available.
+7. Run the repository quality gates and review the final diff.
+8. Do not deploy Production automatically.
+
+Do not re-implement Phase 1, Phase 2, Phase 3, or Phase 4 unless new measured evidence proves a regression or missing contract.
