@@ -113,6 +113,25 @@ jobs:
           echo "[preview] failed to become ready — see .grok/preview.log"
           cat .grok/preview.log
           exit 1
+      - name: Golden performance fixture — 30 products
+        env:
+          GOLDEN_FIXTURE_OUTPUT: .grok/golden-performance-baseline.json
+          GOLDEN_FIXTURE_VIEWPORT_WIDTH: 390
+          GOLDEN_FIXTURE_VIEWPORT_HEIGHT: 844
+        run: |
+          mkdir -p .grok
+          npm run performance:golden
+      - name: Upload golden performance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase6-golden-performance-baseline
+          path: |
+            .grok/golden-performance-baseline.json
+            .grok/golden-performance-current.json
+            .grok/golden-performance-legacy.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Prepare Customer Lifecycle browser database
         env:
           ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
