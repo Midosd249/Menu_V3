@@ -1,8 +1,8 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
-- VERIFIED: Current `main` HEAD: `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
-- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets `main` at that exact commit.
+- VERIFIED: Current `main` HEAD: `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
+- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and targets `main` at that exact commit.
 - VERIFIED: Production root returned HTTP 200.
 - VERIFIED: Valid-format nonexistent public menu slug returned HTTP 404.
 - VERIFIED: No runtime error clusters were found in the selected last-1-hour production window.
@@ -13,7 +13,7 @@
 
 ## Exact Next Task
 
-**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
 
 ## Protected / Not Next
 
@@ -458,12 +458,12 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ## 2026-09-22 — Release Verification — PRODUCTION VERIFIED / DEVICE QA PENDING
 
-- VERIFIED: `main` is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
-- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets that exact `main` commit.
+- VERIFIED: `main` is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
+- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and targets that exact `main` commit.
 - VERIFIED: production root HTTP 200.
 - VERIFIED: valid-format nonexistent public menu HTTP 404.
 - VERIFIED: no runtime error clusters in the selected last-1-hour production window.
 - UNKNOWN: physical Android/iOS/QR/device QA.
 
 ### Exact Next Task
-**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
