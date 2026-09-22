@@ -1,3 +1,13 @@
+## 2026-09-22 — Signal Table QR Image Priority — CLOSED / VERIFIED
+- VERIFIED: PR #245 was merged into `main` as `8adde6f57063f3d4117465f4130cc134b48b5cd8`.
+- VERIFIED: the existing responsive `srcset`/`sizes` delivery contract is preserved.
+- VERIFIED: `MenuMedia` now accepts explicit `fetchPriority` without changing fallback behavior.
+- VERIFIED: Editorial / Signal Table promotes only the first two Featured images and only the first two product images in the initial unfiltered category view to eager/high priority; the remaining product images stay lazy.
+- VERIFIED: PR #245 Quality run #2260 passed; W9 Orders QA #488 passed; Vercel PR preview status passed.
+- VERIFIED: no database, auth, RLS, tenant-data, order, subscription, or theme-architecture changes were introduced.
+- UNKNOWN: physical QR/device waterfall and LCP evidence for the real `saudi-shopping-world` tenant.
+- UNKNOWN: Production deployment of `8adde6f57063f3d4117465f4130cc134b48b5cd8`; current main Vercel status was still pending at continuity update time.
+
 # PROJECT STATE
 
 ## Identity
