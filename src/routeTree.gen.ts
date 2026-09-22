@@ -45,6 +45,7 @@ import { Route as ThemesIndexRouteImport } from './routes/themes/index'
 import { Route as ThemesPreviewRouteImport } from './routes/themes/preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MSlugBranchRouteImport } from './routes/m.$slug.$branch'
+import { Route as ApiMediaTenantTenantIdKindRouteImport } from './routes/api/media/tenant/$tenantId/$kind'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -227,6 +228,12 @@ const MSlugBranchRoute = MSlugBranchRouteImport.update({
   path: '/$branch',
   getParentRoute: () => MSlugRoute,
 } as any)
+const ApiMediaTenantTenantIdKindRoute =
+  ApiMediaTenantTenantIdKindRouteImport.update({
+    id: '/api/media/tenant/$tenantId/$kind',
+    path: '/api/media/tenant/$tenantId/$kind',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -265,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/themes/': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
+  '/api/media/tenant/$tenantId/$kind': typeof ApiMediaTenantTenantIdKindRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -302,6 +310,7 @@ export interface FileRoutesByTo {
   '/themes': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
+  '/api/media/tenant/$tenantId/$kind': typeof ApiMediaTenantTenantIdKindRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -341,6 +350,7 @@ export interface FileRoutesById {
   '/themes/': typeof ThemesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/m/$slug/$branch': typeof MSlugBranchRoute
+  '/api/media/tenant/$tenantId/$kind': typeof ApiMediaTenantTenantIdKindRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -381,6 +391,7 @@ export interface FileRouteTypes {
     | '/themes/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
+    | '/api/media/tenant/$tenantId/$kind'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -418,6 +429,7 @@ export interface FileRouteTypes {
     | '/themes'
     | '/api/auth/$'
     | '/m/$slug/$branch'
+    | '/api/media/tenant/$tenantId/$kind'
   id:
     | '__root__'
     | '/'
@@ -456,6 +468,7 @@ export interface FileRouteTypes {
     | '/themes/'
     | '/api/auth/$'
     | '/m/$slug/$branch'
+    | '/api/media/tenant/$tenantId/$kind'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -471,6 +484,7 @@ export interface RootRouteChildren {
   ThemesPreviewRoute: typeof ThemesPreviewRoute
   ThemesIndexRoute: typeof ThemesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiMediaTenantTenantIdKindRoute: typeof ApiMediaTenantTenantIdKindRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -727,6 +741,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MSlugBranchRouteImport
       parentRoute: typeof MSlugRoute
     }
+    '/api/media/tenant/$tenantId/$kind': {
+      id: '/api/media/tenant/$tenantId/$kind'
+      path: '/api/media/tenant/$tenantId/$kind'
+      fullPath: '/api/media/tenant/$tenantId/$kind'
+      preLoaderRoute: typeof ApiMediaTenantTenantIdKindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -826,6 +847,7 @@ const rootRouteChildren: RootRouteChildren = {
   ThemesPreviewRoute: ThemesPreviewRoute,
   ThemesIndexRoute: ThemesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiMediaTenantTenantIdKindRoute: ApiMediaTenantTenantIdKindRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -7,7 +7,10 @@ export type PublicLocale = Lang;
 export type LocaleAlternate = { hreflang: PublicLocale; href: string };
 
 function clean(value: string): string { return value.replace(/\s+/g, " ").trim(); }
-function absoluteHttpUrl(value: string): string | undefined { return /^https?:\/\//i.test(value) ? value : undefined; }
+function absoluteHttpUrl(value: string, origin = publicOrigin()): string | undefined {
+  if (/^https?:\/\//i.test(value)) return value;
+  return value.startsWith("/api/media/tenant/") ? `${origin}${value}` : undefined;
+}
 function publicOrigin(): string {
   const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
   return getPublicOrigin({ VITE_VERCEL_PROJECT_PRODUCTION_URL: env?.VITE_VERCEL_PROJECT_PRODUCTION_URL, VERCEL_PROJECT_PRODUCTION_URL: env?.VERCEL_PROJECT_PRODUCTION_URL });
@@ -55,8 +58,8 @@ export function getPublicMenuSeo(menu: PublicMenu, pathname: string, requestedLa
   const name = branchName(menu, lang);
   const city = clean(menu.tenant.city);
   const title = lang === "ar" ? clean(city ? `${name} — القائمة والمنيو في ${city}` : `${name} — القائمة والمنيو`) : clean(city ? `${name} — Menu in ${city}` : `${name} — Restaurant Menu`);
-  const image = absoluteHttpUrl(menu.tenant.coverUrl) ?? absoluteHttpUrl(menu.tenant.logoUrl);
-  const logo = absoluteHttpUrl(menu.tenant.logoUrl);
+  const image = absoluteHttpUrl(menu.tenant.coverUrl, origin) ?? absoluteHttpUrl(menu.tenant.logoUrl, origin);
+  const logo = absoluteHttpUrl(menu.tenant.logoUrl, origin);
   const mapsUrl = absoluteHttpUrl(menu.branch.mapsUrl);
   const canonical = `${origin}${localePath(pathname, lang)}`;
   const alternates = lang === requestedLang ? getPublicMenuLocaleAlternates(menu, pathname, origin) : [];

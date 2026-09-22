@@ -1,5 +1,6 @@
 import { isThemeKey, DEFAULT_THEME_KEY } from "../theme/index.ts";
 import { bool, num } from "../utils.ts";
+import { getPublicTenantMediaUrl } from "./image.ts";
 import type { Branch, BranchHour, Category, CaffeineBasis, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
@@ -45,7 +46,11 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
 
 export function mapPublicTenant(row: Record<string, unknown>): PublicTenant {
   const { ownerUserId: _ownerUserId, ...publicTenant } = mapTenant(row);
-  return publicTenant;
+  return {
+    ...publicTenant,
+    logoUrl: getPublicTenantMediaUrl(publicTenant.logoUrl, publicTenant.id, "logo", publicTenant.updatedAt) ?? "",
+    coverUrl: getPublicTenantMediaUrl(publicTenant.coverUrl, publicTenant.id, "cover", publicTenant.updatedAt) ?? "",
+  };
 }
 
 export function mapBranch(row: Record<string, unknown>): Branch {
