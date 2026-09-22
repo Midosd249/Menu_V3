@@ -252,7 +252,7 @@ Acceptance criteria:
 
 ### Phase 2 — Public Image Geometry and Responsive Delivery
 
-Status: TODO.
+Status: IMPLEMENTATION COMPLETE / VERIFICATION BLOCKED
 
 Objective:
 
@@ -640,3 +640,24 @@ Before starting Phase 2, merge PR #239 and verify the resulting `main` SHA. Do n
 - Do not add a speculative image CDN dependency.
 - Do not make Vercel deployments merely to inspect CSS.
 - Do not treat a passing CI build as proof of real-device performance.
+
+
+## 18. Phase 2 Implementation Evidence — 2026-09-22
+
+- VERIFIED: Phase 2 implementation branch is `perf/public-image-geometry-2026-09-22`, based directly on merged Phase 1 `main` `a5073612d162d6d7d6776de6df9e422c1d6dc43e`.
+- VERIFIED: PR #241 is open against `main`.
+- IMPLEMENTED: `src/lib/menu/image.ts` now generates bounded width-descriptor `srcset` candidates for known Unsplash URLs while preserving arbitrary/data/blob URLs.
+- IMPLEMENTED: shared `MenuMedia` and public `DishMedia` now expose responsive source widths and only emit `sizes` when a width-descriptor `srcset` exists.
+- IMPLEMENTED: public image roles were assigned concrete width bands for product cards, featured cards, detail/dialog media, hero/cover media, and logos.
+- IMPLEMENTED: Essential/public shared renderer, Editorial/Signal Table, Noir, Heritage/Taste, and Gallery/public media paths were covered; legacy template media callsites that remain in the repository were also kept consistent.
+- IMPLEMENTED: existing lazy/async/low-priority behavior remains preserved for normal public product media; critical hero/detail surfaces remain explicitly eager where the existing template already treated them as critical.
+- IMPLEMENTED: regression coverage now verifies responsive source generation, non-Unsplash passthrough, and the updated shared/public media contracts.
+- VERIFIED: final branch diff is scoped to responsive image delivery and its regression coverage; no schema, auth, RLS, tenant data, ordering, subscription, or deployment configuration change was introduced.
+- VERIFIED: authoritative research confirms that `srcset` width descriptors + `sizes` let the browser choose an appropriate image source for the rendered slot; Unsplash officially supports dynamic `w`, `q`, `fit`, and `auto=format` transformations.
+- UNKNOWN: GitHub Quality/browser workflow result for PR #241 is not exposed through the connected GitHub workflow surface yet; the only current combined status is Vercel = PENDING.
+- UNKNOWN: physical-device 320/375/390/430px waterfall/LCP and real production performance for the new head.
+- BLOCKED: merge/production verification must wait for the repository quality/browser gates; no production deployment has been triggered by this Phase 2 task.
+
+### Exact Current Execution Task
+
+**Complete PR #241 verification: obtain GitHub Quality/W9 and Vercel results, fix only task-scoped failures, review the final diff, merge once if all required gates are green, verify the resulting `main` SHA, then stop. Do not deploy Production automatically.**
