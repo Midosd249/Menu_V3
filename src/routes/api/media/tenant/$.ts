@@ -16,7 +16,7 @@ function decodeImageDataUrl(value: string): { mime: string; bytes: Uint8Array } 
   const header = value.slice(5, comma).toLowerCase();
   const payload = value.slice(comma + 1);
   const mime = header.split(";")[0];
-  if (!["image/webp", "image/png", "image/jpeg", "image/gif", "image/svg+xml"].includes(mime)) return null;
+  if (!["image/webp", "image/png", "image/jpeg", "image/gif"].includes(mime)) return null;
   if (!/;base64$/i.test(header)) return null;
 
   try {
