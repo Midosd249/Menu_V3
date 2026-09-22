@@ -9,6 +9,7 @@ import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
 import { hasHighSalt, type Lang, type Product, type ProductOptions, type PublicMenu } from "@/lib/menu/types";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
+import { getOptimizedImageUrl } from "@/lib/menu/image";
 
 const label = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
 const value = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
@@ -29,18 +30,11 @@ function WhatsAppIcon() {
 
 function DishMedia({ product, className = "" }: { product: Product; className?: string }) {
   const [failed, setFailed] = useState(false);
-  const eager = typeof document !== "undefined" && document.documentElement.dataset.menuTheme === "editorial";
-
-  useEffect(() => {
-    if (!eager || !product.imageUrl) return;
-    const preload = new Image();
-    preload.decoding = "async";
-    preload.src = product.imageUrl;
-    return () => { preload.onload = null; preload.onerror = null; };
-  }, [eager, product.imageUrl]);
 
   if (!product.imageUrl || failed) return <div className={cn("grid place-items-center bg-sand text-xs text-muted", className)} aria-hidden="true">Menu</div>;
-  return <img src={product.imageUrl} alt="" loading="lazy" decoding="async" fetchPriority="low" className={cn("object-cover", className)} onError={() => setFailed(true)} />;
+
+  const src = getOptimizedImageUrl(product.imageUrl, { width: 640, quality: 76, fit: "crop" });
+  return <img src={src} alt="" loading="lazy" decoding="async" fetchPriority="low" sizes="(min-width: 1024px) 40rem, (min-width: 640px) 50vw, 100vw" className={cn("object-cover", className)} onError={() => setFailed(true)} />;
 }
 
 function useModalAccessibility(open: boolean, close: () => void, dialogRef: React.RefObject<HTMLElement | null>, initialFocusRef?: React.RefObject<HTMLElement | null>) {
