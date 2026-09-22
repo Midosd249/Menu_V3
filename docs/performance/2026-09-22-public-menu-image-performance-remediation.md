@@ -3,7 +3,7 @@
 ## Status
 
 - Date: 2026-09-22
-- Status: ACTIVE / INVESTIGATION VERIFIED / REMEDIATION IN PROGRESS
+- Status: PHASE 1 VERIFIED / PHASE 2 READY
 - Canonical product: Menu V3
 - Target test tenant: `saudi-shopping-world`
 - Test owner account: `mido@hotmail.com` (test reference only; do not expose in product telemetry)
@@ -203,7 +203,7 @@ Do not repeat this phase unless new evidence contradicts it.
 
 ### Phase 1 — Shared Image Delivery Foundation
 
-Status: IN_PROGRESS.
+Status: VERIFIED / COMPLETE
 
 Objective:
 
@@ -613,7 +613,25 @@ When a new chat starts:
 - UNKNOWN: exact real-device network waterfall and LCP on the owner's Android device.
 - PROPOSED: implement the phased remediation described above.
 
-## 16. Do Not Repeat
+## 16. Phase 1 Completion Evidence
+
+- VERIFIED: corrected Phase 1 code commit `8347a3204f501f6a08a085616a3e2cea10e00882`.
+- VERIFIED: GitHub Quality run `#2236` completed successfully.
+- VERIFIED: GitHub W9 Orders QA run `#468` completed successfully.
+- VERIFIED: Quality completed typecheck, tests, lint, production build, Chromium installation, all-theme browser QA, Studio browser QA, and uploaded browser performance diagnostics.
+- VERIFIED: W9 completed route/typecheck, isolated PGLite fixture preparation, Playwright installation, W9 browser QA, and diagnostics upload.
+- VERIFIED: final PR diff is limited to image delivery, Studio/public media loading behavior, regression tests, and continuity documentation.
+- VERIFIED: no database/schema/auth/RLS/order/subscription/tenant-data migration was introduced.
+- UNKNOWN: real-device waterfall/LCP for the physical `saudi-shopping-world` reproduction.
+- UNKNOWN: production performance after release; PR has not yet been deployed to production.
+
+### Exact Current Execution Task
+
+**Phase 2 — Public Image Geometry and Responsive Delivery.**
+
+Before starting Phase 2, merge PR #239 and verify the resulting `main` SHA. Do not deploy production automatically.
+
+## 17. Do Not Repeat
 
 - Do not re-audit PostgreSQL query speed unless new evidence shows query latency.
 - Do not rebuild the public menu.
