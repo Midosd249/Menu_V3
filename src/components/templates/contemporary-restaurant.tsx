@@ -149,6 +149,8 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
                 imageWidth={960}
                 imageWidths={[320, 480, 640, 960]}
                 sizes="(min-width: 701px) calc((min(100vw, 88rem) - 3rem) / 2), calc(100vw - 1.8rem)"
+                eager={index < 2}
+                fetchPriority={index < 2 ? "high" : "auto"}
                 className="editorial-featured-image"
                 fallback={text(lang, "صورة الطبق", "Dish image")}
               /><span className="editorial-card-copy"><span className="editorial-card-index">{String(index + 1).padStart(2, "0")}</span><span className="editorial-card-title">{text(lang, p.nameAr, p.nameEn)}</span><MenuPrice price={p.price} currency={p.currency} lang={lang} className="editorial-card-price" /><span className="editorial-card-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add editorial-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف", "Add")}</button> : null}</article>; })}</div></section> : null}
@@ -158,6 +160,8 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
                   imageWidth={448}
                   imageWidths={[192, 320, 448]}
                   sizes="92px"
+                  eager={index < 2 && categoryIndex === 0 && categoryId === "all" && !query}
+                  fetchPriority={index < 2 && categoryIndex === 0 && categoryId === "all" && !query ? "high" : "auto"}
                   className="editorial-product-image"
                   fallback={text(lang, "صورة الطبق", "Dish image")}
                 /><span className="editorial-product-copy"><span className="editorial-product-topline"><span className="editorial-product-number">{String(index + 1).padStart(2, "0")}</span><span className="editorial-product-name">{text(lang, p.nameAr, p.nameEn)}</span><MenuPrice price={p.price} currency={p.currency} lang={lang} className="editorial-product-price" /></span>{p.descriptionAr || p.descriptionEn ? <span className="editorial-product-description">{text(lang, p.descriptionAr, p.descriptionEn)}</span> : null}<span className="editorial-product-tags">{p.dietaryLabels.slice(0, 3).map((x) => <MenuBadge key={x} tone="muted">{x}</MenuBadge>)}{!p.isAvailable ? <MenuBadge tone="accent">{text(lang, "غير متوفر", "Unavailable")}</MenuBadge> : null}</span></span></button>{!preview && decision === "eligible" ? <button type="button" onClick={() => addSimpleProduct(p)} className="public-menu-quick-add editorial-quick-add" aria-label={text(lang, "إضافة " + text(lang, p.nameAr, p.nameEn) + " للسلة", "Add " + text(lang, p.nameAr, p.nameEn) + " to cart")}><Plus className="size-4" aria-hidden="true" />{text(lang, "أضف للسلة", "Add to cart")}</button> : null}{!preview && decision === "requires-options" ? <button type="button" onClick={() => selectProduct(p)} className="public-menu-options-action editorial-quick-add" aria-label={text(lang, "اختيار خيارات " + text(lang, p.nameAr, p.nameEn), "Choose options for " + text(lang, p.nameAr, p.nameEn))}>{text(lang, "اختر الخيارات", "Choose options")}</button> : null}</div></li>; })}</ul></section>; })}
