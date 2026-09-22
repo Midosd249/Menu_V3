@@ -577,7 +577,7 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Current Exact Next Task
 **Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
-\n\n## 2026-09-22 — Public Menu Image Performance Remediation — IN_PROGRESS
+## 2026-09-22 — Public Menu Image Performance Remediation — IN_PROGRESS
 
 - VERIFIED: live reproduction identified a media-delivery bottleneck rather than a primary PostgreSQL query bottleneck.
 - VERIFIED: the durable root-cause/remediation plan is `docs/performance/2026-09-22-public-menu-image-performance-remediation.md`.
