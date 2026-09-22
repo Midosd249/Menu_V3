@@ -578,3 +578,20 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+
+## 2026-09-22 — Phase 6 Golden Performance Fixture — VERIFIED COMPLETE
+
+- VERIFIED: deterministic PII-free fixture `golden-public-menu-30` contains exactly 30 image-bearing products and 30 Featured products.
+- VERIFIED: fixture includes long Arabic/English content, six missing descriptions, mixed image-provider metadata, and zero option containers.
+- VERIFIED: PR #259 final head `1d7cca3f49242378c8fcf678cbae450d54bbc505` passed GitHub Quality and W9 Orders QA.
+- VERIFIED: Quality passed typecheck, full tests, lint, production build, Chromium browser/template QA, Studio QA, Platform Admin QA, and the Phase 6 golden fixture step.
+- VERIFIED: golden fixture artifact was generated from GitHub Actions run `#35763237359` and records current/legacy document bytes, image requests/bytes, FCP, CLS, and supported Web Vitals.
+- VERIFIED: canonical current fixture document was 20,287 decoded bytes / 20,587 transfer bytes at 390x844; 10 image requests were observed before scroll and 19 after the deterministic scroll-all pass.
+- VERIFIED: legacy Base64-cover comparison shows 233,471 document bytes avoided by the current decoupled cover contract.
+- UNKNOWN: LCP was not exposed by this headless Chromium fixture run; physical-device LCP remains Phase 8 evidence.
+- VERIFIED: no customer PII, schema, auth, RLS, order, subscription, or deployment configuration was changed.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+**Phase 7 — Five-Theme Regression.** Run the golden 30-product fixture and protected public-menu regression matrix across Essential, Editorial, Noir, Heritage, and Gallery, including RTL/LTR and 320/375/390/430 responsive evidence. Do not re-implement Phase 1–6 unless measured regression evidence requires it.
