@@ -59,7 +59,8 @@ export const Route = createFileRoute("/api/media/tenant/$tenantId/$kind")({
                   and is_published = true
                 limit 1
               `;
-          const image = String(rows[0]?.image_url ?? "");
+          const firstRow = (Array.isArray(rows) ? rows[0] : rows) as { image_url?: unknown } | undefined;
+          const image = String(firstRow?.image_url ?? "");
           const decoded = decodeImageDataUrl(image);
           if (!decoded) return new Response("Not found", { status: 404 });
 
