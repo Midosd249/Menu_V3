@@ -577,3 +577,14 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Current Exact Next Task
 **Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
+\n\n## 2026-09-22 — Public Menu Image Performance Remediation — IN_PROGRESS
+
+- VERIFIED: live reproduction identified a media-delivery bottleneck rather than a primary PostgreSQL query bottleneck.
+- VERIFIED: the durable root-cause/remediation plan is `docs/performance/2026-09-22-public-menu-image-performance-remediation.md`.
+- VERIFIED: Phase 1 branch is `perf/saudi-menu-image-delivery-2026-09-22`; PR #239 is open.
+- IMPLEMENTED: safe Unsplash normalization, optimized public product media, lazy Studio thumbnails, and removal of Editorial all-product prefetch.
+- UNKNOWN: Quality #2232 and W9 #464 final results.
+- UNKNOWN: physical Android/browser network waterfall and LCP for the real tenant reproduction.
+
+### Current Exact Next Task
+**Review PR #239 Quality/W9 to completion, fix only task-scoped failures, then run final diff/performance review for Phase 1.**
