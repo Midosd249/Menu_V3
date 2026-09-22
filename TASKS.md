@@ -515,3 +515,13 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.**
+\n\n## 2026-09-22 — Public Menu Image Performance Remediation — IN_PROGRESS
+
+- VERIFIED: investigation and durable plan are recorded in `docs/performance/2026-09-22-public-menu-image-performance-remediation.md`.
+- VERIFIED: PR #239 contains Phase 1 implementation.
+- IMPLEMENTED: known Unsplash URLs are normalized; public product media remains lazy; Studio product thumbnails are lazy/async/dimensioned; Editorial all-product prefetch is removed.
+- UNKNOWN: GitHub Quality #2232 and W9 #464 final conclusions.
+- UNKNOWN: real-device network waterfall and LCP.
+
+### Exact Next Task
+**Review PR #239 Quality/W9 to completion, fix only task-scoped failures, then run final diff/performance review for Phase 1.**
