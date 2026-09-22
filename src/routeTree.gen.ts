@@ -45,7 +45,7 @@ import { Route as ThemesIndexRouteImport } from './routes/themes/index'
 import { Route as ThemesPreviewRouteImport } from './routes/themes/preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MSlugBranchRouteImport } from './routes/m.$slug.$branch'
-import { Route as ApiMediaTenantSplatRouteImport } from './routes/api/media/tenant/
+import { Route as ApiMediaTenantSplatRouteImport } from './routes/api/media/tenant/$
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -229,7 +229,7 @@ const MSlugBranchRoute = MSlugBranchRouteImport.update({
   getParentRoute: () => MSlugRoute,
 } as any)
 const ApiMediaTenantSplatRoute = ApiMediaTenantSplatRouteImport.update({
-  id: '/api/media/tenant/
+  id: '/api/media/tenant/$
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1639,7 +1639,7 @@ declare module '@tanstack/react-start' {
   }
 }
 ,
-  path: '/api/media/tenant/
+  path: '/api/media/tenant/$
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -4458,7 +4458,7 @@ declare module '@tanstack/react-start' {
   }
 }
 : typeof ApiAuthSplatRoute
-  '/api/media/tenant/
+  '/api/media/tenant/$
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -5829,7 +5829,7 @@ declare module '@tanstack/react-start' {
   }
 }
 ,
-  path: '/api/media/tenant/
+  path: '/api/media/tenant/$
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -10019,7 +10019,7 @@ declare module '@tanstack/react-start' {
   }
 }
 ,
-  path: '/api/media/tenant/
+  path: '/api/media/tenant/$
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
