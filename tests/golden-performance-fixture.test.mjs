@@ -29,8 +29,8 @@ test("golden fixture excludes diagnostic customer identity and preserves mixed p
 });
 
 test("golden harness runs canonical and legacy cover modes through the existing audit", () => {
-  assert.match(harness, /golden-performance-\\\${mode}\.json/);
-  assert.match(harness, /cover=\$\\{mode\}/);
+  assert.match(harness, /golden-performance-\$\{mode\}\.json/);
+  assert.match(harness, /cover=\$\{mode\}/);
   assert.match(harness, /PERFORMANCE_AUDIT_SCROLL_ALL: "1"/);
   assert.match(harness, /PERFORMANCE_AUDIT_VIEWPORT_WIDTH/);
   assert.match(harness, /legacyCoverDataUrl/);
