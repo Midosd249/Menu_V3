@@ -43,7 +43,7 @@ export const Route = createFileRoute("/api/media/tenant/$tenantId/$kind")({
         try {
           const sql = await getSql();
           const rows = kind === "logo"
-            ? await sql<{ image_url: string | null }[]>`
+            ? await sql<{ image_url: string | null }>`
                 select logo_url as image_url
                 from tenants
                 where id = ${tenantId}
