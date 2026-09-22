@@ -35,14 +35,32 @@ const browser = await chromium.launch({
 });
 
 try {
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const viewportWidth = Number(process.env.PERFORMANCE_AUDIT_VIEWPORT_WIDTH || 390);
+  const viewportHeight = Number(process.env.PERFORMANCE_AUDIT_VIEWPORT_HEIGHT || 844);
+  const page = await browser.newPage({ viewport: { width: viewportWidth, height: viewportHeight } });
   const response = await page.goto(target.toString(), {
     waitUntil: "networkidle",
     timeout: 45000,
   });
   await page.waitForTimeout(1200);
 
-  const result = await page.evaluate(() => {
+  const initialImageRequestCount = await page.evaluate(
+    () => performance.getEntriesByType("resource").filter((entry) => {
+      const name = entry.name.split("?", 1)[0].toLowerCase();
+      return entry.initiatorType === "img" || entry.initiatorType === "image" || /\\.(avif|gif|jpe?g|png|svg|webp)$/.test(name);
+    }).length,
+  );
+
+  if (process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1") {
+    await page.evaluate(async () => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+      await new Promise((resolve) => setTimeout(resolve, 900));
+      window.scrollTo({ top: 0, behavior: "instant" });
+    });
+    await page.waitForTimeout(900);
+  }
+
+  const result = await page.evaluate(({ initialImages, scrollAll }) => {
     const resources = performance.getEntriesByType("resource").map((entry) => {
       const resource = entry;
       const name = resource.name;
@@ -148,6 +166,9 @@ try {
       media: {
         documentImageCount: document.images.length,
         lazyImageCount: lazyImages,
+        initialImageRequestCount: initialImages,
+        finalImageRequestCount: resources.filter((item) => item.isImage).length,
+        scrollAll,
       },
       cache: {
         observable: true,
@@ -159,7 +180,7 @@ try {
       firstContentfulPaintMs:
         paint.find((entry) => entry.name === "first-contentful-paint")?.startTime || null,
     };
-  });
+  }, { initialImages: initialImageRequestCount, scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1" });
 
   const status = response?.status() ?? 0;
   const payload = {
