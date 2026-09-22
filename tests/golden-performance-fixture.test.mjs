@@ -45,4 +45,6 @@ test("performance audit exposes document and image evidence required by the gold
   assert.match(audit, /initialImageRequestCount/);
   assert.match(audit, /finalImageRequestCount/);
   assert.match(audit, /PERFORMANCE_AUDIT_SCROLL_ALL/);
+  assert.match(audit, /const step = Math.max\(300/);
+  assert.match(audit, /window.scrollTo\(\{ top, behavior: "instant" \}\)/);
 });
