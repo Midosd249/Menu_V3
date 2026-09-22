@@ -16,7 +16,7 @@ export type MenuMediaProps = {
   sizes?: string;
 };
 
-export function MenuMedia({ src, alt = "", className, eager = false, fallback, imageWidth, imageQuality, imageFit, sizes }: MenuMediaProps) {
+export function MenuMedia({ src, alt = "", className, eager = false, fallback, imageWidth, imageWidths, imageQuality, imageFit, sizes }: MenuMediaProps) {
   const [failed, setFailed] = useState(false);
 
   if (!src || failed) {
