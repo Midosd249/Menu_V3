@@ -1,28 +1,26 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
-- VERIFIED: Current `main` HEAD: `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
-- VERIFIED: PR #235 merged the RLS security remediation.
-- VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
-- VERIFIED: GitHub Vercel status for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` is SUCCESS.
-- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` is applied.
-- VERIFIED: The 7 audited server-only tables now have RLS enabled and no client policies; `anon`/`authenticated` have no table access and server-side `postgres` access remains verified.
-- VERIFIED: GitHub Issue #233 is closed.
-- UNKNOWN: Direct Vercel Production deployment identity for current `main`.
+- VERIFIED: Current `main` HEAD: `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets `main` at that exact commit.
+- VERIFIED: Production root returned HTTP 200.
+- VERIFIED: Valid-format nonexistent public menu slug returned HTTP 404.
+- VERIFIED: No runtime error clusters were found in the selected last-1-hour production window.
+- VERIFIED: GitHub Quality #2226 and W9 Orders QA #461 passed on the continuity batch.
+- VERIFIED: 7-table RLS remediation remains applied and verified.
 - UNKNOWN: Physical Android/iOS/QR/device QA.
-- REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain outside Issue #233.
+- REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate from the closed RLS task.
 
 ## Exact Next Task
 
-**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
 
 ## Protected / Not Next
 
 - Do not start another theme, homepage redesign, or unrelated feature.
 - Do not reopen the completed 7-table RLS remediation without new evidence.
-- Do not treat GitHub Vercel SUCCESS as proof of Production deployment.
-- Payment Provider, Commercial Launch, PH-07, and R10 remain deferred boundaries.
-- R7 remains dependent on meaningful real exposure.
+- Do not start Payment Provider / Commercial Launch / PH-07 / R10 prerequisite work.
+- Treat the two remaining Supabase warnings as separate scoped security tasks.
 
 # Menu V3 — Active Plan
 
@@ -456,3 +454,16 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 - VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
 - VERIFIED: Issue #233 closed.
 - UNKNOWN: direct Production deployment identity and physical-device QA.
+
+
+## 2026-09-22 — Release Verification — PRODUCTION VERIFIED / DEVICE QA PENDING
+
+- VERIFIED: `main` is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets that exact `main` commit.
+- VERIFIED: production root HTTP 200.
+- VERIFIED: valid-format nonexistent public menu HTTP 404.
+- VERIFIED: no runtime error clusters in the selected last-1-hour production window.
+- UNKNOWN: physical Android/iOS/QR/device QA.
+
+### Exact Next Task
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
