@@ -42,20 +42,28 @@ export const Route = createFileRoute("/api/media/tenant/$tenantId/$kind")({
 
         try {
           const sql = await getSql();
-          const column = MEDIA_KINDS[kind];
-          const rows = await sql`
-            select ${sql.unsafe(column)} as image_url
-            from tenants
-            where id = ${tenantId}
-              and is_active = true
-              and is_published = true
-            limit 1
-          `;
+          const rows = kind === "logo"
+            ? await sql<{ image_url: string | null }[]>`
+                select logo_url as image_url
+                from tenants
+                where id = ${tenantId}
+                  and is_active = true
+                  and is_published = true
+                limit 1
+              `
+            : await sql<{ image_url: string | null }[]>`
+                select cover_url as image_url
+                from tenants
+                where id = ${tenantId}
+                  and is_active = true
+                  and is_published = true
+                limit 1
+              `;
           const image = String(rows[0]?.image_url ?? "");
           const decoded = decodeImageDataUrl(image);
           if (!decoded) return new Response("Not found", { status: 404 });
 
-          return new Response(decoded.bytes, {
+          return new Response(decoded.bytes as unknown as BodyInit, {
             status: 200,
             headers: {
               "Content-Type": decoded.mime,
