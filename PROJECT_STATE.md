@@ -1,20 +1,22 @@
-# CURRENT VERIFIED PERFORMANCE POSITION — 2026-09-22 — PHASE 7 CLOSED
+# CURRENT VERIFIED PERFORMANCE POSITION — 2026-09-22 — PHASE 8 RELEASE VERIFICATION
 
-- VERIFIED: canonical `main` HEAD is `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`.
-- VERIFIED: Phase 0–6 are CLOSED.
-- VERIFIED: Phase 7 Five-Theme Regression is CLOSED / MERGED via PR #261.
-- VERIFIED: Quality #2313 / run `35766577618` passed typecheck, full tests, lint, production build, all-theme browser QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and performance diagnostics.
-- VERIFIED: W9 Orders QA #529 / run `35766577542` passed.
-- VERIFIED: all five protected themes were exercised in Arabic RTL and English LTR across the existing responsive browser matrix, including 320/375/390/430px.
-- VERIFIED: the Phase 6 golden 30-product performance fixture remained green during the Phase 7 Quality run.
-- VERIFIED: no Phase 1–6 reimplementation or protected architecture changes were introduced.
-- UNKNOWN: direct physical Android/iOS LCP/waterfall and Production performance for the real 30-item customer reproduction.
-- BLOCKED / NON-BLOCKING: Vercel preview status is rate-limited by the known free daily deployment quota; no retry was attempted.
-- Deployment status: NOT_PERFORMED.
+- VERIFIED: canonical `main` HEAD is `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: Phase 0–7 are CLOSED.
+- VERIFIED: Phase 7 implementation merge is `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`; continuity closeout is `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: GitHub Quality/W9 evidence for Phase 7 passed.
+- VERIFIED: Production deployment `dpl_2Ypk1yKSpW4JBMMR5DjkTq2uyZqp` is READY and targets `production`.
+- VERIFIED: the deployed Vercel deployment references GitHub `main` commit `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: production aliases include `menu-v3-kohl.vercel.app` and `menu-v3-midosd2s-projects.vercel.app`.
+- VERIFIED: Vercel reported no runtime errors in the selected last-24-hour production window.
+- VERIFIED: the production root route returned HTTP 200 and rendered Arabic RTL HTML.
+- VERIFIED: production CI/deployment status is distinct from physical-device evidence.
+- UNKNOWN: physical Android/iOS/QR visual QA, device waterfall, and device LCP.
+- BLOCKED: physical-device verification cannot be completed from the currently available repository/Vercel/GitHub tools because no real-device/browser automation surface is available in this session.
+- Deployment status: DEPLOYED / VERIFIED by direct Vercel evidence.
 
 ## EXACT NEXT TASK
 
-**Phase 8 — Production + Real Device QA.** Follow the release-only sequence: verify current `main` locally/CI, perform one authorized Production deployment, verify the exact deployed commit, then run the real Android/iOS/QR five-theme/RTL/LTR/performance smoke matrix. Do not reopen Phase 1–7 without new measured regression evidence.
+**Physical Android/iOS/QR QA of the deployed `488b982e93185caf6908d4b7bf56699952f65463` build**, using a real device/browser surface. Do not change runtime code unless this QA produces new measured regression evidence.
 
 # CURRENT PERFORMANCE REMEDIATION POSITION — 2026-09-22
 

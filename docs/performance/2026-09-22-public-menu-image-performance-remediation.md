@@ -1,3 +1,18 @@
+# CURRENT VERIFIED RELEASE POSITION — 2026-09-22 — PHASE 8 DEPLOYMENT VERIFIED
+
+- VERIFIED: canonical `main` HEAD is `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: Phase 0–7 are CLOSED.
+- VERIFIED: Phase 7 implementation merge is `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`; final continuity merge is `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: Production deployment `dpl_2Ypk1yKSpW4JBMMR5DjkTq2uyZqp` is READY and points to `main` commit `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: Production aliases are present and Vercel reports no runtime errors in the selected 24-hour window.
+- VERIFIED: production root returned HTTP 200 with Arabic RTL document output.
+- UNKNOWN: physical Android/iOS/QR waterfall/LCP and visual interaction evidence.
+- BLOCKED: no real-device/browser automation surface is available in the current session, so physical device QA cannot be truthfully marked complete.
+
+## EXACT NEXT TASK
+
+**Physical Android/iOS/QR QA of deployed main `488b982e93185caf6908d4b7bf56699952f65463`.**
+
 # Menu V3 — Public Menu Image Performance Root-Cause Remediation Plan
 
 ## Status
