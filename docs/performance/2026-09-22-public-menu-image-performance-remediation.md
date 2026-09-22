@@ -720,3 +720,36 @@ Scope:
 8. Do not deploy Production automatically.
 
 Do not re-implement Phase 1, Phase 2, Phase 3, or Phase 4 unless new measured evidence proves a regression or missing contract.
+
+## 23. Phase 5 Completion Evidence — 2026-09-22
+
+Status: VERIFIED COMPLETE / MERGED
+
+- VERIFIED: PR #254 merged once by squash as `45552759054f11b4b37a89caacf73c795040a955`.
+- VERIFIED: PR #255 merged once by squash as `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: public SSR loader now projects explicit browser-required columns instead of serializing whole database rows.
+- VERIFIED: `PublicTenant` no longer returns `isPublished`, `isActive`, `createdAt`, or `updatedAt`; tenant `updated_at` remains only as server-side input for versioning decoupled tenant media URLs.
+- VERIFIED: `loadPublicOptions` no longer pre-allocates empty option state for every product.
+- VERIFIED: 30-product structural empty-options payload: 1,411 bytes legacy shape → 2 bytes compact shape = 1,409 bytes reduction before HTML/script overhead.
+- VERIFIED: SSR hydration contract remains intact; no duplicate initial public-menu fetch was introduced.
+- VERIFIED: Quality #2297 and W9 Orders QA #512 passed on the Phase 5 runtime implementation.
+- VERIFIED: Quality #2299 and W9 Orders QA #518 passed on the Phase 5 evidence instrumentation.
+- VERIFIED: G6 performance audit now records document transfer/encoded/decoded bytes.
+- VERIFIED: CI Editorial theme-preview fixture at 390×844 recorded document transfer 7,805 bytes, encoded 7,505 bytes, decoded 7,505 bytes, FCP 832 ms. This is not the `saudi-shopping-world` customer fixture.
+- UNKNOWN: real customer 30-item post-change HTML size, LCP, image waterfall, and image transfer bytes because no Production deployment was performed and the CI fixture is not that tenant.
+- Deployment status: NOT_PERFORMED.
+
+### Phase 5 Scope Closure
+
+Phase 5 is closed at the application-architecture level. The remaining real-customer measurement belongs to the deterministic Golden Performance Fixture work in Phase 6 and the later Production/real-device phase. Do not repeat Phase 1–5 unless new measured evidence demonstrates a regression.
+
+## 24. Exact Current Execution Task
+
+**Phase 6 — Golden Performance Fixture.**
+
+1. Create a repository-owned deterministic 30-item public-menu fixture.
+2. Include representative image/media states, 30 Featured products, Arabic/English content, missing/external media cases, and relevant menu/options data without production tenant data.
+3. Run the Phase 5 performance audit against that fixture.
+4. Record document transfer/encoded/decoded bytes, FCP/LCP where measurable, image request count/bytes, lazy-image count, and cache behavior.
+5. Establish a repeatable baseline for Phase 6–8 comparison.
+6. Do not deploy Production automatically.
