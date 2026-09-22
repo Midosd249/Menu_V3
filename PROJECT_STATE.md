@@ -18,10 +18,10 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-22
-- VERIFIED: canonical `main` HEAD is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
-- VERIFIED: PR #235 RLS remediation and PR #236 continuity reconciliation are merged.
-- VERIFIED: GitHub Quality #2226 passed; W9 Orders QA #461 passed.
-- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and built from the exact current `main` commit.
+- VERIFIED: canonical `main` HEAD is `8adde6f57063f3d4117465f4130cc134b48b5cd8`.
+- VERIFIED: PR #245 Signal Table QR image-priority remediation is merged; PR #235 RLS remediation and PR #236 continuity reconciliation remain merged.
+- VERIFIED: GitHub Quality #2260 passed; W9 Orders QA #488 passed.
+- UNKNOWN: Production deployment for `8adde6f57063f3d4117465f4130cc134b48b5cd8`; no manual deployment was triggered.
 - VERIFIED: Production root returned HTTP 200.
 - VERIFIED: valid-format nonexistent public menu returned HTTP 404.
 - VERIFIED: no runtime error clusters were found in the selected last-1-hour Production window.
