@@ -1,22 +1,19 @@
-# CURRENT VERIFIED PERFORMANCE POSITION — 2026-09-22 — PHASE 8 RELEASE VERIFICATION
+# CURRENT VERIFIED RELEASE POSITION — 2026-09-22 — PHASE 8 CLOSED / VERIFIED
 
-- VERIFIED: canonical `main` HEAD is `488b982e93185caf6908d4b7bf56699952f65463`.
-- VERIFIED: Phase 0–7 are CLOSED.
-- VERIFIED: Phase 7 implementation merge is `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`; continuity closeout is `488b982e93185caf6908d4b7bf56699952f65463`.
-- VERIFIED: GitHub Quality/W9 evidence for Phase 7 passed.
-- VERIFIED: Production deployment `dpl_2Ypk1yKSpW4JBMMR5DjkTq2uyZqp` is READY and targets `production`.
-- VERIFIED: the deployed Vercel deployment references GitHub `main` commit `488b982e93185caf6908d4b7bf56699952f65463`.
-- VERIFIED: production aliases include `menu-v3-kohl.vercel.app` and `menu-v3-midosd2s-projects.vercel.app`.
-- VERIFIED: Vercel reported no runtime errors in the selected last-24-hour production window.
-- VERIFIED: the production root route returned HTTP 200 and rendered Arabic RTL HTML.
-- VERIFIED: production CI/deployment status is distinct from physical-device evidence.
-- UNKNOWN: physical Android/iOS/QR visual QA, device waterfall, and device LCP.
-- BLOCKED: physical-device verification cannot be completed from the currently available repository/Vercel/GitHub tools because no real-device/browser automation surface is available in this session.
-- Deployment status: DEPLOYED / VERIFIED by direct Vercel evidence.
+- VERIFIED: owner completed the physical Android/iOS/QR production preview and confirmed the image-performance remediation is functioning correctly.
+- VERIFIED: Phase 0–7 were already CLOSED; no runtime reimplementation was required.
+- VERIFIED: Production deployment `dpl_2Ypk1yKSpW4JBMMR5DjkTq2uyZqp` is READY and targets production.
+- VERIFIED: deployed Production commit was `488b982e93185caf6908d4b7bf56699952f65463`.
+- VERIFIED: GitHub Quality/W9 evidence passed for the release closeout.
+- VERIFIED: production root returned HTTP 200 with Arabic RTL output and no selected last-24-hour runtime error clusters.
+- VERIFIED: owner physical preview found no blocking regression in the tested production experience.
+- UNKNOWN: no additional device-side numeric LCP/waterfall measurements were captured as structured repository artifacts.
+- Deployment status: DEPLOYED / VERIFIED.
+- Implementation status: DONE.
 
 ## EXACT NEXT TASK
 
-**Physical Android/iOS/QR QA of the deployed `488b982e93185caf6908d4b7bf56699952f65463` build**, using a real device/browser surface. Do not change runtime code unless this QA produces new measured regression evidence.
+**No further work is authorized for this remediation. Phase 0–8 are CLOSED. Stop and wait for the next explicitly scoped task.**
 
 # CURRENT PERFORMANCE REMEDIATION POSITION — 2026-09-22
 
@@ -598,3 +595,15 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
+
+## 2026-09-22 — Public Menu Image Performance Remediation — PHASE 8 CLOSED / VERIFIED
+
+- VERIFIED: owner completed the final physical Android/iOS/QR production preview and reported that everything is good.
+- VERIFIED: no blocking image-loading, public-menu, Studio, theme, RTL/LTR, or QR regression was reported from the final preview.
+- VERIFIED: Phase 0–8 are now closed for this remediation; no Phase 1–7 work was repeated.
+- VERIFIED: Production remains deployed from `488b982e93185caf6908d4b7bf56699952f65463` via deployment `dpl_2Ypk1yKSpW4JBMMR5DjkTq2uyZqp`.
+- VERIFIED: no runtime code changes were required to close Phase 8 after owner device validation.
+- UNKNOWN: structured device-side LCP/waterfall numbers were not captured into repository artifacts; this does not block closure because the owner completed the requested final preview successfully.
+
+### Exact Next Task
+**Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
