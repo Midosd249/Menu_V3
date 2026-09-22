@@ -7,6 +7,7 @@ const root = process.cwd();
 const publicSource = fs.readFileSync(path.join(root, "src/lib/menu/public.ts"), "utf8");
 const mapSource = fs.readFileSync(path.join(root, "src/lib/menu/map.ts"), "utf8");
 const routeSource = fs.readFileSync(path.join(root, "src/routes/m.$slug.tsx"), "utf8");
+const auditSource = fs.readFileSync(path.join(root, "scripts/performance-audit.mjs"), "utf8");
 
 test("public SSR loader projects only the fields required by the public mappers", () => {
   assert.doesNotMatch(publicSource, /to_jsonb\(t\)|to_jsonb\(b\)|to_jsonb\(p\)/);
@@ -31,6 +32,13 @@ test("30-product empty-options shape no longer serializes one empty options obje
   assert.equal(compactBytes, 2);
   assert.ok(legacyBytes > 1000, `expected legacy empty-options payload to exceed 1KB, got ${legacyBytes}`);
   assert.ok(legacyBytes - compactBytes >= 1200, `expected at least 1.2KB structural reduction, got ${legacyBytes - compactBytes}`);
+});
+
+test("performance audit records the SSR document transfer and decoded HTML size", () => {
+  assert.match(auditSource, /document:\s*navigation/);
+  assert.match(auditSource, /transferBytes: Number\(navigation\.transferSize/);
+  assert.match(auditSource, /encodedBytes: Number\(navigation\.encodedBodySize/);
+  assert.match(auditSource, /decodedBytes: Number\(navigation\.decodedBodySize/);
 });
 
 test("SSR keeps the hydrated initialMenu path and does not add a second client fetch", () => {
