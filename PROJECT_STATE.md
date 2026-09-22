@@ -27,13 +27,12 @@ Do not repeat Phase 1–4. Measure current HTML/SSR payload first and make only 
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-22
-- VERIFIED: canonical `main` HEAD is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
-- VERIFIED: PR #235 RLS remediation and PR #236 continuity reconciliation are merged.
-- VERIFIED: GitHub Quality #2226 passed; W9 Orders QA #461 passed.
-- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and built from the exact current `main` commit.
-- VERIFIED: Production root returned HTTP 200.
-- VERIFIED: valid-format nonexistent public menu returned HTTP 404.
-- VERIFIED: no runtime error clusters were found in the selected last-1-hour Production window.
+- VERIFIED: canonical `main` HEAD is `b5e5e0f7fa000b1451b605e2fb9b484cde690170`.
+- VERIFIED: Phase 4 runtime merge is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Phase 4 Quality #2282 passed; W9 Orders QA #507 passed.
+- VERIFIED: Phase 4 continuity documentation is merged in current `main`.
+- VERIFIED: no Production deployment was performed for Phase 4.
+- UNKNOWN: current Production identity/performance and real-device waterfall/LCP for the 30-item golden tenant.
 - VERIFIED: the seven audited server-only tables remain RLS-enabled with no client policies and server-side access verified.
 - UNKNOWN: physical Android/iOS/QR/device QA for current `main`.
 - REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate scoped findings.
