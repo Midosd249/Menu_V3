@@ -1,1 +1,38 @@
-import assert from "node:assert/strict";\nimport test from "node:test";\nimport fs from "node:fs";\n\nconst templateQa = fs.readFileSync("scripts/template-qa.mjs", "utf8");\nconst qualityWorkflow = fs.readFileSync(".github/workflows/quality.yml", "utf8");\nconst baseline = JSON.parse(fs.readFileSync("docs/performance/baselines/2026-09-22-phase6-golden-performance.json", "utf8"));\n\nconst themes = ["essential", "editorial", "noir", "heritage", "gallery"];\nconst widths = [320, 375, 390, 430];\n\ntest("Phase 7 protects all five themes in both directions", () => {\n  for (const theme of themes) assert.match(templateQa, new RegExp("\"" + theme + "\""));\n  assert.match(templateQa, /const languages = \["ar", "en"\]/);\n  assert.match(templateQa, /targetUrl\.searchParams\.set\("lang", language\)/);\n  assert.match(templateQa, /targetUrl\.searchParams\.set\("theme", theme\)/);\n});\n\ntest("Phase 7 responsive matrix retains the required mobile widths", () => {\n  for (const width of widths) assert.match(templateQa, new RegExp("width: " + width + ","));\n});\n\ntest("Phase 7 keeps the existing golden fixture evidence as the performance reference", () => {\n  assert.equal(baseline.fixture, "golden-public-menu-30");\n  assert.equal(baseline.fixtureShape.productCount, 30);\n  assert.equal(baseline.fixtureShape.imageBearingProductCount, 30);\n  assert.equal(baseline.fixtureShape.featuredProductCount, 30);\n  assert.equal(baseline.viewport.width, 390);\n  assert.equal(baseline.viewport.height, 844);\n  assert.equal(baseline.canonicalMode, "current");\n  assert.match(qualityWorkflow, /Golden performance fixture — 30 products/);\n  assert.match(qualityWorkflow, /Browser template QA — all themes/);\n});\n\ntest("Phase 7 does not introduce a numeric performance budget", () => {\n  assert.match(qualityWorkflow, /npm run performance:golden/);\n  assert.doesNotMatch(templateQa, /LCP.*(?:<|<=|budget|threshold)/i);\n});\n
+import assert from "node:assert/strict";
+import test from "node:test";
+import fs from "node:fs";
+
+const templateQa = fs.readFileSync("scripts/template-qa.mjs", "utf8");
+const qualityWorkflow = fs.readFileSync(".github/workflows/quality.yml", "utf8");
+const baseline = JSON.parse(fs.readFileSync("docs/performance/baselines/2026-09-22-phase6-golden-performance.json", "utf8"));
+
+const themes = ["essential", "editorial", "noir", "heritage", "gallery"];
+const widths = [320, 375, 390, 430];
+
+test("Phase 7 protects all five themes in both directions", () => {
+  for (const theme of themes) assert.match(templateQa, new RegExp("\"" + theme + "\""));
+  assert.match(templateQa, /const languages = \["ar", "en"\]/);
+  assert.match(templateQa, /targetUrl\.searchParams\.set\("lang", language\)/);
+  assert.match(templateQa, /targetUrl\.searchParams\.set\("theme", theme\)/);
+});
+
+test("Phase 7 responsive matrix retains the required mobile widths", () => {
+  for (const width of widths) assert.match(templateQa, new RegExp("width: " + width + ","));
+});
+
+test("Phase 7 keeps the existing golden fixture evidence as the performance reference", () => {
+  assert.equal(baseline.fixture, "golden-public-menu-30");
+  assert.equal(baseline.fixtureShape.productCount, 30);
+  assert.equal(baseline.fixtureShape.imageBearingProductCount, 30);
+  assert.equal(baseline.fixtureShape.featuredProductCount, 30);
+  assert.equal(baseline.viewport.width, 390);
+  assert.equal(baseline.viewport.height, 844);
+  assert.equal(baseline.canonicalMode, "current");
+  assert.match(qualityWorkflow, /Golden performance fixture — 30 products/);
+  assert.match(qualityWorkflow, /Browser template QA — all themes/);
+});
+
+test("Phase 7 does not introduce a numeric performance budget", () => {
+  assert.match(qualityWorkflow, /npm run performance:golden/);
+  assert.doesNotMatch(templateQa, /LCP.*(?:<|<=|budget|threshold)/i);
+});
