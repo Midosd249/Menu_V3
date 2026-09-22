@@ -96,3 +96,18 @@ export function getResponsiveImageSources(src: string | undefined, options: Resp
       .join(", "),
   };
 }
+
+
+export type TenantMediaKind = "logo" | "cover";
+
+export function getPublicTenantMediaUrl(
+  src: string | undefined,
+  tenantId: string,
+  kind: TenantMediaKind,
+  updatedAt?: string,
+): string | undefined {
+  if (!src) return src;
+  if (!src.startsWith("data:image/")) return src;
+  const version = updatedAt ? `?v=${encodeURIComponent(updatedAt)}` : "";
+  return `/api/media/tenant/${encodeURIComponent(tenantId)}/${kind}${version}`;
+}
