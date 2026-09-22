@@ -753,3 +753,36 @@ Phase 5 is closed at the application-architecture level. The remaining real-cust
 4. Record document transfer/encoded/decoded bytes, FCP/LCP where measurable, image request count/bytes, lazy-image count, and cache behavior.
 5. Establish a repeatable baseline for Phase 6–8 comparison.
 6. Do not deploy Production automatically.
+
+
+## 25. Phase 6 Completion Evidence — 2026-09-22
+
+Status: VERIFIED COMPLETE / MERGED
+
+- VERIFIED: PR #259 merged as `618ca8e6d1edfd6ecea9a456841e70993670f2f2`.
+- VERIFIED: deterministic `golden-public-menu-30` fixture contains 30 image-bearing products, 30 Featured products, long Arabic/English content, six missing descriptions, mixed image-provider metadata, and zero option containers.
+- VERIFIED: Phase 6 golden evidence is stored at `docs/performance/baselines/2026-09-22-phase6-golden-performance.json`.
+- VERIFIED: canonical 390×844 current fixture evidence recorded 20,587 transfer bytes, 20,287 decoded bytes, 19 final image requests, 199,000 image transfer bytes, and FCP 56 ms in the Phase 6 CI run.
+- VERIFIED: LCP was not exposed by the headless fixture; this remains a real-device/Production measurement.
+- Deployment status: NOT_PERFORMED.
+
+## 26. Phase 7 Completion Evidence — 2026-09-22
+
+Status: VERIFIED COMPLETE / MERGED
+
+- VERIFIED: PR #261 merged once as `730f162c2ff5a7f10cf0f7c0a71e076cfa54bf7c`.
+- VERIFIED: the existing browser regression matrix now runs all five protected themes — Essential, Editorial, Noir, Heritage, Gallery — in both Arabic RTL and English LTR.
+- VERIFIED: the responsive matrix covers 320, 360, 375, 390, 430, 768, 1024, 1280, and 1440 viewport widths; the Phase 7 acceptance focus explicitly includes 320/375/390/430px.
+- VERIFIED: Quality #2313 / run `35766577618` passed typecheck, full tests, lint, production build, all-theme browser QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and performance diagnostics.
+- VERIFIED: W9 Orders QA #529 / run `35766577542` passed.
+- VERIFIED: the Phase 6 golden performance fixture remained green during the Phase 7 Quality run.
+- VERIFIED: no Phase 1–6 reimplementation or protected architecture changes were introduced.
+- UNKNOWN: direct physical Android/iOS LCP/waterfall and Production performance for the real 30-item customer reproduction.
+- BLOCKED / NON-BLOCKING: Vercel preview status is rate-limited by the known free daily deployment quota; no retry was performed.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Next Task
+
+**Phase 8 — Production + Real Device QA.**
+
+Run the release-only sequence from verified `main`, perform one authorized Production deployment, verify the exact deployed SHA, then execute the real Android/iOS/QR/theme/order/RTL/LTR/performance matrix. Do not reopen Phase 1–7 without new measured regression evidence.
