@@ -207,7 +207,7 @@ export function StudioMenuWorkspace({
                     <tr key={product.id} className="border-t border-line align-middle">
                       <td className="px-4 py-3">
                         <div className="flex min-w-0 items-center gap-3">
-                          {product.imageUrl ? <img src={product.imageUrl} alt="" className="size-12 shrink-0 rounded-lg object-cover" /> : <div className="grid size-12 shrink-0 place-items-center rounded-lg bg-sand text-[10px] text-muted">{t(copy.studio.noImage, lang)}</div>}
+                          {product.imageUrl ? <img src={getOptimizedImageUrl(product.imageUrl, { width: 192, quality: 72, fit: "crop" })} alt="" loading="lazy" decoding="async" width="48" height="48" className="size-12 shrink-0 rounded-lg object-cover" /> : <div className="grid size-12 shrink-0 place-items-center rounded-lg bg-sand text-[10px] text-muted">{t(copy.studio.noImage, lang)}</div>}
                           <div className="min-w-0">
                             <p className="truncate font-medium">{lang === "ar" ? product.nameAr : product.nameEn || product.nameAr}</p>
                             {product.nameAr && product.nameEn && lang === "ar" ? <p dir="ltr" className="truncate text-xs text-muted">{product.nameEn}</p> : null}
