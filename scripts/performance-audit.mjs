@@ -47,7 +47,7 @@ try {
   const initialImageRequestCount = await page.evaluate(
     () => performance.getEntriesByType("resource").filter((entry) => {
       const name = entry.name.split("?", 1)[0].toLowerCase();
-      return entry.initiatorType === "img" || entry.initiatorType === "image" || /\\.(avif|gif|jpe?g|png|svg|webp)$/.test(name);
+      return entry.initiatorType === "img" || entry.initiatorType === "image" || /\.(avif|gif|jpe?g|png|svg|webp)$/.test(name);
     }).length,
   );
 
