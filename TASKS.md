@@ -503,3 +503,16 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 - VERIFIED: Quality #2224 and W9 #460 passed.
 - VERIFIED: Issue #233 closed as completed.
 - UNKNOWN: direct Production identity and physical-device QA.
+
+
+## 2026-09-22 — Release Verification — PRODUCTION VERIFIED / DEVICE QA PENDING
+
+- VERIFIED: `main` is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and targets that exact `main` commit.
+- VERIFIED: production root HTTP 200.
+- VERIFIED: valid-format nonexistent public menu HTTP 404.
+- VERIFIED: no runtime error clusters in the selected last-1-hour production window.
+- UNKNOWN: physical Android/iOS/QR/device QA.
+
+### Exact Next Task
+**Physical Android/iOS/QR/theme/order/RTL smoke QA for current `main` `badeddb6608ea437265e1ac4ca58dab27e368c8c`.**
