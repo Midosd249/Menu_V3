@@ -3,7 +3,7 @@
 ## Status
 
 - Date: 2026-09-22
-- Status: PHASE 1 VERIFIED / PHASE 2 READY
+- Status: PHASE 2 COMPLETE / SIGNAL TABLE QR PRIORITY COMPLETE / PHASE 3 READY
 - Canonical product: Menu V3
 - Target test tenant: `saudi-shopping-world`
 - Test owner account: `mido@hotmail.com` (test reference only; do not expose in product telemetry)
@@ -278,6 +278,30 @@ Acceptance criteria:
 - No desktop-sized product asset is unnecessarily requested for a narrow mobile card.
 - No CLS regression.
 - Five themes retain their intended image composition.
+
+### Phase 2.1 — Signal Table QR Critical Image Priority
+
+Status: VERIFIED COMPLETE / MERGED (PR #245).
+
+Objective:
+
+Reduce perceived QR/mobile image latency without turning the public menu into an eager 30-image download.
+
+Implemented contract:
+
+1. Shared `MenuMedia` accepts explicit `fetchPriority`.
+2. Editorial / Signal Table promotes only the first two Featured images to `loading="eager"` + `fetchPriority="high"`.
+3. Editorial / Signal Table promotes only the first two product images in the initial unfiltered category view to `loading="eager"` + `fetchPriority="high"`.
+4. Remaining product images retain lazy loading and existing responsive `srcset`/`sizes` delivery.
+5. No tenant data mutation or provider-specific behavior was broadened.
+
+Verification:
+
+- VERIFIED: PR #245 merged as `8adde6f57063f3d4117465f4130cc134b48b5cd8`.
+- VERIFIED: Quality run #2260 passed.
+- VERIFIED: W9 Orders QA #488 passed.
+- VERIFIED: Vercel PR preview passed.
+- UNKNOWN: physical QR/device waterfall and LCP for the real test tenant.
 
 ### Phase 3 — Branding/Cover Media Decoupling
 
