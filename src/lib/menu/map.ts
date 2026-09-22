@@ -1,5 +1,6 @@
 import { isThemeKey, DEFAULT_THEME_KEY } from "../theme/index.ts";
 import { bool, num } from "../utils.ts";
+import { getPublicTenantMediaUrl } from "./image";
 import type { Branch, BranchHour, Category, CaffeineBasis, Product, PublicTenant, Tenant } from "./types";
 
 function str(value: unknown): string {
@@ -21,8 +22,8 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
     nameEn: str(row.name_en),
     taglineAr: str(row.tagline_ar),
     taglineEn: str(row.tagline_en),
-    logoUrl: str(row.logo_url),
-    coverUrl: str(row.cover_url),
+    logoUrl: getPublicTenantMediaUrl(str(row.logo_url), str(row.id), "logo", str(row.updated_at)) ?? "",
+    coverUrl: getPublicTenantMediaUrl(str(row.cover_url), str(row.id), "cover", str(row.updated_at)) ?? "",
     instagramUrl: str(row.instagram_url),
     websiteUrl: str(row.website_url),
     snapchatUrl: str(row.snapchat_url),
