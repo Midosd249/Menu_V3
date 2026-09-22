@@ -70,7 +70,7 @@ export function getOptimizedImageUrl(src: string | undefined, options: ImageTran
     url.searchParams.set("w", String(normalizeWidth(options.width)));
   }
   if (options.quality && Number.isFinite(options.quality)) {
-    url.searchParams.set("q", String(Math.max(40, Math.min(90, Math.round(options.quality))));
+    url.searchParams.set("q", String(Math.max(40, Math.min(90, Math.round(options.quality)))));
   }
   if (options.fit) url.searchParams.set("fit", options.fit);
   url.searchParams.set("auto", "format");
