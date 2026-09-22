@@ -2,23 +2,29 @@
 
 ## Current Position
 
-- VERIFIED: `main` HEAD is `84e0509da7de908aac3c863b093101ad4961aa81`.
-- VERIFIED: PR #232 is merged.
-- VERIFIED: GitHub Vercel status for `84e0509da7de908aac3c863b093101ad4961aa81` is SUCCESS.
-- UNKNOWN: direct Production deployment identity/match for `84e0509da7de908aac3c863b093101ad4961aa81`.
-- VERIFIED: live Supabase advisor currently reports 7 RLS-disabled `menu_v3` tables.
-- VERIFIED: GitHub Issue #233 is the dedicated security/data task; no RLS remediation has been applied.
-- UNKNOWN: physical device/QR evidence.
+- VERIFIED: `main` HEAD is `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
+- VERIFIED: PR #235 merged the RLS security remediation.
+- VERIFIED: GitHub Quality #2224 passed.
+- VERIFIED: GitHub W9 Orders QA #460 passed.
+- VERIFIED: GitHub Vercel status for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` is SUCCESS.
+- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` applied successfully.
+- VERIFIED: all 7 audited server-only tables now have RLS enabled and no client policies.
+- VERIFIED: `anon` and `authenticated` have no table SELECT privileges on all 7; `postgres` SELECT access remains verified.
+- VERIFIED: live server-side reads succeeded for all 7 tables.
+- VERIFIED: GitHub Issue #233 is CLOSED / COMPLETED.
+- UNKNOWN: direct Production deployment identity for current `main`.
+- UNKNOWN: physical Android/iOS/QR/device evidence.
+- REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate.
 
 ## Exact Next Task
 
-**Execute Issue #233 — reconcile the 7 live RLS-disabled `menu_v3` tables and implement only the evidence-backed security remediation.**
+**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**
 
 ## Not Next
 
 - No new theme or homepage redesign.
 - No unrelated feature work.
-- No blind `ENABLE ROW LEVEL SECURITY` migration.
+- Do not reopen the completed RLS remediation without new evidence.
 - No claim that Production equals `main` without direct deployment evidence.
 - No Payment Provider / Commercial Launch / PH-07 / R10 prerequisite work.
 
@@ -487,3 +493,13 @@ Review PR #232 checks and final diff; merge once after all gates pass, then use 
 
 ### Historical Next Task
 Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
+
+
+## 2026-09-22 — RLS Security Remediation — CLOSED / VERIFIED
+
+- VERIFIED: PR #235 merged to `main` at `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
+- VERIFIED: live migration `20260922080000_harden_server_only_rls_tables.sql` applied.
+- VERIFIED: all seven audited tables are RLS-enabled, client roles have no table access, and server-side reads remain functional.
+- VERIFIED: Quality #2224 and W9 #460 passed.
+- VERIFIED: Issue #233 closed as completed.
+- UNKNOWN: direct Production identity and physical-device QA.

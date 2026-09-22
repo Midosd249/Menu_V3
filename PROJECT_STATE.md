@@ -7,6 +7,24 @@
 - Source of truth: `main`.
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
+## Current Verified Position — 2026-09-22
+- VERIFIED: canonical `main` HEAD is `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` after PR #235.
+- VERIFIED: PR #235 `security: harden audited server-only tables with RLS` merged successfully.
+- VERIFIED: GitHub Quality #2224 passed.
+- VERIFIED: W9 Orders QA #460 passed.
+- VERIFIED: GitHub Vercel status for the merged commit is SUCCESS; this is not direct Production identity evidence.
+- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` was applied successfully to project `ublxptcqefujkbeepylc`.
+- VERIFIED: all 7 previously RLS-disabled `menu_v3` tables now have RLS enabled and no client policies.
+- VERIFIED: `anon` and `authenticated` have no table SELECT privileges on the seven tables; server-side `postgres` SELECT access remains verified.
+- VERIFIED: live server-side row-count reads succeeded for all seven protected tables.
+- VERIFIED: Supabase security advisor no longer reports the seven tables as RLS-disabled.
+- UNKNOWN: direct Vercel Production deployment identity for current `main`.
+- UNKNOWN: physical Android/iOS/QR/device QA for current `main`.
+- REMAINING SECURITY WARNINGS: Supabase reports one mutable function `search_path` warning and one Auth leaked-password-protection warning; these are separate from completed Issue #233 and are not silently changed.
+
+## Current Release Boundary
+The RLS remediation task is closed. No new feature/theme work is authorized by continuity. Release-stage production identity and physical-device QA remain separate evidence gates.
+
 ## Current Verified Position — 2026-09-20
 - VERIFIED: GitHub `main` is now at `be7b79e5dec7d569aed1828e4376f57a8cbf9507` after merged PR #223.
 - VERIFIED: PR #223 `redesign: replace Editorial with Canva-derived Canvas menu` was merged with squash after GitHub Quality and W9 Orders browser checks passed.
@@ -550,3 +568,20 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 Execute GitHub Issue #233 — reconcile the 7 live RLS-disabled `menu_v3` tables, define the minimum safe policy/exposure contract, implement only evidence-backed remediation, and verify authorization/regression behavior.
 
+
+## 2026-09-22 — RLS Security Remediation — CLOSED / VERIFIED
+
+- VERIFIED: PR #235 merged into `main` at `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
+- VERIFIED: migration `20260922080000_harden_server_only_rls_tables.sql` is present in canonical `main` and applied to Supabase project `ublxptcqefujkbeepylc`.
+- VERIFIED: `public_order_rate_limits`, `public_order_idempotency`, `lead_onboarding`, `ai_request_rate_limits`, `menu_upsell_recommendations`, `guest_profiles`, and `anonymous_sessions` now have RLS enabled.
+- VERIFIED: no RLS policies were added because these tables are intentionally server-only; RLS therefore remains default-deny for roles that do not bypass it.
+- VERIFIED: `anon` and `authenticated` table access checks are false for all seven; `postgres` access is true.
+- VERIFIED: live server-side reads succeeded across all seven tables.
+- VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
+- VERIFIED: GitHub Issue #233 is closed as completed.
+- UNKNOWN: direct Vercel Production identity for current `main`.
+- UNKNOWN: physical Android/iOS/QR/device evidence.
+- REMAINING SECURITY WARNINGS: `menu_v3.sync_guest_profile_from_order` has mutable `search_path`; Supabase Auth leaked-password protection is disabled. These require separate scoped work if authorized.
+
+### Current Exact Next Task
+**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**

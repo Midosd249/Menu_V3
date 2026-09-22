@@ -1,22 +1,25 @@
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
-- VERIFIED: Current `main` HEAD: `84e0509da7de908aac3c863b093101ad4961aa81`.
-- VERIFIED: PR #232 is merged into `main`.
-- VERIFIED: GitHub Vercel status for `84e0509da7de908aac3c863b093101ad4961aa81` is SUCCESS.
-- UNKNOWN: Direct Vercel Production deployment identity for `84e0509da7de908aac3c863b093101ad4961aa81`; the available GitHub status is not sufficient to claim Production matches `main`.
-- VERIFIED: Live Supabase security advisor currently reports **7** RLS-disabled `menu_v3` tables, not the historical 6.
-- VERIFIED: Dedicated security task created as GitHub Issue #233; no RLS remediation SQL has been applied.
+- VERIFIED: Current `main` HEAD: `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
+- VERIFIED: PR #235 merged the RLS security remediation.
+- VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
+- VERIFIED: GitHub Vercel status for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` is SUCCESS.
+- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` is applied.
+- VERIFIED: The 7 audited server-only tables now have RLS enabled and no client policies; `anon`/`authenticated` have no table access and server-side `postgres` access remains verified.
+- VERIFIED: GitHub Issue #233 is closed.
+- UNKNOWN: Direct Vercel Production deployment identity for current `main`.
 - UNKNOWN: Physical Android/iOS/QR/device QA.
+- REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain outside Issue #233.
 
 ## Exact Next Task
 
-**Execute GitHub Issue #233 — reconcile the 7 live `menu_v3` RLS-disabled tables: prove effective exposure/grants and application paths, define the minimum safe RLS/policy contract, implement only the proven remediation, then run negative authorization and regression verification.**
+**Release-stage verification of current `main` — establish direct Vercel Production identity for `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`, then complete the prepared physical Android/iOS/QR/theme/order/RTL smoke evidence.**
 
 ## Protected / Not Next
 
 - Do not start another theme, homepage redesign, or unrelated feature.
-- Do not blindly enable RLS on the affected tables.
+- Do not reopen the completed 7-table RLS remediation without new evidence.
 - Do not treat GitHub Vercel SUCCESS as proof of Production deployment.
 - Payment Provider, Commercial Launch, PH-07, and R10 remain deferred boundaries.
 - R7 remains dependent on meaningful real exposure.
@@ -442,3 +445,14 @@ Review PR #232 final checks and diff, merge once if green, then perform one rele
 
 ### Historical Next Task
 Merge PR #232 once, verify resulting `main` SHA, then execute the single authorized Production deployment and record direct Production identity before real-device QA.
+
+
+## 2026-09-22 — RLS Security Remediation — CLOSED / VERIFIED
+
+- VERIFIED: PR #235 merged into `main` at `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92`.
+- VERIFIED: the repository migration `20260922080000_harden_server_only_rls_tables.sql` was applied successfully to Supabase.
+- VERIFIED: all seven audited tables have RLS enabled, no client policies, and no `anon`/`authenticated` table privileges.
+- VERIFIED: server-side `postgres` reads succeeded for all seven tables.
+- VERIFIED: GitHub Quality #2224 and W9 Orders QA #460 passed.
+- VERIFIED: Issue #233 closed.
+- UNKNOWN: direct Production deployment identity and physical-device QA.
