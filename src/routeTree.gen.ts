@@ -736,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MSlugBranchRouteImport
       parentRoute: typeof MSlugRoute
     }
+    '/api/media/tenant/$tenantId/$kind': {
+      id: '/api/media/tenant/$tenantId/$kind'
+      path: '/api/media/tenant/$tenantId/$kind'
+      fullPath: '/api/media/tenant/$tenantId/$kind'
+      preLoaderRoute: typeof ApiMediaTenantTenantIdKindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
