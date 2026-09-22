@@ -3,6 +3,7 @@ import { Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { useLang } from "@/lib/lang";
+import { getFeaturedProducts } from "@/lib/menu/presentation";
 import { recordPublicEvent } from "@/lib/menu/public";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
@@ -60,7 +61,7 @@ function Cart({ lang, items, setItems, close, submit, error, submitting }: { lan
 export function SpecialtyCafeTemplate({ menu, preview = false }: { menu: PublicMenu; preview?: boolean }) {
   const { lang } = useLang(); const { tenant, branch, categories, products } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<number | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const featured = visible.filter((p) => p.isFeatured);
+  const visible = preview ? products : products.filter((p) => p.isAvailable); const featured = getFeaturedProducts(visible);
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || p.categoryId === categoryId) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId]);
   useEffect(() => { if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "visit", lang } }); }, [tenant.slug, branch.slug, lang, preview]);
   useEffect(() => {
