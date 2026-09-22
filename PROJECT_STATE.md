@@ -8,22 +8,19 @@
 - Product: Menu V3, Arabic-first bilingual multi-tenant digital-menu SaaS for restaurants and cafes.
 
 ## Current Verified Position — 2026-09-22
-- VERIFIED: canonical `main` HEAD is `33bd3ea43bee5112de0d3b8d513cd1aea3a86e92` after PR #235.
-- VERIFIED: PR #235 `security: harden audited server-only tables with RLS` merged successfully.
-- VERIFIED: GitHub Quality #2224 passed.
-- VERIFIED: W9 Orders QA #460 passed.
-- VERIFIED: GitHub Vercel status for the merged commit is SUCCESS; this is not direct Production identity evidence.
-- VERIFIED: Supabase migration `20260922080000_harden_server_only_rls_tables.sql` was applied successfully to project `ublxptcqefujkbeepylc`.
-- VERIFIED: all 7 previously RLS-disabled `menu_v3` tables now have RLS enabled and no client policies.
-- VERIFIED: `anon` and `authenticated` have no table SELECT privileges on the seven tables; server-side `postgres` SELECT access remains verified.
-- VERIFIED: live server-side row-count reads succeeded for all seven protected tables.
-- VERIFIED: Supabase security advisor no longer reports the seven tables as RLS-disabled.
-- UNKNOWN: direct Vercel Production deployment identity for current `main`.
+- VERIFIED: canonical `main` HEAD is `badeddb6608ea437265e1ac4ca58dab27e368c8c`.
+- VERIFIED: PR #235 RLS remediation and PR #236 continuity reconciliation are merged.
+- VERIFIED: GitHub Quality #2226 passed; W9 Orders QA #461 passed.
+- VERIFIED: Vercel Production deployment `dpl_vz8nXu6XxKjtBoMUQXpYXANLbSsP` is READY and built from the exact current `main` commit.
+- VERIFIED: Production root returned HTTP 200.
+- VERIFIED: valid-format nonexistent public menu returned HTTP 404.
+- VERIFIED: no runtime error clusters were found in the selected last-1-hour Production window.
+- VERIFIED: the seven audited server-only tables remain RLS-enabled with no client policies and server-side access verified.
 - UNKNOWN: physical Android/iOS/QR/device QA for current `main`.
-- REMAINING SECURITY WARNINGS: Supabase reports one mutable function `search_path` warning and one Auth leaked-password-protection warning; these are separate from completed Issue #233 and are not silently changed.
+- REMAINING SECURITY WARNINGS: one mutable function `search_path` warning and one Auth leaked-password-protection warning remain separate scoped findings.
 
 ## Current Release Boundary
-The RLS remediation is closed and the current `main` is now directly verified in Vercel Production. Physical Android/iOS/QR/device QA remains the only active release-stage evidence gap. Separate Supabase warnings are documented and not silently changed.
+Production identity and basic HTTP/runtime release verification are now closed for current `main`. Physical Android/iOS/QR/device QA is the only active release-stage evidence gap. Separate Supabase warnings are documented and are not silently changed.
 
 ## Current Verified Position — 2026-09-20
 - VERIFIED: GitHub `main` is now at `be7b79e5dec7d569aed1828e4376f57a8cbf9507` after merged PR #223.
