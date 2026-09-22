@@ -22,8 +22,8 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
     nameEn: str(row.name_en),
     taglineAr: str(row.tagline_ar),
     taglineEn: str(row.tagline_en),
-    logoUrl: getPublicTenantMediaUrl(str(row.logo_url), str(row.id), "logo", str(row.updated_at)) ?? "",
-    coverUrl: getPublicTenantMediaUrl(str(row.cover_url), str(row.id), "cover", str(row.updated_at)) ?? "",
+    logoUrl: str(row.logo_url),
+    coverUrl: str(row.cover_url),
     instagramUrl: str(row.instagram_url),
     websiteUrl: str(row.website_url),
     snapchatUrl: str(row.snapchat_url),
@@ -46,7 +46,11 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
 
 export function mapPublicTenant(row: Record<string, unknown>): PublicTenant {
   const { ownerUserId: _ownerUserId, ...publicTenant } = mapTenant(row);
-  return publicTenant;
+  return {
+    ...publicTenant,
+    logoUrl: getPublicTenantMediaUrl(publicTenant.logoUrl, publicTenant.id, "logo", publicTenant.updatedAt) ?? "",
+    coverUrl: getPublicTenantMediaUrl(publicTenant.coverUrl, publicTenant.id, "cover", publicTenant.updatedAt) ?? "",
+  };
 }
 
 export function mapBranch(row: Record<string, unknown>): Branch {
