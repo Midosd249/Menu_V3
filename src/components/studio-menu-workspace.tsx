@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { copy, t } from "@/lib/menu/i18n";
 import type { Product, StudioSnapshot } from "@/lib/menu/types";
 import { cn, formatSar } from "@/lib/utils";
+import { getOptimizedImageUrl } from "@/lib/menu/image";
 import type { Lang } from "@/lib/menu/types";
 
 type AvailabilityFilter = "all" | "available" | "unavailable";
