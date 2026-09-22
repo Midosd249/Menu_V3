@@ -21,14 +21,11 @@ Measure the golden 30-item menu first. Identify repeated serialized media and un
 
 ## Current Position
 
-- VERIFIED: `main` HEAD is `d6e2b6e9ed13dda4a7cd82d82d4205137a4ef5e0`.
-- VERIFIED: PR #235 and PR #236 are merged.
-- VERIFIED: GitHub Quality #2226 passed.
-- VERIFIED: GitHub W9 Orders QA #461 passed.
-- VERIFIED: Vercel Production deployment `dpl_4TFFTfLKJSFJtojrthNS85gjNWGe` is READY and targets the exact current `main` commit.
-- VERIFIED: Production root HTTP 200.
-- VERIFIED: valid-format nonexistent public menu HTTP 404.
-- VERIFIED: no runtime error clusters in the selected last-1-hour Production window.
+- VERIFIED: `main` HEAD is `b5e5e0f7fa000b1451b605e2fb9b484cde690170`.
+- VERIFIED: Phase 4 runtime merge is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Quality #2282 passed and W9 Orders QA #507 passed.
+- VERIFIED: Phase 4 was not deployed to Production.
+- UNKNOWN: current Production identity/performance and real-device waterfall/LCP for the 30-item golden tenant.
 - VERIFIED: all 7 audited RLS-disabled tables are now RLS-enabled and server-only.
 - VERIFIED: Issue #233 is CLOSED / COMPLETED.
 - UNKNOWN: physical Android/iOS/QR/device evidence.
