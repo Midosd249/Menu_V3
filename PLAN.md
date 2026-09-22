@@ -1,3 +1,23 @@
+## Performance Remediation — Current Position — 2026-09-22
+
+- VERIFIED: canonical `main` HEAD after Phase 4 merge is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Phase 0 is CLOSED.
+- VERIFIED: Phase 1 is COMPLETE / MERGED.
+- VERIFIED: Phase 2 is COMPLETE / MERGED.
+- VERIFIED: Phase 3 is COMPLETE / MERGED at `fb4c5dba311d5f77c3bcb943f13e35cb92ab8584`.
+- VERIFIED: Phase 4 is COMPLETE / MERGED at `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: Quality #2282 passed; W9 Orders QA #507 passed.
+- VERIFIED: Phase 4 bounds dedicated Featured presentation to 6 items without changing stored `isFeatured` truth or normal product discovery.
+- VERIFIED: Vercel preview status is rate-limit failure only; no Production deployment was performed.
+- UNKNOWN: real-device waterfall/LCP and Production performance for the 30-item golden tenant.
+
+## Exact Next Task
+
+**Phase 5 — Public HTML / SSR Payload Reduction for the 30-item `saudi-shopping-world` golden case.**
+
+Do not repeat Phase 1–4. Measure first, then reduce only unnecessary SSR/HTML payload while preserving deterministic hydration, SEO/structured data, and public-menu behavior.
+
+
 # CURRENT CONTINUITY SNAPSHOT — 2026-09-22
 
 - VERIFIED: Canonical branch: `main`.
