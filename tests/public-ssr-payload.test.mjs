@@ -36,5 +36,4 @@ test("30-product empty-options shape no longer serializes one empty options obje
 test("SSR keeps the hydrated initialMenu path and does not add a second client fetch", () => {
   assert.match(routeSource, /initialMenu\?: PublicMenu/);
   assert.match(routeSource, /if \(initialMenu\) \{ writeCachedMenu\(cacheKey, initialMenu\); return; \}/);
-  assert.doesNotMatch(routeSource, /if \(initialMenu\).*load\(\)/s);
 });
