@@ -23,3 +23,77 @@ export async function compressImageFile(file: File): Promise<string> {
   } finally { bitmap.close(); }
   throw new Error("تعذر ضغط الصورة بالحجم المسموح. جرّب صورة أصغر أو أقل دقة.");
 }
+
+
+export type ImageTransformOptions = {
+  width?: number;
+  quality?: number;
+  fit?: "crop" | "max";
+};
+
+export type ResponsiveImageOptions = ImageTransformOptions & {
+  widths?: readonly number[];
+};
+
+export type ResponsiveImageSources = {
+  src: string | undefined;
+  srcSet?: string;
+};
+
+const UNSPLASH_HOSTNAMES = new Set(["images.unsplash.com"]);
+
+function isTransformableImageUrl(src: string): boolean {
+  try {
+    return UNSPLASH_HOSTNAMES.has(new URL(src).hostname);
+  } catch {
+    return false;
+  }
+}
+
+function normalizeWidth(width: number): number {
+  return Math.max(64, Math.min(2400, Math.round(width)));
+}
+
+export function getOptimizedImageUrl(src: string | undefined, options: ImageTransformOptions = {}): string | undefined {
+  if (!src || src.startsWith("data:") || src.startsWith("blob:")) return src;
+
+  let url: URL;
+  try {
+    url = new URL(src);
+  } catch {
+    return src;
+  }
+
+  if (!UNSPLASH_HOSTNAMES.has(url.hostname)) return src;
+
+  if (options.width && Number.isFinite(options.width)) {
+    url.searchParams.set("w", String(normalizeWidth(options.width)));
+  }
+  if (options.quality && Number.isFinite(options.quality)) {
+    url.searchParams.set("q", String(Math.max(40, Math.min(90, Math.round(options.quality))));
+  }
+  if (options.fit) url.searchParams.set("fit", options.fit);
+  url.searchParams.set("auto", "format");
+
+  return url.toString();
+}
+
+export function getResponsiveImageSources(src: string | undefined, options: ResponsiveImageOptions = {}): ResponsiveImageSources {
+  if (!src) return { src: undefined };
+
+  const widths = [...new Set((options.widths ?? (options.width ? [options.width] : []))
+    .filter((width) => Number.isFinite(width))
+    .map(normalizeWidth))].sort((a, b) => a - b);
+
+  if (!widths.length || !isTransformableImageUrl(src)) {
+    return { src: getOptimizedImageUrl(src, options) };
+  }
+
+  const largestWidth = widths[widths.length - 1];
+  return {
+    src: getOptimizedImageUrl(src, { ...options, width: largestWidth }),
+    srcSet: widths
+      .map((width) => getOptimizedImageUrl(src, { ...options, width }) + " " + width + "w")
+      .join(", "),
+  };
+}
