@@ -49,7 +49,7 @@ test("public menu keeps the lazy media baseline without all-product prefetch", a
   const source = await readFile("src/components/public-menu.tsx", "utf8");
   assert.match(source, /loading=\{eager \? "eager" : "lazy"\}/);
   assert.match(source, /decoding="async"/);
-  assert.match(source, /fetchPriority="low"/);
+  assert.match(source, /fetchPriority=\{fetchPriority\}/);
   assert.doesNotMatch(source, /new Image\(\)/);
   assert.doesNotMatch(source, /preload\.src = product\.imageUrl/);
 });
