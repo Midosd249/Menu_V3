@@ -1,3 +1,32 @@
+# CURRENT PERFORMANCE REMEDIATION POSITION — 2026-09-22
+
+- VERIFIED: canonical `main` HEAD is `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: Phase 0 Evidence Lock — CLOSED.
+- VERIFIED: Phase 1 Shared Image Delivery — COMPLETE / MERGED.
+- VERIFIED: Phase 2 Responsive Public Media — COMPLETE / MERGED.
+- VERIFIED: Phase 3 Branding / Cover Decoupling — COMPLETE / MERGED.
+- VERIFIED: Phase 4 Featured Presentation Bound — COMPLETE / MERGED.
+- VERIFIED: Phase 5 Public HTML / SSR Payload Reduction — COMPLETE / MERGED.
+- VERIFIED: Phase 5 core merge is `45552759054f11b4b37a89caacf73c795040a955`; Phase 5 evidence instrumentation is `99a526dc875c1ad5bf50367632f78108681454af`.
+- VERIFIED: Quality #2297 passed for the Phase 5 implementation; W9 Orders QA #512 passed.
+- VERIFIED: Quality #2299 passed for the Phase 5 SSR document-metrics instrumentation; W9 Orders QA #518 passed.
+- VERIFIED: public loader no longer serializes whole tenant/branch/category/product rows via `to_jsonb(table)`; it uses explicit public projections.
+- VERIFIED: public tenant lifecycle fields not required by the browser are no longer returned in `PublicTenant`.
+- VERIFIED: empty `productOptions` entries are no longer created for every product. A 30-product empty-options structural payload drops from 1,411 bytes to 2 bytes, a measured 1,409-byte reduction before HTML/script overhead.
+- VERIFIED: the existing SSR `initialMenu` hydration path remains intact; no new duplicate public-menu fetch was introduced.
+- VERIFIED: the performance audit now records document transfer, encoded response, and decoded/uncompressed document bytes.
+- VERIFIED: CI G6 audit for the existing Editorial theme-preview fixture at 390×844 recorded document transfer 7,805 bytes, encoded 7,505 bytes, decoded 7,505 bytes. This is a CI fixture, not the real 30-item customer reproduction.
+- UNKNOWN: direct post-change HTML size/LCP/waterfall for the real `saudi-shopping-world` tenant because Phase 5 was not deployed to Production and the CI fixture is not that tenant.
+- UNKNOWN: physical Android/iOS/QR waterfall and LCP.
+- Deployment status: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**Phase 6 — Golden Performance Fixture.**
+
+Create a deterministic, repository-owned 30-item public-menu fixture matching the real performance characteristics needed for this remediation, then use the Phase 5 document metrics to establish repeatable HTML/document-transfer/image-request baselines. Do not re-implement Phase 1–5 unless the fixture proves a regression.
+
+
 ## Performance Remediation — Current Task State — 2026-09-22
 
 - VERIFIED: `main` HEAD after Phase 4 continuity closeout is `93c2d8a7f4524986346f4439b5f829cb51308a95`.
