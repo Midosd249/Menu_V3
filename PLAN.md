@@ -1,6 +1,6 @@
 ## Performance Remediation — Current Position — 2026-09-22
 
-- VERIFIED: canonical `main` HEAD after Phase 4 merge is `aa1ac6ba942228e8ad2e32f6c76b485b4706ea78`.
+- VERIFIED: canonical `main` HEAD after Phase 4 continuity closeout is `93c2d8a7f4524986346f4439b5f829cb51308a95`.
 - VERIFIED: Phase 0 is CLOSED.
 - VERIFIED: Phase 1 is COMPLETE / MERGED.
 - VERIFIED: Phase 2 is COMPLETE / MERGED.
