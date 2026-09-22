@@ -43,3 +43,20 @@ test("client-reachable source files do not contain server secret names or creden
   const forbidden = [/SUPABASE_SERVICE_ROLE_KEY/i, /SERVICE_ROLE_KEY/i, /BETTER_AUTH_SECRET/i, /GROK_AUTH_CLIENT_SECRET/i, /GOOGLE_CLIENT_SECRET/i]; const files = sourceFiles(SRC).filter((path) => !path.endsWith(".server.ts") && !path.endsWith(".server.tsx") && !path.endsWith("/auth/server.ts"));
   for (const path of files) { const source = readFileSync(path, "utf8"); for (const pattern of forbidden) assert.doesNotMatch(source, pattern, `${relative(ROOT, path)} contains a forbidden secret/credential reference`); }
 });
+
+test("server-only RLS hardening keeps the seven audited tables default-deny to client roles", () => {
+  const migration = read("migrations/20260922080000_harden_server_only_rls_tables.sql");
+  const tables = [
+    "public_order_rate_limits",
+    "public_order_idempotency",
+    "lead_onboarding",
+    "ai_request_rate_limits",
+    "menu_upsell_recommendations",
+    "guest_profiles",
+    "anonymous_sessions",
+  ];
+  for (const table of tables) {
+    assert.match(migration, new RegExp(`alter table menu_v3\\.${table} enable row level security;`));
+    assert.match(migration, new RegExp(`revoke all on table menu_v3\\.${table} from anon, authenticated;`));
+  }
+});
