@@ -753,3 +753,33 @@ Phase 5 is closed at the application-architecture level. The remaining real-cust
 4. Record document transfer/encoded/decoded bytes, FCP/LCP where measurable, image request count/bytes, lazy-image count, and cache behavior.
 5. Establish a repeatable baseline for Phase 6–8 comparison.
 6. Do not deploy Production automatically.
+
+
+## Phase 6 Completion Evidence — 2026-09-22
+
+**Status: VERIFIED COMPLETE**
+
+- VERIFIED: PR #259 implemented the deterministic golden fixture and CI harness.
+- VERIFIED: final tested head `1d7cca3f49242378c8fcf678cbae450d54bbc505`.
+- VERIFIED: GitHub Quality run `#35763237359` passed.
+- VERIFIED: GitHub W9 Orders QA run `#35763237349` passed.
+- VERIFIED: fixture shape is 30 products / 30 images / 30 Featured / 6 missing descriptions / 3 image-provider metadata groups / 0 option containers.
+- VERIFIED: baseline evidence is stored at `docs/performance/baselines/2026-09-22-phase6-golden-performance.json`.
+- VERIFIED: current fixture document transfer is 20,587 bytes and decoded HTML is 20,287 bytes at 390x844.
+- VERIFIED: legacy-vs-current comparison records 233,471 document bytes avoided by the decoupled cover contract.
+- VERIFIED: current fixture observed 10 initial image requests and 19 after deterministic scroll-all evidence; lazy loading remains part of the measured contract.
+- UNKNOWN: headless Chromium did not expose LCP for this fixture; real-device LCP remains Phase 8 evidence.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Current Execution Task
+
+**Phase 7 — Five-Theme Regression.**
+
+1. Run the golden 30-product fixture through Essential, Editorial, Noir, Heritage, and Gallery.
+2. Verify RTL/LTR content, featured presentation, cover/logo media, product media, fallback states, and detail surfaces.
+3. Exercise 320/375/390/430px responsive widths in the available browser harness.
+4. Compare image request behavior and document metrics against the Phase 6 golden evidence.
+5. Run all applicable quality gates and review the final diff.
+6. Do not deploy Production automatically.
+
+Do not repeat Phase 1–6 unless measured evidence proves a regression or missing contract.
