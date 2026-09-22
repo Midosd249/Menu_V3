@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "fixture": "golden-public-menu-30",
+  "verifiedAt": "2026-09-22T17:45:06.442Z",
+  "workflowRun": 35762298682,
+  "headSha": "42b4ce159b14635a9a2cde15ec9962d087662917",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "canonicalMode": "current",
+  "fixtureShape": {
+    "productCount": 30,
+    "imageBearingProductCount": 30,
+    "featuredProductCount": 30,
+    "missingDescriptionCount": 6,
+    "mixedImageProviderCount": 3,
+    "optionsContainerCount": 0
+  },
+  "current": {
+    "httpStatus": 200,
+    "document": {
+      "transferBytes": 20587,
+      "encodedBytes": 20287,
+      "decodedBytes": 20287
+    },
+    "imageRequests": 19,
+    "imageTransferBytes": 199000,
+    "imageDecodedBytes": 193300,
+    "initialImageRequestCount": 10,
+    "finalImageRequestCount": 19,
+    "fcpMs": 56,
+    "lcpMs": null,
+    "cls": 0
+  },
+  "legacyComparison": {
+    "documentDecodedBytesSaved": 233471,
+    "documentEncodedBytesSaved": 233471,
+    "documentTransferBytesSaved": 233471,
+    "imageRequestCountDelta": 1,
+    "imageTransferBytesDelta": 193438
+  },
+  "limitations": [
+    "LCP was not exposed by this headless Chromium run; physical-device LCP remains Phase 8 evidence.",
+    "Numeric timings are CI-environment evidence, not fixed budgets.",
+    "The legacy comparison is diagnostic only; current mode is the canonical post-Phase-3 contract."
+  ]
+}
