@@ -93,6 +93,9 @@ export function ContemporaryRestaurantTemplate({ menu, preview = false }: Props)
           <MenuMedia
             src={tenant.logoUrl}
             alt=""
+            imageWidth={160}
+            imageWidths={[64, 96, 160]}
+            sizes="38px"
             eager
             fallback={tenant.nameAr.slice(0, 1)}
             className="editorial-topbar-logo"
