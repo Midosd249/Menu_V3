@@ -720,3 +720,27 @@ Scope:
 8. Do not deploy Production automatically.
 
 Do not re-implement Phase 1, Phase 2, Phase 3, or Phase 4 unless new measured evidence proves a regression or missing contract.
+
+
+### Phase 5 — SSR / HTML Reduction — VERIFIED COMPLETE
+
+- VERIFIED: PR #254 merged once by squash as `45552759054f11b4b37a89caacf73c795040a955`.
+- VERIFIED: PR #255 merged once by squash as `99a526dc875c1ad5bf50367632f78108681454af`.
+- IMPLEMENTED: public SSR query projection, lean public tenant mapping, sparse product-option state, and document-level performance instrumentation.
+- VERIFIED: no Phase 1–4 architecture was reimplemented.
+- VERIFIED: no schema/auth/RLS/order/subscription/deployment configuration was changed.
+- UNKNOWN: real-device and Production performance evidence.
+- Deployment status: NOT_PERFORMED.
+
+### Exact Current Execution Task
+
+**Phase 6 — Golden Performance Fixture.**
+
+1. Define one deterministic 30-product fixture matching the real performance shape without embedding the diagnostic customer email.
+2. Run the existing performance audit against the fixture.
+3. Record document transfer bytes, encoded/decoded HTML bytes, initial image request count/transfer bytes, and FCP/LCP where supported.
+4. Store the baseline as repository evidence so future phases can compare against the same fixture.
+5. Run relevant quality gates and review the diff.
+6. Do not deploy Production automatically.
+
+Do not repeat Phase 1–5 unless measured evidence proves a regression or missing contract.
