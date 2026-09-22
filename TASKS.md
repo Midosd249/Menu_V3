@@ -549,3 +549,18 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Run the dedicated real-device/public-menu performance evidence pass for the 30-item Saudi shopping world test menu at 320/375/390/430px.**
+
+
+## 2026-09-22 — Public Menu Image Performance Phase 3 — VERIFIED COMPLETE
+
+- VERIFIED: Phase 1 and Phase 2 were already complete and were not reworked.
+- VERIFIED: Phase 3 PR #247 merged once by squash as `fb4c5dba311d5f77c3bcb943f13e35cb92ab8584`.
+- VERIFIED: public tenant `logo_url` / `cover_url` Base64 media is no longer embedded directly in the public tenant payload; public mapping uses versioned tenant-media URLs.
+- VERIFIED: the tenant media endpoint is active/published gated, tenant-scoped, raster-only, cacheable and protected with `nosniff`.
+- VERIFIED: Studio tenant media values remain unchanged; no schema, auth, RLS, ordering, subscription, or deployment configuration changes were introduced.
+- VERIFIED: GitHub Quality #2276 and W9 Orders QA #503 passed on the final Phase 3 head.
+- UNKNOWN: real-device 320/375/390/430px waterfall/LCP for the full 30-item Saudi Shopping World reproduction and Production performance after this merge.
+- Deployment status: NOT_PERFORMED by this task.
+
+### Exact Next Task
+**Dedicated real-device/public-menu performance evidence pass for the 30-item Saudi Shopping World test menu: measure Studio and QR/public-menu image waterfalls plus LCP at 320/375/390/430px. Do not re-implement Phase 1–3 unless measured evidence requires it.**
