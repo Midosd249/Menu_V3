@@ -43,7 +43,7 @@ const browser = await chromium.launch({
 let failures = 0;
 try {
   for (const theme of themes) {
-    const languages = theme === "editorial" ? ["ar", "en"] : ["ar"];
+    const languages = ["ar", "en"];
     for (const language of languages) {
       const targetUrl = new URL(parsed);
       targetUrl.searchParams.set("theme", theme);
