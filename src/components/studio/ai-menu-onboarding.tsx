@@ -36,6 +36,37 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
     finally { setBusy(false); }
   }
 
+  async function organizeRows(rows: ImportRow[]) {
+    try {
+      const result = await organizeMenuOnboardingDraft({ data: { rows } });
+      if (!result.ok) return rows;
+      setOrganization(result.data);
+      const byIndex = new Map(result.data.categoryAssignments.map((item) => [item.rowIndex, item]));
+      const correctionsByIndex = new Map<number, typeof result.data.corrections>();
+      for (const correction of result.data.corrections) {
+        const list = correctionsByIndex.get(correction.rowIndex) ?? [];
+        list.push(correction);
+        correctionsByIndex.set(correction.rowIndex, list);
+      }
+      const corrected = rows.map((row, index) => {
+        const assignment = byIndex.get(index);
+        const next = assignment ? { ...row, categoryAr: assignment.categoryAr, categoryEn: assignment.categoryEn } : { ...row };
+        for (const correction of correctionsByIndex.get(index) ?? []) {
+          if (correction.field === "price" && typeof correction.value === "number") next.price = correction.value;
+          if (correction.field === "nameAr" && typeof correction.value === "string") next.nameAr = correction.value;
+          if (correction.field === "nameEn" && typeof correction.value === "string") next.nameEn = correction.value;
+          if (correction.field === "descriptionAr" && typeof correction.value === "string") next.descriptionAr = correction.value;
+          if (correction.field === "descriptionEn" && typeof correction.value === "string") next.descriptionEn = correction.value;
+          next.issues = next.issues.filter((issue) => !issue.includes("السعر غير موجود") && !issue.includes("التصنيف يحتاج مراجعة"));
+        }
+        return next;
+      });
+      return result.data.orderedIndexes.map((index) => corrected[index]).filter(Boolean);
+    } catch {
+      return rows;
+    }
+  }
+
   function upload(file: File | null) {
     setFileName(file.name); setError(""); setOk(false); setOrganization(null);
     const detectedSourceType: "text" | "image" | "pdf" = (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) ? "text" : file.type === "application/pdf" ? "pdf" : "image";
