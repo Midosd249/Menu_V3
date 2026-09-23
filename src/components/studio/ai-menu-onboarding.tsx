@@ -15,7 +15,8 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
   const [error, setError] = useState("");
   const [ok, setOk] = useState(false);
   const [sourceType, setSourceType] = useState<"text" | "image" | "pdf">("text");
-  const [organization, setOrganization] = useState<{ orderedIndexes: number[]; categoryAssignments: Array<{ rowIndex: number; categoryAr: string; categoryEn: string; reasonAr: string; reasonEn: string }>; corrections: Array<{ rowIndex: number; field: string; value: string | number; reasonAr: string; reasonEn: string }> } | null>(null);
+  const [readyForSmartExtraction, setReadyForSmartExtraction] = useState(false);
+  const [organization, setOrganization] = useState<{ orderedIndexes: number[]; categoryAssignments: Array<{ rowIndex: number; categoryAr: string; categoryEn: string }>; corrections: Array<{ rowIndex: number; field: string; value: string | number }> } | null>(null);
 
   async function requestDraft() {
     return generateMenuOnboardingDraft({ data: { sourceText: text, sourceType } });
@@ -71,7 +72,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
 
   function upload(file: File | null) {
     if (!file) return;
-    setFileName(file.name); setError(""); setOk(false); setOrganization(null);
+    setFileName(file.name); setError(""); setOk(false); setReadyForSmartExtraction(false); setOrganization(null);
     const detectedSourceType: "text" | "image" | "pdf" = (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) ? "text" : file.type === "application/pdf" ? "pdf" : "image";
     setSourceType(detectedSourceType);
     if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
@@ -90,13 +91,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
         }
         if (!result.ok) { setError(result.error); return; }
         setText(result.data.text);
-        let draft = await generateMenuOnboardingDraft({ data: { sourceText: result.data.text, sourceType: detectedSourceType } });
-        if (!draft.ok) {
-          await new Promise((resolve) => window.setTimeout(resolve, 450));
-          draft = await generateMenuOnboardingDraft({ data: { sourceText: result.data.text, sourceType: detectedSourceType } });
-        }
-        if (!draft.ok) { setError(draft.error); return; }
-        onRows(await organizeRows(draft.data.rows));
+        setReadyForSmartExtraction(true);
         setOk(true);
       } catch (e) { setError(e instanceof Error ? e.message : "File extraction failed"); }
       finally { setBusy(false); }
@@ -109,9 +104,10 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
     <textarea className="min-h-36 w-full rounded-xl border border-line bg-background p-3 text-sm" value={text} onChange={e => { setText(e.target.value); setSourceType("text"); }} placeholder={lang === "ar" ? "الصق قائمة الطعام هنا..." : "Paste the menu here..."} />
     <div className="flex flex-wrap gap-2">
       <label className="inline-flex h-11 cursor-pointer items-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground">{lang === "ar" ? "رفع صورة أو PDF" : "Upload image or PDF"}<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp,.txt" className="sr-only" onChange={e => upload(e.target.files?.[0] ?? null)} /></label>
-      <Button type="button" disabled={busy || !text.trim()} onClick={() => void analyze()}>{busy ? (lang === "ar" ? "جاري المعالجة..." : "Processing...") : (lang === "ar" ? "تحليل القائمة" : "Analyze menu")}</Button>
+      <Button type="button" disabled={busy || !text.trim()} onClick={() => void analyze()}>{busy ? (lang === "ar" ? "جاري الاستخراج والتنظيم..." : "Extracting & organizing...") : (lang === "ar" ? "استخراج القائمة بذكاء" : "Smart extract menu")}</Button>
       {organization ? <span className="self-center text-xs text-muted">{lang === "ar" ? `تم اقتراح تنظيم ${organization.categoryAssignments.length} تصنيفًا و${organization.corrections.length} تصحيحًا` : `${organization.categoryAssignments.length} category changes and ${organization.corrections.length} corrections suggested`}</span> : null}
       {fileName ? <span className="self-center text-xs text-muted">{fileName}</span> : null}
+      {readyForSmartExtraction ? <span className="self-center text-xs font-medium text-accent">{lang === "ar" ? "النص جاهز للاستخراج الذكي" : "Text is ready for smart extraction"}</span> : null}
     </div>
     {organization ? (
       <div className="rounded-xl border border-accent/30 bg-accent/5 p-3 text-sm">
@@ -124,7 +120,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
     <Flash error={error} ok={ok} />
     <div className="flex flex-wrap items-center gap-2">
       <Button type="button" variant="outline" disabled={busy || !text.trim()} onClick={() => void analyze()}>
-        {lang === "ar" ? "إعادة التحليل" : "Re-analyze"}
+        {lang === "ar" ? "إعادة الاستخراج الذكي" : "Re-run smart extraction"}
       </Button>
     </div>
     <div className="rounded-xl border border-line bg-paper/70 p-3 text-xs leading-6 text-muted">
