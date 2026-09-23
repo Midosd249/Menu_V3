@@ -36,8 +36,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
     finally { setBusy(false); }
   }
 
-  function applyOrganization(rows: ImportRow[]) {
-    if (!file) return;
+  function upload(file: File | null) {
     setFileName(file.name); setError(""); setOk(false); setOrganization(null);
     const detectedSourceType: "text" | "image" | "pdf" = (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) ? "text" : file.type === "application/pdf" ? "pdf" : "image";
     setSourceType(detectedSourceType);
