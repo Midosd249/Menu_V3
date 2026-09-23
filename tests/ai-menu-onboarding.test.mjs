@@ -43,10 +43,12 @@ test("file size is bounded before upload", () => {
 });
 
 
-test("image/PDF import continues into structured analysis instead of leaving extracted text unsaved", () => {
+test("image/PDF import exposes extracted text to an explicit smart-extraction action", () => {
   assert.match(ui, /sourceType/);
   assert.match(ui, /detectedSourceType/);
-  assert.match(ui, /generateMenuOnboardingDraft\(\{ data: \{ sourceText: result\.data\.text, sourceType: detectedSourceType \} \}\)/);
+  assert.match(ui, /setReadyForSmartExtraction\(true\)/);
+  assert.match(ui, /استخراج القائمة بذكاء/);
+  assert.doesNotMatch(ui, /sourceText: result\.data\.text, sourceType: detectedSourceType/);
 });
 
 test("import draft uses AI organization for category assignment and ordering", () => {
@@ -60,4 +62,20 @@ test("import image URL validation is consistent with product image limits", () =
   const owner = fs.readFileSync(new URL("../src/lib/menu/owner.ts", import.meta.url), "utf8");
   assert.match(owner, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
   assert.match(ingest, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
+});
+
+
+test("smart extraction uses compact rows and batches large menus before owner review", () => {
+  assert.match(ingest, /extractedRowSchema/);
+  assert.match(ingest, /splitMenuSource/);
+  assert.match(ingest, /currentBlocks\.length >= 6/);
+  assert.match(ingest, /responseSchema: extractedDraftSchema/);
+  assert.match(ingest, /price: z\.number\(\)\.finite\(\)\.min\(0\)\.nullable\(\)/);
+  assert.match(ingest, /imageUrl: ""/);
+});
+
+test("organization output is compact enough for the provider response ceiling", () => {
+  assert.doesNotMatch(ingest, /reasonAr/);
+  assert.doesNotMatch(ingest, /reasonEn/);
+  assert.match(ingest, /maxTokens: 2000/);
 });
