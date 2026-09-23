@@ -41,3 +41,23 @@ test("owner review remains mandatory before commit", () => {
 test("file size is bounded before upload", () => {
   assert.match(ui, /8 \* 1024 \* 1024/);
 });
+
+
+test("image/PDF import continues into structured analysis instead of leaving extracted text unsaved", () => {
+  assert.match(ui, /sourceType/);
+  assert.match(ui, /detectedSourceType/);
+  assert.match(ui, /generateMenuOnboardingDraft\(\{ data: \{ sourceText: result\.data\.text, sourceType: detectedSourceType \} \}\)/);
+});
+
+test("import draft uses AI organization for category assignment and ordering", () => {
+  assert.match(ui, /organizeMenuOnboardingDraft/);
+  assert.match(ui, /orderedIndexes/);
+  assert.match(ui, /categoryAssignments/);
+  assert.match(ingest, /export const organizeMenuOnboardingDraft/);
+});
+
+test("import image URL validation is consistent with product image limits", () => {
+  const owner = fs.readFileSync(new URL("../src/lib/menu/owner.ts", import.meta.url), "utf8");
+  assert.match(owner, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
+  assert.match(ingest, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
+});
