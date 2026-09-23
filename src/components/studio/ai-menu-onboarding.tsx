@@ -39,7 +39,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
   function applyOrganization(rows: ImportRow[]) {
     if (!file) return;
     setFileName(file.name); setError(""); setOk(false); setOrganization(null);
-    const detectedSourceType = file.type === "application/pdf" ? "pdf" : "image";
+    const detectedSourceType: "text" | "image" | "pdf" = (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) ? "text" : file.type === "application/pdf" ? "pdf" : "image";
     setSourceType(detectedSourceType);
     if (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) {
       const reader = new FileReader(); reader.onload = () => setText(String(reader.result || "")); reader.readAsText(file); return;
