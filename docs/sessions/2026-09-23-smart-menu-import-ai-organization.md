@@ -51,3 +51,34 @@
 
 ## Exact next action
 No implementation task remains. Verify the single post-merge main deployment and, separately, replay the exact customer image in an authenticated live session when that environment is available.
+
+
+## Follow-up hardening — 2026-09-23 — DONE
+
+### Problem reproduced from owner evidence
+- VERIFIED: the uploaded menu image successfully produced readable OCR text in the customer UI.
+- VERIFIED: after OCR, the UI showed `نتيجة مساعد الذكاء الاصطناعي غير صالحة` and did not produce the structured import draft.
+- VERIFIED: `src/lib/menu/ai-core.ts` validates structured JSON strictly.
+- VERIFIED: `src/lib/menu/ai-providers.ts` clamps structured output to 2,000 tokens.
+- VERIFIED: the previous onboarding schema requested a large full row object for every product, and organization additionally requested a reason for every change. A full restaurant menu can exceed that output ceiling.
+
+### Implemented
+1. OCR/document extraction is now a separate step. Image/PDF upload leaves the extracted text visible and exposes an explicit **Smart extract menu / استخراج القائمة بذكاء** action.
+2. Structured onboarding extraction now requests only product fields that actually need AI generation/extraction.
+3. Large menus are split into bounded product-oriented batches before structured AI extraction.
+4. Server-side normalization supplies safe defaults for image URL, availability, featured state, tags, dietary labels, and review issues.
+5. Duplicate rows across extraction batches are de-duplicated without changing the owner save contract.
+6. AI organization output is compacted to ordering, confident existing-category assignments, and evidence-backed corrections; verbose per-change reasons are removed from the provider contract.
+7. Existing owner review/save remains the only persistence path.
+
+### Verification
+- VERIFIED: PR #267 merged into `main`.
+- VERIFIED: merge SHA `f60e24071a17077895cb61b5ca85b7a59cdccaea`.
+- VERIFIED: Quality run #2331 passed: route tree, typecheck, tests, W7.4–W7.10 contracts, lint, production build, browser template QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and evidence uploads.
+- VERIFIED: W9 Orders QA run #541 passed.
+- VERIFIED: Vercel Production deployment `dpl_ELuxrzuTeSR3oUwyCLc7sNtmnwwt` is READY and targets production for main commit `f60e24071a17077895cb61b5ca85b7a59cdccaea`.
+- VERIFIED: production root `https://menu-v3-kohl.vercel.app/` returned HTTP 200 with Arabic RTL HTML.
+- UNKNOWN: the exact uploaded customer image has not yet been replayed through an authenticated live Studio session, so exact end-to-end behavior for that specific account/image remains unverified outside CI.
+
+### Exact next action
+Replay the exact uploaded menu image in the authenticated live Studio session and confirm: OCR → **استخراج القائمة بذكاء** → structured rows → AI organization/corrections → owner review → save. Do not change runtime code unless that exact live replay produces a new, reproducible defect.
