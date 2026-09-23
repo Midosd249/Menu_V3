@@ -32,9 +32,8 @@ const extractedRowSchema = z.object({
   calories: z.number().int().min(0).nullable(),
 });
 
-const extractedDraftSchema = z.object({ rows: z.array(extractedRowSchema).min(1).max(250) });
+const extractedDraftSchema = z.object({ rows: z.array(extractedRowSchema).max(250) });
 
-type Category = { id: string; nameAr: string; nameEn: string };
 type Category = { id: string; nameAr: string; nameEn: string };
 
 const responseFormat = {
@@ -44,7 +43,7 @@ const responseFormat = {
     type: "object",
     properties: {
       rows: {
-        type: "array", minItems: 1, maxItems: 250,
+        type: "array", minItems: 0, maxItems: 250,
         items: {
           type: "object",
           properties: {
