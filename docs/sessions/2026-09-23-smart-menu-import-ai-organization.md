@@ -1,9 +1,10 @@
 # Smart Menu Import and AI Organization — 2026-09-23
 
 ## Status
-- VERIFIED_LOCALLY
+- DONE
 - Branch: `fix/smart-menu-import-and-ai-organization-2026-09-23`
-- PR: #265
+- PR: #265 — MERGED
+- Merged SHA: `09c9bfb8ae9aca8dcd66b4364166a2c7e7d26a54`
 - Base: `main`
 - Base SHA at task start: `16e3cfe284a76abb78bcdb51d8c261f8efa7ef61`
 
@@ -49,4 +50,4 @@
 - Existing menu behavior outside this flow remains unchanged.
 
 ## Exact next action
-Merge PR #265 once after the verified green CI/Vercel state. Do not start a separate deployment workflow from this task.
+No implementation task remains. Verify the single post-merge main deployment and, separately, replay the exact customer image in an authenticated live session when that environment is available.
