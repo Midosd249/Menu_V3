@@ -43,10 +43,12 @@ test("file size is bounded before upload", () => {
 });
 
 
-test("image/PDF import continues into structured analysis instead of leaving extracted text unsaved", () => {
+test("image/PDF import exposes extracted text to an explicit smart-extraction action", () => {
   assert.match(ui, /sourceType/);
   assert.match(ui, /detectedSourceType/);
-  assert.match(ui, /generateMenuOnboardingDraft\(\{ data: \{ sourceText: result\.data\.text, sourceType: detectedSourceType \} \}\)/);
+  assert.match(ui, /setReadyForSmartExtraction\(true\)/);
+  assert.match(ui, /استخراج القائمة بذكاء/);
+  assert.doesNotMatch(ui, /sourceText: result\.data\.text, sourceType: detectedSourceType/);
 });
 
 test("import draft uses AI organization for category assignment and ordering", () => {
