@@ -1,7 +1,7 @@
 # Smart Menu Import and AI Organization — 2026-09-23
 
 ## Status
-- IMPLEMENTATION_IN_PROGRESS
+- VERIFIED_LOCALLY
 - Branch: `fix/smart-menu-import-and-ai-organization-2026-09-23`
 - PR: #265
 - Base: `main`
@@ -34,9 +34,11 @@
 ## Verification
 - VERIFIED: branch is based directly on current `main`.
 - VERIFIED: diff is scoped to import UI, AI ingest, import persistence validation, tests, and this continuity note.
-- BLOCKED/UNKNOWN: local test/typecheck/lint/build/browser execution is not available through the current connected GitHub surface.
-- BLOCKED/UNKNOWN: GitHub Actions quality result has not appeared for the latest branch head yet.
-- UNKNOWN: real customer image import/save flow has not been re-run in a live browser session after this change.
+- VERIFIED: GitHub Quality run 2325 completed successfully: route tree, typecheck, tests, lint, production build, browser template QA, golden performance fixture, Studio/browser QA, Platform Admin/browser QA, and performance evidence upload all passed.
+- VERIFIED: GitHub W9 Orders QA run 537 completed successfully, including browser QA.
+- VERIFIED: Vercel preview deployment for the branch is Ready at the PR status target.
+- UNKNOWN: this connected surface does not provide a real authenticated customer session with the uploaded menu image, so the exact user-provided image has not been replayed against the preview.
+- VERIFIED: the code path is covered by CI contract tests and browser QA, but the exact external image remains an application-level live-session check.
 
 ## Acceptance criteria
 - Image/PDF upload produces a structured draft without requiring the customer to discover a second mandatory analysis step.
@@ -47,4 +49,4 @@
 - Existing menu behavior outside this flow remains unchanged.
 
 ## Exact next action
-Run GitHub Quality/W9/browser verification for PR #265. If green, review the final diff and then merge once. If red, fix only the reported task-scoped failure. Do not deploy automatically.
+Merge PR #265 once after the verified green CI/Vercel state. Do not start a separate deployment workflow from this task.
