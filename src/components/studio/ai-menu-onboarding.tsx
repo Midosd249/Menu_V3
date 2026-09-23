@@ -31,18 +31,8 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
         result = await requestDraft();
       }
       if (!result.ok) { setError(result.error); return; }
-      onRows(result.data.rows); setOk(true);
+      onRows(await organizeRows(result.data.rows)); setOk(true);
     } catch (e) { setError(e instanceof Error ? e.message : "AI request failed"); }
-    finally { setBusy(false); }
-  }
-
-  async function organize(rows: ImportRow[]) {
-    setBusy(true); setError("");
-    try {
-      const result = await organizeMenuOnboardingDraft({ data: { rows } });
-      if (!result.ok) { setError(result.error); return; }
-      setOrganization(result.data);
-    } catch (e) { setError(e instanceof Error ? e.message : "Organization failed"); }
     finally { setBusy(false); }
   }
 
@@ -73,7 +63,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
           draft = await generateMenuOnboardingDraft({ data: { sourceText: result.data.text, sourceType: detectedSourceType } });
         }
         if (!draft.ok) { setError(draft.error); return; }
-        onRows(draft.data.rows);
+        onRows(await organizeRows(draft.data.rows));
         setOk(true);
       } catch (e) { setError(e instanceof Error ? e.message : "File extraction failed"); }
       finally { setBusy(false); }
