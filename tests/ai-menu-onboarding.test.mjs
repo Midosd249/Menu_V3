@@ -61,3 +61,19 @@ test("import image URL validation is consistent with product image limits", () =
   assert.match(owner, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
   assert.match(ingest, /imageUrl: z\.string\(\)\.trim\(\)\.max\(450_000\)/);
 });
+
+
+test("smart extraction uses compact rows and batches large menus before owner review", () => {
+  assert.match(ingest, /extractedRowSchema/);
+  assert.match(ingest, /splitMenuSource/);
+  assert.match(ingest, /currentBlocks\.length >= 6/);
+  assert.match(ingest, /responseSchema: extractedDraftSchema/);
+  assert.match(ingest, /price: z\.number\(\)\.finite\(\)\.min\(0\)\.nullable\(\)/);
+  assert.match(ingest, /imageUrl: ""/);
+});
+
+test("organization output is compact enough for the provider response ceiling", () => {
+  assert.doesNotMatch(ingest, /reasonAr/);
+  assert.doesNotMatch(ingest, /reasonEn/);
+  assert.match(ingest, /maxTokens: 2000/);
+});
