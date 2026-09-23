@@ -38,7 +38,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
 
   async function organizeRows(rows: ImportRow[]) {
     try {
-      const result = await organizeMenuOnboardingDraft({ data: { rows } });
+      const result = await organizeMenuOnboardingDraft({ data: { rows: rows.map((row) => ({ ...row, tags: row.tags ?? [], dietaryLabels: row.dietaryLabels ?? [] })) } });
       if (!result.ok) return rows;
       setOrganization(result.data);
       const byIndex = new Map(result.data.categoryAssignments.map((item) => [item.rowIndex, item]));
