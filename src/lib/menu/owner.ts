@@ -526,7 +526,7 @@ export const importProducts = createServerFn({ method: "POST" })
           descriptionAr: z.string().trim().max(600),
           descriptionEn: z.string().trim().max(600),
           price: z.number().min(0).max(100000),
-          imageUrl: z.string().trim().max(500),
+          imageUrl: z.string().trim().max(450_000),
           calories: z.number().int().min(0).max(10000).nullable(),
           isFeatured: z.boolean(),
           isAvailable: z.boolean(),
