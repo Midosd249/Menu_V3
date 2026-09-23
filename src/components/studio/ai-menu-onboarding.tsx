@@ -57,7 +57,9 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
           if (correction.field === "nameEn" && typeof correction.value === "string") next.nameEn = correction.value;
           if (correction.field === "descriptionAr" && typeof correction.value === "string") next.descriptionAr = correction.value;
           if (correction.field === "descriptionEn" && typeof correction.value === "string") next.descriptionEn = correction.value;
-          next.issues = next.issues.filter((issue) => !issue.includes("السعر غير موجود") && !issue.includes("التصنيف يحتاج مراجعة"));
+          if (correction.field === "price") next.issues = next.issues.filter((issue) => !issue.includes("السعر غير موجود") && !issue.includes("السعر غير صالح"));
+          if (correction.field === "nameAr" || correction.field === "nameEn") next.issues = next.issues.filter((issue) => !issue.includes("الاسم العربي مطلوب"));
+          if (byIndex.has(index)) next.issues = next.issues.filter((issue) => !issue.includes("التصنيف يحتاج مراجعة"));
         }
         return next;
       });
