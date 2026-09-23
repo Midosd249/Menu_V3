@@ -106,7 +106,7 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
 
   return <section className="grid gap-4 rounded-2xl border border-line bg-sand/20 p-4">
     <div><h2 className="font-display text-lg font-semibold">{lang === "ar" ? "إدخال القائمة بذكاء" : "Smart menu import"}</h2><p className="mt-1 text-sm text-muted">{lang === "ar" ? "ألصق النص أو ارفع صورة/PDF. سيُنشئ النظام مسودة للمراجعة فقط، ثم تختار أنت ما يُحفظ." : "Paste text or upload an image/PDF. The system creates a review draft, then you choose what gets saved."}</p></div>
-    <textarea className="min-h-36 w-full rounded-xl border border-line bg-background p-3 text-sm" value={text} onChange={e => setText(e.target.value)} placeholder={lang === "ar" ? "الصق قائمة الطعام هنا..." : "Paste the menu here..."} />
+    <textarea className="min-h-36 w-full rounded-xl border border-line bg-background p-3 text-sm" value={text} onChange={e => { setText(e.target.value); setSourceType("text"); }} placeholder={lang === "ar" ? "الصق قائمة الطعام هنا..." : "Paste the menu here..."} />
     <div className="flex flex-wrap gap-2">
       <label className="inline-flex h-11 cursor-pointer items-center rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground">{lang === "ar" ? "رفع صورة أو PDF" : "Upload image or PDF"}<input type="file" accept="application/pdf,image/jpeg,image/png,image/webp,.txt" className="sr-only" onChange={e => upload(e.target.files?.[0] ?? null)} /></label>
       <Button type="button" disabled={busy || !text.trim()} onClick={() => void analyze()}>{busy ? (lang === "ar" ? "جاري المعالجة..." : "Processing...") : (lang === "ar" ? "تحليل القائمة" : "Analyze menu")}</Button>
