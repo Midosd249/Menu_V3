@@ -63,13 +63,14 @@ export function AiMenuOnboarding({ onRows, busy, setBusy }: Props) {
         }
         return next;
       });
-      return result.data.orderedIndexes.map((index) => corrected[index]).filter(Boolean);
+      return result.data.orderedIndexes.map((index) => corrected[index]).filter((row): row is ImportRow => Boolean(row));
     } catch {
       return rows;
     }
   }
 
   function upload(file: File | null) {
+    if (!file) return;
     setFileName(file.name); setError(""); setOk(false); setOrganization(null);
     const detectedSourceType: "text" | "image" | "pdf" = (file.type.startsWith("text/") || file.name.toLowerCase().endsWith(".txt")) ? "text" : file.type === "application/pdf" ? "pdf" : "image";
     setSourceType(detectedSourceType);
