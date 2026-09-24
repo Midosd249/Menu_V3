@@ -4,6 +4,7 @@ import test from "node:test";
 
 const core = fs.readFileSync(new URL("../src/lib/menu/ai-core.ts", import.meta.url), "utf8");
 const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
+const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -100,7 +101,7 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
   }
 });
 
-test("planned providers are registered but cannot enter runtime routing in Phase 1", () => {
+test("planned providers remain registered while the Phase 3 Groq adapter is explicitly active", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
     assert.match(registry, new RegExp(expected));
   }
@@ -108,7 +109,8 @@ test("planned providers are registered but cannot enter runtime routing in Phase
   assert.match(registry, /keyPoolSize:3/);
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
-  assert.doesNotMatch(providers, /typesafe|nvidia|groq|cloudflare|cerebras|mistral|deepgram/);
+  assert.match(providers, /"groq"/);
+  assert.doesNotMatch(providers, /typesafe|nvidia|cloudflare|cerebras|mistral|deepgram/);
 });
 
 
@@ -140,4 +142,27 @@ test("Phase 2 credential status exposes metadata, never secret values", () => {
   assert.match(credentialSource, /AiProviderCredentialStatus/);
   assert.match(credentialSource, /configuredSecretCount/);
   assert.match(credentialSource, /configuredContextCount/);
+});
+
+
+test("Phase 3 Groq adapter uses the official OpenAI-compatible endpoint and strict structured outputs", () => {
+  assert.match(groqAdapter, /https:\/\/api\.groq\.com\/openai\/v1/);
+  assert.match(groqAdapter, /GROQ_API_KEY/);
+  assert.match(groqAdapter, /GROQ_MODEL/);
+  assert.match(groqAdapter, /openai\/gpt-oss-20b/);
+  assert.match(groqAdapter, /response_format/);
+  assert.match(groqAdapter, /type: "json_schema"/);
+  assert.match(groqAdapter, /strict: true/);
+  assert.match(groqAdapter, /max_completion_tokens/);
+  assert.match(groqAdapter, /AbortSignal\.timeout\(60_000\)/);
+});
+
+test("Groq is fail-closed when the credential is missing", () => {
+  assert.match(groqAdapter, /if \(!key\)/);
+  assert.match(groqAdapter, /code: "ai_not_configured"/);
+});
+
+test("Groq remains outside multimodal routing until a separately verified vision adapter is approved", () => {
+  assert.match(providers, /DEFAULT_MULTIMODAL_ORDER: AiProvider\[\] = \["gemini", "openrouter", "zai"\]/);
+  assert.match(registry, /groq:[\s\S]*?candidateCapabilities:\["structured"\]/);
 });
