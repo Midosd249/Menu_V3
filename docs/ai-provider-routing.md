@@ -95,3 +95,10 @@ Confirmed future key pools:
 - Cerebras, Mistral, Deepgram: provider-specific credentials
 
 See `docs/ai-provider-expansion.md` for the complete roadmap and continuity contract.
+
+
+## Provider Expansion / Phase 3 — NVIDIA — 2026-09-24
+
+NVIDIA hosted NIM/API Catalog is enabled only for the existing structured text boundary. Endpoint: `https://integrate.api.nvidia.com/v1/chat/completions`. Credentials: `NVIDIA_API_KEY`, `NVIDIA_API_KEY_2`. Default model: `openai/gpt-oss-120b`; optional `NVIDIA_MODEL`. The adapter embeds the server-generated JSON schema in the system instruction and requires JSON-only output; downstream Zod/domain validation remains authoritative. Timeout is 60 seconds. NVIDIA is excluded from image/PDF routing because the verified default model is text-only. Explicit test selection uses `AI_PROVIDER=nvidia`.
+
+Official sources: https://docs.api.nvidia.com/nim/reference/openai-gpt-oss-120b ; https://docs.api.nvidia.com/nim/reference/openai-gpt-oss-120b-infer ; https://docs.api.nvidia.com/nim/reference/llm-apis

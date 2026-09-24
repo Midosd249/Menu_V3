@@ -751,3 +751,18 @@ Exact next task:
 
 ### EXACT NEXT TASK
 **Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify structured output and normalized failure behavior, then review the final diff. Do not merge PR #270 or start NVIDIA before Groq smoke evidence is recorded.**
+
+
+# 2026-09-24 — AI Provider Expansion / Phase 3 NVIDIA — IMPLEMENTED / LIVE SMOKE PENDING
+
+- VERIFIED: owner confirmed Groq live smoke succeeds on `main`.
+- IMPLEMENTED: NVIDIA structured adapter `src/lib/menu/ai-nvidia.ts` and two-key pool.
+- IMPLEMENTED: default `openai/gpt-oss-120b`, optional `NVIDIA_MODEL`, bounded timeout and normalized failures.
+- VERIFIED: NVIDIA remains outside multimodal routing.
+- VERIFIED: no protected product/security/data boundaries changed.
+- UNKNOWN: authenticated live NVIDIA behavior.
+
+Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 credentials; existing AI routing; Smart Menu Import; public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+**Run the single authenticated NVIDIA structured-AI smoke on `main` with `AI_PROVIDER=nvidia`; if valid, record evidence and proceed to Cloudflare without unnecessary Vercel deployments.**
