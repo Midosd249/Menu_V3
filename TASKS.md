@@ -777,3 +777,14 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Mistral document/OCR specialist adapter.**
+
+
+## 2026-09-24 — AI Provider Expansion / Mistral CLOSED
+
+- VERIFIED: PR #277 merged at `9d57186788fd9b91669bb52e201bb492551eb9fc`.
+- VERIFIED: Quality #2378 and W9 Orders QA #581 passed.
+- UNKNOWN: authenticated Mistral live document smoke remains pending because secret values are inaccessible through the connected GitHub session.
+- MUST NOT REDO: Groq, NVIDIA, Cloudflare, Cerebras, Phase 1 registry, Phase 2 credentials, Mistral, Smart Menu Import, and public-menu/performance phases 0–8.
+
+### Exact Next Task
+**Implement and verify the Deepgram isolated STT/audio specialist adapter.**

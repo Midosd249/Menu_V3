@@ -860,3 +860,20 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **Phase 3 — implement and verify the Mistral document/OCR specialist adapter. Keep Mistral isolated from generic text routing and preserve the existing Smart Menu Import architecture.**
+
+
+# 2026-09-24 — AI Provider Expansion / Mistral Document AI — CLOSED / VERIFIED
+
+- VERIFIED: PR #277 merged by squash as `9d57186788fd9b91669bb52e201bb492551eb9fc`.
+- VERIFIED: Mistral Document AI/OCR specialist is active through the existing menu document/multimodal boundary.
+- VERIFIED: official `POST /v1/ocr` contract, `MISTRAL_API_KEY`, default `mistral-ocr-latest`, PDF `document_url`, image `image_url`, and structured `document_annotation_format` were implemented.
+- VERIFIED: Mistral is excluded from generic structured text routing and registered only as the document specialist capability.
+- VERIFIED: Quality #2378 passed Typecheck, Tests, W7.4–W7.10 contracts, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: W9 Orders QA #581 passed.
+- VERIFIED: Vercel PR status for the final head was SUCCESS; no Production deployment was requested by this task.
+- UNKNOWN: authenticated live Mistral document smoke remains unverified because secret values are not accessible through the connected GitHub session.
+- PROTECTED / MUST NOT REDO: Groq, NVIDIA, Cloudflare, Cerebras, Phase 1 registry, Phase 2 credentials, existing Smart Menu Import architecture, and public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+
+**Phase 3 — implement and verify the Deepgram isolated STT/audio specialist adapter. Keep audio routing isolated from generic LLM routing and preserve all existing Menu V3 boundaries.**
