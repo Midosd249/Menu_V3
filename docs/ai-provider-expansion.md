@@ -2,7 +2,7 @@
 
 ## Status
 
-IN_PROGRESS — Phase 4: Cloudflare Workers AI structured adapter implemented; live smoke pending.
+IN_PROGRESS — Phase 3: Mistral Document AI/OCR structured adapter implemented; CI and live smoke pending.
 
 This document is the continuity anchor for the AI provider expansion. A new chat must read this document, docs/ai-provider-routing.md, PROJECT_STATE.md, PLAN.md, TASKS.md, and the current src/lib/menu/ai-*.ts implementation before making further changes.
 
@@ -369,3 +369,45 @@ Security / protected work:
 
 ### Remaining gate
 CI must pass. One authenticated live Cerebras smoke on `main` remains a separate runtime evidence item because GitHub cannot read the configured secret value or substitute it into an authenticated external API request.
+
+
+## Phase 3 — Mistral Document AI/OCR Specialist — 2026-09-24
+
+**Status:** IMPLEMENTED / CI verification pending.
+
+### Official contract verified
+- Endpoint: `POST https://api.mistral.ai/v1/ocr`.
+- Authentication: `Authorization: Bearer $MISTRAL_API_KEY`.
+- Default model: `mistral-ocr-latest`; optional override: `MISTRAL_MODEL`.
+- PDF input uses `document.type = "document_url"`; base64 PDF data URLs are supported by the official Mistral cookbook.
+- Image input uses `document.type = "image_url"`; base64 image data URLs are supported by the official Mistral OCR documentation/cookbook.
+- Document annotations use `document_annotation_format.type = "json_schema"` with a typed JSON Schema and `document_annotation_prompt`.
+- The adapter requests only the structured menu fields needed by the existing `extractMenuDocument` contract: `text` and `summary`.
+- OCR page markdown remains a fallback source if the annotation payload is absent, while downstream Zod validation remains authoritative.
+- Mistral remains isolated from generic structured text routing; it is a document/OCR specialist invoked by the existing multimodal menu-document boundary.
+
+### Security and resilience
+- `MISTRAL_API_KEY` is server-side only.
+- No `VITE_*` credential path is introduced.
+- Prompt input is bounded by the existing document-extraction boundary.
+- Request timeout is 60 seconds.
+- Missing credentials fail closed with `ai_not_configured`.
+- HTTP/runtime failures normalize to the existing provider failure contract.
+- No secrets are logged or committed.
+- No database, auth/RLS, subscription, tenant/branch, ordering, public-menu, or deployment architecture changes.
+
+### Research sources
+- Mistral OCR API: https://docs.mistral.ai/api/endpoint/ocr
+- Mistral OCR Processor: https://docs.mistral.ai/studio/document-processing/basic_ocr
+- Mistral Document Annotations: https://docs.mistral.ai/studio-api/document-processing/annotations
+- Mistral OCR data-extraction cookbook: https://docs.mistral.ai/resources/cookbooks/mistral-ocr-data_extraction
+
+### Verification gate
+1. GitHub Quality must pass typecheck, tests, lint, production build, browser/template checks, and performance gates.
+2. W9 Orders QA must pass.
+3. Final diff must remain limited to the Mistral specialist boundary, routing integration, registry, tests, and continuity documentation.
+4. One authenticated Mistral document smoke remains separate runtime evidence because GitHub cannot read the configured secret value.
+5. No Production deployment is requested by this adapter task.
+
+### Exact next task after closure
+**Deepgram isolated STT/audio adapter. Do not rebuild or rework Groq, NVIDIA, Cloudflare, Cerebras, Phase 1/2 credential contracts, Smart Menu Import, or public-menu/performance phases 0–8.**

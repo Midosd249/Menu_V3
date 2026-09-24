@@ -4,6 +4,7 @@ import { callGroqStructured, GROQ_DEFAULT_MODEL } from "./ai-groq";
 import { callNvidiaStructured, NVIDIA_DEFAULT_MODEL } from "./ai-nvidia";
 import { callCloudflareStructured, CLOUDFLARE_DEFAULT_MODEL } from "./ai-cloudflare";
 import { callCerebrasStructured, CEREBRAS_DEFAULT_MODEL } from "./ai-cerebras";
+import { callMistralDocument, MISTRAL_DEFAULT_MODEL } from "./ai-mistral";
 
 export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare" | "cerebras";
 type JsonSchema = Record<string, unknown>;
@@ -19,15 +20,16 @@ type ProviderCallArgs = {
 type MultimodalCallArgs = {
   prompt: string;
   dataUrl: string;
-  mimeType: string;
+  mimeType: "application/pdf" | "image/jpeg" | "image/png" | "image/webp";
 };
 
-type ProviderSuccess = { ok: true; content: string; provider: AiProvider; model: string };
+type ProviderResultProvider = AiProvider | "mistral";
+type ProviderSuccess = { ok: true; content: string; provider: ProviderResultProvider; model: string };
 type ProviderFailure = {
   ok: false;
   code: "ai_not_configured" | "ai_unavailable" | "ai_invalid";
   error: string;
-  provider: AiProvider;
+  provider: ProviderResultProvider;
   model: string;
 };
 
@@ -45,6 +47,7 @@ export const AI_PROVIDER_DEFAULTS = {
   nvidia: NVIDIA_DEFAULT_MODEL,
   cloudflare: CLOUDFLARE_DEFAULT_MODEL,
   cerebras: CEREBRAS_DEFAULT_MODEL,
+  mistral: MISTRAL_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
@@ -328,8 +331,17 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
 export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<ProviderSuccess | ProviderFailure> {
   const capability: AiCapability = args.mimeType === "application/pdf" ? "pdf" : "image";
   const order = getProviderOrder(capability);
+  const forcedProvider = env("AI_PROVIDER").toLowerCase();
   let lastFailure: ProviderFailure | null = null;
 
+
+  // Mistral is a document/OCR specialist, so it is tried first for menu document extraction.
+  // An explicit non-Mistral provider override keeps the existing override semantics.
+  if (!forcedProvider || forcedProvider === "auto" || forcedProvider === "mistral") {
+    const mistralResult = await callMistralDocument(args);
+    if (mistralResult.ok) return mistralResult;
+    lastFailure = mistralResult;
+  }
   for (const provider of order) {
     const keys = orderedKeys(provider);
     if (!keys.length) {

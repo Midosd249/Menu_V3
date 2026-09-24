@@ -8,6 +8,7 @@ const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import
 const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", import.meta.url), "utf8");
 const cloudflareAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cloudflare.ts", import.meta.url), "utf8");
 const cerebrasAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cerebras.ts", import.meta.url), "utf8");
+const mistralAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-mistral.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -117,7 +118,7 @@ test("planned providers remain registered while Groq, NVIDIA, and Cloudflare ada
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe|mistral|deepgram/);
+  assert.doesNotMatch(providers, /typesafe|deepgram/);
   assert.match(providers, /"cerebras"/);
 });
 
@@ -210,6 +211,29 @@ test("Cerebras adapter contract is server-only, bounded, version-pinned, and str
   assert.match(cerebrasAdapter, /AbortSignal\.timeout\(60_000\)/);
   assert.match(cerebrasAdapter, /ai_not_configured/);
   assert.doesNotMatch(cerebrasAdapter, /VITE_/);
+});
+
+test("Mistral Document AI is server-only, structured-annotation capable, and document-scoped", () => {
+  assert.match(mistralAdapter, /https:\/\/api\.mistral\.ai\/v1\/ocr/);
+  assert.match(mistralAdapter, /MISTRAL_API_KEY/);
+  assert.match(mistralAdapter, /MISTRAL_MODEL/);
+  assert.match(mistralAdapter, /mistral-ocr-latest/);
+  assert.match(mistralAdapter, /document_annotation_format/);
+  assert.match(mistralAdapter, /json_schema/);
+  assert.match(mistralAdapter, /document_url/);
+  assert.match(mistralAdapter, /image_url/);
+  assert.match(mistralAdapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(mistralAdapter, /ai_not_configured/);
+  assert.doesNotMatch(mistralAdapter, /VITE_/);
+  assert.match(providers, /callMistralDocument/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*mistral/);
+});
+
+test("Mistral is active only as the document/OCR specialist", () => {
+  assert.match(registry, /mistral:[\s\S]*?lifecycle:"active"/);
+  assert.match(registry, /mistral:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /mistral:[\s\S]*?candidateCapabilities:\["ocr_document","image","pdf"\]/);
+  assert.match(registry, /mistral:[\s\S]*?role:"document_specialist"/);
 });
 
 test("Cerebras remains structured-only and excluded from multimodal routing", () => {
