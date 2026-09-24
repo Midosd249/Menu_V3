@@ -20,7 +20,7 @@ type ProviderCallArgs = {
 type MultimodalCallArgs = {
   prompt: string;
   dataUrl: string;
-  mimeType: string;
+  mimeType: "application/pdf" | "image/jpeg" | "image/png" | "image/webp";
 };
 
 type ProviderResultProvider = AiProvider | "mistral";
