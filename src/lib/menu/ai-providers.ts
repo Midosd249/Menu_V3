@@ -52,6 +52,7 @@ async function getPreferredStructuredProvider(args: {
   const candidates = args.candidates
     .map((provider) => ({ provider, model: getProviderModel(provider, "structured") }))
     .filter((candidate) => Boolean(candidate.model))
+    .filter((candidate) => getProviderKeys(candidate.provider).length > 0)
     .map((candidate) => ({
       id: candidate.provider + ":" + candidate.model,
       provider: candidate.provider,
