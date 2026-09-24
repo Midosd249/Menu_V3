@@ -281,13 +281,17 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
     }
 
     for (const key of keys) {
-      const result = provider === "gemini"
-        ? await callGemini(args, key)
-        : provider === "groq"
-          ? await callGroqStructured(args, key).then((result) => result.ok
-            ? { ok: true, content: result.content, provider: "groq" as const, model: result.model }
-            : { ok: false, code: result.code, error: result.error, provider: "groq" as const, model: result.model })
-          : await callOpenAiCompatible(provider, args, key);
+      let result: ProviderSuccess | ProviderFailure;
+      if (provider === "gemini") {
+        result = await callGemini(args, key);
+      } else if (provider === "groq") {
+        const groqResult = await callGroqStructured(args, key);
+        result = groqResult.ok
+          ? { ok: true, content: groqResult.content, provider: "groq", model: groqResult.model }
+          : { ok: false, code: groqResult.code, error: groqResult.error, provider: "groq", model: groqResult.model };
+      } else {
+        result = await callOpenAiCompatible(provider, args, key);
+      }
       if (result.ok) return result;
       lastFailure = result;
     }
@@ -319,6 +323,8 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
       };
       continue;
     }
+
+    if (provider === "groq") continue;
 
     for (const key of keys) {
       const genericArgs: ProviderCallArgs = {
