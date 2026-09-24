@@ -679,3 +679,16 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Deepgram isolated STT/audio specialist adapter, without entering generic LLM routing.**
+\n\n## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+
+- VERIFIED: PR #279 merged by squash as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
+- VERIFIED: official Deepgram pre-recorded STT contract researched through primary documentation.
+- VERIFIED: dedicated adapter, existing-boundary integration, audio-only capability activation, regression contracts, normalized failures, bounded timeout, and fail-closed credential behavior.
+- VERIFIED: Quality #2387 passed.
+- VERIFIED: W9 Orders QA #588 passed.
+- VERIFIED: no database, auth/RLS, subscription, tenant/branch, Smart Menu Import, public-menu/performance, or Production deployment changes were introduced by the task.
+- UNKNOWN: authenticated Deepgram live smoke.
+- UNKNOWN: direct Production deployment identity/status for merged main.
+
+### EXACT NEXT TASK
+**Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
