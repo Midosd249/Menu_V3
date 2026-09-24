@@ -699,3 +699,28 @@ Verification:
 
 Exact next task:
 **Close Phase 2 after final Quality/W9 verification; then Phase 3 adapters.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 2 CLOSED
+
+- VERIFIED: server-only credential contract implemented.
+- VERIFIED: owner-provided key-pool inventory locked.
+- VERIFIED: Cloudflare token + Account ID dependency locked.
+- VERIFIED: fail-closed credential state implemented.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no secrets committed.
+- VERIFIED: no runtime provider activation.
+- VERIFIED: no deployment.
+
+Protected / MUST NOT REDO:
+- Phase 1 capability vocabulary.
+- Provider registry.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro runtime routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+
+UNKNOWN:
+- Live credential validity until environment secrets are supplied.
+
+Exact next task:
+**Phase 3 — Groq execution adapter and targeted verification.**

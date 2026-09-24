@@ -240,3 +240,43 @@ The credential module is `src/lib/menu/ai-provider-credentials.server.ts`. The `
 3. CI must pass the applicable Quality and W9 gates.
 4. Diff review must prove no secret values, no runtime activation, and no database/deployment changes.
 5. Only after closure may Phase 3 adapters begin.
+
+
+## Phase 2 Closure — VERIFIED — 2026-09-24
+
+**Status: CLOSED / VERIFIED.**
+
+Implementation:
+- Added `src/lib/menu/ai-provider-credentials.server.ts`.
+- Locked the requested credential names and pool inventory.
+- TypeSafe/Jev: 3 key slots.
+- NVIDIA: 2 key slots.
+- Groq/Cerebras/Mistral/Deepgram: 1 key slot each.
+- Cloudflare: API token + Account ID.
+- Missing/partial configuration fails closed.
+- Credential status contains counts/state only; it does not expose secret values.
+- The module is server-only by filename boundary.
+- No provider runtime activation was introduced.
+- No database migration or deployment was introduced.
+
+Research:
+- Official authentication requirements were checked for all seven provider families using the connected Exa research workflow.
+
+Verification:
+- GitHub Quality #2345: PASS.
+- GitHub W9 Orders QA #553: PASS.
+- Quality included typecheck/tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA.
+- W9 Orders browser QA passed.
+- Final diff review shows only the planned AI registry/credential/documentation/test files.
+
+Security:
+- No secret values were committed.
+- No `VITE_*` credential path was introduced.
+- No new provider entered runtime routing.
+- Live credential validity remains UNKNOWN until the owner supplies credentials through the secret store; this is intentionally not a blocker for the credential-contract phase.
+
+**Implementation status: READY_TO_PUSH.**
+
+**Deployment status: NOT_PERFORMED.**
+
+**Exact next task:** Phase 3 — execution adapters, beginning with Groq, then NVIDIA, Cloudflare Workers AI, Cerebras, Mistral, and Deepgram. TypeSafe/Jev remains the later decision-orchestrator adapter. Do not activate any provider until its adapter, exact capability contract, targeted tests, and smoke verification pass.

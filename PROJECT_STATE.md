@@ -777,3 +777,22 @@ Phase 2 — implement fail-closed credential validation and key pools for TypeSa
 ## EXACT NEXT TASK
 
 Complete Phase 2 verification and close the credential-contract phase. If Quality/W9 pass, Phase 3 is the execution-adapter phase, beginning with Groq and then NVIDIA/Cloudflare/Cerebras/Mistral/Deepgram according to the documented order.
+
+
+# CURRENT VERIFIED POSITION — AI PROVIDER EXPANSION — 2026-09-24
+
+- VERIFIED: Phase 1 provider registry/capability foundation is complete.
+- VERIFIED: Phase 2 credential contract is CLOSED / VERIFIED.
+- VERIFIED: current branch is `feat/ai-provider-expansion-foundation`.
+- VERIFIED: current Phase-2 implementation head is the parent of the closure documentation commit.
+- VERIFIED: TypeSafe/Jev 3-key, NVIDIA 2-key, Groq 1-key, Cloudflare token+Account ID, Cerebras 1-key, Mistral 1-key, Deepgram 1-key contracts exist.
+- VERIFIED: credential module is server-only.
+- VERIFIED: missing required credentials/context fail closed.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no provider runtime activation, database migration, or Vercel deployment occurred.
+- UNKNOWN: live credential validity, because secret values are not present in the repository or this connected GitHub session.
+
+## EXACT NEXT TASK
+
+**Phase 3 — execution adapters.** Implement and verify one adapter at a time, beginning with Groq. Preserve the credential boundary and keep every new provider runtime-disabled until its adapter and targeted smoke verification are complete.

@@ -607,3 +607,18 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+# CURRENT VERIFIED AI EXPANSION POSITION — 2026-09-24
+
+- VERIFIED: Phase 1 CLOSED.
+- VERIFIED: Phase 2 CLOSED / VERIFIED.
+- VERIFIED: all requested credential names and pool sizes are documented and implemented server-side.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no secrets, runtime activation, migration, or deployment.
+- UNKNOWN: live credential validity until credentials are supplied through the environment/secret store.
+
+## EXACT NEXT TASK
+
+**Phase 3 — execution adapters, beginning with Groq.**
