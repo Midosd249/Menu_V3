@@ -683,3 +683,19 @@ Exact next task after closure:
 
 Exact next task:
 **Phase 2 — fail-closed credential validation/key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram; no runtime activation.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 2 IN PROGRESS
+
+- Credential contract implemented as server-only module.
+- Key-pool inventory locked to owner-provided counts.
+- Cloudflare token + Account ID dependency documented.
+- Runtime provider activation explicitly remains disabled.
+- Live credential validity is UNKNOWN because secret values are not available to this connected GitHub session.
+
+Verification:
+- Static contract tests added.
+- GitHub Quality/W9 pending for the final Phase-2 head.
+
+Exact next task:
+**Close Phase 2 after final Quality/W9 verification; then Phase 3 adapters.**
