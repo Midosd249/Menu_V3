@@ -102,7 +102,7 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
   }
 });
 
-test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort: "low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
+test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort: "low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
 
 test("planned providers remain registered while the Phase 3 Groq and NVIDIA adapters are explicitly active", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
