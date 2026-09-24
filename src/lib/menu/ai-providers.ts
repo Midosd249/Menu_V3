@@ -46,7 +46,8 @@ export const AI_PROVIDER_DEFAULTS = {
   groq: GROQ_DEFAULT_MODEL,
   nvidia: NVIDIA_DEFAULT_MODEL,
   cloudflare: CLOUDFLARE_DEFAULT_MODEL,
-  cerebras: CEREBRAS_DEFAULT_MODEL,\n  mistral: MISTRAL_DEFAULT_MODEL,
+  cerebras: CEREBRAS_DEFAULT_MODEL,
+  mistral: MISTRAL_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
