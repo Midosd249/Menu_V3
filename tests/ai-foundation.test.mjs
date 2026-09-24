@@ -109,7 +109,8 @@ test("planned providers remain registered while Groq, NVIDIA, and Cloudflare ada
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
     assert.match(registry, new RegExp(expected));
   }
-  assert.match(registry, /runtimeEligible:false/);\n  assert.match(registry, /cloudflare:[\\s\\S]*?runtimeEligible:true/);
+  assert.match(registry, /runtimeEligible:false/);
+  assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /keyPoolSize:3/);
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
