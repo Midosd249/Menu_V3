@@ -10,11 +10,11 @@ export type GuestFallbackProduct = Pick<
   | "price"
   | "currency"
   | "isAvailable"
-  | "isFeatured"
   | "allergens"
   | "dietaryLabels"
-  | "tags"
 > & {
+  isFeatured?: boolean;
+  tags?: string[];
   categoryAr?: string;
   categoryEn?: string;
 };
