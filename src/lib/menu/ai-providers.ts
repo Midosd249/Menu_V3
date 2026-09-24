@@ -3,8 +3,9 @@ import type { AiCapability } from "./ai-capabilities";
 import { callGroqStructured, GROQ_DEFAULT_MODEL } from "./ai-groq";
 import { callNvidiaStructured, NVIDIA_DEFAULT_MODEL } from "./ai-nvidia";
 import { callCloudflareStructured, CLOUDFLARE_DEFAULT_MODEL } from "./ai-cloudflare";
+import { callCerebrasStructured, CEREBRAS_DEFAULT_MODEL } from "./ai-cerebras";
 
-export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare";
+export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare" | "cerebras";
 type JsonSchema = Record<string, unknown>;
 
 type ProviderCallArgs = {
@@ -30,7 +31,7 @@ type ProviderFailure = {
   model: string;
 };
 
-const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq", "nvidia", "cloudflare"];
+const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq", "nvidia", "cloudflare", "cerebras"];
 const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai"];
 
 export const AI_PROVIDER_DEFAULTS = {
@@ -43,6 +44,7 @@ export const AI_PROVIDER_DEFAULTS = {
   groq: GROQ_DEFAULT_MODEL,
   nvidia: NVIDIA_DEFAULT_MODEL,
   cloudflare: CLOUDFLARE_DEFAULT_MODEL,
+  cerebras: CEREBRAS_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
@@ -54,14 +56,14 @@ function parseOrder(value: string | undefined, fallback: AiProvider[]) {
     .split(",")
     .map((item) => item.trim().toLowerCase())
     .filter((item): item is AiProvider =>
-      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro" || item === "groq" || item === "nvidia" || item === "cloudflare",
+      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro" || item === "groq" || item === "nvidia" || item === "cloudflare" || item === "cerebras",
     );
   return parsed.length ? [...new Set(parsed)] : fallback;
 }
 
 export function getProviderOrder(capability: AiCapability): AiProvider[] {
   const forced = env("AI_PROVIDER").toLowerCase();
-  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro" || forced === "groq" || forced === "nvidia" || forced === "cloudflare";
+  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro" || forced === "groq" || forced === "nvidia" || forced === "cloudflare" || forced === "cerebras";
   if (validProvider && (capability === "structured" || forced !== "mercury")) return [forced];
   if (forced && forced !== "auto") return capability === "structured" ? DEFAULT_STRUCTURED_ORDER : DEFAULT_MULTIMODAL_ORDER;
 
@@ -88,6 +90,7 @@ export function getProviderModel(provider: AiProvider, capability: AiCapability)
   if (provider === "groq") return env("GROQ_MODEL") || AI_PROVIDER_DEFAULTS.groq;
   if (provider === "nvidia") return env("NVIDIA_MODEL") || AI_PROVIDER_DEFAULTS.nvidia;
   if (provider === "cloudflare") return env("CLOUDFLARE_MODEL") || AI_PROVIDER_DEFAULTS.cloudflare;
+  if (provider === "cerebras") return env("CEREBRAS_MODEL") || AI_PROVIDER_DEFAULTS.cerebras;
   return capability === "structured"
     ? env("XKIRO_MODEL") || AI_PROVIDER_DEFAULTS.xkiro
     : env("XKIRO_VISION_MODEL");
@@ -114,6 +117,7 @@ function getProviderKeys(provider: AiProvider): string[] {
   };
   if (provider === "nvidia") return [process.env.NVIDIA_API_KEY, process.env.NVIDIA_API_KEY_2].filter((key): key is string => Boolean(key?.trim())).map((key) => key.trim());
   if (provider === "cloudflare") return env("CLOUDFLARE_API_TOKEN") ? [env("CLOUDFLARE_API_TOKEN")] : [];
+  if (provider === "cerebras") return env("CEREBRAS_API_KEY") ? [env("CEREBRAS_API_KEY")] : [];
   const key = env(keyName[provider]);
   return key ? [key] : [];
 }
@@ -300,6 +304,9 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
       } else if (provider === "nvidia") {
         const nvidiaResult = await callNvidiaStructured(args, key);
         result = nvidiaResult.ok ? { ok:true, content:nvidiaResult.content, provider:"nvidia", model:nvidiaResult.model } : { ok:false, code:nvidiaResult.code, error:nvidiaResult.error, provider:"nvidia", model:nvidiaResult.model };
+      } else if (provider === "cerebras") {
+        const cerebrasResult = await callCerebrasStructured(args, key);
+        result = cerebrasResult.ok ? { ok:true, content:cerebrasResult.content, provider:"cerebras", model:cerebrasResult.model } : { ok:false, code:cerebrasResult.code, error:cerebrasResult.error, provider:"cerebras", model:cerebrasResult.model };
       } else {
         result = await callOpenAiCompatible(provider, args, key);
       }
@@ -335,7 +342,7 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
       continue;
     }
 
-    if (provider === "groq" || provider === "nvidia" || provider === "cloudflare") continue;
+    if (provider === "groq" || provider === "nvidia" || provider === "cloudflare" || provider === "cerebras") continue;
 
     for (const key of keys) {
       const genericArgs: ProviderCallArgs = {
