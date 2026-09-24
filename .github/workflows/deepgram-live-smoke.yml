@@ -1,0 +1,100 @@
+name: Deepgram Live Smoke
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - ".github/workflows/deepgram-live-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  deepgram-live-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DEEPGRAM_API_KEY: ${{ secrets.DEEPGRAM_API_KEY }}
+    steps:
+      - name: Verify credential is available
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${DEEPGRAM_API_KEY:-}" ]; then
+            echo "::error::DEEPGRAM_API_KEY is not available to this GitHub Actions runtime."
+            exit 1
+          fi
+          echo "DEEPGRAM_API_KEY is available (value not printed)."
+
+      - name: Generate deterministic speech fixture
+        shell: python
+        run: |
+          import math
+          import struct
+          import wave
+
+          sample_rate = 8000
+          duration = 1.0
+          frequency = 440.0
+          samples = int(sample_rate * duration)
+
+          with wave.open("deepgram-smoke.wav", "wb") as out:
+              out.setnchannels(1)
+              out.setsampwidth(2)
+              out.setframerate(sample_rate)
+              frames = b"".join(
+                  struct.pack("<h", int(0.15 * 32767 * math.sin(2 * math.pi * frequency * i / sample_rate)))
+                  for i in range(samples)
+              )
+              out.writeframes(frames)
+
+      - name: Call Deepgram pre-recorded STT
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          http_code="$(curl --silent --show-error --output deepgram-response.json --write-out "%{http_code}"             --max-time 60             --retry 2 --retry-delay 2             -X POST             "https://api.deepgram.com/v1/listen?model=nova-3&smart_format=true"             -H "Authorization: Token ${DEEPGRAM_API_KEY}"             -H "Content-Type: audio/wav"             --data-binary "@deepgram-smoke.wav")"
+
+          echo "Deepgram HTTP status: ${http_code}"
+
+          if [ "${http_code}" != "200" ]; then
+            echo "::error::Deepgram pre-recorded STT smoke returned HTTP ${http_code}."
+            python - <<'PY'
+          import json
+          from pathlib import Path
+
+          raw = Path("deepgram-response.json").read_text(errors="replace")
+          try:
+              data = json.loads(raw)
+              if isinstance(data, dict):
+                  safe = {k: data[k] for k in ("err_code", "err_msg", "status") if k in data}
+                  print(json.dumps(safe, ensure_ascii=False))
+              else:
+                  print("Deepgram returned a non-object error payload.")
+          except Exception:
+              print("Deepgram returned a non-JSON error payload.")
+          PY
+            exit 1
+          fi
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("deepgram-response.json").read_text())
+          channels = data.get("results", {}).get("channels", [])
+          alternatives = channels[0].get("alternatives", []) if channels else []
+          transcript = alternatives[0].get("transcript", "") if alternatives else ""
+          confidence = alternatives[0].get("confidence") if alternatives else None
+
+          if not isinstance(transcript, str):
+              raise SystemExit("Deepgram transcript field is not a string.")
+          if not transcript:
+              raise SystemExit("Deepgram returned HTTP 200 but no transcript field was present.")
+
+          print("Deepgram authenticated pre-recorded STT smoke: PASS")
+          print(f"Transcript length: {len(transcript)}")
+          if confidence is not None:
+              print(f"Confidence present: yes ({confidence})")
+          else:
+              print("Confidence present: no")
+          PY
