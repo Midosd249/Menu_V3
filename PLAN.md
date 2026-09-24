@@ -668,3 +668,14 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Mistral document/OCR specialist adapter, isolated from generic text routing and preserving Smart Menu Import boundaries.**
+
+
+## 2026-09-24 — AI Provider Expansion / Mistral Closure
+
+- VERIFIED: Mistral Document AI/OCR specialist merged as `9d57186788fd9b91669bb52e201bb492551eb9fc`.
+- VERIFIED: Quality #2378 and W9 Orders QA #581 passed.
+- VERIFIED: Vercel PR status succeeded; no Production deployment was requested.
+- UNKNOWN: authenticated Mistral live document smoke remains unverified.
+
+### Exact Next Task
+**Implement and verify the Deepgram isolated STT/audio specialist adapter, without entering generic LLM routing.**
