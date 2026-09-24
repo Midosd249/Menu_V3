@@ -54,7 +54,7 @@ function normalizeResponseFormat(responseFormat: Record<string, unknown>) {
     type: "json_schema",
     json_schema: {
       name,
-      strict: true,
+      strict: false,
       schema: rawSchema,
     },
   };
