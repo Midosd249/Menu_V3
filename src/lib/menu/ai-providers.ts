@@ -6,6 +6,8 @@ import { callCloudflareStructured, CLOUDFLARE_DEFAULT_MODEL } from "./ai-cloudfl
 import { callCerebrasStructured, CEREBRAS_DEFAULT_MODEL } from "./ai-cerebras";
 import { callMistralDocument, MISTRAL_DEFAULT_MODEL } from "./ai-mistral";
 import { callDeepgramStt, DEEPGRAM_DEFAULT_MODEL, type DeepgramSttResult } from "./ai-deepgram";
+import { callTypeSafeDecision } from "./ai-typesafe";
+import { AI_PROVIDER_REGISTRY } from "./ai-provider-registry";
 
 export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare" | "cerebras";
 type JsonSchema = Record<string, unknown>;
@@ -16,6 +18,8 @@ type ProviderCallArgs = {
   responseFormat: JsonSchema;
   maxTokens: number;
   temperature: number;
+  operation?: string;
+  validateContent?: (content: string) => boolean;
 };
 
 type MultimodalCallArgs = {
@@ -36,6 +40,58 @@ type ProviderFailure = {
 
 const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq", "nvidia", "cloudflare", "cerebras"];
 const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai"];
+
+async function getPreferredStructuredProvider(args: {
+  operation: string;
+  prompt: string;
+  candidates: readonly AiProvider[];
+}): Promise<AiProvider | null> {
+  if (!AI_PROVIDER_REGISTRY.typesafe.runtimeEligible) return null;
+  if (!process.env.TYPESAFE_API_KEY?.trim() && !process.env.TYPESAFE_API_KEY_2?.trim() && !process.env.TYPESAFE_API_KEY_3?.trim()) return null;
+
+  const candidates = args.candidates
+    .map((provider) => ({ provider, model: getProviderModel(provider, "structured") }))
+    .filter((candidate) => Boolean(candidate.model))
+    .map((candidate) => ({
+      id: candidate.provider + ":" + candidate.model,
+      provider: candidate.provider,
+      model: candidate.model,
+      capabilities: ["structured"] as const,
+    }));
+
+  if (candidates.length < 2) return candidates[0]?.provider ?? null;
+
+  try {
+    const result = await callTypeSafeDecision({
+      state: {
+        operation: args.operation,
+        task: "Select the best available structured AI execution provider for this Menu V3 request.",
+        request: args.prompt.slice(0, 12_000),
+      },
+      questions: {
+        selected_candidate: {
+          type: "choice",
+          instructions: "Select the single provider/model that is most suitable for this request. Prefer correctness and grounded structured-output reliability. Never select an option outside the provided candidates.",
+          criteria: Object.fromEntries(candidates.map((candidate) => [
+            candidate.id,
+            candidate.provider + " / " + candidate.model,
+          ])),
+        },
+      },
+      eligibleCandidates: candidates,
+    });
+
+    if (!result.ok) return null;
+    const answer = result.answers.selected_candidate;
+    if (answer?.type !== "choice") return null;
+    if (typeof answer.confidence === "number" && answer.confidence < 0.55) return null;
+    const selected = candidates.find((candidate) => candidate.id === answer.choice);
+    return selected?.provider ?? null;
+  } catch {
+    return null;
+  }
+}
+
 
 export const AI_PROVIDER_DEFAULTS = {
   mercury: "mercury-2.5",
@@ -282,7 +338,15 @@ async function callGemini(args: ProviderCallArgs, key: string, multimodal?: Mult
 }
 
 export async function callStructuredProvider(args: ProviderCallArgs): Promise<ProviderSuccess | ProviderFailure> {
-  const order = getProviderOrder("structured");
+  const configuredOrder = getProviderOrder("structured");
+  const preferredProvider = await getPreferredStructuredProvider({
+    operation: args.operation ?? "unknown",
+    prompt: args.prompt,
+    candidates: configuredOrder,
+  });
+  const order = preferredProvider
+    ? [preferredProvider, ...configuredOrder.filter((provider) => provider !== preferredProvider)]
+    : configuredOrder;
   let lastFailure: ProviderFailure | null = null;
 
   for (const provider of order) {
@@ -316,7 +380,19 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
       } else {
         result = await callOpenAiCompatible(provider, args, key);
       }
-      if (result.ok) return result;
+      if (result.ok) {
+        if (args.validateContent && !args.validateContent(result.content)) {
+          lastFailure = {
+            ok: false,
+            code: "ai_invalid",
+            error: "Provider returned content that failed application schema validation",
+            provider: result.provider,
+            model: result.model,
+          };
+          continue;
+        }
+        return result;
+      }
       lastFailure = result;
     }
   }
