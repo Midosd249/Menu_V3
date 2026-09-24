@@ -230,10 +230,10 @@ test("Mistral Document AI is server-only, structured-annotation capable, and doc
 });
 
 test("Mistral is active only as the document/OCR specialist", () => {
-  assert.match(registry, /mistral:[\\s\\S]*?lifecycle:"active"/);
-  assert.match(registry, /mistral:[\\s\\S]*?runtimeEligible:true/);
-  assert.match(registry, /mistral:[\\s\\S]*?candidateCapabilities:\["ocr_document","image","pdf","structured"\]/);
-  assert.match(registry, /mistral:[\\s\\S]*?role:"document_specialist"/);
+  assert.match(registry, /mistral:[\s\S]*?lifecycle:"active"/);
+  assert.match(registry, /mistral:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /mistral:[\s\S]*?candidateCapabilities:\["ocr_document","image","pdf","structured"\]/);
+  assert.match(registry, /mistral:[\s\S]*?role:"document_specialist"/);
 });
 
 test("Cerebras remains structured-only and excluded from multimodal routing", () => {
