@@ -5,6 +5,7 @@ import { getGuestSessionId } from "@/lib/menu/session";
 import { useLang } from "@/lib/lang";
 import type { PublicMenu } from "@/lib/menu/types";
 import { Button } from "@/components/ui/button";
+import { fallbackGuestAnswer } from "@/lib/menu/guest-assistant-fallback";
 
 const suggestions = {
   ar: ["ما الذي تنصحني به؟", "ما الأصناف المتاحة؟", "ما الخيارات الخفيفة؟"],
@@ -78,13 +79,17 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
         },
       });
       if (!result.ok) {
-        setError(result.error);
+        const fallback = fallbackGuestAnswer(trimmed, menu.products);
+        setAnswer({ ar: fallback.answerAr, en: fallback.answerEn, productIds: fallback.productIds });
+        setError("");
         return;
       }
       setAnswer({ ar: result.data.answerAr, en: result.data.answerEn, productIds: result.data.productIds });
       setQuestion("");
     } catch {
-      setError(lang === "ar" ? "تعذر تشغيل المساعد حالياً." : "The assistant is unavailable right now.");
+      const fallback = fallbackGuestAnswer(trimmed, menu.products);
+      setAnswer({ ar: fallback.answerAr, en: fallback.answerEn, productIds: fallback.productIds });
+      setError("");
     } finally {
       setLoading(false);
     }
