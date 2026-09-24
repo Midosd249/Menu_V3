@@ -307,6 +307,7 @@ test("TypeSafe Jev adapter uses the official System One contract and stays serve
   assert.match(adapter, /ai_unavailable/);
   assert.doesNotMatch(adapter, /VITE_/);
   assert.doesNotMatch(adapter, /api\.openai\.com/);
+  assert.match(adapter, /TypeSafe decision adapter is server-only/);
 });
 
 test("TypeSafe Jev adapter bounds candidates/questions and rejects malformed decisions", () => {
