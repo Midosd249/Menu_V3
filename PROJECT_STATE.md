@@ -796,3 +796,35 @@ Complete Phase 2 verification and close the credential-contract phase. If Qualit
 ## EXACT NEXT TASK
 
 **Phase 3 — execution adapters.** Implement and verify one adapter at a time, beginning with Groq. Preserve the credential boundary and keep every new provider runtime-disabled until its adapter and targeted smoke verification are complete.
+
+
+
+# 2026-09-24 — AI Provider Expansion / Phase 3 Groq Adapter — IN PROGRESS
+
+- VERIFIED: current branch is `feat/ai-provider-expansion-foundation`.
+- VERIFIED: current branch head before continuity-only updates is `ea8ad25082c90ce3dce1eb2b0cd4108c3d466cda`.
+- VERIFIED: PR #270 remains OPEN / MERGEABLE / NOT MERGED.
+- VERIFIED: Phase 1 and Phase 2 remain CLOSED / VERIFIED.
+- IMPLEMENTED: dedicated Groq structured execution adapter in `src/lib/menu/ai-groq.ts`.
+- IMPLEMENTED: Groq is wired only to the existing structured AI boundary; no second AI architecture was introduced.
+- IMPLEMENTED: Groq default model is `openai/gpt-oss-20b`; `GROQ_MODEL` may override it.
+- IMPLEMENTED: bounded timeout, normalized failures, server-only credential use, prompt-injection boundary, and no secret logging.
+- VERIFIED: Groq is not part of multimodal routing; vision remains a separate future capability decision.
+- VERIFIED: GitHub Quality #2353 passed.
+- VERIFIED: GitHub W9 Orders QA #561 passed.
+- VERIFIED: Quality passed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: Vercel Preview for the current branch head is READY.
+- UNKNOWN: live Groq API smoke because the secret value is not accessible to the connected GitHub session.
+- UNKNOWN: provider-specific live latency/error/quota behavior in the configured Preview environment.
+- VERIFIED: no Production deployment, merge, migration, auth/RLS, subscription, or tenant/branch changes were performed.
+
+Protected / MUST NOT REDO:
+- Phase 1 capability vocabulary and provider registry foundation.
+- Phase 2 server-only credential contract and key-pool inventory.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro runtime routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+
+**Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify valid structured output and normalized failure behavior. Then review the final diff. Do not merge PR #270 or start NVIDIA until Groq smoke evidence is recorded.**
