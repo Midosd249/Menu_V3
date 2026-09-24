@@ -330,9 +330,18 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
 export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<ProviderSuccess | ProviderFailure> {
   const capability: AiCapability = args.mimeType === "application/pdf" ? "pdf" : "image";
   const order = getProviderOrder(capability);
-  const forcedProvider = env("AI_PROVIDER").toLowerCase();\n  let lastFailure: ProviderFailure | null = null;
+  const forcedProvider = env("AI_PROVIDER").toLowerCase();
+  let lastFailure: ProviderFailure | null = null;
 
-\n  // Mistral is a document/OCR specialist, so it is tried first for menu document extraction.\n  // An explicit non-Mistral provider override keeps the existing override semantics.\n  if (!forcedProvider || forcedProvider === "auto" || forcedProvider === "mistral") {\n    const mistralResult = await callMistralDocument(args);\n    if (mistralResult.ok) return mistralResult;\n    lastFailure = mistralResult;\n  }\n  for (const provider of order) {
+
+  // Mistral is a document/OCR specialist, so it is tried first for menu document extraction.
+  // An explicit non-Mistral provider override keeps the existing override semantics.
+  if (!forcedProvider || forcedProvider === "auto" || forcedProvider === "mistral") {
+    const mistralResult = await callMistralDocument(args);
+    if (mistralResult.ok) return mistralResult;
+    lastFailure = mistralResult;
+  }
+  for (const provider of order) {
     const keys = orderedKeys(provider);
     if (!keys.length) {
       lastFailure = {
