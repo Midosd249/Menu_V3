@@ -57,4 +57,10 @@ test("assistant is added once through the canonical theme renderer and not to pr
   assert.ok(renderer.includes("<GuestMenuAssistant menu={menu} />"));
   assert.ok(renderer.includes("{!preview && <GuestMenuAssistant menu={menu} />}") );
 });
-\n\ntest("guest assistant never surfaces a provider failure when grounded fallback data can answer", () => {\n  assert.match(source, /if \(!result\.ok\)/);\n  assert.match(source, /const fallback = fallbackGuestAnswer/);\n  assert.match(source, /return \{ ok: true, data: fallback \}/);\n});\n
+
+
+test("guest assistant never surfaces a provider failure when grounded fallback data can answer", () => {
+  assert.match(source, /if \(!result\.ok\)/);
+  assert.match(source, /const fallback = fallbackGuestAnswer/);
+  assert.match(source, /return \{ ok: true, data: fallback \}/);
+});
