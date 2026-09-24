@@ -468,3 +468,30 @@ Official references:
 ### Protected boundaries
 - Do not reimplement Groq, NVIDIA, Cloudflare, Cerebras, or Mistral.
 - Do not change Smart Menu Import, public-menu/performance phases, auth/RLS, subscriptions, tenant/branch isolation, database schema, or deployment behavior.
+\n\n## Phase 3 — Deepgram STT/Audio Specialist — CLOSED / VERIFIED — 2026-09-24
+
+- VERIFIED: PR #279 merged by squash into `main` as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
+- VERIFIED: dedicated server-side `src/lib/menu/ai-deepgram.ts` implements Deepgram pre-recorded STT through the official `POST /v1/listen` contract.
+- VERIFIED: `DEEPGRAM_API_KEY` is server-only; optional `DEEPGRAM_MODEL`; default `nova-3`.
+- VERIFIED: binary audio input is sent with the caller-supplied audio MIME type; optional language is explicit; `smart_format=true` is enabled.
+- VERIFIED: transcript extraction uses `results.channels[].alternatives[].transcript` with optional confidence.
+- VERIFIED: bounded 60-second timeout, fail-closed missing credentials, input validation, and normalized provider failures are implemented.
+- VERIFIED: Deepgram is active only for `audio_stt` in the provider registry and remains outside `DEFAULT_STRUCTURED_ORDER` and `DEFAULT_MULTIMODAL_ORDER`.
+- VERIFIED: streaming/WebSocket transport was researched and intentionally excluded from this phase.
+- VERIFIED: GitHub Quality #2387 passed Typecheck, full Tests, W7.4–W7.10 contracts, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #588 passed.
+- VERIFIED: Vercel Preview status for the final PR head was successful.
+- UNKNOWN: authenticated live Deepgram API smoke remains unverified because secret values are not accessible through the connected GitHub session.
+- UNKNOWN: direct Production deployment identity/status for merged `main`; no Production deployment was explicitly requested by this task.
+
+### Protected / MUST NOT REDO
+- Groq, NVIDIA, Cloudflare, Cerebras, Mistral.
+- Phase 1 capability registry and Phase 2 credential contracts.
+- Existing generic structured/multimodal routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+- Auth/RLS/subscription/tenant/branch boundaries.
+
+## EXACT NEXT TASK
+
+**Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
