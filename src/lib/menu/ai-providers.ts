@@ -102,7 +102,7 @@ function getProviderKeys(provider: AiProvider): string[] {
     ].filter((key): key is string => Boolean(key?.trim())).map((key) => key.trim());
   }
 
-  const keyName: Record<Exclude<AiProvider, "mercury">, string> = {
+  const keyName: Record<Exclude<AiProvider, "mercury" | "nvidia">, string> = {
     gemini: "GOOGLE_GEMINI_API_KEY",
     zai: "ZAI_API_KEY",
     openrouter: "OPENROUTER_API_KEY",
