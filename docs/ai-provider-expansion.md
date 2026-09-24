@@ -2,7 +2,7 @@
 
 ## Status
 
-IN_PROGRESS — Phase 3: Mistral Document AI/OCR structured adapter implemented; CI and live smoke pending.
+IN_PROGRESS — Phase 3: Deepgram isolated STT/audio specialist adapter implemented; CI and authenticated live smoke pending.
 
 This document is the continuity anchor for the AI provider expansion. A new chat must read this document, docs/ai-provider-routing.md, PROJECT_STATE.md, PLAN.md, TASKS.md, and the current src/lib/menu/ai-*.ts implementation before making further changes.
 
@@ -411,3 +411,60 @@ CI must pass. One authenticated live Cerebras smoke on `main` remains a separate
 
 ### Exact next task after closure
 **Deepgram isolated STT/audio adapter. Do not rebuild or rework Groq, NVIDIA, Cloudflare, Cerebras, Phase 1/2 credential contracts, Smart Menu Import, or public-menu/performance phases 0–8.**
+
+
+## Phase 3 — Deepgram STT/Audio Specialist — IMPLEMENTED / VERIFICATION PENDING — 2026-09-24
+
+**Task boundary**
+- Dedicated server-side pre-recorded speech-to-text adapter only.
+- Deepgram is isolated from generic structured text routing and existing multimodal document routing.
+- Streaming/WebSocket transcription is explicitly outside this adapter scope.
+- Existing `audio_stt` capability vocabulary is reused; no new capability family was introduced.
+
+### Official research evidence
+- Deepgram pre-recorded STT uses `POST https://api.deepgram.com/v1/listen`.
+- API-key authentication uses `Authorization: Token <DEEPGRAM_API_KEY>`.
+- Pre-recorded local audio is sent as binary request data with the audio MIME type; remote media can alternatively be supplied as JSON `{"url":"..."}`.
+- The official getting-started example uses `model=nova-3` and `smart_format=true`.
+- The standard response contains `results.channels[].alternatives[].transcript` and may include an alternative `confidence`.
+- Streaming uses a separate WebSocket transport and is not part of this adapter.
+- Deepgram documents 400/413/415/422 request/content failures and 401/403/429/service failures; the adapter normalizes these to the existing Menu V3 `ai_invalid` / `ai_unavailable` contract without exposing provider response bodies.
+- Supported audio formats include common MP3, MP4, AAC, WAV, FLAC, PCM, M4A, Ogg, Opus, and WebM formats. The adapter accepts only `audio/*` MIME types because this task is scoped to audio STT.
+
+Official references:
+- https://developers.deepgram.com/reference/speech-to-text/listen-pre-recorded
+- https://developers.deepgram.com/docs/pre-recorded-audio
+- https://developers.deepgram.com/docs/supported-audio-formats
+- https://developers.deepgram.com/docs/errors
+- https://developers.deepgram.com/reference/authentication
+- https://developers.deepgram.com/reference/speech-to-text/listen-streaming
+
+### Implementation
+- Added `src/lib/menu/ai-deepgram.ts`.
+- Uses `DEEPGRAM_API_KEY` server-side only.
+- Optional `DEEPGRAM_MODEL`; default `nova-3`.
+- Uses binary pre-recorded audio input with the caller-supplied audio MIME type.
+- Uses `smart_format=true`; optional language is passed only when explicitly supplied.
+- Extracts the first channel/alternative transcript and optional confidence.
+- Uses a bounded 60-second timeout.
+- Missing credentials fail closed as `ai_not_configured`.
+- Invalid audio input/provider request errors normalize to `ai_invalid`.
+- Authentication, rate-limit, service, and transport failures normalize to `ai_unavailable`.
+- No provider error body is returned or logged.
+
+### Existing-boundary integration
+- `callAudioStt` is exported from `src/lib/menu/ai-providers.ts` as the existing AI boundary.
+- Deepgram is not added to `DEFAULT_STRUCTURED_ORDER`.
+- Deepgram is not added to `DEFAULT_MULTIMODAL_ORDER`.
+- Deepgram is not exposed through the generic LLM provider union/router.
+- Registry marks Deepgram `active` only for `audio_stt`, role `audio_specialist`, transport `deepgram_stt`.
+
+### Verification
+- Targeted regression contracts were added to `tests/ai-foundation.test.mjs`.
+- CI/typecheck/lint/build/browser gates remain to be verified on the PR.
+- Authenticated live Deepgram smoke remains UNKNOWN until a configured secret is available to an authorized runtime.
+- No Production deployment is part of this task.
+
+### Protected boundaries
+- Do not reimplement Groq, NVIDIA, Cloudflare, Cerebras, or Mistral.
+- Do not change Smart Menu Import, public-menu/performance phases, auth/RLS, subscriptions, tenant/branch isolation, database schema, or deployment behavior.
