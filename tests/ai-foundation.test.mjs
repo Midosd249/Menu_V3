@@ -152,7 +152,7 @@ test("Phase 3 Groq adapter uses the official OpenAI-compatible endpoint and stri
   assert.match(groqAdapter, /openai\/gpt-oss-20b/);
   assert.match(groqAdapter, /response_format/);
   assert.match(groqAdapter, /type: "json_schema"/);
-  assert.match(groqAdapter, /strict: true/);
+  assert.match(groqAdapter, /strict: false/);
   assert.match(groqAdapter, /max_completion_tokens/);
   assert.match(groqAdapter, /AbortSignal\.timeout\(60_000\)/);
 });
