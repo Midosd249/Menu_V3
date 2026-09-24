@@ -39,7 +39,7 @@ function extractTranscript(payload: unknown): { transcript: string; confidence?:
   };
 }
 
-function normalizeHttpFailure(status: number): DeepgramSttResult["code"] {
+function normalizeHttpFailure(status: number): "ai_invalid" | "ai_unavailable" {
   if (status === 400 || status === 413 || status === 415 || status === 422) return "ai_invalid";
   return "ai_unavailable";
 }
@@ -77,7 +77,7 @@ export async function callDeepgramStt(
         "Content-Type": mimeType,
         Accept: "application/json",
       },
-      body: audio,
+      body: new Blob([audio], { type: mimeType }),
       signal: AbortSignal.timeout(60_000),
     });
 
