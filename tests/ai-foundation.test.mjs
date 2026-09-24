@@ -338,3 +338,41 @@ test("TypeSafe remains a decision boundary and is not activated in generic struc
   assert.doesNotMatch(providers, /callTypeSafeDecision/);
   assert.match(adapter, /eligibleCandidates/);
 });
+
+
+test("Phase 6 capability-aware routing filters execution candidates before decision selection", () => {
+  const router = fs.readFileSync(new URL("../src/lib/menu/ai-capability-router.ts", import.meta.url), "utf8");
+  assert.match(router, /getCapabilityEligibleExecutionCandidates/);
+  assert.match(router, /runtimeEligible/);
+  assert.match(router, /candidateCapabilities\.includes\(capability\)/);
+  assert.match(router, /role === "execution"/);
+  assert.match(router, /EXECUTION_PROVIDER_IDS/);
+  assert.match(router, /buildTypeSafeSelectionQuestion/);
+  assert.match(router, /selectExecutionCandidate/);
+});
+
+test("Phase 6 selection is fail-closed for policy and candidate membership", () => {
+  const router = fs.readFileSync(new URL("../src/lib/menu/ai-capability-router.ts", import.meta.url), "utf8");
+  for (const requiredPolicy of [
+    "authorizationVerified",
+    "entitlementVerified",
+    "tenantScopeVerified",
+    "branchScopeVerified",
+    "pricingPolicyVerified",
+  ]) {
+    assert.match(router, new RegExp(requiredPolicy));
+  }
+  assert.match(router, /ai_policy_blocked/);
+  assert.match(router, /ai_invalid_selection/);
+  assert.match(router, /server-generated eligible set/);
+  assert.match(router, /candidate\.model !== getProviderModel/);
+});
+
+test("Phase 6 does not activate TypeSafe or modify the generic provider orders", () => {
+  const router = fs.readFileSync(new URL("../src/lib/menu/ai-capability-router.ts", import.meta.url), "utf8");
+  assert.match(router, /canUseTypeSafeDecisionLayer/);
+  assert.match(router, /AI_PROVIDER_REGISTRY\.typesafe\.runtimeEligible/);
+  assert.doesNotMatch(providers, /typesafe.*DEFAULT_STRUCTURED_ORDER/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\n]*typesafe/);
+  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:false/);
+});
