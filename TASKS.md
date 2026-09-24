@@ -828,3 +828,13 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
 \n\n## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING\n\n- IMPLEMENTED: `src/lib/menu/ai-typesafe.ts` dedicated System One / Jev decision adapter.\n- IMPLEMENTED: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` rotation without secret logging.\n- IMPLEMENTED: Noul/Choice/Score validation, candidate membership guard, bounded state/questions/candidates, and 60-second timeout.\n- VERIFIED: no generic routing activation; registry remains `runtimeEligible:false`.\n- UNKNOWN: authenticated live TypeSafe smoke.\n- MUST NOT REDO: completed provider adapters and all protected product/security/data boundaries.\n\n### EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe before the smoke is verified.**\n
+
+## 2026-09-24 — AI Provider Expansion / Phase 6 — CAPABILITY-AWARE ROUTING
+
+- IMPLEMENTED: `src/lib/menu/ai-capability-router.ts`.
+- VERIFIED: capability filtering, candidate membership validation, provider/model revalidation, and fail-closed policy admission are present.
+- VERIFIED: TypeSafe remains disabled in the registry and generic provider routing remains unchanged.
+- UNKNOWN: branch CI/W9 final results until the connected GitHub workflow reports them.
+
+### EXACT NEXT TASK
+**Review Phase 6 GitHub Quality/W9 results; fix only task-scoped failures, then merge once if all gates pass.**
