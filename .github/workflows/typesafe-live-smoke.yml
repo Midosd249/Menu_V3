@@ -1,0 +1,126 @@
+name: TypeSafe Live Smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/typesafe-live-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Run one authenticated TypeSafe/Jev decision smoke
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          const key = (process.env.TYPESAFE_API_KEY || "").trim();
+          if (!key) {
+            console.error("TYPESAFE_CREDENTIAL=missing");
+            process.exit(2);
+          }
+
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 30000);
+          const started = Date.now();
+
+          const candidates = [
+            {
+              id: "mercury:mercury-2.5",
+              provider: "mercury",
+              model: "mercury-2.5",
+              capabilities: ["structured"],
+            },
+            {
+              id: "gemini:gemini-3.5-flash-lite",
+              provider: "gemini",
+              model: "gemini-3.5-flash-lite",
+              capabilities: ["structured"],
+            },
+            {
+              id: "nvidia:openai/gpt-oss-120b",
+              provider: "nvidia",
+              model: "openai/gpt-oss-120b",
+              capabilities: ["structured"],
+            },
+          ];
+
+          const body = {
+            state: {
+              smoke: true,
+              purpose: "Menu V3 TypeSafe/Jev live verification",
+              task: "Select the most suitable structured execution candidate for a grounded menu assistant request.",
+              request: "Choose the candidate that best balances structured-output reliability and suitability for a concise Arabic/English restaurant menu answer.",
+              eligible_candidates: candidates,
+            },
+            model: "jev-latest",
+            questions: {
+              selected_candidate: {
+                type: "choice",
+                instructions: "Select exactly one candidate from the server-generated eligible set. Never introduce a candidate outside the provided list.",
+                criteria: Object.fromEntries(
+                  candidates.map((candidate) => [
+                    candidate.id,
+                    candidate.provider + " / " + candidate.model,
+                  ]),
+                ),
+              },
+            },
+          };
+
+          let response;
+          try {
+            response = await fetch("https://api.typesafe.ai/v1/systemone", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${key}`,
+              },
+              body: JSON.stringify(body),
+              signal: controller.signal,
+            });
+          } finally {
+            clearTimeout(timeout);
+          }
+
+          const latencyMs = Date.now() - started;
+          const payload = await response.json().catch(() => null);
+
+          const answer = payload?.answers?.selected_candidate;
+          const allowed = new Set(candidates.map((candidate) => candidate.id));
+          const decisionValid =
+            answer?.type === "choice" &&
+            typeof answer.choice === "string" &&
+            allowed.has(answer.choice) &&
+            (answer.confidence === undefined ||
+              (typeof answer.confidence === "number" &&
+                Number.isFinite(answer.confidence) &&
+                answer.confidence >= 0 &&
+                answer.confidence <= 1));
+
+          console.log(`HTTP_STATUS=${response.status}`);
+          console.log(`LATENCY_MS=${latencyMs}`);
+          console.log(`MODEL=${typeof payload?.model === "string" ? payload.model : "missing"}`);
+          console.log(`DECISION_TYPE=${typeof answer?.type === "string" ? answer.type : "missing"}`);
+          console.log(`SELECTED_CANDIDATE=${typeof answer?.choice === "string" ? answer.choice : "missing"}`);
+          console.log(`CONFIDENCE=${typeof answer?.confidence === "number" ? answer.confidence : "missing"}`);
+          console.log(`DECISION_VALID=${decisionValid}`);
+          console.log(
+            `USAGE_INPUT_TOKENS=${typeof payload?.usage?.input_tokens === "number" ? payload.usage.input_tokens : "missing"}`,
+          );
+          console.log(
+            `USAGE_OUTPUT_TOKENS=${typeof payload?.usage?.output_tokens === "number" ? payload.usage.output_tokens : "missing"}`,
+          );
+
+          if (!response.ok || !decisionValid) {
+            console.error(`SMOKE_RESULT=failed`);
+            process.exit(1);
+          }
+
+          console.log("SMOKE_RESULT=passed");
+          NODE
