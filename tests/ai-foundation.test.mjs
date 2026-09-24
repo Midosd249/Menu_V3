@@ -288,3 +288,53 @@ test("Deepgram credential remains server-only and uses the existing Phase 2 cont
   assert.match(credentialSource, /DEEPGRAM_API_KEY/);
   assert.doesNotMatch(deepgramAdapter, /VITE_/);
 });
+
+
+test("TypeSafe Jev adapter uses the official System One contract and stays server-only", () => {
+  const adapter = fs.readFileSync(new URL("../src/lib/menu/ai-typesafe.ts", import.meta.url), "utf8");
+  assert.match(adapter, /https:\/\/api\.typesafe\.ai\/v1\/systemone/);
+  assert.match(adapter, /TYPESAFE_API_KEY/);
+  assert.match(adapter, /TYPESAFE_API_KEY_2/);
+  assert.match(adapter, /TYPESAFE_API_KEY_3/);
+  assert.match(adapter, /Authorization/);
+  assert.match(adapter, /Bearer/);
+  assert.match(adapter, /TYPESAFE_DEFAULT_MODEL/);
+  assert.match(adapter, /questions/);
+  assert.match(adapter, /eligible_candidates/);
+  assert.match(adapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(adapter, /ai_not_configured/);
+  assert.match(adapter, /ai_invalid/);
+  assert.match(adapter, /ai_unavailable/);
+  assert.doesNotMatch(adapter, /VITE_/);
+  assert.doesNotMatch(adapter, /api\.openai\.com/);
+});
+
+test("TypeSafe Jev adapter bounds candidates/questions and rejects malformed decisions", () => {
+  const adapter = fs.readFileSync(new URL("../src/lib/menu/ai-typesafe.ts", import.meta.url), "utf8");
+  assert.match(adapter, /MAX_CANDIDATES = 64/);
+  assert.match(adapter, /MAX_QUESTIONS = 32/);
+  assert.match(adapter, /MAX_STATE_CHARS = 48_000/);
+  assert.match(adapter, /validateResponse/);
+  assert.match(adapter, /policy-incompatible typed decision/);
+  assert.match(adapter, /questionId === "selected_candidate"/);
+  assert.match(adapter, /candidateIds\.has\(value\.choice\)/);
+});
+
+test("TypeSafe Jev adapter rotates the configured three-key pool without exposing secrets", () => {
+  const adapter = fs.readFileSync(new URL("../src/lib/menu/ai-typesafe.ts", import.meta.url), "utf8");
+  assert.match(adapter, /orderedKeys/);
+  assert.match(adapter, /Math\.floor\(Date\.now\(\) \/ 60_000\)/);
+  assert.match(adapter, /process\.env\.TYPESAFE_API_KEY_2/);
+  assert.match(adapter, /process\.env\.TYPESAFE_API_KEY_3/);
+  assert.doesNotMatch(adapter, /console\.(log|error|warn)/);
+});
+
+test("TypeSafe remains a decision boundary and is not activated in generic structured routing", () => {
+  const adapter = fs.readFileSync(new URL("../src/lib/menu/ai-typesafe.ts", import.meta.url), "utf8");
+  assert.match(registry, /typesafe:[\s\S]*?role:"decision_orchestrator"/);
+  assert.match(registry, /typesafe:[\s\S]*?candidateCapabilities:\["typed_decision"\]/);
+  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:false/);
+  assert.match(providers, /DEFAULT_STRUCTURED_ORDER/);
+  assert.doesNotMatch(providers, /callTypeSafeDecision/);
+  assert.match(adapter, /eligibleCandidates/);
+});
