@@ -1,3 +1,24 @@
+# CURRENT VERIFIED AI POSITION — 2026-09-24 — PHASE 6 CLOSED / VERIFIED / MERGED
+
+- VERIFIED: canonical `main` HEAD before this continuity commit is `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
+- VERIFIED: PR #285 capability-aware routing is merged at `99dfd0c5b83baff890eecb89971ea2d0056e351e`.
+- VERIFIED: PR #286 Phase 6 continuity closure is merged at `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
+- VERIFIED: `docs/ai-phase6-closure-2026-09-24.md` is present on `main`.
+- VERIFIED: GitHub Quality `35966976169` and W9 Orders QA `35966976170` passed for Phase 6.
+- VERIFIED: TypeSafe/Jev remains `runtimeEligible:false` and is not activated or added as a generic fallback.
+- VERIFIED: no provider rebuild, Smart Menu Import change, database/auth/RLS/subscription/tenant/branch change, or public-menu/performance change was introduced by Phase 6.
+- VERIFIED: no Production deployment was requested for Phase 6.
+- UNKNOWN: authenticated live TypeSafe/Jev API behavior, quota, and latency.
+- BLOCKED: TypeSafe activation until one authenticated smoke and the activation review are completed.
+- UNKNOWN: whether the current `main` commit is the Production deployment identity.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED for Phase 6.
+
+## EXACT NEXT TASK
+
+**Run exactly one authenticated TypeSafe/Jev smoke on an authorized runtime using the configured TypeSafe credential, record the real response/failure evidence, and keep `runtimeEligible:false` until the activation review is complete.**
+
+Do not start another provider implementation, deployment, redesign, or unrelated cleanup before that task is explicitly authorized.
+
 # CURRENT VERIFIED RELEASE POSITION — 2026-09-22 — PHASE 8 CLOSED / VERIFIED
 
 - VERIFIED: owner completed the physical Android/iOS/QR production preview and confirmed the image-performance remediation is functioning correctly.

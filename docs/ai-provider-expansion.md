@@ -413,6 +413,27 @@ CI must pass. One authenticated live Cerebras smoke on `main` remains a separate
 **Deepgram isolated STT/audio adapter. Do not rebuild or rework Groq, NVIDIA, Cloudflare, Cerebras, Phase 1/2 credential contracts, Smart Menu Import, or public-menu/performance phases 0–8.**
 
 
+## Phase 6 — Capability-aware Routing — CLOSED / VERIFIED / MERGED — 2026-09-24
+
+- VERIFIED: PR #285 merged into `main` as `99dfd0c5b83baff890eecb89971ea2d0056e351e`.
+- VERIFIED: added `src/lib/menu/ai-capability-router.ts` as an isolated server-side candidate/selection boundary.
+- VERIFIED: candidates are filtered by registry runtime eligibility, execution role, requested capability, and approved execution-provider family.
+- VERIFIED: candidate IDs/models are derived from server-side provider capability state; selections are rejected when outside the server-generated eligible set or when provider/model policy no longer matches.
+- VERIFIED: routing fails closed unless authorization, entitlement, tenant scope, branch scope, and pricing policy are all verified.
+- VERIFIED: TypeSafe/Jev is represented only as a gated decision-layer boundary; it remains `runtimeEligible:false` and is excluded from generic structured/multimodal fallback.
+- VERIFIED: GitHub Quality run `35966976169` passed the relevant route-generation, typecheck, tests, contract, lint, build, browser, performance, Studio, Platform Admin, diagnostics, and cleanup gates.
+- VERIFIED: GitHub W9 Orders QA run `35966976170` passed.
+- VERIFIED: PR #286 merged the Phase 6 continuity closure at `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
+- VERIFIED: `docs/ai-phase6-closure-2026-09-24.md` is present on `main`.
+- PROTECTED: existing provider adapters, generic routing, Smart Menu Import, public-menu/performance phases 0–8, auth/RLS/subscription/tenant/branch boundaries.
+- DEPLOYMENT: no Production deployment was requested; any Vercel status is separate deployment evidence and must not be used to claim Production = `main`.
+- UNKNOWN: authenticated live TypeSafe/Jev response, quota, and latency.
+- BLOCKED: TypeSafe activation pending one authenticated smoke and activation review.
+
+### EXACT NEXT TASK
+
+**Run exactly one authenticated TypeSafe/Jev smoke on an authorized runtime using the configured TypeSafe credential, record the real response/failure evidence, and keep `runtimeEligible:false` until the activation review is complete.**
+
 ## Phase 3 — Deepgram STT/Audio Specialist — IMPLEMENTED / VERIFICATION PENDING — 2026-09-24
 
 **Task boundary**
