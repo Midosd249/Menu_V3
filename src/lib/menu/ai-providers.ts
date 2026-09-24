@@ -5,6 +5,7 @@ import { callNvidiaStructured, NVIDIA_DEFAULT_MODEL } from "./ai-nvidia";
 import { callCloudflareStructured, CLOUDFLARE_DEFAULT_MODEL } from "./ai-cloudflare";
 import { callCerebrasStructured, CEREBRAS_DEFAULT_MODEL } from "./ai-cerebras";
 import { callMistralDocument, MISTRAL_DEFAULT_MODEL } from "./ai-mistral";
+import { callDeepgramStt, DEEPGRAM_DEFAULT_MODEL, type DeepgramSttResult } from "./ai-deepgram";
 
 export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare" | "cerebras";
 type JsonSchema = Record<string, unknown>;
@@ -48,6 +49,7 @@ export const AI_PROVIDER_DEFAULTS = {
   cloudflare: CLOUDFLARE_DEFAULT_MODEL,
   cerebras: CEREBRAS_DEFAULT_MODEL,
   mistral: MISTRAL_DEFAULT_MODEL,
+  deepgram: DEEPGRAM_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
@@ -396,3 +398,15 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
 export type StructuredProviderResult<T extends z.ZodTypeAny> =
   | { ok: true; data: z.output<T>; provider: AiProvider; model: string }
   | ProviderFailure;
+
+
+export type AudioSttProviderResult = DeepgramSttResult;
+
+export async function callAudioStt(args: {
+  audio: ArrayBuffer | Uint8Array;
+  mimeType: string;
+  model?: string;
+  language?: string;
+}): Promise<AudioSttProviderResult> {
+  return callDeepgramStt(args);
+}
