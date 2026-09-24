@@ -206,3 +206,19 @@ The Jev/TypeSafe step is represented by a typed selection question boundary but 
 
 ## EXACT NEXT TASK
 **After the merged Production deployment reaches READY, perform exactly one authenticated TypeSafe/Jev smoke on the authorized runtime and record the real decision evidence; then stop.**
+
+
+# 2026-09-24 — TypeSafe/Jev Live Smoke Evidence
+
+- VERIFIED: current `main` code has `AI_PROVIDER_REGISTRY.typesafe.runtimeEligible:true`; this was intentionally enabled by PR #288 for the guarded high-level selector.
+- VERIFIED: exactly one authenticated-smoke workflow attempt was made through GitHub Actions run `36033142672`.
+- VERIFIED: the runtime had no `TYPESAFE_API_KEY`; the smoke exited before issuing the TypeSafe POST request.
+- VERIFIED: no TypeSafe API response was therefore observed, and no secret value was exposed.
+- VERIFIED: PR #292 was verification-only and was closed without merge.
+- UNKNOWN: TypeSafe credential availability in Production/Vercel and real API health/latency.
+- BLOCKED: no second smoke until an authorized runtime has the configured credential.
+- PROTECTED: Jev remains a decision/orchestration layer; it is not a generic text provider and does not replace the validated execution-provider fallback.
+
+## EXACT NEXT TASK
+
+**Provide the TypeSafe credential to an authorized smoke runtime without exposing it, then run exactly one authenticated TypeSafe/Jev smoke and record HTTP/decision evidence.**

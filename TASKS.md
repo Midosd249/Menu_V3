@@ -932,3 +932,18 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **After the merged Production deployment reaches READY, perform exactly one authenticated TypeSafe/Jev smoke on the authorized runtime and record the real decision evidence; then stop.**
+
+
+# 2026-09-24 — TypeSafe/Jev Smoke Blocker
+
+- CLOSED: PR #291 continuity documentation.
+- VERIFIED: main `850c9baa8aac0aa80123ab5d83742db577a5477e`.
+- VERIFIED: Vercel status for the merged continuity commit is `success`.
+- VERIFIED: exactly one TypeSafe/Jev smoke attempt was made: GitHub Actions run `36033142672`.
+- BLOCKED: `TYPESAFE_API_KEY` was not present in the GitHub Actions runtime, so no TypeSafe HTTP request occurred.
+- CLOSED WITHOUT MERGE: temporary smoke PR #292.
+- PROTECTED: do not repeat the smoke, modify provider adapters, or create another temporary smoke workflow until an authorized credentialed runtime is available.
+
+## EXACT NEXT TASK
+
+**Securely expose the configured TypeSafe credential to one authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real evidence.**

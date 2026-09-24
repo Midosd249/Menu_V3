@@ -1047,3 +1047,22 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **After the merged Production deployment reaches READY, perform exactly one authenticated TypeSafe/Jev smoke on the authorized runtime and record the real decision evidence; then stop.**
+
+
+# 2026-09-24 — TypeSafe/Jev Live Smoke — BLOCKED BY AUTHORIZED RUNTIME CREDENTIAL
+
+- VERIFIED: continuity PR #291 is merged to `main` as `850c9baa8aac0aa80123ab5d83742db577a5477e`.
+- VERIFIED: the merged Production deployment for `850c9baa8aac0aa80123ab5d83742db577a5477e` reports Vercel `success`.
+- VERIFIED: exactly one TypeSafe/Jev live-smoke attempt was executed through GitHub Actions run `36033142672` via temporary PR #292.
+- VERIFIED: the GitHub Actions runtime reported `TYPESAFE_CREDENTIAL=missing` and exited with code 2.
+- VERIFIED: no TypeSafe API request was made because the credential was absent before the HTTP call.
+- VERIFIED: no secret value was exposed.
+- VERIFIED: temporary smoke PR #292 was closed without merge; its branch is `ops/typesafe-live-smoke-2026-09-24`.
+- VERIFIED: current production code in `src/lib/menu/ai-provider-registry.ts` has TypeSafe/Jev `runtimeEligible:true`; PR #288 intentionally enabled the guarded Jev selector. The live smoke remains unverified, so this is an evidence gap, not evidence that the credential or provider is healthy.
+- PROTECTED: no provider rebuild, guest-assistant fallback rewrite, database/auth/RLS/subscription/tenant/branch change, public-menu/performance change, or deployment retry was introduced for this smoke attempt.
+- UNKNOWN: whether the Production/Vercel runtime currently has a valid TypeSafe credential and whether the real production path can successfully reach TypeSafe.
+- BLOCKED: a second smoke must not be attempted until an authorized smoke runtime has the configured TypeSafe credential.
+
+## EXACT NEXT TASK
+
+**Make the configured TypeSafe credential available to one authorized smoke runtime without exposing or committing it, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that credential prerequisite is verified.**
