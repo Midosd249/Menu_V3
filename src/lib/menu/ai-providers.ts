@@ -152,7 +152,7 @@ function getGeminiSchema(responseFormat: JsonSchema) {
 }
 
 async function callOpenAiCompatible(
-  provider: Exclude<AiProvider, "gemini">,
+  provider: Exclude<AiProvider, "gemini" | "groq">,
   args: ProviderCallArgs,
   key: string,
   multimodal?: MultimodalCallArgs,
