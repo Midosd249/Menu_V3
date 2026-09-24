@@ -114,6 +114,7 @@ function getProviderKeys(provider: AiProvider): string[] {
     openrouter: "OPENROUTER_API_KEY",
     xkiro: "XKIRO_API_KEY",
     groq: "GROQ_API_KEY",
+    cerebras: "CEREBRAS_API_KEY",
   };
   if (provider === "nvidia") return [process.env.NVIDIA_API_KEY, process.env.NVIDIA_API_KEY_2].filter((key): key is string => Boolean(key?.trim())).map((key) => key.trim());
   if (provider === "cloudflare") return env("CLOUDFLARE_API_TOKEN") ? [env("CLOUDFLARE_API_TOKEN")] : [];
