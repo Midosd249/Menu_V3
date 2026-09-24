@@ -6,6 +6,7 @@ const core = fs.readFileSync(new URL("../src/lib/menu/ai-core.ts", import.meta.u
 const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
 const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import.meta.url), "utf8");
 const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", import.meta.url), "utf8");
+const cloudflareAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cloudflare.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -104,17 +105,18 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
 
 test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort:"low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
 
-test("planned providers remain registered while the Phase 3 Groq and NVIDIA adapters are explicitly active", () => {
+test("planned providers remain registered while Groq, NVIDIA, and Cloudflare adapters are active", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
     assert.match(registry, new RegExp(expected));
   }
   assert.match(registry, /runtimeEligible:false/);
+  assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /keyPoolSize:3/);
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe|cloudflare|cerebras|mistral|deepgram/);
+  assert.doesNotMatch(providers, /typesafe|cerebras|mistral|deepgram/);
 });
 
 
@@ -171,4 +173,24 @@ test("Groq and NVIDIA remain outside multimodal routing until separately verifie
   assert.match(registry, /groq:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(registry, /nvidia:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(providers, /provider === "groq" \|\| provider === "nvidia"/);
+});
+
+
+test("Cloudflare Workers AI adapter contract is server-only, bounded, and structured-safe", () => {
+  assert.match(cloudflareAdapter, /api\.cloudflare\.com\/client\/v4\/accounts/);
+  assert.match(cloudflareAdapter, /CLOUDFLARE_API_TOKEN/);
+  assert.match(cloudflareAdapter, /CLOUDFLARE_DEFAULT_MODEL/);
+  assert.match(cloudflareAdapter, /@cf\/openai\/gpt-oss-120b/);
+  assert.match(cloudflareAdapter, /response_format/);
+  assert.match(cloudflareAdapter, /json_schema/);
+  assert.match(cloudflareAdapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(cloudflareAdapter, /ai_not_configured/);
+  assert.doesNotMatch(cloudflareAdapter, /VITE_/);
+});
+
+test("Cloudflare is structured-only and never enters multimodal routing", () => {
+  assert.match(providers, /"cloudflare"/);
+  assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /cloudflare:[\s\S]*?candidateCapabilities:\["structured"\]/);
+  assert.match(providers, /provider === "groq" \|\| provider === "nvidia" \|\| provider === "cloudflare"/);
 });

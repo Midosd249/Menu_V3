@@ -2,7 +2,7 @@
 
 ## Status
 
-IN_PROGRESS — Phase 3: NVIDIA execution adapter implemented; live smoke pending.
+IN_PROGRESS — Phase 4: Cloudflare Workers AI structured adapter implemented; live smoke pending.
 
 This document is the continuity anchor for the AI provider expansion. A new chat must read this document, docs/ai-provider-routing.md, PROJECT_STATE.md, PLAN.md, TASKS.md, and the current src/lib/menu/ai-*.ts implementation before making further changes.
 
@@ -99,19 +99,19 @@ CURRENT.
 
 Every adapter requires server-only credentials, bounded timeout, normalized errors, no secret logging, validation, capability gate, model contract, and targeted tests.
 
-### Phase 4 — Jev adapter and 3-key orchestration
+### Phase 4 — Cloudflare Workers AI structured adapter\n- Endpoint: `https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1/chat/completions`.\n- Credentials: `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`.\n- Default model: `@cf/openai/gpt-oss-120b`; optional `CLOUDFLARE_MODEL`.\n- Structured JSON uses the documented `response_format` boundary and remains subject to Menu V3 Zod/domain validation.\n- 60-second bounded timeout and normalized provider failures.\n- Structured-only: no image/PDF routing.\n- Runtime activation requires CI, exact provider contract verification, and one authenticated smoke before release.\n\n### Phase 5 — Jev adapter and 3-key orchestration
 Use POST /v1/systemone with typed questions. Batch related questions, pin the model when threshold behavior matters, preserve probabilities/confidence, rotate three keys, reject malformed decisions, and restrict selection to server-provided candidates.
 
-### Phase 5 — Capability-aware routing
+### Phase 6 — Capability-aware routing
 Filter candidates by task class, input modality, required capability, structured-output requirement, confidence requirement, provider health, configured model, and bounded latency/cost policy. Then let Jev choose among eligible candidates.
 
-### Phase 6 — Smart Menu Import
+### Phase 7 — Smart Menu Import
 Preserve OCR -> Smart Extract -> normalization -> bounded batches -> AI organization -> review -> save. Jev may assist with typed classification/validity/duplicate/evidence decisions, but never writes directly to source-of-truth data.
 
-### Phase 7 — Intelligence/Growth
+### Phase 8 — Intelligence/Growth
 Evaluate Jev for Menu Intelligence, Owner Intelligence, Growth, and Guest/Relationship intelligence only when each output has a stable typed contract and measurable acceptance criteria.
 
-### Phase 8 — Verification and release
+### Phase 9 — Verification and release
 Run applicable typecheck, tests, platform tests, lint, build, auth checks, targeted AI/security tests, and provider smoke tests only when credentials are configured. Review the final diff and release through the normal one-batch Vercel process only after explicit release authorization.
 
 ## 6. Research evidence
@@ -161,7 +161,7 @@ At every phase close, record:
 - protected work not to repeat
 - exactly one next task
 
-Current exact next task after Phase 1: implement fail-closed credential validation/key pools for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate providers yet; adapters follow the credential contract.
+Current exact next task: finish Cloudflare CI verification, perform one authenticated smoke on `main`, then continue with the next explicitly scoped provider adapter. NVIDIA is merged but its live provider response remains an external runtime evidence item.
 
 
 ## Phase 1 Closure — 2026-09-24

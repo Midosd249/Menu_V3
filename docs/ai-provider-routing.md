@@ -102,3 +102,20 @@ See `docs/ai-provider-expansion.md` for the complete roadmap and continuity cont
 NVIDIA hosted NIM/API Catalog is enabled only for the existing structured text boundary. Endpoint: `https://integrate.api.nvidia.com/v1/chat/completions`. Credentials: `NVIDIA_API_KEY`, `NVIDIA_API_KEY_2`. Default model: `openai/gpt-oss-120b`; optional `NVIDIA_MODEL`. The adapter embeds the server-generated JSON schema in the system instruction and requires JSON-only output; downstream Zod/domain validation remains authoritative. Timeout is 60 seconds. NVIDIA is excluded from image/PDF routing because the verified default model is text-only. Explicit test selection uses `AI_PROVIDER=nvidia`.
 
 Official sources: https://docs.api.nvidia.com/nim/reference/openai-gpt-oss-120b ; https://docs.api.nvidia.com/nim/reference/openai-gpt-oss-120b-infer ; https://docs.api.nvidia.com/nim/reference/llm-apis
+
+
+## Provider Expansion / Phase 4 — Cloudflare Workers AI — 2026-09-24
+
+Cloudflare Workers AI is enabled only for the structured text capability. The adapter uses the account-scoped OpenAI-compatible endpoint:
+
+`https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1/chat/completions`
+
+Credentials remain server-only:
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+Default model:
+- `@cf/openai/gpt-oss-120b`
+- optional `CLOUDFLARE_MODEL`
+
+The adapter uses JSON schema response formatting, bounds prompts/output/timeouts, normalizes failures, and leaves final acceptance to existing Zod/domain validation. Cloudflare is explicitly excluded from image/PDF routing. Runtime activation is subject to CI and one authenticated provider smoke; no secret values are stored in GitHub.

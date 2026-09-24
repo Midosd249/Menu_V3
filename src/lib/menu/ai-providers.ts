@@ -2,8 +2,9 @@ import type { z } from "zod";
 import type { AiCapability } from "./ai-capabilities";
 import { callGroqStructured, GROQ_DEFAULT_MODEL } from "./ai-groq";
 import { callNvidiaStructured, NVIDIA_DEFAULT_MODEL } from "./ai-nvidia";
+import { callCloudflareStructured, CLOUDFLARE_DEFAULT_MODEL } from "./ai-cloudflare";
 
-export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia";
+export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq" | "nvidia" | "cloudflare";
 type JsonSchema = Record<string, unknown>;
 
 type ProviderCallArgs = {
@@ -29,7 +30,7 @@ type ProviderFailure = {
   model: string;
 };
 
-const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq", "nvidia"];
+const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq", "nvidia", "cloudflare"];
 const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai"];
 
 export const AI_PROVIDER_DEFAULTS = {
@@ -41,6 +42,7 @@ export const AI_PROVIDER_DEFAULTS = {
   xkiro: "minimax/minimax-m3:free",
   groq: GROQ_DEFAULT_MODEL,
   nvidia: NVIDIA_DEFAULT_MODEL,
+  cloudflare: CLOUDFLARE_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
@@ -52,14 +54,14 @@ function parseOrder(value: string | undefined, fallback: AiProvider[]) {
     .split(",")
     .map((item) => item.trim().toLowerCase())
     .filter((item): item is AiProvider =>
-      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro" || item === "groq" || item === "nvidia",
+      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro" || item === "groq" || item === "nvidia" || item === "cloudflare",
     );
   return parsed.length ? [...new Set(parsed)] : fallback;
 }
 
 export function getProviderOrder(capability: AiCapability): AiProvider[] {
   const forced = env("AI_PROVIDER").toLowerCase();
-  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro" || forced === "groq" || forced === "nvidia";
+  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro" || forced === "groq" || forced === "nvidia" || forced === "cloudflare";
   if (validProvider && (capability === "structured" || forced !== "mercury")) return [forced];
   if (forced && forced !== "auto") return capability === "structured" ? DEFAULT_STRUCTURED_ORDER : DEFAULT_MULTIMODAL_ORDER;
 
@@ -85,6 +87,7 @@ export function getProviderModel(provider: AiProvider, capability: AiCapability)
   if (provider === "openrouter") return env("OPENROUTER_MODEL") || AI_PROVIDER_DEFAULTS.openrouter;
   if (provider === "groq") return env("GROQ_MODEL") || AI_PROVIDER_DEFAULTS.groq;
   if (provider === "nvidia") return env("NVIDIA_MODEL") || AI_PROVIDER_DEFAULTS.nvidia;
+  if (provider === "cloudflare") return env("CLOUDFLARE_MODEL") || AI_PROVIDER_DEFAULTS.cloudflare;
   return capability === "structured"
     ? env("XKIRO_MODEL") || AI_PROVIDER_DEFAULTS.xkiro
     : env("XKIRO_VISION_MODEL");
@@ -102,7 +105,7 @@ function getProviderKeys(provider: AiProvider): string[] {
     ].filter((key): key is string => Boolean(key?.trim())).map((key) => key.trim());
   }
 
-  const keyName: Record<Exclude<AiProvider, "mercury" | "nvidia">, string> = {
+  const keyName: Record<Exclude<AiProvider, "mercury" | "nvidia" | "cloudflare">, string> = {
     gemini: "GOOGLE_GEMINI_API_KEY",
     zai: "ZAI_API_KEY",
     openrouter: "OPENROUTER_API_KEY",
@@ -110,6 +113,7 @@ function getProviderKeys(provider: AiProvider): string[] {
     groq: "GROQ_API_KEY",
   };
   if (provider === "nvidia") return [process.env.NVIDIA_API_KEY, process.env.NVIDIA_API_KEY_2].filter((key): key is string => Boolean(key?.trim())).map((key) => key.trim());
+  if (provider === "cloudflare") return env("CLOUDFLARE_API_TOKEN") ? [env("CLOUDFLARE_API_TOKEN")] : [];
   const key = env(keyName[provider]);
   return key ? [key] : [];
 }
@@ -331,7 +335,7 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
       continue;
     }
 
-    if (provider === "groq" || provider === "nvidia") continue;
+    if (provider === "groq" || provider === "nvidia" || provider === "cloudflare") continue;
 
     for (const key of keys) {
       const genericArgs: ProviderCallArgs = {
