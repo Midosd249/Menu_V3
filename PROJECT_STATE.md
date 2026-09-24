@@ -758,3 +758,22 @@ Deployment status: NOT_PERFORMED.
 ## EXACT NEXT TASK
 
 Phase 2 — implement fail-closed credential validation and key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare Workers AI (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing during the credential-only phase.
+
+
+# AI Provider Expansion — PHASE 2 IN PROGRESS — 2026-09-24
+
+- VERIFIED: Phase 1 registry foundation remains intact.
+- VERIFIED: Phase 2 credential contract is implemented in `src/lib/menu/ai-provider-credentials.server.ts`.
+- VERIFIED: TypeSafe/Jev has a 3-key pool contract.
+- VERIFIED: NVIDIA has a 2-key pool contract.
+- VERIFIED: Groq, Cerebras, Mistral, and Deepgram each have a 1-key contract.
+- VERIFIED: Cloudflare requires both `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+- VERIFIED: missing/partial credential configuration fails closed at the credential-contract layer.
+- VERIFIED: no secret values were added.
+- VERIFIED: no provider was activated in runtime routing.
+- VERIFIED: no database migration or Vercel deployment was performed.
+- UNKNOWN: live credential validity; no secret values have been supplied to this GitHub session.
+
+## EXACT NEXT TASK
+
+Complete Phase 2 verification and close the credential-contract phase. If Quality/W9 pass, Phase 3 is the execution-adapter phase, beginning with Groq and then NVIDIA/Cloudflare/Cerebras/Mistral/Deepgram according to the documented order.
