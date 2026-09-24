@@ -721,3 +721,20 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+# AI Provider Expansion — 2026-09-24 — PHASE 1 IN PROGRESS
+
+- VERIFIED: current main HEAD at task start is `17fbefd1c8a80c69e7fba28338c2121a97e7aea3`.
+- VERIFIED: existing AI runtime boundary is `src/lib/menu/ai-providers.ts`.
+- VERIFIED: existing executable providers remain Mercury/Inception, Gemini, Z.AI, OpenRouter, and xKiro.
+- VERIFIED: owner confirmed availability of TypeSafe/Jev (3 keys), NVIDIA (2 keys), Groq (1 key), Cloudflare Workers AI, Cerebras, Mistral, and Deepgram.
+- VERIFIED: Phase-1 registry and capability vocabulary are implemented on branch `feat/ai-provider-expansion-foundation`.
+- VERIFIED: new providers are registered as planned but remain `runtimeEligible: false`; no new provider has been added to runtime routing.
+- VERIFIED: no API secret values were added to GitHub, source, tests, or documentation.
+- VERIFIED: official provider documentation was researched before implementation; see `docs/ai-provider-expansion.md`.
+- IN_PROGRESS: Phase 1 verification and final diff/CI review.
+
+## EXACT NEXT TASK
+
+After Phase 1 closes, implement the fail-closed credential validation/key-pool contract for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing in that credential-only phase.
