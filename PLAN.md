@@ -789,3 +789,39 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Run exactly one authenticated TypeSafe/Jev smoke on the authorized runtime using the configured TypeSafe key pool; record the real HTTP/decision evidence, then stop.**
+
+
+# 2026-09-24 — Guest Assistant Last-Mile Reliability — CLOSED / VERIFIED
+
+- VERIFIED: PR #290 merged to `main` as `4a7e35053c5f5a3cde75d1412d6c39c311e5385e`.
+- VERIFIED: the public Guest Menu Assistant now shares one grounded catalog fallback between server and client via `src/lib/menu/guest-assistant-fallback.ts`.
+- VERIFIED: provider/schema/routing failures no longer surface as a blank/error assistant state when the already-loaded public menu can provide a grounded response; the client uses the same deterministic fallback on server-function failure.
+- VERIFIED: Jev/TypeSafe remains the high-level selector for the AI-enhanced structured path; the deterministic fallback is a last-mile safety layer, not a replacement for Jev or the execution providers.
+- VERIFIED: fallback answers remain read-only and derive product references only from the current public menu catalog; allergen absence is never inferred.
+- VERIFIED: Quality run `36030801370` passed Typecheck, repository Tests, W7.4–W7.10 contract gates, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: W9 Orders QA run `36030801753` passed.
+- VERIFIED: Vercel preview deployment for head `24564f05d2794665b463d64440588eefdd09e767` reached READY.
+- UNKNOWN: authenticated live TypeSafe/Jev provider response, quota, and latency; no secret value was exposed through the connected tools.
+- UNKNOWN: final Production deployment readiness for merged `4a7e35053c5f5a3cde75d1412d6c39c311e5385e` until the Vercel Production deployment reports READY.
+
+## PROTECTED / MUST NOT REDO
+- Groq, NVIDIA, Cloudflare, Cerebras, Mistral, and Deepgram adapters.
+- Phase 1 provider registry/capability foundation and Phase 2 credential/key-pool contracts.
+- Existing generic structured/multimodal routing order and server-side secret boundaries.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+- Auth/RLS/subscription/tenant/branch isolation and payment boundaries.
+
+## IMPLEMENTATION STATUS
+**VERIFIED / MERGED**
+
+## DEPLOYMENT STATUS
+**PRODUCTION_DEPLOYMENT_IN_PROGRESS**
+
+## UNKNOWN / BLOCKED
+- UNKNOWN: one authenticated TypeSafe/Jev smoke against an authorized runtime.
+- UNKNOWN: direct real-device validation of the new last-mile fallback in this session.
+- BLOCKED only for live Jev smoke if no authorized runtime exposes the configured TypeSafe key pool.
+
+## EXACT NEXT TASK
+**After the merged Production deployment reaches READY, perform exactly one authenticated TypeSafe/Jev smoke on the authorized runtime and record the real decision evidence; then stop.**
