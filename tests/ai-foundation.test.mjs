@@ -145,7 +145,7 @@ test("Phase 2 credential status exposes metadata, never secret values", () => {
 });
 
 
-test("Phase 3 Groq adapter uses the official OpenAI-compatible endpoint and strict structured outputs", () => {
+test("Phase 3 Groq adapter uses the official OpenAI-compatible endpoint and structured outputs", () => {
   assert.match(groqAdapter, /https:\/\/api\.groq\.com\/openai\/v1/);
   assert.match(groqAdapter, /GROQ_API_KEY/);
   assert.match(groqAdapter, /GROQ_MODEL/);
