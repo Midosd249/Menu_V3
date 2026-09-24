@@ -317,3 +317,20 @@ Security / protected work:
 **Deployment status: Preview READY; Production NOT_PERFORMED**
 
 **Exact next task:** Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`, verify a valid structured response and normalized failure behavior, then review the final diff. Do not merge or start NVIDIA until the Groq smoke evidence is recorded.
+
+## Phase 3 Groq — MAIN / LIVE SMOKE PENDING — 2026-09-24
+
+**Status:** IMPLEMENTED and MERGED to `main`; authenticated live smoke remains pending.
+
+- VERIFIED: PR #270 merged as `b08721f2710de89dc811621d5f2e9959338f1584`.
+- VERIFIED: latest pre-merge Quality #2357 passed.
+- VERIFIED: latest pre-merge W9 Orders QA #565 passed.
+- VERIFIED: `src/lib/menu/ai-groq.ts` is now part of `main`.
+- VERIFIED: Groq uses the official OpenAI-compatible Chat Completions contract with `GROQ_API_KEY` and default `openai/gpt-oss-20b`.
+- VERIFIED: Structured JSON Schema output is validated downstream by the existing application contract.
+- VERIFIED: Groq is enabled only for `structured`; it is not used for image/PDF routing.
+- VERIFIED: no secret values were committed and no protected application boundaries were changed.
+- UNKNOWN: live Groq response, quota, latency, and failure behavior in the owner's real `main` environment.
+
+### Exact Next Task
+**Owner performs one authenticated Groq smoke test on `main` through the existing structured-AI path, records the result, and only then begins NVIDIA adapter work.**

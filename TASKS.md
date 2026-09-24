@@ -751,3 +751,23 @@ Exact next task:
 
 ### EXACT NEXT TASK
 **Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify structured output and normalized failure behavior, then review the final diff. Do not merge PR #270 or start NVIDIA before Groq smoke evidence is recorded.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Groq — MERGED / LIVE SMOKE PENDING
+
+- VERIFIED: PR #270 merged to `main` as `b08721f2710de89dc811621d5f2e9959338f1584`.
+- VERIFIED: Quality #2357 passed.
+- VERIFIED: W9 Orders QA #565 passed.
+- VERIFIED: Groq structured adapter is available on `main`.
+- VERIFIED: Groq remains outside multimodal routing.
+- UNKNOWN: live provider execution and real quota/latency/error behavior.
+
+Protected / MUST NOT REDO:
+- Existing AI routing architecture.
+- Phase 1 registry/capability foundation.
+- Phase 2 credential contracts/key pools.
+- Smart Menu Import pipeline and source-of-truth review/save boundary.
+- Existing public-menu, theme, performance, auth, RLS, subscription, tenant/branch boundaries.
+
+### EXACT NEXT TASK
+**Run the authenticated Groq smoke test on `main` through the existing structured-AI path. Capture the result and then proceed to the next provider only if the smoke is successful.**

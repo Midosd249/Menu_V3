@@ -828,3 +828,26 @@ Protected / MUST NOT REDO:
 ## EXACT NEXT TASK
 
 **Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify valid structured output and normalized failure behavior. Then review the final diff. Do not merge PR #270 or start NVIDIA until Groq smoke evidence is recorded.**
+
+
+# 2026-09-24 — AI Provider Expansion / Phase 3 Groq — MAIN / LIVE SMOKE PENDING
+
+- VERIFIED: PR #270 is merged.
+- VERIFIED: main merge commit: `b08721f2710de89dc811621d5f2e9959338f1584`.
+- VERIFIED: latest pre-merge Quality #2357 passed.
+- VERIFIED: latest pre-merge W9 Orders QA #565 passed.
+- VERIFIED: Groq structured adapter is now on `main`.
+- VERIFIED: default model is `openai/gpt-oss-20b`; optional override remains `GROQ_MODEL`.
+- VERIFIED: Groq is excluded from multimodal routing and vision remains unactivated.
+- VERIFIED: no secrets were committed and no protected architecture was changed.
+- UNKNOWN: authenticated live Groq behavior in the owner's `main` runtime.
+
+Protected / MUST NOT REDO:
+- Phase 1 capability vocabulary and provider registry.
+- Phase 2 server-only credential contract and key-pool inventory.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro runtime routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+**Owner performs the real Groq smoke test on `main`, using the existing structured-AI path and configured `GROQ_API_KEY`. Do not start NVIDIA before that evidence is recorded.**
