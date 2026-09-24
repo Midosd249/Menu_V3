@@ -17,7 +17,10 @@ for (const expected of [
   "Never invent ingredients, allergens, dietary properties, availability, prices",
   "Do not claim that an allergen is absent",
   "read-only",
-  "productIds",\n  "fallbackGuestAnswer",\n  "السعر في القائمة",\n  "I cannot generate the full AI answer right now",
+  "productIds",
+  "fallbackGuestAnswer",
+  "السعر في القائمة",
+  "I cannot generate the full AI answer right now",
 ]) {
   test(`guest assistant enforces ${expected}`, () => {
     assert.ok(source.includes(expected), `Missing expected contract: ${expected}`);
