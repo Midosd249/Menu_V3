@@ -1,3 +1,21 @@
+# CURRENT AI PROVIDER EXPANSION POSITION — 2026-09-24
+
+- VERIFIED: canonical branch is `main`.
+- VERIFIED: NVIDIA adapter PR #272 is merged at `192dc0becc364fd797db5a06f584eb03e3d15676`.
+- VERIFIED: Cloudflare Workers AI structured adapter PR #273 is merged at `889f63fa4a4410d6258654be51549ca44b6a9bf6`.
+- VERIFIED: Cloudflare branch Quality #2368 passed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: Cloudflare W9 Orders QA #574 passed.
+- VERIFIED: Cloudflare Preview Vercel check passed before merge; the post-merge Vercel status is currently pending and is not treated as Production evidence.
+- UNKNOWN: authenticated live Cloudflare provider smoke on `main`; the repository/CI connector cannot read Vercel secret values or perform an authenticated provider call with them.
+- UNKNOWN: authenticated live NVIDIA provider smoke on `main`; same secret-boundary limitation.
+- VERIFIED: no provider secret values were committed.
+- VERIFIED: Cloudflare is structured-only and remains excluded from image/PDF routing.
+- VERIFIED: NVIDIA remains structured-only and excluded from image/PDF routing.
+- VERIFIED: no database migration, auth/RLS, tenant isolation, subscription, order, pricing, or public-menu architecture was changed by these provider adapters.
+- Implementation status: VERIFIED / MERGED for code and CI.
+- Deployment status: NOT_PERFORMED by this task; do not infer Production from Preview.
+- EXACT NEXT TASK: implement the Cerebras structured execution adapter using the existing server-side provider boundary, then run the same CI/review/smoke gate without creating unnecessary Vercel deployments.
+
 # Menu V3 — AI Provider Expansion and Intelligent Model Orchestration
 
 ## Status
@@ -58,9 +76,9 @@ Jev can only choose from a server-generated candidate set. It cannot bypass auth
 | OpenRouter | active | execution | OpenAI-compatible | 1 | enabled |
 | xKiro | active | execution | OpenAI-compatible | 1 | enabled |
 | TypeSafe/Jev | planned | decision orchestrator | System One | 3 | disabled |
-| NVIDIA | planned | execution | OpenAI-compatible | 2 | disabled |
-| Groq | planned | execution | OpenAI-compatible | 1 | disabled |
-| Cloudflare Workers AI | planned | execution | OpenAI-compatible | 1 | disabled |
+| NVIDIA | active | execution | OpenAI-compatible | 2 | CI-verified; live smoke pending |
+| Groq | active | execution | OpenAI-compatible | 1 | CI-verified |
+| Cloudflare Workers AI | active | execution | OpenAI-compatible | 1 | CI-verified; live smoke pending |
 | Cerebras | planned | execution | OpenAI-compatible | 1 | disabled |
 | Mistral | planned | document specialist | Document AI | 1 | disabled |
 | Deepgram | planned | audio specialist | STT | 1 | disabled |
