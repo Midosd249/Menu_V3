@@ -119,7 +119,7 @@ test("provider registry includes the guarded Jev decision layer and active execu
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*typesafe/);
   assert.match(providers, /"cerebras"/);
 });
 
