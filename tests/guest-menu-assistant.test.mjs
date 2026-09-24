@@ -17,7 +17,7 @@ for (const expected of [
   "Never invent ingredients, allergens, dietary properties, availability, prices",
   "Do not claim that an allergen is absent",
   "read-only",
-  "productIds",
+  "productIds",\n  "fallbackGuestAnswer",\n  "السعر في القائمة",\n  "I cannot generate the full AI answer right now",
 ]) {
   test(`guest assistant enforces ${expected}`, () => {
     assert.ok(source.includes(expected), `Missing expected contract: ${expected}`);
@@ -54,3 +54,4 @@ test("assistant is added once through the canonical theme renderer and not to pr
   assert.ok(renderer.includes("<GuestMenuAssistant menu={menu} />"));
   assert.ok(renderer.includes("{!preview && <GuestMenuAssistant menu={menu} />}") );
 });
+\n\ntest("guest assistant never surfaces a provider failure when grounded fallback data can answer", () => {\n  assert.match(source, /if \(!result\.ok\)/);\n  assert.match(source, /const fallback = fallbackGuestAnswer/);\n  assert.match(source, /return \{ ok: true, data: fallback \}/);\n});\n
