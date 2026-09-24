@@ -119,7 +119,7 @@ function normalizeSearchText(value: string) {
     .trim();
 }
 
-function fallbackGuestAnswer(question: string, products: MenuProduct[], lang: "ar" | "en") {
+function fallbackGuestAnswer(question: string, products: MenuProduct[]) {
   const query = normalizeSearchText(question);
   const tokens = query.split(" ").filter((token) => token.length >= 2);
   const scored = products
@@ -248,7 +248,7 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
         systemPrompt: "You are a grounded restaurant menu assistant. The supplied published menu is the only source of truth. You are read-only. Never guess. Never execute transactions. Never claim facts that are not explicitly present in the supplied catalog. The restaurant owner and database remain authoritative.",
       });
       if (!result.ok) {
-        const fallback = fallbackGuestAnswer(data.question, products, data.lang);
+        const fallback = fallbackGuestAnswer(data.question, products);
         return { ok: true, data: fallback };
       }
 
