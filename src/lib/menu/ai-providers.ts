@@ -1,8 +1,7 @@
 import type { z } from "zod";
+import type { AiCapability } from "./ai-capabilities";
 
 export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro";
-export type AiCapability = "structured" | "image" | "pdf";
-
 type JsonSchema = Record<string, unknown>;
 
 type ProviderCallArgs = {
