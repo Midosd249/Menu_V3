@@ -1,5 +1,3 @@
-import "server-only";
-
 export const TYPESAFE_DEFAULT_MODEL = "jev-latest";
 const TYPESAFE_ENDPOINT = "https://api.typesafe.ai/v1/systemone";
 const MAX_STATE_CHARS = 48_000;
@@ -203,6 +201,9 @@ function validateCandidates(candidates: readonly TypeSafeCandidate[]) {
 }
 
 export async function callTypeSafeDecision(args: TypeSafeDecisionArgs): Promise<TypeSafeDecisionResult> {
+  if (typeof window !== "undefined") {
+    throw new Error("TypeSafe decision adapter is server-only");
+  }
   const model = env("TYPESAFE_MODEL") || args.model || TYPESAFE_DEFAULT_MODEL;
   const questions = args.questions;
   const questionEntries = Object.entries(questions);

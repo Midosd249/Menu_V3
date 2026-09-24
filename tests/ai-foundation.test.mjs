@@ -108,18 +108,18 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
 
 test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort:"low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
 
-test("planned providers remain registered while Groq, NVIDIA, and Cloudflare adapters are active", () => {
+test("provider registry includes the guarded Jev decision layer and active execution specialists", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral"]) {
     assert.match(registry, new RegExp(expected));
   }
-  assert.match(registry, /runtimeEligible:false/);
+  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /keyPoolSize:3/);
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*typesafe/);
   assert.match(providers, /"cerebras"/);
 });
 
@@ -227,7 +227,7 @@ test("Mistral Document AI is server-only, structured-annotation capable, and doc
   assert.match(mistralAdapter, /ai_not_configured/);
   assert.doesNotMatch(mistralAdapter, /VITE_/);
   assert.match(providers, /callMistralDocument/);
-  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*mistral/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\\n]*mistral/);
 });
 
 test("Mistral is active only as the document/OCR specialist", () => {
@@ -271,8 +271,8 @@ test("Deepgram is active only for audio_stt and remains outside generic structur
   assert.match(registry, /deepgram:[\s\S]*?transport:"deepgram_stt"/);
   assert.match(providers, /callDeepgramStt/);
   assert.match(providers, /callAudioStt/);
-  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*deepgram/);
-  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\n]*deepgram/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\\n]*deepgram/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\\n]*deepgram/);
 });
 
 test("Deepgram fails closed for missing credentials and rejects invalid audio inputs", () => {
@@ -307,6 +307,7 @@ test("TypeSafe Jev adapter uses the official System One contract and stays serve
   assert.match(adapter, /ai_unavailable/);
   assert.doesNotMatch(adapter, /VITE_/);
   assert.doesNotMatch(adapter, /api\.openai\.com/);
+  assert.match(adapter, /TypeSafe decision adapter is server-only/);
 });
 
 test("TypeSafe Jev adapter bounds candidates/questions and rejects malformed decisions", () => {
@@ -329,13 +330,13 @@ test("TypeSafe Jev adapter rotates the configured three-key pool without exposin
   assert.doesNotMatch(adapter, /console\.(log|error|warn)/);
 });
 
-test("TypeSafe remains a decision boundary and is not activated in generic structured routing", () => {
+test("TypeSafe remains a decision boundary and is used only as the guarded high-level selector", () => {
   const adapter = fs.readFileSync(new URL("../src/lib/menu/ai-typesafe.ts", import.meta.url), "utf8");
   assert.match(registry, /typesafe:[\s\S]*?role:"decision_orchestrator"/);
   assert.match(registry, /typesafe:[\s\S]*?candidateCapabilities:\["typed_decision"\]/);
-  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:false/);
+  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:true/);
   assert.match(providers, /DEFAULT_STRUCTURED_ORDER/);
-  assert.doesNotMatch(providers, /callTypeSafeDecision/);
+  assert.match(providers, /callTypeSafeDecision/);
   assert.match(adapter, /eligibleCandidates/);
 });
 
@@ -368,11 +369,27 @@ test("Phase 6 selection is fail-closed for policy and candidate membership", () 
   assert.match(router, /candidate\.model !== getProviderModel/);
 });
 
-test("Phase 6 does not activate TypeSafe or modify the generic provider orders", () => {
+test("Phase 6 keeps TypeSafe out of the generic execution candidate list and preserves provider orders", () => {
   const router = fs.readFileSync(new URL("../src/lib/menu/ai-capability-router.ts", import.meta.url), "utf8");
   assert.match(router, /canUseTypeSafeDecisionLayer/);
   assert.match(router, /AI_PROVIDER_REGISTRY\.typesafe\.runtimeEligible/);
   assert.doesNotMatch(providers, /typesafe.*DEFAULT_STRUCTURED_ORDER/);
-  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\n]*typesafe/);
-  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:false/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\\n]*typesafe/);
+  assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:true/);
+});
+
+test("structured routing retries another provider when application schema validation fails", () => {
+  assert.match(providers, /validateContent/);
+  assert.match(providers, /Provider returned content that failed application schema validation/);
+  assert.match(providers, /continue;/);
+  assert.match(core, /validateContent: \(content\) =>/);
+  assert.match(core, /args.responseSchema.safeParse\(parsed\)/);
+});
+
+test("Jev selection is confidence-gated and fails open to the existing provider order", () => {
+  assert.match(providers, /getPreferredStructuredProvider/);
+  assert.match(providers, /callTypeSafeDecision/);
+  assert.match(providers, /answer\.confidence/);
+  assert.match(providers, /< 0\.55/);
+  assert.match(providers, /return null;/);
 });
