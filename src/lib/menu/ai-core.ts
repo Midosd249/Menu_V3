@@ -61,6 +61,15 @@ export async function generateStructuredAi<T extends z.ZodTypeAny>(args: Generat
       maxTokens: args.maxTokens,
       temperature: args.temperature ?? 0.3,
       systemPrompt: args.systemPrompt,
+      operation: args.operation,
+      validateContent: (content) => {
+        try {
+          const parsed = JSON.parse(content) as unknown;
+          return args.responseSchema.safeParse(parsed).success;
+        } catch {
+          return false;
+        }
+      },
     });
 
     if (!result.ok) return result;
