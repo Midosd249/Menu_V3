@@ -738,3 +738,23 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 ## EXACT NEXT TASK
 
 After Phase 1 closes, implement the fail-closed credential validation/key-pool contract for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing in that credential-only phase.
+
+
+# AI Provider Expansion — Phase 1 CLOSED / VERIFIED — 2026-09-24
+
+- VERIFIED: Phase 1 completed on branch `feat/ai-provider-expansion-foundation`.
+- VERIFIED: PR #270 is open and targets `main`; it is not merged.
+- VERIFIED: Phase-1 head is `bbe75353b0bee595defd36af9d1f70aeada4b32f`.
+- VERIFIED: GitHub Quality #2337 passed.
+- VERIFIED: GitHub W9 Orders QA #545 passed.
+- VERIFIED: typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA passed in Quality.
+- VERIFIED: planned providers remain disabled from runtime routing.
+- VERIFIED: no provider secrets, database migrations, or production routing changes were introduced.
+- VERIFIED: complete continuity plan is in `docs/ai-provider-expansion.md`.
+
+Implementation status: READY_TO_PUSH.
+Deployment status: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Phase 2 — implement fail-closed credential validation and key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare Workers AI (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing during the credential-only phase.
