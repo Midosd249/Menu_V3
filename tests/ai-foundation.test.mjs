@@ -278,7 +278,7 @@ test("Deepgram is active only for audio_stt and remains outside generic structur
 test("Deepgram fails closed for missing credentials and rejects invalid audio inputs", () => {
   assert.match(deepgramAdapter, /if \(!key\)/);
   assert.match(deepgramAdapter, /code: "ai_not_configured"/);
-  assert.match(deepgramAdapter, /!mimeType\.startsWith\("audio\\/"\)/);
+  assert.match(deepgramAdapter, /!mimeType\.startsWith\("audio\\/"/);
   assert.match(deepgramAdapter, /audio\.byteLength === 0/);
 });
 
