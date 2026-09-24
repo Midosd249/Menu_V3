@@ -638,3 +638,32 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 1
+
+**Status: IN_PROGRESS**
+
+Goal: establish the shared capability vocabulary and provider registry before adding credentials or runtime adapters.
+
+Completed in this phase:
+- Added `src/lib/menu/ai-capabilities.ts`.
+- Added `src/lib/menu/ai-provider-registry.ts`.
+- Centralized the existing `AiCapability` type in the shared capability module.
+- Added regression contracts proving planned providers remain outside runtime routing.
+- Added the complete AI provider expansion continuity document at `docs/ai-provider-expansion.md`.
+- Preserved the existing runtime provider order and multimodal behavior.
+
+Protected / MUST NOT redo:
+- Existing AI provider routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization flow.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro adapters.
+
+Verification state:
+- Static GitHub source review: completed.
+- Official provider research: completed.
+- Local commands: BLOCKED because this connected GitHub session has repository read/write access but no local checkout/runtime.
+- CI: pending final PR/quality run.
+
+Exact next task after closure:
+**Phase 2 — fail-closed credential validation/key pools for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram.**
