@@ -113,7 +113,7 @@ test("planned providers are registered but cannot enter runtime routing in Phase
 
 
 test("Phase 2 credential contracts are server-only, explicit, and fail closed", () => {
-  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8");
   for (const expected of [
     "TYPESAFE_API_KEY", "TYPESAFE_API_KEY_2", "TYPESAFE_API_KEY_3",
     "NVIDIA_API_KEY", "NVIDIA_API_KEY_2", "GROQ_API_KEY",
