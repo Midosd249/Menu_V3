@@ -108,6 +108,99 @@ async function loadGuestCatalog(slug: string, branchSlug?: string) {
   return { sql, tenantId: rows[0]?.tenant_id ?? null, products };
 }
 
+function normalizeSearchText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[ًٌٍَُِّْـ]/g, "")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function fallbackGuestAnswer(question: string, products: MenuProduct[], lang: "ar" | "en") {
+  const query = normalizeSearchText(question);
+  const tokens = query.split(" ").filter((token) => token.length >= 2);
+  const scored = products
+    .map((product) => {
+      const haystack = normalizeSearchText([
+        product.nameAr,
+        product.nameEn,
+        product.descriptionAr,
+        product.descriptionEn,
+        product.categoryAr,
+        product.categoryEn,
+      ].join(" "));
+      const score = tokens.reduce((total, token) => total + (haystack.includes(token) ? 1 : 0), 0);
+      return { product, score };
+    })
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score || a.product.nameAr.localeCompare(b.product.nameAr, "ar"))
+    .slice(0, 5)
+    .map((entry) => entry.product);
+
+  const isRecommendation = /recommend|suggest|what should|تنصح|اقترح|اقتراح|اختار|اختيار/.test(query);
+  const isAvailability = /available|availability|متاح|متوفر|موجود/.test(query);
+  const isPrice = /price|cost|how much|سعر|بكم|كم/.test(query);
+  const isAllergen = /allergen|allergy|حساسي|مكونات/.test(query);
+  const matches = scored.length ? scored : (isRecommendation ? products.slice(0, 3) : []);
+
+  if (isPrice && matches.length) {
+    const linesAr = matches.map((p) => `${p.nameAr}: ${p.price} ${p.currency}`);
+    const linesEn = matches.map((p) => `${p.nameEn || p.nameAr}: ${p.price} ${p.currency}`);
+    return {
+      answerAr: `السعر في القائمة: ${linesAr.join("، ")}.`,
+      answerEn: `Menu prices: ${linesEn.join(", ")}.`,
+      productIds: matches.map((p) => p.id).slice(0, 5),
+    };
+  }
+
+  if (isAvailability && matches.length) {
+    const available = matches.filter((p) => p.isAvailable);
+    const namesAr = available.map((p) => p.nameAr);
+    const namesEn = available.map((p) => p.nameEn || p.nameAr);
+    return {
+      answerAr: namesAr.length ? `هذه الأصناف متاحة حالياً: ${namesAr.join("، ")}.` : "لا توجد أصناف مطابقة متاحة حالياً.",
+      answerEn: namesEn.length ? `These items are currently available: ${namesEn.join(", ")}.` : "No matching items are currently available.",
+      productIds: available.map((p) => p.id).slice(0, 5),
+    };
+  }
+
+  if (isAllergen && matches.length) {
+    const withAllergens = matches.filter((p) => p.allergens.trim());
+    if (!withAllergens.length) {
+      return {
+        answerAr: "معلومات مسببات الحساسية غير محددة لهذه الأصناف في القائمة، لذلك لا يمكنني تأكيد غياب أي مسبب حساسية.",
+        answerEn: "Allergen information is not specified for these items in the menu, so I cannot confirm that any allergen is absent.",
+        productIds: matches.map((p) => p.id).slice(0, 5),
+      };
+    }
+    return {
+      answerAr: withAllergens.map((p) => `${p.nameAr}: ${p.allergens}`).join("؛ "),
+      answerEn: withAllergens.map((p) => `${p.nameEn || p.nameAr}: ${p.allergens}`).join("; "),
+      productIds: withAllergens.map((p) => p.id).slice(0, 5),
+    };
+  }
+
+  if (matches.length) {
+    const namesAr = matches.map((p) => p.nameAr);
+    const namesEn = matches.map((p) => p.nameEn || p.nameAr);
+    return {
+      answerAr: `وجدت في القائمة: ${namesAr.join("، ")}. اسألني عن السعر أو التوفر أو الوصف.`,
+      answerEn: `I found these menu items: ${namesEn.join(", ")}. You can ask about price, availability, or description.`,
+      productIds: matches.map((p) => p.id).slice(0, 5),
+    };
+  }
+
+  const sampleAr = products.slice(0, 5).map((p) => p.nameAr);
+  const sampleEn = products.slice(0, 5).map((p) => p.nameEn || p.nameAr);
+  return {
+    answerAr: `لا أستطيع بناء إجابة ذكية لهذا السؤال الآن، لكن بيانات القائمة متاحة. جرّب السؤال عن صنف محدد أو السعر أو التوفر. من الأصناف الموجودة: ${sampleAr.join("، ")}.`,
+    answerEn: `I cannot generate the full AI answer right now, but the menu data is available. Try asking about a specific item, price, or availability. Some available items are: ${sampleEn.join(", ")}.`,
+    productIds: products.slice(0, 5).map((p) => p.id),
+  };
+}
 function buildCatalog(products: MenuProduct[]) {
   return products.map((p, index) => [
     `#${index + 1}`,
@@ -154,7 +247,10 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
         temperature: 0.2,
         systemPrompt: "You are a grounded restaurant menu assistant. The supplied published menu is the only source of truth. You are read-only. Never guess. Never execute transactions. Never claim facts that are not explicitly present in the supplied catalog. The restaurant owner and database remain authoritative.",
       });
-      if (!result.ok) return { ok: false, code: "unavailable", error: result.error };
+      if (!result.ok) {
+        const fallback = fallbackGuestAnswer(data.question, products, data.lang);
+        return { ok: true, data: fallback };
+      }
 
       const productIds = result.data.productIds.filter((id) => allowedIds.has(id));
       return { ok: true, data: { answerAr: result.data.answerAr, answerEn: result.data.answerEn, productIds } };
