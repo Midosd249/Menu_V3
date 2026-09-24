@@ -169,8 +169,8 @@ function validateResponse(payload: unknown, questions: Readonly<Record<string, T
   const usage = body.usage;
   const normalizedUsage = usage && typeof usage === "object" && !Array.isArray(usage)
     ? {
-        input_tokens: typeof (usage as JsonObject).input_tokens === "number" ? (usage as JsonObject).input_tokens : undefined,
-        output_tokens: typeof (usage as JsonObject).output_tokens === "number" ? (usage as JsonObject).output_tokens : undefined,
+        input_tokens: typeof (usage as JsonObject).input_tokens === "number" ? (usage as JsonObject).input_tokens as number : undefined,
+        output_tokens: typeof (usage as JsonObject).output_tokens === "number" ? (usage as JsonObject).output_tokens as number : undefined,
       }
     : undefined;
 
