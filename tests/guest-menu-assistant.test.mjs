@@ -5,6 +5,7 @@ import test from "node:test";
 const source = fs.readFileSync(new URL("../src/lib/menu/guest-assistant.ts", import.meta.url), "utf8");
 const ui = fs.readFileSync(new URL("../src/components/guest-menu-assistant.tsx", import.meta.url), "utf8");
 const renderer = fs.readFileSync(new URL("../src/components/theme-renderer.tsx", import.meta.url), "utf8");
+const fallback = fs.readFileSync(new URL("../src/lib/menu/guest-assistant-fallback.ts", import.meta.url), "utf8");
 
 for (const expected of [
   "export const askGuestMenuAssistant",
@@ -63,4 +64,31 @@ test("guest assistant never surfaces a provider failure when grounded fallback d
   assert.match(source, /if \(!result\.ok\)/);
   assert.match(source, /const fallback = fallbackGuestAnswer/);
   assert.match(source, /return \{ ok: true, data: fallback \}/);
+});
+
+
+test("shared guest fallback is pure, grounded, and usable by server and client", () => {
+  for (const expected of [
+    "export function fallbackGuestAnswer",
+    "isRecommendation",
+    "isAvailability",
+    "isPrice",
+    "isAllergen",
+    "productIds",
+    "isFeatured",
+    "isAvailable",
+    "I cannot confirm that any allergen is absent",
+  ]) {
+    assert.ok(fallback.includes(expected), `Missing shared fallback contract: ${expected}`);
+  }
+  assert.ok(!fallback.includes("getSql"));
+  assert.ok(!fallback.includes("process.env"));
+});
+
+test("client assistant never surfaces AI failure when public menu data can answer", () => {
+  assert.match(ui, /fallbackGuestAnswer\(trimmed, menu\.products\)/);
+  assert.match(ui, /if \(!result\.ok\)/);
+  assert.match(ui, /setAnswer\(\{ ar: fallback\.answerAr, en: fallback\.answerEn, productIds: fallback\.productIds \}\)/);
+  assert.ok(!ui.includes("setError(result.error)"));
+  assert.match(ui, /catch \{/);
 });
