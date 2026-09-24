@@ -543,3 +543,40 @@ Official references:
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
 \n\n## Phase 5 — TypeSafe/Jev Decision Orchestrator — IMPLEMENTED / LIVE SMOKE PENDING — 2026-09-24\n\n- IMPLEMENTED: added dedicated server-only `src/lib/menu/ai-typesafe.ts` for TypeSafe System One / Jev typed decisions.\n- IMPLEMENTED: official `POST https://api.typesafe.ai/v1/systemone` contract with Bearer authentication.\n- IMPLEMENTED: three-key pool using `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, and `TYPESAFE_API_KEY_3`, with deterministic minute-based rotation.\n- IMPLEMENTED: optional `TYPESAFE_MODEL`; default `jev-latest`.\n- IMPLEMENTED: bounded state, question, candidate, and 60-second request limits.\n- IMPLEMENTED: typed Noul/Choice/Score response validation, probability/confidence validation, and malformed-response rejection.\n- IMPLEMENTED: server-provided eligible candidate set is embedded in the decision state; a `selected_candidate` Choice answer is rejected if it names a candidate outside that server-generated set.\n- IMPLEMENTED: TypeSafe remains outside generic structured/multimodal routing; no runtime activation was introduced.\n- PROTECTED: authorization, tenant/branch isolation, entitlements, pricing, RLS, Smart Menu Import, public-menu/performance phases 0–8, and existing provider adapters.\n- UNKNOWN: authenticated live TypeSafe smoke until an authorized runtime has access to the configured key.\n\n### Official research\n- TypeSafe API Swagger: https://api.typesafe.ai/docs\n- TypeSafe System One / Jev announcement: https://typesafe.ai/blog/introducing-system-one-models-and-jev\n\n### Verification gate\n1. GitHub Quality must pass typecheck, tests, lint, production build, browser/performance gates, and cleanup.\n2. W9 Orders QA must pass.\n3. Final diff must remain isolated to the TypeSafe specialist boundary, regression contracts, and continuity documentation.\n4. One authenticated TypeSafe smoke remains separate runtime evidence.\n5. TypeSafe must remain `runtimeEligible:false` until smoke evidence and exact activation review are complete.\n\n### EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe or modify existing provider routing until the smoke is verified.**\n
+
+# 2026-09-24 — AI Reliability / TypeSafe-Jev + Guest Menu Assistant — CLOSED / VERIFIED
+
+- VERIFIED: feature implementation merged to main as `c62db8bf8a691af791ab0e1bb86f8694b7514619` through PR #288.
+- VERIFIED: TypeSafe/Jev is now an optional high-level structured-provider selector when its server credentials are configured and at least two configured execution candidates are available.
+- VERIFIED: Jev selection is confidence-gated at 0.55 and fails open to the existing deterministic provider order on unavailable, malformed, low-confidence, or exceptional Jev results.
+- VERIFIED: Jev receives only currently configured structured execution candidates; it is not inserted into `DEFAULT_STRUCTURED_ORDER` or `DEFAULT_MULTIMODAL_ORDER`.
+- VERIFIED: structured provider execution now continues to the next provider when the provider response fails the feature's application Zod schema, instead of surfacing the invalid result immediately.
+- VERIFIED: the public Guest Menu Assistant now has a grounded read-only catalog fallback for provider failure/invalid results, covering item matching, price, availability, allergen disclosure limits, and general menu navigation without inventing data.
+- VERIFIED: no database schema, auth/RLS, subscription, tenant/branch, Smart Menu Import, public-menu/performance architecture, or payment behavior changed.
+- VERIFIED: GitHub Quality #2411 passed Typecheck, Tests, W7.4–W7.10 contract gates, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #604 passed.
+- VERIFIED: Vercel PR Preview status for the final feature commit was successful.
+- UNKNOWN: authenticated TypeSafe/Jev live provider response, real quota, and latency behavior; the connected GitHub session cannot expose runtime secret values.
+- UNKNOWN: direct Production deployment identity/status for the merged main commit; no separate production deployment was manually requested.
+
+## PROTECTED / MUST NOT REDO
+- Groq, NVIDIA, Cloudflare, Cerebras, Mistral, and Deepgram adapters already completed.
+- Phase 1 capability registry and Phase 2 credential/key-pool contracts.
+- Existing generic structured/multimodal provider orders except for the new schema-validation fallback and optional Jev preselection boundary documented above.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+- Auth/RLS/subscription/tenant/branch isolation and server-side secret boundaries.
+
+## IMPLEMENTATION STATUS
+**VERIFIED / MERGED**
+
+## DEPLOYMENT STATUS
+**MERGED_TO_MAIN / PRODUCTION_STATUS_UNKNOWN**
+
+## UNKNOWN / BLOCKED
+- UNKNOWN: one authenticated TypeSafe/Jev smoke against an authorized runtime.
+- BLOCKED only if no authorized runtime exposes the configured TypeSafe credentials for smoke verification.
+- Deepgram key/smoke remains separately deferred and is not part of this task.
+
+## EXACT NEXT TASK
+**Run exactly one authenticated TypeSafe/Jev smoke on the authorized runtime using the configured TypeSafe key pool; record the real HTTP/decision evidence, then stop.**

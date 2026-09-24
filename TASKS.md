@@ -859,3 +859,40 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT TASK
 **Review Phase 6 GitHub Quality/W9 results; fix only task-scoped failures, then merge once if all gates pass.**
+
+# 2026-09-24 — AI Reliability / TypeSafe-Jev + Guest Menu Assistant — CLOSED / VERIFIED
+
+- VERIFIED: feature implementation merged to main as `c62db8bf8a691af791ab0e1bb86f8694b7514619` through PR #288.
+- VERIFIED: TypeSafe/Jev is now an optional high-level structured-provider selector when its server credentials are configured and at least two configured execution candidates are available.
+- VERIFIED: Jev selection is confidence-gated at 0.55 and fails open to the existing deterministic provider order on unavailable, malformed, low-confidence, or exceptional Jev results.
+- VERIFIED: Jev receives only currently configured structured execution candidates; it is not inserted into `DEFAULT_STRUCTURED_ORDER` or `DEFAULT_MULTIMODAL_ORDER`.
+- VERIFIED: structured provider execution now continues to the next provider when the provider response fails the feature's application Zod schema, instead of surfacing the invalid result immediately.
+- VERIFIED: the public Guest Menu Assistant now has a grounded read-only catalog fallback for provider failure/invalid results, covering item matching, price, availability, allergen disclosure limits, and general menu navigation without inventing data.
+- VERIFIED: no database schema, auth/RLS, subscription, tenant/branch, Smart Menu Import, public-menu/performance architecture, or payment behavior changed.
+- VERIFIED: GitHub Quality #2411 passed Typecheck, Tests, W7.4–W7.10 contract gates, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #604 passed.
+- VERIFIED: Vercel PR Preview status for the final feature commit was successful.
+- UNKNOWN: authenticated TypeSafe/Jev live provider response, real quota, and latency behavior; the connected GitHub session cannot expose runtime secret values.
+- UNKNOWN: direct Production deployment identity/status for the merged main commit; no separate production deployment was manually requested.
+
+## PROTECTED / MUST NOT REDO
+- Groq, NVIDIA, Cloudflare, Cerebras, Mistral, and Deepgram adapters already completed.
+- Phase 1 capability registry and Phase 2 credential/key-pool contracts.
+- Existing generic structured/multimodal provider orders except for the new schema-validation fallback and optional Jev preselection boundary documented above.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+- Auth/RLS/subscription/tenant/branch isolation and server-side secret boundaries.
+
+## IMPLEMENTATION STATUS
+**VERIFIED / MERGED**
+
+## DEPLOYMENT STATUS
+**MERGED_TO_MAIN / PRODUCTION_STATUS_UNKNOWN**
+
+## UNKNOWN / BLOCKED
+- UNKNOWN: one authenticated TypeSafe/Jev smoke against an authorized runtime.
+- BLOCKED only if no authorized runtime exposes the configured TypeSafe credentials for smoke verification.
+- Deepgram key/smoke remains separately deferred and is not part of this task.
+
+## EXACT NEXT TASK
+**Run exactly one authenticated TypeSafe/Jev smoke on the authorized runtime using the configured TypeSafe key pool; record the real HTTP/decision evidence, then stop.**
