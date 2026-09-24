@@ -120,3 +120,16 @@ Default model:
 
 The adapter uses JSON schema response formatting, bounds prompts/output/timeouts, normalizes failures, and leaves final acceptance to existing Zod/domain validation. Cloudflare is explicitly excluded from image/PDF routing. Runtime activation is subject to CI and one authenticated provider smoke; no secret values are stored in GitHub.
 \n\n## Provider Expansion / Phase 5 — TypeSafe/Jev — 2026-09-24\n\nTypeSafe/Jev is a decision-orchestrator specialist, not a generic text fallback. The dedicated adapter is `src/lib/menu/ai-typesafe.ts`.\n\n- Endpoint: `POST https://api.typesafe.ai/v1/systemone`\n- Authentication: `Authorization: Bearer <TYPESAFE_API_KEY>`\n- Model: `TYPESAFE_MODEL` optional; defaults to `jev-latest`\n- Key pool: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3`\n- Rotation: deterministic minute-based starting-key rotation; failures fall through the remaining configured keys.\n- Typed questions: Noul, Choice, Score.\n- Validation: response model, answer type, probabilities/confidence, question shape, candidate membership, and bounded request size are validated server-side.\n- Candidate boundary: callers must provide a non-empty unique eligible candidate set; the adapter includes only that server-provided set in the decision state and rejects a `selected_candidate` answer outside it.\n- Timeout: 60 seconds.\n- Routing: TypeSafe is intentionally absent from `DEFAULT_STRUCTURED_ORDER` and `DEFAULT_MULTIMODAL_ORDER`; `runtimeEligible` remains false until the live smoke/activation gate is satisfied.\n\n### Server environment contract\n- `TYPESAFE_API_KEY`\n- `TYPESAFE_API_KEY_2`\n- `TYPESAFE_API_KEY_3`\n- `TYPESAFE_MODEL` — optional; defaults to `jev-latest`\n
+
+## Provider Expansion / Phase 6 — Capability-aware routing — 2026-09-24
+
+- IMPLEMENTED: isolated `src/lib/menu/ai-capability-router.ts` filters execution candidates by `runtimeEligible`, execution role, and required capability before any decision layer is considered.
+- IMPLEMENTED: candidate IDs are server-derived from provider/model capability state; selection rejects candidates outside the generated set and revalidates the current provider/model contract before execution.
+- IMPLEMENTED: policy gate requires verified authorization, entitlement, tenant scope, branch scope, and pricing policy before a selected candidate can be admitted.
+- VERIFIED: TypeSafe remains `runtimeEligible:false`; Phase 6 does not add it to generic structured or multimodal routing and does not call the TypeSafe adapter.
+- VERIFIED: existing `DEFAULT_STRUCTURED_ORDER` and `DEFAULT_MULTIMODAL_ORDER` remain unchanged.
+
+### Routing boundary
+`Feature → AI Core → Capability Registry → Eligible Candidate Set → Jev (gated) → Policy Validation → Selected Provider/Model → Execution Adapter`
+
+The Jev/TypeSafe step is represented by a typed selection question boundary but remains disabled until its independent live smoke and activation gate are satisfied. No tenant, branch, authorization, entitlement, pricing, RLS, or provider execution boundary is delegated to Jev.
