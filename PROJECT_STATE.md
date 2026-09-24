@@ -877,3 +877,33 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **Phase 3 — implement and verify the Deepgram isolated STT/audio specialist adapter. Keep audio routing isolated from generic LLM routing and preserve all existing Menu V3 boundaries.**
+\n\n# 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+
+- VERIFIED: main is `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
+- VERIFIED: PR #279 merged by squash.
+- VERIFIED: Deepgram pre-recorded STT specialist is implemented in `src/lib/menu/ai-deepgram.ts`.
+- VERIFIED: existing AI boundary exposes `callAudioStt`; Deepgram is not part of generic structured or multimodal routing.
+- VERIFIED: registry marks Deepgram `active` only for `audio_stt`, role `audio_specialist`, transport `deepgram_stt`.
+- VERIFIED: Quality #2387 passed all configured quality gates.
+- VERIFIED: W9 Orders QA #588 passed.
+- VERIFIED: final PR Vercel Preview status succeeded.
+- UNKNOWN: authenticated live Deepgram smoke because secret values are not accessible to the connected GitHub session.
+- UNKNOWN: direct Production deployment identity/status for this merged main; no Production deployment was explicitly requested.
+
+## PROTECTED / MUST NOT REDO
+- Groq, NVIDIA, Cloudflare, Cerebras, Mistral.
+- Phase 1 registry/capability foundation.
+- Phase 2 credential contracts/key pools.
+- Generic structured and multimodal provider routing.
+- Smart Menu Import architecture.
+- Public-menu/performance phases 0–8.
+- Auth/RLS/subscription/tenant/branch boundaries.
+
+## IMPLEMENTATION STATUS
+**VERIFIED_LOCALLY via GitHub CI evidence / LIVE_SMOKE_PENDING**
+
+## DEPLOYMENT STATUS
+**UNKNOWN — no Production deployment was explicitly requested or verified.**
+
+## EXACT NEXT TASK
+**Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
