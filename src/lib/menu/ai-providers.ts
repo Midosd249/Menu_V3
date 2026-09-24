@@ -1,8 +1,8 @@
 import type { z } from "zod";
+import type { AiCapability } from "./ai-capabilities";
+import { callGroqStructured, GROQ_DEFAULT_MODEL } from "./ai-groq";
 
-export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro";
-export type AiCapability = "structured" | "image" | "pdf";
-
+export type AiProvider = "mercury" | "gemini" | "zai" | "openrouter" | "xkiro" | "groq";
 type JsonSchema = Record<string, unknown>;
 
 type ProviderCallArgs = {
@@ -28,7 +28,7 @@ type ProviderFailure = {
   model: string;
 };
 
-const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro"];
+const DEFAULT_STRUCTURED_ORDER: AiProvider[] = ["mercury", "gemini", "zai", "openrouter", "xkiro", "groq"];
 const DEFAULT_MULTIMODAL_ORDER: AiProvider[] = ["gemini", "openrouter", "zai"];
 
 export const AI_PROVIDER_DEFAULTS = {
@@ -38,6 +38,7 @@ export const AI_PROVIDER_DEFAULTS = {
   zaiVision: "glm-4.6v-flash",
   openrouter: "google/gemma-4-31b-it:free",
   xkiro: "minimax/minimax-m3:free",
+  groq: GROQ_DEFAULT_MODEL,
 } as const;
 
 function env(name: string) {
@@ -49,14 +50,14 @@ function parseOrder(value: string | undefined, fallback: AiProvider[]) {
     .split(",")
     .map((item) => item.trim().toLowerCase())
     .filter((item): item is AiProvider =>
-      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro",
+      item === "mercury" || item === "gemini" || item === "zai" || item === "openrouter" || item === "xkiro" || item === "groq",
     );
   return parsed.length ? [...new Set(parsed)] : fallback;
 }
 
 export function getProviderOrder(capability: AiCapability): AiProvider[] {
   const forced = env("AI_PROVIDER").toLowerCase();
-  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro";
+  const validProvider = forced === "mercury" || forced === "gemini" || forced === "zai" || forced === "openrouter" || forced === "xkiro" || forced === "groq";
   if (validProvider && (capability === "structured" || forced !== "mercury")) return [forced];
   if (forced && forced !== "auto") return capability === "structured" ? DEFAULT_STRUCTURED_ORDER : DEFAULT_MULTIMODAL_ORDER;
 
@@ -80,6 +81,7 @@ export function getProviderModel(provider: AiProvider, capability: AiCapability)
       : env("ZAI_VISION_MODEL") || AI_PROVIDER_DEFAULTS.zaiVision;
   }
   if (provider === "openrouter") return env("OPENROUTER_MODEL") || AI_PROVIDER_DEFAULTS.openrouter;
+  if (provider === "groq") return env("GROQ_MODEL") || AI_PROVIDER_DEFAULTS.groq;
   return capability === "structured"
     ? env("XKIRO_MODEL") || AI_PROVIDER_DEFAULTS.xkiro
     : env("XKIRO_VISION_MODEL");
@@ -102,6 +104,7 @@ function getProviderKeys(provider: AiProvider): string[] {
     zai: "ZAI_API_KEY",
     openrouter: "OPENROUTER_API_KEY",
     xkiro: "XKIRO_API_KEY",
+    groq: "GROQ_API_KEY",
   };
   const key = env(keyName[provider]);
   return key ? [key] : [];
@@ -149,7 +152,7 @@ function getGeminiSchema(responseFormat: JsonSchema) {
 }
 
 async function callOpenAiCompatible(
-  provider: Exclude<AiProvider, "gemini">,
+  provider: Exclude<AiProvider, "gemini" | "groq">,
   args: ProviderCallArgs,
   key: string,
   multimodal?: MultimodalCallArgs,
@@ -278,9 +281,17 @@ export async function callStructuredProvider(args: ProviderCallArgs): Promise<Pr
     }
 
     for (const key of keys) {
-      const result = provider === "gemini"
-        ? await callGemini(args, key)
-        : await callOpenAiCompatible(provider, args, key);
+      let result: ProviderSuccess | ProviderFailure;
+      if (provider === "gemini") {
+        result = await callGemini(args, key);
+      } else if (provider === "groq") {
+        const groqResult = await callGroqStructured(args, key);
+        result = groqResult.ok
+          ? { ok: true, content: groqResult.content, provider: "groq", model: groqResult.model }
+          : { ok: false, code: groqResult.code, error: groqResult.error, provider: "groq", model: groqResult.model };
+      } else {
+        result = await callOpenAiCompatible(provider, args, key);
+      }
       if (result.ok) return result;
       lastFailure = result;
     }
@@ -312,6 +323,8 @@ export async function callMultimodalProvider(args: MultimodalCallArgs): Promise<
       };
       continue;
     }
+
+    if (provider === "groq") continue;
 
     for (const key of keys) {
       const genericArgs: ProviderCallArgs = {

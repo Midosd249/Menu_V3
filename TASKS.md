@@ -638,3 +638,116 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 1
+
+**Status: IN_PROGRESS**
+
+Goal: establish the shared capability vocabulary and provider registry before adding credentials or runtime adapters.
+
+Completed in this phase:
+- Added `src/lib/menu/ai-capabilities.ts`.
+- Added `src/lib/menu/ai-provider-registry.ts`.
+- Centralized the existing `AiCapability` type in the shared capability module.
+- Added regression contracts proving planned providers remain outside runtime routing.
+- Added the complete AI provider expansion continuity document at `docs/ai-provider-expansion.md`.
+- Preserved the existing runtime provider order and multimodal behavior.
+
+Protected / MUST NOT redo:
+- Existing AI provider routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization flow.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro adapters.
+
+Verification state:
+- Static GitHub source review: completed.
+- Official provider research: completed.
+- Local commands: BLOCKED because this connected GitHub session has repository read/write access but no local checkout/runtime.
+- CI: pending final PR/quality run.
+
+Exact next task after closure:
+**Phase 2 — fail-closed credential validation/key pools for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 1 CLOSED
+
+- VERIFIED: capability vocabulary and provider registry implemented on `feat/ai-provider-expansion-foundation`.
+- VERIFIED: planned providers are explicitly `runtimeEligible: false`.
+- VERIFIED: complete architecture/roadmap documented in `docs/ai-provider-expansion.md`.
+- VERIFIED: GitHub Quality #2337 passed.
+- VERIFIED: GitHub W9 Orders QA #545 passed.
+- VERIFIED: PR #270 is open and not merged.
+- VERIFIED: no secrets, migrations, runtime activation, or production deployment were performed.
+- UNKNOWN: provider credential validity because no secret values were supplied or tested.
+- Protected / MUST NOT redo: existing AI provider routing and Smart Menu Import flow.
+
+Exact next task:
+**Phase 2 — fail-closed credential validation/key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram; no runtime activation.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 2 IN PROGRESS
+
+- Credential contract implemented as server-only module.
+- Key-pool inventory locked to owner-provided counts.
+- Cloudflare token + Account ID dependency documented.
+- Runtime provider activation explicitly remains disabled.
+- Live credential validity is UNKNOWN because secret values are not available to this connected GitHub session.
+
+Verification:
+- Static contract tests added.
+- GitHub Quality/W9 pending for the final Phase-2 head.
+
+Exact next task:
+**Close Phase 2 after final Quality/W9 verification; then Phase 3 adapters.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 2 CLOSED
+
+- VERIFIED: server-only credential contract implemented.
+- VERIFIED: owner-provided key-pool inventory locked.
+- VERIFIED: Cloudflare token + Account ID dependency locked.
+- VERIFIED: fail-closed credential state implemented.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no secrets committed.
+- VERIFIED: no runtime provider activation.
+- VERIFIED: no deployment.
+
+Protected / MUST NOT REDO:
+- Phase 1 capability vocabulary.
+- Provider registry.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro runtime routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+
+UNKNOWN:
+- Live credential validity until environment secrets are supplied.
+
+Exact next task:
+**Phase 3 — Groq execution adapter and targeted verification.**
+
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Groq Adapter — IN PROGRESS
+
+- VERIFIED: Phase 1 capability/provider registry is closed.
+- VERIFIED: Phase 2 credential contract is closed.
+- IMPLEMENTED: dedicated Groq structured adapter `src/lib/menu/ai-groq.ts`.
+- IMPLEMENTED: Groq integration into the existing structured provider boundary.
+- IMPLEMENTED: `GROQ_API_KEY` credential usage and configurable `GROQ_MODEL`.
+- IMPLEMENTED: production default model `openai/gpt-oss-20b`.
+- IMPLEMENTED: timeout/error normalization and prompt-injection boundary.
+- VERIFIED: Groq remains outside multimodal routing; vision is not activated by this task.
+- VERIFIED: Quality #2353 passed.
+- VERIFIED: W9 Orders QA #561 passed.
+- VERIFIED: Vercel Preview is READY.
+- UNKNOWN: live Groq smoke and live credential/provider behavior.
+
+### Protected / MUST NOT REDO
+- Existing AI provider routing architecture.
+- Phase 1 capability registry.
+- Phase 2 credential contracts/key pools.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Existing public-menu, theme, performance, auth, RLS, subscription, tenant/branch boundaries.
+
+### EXACT NEXT TASK
+**Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify structured output and normalized failure behavior, then review the final diff. Do not merge PR #270 or start NVIDIA before Groq smoke evidence is recorded.**

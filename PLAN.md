@@ -607,3 +607,38 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+# CURRENT VERIFIED AI EXPANSION POSITION — 2026-09-24
+
+- VERIFIED: Phase 1 CLOSED.
+- VERIFIED: Phase 2 CLOSED / VERIFIED.
+- VERIFIED: all requested credential names and pool sizes are documented and implemented server-side.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no secrets, runtime activation, migration, or deployment.
+- UNKNOWN: live credential validity until credentials are supplied through the environment/secret store.
+
+## EXACT NEXT TASK
+
+**Phase 3 — execution adapters, beginning with Groq.**
+
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Groq Adapter — IMPLEMENTED / LIVE SMOKE PENDING
+
+- VERIFIED: Phase 1 and Phase 2 are closed.
+- IMPLEMENTED: `src/lib/menu/ai-groq.ts` provides the dedicated Groq structured execution adapter.
+- IMPLEMENTED: `src/lib/menu/ai-providers.ts` preserves the single AI boundary and routes structured Groq calls through the dedicated adapter.
+- IMPLEMENTED: Groq uses the official OpenAI-compatible Chat Completions endpoint and `GROQ_API_KEY`.
+- IMPLEMENTED: default model `openai/gpt-oss-20b`, configurable through `GROQ_MODEL`.
+- IMPLEMENTED: bounded 60-second timeout, normalized errors, best-effort JSON Schema output, prompt-injection boundary, and fail-closed missing credential behavior.
+- VERIFIED: Quality #2353 passed.
+- VERIFIED: W9 Orders QA #561 passed.
+- VERIFIED: Vercel Preview deployment is READY.
+- UNKNOWN: live provider smoke and real provider quota/latency/error behavior because the secret value is not accessible to the connected GitHub session.
+- Deployment status: Preview READY; Production NOT_PERFORMED.
+
+### Exact Next Task
+
+**Execute one authenticated Groq smoke request against the current Vercel Preview, record valid structured output + failure behavior, then review the final diff. Do not merge or start NVIDIA before that evidence exists.**

@@ -721,3 +721,110 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 ### Exact Next Task
 **Wait for the next explicitly scoped task. Do not reopen Phase 0–8 or repeat completed performance work without new measured regression evidence.**
+
+
+# AI Provider Expansion — 2026-09-24 — PHASE 1 IN PROGRESS
+
+- VERIFIED: current main HEAD at task start is `17fbefd1c8a80c69e7fba28338c2121a97e7aea3`.
+- VERIFIED: existing AI runtime boundary is `src/lib/menu/ai-providers.ts`.
+- VERIFIED: existing executable providers remain Mercury/Inception, Gemini, Z.AI, OpenRouter, and xKiro.
+- VERIFIED: owner confirmed availability of TypeSafe/Jev (3 keys), NVIDIA (2 keys), Groq (1 key), Cloudflare Workers AI, Cerebras, Mistral, and Deepgram.
+- VERIFIED: Phase-1 registry and capability vocabulary are implemented on branch `feat/ai-provider-expansion-foundation`.
+- VERIFIED: new providers are registered as planned but remain `runtimeEligible: false`; no new provider has been added to runtime routing.
+- VERIFIED: no API secret values were added to GitHub, source, tests, or documentation.
+- VERIFIED: official provider documentation was researched before implementation; see `docs/ai-provider-expansion.md`.
+- IN_PROGRESS: Phase 1 verification and final diff/CI review.
+
+## EXACT NEXT TASK
+
+After Phase 1 closes, implement the fail-closed credential validation/key-pool contract for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing in that credential-only phase.
+
+
+# AI Provider Expansion — Phase 1 CLOSED / VERIFIED — 2026-09-24
+
+- VERIFIED: Phase 1 completed on branch `feat/ai-provider-expansion-foundation`.
+- VERIFIED: PR #270 is open and targets `main`; it is not merged.
+- VERIFIED: Phase-1 head is `bbe75353b0bee595defd36af9d1f70aeada4b32f`.
+- VERIFIED: GitHub Quality #2337 passed.
+- VERIFIED: GitHub W9 Orders QA #545 passed.
+- VERIFIED: typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA passed in Quality.
+- VERIFIED: planned providers remain disabled from runtime routing.
+- VERIFIED: no provider secrets, database migrations, or production routing changes were introduced.
+- VERIFIED: complete continuity plan is in `docs/ai-provider-expansion.md`.
+
+Implementation status: READY_TO_PUSH.
+Deployment status: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Phase 2 — implement fail-closed credential validation and key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare Workers AI (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing during the credential-only phase.
+
+
+# AI Provider Expansion — PHASE 2 IN PROGRESS — 2026-09-24
+
+- VERIFIED: Phase 1 registry foundation remains intact.
+- VERIFIED: Phase 2 credential contract is implemented in `src/lib/menu/ai-provider-credentials.server.ts`.
+- VERIFIED: TypeSafe/Jev has a 3-key pool contract.
+- VERIFIED: NVIDIA has a 2-key pool contract.
+- VERIFIED: Groq, Cerebras, Mistral, and Deepgram each have a 1-key contract.
+- VERIFIED: Cloudflare requires both `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+- VERIFIED: missing/partial credential configuration fails closed at the credential-contract layer.
+- VERIFIED: no secret values were added.
+- VERIFIED: no provider was activated in runtime routing.
+- VERIFIED: no database migration or Vercel deployment was performed.
+- UNKNOWN: live credential validity; no secret values have been supplied to this GitHub session.
+
+## EXACT NEXT TASK
+
+Complete Phase 2 verification and close the credential-contract phase. If Quality/W9 pass, Phase 3 is the execution-adapter phase, beginning with Groq and then NVIDIA/Cloudflare/Cerebras/Mistral/Deepgram according to the documented order.
+
+
+# CURRENT VERIFIED POSITION — AI PROVIDER EXPANSION — 2026-09-24
+
+- VERIFIED: Phase 1 provider registry/capability foundation is complete.
+- VERIFIED: Phase 2 credential contract is CLOSED / VERIFIED.
+- VERIFIED: current branch is `feat/ai-provider-expansion-foundation`.
+- VERIFIED: current Phase-2 implementation head is the parent of the closure documentation commit.
+- VERIFIED: TypeSafe/Jev 3-key, NVIDIA 2-key, Groq 1-key, Cloudflare token+Account ID, Cerebras 1-key, Mistral 1-key, Deepgram 1-key contracts exist.
+- VERIFIED: credential module is server-only.
+- VERIFIED: missing required credentials/context fail closed.
+- VERIFIED: Quality #2345 passed.
+- VERIFIED: W9 Orders QA #553 passed.
+- VERIFIED: no provider runtime activation, database migration, or Vercel deployment occurred.
+- UNKNOWN: live credential validity, because secret values are not present in the repository or this connected GitHub session.
+
+## EXACT NEXT TASK
+
+**Phase 3 — execution adapters.** Implement and verify one adapter at a time, beginning with Groq. Preserve the credential boundary and keep every new provider runtime-disabled until its adapter and targeted smoke verification are complete.
+
+
+
+# 2026-09-24 — AI Provider Expansion / Phase 3 Groq Adapter — IN PROGRESS
+
+- VERIFIED: current branch is `feat/ai-provider-expansion-foundation`.
+- VERIFIED: current branch head before continuity-only updates is `ea8ad25082c90ce3dce1eb2b0cd4108c3d466cda`.
+- VERIFIED: PR #270 remains OPEN / MERGEABLE / NOT MERGED.
+- VERIFIED: Phase 1 and Phase 2 remain CLOSED / VERIFIED.
+- IMPLEMENTED: dedicated Groq structured execution adapter in `src/lib/menu/ai-groq.ts`.
+- IMPLEMENTED: Groq is wired only to the existing structured AI boundary; no second AI architecture was introduced.
+- IMPLEMENTED: Groq default model is `openai/gpt-oss-20b`; `GROQ_MODEL` may override it.
+- IMPLEMENTED: bounded timeout, normalized failures, server-only credential use, prompt-injection boundary, and no secret logging.
+- VERIFIED: Groq is not part of multimodal routing; vision remains a separate future capability decision.
+- VERIFIED: GitHub Quality #2353 passed.
+- VERIFIED: GitHub W9 Orders QA #561 passed.
+- VERIFIED: Quality passed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: Vercel Preview for the current branch head is READY.
+- UNKNOWN: live Groq API smoke because the secret value is not accessible to the connected GitHub session.
+- UNKNOWN: provider-specific live latency/error/quota behavior in the configured Preview environment.
+- VERIFIED: no Production deployment, merge, migration, auth/RLS, subscription, or tenant/branch changes were performed.
+
+Protected / MUST NOT REDO:
+- Phase 1 capability vocabulary and provider registry foundation.
+- Phase 2 server-only credential contract and key-pool inventory.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro runtime routing.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+
+**Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify valid structured output and normalized failure behavior. Then review the final diff. Do not merge PR #270 or start NVIDIA until Groq smoke evidence is recorded.**
