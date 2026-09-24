@@ -616,3 +616,18 @@ Official references:
 
 ## EXACT NEXT TASK
 **After the merged Production deployment reaches READY, perform exactly one authenticated TypeSafe/Jev smoke on the authorized runtime and record the real decision evidence; then stop.**
+
+
+# 2026-09-24 — TypeSafe/Jev Live Smoke Result
+
+- VERIFIED: the TypeSafe/Jev adapter and guarded selector are already implemented and merged.
+- VERIFIED: current registry state is `runtimeEligible:true` for the TypeSafe decision layer.
+- VERIFIED: exactly one live-smoke attempt was made in GitHub Actions run `36033142672`.
+- VERIFIED: `TYPESAFE_API_KEY` was missing from that runtime; therefore no request reached `https://api.typesafe.ai/v1/systemone`.
+- VERIFIED: temporary PR #292 was closed without merge and no secret was exposed.
+- UNKNOWN: authenticated API response, quota, and latency.
+- BLOCKED: do not retry until an authorized runtime has the configured TypeSafe credential.
+
+## EXACT NEXT TASK
+
+**Securely provide the configured TypeSafe credential to the authorized smoke runtime, run exactly one authenticated smoke, record HTTP/decision evidence, then stop.**
