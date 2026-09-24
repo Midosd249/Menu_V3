@@ -7,6 +7,7 @@ const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", imp
 const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import.meta.url), "utf8");
 const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", import.meta.url), "utf8");
 const cloudflareAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cloudflare.ts", import.meta.url), "utf8");
+const cerebrasAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cerebras.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -116,7 +117,8 @@ test("planned providers remain registered while Groq, NVIDIA, and Cloudflare ada
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe|cerebras|mistral|deepgram/);
+  assert.doesNotMatch(providers, /typesafe|mistral|deepgram/);
+  assert.match(providers, /"cerebras"/);
 });
 
 
@@ -193,4 +195,26 @@ test("Cloudflare is structured-only and never enters multimodal routing", () => 
   assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /cloudflare:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(providers, /provider === "groq" \|\| provider === "nvidia" \|\| provider === "cloudflare"/);
+});
+
+
+test("Cerebras adapter contract is server-only, bounded, version-pinned, and structured-safe", () => {
+  assert.match(cerebrasAdapter, /https:\/\/api\.cerebras\.ai\/v1/);
+  assert.match(cerebrasAdapter, /CEREBRAS_API_KEY/);
+  assert.match(cerebrasAdapter, /CEREBRAS_MODEL/);
+  assert.match(cerebrasAdapter, /gpt-oss-120b/);
+  assert.match(cerebrasAdapter, /X-Cerebras-Version-Patch/);
+  assert.match(cerebrasAdapter, /response_format/);
+  assert.match(cerebrasAdapter, /json_schema/);
+  assert.match(cerebrasAdapter, /strict: false/);
+  assert.match(cerebrasAdapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(cerebrasAdapter, /ai_not_configured/);
+  assert.doesNotMatch(cerebrasAdapter, /VITE_/);
+});
+
+test("Cerebras remains structured-only and excluded from multimodal routing", () => {
+  assert.match(providers, /"cerebras"/);
+  assert.match(registry, /cerebras:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /cerebras:[\s\S]*?candidateCapabilities:\["structured"\]/);
+  assert.match(providers, /provider === "groq" \|\| provider === "nvidia" \|\| provider === "cloudflare" \|\| provider === "cerebras"/);
 });
