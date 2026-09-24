@@ -213,7 +213,31 @@ test("Cerebras adapter contract is server-only, bounded, version-pinned, and str
   assert.doesNotMatch(cerebrasAdapter, /VITE_/);
 });
 
-test("Mistral Document AI is server-only, structured-annotation capable, and document-scoped", () => {\n  assert.match(mistralAdapter, /https:\/\/api\.mistral\.ai\/v1\/ocr/);\n  assert.match(mistralAdapter, /MISTRAL_API_KEY/);\n  assert.match(mistralAdapter, /MISTRAL_MODEL/);\n  assert.match(mistralAdapter, /mistral-ocr-latest/);\n  assert.match(mistralAdapter, /document_annotation_format/);\n  assert.match(mistralAdapter, /json_schema/);\n  assert.match(mistralAdapter, /document_url/);\n  assert.match(mistralAdapter, /image_url/);\n  assert.match(mistralAdapter, /AbortSignal\\.timeout\\(60_000\\)/);\n  assert.match(mistralAdapter, /ai_not_configured/);\n  assert.doesNotMatch(mistralAdapter, /VITE_/);\n  assert.match(providers, /callMistralDocument/);\n  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\\n]*mistral/);\n});\n\ntest("Mistral is active only as the document/OCR specialist", () => {\n  assert.match(registry, /mistral:[\\s\\S]*?lifecycle:"active"/);\n  assert.match(registry, /mistral:[\\s\\S]*?runtimeEligible:true/);\n  assert.match(registry, /mistral:[\\s\\S]*?candidateCapabilities:\["ocr_document","image","pdf","structured"\]/);\n  assert.match(registry, /mistral:[\\s\\S]*?role:"document_specialist"/);\n});\n\ntest("Cerebras remains structured-only and excluded from multimodal routing", () => {
+test("Mistral Document AI is server-only, structured-annotation capable, and document-scoped", () => {
+  assert.match(mistralAdapter, /https:\/\/api\.mistral\.ai\/v1\/ocr/);
+  assert.match(mistralAdapter, /MISTRAL_API_KEY/);
+  assert.match(mistralAdapter, /MISTRAL_MODEL/);
+  assert.match(mistralAdapter, /mistral-ocr-latest/);
+  assert.match(mistralAdapter, /document_annotation_format/);
+  assert.match(mistralAdapter, /json_schema/);
+  assert.match(mistralAdapter, /document_url/);
+  assert.match(mistralAdapter, /image_url/);
+  assert.match(mistralAdapter, /AbortSignal\\.timeout\\(60_000\\)/);
+  assert.match(mistralAdapter, /ai_not_configured/);
+  assert.doesNotMatch(mistralAdapter, /VITE_/);
+  assert.match(providers, /callMistralDocument/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\
+]*mistral/);
+});
+
+test("Mistral is active only as the document/OCR specialist", () => {
+  assert.match(registry, /mistral:[\\s\\S]*?lifecycle:"active"/);
+  assert.match(registry, /mistral:[\\s\\S]*?runtimeEligible:true/);
+  assert.match(registry, /mistral:[\\s\\S]*?candidateCapabilities:\["ocr_document","image","pdf","structured"\]/);
+  assert.match(registry, /mistral:[\\s\\S]*?role:"document_specialist"/);
+});
+
+test("Cerebras remains structured-only and excluded from multimodal routing", () => {
   assert.match(providers, /"cerebras"/);
   assert.match(registry, /cerebras:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /cerebras:[\s\S]*?candidateCapabilities:\["structured"\]/);
