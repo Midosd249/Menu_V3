@@ -5,6 +5,7 @@ import test from "node:test";
 const core = fs.readFileSync(new URL("../src/lib/menu/ai-core.ts", import.meta.url), "utf8");
 const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
 const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import.meta.url), "utf8");
+const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -101,7 +102,9 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
   }
 });
 
-test("planned providers remain registered while the Phase 3 Groq adapter is explicitly active", () => {
+test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort:"low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
+
+test("planned providers remain registered while the Phase 3 Groq and NVIDIA adapters are explicitly active", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
     assert.match(registry, new RegExp(expected));
   }
@@ -110,7 +113,8 @@ test("planned providers remain registered while the Phase 3 Groq adapter is expl
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
-  assert.doesNotMatch(providers, /typesafe|nvidia|cloudflare|cerebras|mistral|deepgram/);
+  assert.match(providers, /"nvidia"/);
+  assert.doesNotMatch(providers, /typesafe|cloudflare|cerebras|mistral|deepgram/);
 });
 
 
@@ -162,7 +166,9 @@ test("Groq is fail-closed when the credential is missing", () => {
   assert.match(groqAdapter, /code: "ai_not_configured"/);
 });
 
-test("Groq remains outside multimodal routing until a separately verified vision adapter is approved", () => {
+test("Groq and NVIDIA remain outside multimodal routing until separately verified vision adapters are approved", () => {
   assert.match(providers, /DEFAULT_MULTIMODAL_ORDER: AiProvider\[\] = \["gemini", "openrouter", "zai"\]/);
   assert.match(registry, /groq:[\s\S]*?candidateCapabilities:\["structured"\]/);
+  assert.match(registry, /nvidia:[\s\S]*?candidateCapabilities:\["structured"\]/);
+  assert.match(providers, /provider === "groq" \|\| provider === "nvidia"/);
 });

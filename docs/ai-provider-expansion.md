@@ -2,7 +2,7 @@
 
 ## Status
 
-IN_PROGRESS — Phase 1: Provider abstraction audit + capability registry foundation.
+IN_PROGRESS — Phase 3: NVIDIA execution adapter implemented; live smoke pending.
 
 This document is the continuity anchor for the AI provider expansion. A new chat must read this document, docs/ai-provider-routing.md, PROJECT_STATE.md, PLAN.md, TASKS.md, and the current src/lib/menu/ai-*.ts implementation before making further changes.
 
@@ -317,3 +317,19 @@ Security / protected work:
 **Deployment status: Preview READY; Production NOT_PERFORMED**
 
 **Exact next task:** Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`, verify a valid structured response and normalized failure behavior, then review the final diff. Do not merge or start NVIDIA until the Groq smoke evidence is recorded.
+
+## Phase 3 — NVIDIA Execution Adapter — IMPLEMENTED / LIVE SMOKE PENDING — 2026-09-24
+
+- VERIFIED: owner confirmed Groq live smoke succeeds on `main`.
+- IMPLEMENTED: `src/lib/menu/ai-nvidia.ts` dedicated server-side structured adapter.
+- IMPLEMENTED: two-key pool, configurable `NVIDIA_MODEL`, default `openai/gpt-oss-120b`.
+- IMPLEMENTED: bounded timeout, normalized errors, prompt-injection boundary, schema-aware JSON-only instruction, fail-closed credentials.
+- VERIFIED: NVIDIA is structured-only; image/PDF routing is unchanged.
+- VERIFIED: no database/auth/RLS/subscription/tenant/branch/public-menu/performance changes.
+- UNKNOWN: live NVIDIA response/quota/latency/error behavior.
+
+### Exact verification boundary
+1. Static adapter/routing tests.
+2. Full Quality/W9 gates.
+3. One authenticated NVIDIA smoke on `main` with `AI_PROVIDER=nvidia`.
+4. Only after smoke evidence: proceed to Cloudflare.
