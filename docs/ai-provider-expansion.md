@@ -191,3 +191,52 @@ Phase-1 regression note:
 **Deployment status: NOT_PERFORMED.**
 
 **Exact next task:** Phase 2 — implement fail-closed credential validation and key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare Workers AI (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing during the credential-only phase.
+
+
+## Phase 2 — Credential Contracts / Key Pools — IN PROGRESS
+
+Scope is deliberately credential-only. No new provider is activated and no runtime routing order changes.
+
+### Server-only environment contract
+
+| Provider | Secret environment variables | Required context | Activation |
+|---|---|---|---|
+| TypeSafe/Jev | `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` | none | disabled |
+| NVIDIA | `NVIDIA_API_KEY`, `NVIDIA_API_KEY_2` | none | disabled |
+| Groq | `GROQ_API_KEY` | none | disabled |
+| Cloudflare Workers AI | `CLOUDFLARE_API_TOKEN` | `CLOUDFLARE_ACCOUNT_ID` | disabled |
+| Cerebras | `CEREBRAS_API_KEY` | none | disabled |
+| Mistral | `MISTRAL_API_KEY` | none | disabled |
+| Deepgram | `DEEPGRAM_API_KEY` | none | disabled |
+
+The credential module is `src/lib/menu/ai-provider-credentials.server.ts`. The `.server.ts` boundary is intentional.
+
+### Fail-closed rules
+
+- Missing required secret => provider credential state is `missing`.
+- Missing required context => provider credential state is `missing`.
+- A configured pool may contain fewer optional rotation keys than the owner's maximum pool size.
+- The application never serializes or returns secret values as credential status; status exposes counts and state only.
+- Client/browser code must not import the credential module.
+- Credentials are never committed to GitHub and are not read from `VITE_*` variables.
+- Credential configuration does not activate a provider. Runtime eligibility remains controlled by the provider registry.
+- Cloudflare requires both the API token and Account ID because the official Workers AI OpenAI-compatible endpoint is account-scoped.
+- Key pools are for resilience/load distribution only; they must not be used to bypass provider quotas or policy.
+
+### Official authentication evidence used for Phase 2
+
+- TypeSafe: `TYPESAFE_API_KEY`, Bearer authentication, System One endpoint.
+- NVIDIA API Catalog: Developer API Key for hosted model requests.
+- Groq: `GROQ_API_KEY`, OpenAI-compatible endpoint.
+- Cloudflare Workers AI: API token + Account ID.
+- Cerebras: `CEREBRAS_API_KEY`, Bearer authentication.
+- Mistral: standard API key for inference/document APIs.
+- Deepgram: `DEEPGRAM_API_KEY`, Token authentication.
+
+### Exact Phase 2 verification
+
+1. Static tests prove every credential contract and pool cardinality.
+2. Typecheck/test/lint/build must pass.
+3. CI must pass the applicable Quality and W9 gates.
+4. Diff review must prove no secret values, no runtime activation, and no database/deployment changes.
+5. Only after closure may Phase 3 adapters begin.
