@@ -667,3 +667,19 @@ Verification state:
 
 Exact next task after closure:
 **Phase 2 — fail-closed credential validation/key pools for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram.**
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 1 CLOSED
+
+- VERIFIED: capability vocabulary and provider registry implemented on `feat/ai-provider-expansion-foundation`.
+- VERIFIED: planned providers are explicitly `runtimeEligible: false`.
+- VERIFIED: complete architecture/roadmap documented in `docs/ai-provider-expansion.md`.
+- VERIFIED: GitHub Quality #2337 passed.
+- VERIFIED: GitHub W9 Orders QA #545 passed.
+- VERIFIED: PR #270 is open and not merged.
+- VERIFIED: no secrets, migrations, runtime activation, or production deployment were performed.
+- UNKNOWN: provider credential validity because no secret values were supplied or tested.
+- Protected / MUST NOT redo: existing AI provider routing and Smart Menu Import flow.
+
+Exact next task:
+**Phase 2 — fail-closed credential validation/key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram; no runtime activation.**
