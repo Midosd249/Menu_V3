@@ -6,6 +6,7 @@ const core = fs.readFileSync(new URL("../src/lib/menu/ai-core.ts", import.meta.u
 const providers = fs.readFileSync(new URL("../src/lib/menu/ai-providers.ts", import.meta.url), "utf8");
 const groqAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-groq.ts", import.meta.url), "utf8");
 const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", import.meta.url), "utf8");
+const cloudflareAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cloudflare.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -171,4 +172,24 @@ test("Groq and NVIDIA remain outside multimodal routing until separately verifie
   assert.match(registry, /groq:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(registry, /nvidia:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(providers, /provider === "groq" \|\| provider === "nvidia"/);
+});
+
+
+test("Cloudflare Workers AI adapter contract is server-only, bounded, and structured-safe", () => {
+  assert.match(cloudflareAdapter, /api\.cloudflare\.com\/client\/v4\/accounts/);
+  assert.match(cloudflareAdapter, /CLOUDFLARE_API_TOKEN/);
+  assert.match(cloudflareAdapter, /CLOUDFLARE_DEFAULT_MODEL/);
+  assert.match(cloudflareAdapter, /@cf\/openai\/gpt-oss-120b/);
+  assert.match(cloudflareAdapter, /response_format/);
+  assert.match(cloudflareAdapter, /json_schema/);
+  assert.match(cloudflareAdapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(cloudflareAdapter, /ai_not_configured/);
+  assert.doesNotMatch(cloudflareAdapter, /VITE_/);
+});
+
+test("Cloudflare is structured-only and never enters multimodal routing", () => {
+  assert.match(providers, /"cloudflare"/);
+  assert.match(registry, /cloudflare:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /cloudflare:[\s\S]*?candidateCapabilities:\["structured"\]/);
+  assert.match(providers, /provider === "groq" \|\| provider === "nvidia" \|\| provider === "cloudflare"/);
 });
