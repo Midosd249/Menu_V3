@@ -801,3 +801,15 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT TASK
 **Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
+
+## 2026-09-24 — Post-merge Vercel status correction
+
+- VERIFIED: continuity documentation was merged to `main` as `b4e0dd4d95add743cc6d0fa683e2223ccf57bc81`.
+- VERIFIED: GitHub combined status for this main commit reports Vercel **FAILURE** with target indicating `build-rate-limit`.
+- VERIFIED: this is a Vercel build/deployment infrastructure/quota status, not an application-code verification failure.
+- UNKNOWN: no Production deployment identity was established for this main commit.
+- DEPLOYMENT STATUS: **DEPLOYMENT_BLOCKED** by the observed Vercel build-rate-limit status.
+- LIVE_SMOKE: still **UNKNOWN** for authenticated Deepgram runtime behavior.
+
+### EXACT NEXT TASK
+**Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
