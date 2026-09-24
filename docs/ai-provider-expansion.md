@@ -507,3 +507,17 @@ Official references:
 
 ### EXACT NEXT TASK
 **Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
+
+
+## 2026-09-24 — Authenticated Deepgram smoke attempt — BLOCKED
+
+- VERIFIED: a one-off GitHub Actions smoke workflow was executed as run `35963994824`.
+- VERIFIED: the runner reached the credential gate and `DEEPGRAM_API_KEY` was empty/unavailable to that GitHub Actions runtime.
+- VERIFIED: no API request was sent to Deepgram; therefore no authenticated provider response can be claimed.
+- VERIFIED: no secret value was printed or exposed.
+- VERIFIED: temporary smoke PR #282 was closed without merge; no runtime application code was changed.
+- BLOCKED: authenticated live Deepgram smoke cannot complete until `DEEPGRAM_API_KEY` is available in an authorized runtime.
+- Deployment status remains **DEPLOYMENT_BLOCKED** from the previously verified Vercel build-rate-limit status; no Production deployment is claimed.
+
+### EXACT NEXT ACTION
+**Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
