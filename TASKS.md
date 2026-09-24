@@ -788,3 +788,16 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Deepgram isolated STT/audio specialist adapter.**
+\n\n## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+
+- VERIFIED: PR #279 merged by squash as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
+- VERIFIED: Deepgram isolated pre-recorded STT adapter is active only for `audio_stt`.
+- VERIFIED: Quality #2387 passed.
+- VERIFIED: W9 Orders QA #588 passed.
+- VERIFIED: final PR Vercel Preview status succeeded.
+- UNKNOWN: authenticated Deepgram live smoke.
+- UNKNOWN: direct Production deployment identity/status for merged main.
+- MUST NOT REDO: Groq, NVIDIA, Cloudflare, Cerebras, Mistral, Phase 1/2, Smart Menu Import, public-menu/performance phases 0–8, auth/RLS/subscription/tenant/branch boundaries.
+
+### EXACT NEXT TASK
+**Perform one authenticated Deepgram pre-recorded STT smoke on an authorized runtime using the configured `DEEPGRAM_API_KEY`; record the real response/failure evidence, then stop.**
