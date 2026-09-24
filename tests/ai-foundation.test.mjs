@@ -105,8 +105,8 @@ test("planned providers are registered but cannot enter runtime routing in Phase
     assert.match(registry, new RegExp(expected));
   }
   assert.match(registry, /runtimeEligible:false/);
-  assert.match(registry, /keyPoolSize: 3/);
-  assert.match(registry, /keyPoolSize: 2/);
-  assert.match(registry, /role: "decision_orchestrator"/);
+  assert.match(registry, /keyPoolSize:3/);
+  assert.match(registry, /keyPoolSize:2/);
+  assert.match(registry, /role:"decision_orchestrator"/);
   assert.doesNotMatch(providers, /typesafe|nvidia|groq|cloudflare|cerebras|mistral|deepgram/);
 });
