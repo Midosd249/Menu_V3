@@ -162,3 +162,32 @@ At every phase close, record:
 - exactly one next task
 
 Current exact next task after Phase 1: implement fail-closed credential validation/key pools for TypeSafe (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate providers yet; adapters follow the credential contract.
+
+
+## Phase 1 Closure — 2026-09-24
+
+**Status: CLOSED / VERIFIED on branch `feat/ai-provider-expansion-foundation`.**
+
+Verified evidence:
+- Branch base is current `main` at `17fbefd1c8a80c69e7fba28338c2121a97e7aea3`.
+- Phase-1 changes are contained in PR #270.
+- GitHub Quality run #2337: PASS.
+- GitHub W9 Orders QA run #545: PASS.
+- Quality completed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and artifact/cleanup stages.
+- W9 Orders QA completed successfully.
+- Combined status for the Phase-1 head is successful.
+- No provider secrets were added.
+- No runtime provider order was changed.
+- No new provider was enabled in production routing.
+- No database migration was introduced.
+- No Vercel production deployment was performed.
+
+Phase-1 regression note:
+- The first CI attempt exposed only a test assertion-format mismatch in the new registry contract. It was corrected in a focused test-only commit.
+- The final CI run passed all configured Quality and W9 gates.
+
+**Implementation status: READY_TO_PUSH.**
+
+**Deployment status: NOT_PERFORMED.**
+
+**Exact next task:** Phase 2 — implement fail-closed credential validation and key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare Workers AI (token + Account ID), Cerebras, Mistral, and Deepgram. Do not activate provider routing during the credential-only phase.
