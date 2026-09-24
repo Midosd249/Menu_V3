@@ -642,3 +642,19 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 ### Exact Next Task
 
 **Execute one authenticated Groq smoke request against the current Vercel Preview, record valid structured output + failure behavior, then review the final diff. Do not merge or start NVIDIA before that evidence exists.**
+
+
+# 2026-09-24 — AI Provider Expansion / Phase 3 Groq — MERGED TO MAIN / LIVE SMOKE PENDING
+
+- VERIFIED: PR #270 merged successfully with squash merge.
+- VERIFIED: resulting `main` merge commit is `b08721f2710de89dc811621d5f2e9959338f1584`.
+- VERIFIED: latest pre-merge GitHub Quality run #2357 passed all configured quality stages.
+- VERIFIED: latest pre-merge W9 Orders QA run #565 passed.
+- VERIFIED: Groq adapter is present in `main` and enabled only for structured AI execution.
+- VERIFIED: Groq vision remains outside multimodal routing.
+- VERIFIED: no secret values, database migrations, auth/RLS, subscription, tenant/branch, or unrelated product changes were introduced.
+- UNKNOWN: live Groq provider response, quota, latency, and failure behavior in the owner's real `main` environment.
+- Deployment status: MAIN_UPDATED; Production deployment status is UNKNOWN until direct deployment evidence is available.
+
+### Exact Next Task
+**Owner executes one real Smart Menu / structured-AI smoke test on `main` with the configured `GROQ_API_KEY`; record the observed result, then continue with NVIDIA only after Groq live evidence is captured.**
