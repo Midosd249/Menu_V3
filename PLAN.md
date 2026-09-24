@@ -1,3 +1,21 @@
+# CURRENT AI PROVIDER EXPANSION POSITION — 2026-09-24
+
+- VERIFIED: canonical branch is `main`.
+- VERIFIED: NVIDIA adapter PR #272 is merged at `192dc0becc364fd797db5a06f584eb03e3d15676`.
+- VERIFIED: Cloudflare Workers AI structured adapter PR #273 is merged at `889f63fa4a4410d6258654be51549ca44b6a9bf6`.
+- VERIFIED: Cloudflare branch Quality #2368 passed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: Cloudflare W9 Orders QA #574 passed.
+- VERIFIED: Cloudflare Preview Vercel check passed before merge; the post-merge Vercel status is currently pending and is not treated as Production evidence.
+- UNKNOWN: authenticated live Cloudflare provider smoke on `main`; the repository/CI connector cannot read Vercel secret values or perform an authenticated provider call with them.
+- UNKNOWN: authenticated live NVIDIA provider smoke on `main`; same secret-boundary limitation.
+- VERIFIED: no provider secret values were committed.
+- VERIFIED: Cloudflare is structured-only and remains excluded from image/PDF routing.
+- VERIFIED: NVIDIA remains structured-only and excluded from image/PDF routing.
+- VERIFIED: no database migration, auth/RLS, tenant isolation, subscription, order, pricing, or public-menu architecture was changed by these provider adapters.
+- Implementation status: VERIFIED / MERGED for code and CI.
+- Deployment status: NOT_PERFORMED by this task; do not infer Production from Preview.
+- EXACT NEXT TASK: implement the Cerebras structured execution adapter using the existing server-side provider boundary, then run the same CI/review/smoke gate without creating unnecessary Vercel deployments.
+
 # CURRENT VERIFIED RELEASE POSITION — 2026-09-22 — PHASE 8 CLOSED / VERIFIED
 
 - VERIFIED: owner completed the physical Android/iOS/QR production preview and confirmed the image-performance remediation is functioning correctly.
