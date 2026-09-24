@@ -16,8 +16,11 @@ function readEnv(name: string) {
   return process.env[name]?.trim() || "";
 }
 
-function normalizeAudio(audio: ArrayBuffer | Uint8Array): Uint8Array {
-  return audio instanceof Uint8Array ? audio : new Uint8Array(audio);
+function normalizeAudio(audio: ArrayBuffer | Uint8Array): ArrayBuffer {
+  if (audio instanceof ArrayBuffer) return audio;
+  const copy = new ArrayBuffer(audio.byteLength);
+  new Uint8Array(copy).set(audio);
+  return copy;
 }
 
 function extractTranscript(payload: unknown): { transcript: string; confidence?: number } | null {
