@@ -123,12 +123,12 @@ test("Phase 2 credential contracts are server-only, explicit, and fail closed", 
     assert.match(credentialSource, new RegExp(expected));
   }
   assert.match(credentialSource, /state !== "configured"/);
-  assert.match(credentialSource, /return []/);
+  assert.match(credentialSource, /return \[\]/g);
   assert.doesNotMatch(credentialSource, /VITE_/);
 });
 
 test("Phase 2 key-pool cardinality matches the owner-provided inventory", () => {
-  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8");
   assert.match(credentialSource, /typesafe:[\s\S]*?requiredSecretCount: 1/);
   assert.match(credentialSource, /secretEnv: \["TYPESAFE_API_KEY", "TYPESAFE_API_KEY_2", "TYPESAFE_API_KEY_3"\]/);
   assert.match(credentialSource, /secretEnv: \["NVIDIA_API_KEY", "NVIDIA_API_KEY_2"\]/);
@@ -136,7 +136,7 @@ test("Phase 2 key-pool cardinality matches the owner-provided inventory", () => 
 });
 
 test("Phase 2 credential status exposes metadata, never secret values", () => {
-  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8");
   assert.match(credentialSource, /AiProviderCredentialStatus/);
   assert.match(credentialSource, /configuredSecretCount/);
   assert.match(credentialSource, /configuredContextCount/);
