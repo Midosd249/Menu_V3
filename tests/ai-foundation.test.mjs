@@ -222,12 +222,11 @@ test("Mistral Document AI is server-only, structured-annotation capable, and doc
   assert.match(mistralAdapter, /json_schema/);
   assert.match(mistralAdapter, /document_url/);
   assert.match(mistralAdapter, /image_url/);
-  assert.match(mistralAdapter, /AbortSignal\\.timeout\\(60_000\\)/);
+  assert.match(mistralAdapter, /AbortSignal\.timeout\(60_000\)/);
   assert.match(mistralAdapter, /ai_not_configured/);
   assert.doesNotMatch(mistralAdapter, /VITE_/);
   assert.match(providers, /callMistralDocument/);
-  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\
-]*mistral/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*mistral/);
 });
 
 test("Mistral is active only as the document/OCR specialist", () => {
