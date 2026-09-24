@@ -105,17 +105,17 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
 
 test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort:"low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
 
-test("planned providers remain registered while the Phase 3 Groq and NVIDIA adapters are explicitly active", () => {
+test("planned providers remain registered while Groq, NVIDIA, and Cloudflare adapters are active", () => {
   for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
     assert.match(registry, new RegExp(expected));
   }
-  assert.match(registry, /runtimeEligible:false/);
+  assert.match(registry, /runtimeEligible:false/);\n  assert.match(registry, /cloudflare:[\\s\\S]*?runtimeEligible:true/);
   assert.match(registry, /keyPoolSize:3/);
   assert.match(registry, /keyPoolSize:2/);
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe|cloudflare|cerebras|mistral|deepgram/);
+  assert.doesNotMatch(providers, /typesafe|cerebras|mistral|deepgram/);
 });
 
 
