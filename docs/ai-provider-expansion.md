@@ -280,3 +280,40 @@ Security:
 **Deployment status: NOT_PERFORMED.**
 
 **Exact next task:** Phase 3 — execution adapters, beginning with Groq, then NVIDIA, Cloudflare Workers AI, Cerebras, Mistral, and Deepgram. TypeSafe/Jev remains the later decision-orchestrator adapter. Do not activate any provider until its adapter, exact capability contract, targeted tests, and smoke verification pass.
+
+
+## Phase 3 — Groq Execution Adapter — IN PROGRESS — 2026-09-24
+
+**Current branch:** `feat/ai-provider-expansion-foundation`
+**Current head:** `ea8ad25082c90ce3dce1eb2b0cd4108c3d466cda`
+**PR:** #270 (OPEN / MERGEABLE / NOT MERGED)
+
+Implementation completed:
+- Added `src/lib/menu/ai-groq.ts` as a dedicated server-side Groq execution adapter.
+- Uses the official Groq OpenAI-compatible Chat Completions endpoint.
+- Uses `GROQ_API_KEY` and optional `GROQ_MODEL`; default model is `openai/gpt-oss-20b`.
+- Uses structured JSON Schema response format with best-effort mode so the existing Menu V3 schema contracts remain compatible; downstream Zod validation remains authoritative.
+- Applies a bounded 60-second timeout, normalized failure codes, prompt-injection boundary text, and no secret logging.
+- Groq is enabled only for the `structured` capability. Groq vision remains outside runtime multimodal routing until a separate exact vision contract is approved.
+
+Verification:
+- GitHub Quality #2353: PASS.
+- GitHub W9 Orders QA #561: PASS.
+- Quality passed typecheck, full tests, lint, production build, browser template QA, golden performance fixture, Studio browser QA, and Platform Admin browser QA.
+- Vercel Preview deployment for the current branch head is READY.
+- The first adapter CI attempt exposed three TypeScript boundary errors; they were corrected in focused follow-up commits and the final Quality/W9 run passed.
+
+Smoke status:
+- UNKNOWN: live Groq API invocation has not been executed from this connected GitHub session because the secret value is not accessible to the session.
+- UNKNOWN: provider-specific live latency/error behavior and actual Groq quota response in the configured Vercel Preview environment.
+- No Production deployment or merge was performed.
+
+Security / protected work:
+- No secret values were committed.
+- Existing Mercury/Gemini/Z.AI/OpenRouter/xKiro routing and Smart Menu Import flow remain protected.
+- No database migration, auth/RLS, subscription, tenant/branch, or Production deployment changes were introduced.
+
+**Implementation status: VERIFIED_LOCALLY (CI evidence) / LIVE_SMOKE_PENDING**
+**Deployment status: Preview READY; Production NOT_PERFORMED**
+
+**Exact next task:** Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`, verify a valid structured response and normalized failure behavior, then review the final diff. Do not merge or start NVIDIA until the Groq smoke evidence is recorded.
