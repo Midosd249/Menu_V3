@@ -934,3 +934,22 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
 \n\n# 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / LIVE SMOKE PENDING\n\n- VERIFIED: current `main` before this task is `c5ee3cebbf4be6125367b61023da93feee59b0f8`.\n- IMPLEMENTED: branch `feat/ai-typesafe-jev-decision-adapter` adds `src/lib/menu/ai-typesafe.ts`.\n- IMPLEMENTED: TypeSafe System One endpoint, server-only Bearer credential handling, three-key rotation, typed question support, bounded request size, and strict response validation.\n- IMPLEMENTED: server-provided eligible candidate set is mandatory and candidate membership is validated for `selected_candidate`.\n- VERIFIED: no generic provider routing, database, auth/RLS, subscription, tenant/branch, Smart Menu Import, public-menu/performance, or deployment behavior was changed by this implementation.\n- UNKNOWN: authenticated TypeSafe live smoke.\n- BLOCKED only if the authorized runtime cannot access the configured TypeSafe key.\n\n## PROTECTED / MUST NOT REDO\n- Groq, NVIDIA, Cloudflare, Cerebras, Mistral, Deepgram.\n- Phase 1 registry/capability foundation.\n- Phase 2 credential contracts/key pools.\n- Existing generic structured and multimodal provider routing.\n- Smart Menu Import architecture.\n- Public-menu/performance phases 0–8.\n- Auth/RLS/subscription/tenant/branch boundaries.\n\n## IMPLEMENTATION STATUS\n**IMPLEMENTATION_IN_PROGRESS — awaiting CI verification**\n\n## DEPLOYMENT STATUS\n**NOT_REQUESTED / NOT_PERFORMED**\n\n## UNKNOWN / BLOCKED\n- UNKNOWN: authenticated TypeSafe/Jev provider response and live quota/latency behavior.\n- BLOCKED if no authorized runtime can supply the TypeSafe secret for smoke verification.\n\n## EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Keep TypeSafe `runtimeEligible:false` until smoke verification is complete.**\n
+
+## 2026-09-24 — AI Provider Expansion / Phase 6 — VERIFIED IMPLEMENTATION
+
+- VERIFIED: current main at Phase 6 start was `9573de8fbe1eca6ed0f1761b7eecf150d547f6b0`.
+- IMPLEMENTED: isolated `src/lib/menu/ai-capability-router.ts`.
+- IMPLEMENTED: capability-aware candidate filtering using registry runtime eligibility, execution role, and required capability.
+- IMPLEMENTED: server-generated candidate IDs with provider/model revalidation at selection time.
+- IMPLEMENTED: fail-closed policy admission for authorization, entitlement, tenant scope, branch scope, and pricing policy.
+- VERIFIED: TypeSafe/Jev remains `runtimeEligible:false` and generic structured/multimodal provider orders were not modified.
+- PROTECTED: existing provider adapters, Smart Menu Import, public-menu/performance phases 0–8, auth/RLS/subscription/tenant/branch boundaries.
+- UNKNOWN: live TypeSafe smoke remains unverified; Phase 6 therefore does not activate Jev.
+
+### Exact verification gate
+- GitHub Quality/W9 for the Phase 6 branch.
+- Final diff review limited to the routing boundary, regression contracts, and continuity documentation.
+- No Vercel deployment requested.
+
+### Exact next task
+**Review Phase 6 CI and merge once; then proceed to the next provider-expansion task only after the merged `main` SHA and verification evidence are recorded.**
