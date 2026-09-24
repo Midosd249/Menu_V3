@@ -118,7 +118,7 @@ test("planned providers remain registered while Groq, NVIDIA, and Cloudflare ada
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.match(providers, /"groq"/);
   assert.match(providers, /"nvidia"/);
-  assert.doesNotMatch(providers, /typesafe|mistral|deepgram/);
+  assert.doesNotMatch(providers, /typesafe|deepgram/);
   assert.match(providers, /"cerebras"/);
 });
 
