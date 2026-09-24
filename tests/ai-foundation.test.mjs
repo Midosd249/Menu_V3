@@ -110,3 +110,34 @@ test("planned providers are registered but cannot enter runtime routing in Phase
   assert.match(registry, /role:"decision_orchestrator"/);
   assert.doesNotMatch(providers, /typesafe|nvidia|groq|cloudflare|cerebras|mistral|deepgram/);
 });
+
+
+test("Phase 2 credential contracts are server-only, explicit, and fail closed", () => {
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  for (const expected of [
+    "TYPESAFE_API_KEY", "TYPESAFE_API_KEY_2", "TYPESAFE_API_KEY_3",
+    "NVIDIA_API_KEY", "NVIDIA_API_KEY_2", "GROQ_API_KEY",
+    "CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID",
+    "CEREBRAS_API_KEY", "MISTRAL_API_KEY", "DEEPGRAM_API_KEY",
+  ]) {
+    assert.match(credentialSource, new RegExp(expected));
+  }
+  assert.match(credentialSource, /state !== "configured"/);
+  assert.match(credentialSource, /return []/);
+  assert.doesNotMatch(credentialSource, /VITE_/);
+});
+
+test("Phase 2 key-pool cardinality matches the owner-provided inventory", () => {
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  assert.match(credentialSource, /typesafe:[\s\S]*?requiredSecretCount: 1/);
+  assert.match(credentialSource, /secretEnv: \["TYPESAFE_API_KEY", "TYPESAFE_API_KEY_2", "TYPESAFE_API_KEY_3"\]/);
+  assert.match(credentialSource, /secretEnv: \["NVIDIA_API_KEY", "NVIDIA_API_KEY_2"\]/);
+  assert.match(credentialSource, /cloudflare:[\s\S]*?requiredContextCount: 1/);
+});
+
+test("Phase 2 credential status exposes metadata, never secret values", () => {
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.ts", import.meta.url), "utf8");
+  assert.match(credentialSource, /AiProviderCredentialStatus/);
+  assert.match(credentialSource, /configuredSecretCount/);
+  assert.match(credentialSource, /configuredContextCount/);
+});
