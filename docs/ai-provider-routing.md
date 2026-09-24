@@ -77,3 +77,21 @@ Only the minimum required menu content should be sent to a provider. Customer PI
 ## Verification requirements
 
 Provider API availability and model capabilities must be rechecked against current official documentation when a model default is changed. CI validates the routing contracts and server-only credential boundaries; live provider execution remains dependent on the configured server environment and provider quotas.
+
+
+## Provider Expansion / Phase 1 — 2026-09-24
+
+The existing runtime router remains unchanged during Phase 1. Provider families are now modeled separately from runtime eligibility in `src/lib/menu/ai-provider-registry.ts`, while shared capability/task/modality vocabulary lives in `src/lib/menu/ai-capabilities.ts`.
+
+Planned providers are deliberately `runtimeEligible: false` until their credential contract, adapter, exact model capability, tests, and smoke verification are complete.
+
+Jev/TypeSafe is modeled as a `typed_decision` / `decision_orchestrator` capability, not a generic LLM fallback. It will later receive only a server-generated eligible candidate set and its decision will be policy-validated before execution.
+
+Confirmed future key pools:
+- TypeSafe/Jev: 3 keys
+- NVIDIA: 2 keys
+- Groq: 1 key
+- Cloudflare Workers AI: API token + Account ID
+- Cerebras, Mistral, Deepgram: provider-specific credentials
+
+See `docs/ai-provider-expansion.md` for the complete roadmap and continuity contract.
