@@ -724,3 +724,30 @@ UNKNOWN:
 
 Exact next task:
 **Phase 3 — Groq execution adapter and targeted verification.**
+
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Groq Adapter — IN PROGRESS
+
+- VERIFIED: Phase 1 capability/provider registry is closed.
+- VERIFIED: Phase 2 credential contract is closed.
+- IMPLEMENTED: dedicated Groq structured adapter `src/lib/menu/ai-groq.ts`.
+- IMPLEMENTED: Groq integration into the existing structured provider boundary.
+- IMPLEMENTED: `GROQ_API_KEY` credential usage and configurable `GROQ_MODEL`.
+- IMPLEMENTED: production default model `openai/gpt-oss-20b`.
+- IMPLEMENTED: timeout/error normalization and prompt-injection boundary.
+- VERIFIED: Groq remains outside multimodal routing; vision is not activated by this task.
+- VERIFIED: Quality #2353 passed.
+- VERIFIED: W9 Orders QA #561 passed.
+- VERIFIED: Vercel Preview is READY.
+- UNKNOWN: live Groq smoke and live credential/provider behavior.
+
+### Protected / MUST NOT REDO
+- Existing AI provider routing architecture.
+- Phase 1 capability registry.
+- Phase 2 credential contracts/key pools.
+- Smart Menu Import OCR → Smart Extract → normalization → batching → AI organization → review → save.
+- Existing public-menu, theme, performance, auth, RLS, subscription, tenant/branch boundaries.
+
+### EXACT NEXT TASK
+**Execute one authenticated Groq smoke request against the current Vercel Preview using the configured `GROQ_API_KEY`; verify structured output and normalized failure behavior, then review the final diff. Do not merge PR #270 or start NVIDIA before Groq smoke evidence is recorded.**
