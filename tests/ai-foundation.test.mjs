@@ -227,8 +227,7 @@ test("Mistral Document AI is server-only, structured-annotation capable, and doc
   assert.match(mistralAdapter, /ai_not_configured/);
   assert.doesNotMatch(mistralAdapter, /VITE_/);
   assert.match(providers, /callMistralDocument/);
-  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^
-]*mistral/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\\n]*mistral/);
 });
 
 test("Mistral is active only as the document/OCR specialist", () => {
@@ -272,10 +271,8 @@ test("Deepgram is active only for audio_stt and remains outside generic structur
   assert.match(registry, /deepgram:[\s\S]*?transport:"deepgram_stt"/);
   assert.match(providers, /callDeepgramStt/);
   assert.match(providers, /callAudioStt/);
-  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^
-]*deepgram/);
-  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^
-]*deepgram/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\\n]*deepgram/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\\n]*deepgram/);
 });
 
 test("Deepgram fails closed for missing credentials and rejects invalid audio inputs", () => {
@@ -376,8 +373,7 @@ test("Phase 6 keeps TypeSafe out of the generic execution candidate list and pre
   assert.match(router, /canUseTypeSafeDecisionLayer/);
   assert.match(router, /AI_PROVIDER_REGISTRY\.typesafe\.runtimeEligible/);
   assert.doesNotMatch(providers, /typesafe.*DEFAULT_STRUCTURED_ORDER/);
-  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^
-]*typesafe/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\\n]*typesafe/);
   assert.match(registry, /typesafe:[\s\S]*?runtimeEligible:true/);
 });
 
