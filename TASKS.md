@@ -766,3 +766,14 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Run the single authenticated NVIDIA structured-AI smoke on `main` with `AI_PROVIDER=nvidia`; if valid, record evidence and proceed to Cloudflare without unnecessary Vercel deployments.**
+
+
+## 2026-09-24 — AI Provider Expansion / Cerebras CLOSED
+
+- VERIFIED: PR #275 merged at `ba9da375398998a444e5a89bdad249cc8ab6c86d`.
+- VERIFIED: Quality #2373 and W9 Orders QA #578 passed.
+- UNKNOWN: authenticated Cerebras live smoke remains pending due to inaccessible secret values in the connected GitHub session.
+- MUST NOT REDO: Phase 1 registry, Phase 2 credentials, Groq, NVIDIA, Cloudflare, Cerebras, Smart Menu Import, and public-menu/performance phases 0–8.
+
+### Exact Next Task
+**Implement and verify the Mistral document/OCR specialist adapter.**

@@ -657,3 +657,14 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Run the single authenticated NVIDIA structured-AI smoke on `main` with `AI_PROVIDER=nvidia`; if valid, record evidence and proceed to Cloudflare without unnecessary Vercel deployments.**
+
+
+## 2026-09-24 — AI Provider Expansion Continuity
+
+- VERIFIED: Cerebras adapter task is complete and merged as `ba9da375398998a444e5a89bdad249cc8ab6c86d`.
+- VERIFIED: full Quality #2373 and W9 Orders QA #578 passed.
+- VERIFIED: no Production deployment was requested.
+- UNKNOWN: authenticated Cerebras live smoke remains unverified.
+
+### Exact Next Task
+**Implement and verify the Mistral document/OCR specialist adapter, isolated from generic text routing and preserving Smart Menu Import boundaries.**
