@@ -9,6 +9,7 @@ const nvidiaAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-nvidia.ts", im
 const cloudflareAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cloudflare.ts", import.meta.url), "utf8");
 const cerebrasAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-cerebras.ts", import.meta.url), "utf8");
 const mistralAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-mistral.ts", import.meta.url), "utf8");
+const deepgramAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-deepgram.ts", import.meta.url), "utf8");
 const capabilities = fs.readFileSync(new URL("../src/lib/menu/ai-capabilities.ts", import.meta.url), "utf8");
 const registry = fs.readFileSync(new URL("../src/lib/menu/ai-provider-registry.ts", import.meta.url), "utf8");
 const documentAdapter = fs.readFileSync(new URL("../src/lib/menu/ai-document.ts", import.meta.url), "utf8");
@@ -108,7 +109,7 @@ test("AI capability vocabulary covers the new specialist boundaries", () => {
 test("NVIDIA adapter contract is server-only, bounded, and structured-safe", () => { assert.match(nvidiaAdapter,/integrate\.api\.nvidia\.com\/v1/); assert.match(nvidiaAdapter,/NVIDIA_API_KEY/); assert.match(fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8"),/NVIDIA_API_KEY_2/); assert.match(nvidiaAdapter,/openai\/gpt-oss-120b/); assert.match(nvidiaAdapter,/Schema:/); assert.match(nvidiaAdapter,/reasoning_effort:"low"/); assert.match(nvidiaAdapter,/AbortSignal\.timeout\(60000\)/); assert.match(nvidiaAdapter,/ai_not_configured/); assert.doesNotMatch(nvidiaAdapter,/VITE_/); });
 
 test("planned providers remain registered while Groq, NVIDIA, and Cloudflare adapters are active", () => {
-  for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral", "deepgram"]) {
+  for (const expected of ["typesafe", "nvidia", "groq", "cloudflare", "cerebras", "mistral"]) {
     assert.match(registry, new RegExp(expected));
   }
   assert.match(registry, /runtimeEligible:false/);
@@ -241,4 +242,49 @@ test("Cerebras remains structured-only and excluded from multimodal routing", ()
   assert.match(registry, /cerebras:[\s\S]*?runtimeEligible:true/);
   assert.match(registry, /cerebras:[\s\S]*?candidateCapabilities:\["structured"\]/);
   assert.match(providers, /provider === "groq" \|\| provider === "nvidia" \|\| provider === "cloudflare" \|\| provider === "cerebras"/);
+});
+
+
+test("Deepgram adapter uses the official pre-recorded STT contract", () => {
+  assert.match(deepgramAdapter, /https:\/\/api\.deepgram\.com\/v1\/listen/);
+  assert.match(deepgramAdapter, /DEEPGRAM_API_KEY/);
+  assert.match(deepgramAdapter, /DEEPGRAM_MODEL/);
+  assert.match(deepgramAdapter, /nova-3/);
+  assert.match(deepgramAdapter, /Authorization/);
+  assert.match(deepgramAdapter, /Token/);
+  assert.match(deepgramAdapter, /Content-Type/);
+  assert.match(deepgramAdapter, /smart_format/);
+  assert.match(deepgramAdapter, /results\?\.channels\?\.\[0\]\?\.alternatives\?\.\[0\]/);
+  assert.match(deepgramAdapter, /AbortSignal\.timeout\(60_000\)/);
+  assert.match(deepgramAdapter, /ai_not_configured/);
+  assert.match(deepgramAdapter, /ai_invalid/);
+  assert.match(deepgramAdapter, /ai_unavailable/);
+  assert.doesNotMatch(deepgramAdapter, /VITE_/);
+  assert.doesNotMatch(deepgramAdapter, /websocket|WebSocket/);
+});
+
+test("Deepgram is active only for audio_stt and remains outside generic structured routing", () => {
+  assert.match(registry, /deepgram:[\s\S]*?lifecycle:"active"/);
+  assert.match(registry, /deepgram:[\s\S]*?runtimeEligible:true/);
+  assert.match(registry, /deepgram:[\s\S]*?candidateCapabilities:\["audio_stt"\]/);
+  assert.match(registry, /deepgram:[\s\S]*?role:"audio_specialist"/);
+  assert.match(registry, /deepgram:[\s\S]*?transport:"deepgram_stt"/);
+  assert.match(providers, /callDeepgramStt/);
+  assert.match(providers, /callAudioStt/);
+  assert.doesNotMatch(providers, /DEFAULT_STRUCTURED_ORDER[^\n]*deepgram/);
+  assert.doesNotMatch(providers, /DEFAULT_MULTIMODAL_ORDER[^\n]*deepgram/);
+});
+
+test("Deepgram fails closed for missing credentials and rejects invalid audio inputs", () => {
+  assert.match(deepgramAdapter, /if \(!key\)/);
+  assert.match(deepgramAdapter, /code: "ai_not_configured"/);
+  assert.match(deepgramAdapter, /!mimeType\.startsWith\("audio\\/"\)/);
+  assert.match(deepgramAdapter, /audio\.byteLength === 0/);
+});
+
+test("Deepgram credential remains server-only and uses the existing Phase 2 contract", () => {
+  const credentialSource = fs.readFileSync(new URL("../src/lib/menu/ai-provider-credentials.server.ts", import.meta.url), "utf8");
+  assert.match(credentialSource, /deepgram:[\s\S]*?secretEnv: \["DEEPGRAM_API_KEY"\]/);
+  assert.match(credentialSource, /DEEPGRAM_API_KEY/);
+  assert.doesNotMatch(deepgramAdapter, /VITE_/);
 });
