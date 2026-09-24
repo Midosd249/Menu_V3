@@ -333,3 +333,39 @@ Security / protected work:
 2. Full Quality/W9 gates.
 3. One authenticated NVIDIA smoke on `main` with `AI_PROVIDER=nvidia`.
 4. Only after smoke evidence: proceed to Cloudflare.
+
+
+## Phase — Cerebras Structured Execution — 2026-09-24
+
+**Status:** IMPLEMENTED / CI verification pending.
+
+### Official contract verified via Cerebras documentation
+- OpenAI-compatible base URL: `https://api.cerebras.ai/v1`.
+- Chat endpoint: `POST /v1/chat/completions`.
+- Authentication: `Authorization: Bearer $CEREBRAS_API_KEY`.
+- Structured Outputs: `response_format.type = json_schema`.
+- Current documented production model used as the repository default: `gpt-oss-120b`.
+- API Version 2 is now the default; the adapter explicitly sends `X-Cerebras-Version-Patch: 2` to make the intended contract explicit.
+- Structured outputs have model/schema constraints; the adapter uses `strict: false` because the existing Menu V3 response schemas are not globally proven to satisfy Cerebras strict-mode requirements. Final acceptance remains the existing application-level schema validation.
+- Cerebras is structured-only in Menu V3 and is excluded from image/PDF routing.
+
+### Security and resilience
+- `CEREBRAS_API_KEY` is read server-side only.
+- Optional model override: `CEREBRAS_MODEL`.
+- Prompt input is bounded to 12,000 characters.
+- Output is bounded to 2,000 tokens.
+- Temperature is clamped to 0–1.
+- Request timeout is 60 seconds.
+- Missing credentials fail closed with `ai_not_configured`.
+- Provider HTTP/runtime failures normalize to the existing provider failure contract.
+- No secrets are committed.
+
+### Research sources
+- Cerebras OpenAI Compatibility: https://inference-docs.cerebras.ai/resources/openai
+- Cerebras Structured Outputs: https://inference-docs.cerebras.ai/capabilities/structured-outputs
+- Cerebras Chat Completions API reference: https://inference-docs.cerebras.ai/api-reference/chat-completions
+- Cerebras Versions: https://inference-docs.cerebras.ai/api-reference/versions
+- Cerebras Public Models: https://inference-docs.cerebras.ai/api-reference/models/public-models
+
+### Remaining gate
+CI must pass. One authenticated live Cerebras smoke on `main` remains a separate runtime evidence item because GitHub cannot read the configured secret value or substitute it into an authenticated external API request.
