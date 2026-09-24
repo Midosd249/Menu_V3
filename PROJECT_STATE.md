@@ -843,3 +843,20 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Run the single authenticated NVIDIA structured-AI smoke on `main` with `AI_PROVIDER=nvidia`; if valid, record evidence and proceed to Cloudflare without unnecessary Vercel deployments.**
+
+
+# 2026-09-24 — AI Provider Expansion / Cerebras — CLOSED / VERIFIED
+
+- VERIFIED: PR #275 merged by squash as `ba9da375398998a444e5a89bdad249cc8ab6c86d`.
+- VERIFIED: Cerebras structured execution adapter is active through the existing `src/lib/menu/ai-providers.ts` boundary.
+- VERIFIED: Cerebras uses server-only `CEREBRAS_API_KEY`, optional `CEREBRAS_MODEL`, default `gpt-oss-120b`, official OpenAI-compatible Chat Completions, and `X-Cerebras-Version-Patch: 2`.
+- VERIFIED: Cerebras is structured-only and excluded from image/PDF multimodal routing.
+- VERIFIED: Quality #2373 passed Typecheck, Tests, W7.4–W7.10 contract tests, Lint, Production Build, Browser Template QA, Golden Performance Fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: W9 Orders QA #578 passed.
+- VERIFIED: Vercel PR status for the final head was SUCCESS; no Production deployment was requested by this task.
+- UNKNOWN: authenticated live Cerebras API smoke remains unverified because secret values are not accessible through the connected GitHub session.
+- PROTECTED / MUST NOT REDO: Phase 1 provider registry/capability foundation; Phase 2 credential contracts; Groq/NVIDIA/Cloudflare adapters; existing AI routing; Smart Menu Import architecture; public-menu/performance phases 0–8.
+
+## EXACT NEXT TASK
+
+**Phase 3 — implement and verify the Mistral document/OCR specialist adapter. Keep Mistral isolated from generic text routing and preserve the existing Smart Menu Import architecture.**
