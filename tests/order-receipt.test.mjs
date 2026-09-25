@@ -47,11 +47,24 @@ test("VAT is optional metadata and receipt is explicitly informal", () => {
   assert.match(map, /vatRegistrationNumber/);
   assert.match(owner, /vatRegistrationNumber/);
   assert.match(brand, /VAT registration number \(optional\)/);
-  assert.match(receipt, /Not recorded in order data/);
   assert.match(receipt, /ZATCA-compliant tax invoice/);
-  assert.match(receipt, /does not confirm payment/);
+  assert.doesNotMatch(receipt, /receipt\.customerName/);
+  assert.doesNotMatch(receipt, /item\.note/);
+  assert.match(receipt, /order-receipt-portal/);
+  assert.match(receipt, /createPortal/);
+  assert.match(receipt, /document\.title = `Receipt-\$\{data\.orderNumber\}`/);
+  assert.match(receipt, /@page \{ size: auto; margin: 8mm; \}/);
+  assert.doesNotMatch(receipt, /does not confirm payment/);
   assert.doesNotMatch(pub, /payment|paid|charge|webhook/i);
 });
+test("print output is isolated and excludes staff-only content", () => {
+  assert.match(receipt, /body\.printing-order-receipt > \*:\not\(\.order-receipt-portal\)/);
+  assert.match(receipt, /width: 80mm/);
+  assert.match(receipt, /page-break-inside: avoid/);
+  assert.match(receipt, /Receipt-\$\{data\.orderNumber\}/);
+  assert.doesNotMatch(receipt, /Customer.*receipt\.customerName|receipt\.customerName.*Customer/);
+});
+
 test("staff and guest surfaces expose print receipt", () => {
   assert.match(studio, /OrderReceiptButton/);
   assert.match(publicMenu, /OrderReceiptButton/);
