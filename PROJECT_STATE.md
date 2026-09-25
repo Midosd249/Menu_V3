@@ -1212,3 +1212,18 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Review the final PR #304 Quality/W9 results; if all applicable gates pass, present PR #304 for owner merge review. Do not merge or deploy automatically.**
+
+
+# 2026-09-26 — Guest Assistant Cost-Abuse Hardening — MERGED / DEPLOYMENT BLOCKED
+
+- VERIFIED: PR #304 merged into `main` with squash.
+- VERIFIED: Merge commit / current `main` HEAD: `abb124101531242a6cabf070db1864dcda4aa9c1`.
+- VERIFIED: GitHub Quality run `36200820867` finished SUCCESS on PR head `3c6a998e43621e086af23118e5111455783846ed`.
+- VERIFIED: Quality completed typecheck, full tests, lint, production build, Browser Template QA all themes, Golden performance fixture, Customer Lifecycle browser QA, Studio browser QA, Platform Admin browser QA.
+- VERIFIED: W9 Orders QA run `36200820957` finished SUCCESS; W9 browser QA completed successfully.
+- VERIFIED: Browser Template QA passed after adding the preview-hydration wait that prevents false negatives while the preview is still loading.
+- VERIFIED: No AI provider was added, removed, paused, reordered, or modified. Only Guest Assistant admission/rate-limiting logic and QA synchronization were changed.
+- BLOCKED: Vercel production deployment could not be created through the connected Vercel deployment API because the account reached the API deployment quota: `api-deployments-free-per-day`, limit 100, remaining 0, reset in approximately 24 hours.
+- VERIFIED: Existing latest production deployment remains `dpl_2wvWPVsr1i2q7CnVBSkPs6xPtj78`, READY, target production, but it is still commit `b552a7d6a0c8b369a6b6b54774a0fd9b26461aa1`; therefore Production != main HEAD.
+- DEPLOYMENT STATUS: DEPLOYMENT_BLOCKED — no false production claim made.
+- EXACT NEXT ACTION: Once the Vercel deployment quota resets, deploy `main` commit `abb124101531242a6cabf070db1864dcda4aa9c1` exactly once to production, verify READY + target production + exact SHA + Production == main HEAD, then close this task.
