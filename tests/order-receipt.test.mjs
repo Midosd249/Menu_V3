@@ -53,6 +53,11 @@ test("VAT is optional metadata and receipt is explicitly informal", () => {
   assert.match(receipt, /order-receipt-portal/);
   assert.match(receipt, /createPortal/);
   assert.match(receipt, /document\.title = `Receipt-\$\{data\.orderNumber\}`/);
+  assert.match(receipt, /calendar: "gregory"/);
+  assert.match(receipt, /previewOpen/);
+  assert.match(receipt, /Receipt preview/);
+  assert.match(receipt, /aria-labelledby="order-receipt-preview-title"/);
+  assert.match(receipt, /printReceiptData/);
   assert.match(receipt, /@page \{ size: auto; margin: 8mm; \}/);
   assert.doesNotMatch(receipt, /does not confirm payment/);
   assert.doesNotMatch(pub, /payment|paid|charge|webhook/i);
@@ -65,9 +70,11 @@ test("print output is isolated and excludes staff-only content", () => {
   assert.doesNotMatch(receipt, /Customer.*receipt\.customerName|receipt\.customerName.*Customer/);
 });
 
-test("staff and guest surfaces expose print receipt", () => {
+test("staff and guest surfaces share one receipt renderer and preview flow", () => {
   assert.match(studio, /OrderReceiptButton/);
   assert.match(publicMenu, /OrderReceiptButton/);
   assert.match(taste, /OrderReceiptButton/);
   assert.match(signal, /OrderReceiptButton/);
+  assert.equal((receipt.match(/function ReceiptView\(/g) ?? []).length, 1);
+  assert.equal((receipt.match(/function printReceiptData\(/g) ?? []).length, 1);
 });
