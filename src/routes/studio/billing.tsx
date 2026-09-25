@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Flash } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getBillingSummary, type BillingSummary, type SubscriptionInvoice } from "@/lib/menu/billing";
-import { useStudio } from "@/lib/menu/studio";
 
 export const Route = createFileRoute("/studio/billing")({ component: BillingPage });
 
@@ -144,7 +143,6 @@ function InvoicePrintView({ invoice, lang, onClose }: { invoice: SubscriptionInv
         </div>
         <div className="flex flex-wrap gap-2 print:hidden">
           <Button onClick={() => window.print()}><Printer className="size-4" />{lang === "ar" ? "طباعة" : "Print"}</Button>
-          <Button variant="outline" asChild><a href={buildInvoiceWhatsAppUrl(invoice, lang)} target="_blank" rel="noreferrer"><MessageCircle className="size-4" />WhatsApp</a></Button>
           <Button variant="outline" onClick={onClose}>{lang === "ar" ? "إغلاق" : "Close"}</Button>
         </div>
       </div>
