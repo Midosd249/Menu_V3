@@ -121,7 +121,8 @@ test("guest assistant daily tenant circuit breaker is configurable, atomic, and 
   assert.match(core, /consumeRateLimit\(args\.sql, args\.tenantId, args\.userId, args\.operation\)/);
   assert.ok(core.indexOf("consumeRateLimit(args.sql") < core.indexOf("callStructuredProvider"));
   assert.match(dailyMigration, /primary key \(tenant_id, window_start\)/);
-  assert.match(dailyMigration, /alter table menu_v3\.ai_guest_assistant_daily_limits enable row level security/);\n  assert.match(dailyMigration, /revoke all on table menu_v3\.ai_guest_assistant_daily_limits from public, anon, authenticated/);
+  assert.match(dailyMigration, /alter table menu_v3\.ai_guest_assistant_daily_limits enable row level security/);
+  assert.match(dailyMigration, /revoke all on table menu_v3\.ai_guest_assistant_daily_limits from public, anon, authenticated/);
 });
 
 test("daily cap denial stays inside the existing grounded guest fallback path", () => {
