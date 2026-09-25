@@ -2,12 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { generateStructuredAi } from "./ai-core";
+import { resolveAnonymousSession } from "./session.server";
 import type { FnResult } from "./types";
 
 const inputSchema = z.object({
   slug: z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/),
   branchSlug: z.string().max(63).optional(),
-  sessionId: z.string().min(8).max(100),
   lang: z.enum(["ar", "en"]).default("ar"),
   question: z.string().trim().min(2).max(500),
 });
@@ -133,12 +133,13 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
       const { sql, tenantId, products } = await loadGuestCatalog(data.slug, data.branchSlug);
       if (!tenantId || !products.length) return { ok: false, code: "not_found", error: "لا توجد أصناف متاحة حالياً" };
 
+      const anonymousSession = await resolveAnonymousSession(sql, tenantId);
       const allowedIds = new Set(products.map((p) => p.id));
       const catalog = buildCatalog(products).slice(0, 32_000);
       const result = await generateStructuredAi({
         sql,
         tenantId,
-        userId: `guest:${data.sessionId}`,
+        userId: `guest-session:${anonymousSession.id}`,
         operation: "guest.menu_assistant",
         prompt: [
           `Guest question (${data.lang}): ${data.question}`,
