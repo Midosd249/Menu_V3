@@ -1072,3 +1072,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT TASK
 **Review PR #304 CI results; if all applicable gates pass, owner reviews and authorizes merge. Do not merge or deploy automatically.**
+
+
+## 2026-09-26 — Guest Assistant Cost-Abuse Hardening
+
+- VERIFIED: PR #304 merged by squash.
+- VERIFIED: `main` HEAD = `abb124101531242a6cabf070db1864dcda4aa9c1`.
+- VERIFIED: GitHub Quality `36200820867` = SUCCESS, including typecheck, tests, lint, production build, Browser QA and remaining quality gates.
+- VERIFIED: W9 Orders QA `36200820957` = SUCCESS.
+- VERIFIED: No AI provider was added, removed, paused, reordered, or modified.
+- BLOCKED: Vercel production deployment API rejected deployment because `api-deployments-free-per-day` reached its 100/day limit with 0 remaining.
+- VERIFIED: Current production is still the prior main deployment on `b552a7d6a0c8b369a6b6b54774a0fd9b26461aa1`; Production != current main HEAD.
+- IMPLEMENTATION STATUS: MERGED.
+- DEPLOYMENT STATUS: DEPLOYMENT_BLOCKED.
+
+### EXACT NEXT TASK
+Deploy `main` SHA `abb124101531242a6cabf070db1864dcda4aa9c1` once Vercel deployment quota resets; verify READY, production target, exact commit SHA, and Production == main HEAD.
