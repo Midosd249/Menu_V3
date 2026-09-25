@@ -117,7 +117,7 @@ test("guest assistant daily tenant circuit breaker is configurable, atomic, and 
   assert.match(core, /AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT = 500/);
   assert.match(core, /AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE = 60/);
   assert.match(core, /createHash\("sha256"\)/);
-  assert.match(core, /guest-ip:\\${normalizedIpKey}/);
+  assert.ok(core.includes("guest-ip:${normalizedIpKey}"));
   assert.match(core, /operation !== "guest\.menu_assistant"/);
   assert.match(core, /ai_guest_assistant_daily_limits/);
   assert.match(core, /where ai_guest_assistant_daily_limits\.request_count < \$\{dailyLimit\}/);
