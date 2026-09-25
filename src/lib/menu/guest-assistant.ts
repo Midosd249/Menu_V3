@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { generateStructuredAi } from "./ai-core";
@@ -141,6 +142,7 @@ export const askGuestMenuAssistant = createServerFn({ method: "POST" })
         tenantId,
         userId: `guest-session:${anonymousSession.id}`,
         operation: "guest.menu_assistant",
+        rateLimitIp: getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ?? undefined,
         prompt: [
           `Guest question (${data.lang}): ${data.question}`,
           "Answer using ONLY the available menu catalog below.",
