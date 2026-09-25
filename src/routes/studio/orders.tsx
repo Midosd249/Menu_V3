@@ -3,7 +3,6 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, ExternalLink, PackageCheck
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { OrderReceiptButton } from "@/components/order-receipt";
-import { buildOrderReceiptFromAdminOrder } from "@/lib/menu/order-receipt";
 import { Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { getOrdersDashboard, ORDER_STATUSES, updateOrderStatus, type AdminOrder, type OrderStatus, type OrdersDashboard } from "@/lib/menu/orders";
@@ -67,7 +66,7 @@ const OrderDetail=forwardRef<HTMLElement,{order:AdminOrder|null;lang:"ar"|"en";o
     </section>
     <section className="grid gap-3" aria-labelledby="order-items-title"><div className="flex items-center justify-between gap-3"><h3 id="order-items-title" className="font-semibold">{text(C.items,lang)}</h3><span className="text-xs text-muted"><span dir="ltr">{order.itemCount}</span> {lang === "ar"?"عناصر":"items"}</span></div><div className="grid gap-2">{order.items.map(item=><OrderItem key={item.id} item={item} lang={lang} currency={order.currency}/>)}</div></section>
     <section className="grid gap-2 rounded-2xl border border-line bg-sand/20 p-4"><Info label={text(C.total,lang)} value={money(order.total,order.currency,lang)} strong ltr/>{order.subtotal!==order.total?<Info label={lang === "ar"?"الإجمالي الفرعي":"Subtotal"} value={money(order.subtotal,order.currency,lang)} ltr/>:null}</section>
-    <div className="grid gap-2"><OrderReceiptButton receipt={buildOrderReceiptFromAdminOrder(order, snapshot.tenant)} /></div>
+    <div className="grid gap-2"><OrderReceiptButton staffOrderId={order.id} /></div>
     <section className="grid gap-2 rounded-2xl border border-line bg-paper p-4"><h3 className="font-semibold">{text(C.notes,lang)}</h3><p className="text-sm leading-6 text-muted" dir="auto">{order.notes||text(C.noNotes,lang)}</p></section>
     <Button variant="ghost" className="min-h-11 justify-start" onClick={()=>void onBack()}><ArrowLeft className="size-4 rtl:rotate-180"/>{text(C.back,lang)}</Button>
   </aside>;
