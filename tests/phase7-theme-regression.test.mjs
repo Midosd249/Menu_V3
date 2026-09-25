@@ -36,3 +36,11 @@ test("Phase 7 does not introduce a numeric performance budget", () => {
   assert.match(qualityWorkflow, /npm run performance:golden/);
   assert.doesNotMatch(templateQa, /LCP.*(?:<|<=|budget|threshold)/i);
 });
+
+
+test("Phase 7 waits for preview hydration before evaluating rendered theme gates", () => {
+  assert.match(
+    templateQa,
+    /await page\.waitForFunction\(\(\) => document\.documentElement\.dataset\.menuTheme \|\| document\.querySelector\("h1, h2, h3, h4, h5, h6"\), \{ timeout: 10000 \}\);/,
+  );
+});
