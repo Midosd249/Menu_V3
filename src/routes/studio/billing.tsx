@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle, Printer, ReceiptText, RefreshCw } from "lucide-react";
+import { Printer, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Flash } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
-import { buildInvoiceWhatsAppUrl, getBillingSummary, issueSubscriptionInvoice, type BillingSummary, type SubscriptionInvoice } from "@/lib/menu/billing";
-import { useStudio } from "@/lib/menu/studio";
+import { getBillingSummary, type BillingSummary, type SubscriptionInvoice } from "@/lib/menu/billing";
 
 export const Route = createFileRoute("/studio/billing")({ component: BillingPage });
 
 function BillingPage() {
   const { lang } = useLang();
-  const { snapshot } = useStudio();
   const [billing, setBilling] = useState<BillingSummary | null>(null);
   const [selected, setSelected] = useState<SubscriptionInvoice | null>(null);
   const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [ok, setOk] = useState(false);
 
@@ -35,26 +32,7 @@ function BillingPage() {
 
   useEffect(() => { void load(); }, []);
 
-  async function issueInvoice() {
-    setBusy(true);
-    setError("");
-    setOk(false);
-    try {
-      const result = await issueSubscriptionInvoice({ data: {} });
-      if (!result.ok) setError(result.error);
-      else {
-        setSelected(result.data);
-        setOk(true);
-        await load();
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : (lang === "ar" ? "تعذر إصدار الفاتورة" : "Unable to issue invoice"));
-    } finally {
-      setBusy(false);
-    }
-  }
 
-  const roleAllowed = snapshot.role === "owner" || snapshot.role === "admin";
   const intervalLabel = billing?.billingInterval === "annual"
     ? (lang === "ar" ? "سنوية" : "Annual")
     : (lang === "ar" ? "شهرية" : "Monthly");
@@ -77,8 +55,8 @@ function BillingPage() {
         </div>
         <p className="max-w-2xl text-sm leading-6 text-muted">
           {lang === "ar"
-            ? "إصدار الفاتورة هنا ينشئ مستند اشتراك قابل للطباعة والمشاركة عبر واتساب. لا يوجد تحصيل إلكتروني أو خصم تلقائي في هذه المرحلة."
-            : "Invoices here are subscription documents that can be printed or shared through WhatsApp. No electronic collection or automatic charging is performed in this phase."}
+            ? "تعرض هذه الصفحة فقط الفواتير التي أصدرها مالك المنصة. يمكنك مراجعة الفاتورة وطباعتها؛ لا يمكن إصدار أو إرسال الفواتير من حساب العميل."
+            : "This page only shows invoices issued by the Platform Owner. You can review and print them; customers cannot issue or send invoices."}
         </p>
       </header>
 
@@ -101,13 +79,7 @@ function BillingPage() {
 
           {billing.trialEndsAt ? <p className="rounded-2xl bg-sand/40 px-4 py-3 text-sm text-muted">{lang === "ar" ? "نهاية التجربة:" : "Trial ends:"} {formatDate(billing.trialEndsAt, lang)}</p> : null}
 
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={() => void issueInvoice()} disabled={busy || !roleAllowed || billing.planCode === "free" || (billing.status !== "active" && billing.status !== "past_due")}>
-              <ReceiptText className="size-4" />
-              {busy ? (lang === "ar" ? "جارٍ الإصدار…" : "Issuing…") : (lang === "ar" ? "إصدار فاتورة" : "Issue invoice")}
-            </Button>
-          </div>
-        </section>
+       </section>
       ) : null}
 
       <section className="grid gap-3">
@@ -139,10 +111,10 @@ function InvoiceCard({ invoice, lang, onSelect }: { invoice: SubscriptionInvoice
         </div>
         <p className="mt-1 text-sm text-muted">{formatDate(invoice.periodStart, lang)} → {formatDate(invoice.periodEnd, lang)}</p>
         <p className="mt-1 text-sm font-semibold" dir="ltr">{invoice.amountSar.toFixed(2)} {invoice.currency}</p>
+        {invoice.notes ? <p className="mt-1 text-xs text-muted">{invoice.notes}</p> : null}
       </div>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={() => onSelect(invoice)}><Printer className="size-4" />{lang === "ar" ? "عرض / طباعة" : "View / print"}</Button>
-        <Button variant="outline" asChild><a href={buildInvoiceWhatsAppUrl(invoice, lang)} target="_blank" rel="noreferrer"><MessageCircle className="size-4" />WhatsApp</a></Button>
       </div>
     </article>
   );
@@ -166,11 +138,11 @@ function InvoicePrintView({ invoice, lang, onClose }: { invoice: SubscriptionInv
           <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "دورة الفوترة" : "Billing interval"}</span><strong>{interval}</strong></div>
           <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "فترة الاشتراك" : "Billing period"}</span><strong>{formatDate(invoice.periodStart, lang)} → {formatDate(invoice.periodEnd, lang)}</strong></div>
           <div className="flex items-center justify-between rounded-2xl bg-sand/40 p-4"><span>{lang === "ar" ? "الإجمالي" : "Total"}</span><strong dir="ltr">{invoice.amountSar.toFixed(2)} {invoice.currency}</strong></div>
-          <p className="text-xs leading-5 text-muted">{lang === "ar" ? "هذه فاتورة اشتراك صادرة من Menu V3. لا تمثل إثبات دفع ولا تنفذ تحصيلاً إلكترونياً." : "This is a Menu V3 subscription invoice. It is not proof of payment and does not perform electronic collection."}</p>
+          <p className="text-xs leading-5 text-muted">{lang === "ar" ? "هذه فاتورة اشتراك صادرة من مالك المنصة. لا تمثل إثبات دفع ولا تنفذ تحصيلاً إلكترونياً." : "This is a subscription invoice issued by the Platform Owner. It is not proof of payment and does not perform electronic collection."}</p>
+          {invoice.notes ? <div className="grid gap-1"><span className="text-muted">{lang === "ar" ? "ملاحظات" : "Notes"}</span><strong className="whitespace-pre-wrap">{invoice.notes}</strong></div> : null}
         </div>
         <div className="flex flex-wrap gap-2 print:hidden">
           <Button onClick={() => window.print()}><Printer className="size-4" />{lang === "ar" ? "طباعة" : "Print"}</Button>
-          <Button variant="outline" asChild><a href={buildInvoiceWhatsAppUrl(invoice, lang)} target="_blank" rel="noreferrer"><MessageCircle className="size-4" />WhatsApp</a></Button>
           <Button variant="outline" onClick={onClose}>{lang === "ar" ? "إغلاق" : "Close"}</Button>
         </div>
       </div>
