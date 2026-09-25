@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Printer } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import { getPublicOrderReceipt } from "@/lib/menu/order-public";
+import { getStaffOrderReceipt } from "@/lib/menu/order-receipt";
 import type { OrderReceiptData } from "@/lib/menu/order-receipt";
 import { cn } from "@/lib/utils";
 
-type Props = { receipt?: OrderReceiptData; orderId?: string; className?: string };
+type Props = { receipt?: OrderReceiptData; orderId?: string; staffOrderId?: string; className?: string };
 
 function money(value: number, currency: string, lang: "ar" | "en") {
   try {
@@ -88,7 +89,7 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
   );
 }
 
-export function OrderReceiptButton({ receipt, orderId, className }: Props) {
+export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }: Props) {
   const { lang } = useLang();
   const [printable, setPrintable] = useState<OrderReceiptData | null>(null);
   const [busy, setBusy] = useState(false);
@@ -111,6 +112,15 @@ export function OrderReceiptButton({ receipt, orderId, className }: Props) {
     setBusy(true);
     setError("");
     let data = receipt;
+    if (!data && staffOrderId) {
+      const result = await getStaffOrderReceipt({ data: { orderId: staffOrderId } });
+      if (!result.ok) {
+        setError(result.error);
+        setBusy(false);
+        return;
+      }
+      data = result.data;
+    }
     if (!data && orderId) {
       const result = await getPublicOrderReceipt({ data: { orderId } });
       if (!result.ok) {
