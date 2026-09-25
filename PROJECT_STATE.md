@@ -1188,3 +1188,27 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - UNKNOWN: A live Production customer order was not used to print/send a receipt in this session. CI used isolated fixtures.
 - DEPLOYMENT: NOT DEPLOYED. Production deployment is intentionally held for the user's release authorization.
 - EXACT NEXT TASK: Owner reviews PR #298 and authorizes the single release batch; do not merge or deploy automatically.
+
+# 2026-09-25 — Guest Assistant Cost-Abuse Hardening — PR #304 — VERIFICATION IN PROGRESS
+
+- VERIFIED: Current canonical `main` base for PR #304 is `b552a7d6a0c8b369a6b6b54774a0fd9b26461aa1`.
+- VERIFIED: PR #304 is open against `main`; current head is `40ac0534c184907b000df9009e67c0121d24e0c9`.
+- VERIFIED: Client-supplied Guest Assistant `sessionId` was removed from the server-function contract and UI call.
+- VERIFIED: Guest Assistant now resolves the existing server-issued `__Host-menu_v3_sid` anonymous session and uses its tenant-bound ID for the existing per-minute AI rate limit.
+- VERIFIED: Guest Assistant additionally supplies the Vercel `x-forwarded-for` client IP to the server-side limiter; the IP is SHA-256 hashed before storage and uses a configurable 60/minute default.
+- VERIFIED: Added tenant-wide Guest Assistant daily circuit breaker with configurable `AI_GUEST_ASSISTANT_REQUESTS_PER_TENANT_PER_DAY`, default 500/day.
+- VERIFIED: Daily cap is enforced by an atomic PostgreSQL upsert before `callStructuredProvider()`; denied requests stay inside the existing grounded fallback path.
+- VERIFIED: New daily-limit table is RLS-enabled and revoked from `public`, `anon`, and `authenticated`.
+- VERIFIED: No AI provider adapter, provider list, routing order, model selection, or provider key was changed.
+- IN_PROGRESS: GitHub Quality run `36198791916` and W9 Orders QA run `36198791914` are running for the final PR head; no passing result is claimed yet.
+- BLOCKED: Local execution from this connected environment is unavailable because the container cannot resolve GitHub DNS; verification is therefore being performed through GitHub Actions.
+- DEPLOYMENT: NOT DEPLOYED; merge/deployment remain held for owner review.
+
+## PROTECTED / MUST NOT REDO
+- Existing AI provider adapters and routing.
+- Existing anonymous-session infrastructure and tenant/branch boundaries.
+- Existing Guest Assistant grounded fallback.
+- Provider keys and provider activation state.
+
+## EXACT NEXT TASK
+**Review the final PR #304 Quality/W9 results; if all applicable gates pass, present PR #304 for owner merge review. Do not merge or deploy automatically.**
