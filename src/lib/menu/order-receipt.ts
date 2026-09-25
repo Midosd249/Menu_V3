@@ -51,6 +51,6 @@ export function buildOrderReceiptFromAdminOrder(order: AdminOrder, tenant: Tenan
     })),
     subtotal: order.subtotal,
     total: order.total,
-    vatRegistrationNumber: tenant.vatRegistrationNumber,
+    vatRegistrationNumber: tenant.vatRegistrationNumber ?? "",
   };
 }
