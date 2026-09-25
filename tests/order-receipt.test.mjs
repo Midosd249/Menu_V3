@@ -26,8 +26,8 @@ test("receipt uses existing order snapshots", () => {
 test("staff receipt keeps tenant and branch authorization", () => {
   assert.match(orders, /getClientTenantIds/);
   assert.match(orders, /tenant_members/);
-  assert.match(receipt, /getStaffOrderReceipt/);
-  assert.match(receipt, /has_branch_access/);
+  assert.match(domain, /getStaffOrderReceipt/);
+  assert.match(domain, /has_branch_access/);
   assert.match(orders, /branch_id is null/);
   assert.match(studio, /OrderReceiptButton/);
 });
