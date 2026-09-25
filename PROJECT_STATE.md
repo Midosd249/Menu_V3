@@ -1,5 +1,27 @@
 # CURRENT VERIFIED AI POSITION — 2026-09-24 — PHASE 6 CLOSED / VERIFIED / MERGED
 
+
+# 2026-09-25 — Supabase Security Hardening — IMPLEMENTED / VERIFIED / PR #295 OPEN
+
+- VERIFIED: current canonical `main` at task start was `1f70da5046efa43712cffe29b85610f18524a35d`.
+- VERIFIED: live Supabase Security Advisor initially reported the mutable `menu_v3.sync_guest_profile_from_order` search_path warning and leaked-password-protection warning; the seven previously reported tables were already RLS-enabled and default-deny with no `anon`/`authenticated` table grants.
+- VERIFIED: live SQL confirmed all seven tables have RLS enabled, zero `anon`/`authenticated` SELECT/INSERT table privileges, and no pre-existing policies.
+- VERIFIED: live migration `security_rls_and_search_path_hardening` applied successfully.
+- VERIFIED: live advisor after the migration no longer reports any of the seven tables or the mutable function search_path. The remaining Security Advisor finding is only Auth leaked-password protection disabled; 33 unrelated RLS-enabled/no-policy INFO findings remain outside this scoped task.
+- VERIFIED: explicit restrictive deny policies were added for `anon`/`authenticated` on the seven server-only tables; server-side PostgreSQL access remains the application's actual DB path via `getSql()`.
+- VERIFIED: function `menu_v3.sync_guest_profile_from_order()` now has `search_path=menu_v3, pg_catalog`.
+- VERIFIED: GitHub Quality #2424 passed typecheck, `npm test`, lint, build, all-theme browser QA, Studio/Customers browser QA, and Platform Admin browser QA.
+- VERIFIED: GitHub W9 Orders QA #611 passed the order browser suite.
+- UNKNOWN: `npm run test:platform` was not a separately executed CI command in the existing workflows.
+- UNKNOWN: `npm run check:auth` was not separately executed; its script requires a live dev server observation.
+- BLOCKED: leaked-password protection still requires the hosted Supabase Auth setting; the available Supabase MCP actions do not expose Auth security configuration. Supabase documents this under project Auth settings. 
+- VERIFIED: PR #295 is open at `d37eed14348b9ca86f2061cc30adbad57b277f2e`; no Production deployment was manually performed or authorized by this task.
+
+## EXACT NEXT ACTION
+
+**Enable Supabase Auth leaked-password protection in the project's Auth settings, then re-run Security Advisor once and confirm the Auth warning is gone. Do not merge/deploy PR #295 automatically in this task.**
+
+
 - VERIFIED: canonical `main` HEAD before this continuity commit is `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
 - VERIFIED: PR #285 capability-aware routing is merged at `99dfd0c5b83baff890eecb89971ea2d0056e351e`.
 - VERIFIED: PR #286 Phase 6 continuity closure is merged at `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
