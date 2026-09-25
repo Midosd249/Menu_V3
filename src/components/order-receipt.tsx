@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Printer } from "lucide-react";
 import { useLang } from "@/lib/lang";
@@ -50,17 +50,19 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "رقم الطلب" : "Order number"}</span><strong dir="ltr">#{receipt.orderNumber}</strong></div>
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "التاريخ والوقت" : "Date & time"}</span><span dir="ltr">{date(receipt.createdAt, lang)}</span></div>
       </section>
-      <section className="grid gap-3 py-4">
+      <section className="grid gap-2 py-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] gap-2 border-b border-black/15 pb-2 text-[10px] font-semibold uppercase tracking-wide text-black/55" dir={lang === "ar" ? "rtl" : "ltr"}>
+          <span>{lang === "ar" ? "الصنف" : "Item"}</span>
+          <span>{lang === "ar" ? "الكمية" : "Qty"}</span>
+          <span>{lang === "ar" ? "سعر الوحدة" : "Unit"}</span>
+          <span>{lang === "ar" ? "الإجمالي" : "Total"}</span>
+        </div>
         {receipt.items.map((item) => (
-          <div key={item.id} className="grid gap-1 border-b border-black/10 pb-3 last:border-b-0 last:pb-0">
-            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
-              <span dir="ltr">×{item.quantity}</span>
-              <span dir="auto">{lang === "ar" ? item.nameAr || item.nameEn : item.nameEn || item.nameAr}</span>
-              <span dir="ltr" className="whitespace-nowrap">{money(item.lineTotal, receipt.currency, lang)}</span>
-            </div>
-            <div className="flex justify-between gap-3 text-xs text-black/60" dir="ltr">
-              <span>{money(item.unitPrice, receipt.currency, lang)} × {item.quantity}</span>
-            </div>
+          <div key={item.id} className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-start gap-2 border-b border-black/10 py-2 last:border-b-0" dir={lang === "ar" ? "rtl" : "ltr"}>
+            <span className="min-w-0 break-words text-xs font-medium" dir="auto">{lang === "ar" ? item.nameAr || item.nameEn : item.nameEn || item.nameAr}</span>
+            <span className="text-xs tabular-nums" dir="ltr">{item.quantity}</span>
+            <span className="whitespace-nowrap text-xs tabular-nums" dir="ltr">{money(item.unitPrice, receipt.currency, lang)}</span>
+            <span className="whitespace-nowrap text-xs font-semibold tabular-nums" dir="ltr">{money(item.lineTotal, receipt.currency, lang)}</span>
           </div>
         ))}
       </section>
@@ -92,10 +94,15 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
   const [printable, setPrintable] = useState<OrderReceiptData | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const previousTitleRef = useRef<string | null>(null);
 
   useEffect(() => {
     const done = () => {
       document.body.classList.remove("printing-order-receipt");
+      if (previousTitleRef.current !== null) {
+        document.title = previousTitleRef.current;
+        previousTitleRef.current = null;
+      }
       setPrintable(null);
       setBusy(false);
     };
@@ -103,6 +110,10 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
     return () => {
       window.removeEventListener("afterprint", done);
       document.body.classList.remove("printing-order-receipt");
+      if (previousTitleRef.current !== null) {
+        document.title = previousTitleRef.current;
+        previousTitleRef.current = null;
+      }
     };
   }, []);
 
@@ -134,15 +145,10 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
       return;
     }
     setPrintable(data);
-    const previousTitle = document.title;
+    previousTitleRef.current = document.title;
     document.title = `Receipt-${data.orderNumber}`;
     document.body.classList.add("printing-order-receipt");
-    window.setTimeout(() => {
-      window.print();
-      window.setTimeout(() => {
-        document.title = previousTitle;
-      }, 0);
-    }, 40);
+    window.setTimeout(() => window.print(), 40);
   }
 
   return (
