@@ -101,6 +101,7 @@ const dailyMigration = fs.readFileSync(new URL("../migrations/20260926010000_ai_
 test("guest assistant rate-limit identity is server-issued and cannot be reset by rotating client sessionId", () => {
   assert.ok(source.includes("resolveAnonymousSession(sql, tenantId)"));
   assert.ok(source.includes("userId: `guest-session:${anonymousSession.id}`"));
+  assert.ok(source.includes("rateLimitIp: getRequestHeader(\"x-forwarded-for\")?.split(\",\")[0]?.trim() ?? undefined"));
   assert.ok(!source.includes("data.sessionId"));
   assert.ok(!ui.includes("getGuestSessionId"));
   assert.ok(!ui.includes("sessionId:"));
@@ -114,6 +115,9 @@ test("guest assistant rate-limit identity is server-issued and cannot be reset b
 test("guest assistant daily tenant circuit breaker is configurable, atomic, and runs before providers", () => {
   assert.match(core, /AI_GUEST_ASSISTANT_REQUESTS_PER_TENANT_PER_DAY/);
   assert.match(core, /AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT = 500/);
+  assert.match(core, /AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE = 60/);
+  assert.match(core, /createHash\("sha256"\)/);
+  assert.match(core, /guest-ip:\\${normalizedIpKey}/);
   assert.match(core, /operation !== "guest\.menu_assistant"/);
   assert.match(core, /ai_guest_assistant_daily_limits/);
   assert.match(core, /where ai_guest_assistant_daily_limits\.request_count < \$\{dailyLimit\}/);
