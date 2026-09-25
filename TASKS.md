@@ -1,3 +1,15 @@
+# 2026-09-25 — Unified Order Receipt Preview — READY FOR REVIEW
+
+- VERIFIED: PR #303 `feat(orders): unify receipt preview and printing` is open and mergeable against `main`.
+- VERIFIED: Head `61065efc2d64f7c60e236dc7f681460241616aa3` passed Quality and W9 Orders QA.
+- VERIFIED: All Studio and public-menu receipt surfaces continue to use the single shared receipt renderer.
+- VERIFIED: The owner/Studio receipt action now opens the same professional receipt preview used by the unified receipt flow before print.
+- VERIFIED: Print isolation, Gregorian date formatting, optional VAT registration display, and informal/non-ZATCA labeling are covered by the receipt contract tests.
+- UNKNOWN: Physical printer output on a real device.
+- BLOCKED: Vercel preview deployment is currently limited by the account deployment-rate limit.
+- IMPLEMENTATION STATUS: READY_TO_REVIEW
+- DEPLOYMENT STATUS: NOT_DEPLOYED
+- EXACT NEXT TASK: Owner reviews PR #303; merge/deploy only with explicit release authorization.
 # 2026-09-25 — Order Receipt Print Isolation — MERGED / DEPLOYED
 
 - VERIFIED: PR #301 `fix(orders): isolate receipt print output` passed full Quality #2476 and W9 Orders QA #658.
