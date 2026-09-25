@@ -92,3 +92,40 @@ test("client assistant never surfaces AI failure when public menu data can answe
   assert.ok(!ui.includes("setError(result.error)"));
   assert.match(ui, /catch \{/);
 });
+
+
+const core = fs.readFileSync(new URL("../src/lib/menu/ai-core.ts", import.meta.url), "utf8");
+const sessionServer = fs.readFileSync(new URL("../src/lib/menu/session.server.ts", import.meta.url), "utf8");
+const dailyMigration = fs.readFileSync(new URL("../migrations/20260926010000_ai_guest_assistant_daily_limits.sql", import.meta.url), "utf8");
+
+test("guest assistant rate-limit identity is server-issued and cannot be reset by rotating client sessionId", () => {
+  assert.ok(source.includes("resolveAnonymousSession(sql, tenantId)"));
+  assert.ok(source.includes("userId: `guest-session:${anonymousSession.id}`"));
+  assert.ok(!source.includes("data.sessionId"));
+  assert.ok(!ui.includes("getGuestSessionId"));
+  assert.ok(!ui.includes("sessionId:"));
+  assert.match(sessionServer, /setCookie\(ANONYMOUS_SESSION_COOKIE/);
+  assert.match(sessionServer, /httpOnly: true/);
+  assert.match(sessionServer, /secure: true/);
+  assert.match(sessionServer, /sameSite: "lax"/);
+  assert.match(sessionServer, /tenant_id = \$\{tenantId\}/);
+});
+
+test("guest assistant daily tenant circuit breaker is configurable, atomic, and runs before providers", () => {
+  assert.match(core, /AI_GUEST_ASSISTANT_REQUESTS_PER_TENANT_PER_DAY/);
+  assert.match(core, /AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT = 500/);
+  assert.match(core, /operation !== "guest\.menu_assistant"/);
+  assert.match(core, /ai_guest_assistant_daily_limits/);
+  assert.match(core, /where ai_guest_assistant_daily_limits\.request_count < \$\{dailyLimit\}/);
+  assert.match(core, /return Number\(dailyRows\[0\]\?\.request_count \?\? dailyLimit \+ 1\) <= dailyLimit/);
+  assert.match(core, /consumeRateLimit\(args\.sql, args\.tenantId, args\.userId, args\.operation\)/);
+  assert.ok(core.indexOf("consumeRateLimit(args.sql") < core.indexOf("callStructuredProvider"));
+  assert.match(dailyMigration, /primary key \(tenant_id, window_start\)/);
+  assert.match(dailyMigration, /revoke all on table menu_v3\.ai_guest_assistant_daily_limits from anon, authenticated/);
+});
+
+test("daily cap denial stays inside the existing grounded guest fallback path", () => {
+  assert.match(source, /if \(!result\.ok\)/);
+  assert.match(source, /const fallback = fallbackGuestAnswer\(data\.question, products\)/);
+  assert.match(source, /return \{ ok: true, data: fallback \}/);
+});
