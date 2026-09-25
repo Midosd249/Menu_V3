@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { callStructuredProvider, AI_PROVIDER_DEFAULTS } from "@/lib/menu/ai-providers";
@@ -7,6 +8,7 @@ export const AI_DEFAULT_PROVIDER = "auto";
 export const AI_DEFAULT_MODEL = AI_PROVIDER_DEFAULTS.mercury;
 export const AI_DEFAULT_RATE_LIMIT_PER_MINUTE = 20;
 export const AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT = 500;
+export const AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE = 60;
 export const AI_MAX_PROMPT_CHARS = 12_000;
 export const AI_TIMEOUT_MS = 60_000;
 
@@ -38,6 +40,14 @@ function getRateLimit() {
   return Math.max(1, Math.min(120, Math.floor(configured)));
 }
 
+function getGuestAssistantIpRateLimit() {
+  const configured = Number(
+    process.env.AI_GUEST_ASSISTANT_REQUESTS_PER_IP_PER_MINUTE ?? AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE,
+  );
+  if (!Number.isFinite(configured)) return AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE;
+  return Math.max(1, Math.min(300, Math.floor(configured)));
+}
+
 function getGuestAssistantDailyLimit() {
   const configured = Number(
     process.env.AI_GUEST_ASSISTANT_REQUESTS_PER_TENANT_PER_DAY ?? AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT,
@@ -46,7 +56,7 @@ function getGuestAssistantDailyLimit() {
   return Math.max(1, Math.min(10_000, Math.floor(configured)));
 }
 
-async function consumeRateLimit(sql: Sql, tenantId: string, userId: string, operation: string) {
+async function consumeMinuteRateLimit(sql: Sql, tenantId: string, userId: string, limit: number) {
   const windowStart = new Date(Math.floor(Date.now() / 60_000) * 60_000);
   const rows = await sql<{ request_count: number }>`
     insert into ai_request_rate_limits (tenant_id, user_id, window_start, request_count)
@@ -55,9 +65,20 @@ async function consumeRateLimit(sql: Sql, tenantId: string, userId: string, oper
     do update set request_count = ai_request_rate_limits.request_count + 1, updated_at = now()
     returning request_count
   `;
-  if (Number(rows[0]?.request_count ?? 0) > getRateLimit()) return false;
+  return Number(rows[0]?.request_count ?? 0) <= limit;
+}
+
+async function consumeRateLimit(
+  sql: Sql,
+  tenantId: string,
+  userId: string,
+  operation: string,
+  ipKey?: string,
+) {
+  if (!(await consumeMinuteRateLimit(sql, tenantId, userId, getRateLimit()))) return false;
 
   if (operation !== "guest.menu_assistant") return true;
+  if (ipKey && !(await consumeMinuteRateLimit(sql, tenantId, `guest-ip:${ipKey}`, getGuestAssistantIpRateLimit()))) return false;
 
   const dailyLimit = getGuestAssistantDailyLimit();
   const dailyWindowStart = new Date();
@@ -75,9 +96,9 @@ async function consumeRateLimit(sql: Sql, tenantId: string, userId: string, oper
   return Number(dailyRows[0]?.request_count ?? dailyLimit + 1) <= dailyLimit;
 }
 
-export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T>): Promise<{ ok: true; data: z.output<T> } | AiFailure> {
+export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T> & { rateLimitIp?: string }): Promise<{ ok: true; data: z.output<T> } | AiFailure> {
   try {
-    if (!(await consumeRateLimit(args.sql, args.tenantId, args.userId, args.operation))) {
+    if (!(await consumeRateLimit(args.sql, args.tenantId, args.userId, args.operation, args.rateLimitIp))) {
       return { ok: false, code: "ai_rate_limited", error: "تم تجاوز حد استخدام مساعد الذكاء الاصطناعي مؤقتاً. حاول لاحقاً." };
     }
 
