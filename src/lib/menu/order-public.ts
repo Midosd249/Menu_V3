@@ -1,9 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { getCookie } from "@tanstack/react-start/server";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
-import { resolveAnonymousSession } from "./session.server";
+import { ANONYMOUS_SESSION_COOKIE, resolveAnonymousSession } from "./session.server";
+import type { OrderReceiptData } from "./order-receipt";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
 const selectedSchema = z.object({
@@ -70,6 +72,54 @@ const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: str
     items: data.items,
   }));
 
+export const getPublicOrderReceipt = createServerFn({ method: "GET" })
+  .validator(z.object({ orderId: z.string().min(1).max(100) }))
+  .handler(async ({ data }): Promise<FnResult<OrderReceiptData>> => {
+    try {
+      const cookie = getCookie(ANONYMOUS_SESSION_COOKIE)?.trim() ?? "";
+      if (!/^[0-9a-f]{64}$/i.test(cookie)) return { ok: false, code: "forbidden", error: "الإيصال غير متاح لهذا الطلب" };
+      const sql = await getSql();
+      const rows = await sql<Record<string, unknown>>`
+        select o.id, o.order_number, o.created_at, o.currency, o.customer_name, o.subtotal, o.total,
+          t.name_ar as restaurant_name_ar, t.name_en as restaurant_name_en, t.logo_url as restaurant_logo_url,
+          t.vat_registration_number, b.name_ar as branch_name_ar, b.name_en as branch_name_en,
+          coalesce((select jsonb_agg(jsonb_build_object(
+            'id', oi.id, 'name_ar', oi.product_name_ar, 'name_en', oi.product_name_en,
+            'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total,
+            'selected_options', oi.selected_options
+          ) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
+        from orders o
+        join tenants t on t.id = o.tenant_id
+        left join branches b on b.id = o.branch_id
+        join anonymous_sessions s on s.id = o.anonymous_session_id and s.tenant_id = o.tenant_id
+        where o.id = ${data.orderId}
+          and o.anonymous_session_id = ${cookie}
+          and s.revoked_at is null
+          and s.expires_at > now()
+        limit 1
+      `;
+      const row = rows[0];
+      if (!row) return { ok: false, code: "forbidden", error: "الإيصال غير متاح لهذا الطلب" };
+      const rawItems = Array.isArray(row.items) ? row.items : [];
+      return { ok: true, data: {
+        orderId: String(row.id), orderNumber: Number(row.order_number ?? 0),
+        restaurantNameAr: String(row.restaurant_name_ar ?? ""), restaurantNameEn: String(row.restaurant_name_en ?? ""), restaurantLogoUrl: String(row.restaurant_logo_url ?? ""),
+        branchNameAr: String(row.branch_name_ar ?? ""), branchNameEn: String(row.branch_name_en ?? ""), createdAt: new Date(String(row.created_at)).toISOString(),
+        currency: String(row.currency ?? "SAR"), customerName: String(row.customer_name ?? ""),
+        items: rawItems.map((item) => {
+          const source = item as Record<string, unknown>;
+          const selected = Array.isArray(source.selected_options) ? source.selected_options : [];
+          const note = selected.find((option) => option && typeof option === "object" && (option as Record<string, unknown>).type === "note") as Record<string, unknown> | undefined;
+          return { id: String(source.id ?? ""), nameAr: String(source.name_ar ?? ""), nameEn: String(source.name_en ?? ""), quantity: Number(source.quantity ?? 0), unitPrice: Number(source.unit_price ?? 0), lineTotal: Number(source.line_total ?? 0), note: note ? String(note.nameAr ?? note.nameEn ?? "") : undefined };
+        }),
+        subtotal: Number(row.subtotal ?? 0), total: Number(row.total ?? 0), vatRegistrationNumber: String(row.vat_registration_number ?? ""),
+      } };
+    } catch (error) {
+      console.error("getPublicOrderReceipt failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحميل الإيصال" };
+    }
+  });
+
 export const submitPublicOrder = createServerFn({ method: "POST" })
   .validator(submitOrderSchema)
   .handler(async ({ data }): Promise<FnResult<{ orderId: string; orderNumber: number; total: number; currency: string }>> => {
@@ -92,7 +142,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
 
       const anonymousSession = await resolveAnonymousSession(sql, String(tenant.id));
-      const anonymousSessionId = anonymousSession.fromValidCookie ? anonymousSession.id : null;
+      const anonymousSessionId = anonymousSession.id;
 
       const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
       const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);

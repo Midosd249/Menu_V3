@@ -1115,3 +1115,20 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 **Owner reviews and authorizes the merge/release of PR #297; do not deploy automatically.**
 
+
+
+## 2026-09-25 — Per-Order Customer Receipt — IMPLEMENTED / VERIFIED BY CI
+
+- VERIFIED: PR #297 (Platform Admin subscription invoice ownership correction) is merged into `main` at `66e0a21ad19ea0fb15acd81582792f3f10d02753`; no Production deployment was performed.
+- VERIFIED: Existing order storage is sufficient for an informal receipt: `orders.order_number`, `orders.tenant_id`, `orders.branch_id`, `orders.currency`, `orders.subtotal`, `orders.total`, `orders.created_at`, plus `order_items` snapshots for product names, quantity, unit price, line total and selected options.
+- VERIFIED: The current order model has no stored tax/VAT amount. The receipt does not invent a tax amount. If a tenant configures a VAT registration number, the receipt transparently states that tax is not recorded in order data.
+- VERIFIED: No tenant VAT registration field existed before this task. Added minimal optional `vat_registration_number` metadata with an empty default in the existing Brand settings flow.
+- VERIFIED: Staff/owner receipt rendering uses existing order data and a server-authorized receipt action. Tenant owner/admin access remains compatible with existing Orders authorization; branch-scoped access is enforced through `has_branch_access`.
+- VERIFIED: Guest receipt access requires the matching active anonymous session cookie and tenant binding. The first public order is now bound to the newly created server-controlled session before insertion, fixing the first-order receipt edge case without exposing order enumeration.
+- VERIFIED: Receipt uses the existing `window.print()` pattern and is explicitly labeled in Arabic and English as an informal receipt, not a ZATCA-compliant tax invoice. It does not claim payment and does not perform electronic collection.
+- VERIFIED: Quality run `#2466` passed Typecheck, Tests, Lint, Production Build, all-theme browser QA, Golden performance fixture, Studio browser QA and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA run `#651` passed on the final HEAD, including receipt action and responsive Orders checks.
+- VERIFIED: Final PR #298 HEAD is `233af979e465c5ba28ffcbb458224afd5696532a`; PR remains OPEN and mergeable.
+- UNKNOWN: A live Production customer order was not used to print/send a receipt in this session. CI used isolated fixtures.
+- DEPLOYMENT: NOT DEPLOYED. Production deployment is intentionally held for the user's release authorization.
+- EXACT NEXT TASK: Owner reviews PR #298 and authorizes the single release batch; do not merge or deploy automatically.

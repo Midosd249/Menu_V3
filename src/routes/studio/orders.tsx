@@ -2,12 +2,14 @@ import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock3, ExternalLink, PackageCheck, Phone, RefreshCw, Search, ShieldAlert, UserRound, XCircle } from "lucide-react";
 import { createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { OrderReceiptButton } from "@/components/order-receipt";
 import { Input } from "@/components/ui/input";
 import { useLang } from "@/lib/lang";
 import { getOrdersDashboard, ORDER_STATUSES, updateOrderStatus, type AdminOrder, type OrderStatus, type OrdersDashboard } from "@/lib/menu/orders";
 import { buildOrderContact, buildOrderWhatsAppUrl } from "@/lib/menu/order-contact";
 import { t } from "@/lib/menu/i18n";
 import { cn } from "@/lib/utils";
+import { useStudio } from "@/lib/menu/studio";
 
 export const Route = createFileRoute("/studio/orders")({ component: OrdersPage });
 
@@ -52,6 +54,7 @@ function Empty({text:value}:{text:string}){return <div className="rounded-2xl bo
 function OrderList({order,selected,lang,onSelect}:{order:AdminOrder;selected:boolean;lang:"ar"|"en";onSelect:()=>void}){const customer=order.customerName||text(C.customerFallback,lang);return <button type="button" onClick={onSelect} aria-pressed={selected} className={cn("grid min-w-0 gap-2 rounded-2xl border bg-paper p-4 text-start transition",selected?"border-ink bg-sand/40":"border-line hover:bg-sand/40")}><div className="flex min-w-0 items-start justify-between gap-3"><div className="min-w-0"><strong className="block break-words" dir="auto">#{order.orderNumber} · {customer}</strong><p className="mt-1 truncate text-xs text-muted" dir="auto">{order.branchName} · <span dir="ltr">{order.customerPhone||"—"}</span></p></div><Badge status={order.status} lang={lang}/></div><div className="flex min-w-0 flex-wrap justify-between gap-2 text-xs text-muted"><span><span dir="ltr">{order.itemCount}</span> {lang === "ar"?"عناصر":"items"} · <span dir="ltr">{money(order.total,order.currency,lang)}</span></span><span dir="ltr">{date(order.createdAt,lang)}</span></div></button>}
 
 const OrderDetail=forwardRef<HTMLElement,{order:AdminOrder|null;lang:"ar"|"en";onBack:()=>Promise<void>;onStatus:(id:string,status:OrderStatus)=>Promise<void>}>(({order,lang,onBack,onStatus},ref)=>{
+  const { snapshot } = useStudio();
   const [secondary,setSecondary]=useState<OrderStatus>("confirmed"); const [confirmCancel,setConfirmCancel]=useState(false); if(!order)return <aside ref={ref} className="grid content-start gap-5 rounded-2xl border border-line bg-paper p-5"><Empty text={text(C.select,lang)}/></aside>;
   const phone=buildOrderContact(order.customerPhone); const whatsapp=buildOrderWhatsAppUrl(order,lang); const next=NEXT[order.status]; const secondaryStatuses=ORDER_STATUSES.filter(s=>s!==order.status&&s!==next&&s!=="cancelled"); const customer=order.customerName||text(C.customerFallback,lang);
   return <aside ref={ref} aria-label={lang === "ar"?`تفاصيل الطلب #${order.orderNumber}`:`Order #${order.orderNumber} details`} className="grid min-w-0 content-start gap-5 rounded-2xl border border-line bg-paper p-4 sm:p-5 lg:sticky lg:top-5 lg:h-fit">
@@ -63,6 +66,7 @@ const OrderDetail=forwardRef<HTMLElement,{order:AdminOrder|null;lang:"ar"|"en";o
     </section>
     <section className="grid gap-3" aria-labelledby="order-items-title"><div className="flex items-center justify-between gap-3"><h3 id="order-items-title" className="font-semibold">{text(C.items,lang)}</h3><span className="text-xs text-muted"><span dir="ltr">{order.itemCount}</span> {lang === "ar"?"عناصر":"items"}</span></div><div className="grid gap-2">{order.items.map(item=><OrderItem key={item.id} item={item} lang={lang} currency={order.currency}/>)}</div></section>
     <section className="grid gap-2 rounded-2xl border border-line bg-sand/20 p-4"><Info label={text(C.total,lang)} value={money(order.total,order.currency,lang)} strong ltr/>{order.subtotal!==order.total?<Info label={lang === "ar"?"الإجمالي الفرعي":"Subtotal"} value={money(order.subtotal,order.currency,lang)} ltr/>:null}</section>
+    <div className="grid gap-2"><OrderReceiptButton staffOrderId={order.id} /></div>
     <section className="grid gap-2 rounded-2xl border border-line bg-paper p-4"><h3 className="font-semibold">{text(C.notes,lang)}</h3><p className="text-sm leading-6 text-muted" dir="auto">{order.notes||text(C.noNotes,lang)}</p></section>
     <Button variant="ghost" className="min-h-11 justify-start" onClick={()=>void onBack()}><ArrowLeft className="size-4 rtl:rotate-180"/>{text(C.back,lang)}</Button>
   </aside>;

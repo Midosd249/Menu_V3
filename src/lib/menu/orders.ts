@@ -47,7 +47,6 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
     return { ok: false, code: "unavailable", error: "تعذر التحقق من صلاحية الطلب" };
   }
 }
-
 function mapItem(row: Record<string, unknown>): OrderItemDetail {
   const rawOptions = Array.isArray(row.selected_options) ? row.selected_options : [];
   return {

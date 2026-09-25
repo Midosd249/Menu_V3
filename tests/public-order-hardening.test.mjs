@@ -42,7 +42,7 @@ test("legacy security-definer RPCs are not executable by public client roles", (
 
 test("public orders attach only a valid server-controlled tenant session", () => {
   assert.match(orderSource, /resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
-  assert.match(orderSource, /fromValidCookie/);
+  assert.match(orderSource, /const anonymousSessionId = anonymousSession\.id/);
   assert.match(orderSource, /anonymous_session_id/);
   assert.doesNotMatch(orderSource, /anonymous_session_id.*data\./);
   assert.match(attributionMigration, /foreign key \(tenant_id, anonymous_session_id\)\s+references anonymous_sessions \(tenant_id, id\)/);

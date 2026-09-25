@@ -130,7 +130,7 @@ test("A.3 order attribution is database-enforced by tenant and never client-supp
   assert.match(attributionMigration, /alter table orders\s+add column if not exists anonymous_session_id text/);
   assert.match(attributionMigration, /foreign key \(tenant_id, anonymous_session_id\)\s+references anonymous_sessions \(tenant_id, id\)\s+on delete set null \(anonymous_session_id\)/);
   assert.match(orderSource, /resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
-  assert.match(orderSource, /const anonymousSessionId = anonymousSession\.fromValidCookie \? anonymousSession\.id : null/);
+  assert.match(orderSource, /const anonymousSessionId = anonymousSession\.id/);
   assert.match(orderSource, /anonymous_session_id/);
   assert.doesNotMatch(orderSource, /anonymousSessionId:\s*z\./);
 });

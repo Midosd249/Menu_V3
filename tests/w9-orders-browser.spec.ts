@@ -12,6 +12,7 @@ test("W9 Orders mobile detail, language switch, contact actions, and status acti
   await expect(page.getByRole("button", { name: "تأكيد الطلب" })).toBeVisible();
   await expect(page.getByRole("link", { name: /واتساب أحمد العتيبي/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /اتصال أحمد العتيبي/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "طباعة الإيصال" })).toBeVisible();
   await page.getByRole("button", { name: "تأكيد الطلب" }).click();
   await expect(page.getByRole("button", { name: "بدء التحضير" })).toBeVisible();
   const orderUrl = page.url();

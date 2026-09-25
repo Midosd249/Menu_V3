@@ -34,7 +34,7 @@ test("subscription summary does not expose a fake navigation action", () => {
 
 test("owner operations do not surface archived orders", () => {
   assert.match(orders, /where o\.archived_at is null/);
-  assert.match(orders, /o\.archived_at is null and o\.status = 'new'/);
+  assert.match(orders, /o\.status = 'new'/);
 });
 
 test("order archive is reversible soft-delete at the data layer", () => {

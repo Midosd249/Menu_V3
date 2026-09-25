@@ -29,6 +29,7 @@ function BrandPage() {
     snapchatUrl: tenant.snapchatUrl ?? "",
     facebookUrl: tenant.facebookUrl ?? "",
     tiktokUrl: tenant.tiktokUrl ?? "",
+    vatRegistrationNumber: tenant.vatRegistrationNumber ?? "",
     logoUrl: tenant.logoUrl,
     coverUrl: tenant.coverUrl,
     primaryColor: tenant.primaryColor,
@@ -81,6 +82,9 @@ function BrandPage() {
         </Field>
         <Field label={t(copy.studio.whatsappTpl, lang)}>
           <Textarea value={form.whatsappTemplate} onChange={(e) => set("whatsappTemplate", e.target.value)} />
+        </Field>
+        <Field label={lang === "ar" ? "رقم التسجيل في ضريبة القيمة المضافة (اختياري)" : "VAT registration number (optional)"}>
+          <Input value={form.vatRegistrationNumber} onChange={(e) => set("vatRegistrationNumber", e.target.value)} inputMode="numeric" placeholder={lang === "ar" ? "اتركه فارغاً إذا لم يكن لديك رقم VAT" : "Leave blank if you do not have a VAT number"} />
         </Field>
         <div className="grid gap-3 rounded-2xl border border-line bg-sand/30 p-4">
           <div>

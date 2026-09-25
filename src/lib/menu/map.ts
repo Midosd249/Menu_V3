@@ -29,6 +29,7 @@ export function mapTenant(row: Record<string, unknown>): Tenant {
     snapchatUrl: str(row.snapchat_url),
     facebookUrl: str(row.facebook_url),
     tiktokUrl: str(row.tiktok_url),
+    vatRegistrationNumber: str(row.vat_registration_number),
     whatsapp: str(row.whatsapp),
     whatsappTemplate: str(row.whatsapp_template) || "السلام عليكم، أريد الاستفسار عن {product} من {restaurant}.",
     primaryColor: str(row.primary_color) || "#171411",

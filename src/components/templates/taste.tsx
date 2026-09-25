@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Clock3, MapPin, Minus, Plus, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
+import { OrderReceiptButton } from "@/components/order-receipt";
 import { MenuBadge, MenuMedia, MenuPrice } from "@/components/menu";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { useLang } from "@/lib/lang";
@@ -100,7 +101,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   const [cartOpen, setCartOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState("");
-  const [success, setSuccess] = useState<number | null>(null);
+  const [success, setSuccess] = useState<{ id: string; number: number } | null>(null);
   const visible = preview ? products : products.filter((product) => product.isAvailable);
   const selected = visible.find((product) => product.id === selectedId);
   const filtered = useMemo(() => {
@@ -149,7 +150,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
     const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds, note: item.note || undefined } })) } });
     setSubmitting(false);
     if (!result.ok) { setOrderError(result.error); return; }
-    setCart([]); setCartOpen(false); setSuccess(result.data.orderNumber);
+    setCart([]); setCartOpen(false); setSuccess({ id: result.data.orderId, number: result.data.orderNumber });
   };
   const dayHours = [...hours].sort((a, b) => a.weekday - b.weekday);
   return (
@@ -192,7 +193,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
       {cartCount ? <div className="taste-floating-cart"><button type="button" onClick={() => setCartOpen(true)}><ShoppingBag className="size-5" /><span>{text(lang, "السلة", "Cart")} · {cartCount}</span><strong>{formatSar(cartTotal, lang)}</strong></button></div> : null}
       {selected ? <ProductSheet lang={lang} product={selected} options={menu.productOptions?.[selected.id]} close={() => setSelectedId(null)} add={add} submitting={submitting} /> : null}
       {cartOpen ? <CartSheet lang={lang} items={cart} setItems={setCart} close={() => setCartOpen(false)} submit={submit} error={orderError} submitting={submitting} /> : null}
-      {success ? <div className="taste-dialog-backdrop" role="presentation"><section role="dialog" aria-modal="true" className="taste-success"><Sparkles className="size-8" /><h2>{text(lang, "تم استلام طلبك", "Order received")}</h2><p>{text(lang, `رقم الطلب #${success}`, `Order #${success}`)}</p><button type="button" className="taste-primary-button" onClick={() => setSuccess(null)}>{text(lang, "حسنًا", "Done")}</button></section></div> : null}
+      {success ? <div className="taste-dialog-backdrop" role="presentation"><section role="dialog" aria-modal="true" className="taste-success"><Sparkles className="size-8" /><h2>{text(lang, "تم استلام طلبك", "Order received")}</h2><p>{text(lang, `رقم الطلب #${success}`, `Order #${success}`)}</p><div className="grid gap-2"><OrderReceiptButton orderId={success.id} className="w-full" /><button type="button" className="taste-primary-button" onClick={() => setSuccess(null)}>{text(lang, "حسنًا", "Done")}</button></div></section></div> : null}
     </div>
   );
 }
