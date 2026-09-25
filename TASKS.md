@@ -2,7 +2,7 @@
 
 - VERIFIED: PR #298 `feat(orders): add informal customer receipts` is merged into `main`.
 - VERIFIED: merge commit is `a6f9ff63a360cdb65d5c831b46659829cf512e57`.
-- VERIFIED: `main` now points to `a6f9ff63a360cdb65d5c831b46659829cf512e57`.
+- VERIFIED: `main` contains PR #298 merge commit `a6f9ff63a360cdb65d5c831b46659829cf512e57`; the current continuity documentation merge commit is `c87a6f0e6a57cd9e79a4b2ac19918399d5275a2e`.
 - VERIFIED: Pre-merge Quality #2470 and W9 Orders QA #655 passed on final implementation HEAD `25a1c75b6911c9c49a503e4e5bd9453f4142366e`.
 - VERIFIED: staff receipt access is server-authorized and branch-scoped; guest receipt access is bound to the server-controlled anonymous session.
 - VERIFIED: first-order anonymous-session binding was fixed and covered by contract tests.
