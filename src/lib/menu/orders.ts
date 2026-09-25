@@ -40,7 +40,7 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
             o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
             or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.access_role in ('tenant_owner','branch_manager') and tm.is_active = true)
           )
-          or (o.branch_id is not null and menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id))
+          or (o.branch_id is not null and menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id))
         )
       limit 1
     `;
@@ -93,16 +93,16 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
             coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
           from orders o join scope s on s.tenant_id = o.tenant_id join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
           where o.archived_at is null
-            and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id))
+            and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id))
             and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
             and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q})
         )
         select
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id))) as total,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id)) and o.status = 'new') as new_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id)) and o.status in ('confirmed','preparing','ready')) as active_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id)) and o.status = 'completed') as completed_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id)) and o.status = 'cancelled') as cancelled_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id))) as total,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id)) and o.status = 'new') as new_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id)) and o.status in ('confirmed','preparing','ready')) as active_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id)) and o.status = 'completed') as completed_count,
+          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and (o.branch_id is null or menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id)) and o.status = 'cancelled') as cancelled_count,
           coalesce((select jsonb_agg(to_jsonb(x) order by x.created_at desc) from (select * from filtered order by created_at desc limit 100) x), '[]'::jsonb) as orders
       `;
       const row = rows[0];
