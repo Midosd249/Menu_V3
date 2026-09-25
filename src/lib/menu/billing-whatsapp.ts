@@ -17,6 +17,7 @@ export type SubscriptionInvoice = {
   periodEnd: string;
   status: "issued" | "void";
   issuedAt: string;
+  notes: string;
 };
 
 export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: "ar" | "en"): string {
@@ -33,6 +34,7 @@ export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: 
       `الفوترة: ${interval}`,
       `الفترة: ${period}`,
       `المبلغ: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
+      ...(invoice.notes ? [`ملاحظات: ${invoice.notes}`] : []),
       "الحالة: صادرة — لا تمثل هذه الرسالة إثبات دفع أو تحصيلاً إلكترونياً.",
     ].join("\n");
   }
@@ -44,6 +46,7 @@ export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: 
     `Billing: ${interval}`,
     `Period: ${period}`,
     `Amount: ${invoice.amountSar.toFixed(2)} ${invoice.currency}`,
+    ...(invoice.notes ? [`Notes: ${invoice.notes}`] : []),
     "Status: Issued — this message is not proof of payment or electronic collection.",
   ].join("\n");
 }
