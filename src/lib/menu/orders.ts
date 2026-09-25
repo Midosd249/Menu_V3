@@ -36,16 +36,8 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
       from orders o
       where o.id = ${orderId}
         and (
-          o.branch_id is null
-          and (
-            o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
-            or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.access_role in ('tenant_owner','branch_manager') and tm.is_active = true)
-          )
-          or (o.branch_id is not null and (
-            o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
-            or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.role in ('owner','admin') and tm.is_active = true)
-            or menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id)
-          ))
+          o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
+          or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.role in ('owner','admin'))
         )
       limit 1
     `;
@@ -55,7 +47,6 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
     return { ok: false, code: "unavailable", error: "تعذر التحقق من صلاحية الطلب" };
   }
 }
-
 function mapItem(row: Record<string, unknown>): OrderItemDetail {
   const rawOptions = Array.isArray(row.selected_options) ? row.selected_options : [];
   return {
