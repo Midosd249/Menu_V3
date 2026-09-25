@@ -61,6 +61,10 @@ try {
       const response = await page.goto(targetUrl.toString(), { waitUntil: "domcontentloaded", timeout: 45000 });
       const status = response?.status() ?? 0;
       await page.waitForTimeout(1200);
+      await page.waitForFunction(\
+        () => document.documentElement.dataset.menuTheme || document.querySelector("h1, h2, h3, h4, h5, h6"),\
+        { timeout: 10000 },\
+      );
 
       const result = await page.evaluate(() => {
         const html = document.documentElement;
