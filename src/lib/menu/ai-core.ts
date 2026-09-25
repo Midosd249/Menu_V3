@@ -78,7 +78,8 @@ async function consumeRateLimit(
   if (!(await consumeMinuteRateLimit(sql, tenantId, userId, getRateLimit()))) return false;
 
   if (operation !== "guest.menu_assistant") return true;
-  if (ipKey && !(await consumeMinuteRateLimit(sql, tenantId, `guest-ip:${ipKey}`, getGuestAssistantIpRateLimit()))) return false;
+  const normalizedIpKey = ipKey?.trim() ? createHash("sha256").update(ipKey.trim()).digest("hex") : undefined;
+  if (normalizedIpKey && !(await consumeMinuteRateLimit(sql, tenantId, `guest-ip:${normalizedIpKey}`, getGuestAssistantIpRateLimit()))) return false;
 
   const dailyLimit = getGuestAssistantDailyLimit();
   const dailyWindowStart = new Date();
