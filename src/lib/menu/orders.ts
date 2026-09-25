@@ -40,7 +40,7 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
             o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
             or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.access_role in ('tenant_owner','branch_manager') and tm.is_active = true)
           )
-          or (o.branch_id is not null and menu_v3.has_branch_access(${context.userId}, o.tenant_id, o.branch_id))
+          or (o.branch_id is not null and menu_v3.has_branch_access(${userId}, o.tenant_id, o.branch_id))
         )
       limit 1
     `;
