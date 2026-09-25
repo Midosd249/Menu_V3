@@ -1,7 +1,6 @@
 import { Bot, LoaderCircle, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { askGuestMenuAssistant } from "@/lib/menu/guest-assistant";
-import { getGuestSessionId } from "@/lib/menu/session";
 import { useLang } from "@/lib/lang";
 import type { PublicMenu } from "@/lib/menu/types";
 import { Button } from "@/components/ui/button";
@@ -73,7 +72,6 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
         data: {
           slug: menu.tenant.slug,
           branchSlug: menu.branch.slug,
-          sessionId: getGuestSessionId(),
           lang,
           question: trimmed,
         },
