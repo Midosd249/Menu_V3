@@ -6,7 +6,9 @@ create table if not exists menu_v3.ai_guest_assistant_daily_limits (
   primary key (tenant_id, window_start)
 );
 
+alter table menu_v3.ai_guest_assistant_daily_limits enable row level security;
+
 create index if not exists ai_guest_assistant_daily_limits_updated_idx
   on menu_v3.ai_guest_assistant_daily_limits (updated_at);
 
-revoke all on table menu_v3.ai_guest_assistant_daily_limits from anon, authenticated;
+revoke all on table menu_v3.ai_guest_assistant_daily_limits from public, anon, authenticated;
