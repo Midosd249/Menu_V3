@@ -58,7 +58,7 @@ test("VAT is optional metadata and receipt is explicitly informal", () => {
   assert.doesNotMatch(pub, /payment|paid|charge|webhook/i);
 });
 test("print output is isolated and excludes staff-only content", () => {
-  assert.match(receipt, /body\.printing-order-receipt > \*:\not\(\.order-receipt-portal\)/);
+  assert.match(receipt, /body\.printing-order-receipt > \*:not\(\.order-receipt-portal\)/);
   assert.match(receipt, /width: 80mm/);
   assert.match(receipt, /page-break-inside: avoid/);
   assert.match(receipt, /Receipt-\$\{data\.orderNumber\}/);
