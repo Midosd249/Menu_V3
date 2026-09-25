@@ -124,7 +124,8 @@ export const issuePlatformInvoice = createServerFn({ method: "POST" })
           t.id as tenant_id,
           coalesce(t.name_ar, t.name_en, '') as tenant_name,
           coalesce(u.name, '') as owner_name,
-          coalesce(u.email, '') as owner_email
+          coalesce(u.email, '') as owner_email,
+          (select coalesce(name, '') from "user" where id = ${context.userId}) as created_by_name
         from tenants t
         join "user" u on u.id = t.owner_user_id
         where t.id = ${data.tenantId}
@@ -178,7 +179,7 @@ export const issuePlatformInvoice = createServerFn({ method: "POST" })
           tenant_name: tenant.tenant_name,
           owner_name: tenant.owner_name,
           owner_email: tenant.owner_email,
-          created_by_name: context.userId,
+          created_by_name: tenant.created_by_name,
         }),
       };
     } catch (error) {
