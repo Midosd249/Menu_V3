@@ -69,12 +69,9 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
       <section className="grid gap-2 border-t border-black/20 pt-4 text-sm">
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span><span dir="ltr">{money(receipt.subtotal, receipt.currency, lang)}</span></div>
         {receipt.vatRegistrationNumber ? (
-          <div className="grid gap-1">
-            <div className="flex justify-between gap-4">
-              <span>{lang === "ar" ? "الضريبة / VAT" : "Tax / VAT"}</span>
-              <span>{lang === "ar" ? "غير مسجلة في الطلب" : "Not recorded in order data"}</span>
-            </div>
-            <div className="text-xs text-black/60" dir="ltr">{lang === "ar" ? "رقم التسجيل" : "VAT registration"}: {receipt.vatRegistrationNumber}</div>
+          <div className="flex justify-between gap-4">
+            <span>{lang === "ar" ? "رقم تسجيل VAT" : "VAT registration"}</span>
+            <span dir="ltr">{receipt.vatRegistrationNumber}</span>
           </div>
         ) : null}
         <div className="flex justify-between gap-4 border-t border-black/20 pt-2 text-base font-bold">
