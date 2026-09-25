@@ -29,7 +29,7 @@ function BrandPage() {
     snapchatUrl: tenant.snapchatUrl ?? "",
     facebookUrl: tenant.facebookUrl ?? "",
     tiktokUrl: tenant.tiktokUrl ?? "",
-    vatRegistrationNumber: tenant.vatRegistrationNumber,
+    vatRegistrationNumber: tenant.vatRegistrationNumber ?? "",
     logoUrl: tenant.logoUrl,
     coverUrl: tenant.coverUrl,
     primaryColor: tenant.primaryColor,
