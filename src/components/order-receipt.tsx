@@ -25,6 +25,7 @@ function money(value: number, currency: string, lang: "ar" | "en") {
 function date(value: string, lang: "ar" | "en") {
   try {
     return new Intl.DateTimeFormat(lang === "ar" ? "ar-SA" : "en-SA", {
+      calendar: "gregory",
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date(value));
@@ -38,11 +39,14 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
   const branch = lang === "ar" ? receipt.branchNameAr || receipt.branchNameEn : receipt.branchNameEn || receipt.branchNameAr;
 
   return (
-    <article className="order-receipt-print mx-auto w-full max-w-[440px] bg-white p-6 text-black" dir={lang === "ar" ? "rtl" : "ltr"}>
+    <article className="order-receipt-print mx-auto w-full max-w-[440px] overflow-hidden rounded-2xl border border-black/10 bg-white p-6 text-black shadow-xl" dir={lang === "ar" ? "rtl" : "ltr"}>
       <header className="grid gap-3 border-b border-black/15 pb-4 text-center">
         {receipt.restaurantLogoUrl ? <img src={receipt.restaurantLogoUrl} alt="" className="mx-auto size-16 rounded-xl object-cover" /> : null}
         <div>
-          <h1 className="text-xl font-bold">{restaurant}</h1>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-black/45">
+            {lang === "ar" ? "إيصال" : "Receipt"}
+          </p>
+          <h1 className="mt-1 text-xl font-bold">{restaurant}</h1>
           <p className="mt-1 text-sm text-black/65">{branch}</p>
         </div>
       </header>
@@ -89,6 +93,7 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
 export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }: Props) {
   const { lang } = useLang();
   const [printable, setPrintable] = useState<OrderReceiptData | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const previousTitleRef = useRef<string | null>(null);
@@ -100,7 +105,6 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
         document.title = previousTitleRef.current;
         previousTitleRef.current = null;
       }
-      setPrintable(null);
       setBusy(false);
     };
     window.addEventListener("afterprint", done);
@@ -111,6 +115,9 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
         document.title = previousTitleRef.current;
         previousTitleRef.current = null;
       }
+      setPreviewOpen(false);
+      setPrintable(null);
+      setBusy(false);
     };
   }, []);
 
@@ -142,16 +149,30 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
       return;
     }
     setPrintable(data);
+    setPreviewOpen(true);
+    setBusy(false);
+  }
+
+  function printReceiptData(data: OrderReceiptData) {
+    if (typeof document === "undefined") return;
+    setBusy(true);
     previousTitleRef.current = document.title;
     document.title = `Receipt-${data.orderNumber}`;
     document.body.classList.add("printing-order-receipt");
     window.setTimeout(() => window.print(), 40);
   }
 
+  function closePreview() {
+    if (busy) return;
+    setPreviewOpen(false);
+    setPrintable(null);
+  }
+
   return (
     <>
       <style>{`
         .order-receipt-portal { display: none; }
+        .order-receipt-preview { display: grid; }
         @media print {
           @page { size: auto; margin: 8mm; }
           body.printing-order-receipt > *:not(.order-receipt-portal) { display: none !important; }
@@ -168,6 +189,8 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
             min-height: 0 !important;
             margin: 0 auto !important;
             padding: 4mm !important;
+            border: 0 !important;
+            border-radius: 0 !important;
             box-shadow: none !important;
             break-inside: avoid !important;
             page-break-inside: avoid !important;
@@ -185,7 +208,73 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
       </button>
       {error ? <p role="alert" className="text-xs text-danger">{error}</p> : null}
       {printable && typeof document !== "undefined"
-        ? createPortal(<div className="order-receipt-portal"><ReceiptView receipt={printable} lang={lang} /></div>, document.body)
+        ? createPortal(
+            <>
+              <div className="order-receipt-portal">
+                <ReceiptView receipt={printable} lang={lang} />
+              </div>
+              {previewOpen ? (
+                <div
+                  className="order-receipt-preview fixed inset-0 z-[100] grid place-items-center bg-black/55 p-4"
+                  role="presentation"
+                  onMouseDown={(event) => {
+                    if (event.target === event.currentTarget) closePreview();
+                  }}
+                >
+                  <section
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="order-receipt-preview-title"
+                    className="flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-white/15 bg-paper shadow-2xl"
+                    onMouseDown={(event) => event.stopPropagation()}
+                  >
+                    <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 md:px-5">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">
+                          {lang === "ar" ? "إيصال الطلب" : "Order receipt"}
+                        </p>
+                        <h2 id="order-receipt-preview-title" className="mt-1 truncate text-base font-semibold">
+                          {lang === "ar" ? "معاينة الإيصال" : "Receipt preview"}
+                        </h2>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={closePreview}
+                        disabled={busy}
+                        className="grid size-10 shrink-0 place-items-center rounded-full border border-line text-muted transition hover:bg-sand/40 disabled:opacity-50"
+                        aria-label={lang === "ar" ? "إغلاق معاينة الإيصال" : "Close receipt preview"}
+                      >
+                        ×
+                      </button>
+                    </header>
+                    <div className="min-h-0 overflow-y-auto bg-sand/20 p-4 md:p-6">
+                      <ReceiptView receipt={printable} lang={lang} />
+                    </div>
+                    <footer className="grid grid-cols-2 gap-2 border-t border-line bg-paper p-4">
+                      <button
+                        type="button"
+                        onClick={() => printReceiptData(printable)}
+                        disabled={busy}
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-semibold text-paper disabled:opacity-50"
+                      >
+                        <Printer className="size-4" aria-hidden="true" />
+                        {busy ? (lang === "ar" ? "جاري الطباعة…" : "Printing…") : (lang === "ar" ? "طباعة الإيصال" : "Print receipt")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={closePreview}
+                        disabled={busy}
+                        className="min-h-11 rounded-xl border border-line bg-paper px-4 text-sm font-medium disabled:opacity-50"
+                      >
+                        {lang === "ar" ? "إغلاق" : "Close"}
+                      </button>
+                    </footer>
+                  </section>
+                </div>
+              ) : null}
+            </>,
+            document.body,
+          )
         : null}
     </>
   );
