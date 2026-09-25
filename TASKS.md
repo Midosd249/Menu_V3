@@ -1058,3 +1058,17 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - UNKNOWN: A live Production customer order was not used to print/send a receipt in this session. CI used isolated fixtures.
 - DEPLOYMENT: NOT DEPLOYED. Production deployment is intentionally held for the user's release authorization.
 - EXACT NEXT TASK: Owner reviews PR #298 and authorizes the single release batch; do not merge or deploy automatically.
+
+## 2026-09-25 — Guest Assistant Cost-Abuse Hardening — PR #304
+
+- VERIFIED: Removed the client-controlled Guest Assistant `sessionId` from the request contract.
+- VERIFIED: Bound Guest Assistant minute limiting to the existing server-issued anonymous session.
+- VERIFIED: Added trusted Vercel requester-IP rate limiting with hashed IP storage.
+- VERIFIED: Added configurable tenant-wide daily Guest Assistant circuit breaker, default 500/day.
+- VERIFIED: Admission checks occur before provider execution; existing grounded fallback handles denial.
+- VERIFIED: No AI provider was added, removed, paused, reordered, or modified.
+- IN_PROGRESS: GitHub Quality/W9 verification is running on PR #304 head `40ac0534c184907b000df9009e67c0121d24e0c9`.
+- DEPLOYMENT: NOT DEPLOYED; merge/deployment held for owner review.
+
+### EXACT NEXT TASK
+**Review PR #304 CI results; if all applicable gates pass, owner reviews and authorizes merge. Do not merge or deploy automatically.**
