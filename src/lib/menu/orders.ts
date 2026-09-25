@@ -16,12 +16,13 @@ export type OrdersDashboard = { total: number; newCount: number; activeCount: nu
 async function getClientTenantIds(userId: string): Promise<string[]> {
   const sql = await getSql();
   const rows = await sql<{ id: string }>`
-    select distinct t.id
+    select t.id
     from tenants t
     where t.owner_user_id = ${userId}
        or exists (
          select 1 from tenant_members tm
-         where tm.tenant_id = t.id and tm.user_id = ${userId} and tm.is_active = true
+         where tm.tenant_id = t.id and tm.user_id = ${userId}
+           and tm.role in ('owner', 'admin')
        )
   `;
   return rows.map((row) => String(row.id));
