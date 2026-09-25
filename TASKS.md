@@ -1010,3 +1010,17 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - VERIFIED: Quality run `2445` passed typecheck, tests, lint, production build, all-theme browser QA, performance fixture, Studio browser QA and Platform Admin browser QA. W9 Orders QA run `630` passed the Orders browser QA for the staff receipt action.
 - UNKNOWN: A live Production customer order was not used to send/print a receipt in this session; CI used isolated fixtures. No production deployment was authorized.
 - EXACT NEXT TASK: Owner reviews PR #298 and authorizes the single release batch; keep Production deployment held until explicit approval.
+
+
+## FINAL CLOSEOUT — 2026-09-25 — Per-Order Customer Receipt
+
+- VERIFIED: PR #297 is merged into `main` at `66e0a21ad19ea0fb15acd81582792f3f10d02753`; Production deployment remains intentionally held.
+- VERIFIED: PR #298 remains OPEN and mergeable at head `592fb41dfff5f926b3d213a29e9d48aee6d3b7c5`.
+- VERIFIED: Quality run `#2461` passed Typecheck, Tests, Lint, Production Build, all-theme browser QA, Golden 30-product performance fixture, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders browser QA run `#646` passed all Orders browser checks, including the receipt action.
+- VERIFIED: Staff receipt printing loads receipt data through the server-authorized `getStaffOrderReceipt` action; tenant owner/admin access is preserved and branch-scoped access is enforced through `has_branch_access`.
+- VERIFIED: Guest receipt remains bound to the anonymous order session and cannot enumerate other orders by id/number.
+- VERIFIED: No receipt ledger/table was added; existing `orders` and `order_items` snapshots remain the source of receipt data.
+- VERIFIED: No payment status, payment gateway, ZATCA integration, automated e-invoicing, or collection behavior was introduced.
+- UNKNOWN: Live Production receipt printing was not executed; CI uses isolated fixtures. Production deployment was not authorized.
+- EXACT NEXT TASK: Owner reviews PR #298 and, if satisfied, authorizes the single combined release batch. Do not merge/deploy automatically from this session.
