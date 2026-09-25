@@ -23,9 +23,11 @@ test("receipt uses existing order snapshots", () => {
   assert.doesNotMatch(migration, /create table.*receipt/i);
   assert.doesNotMatch(migration, /subscription_invoices/);
 });
-test("staff receipt keeps existing authorization", () => {
+test("staff receipt keeps tenant and branch authorization", () => {
   assert.match(orders, /getClientTenantIds/);
   assert.match(orders, /tenant_members/);
+  assert.match(orders, /has_branch_access/);
+  assert.match(orders, /branch_id is null/);
   assert.match(studio, /OrderReceiptButton/);
 });
 test("guest receipt is session-bound and non-enumerable", () => {
