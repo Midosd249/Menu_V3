@@ -33,7 +33,7 @@ test("guest receipt is session-bound and non-enumerable", () => {
   assert.match(pub, /o\.anonymous_session_id = \$\{cookie\}/);
   assert.match(pub, /s\.id = o\.anonymous_session_id/);
   assert.match(pub, /s\.expires_at > now\(\)/);
-  assert.match(publicMenu, /orderId: result\.data\.orderId/);
+  assert.match(publicMenu, /id: result\.data\.orderId/);
   assert.match(taste, /orderId=\{success\.id\}/);
   assert.match(signal, /orderId=\{success\.id\}/);
 });
