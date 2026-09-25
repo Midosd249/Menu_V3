@@ -842,3 +842,29 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 **Provide the TypeSafe credential to the authorized smoke runtime securely, then run exactly one authenticated smoke and record HTTP status, decision validity, selected candidate, confidence when returned, latency, and any bounded usage metadata.**
 \n\n# 2026-09-24 — Post-Merge Continuity Anchor\n\n- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.\n- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.\n- VERIFIED: the smoke was not repeated after the credential blocker was observed.\n- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.\n\n## EXACT NEXT TASK\n\n**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**\n
+
+# 2026-09-25 — Platform-Admin Invoice Ownership Correction — IMPLEMENTED / VERIFIED / PR #297
+
+- VERIFIED: Current main at task start was `ea8f4582f60953e7a8029d5f6905e18454e85114`.
+- VERIFIED: Before this task, tenant `/studio/billing` contained the `issueSubscriptionInvoice` server function and an Issue Invoice button; there was no Platform Admin invoice-issuance UI.
+- VERIFIED: PR #297 moves issuance to the Platform Admin `/admin/users` subscription screen and removes tenant-side issuance.
+- VERIFIED: Invoice creation is server-authorized by `requirePlatformAdmin`, records `created_by_user_id`, and tenant history filters to invoices whose creator is a Platform Admin.
+- VERIFIED: `subscription_invoices` is reused. Migration `20260925130000_platform_admin_invoice_issuance.sql` adds only `notes` and a cache-1 sequential invoice-number sequence.
+- VERIFIED: Admin can issue for a selected tenant with plan, SAR amount, period start/end, and notes; admin history exposes print and the existing WhatsApp click-to-chat pattern.
+- VERIFIED: Tenant billing is read-only: review/print only; no customer-side issue or WhatsApp-send action remains.
+- VERIFIED: Invoice issuance does not mark payment status, change entitlements, or invoke a payment gateway, automatic charge, webhook, or payment automation.
+- VERIFIED: GitHub Quality run `#2430` passed Typecheck, Tests, Lint, Production Build, browser template QA, Golden 30-product performance fixture, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA run `#616` passed.
+- VERIFIED: Vercel Preview status for final head `c77d901f11b8064b9e701f86d51477b1ce338698` is `success`. No Production deployment was triggered.
+- UNKNOWN: A distinct prior `mark paid + upgrade plan together` function is not present in the current repository source. Existing Platform Admin plan/status mutations remain untouched; no payment-state coupling was added.
+- REAL-DATA E2E UNKNOWN: CI browser QA verifies the Platform Admin route, but the invoice issuance mutation and tenant reflection were not executed against live production data in this task.
+
+## IMPLEMENTATION STATUS
+**VERIFIED_LOCALLY / CI VERIFIED — PR #297 OPEN**
+
+## DEPLOYMENT STATUS
+**NOT DEPLOYED — no Production deployment authorized**
+
+## EXACT NEXT TASK
+**Owner reviews and authorizes the merge/release of PR #297; do not deploy automatically.**
+
