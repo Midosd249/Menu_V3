@@ -142,7 +142,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
 
       const anonymousSession = await resolveAnonymousSession(sql, String(tenant.id));
-      const anonymousSessionId = anonymousSession.fromValidCookie ? anonymousSession.id : null;
+      const anonymousSessionId = anonymousSession.id;
 
       const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
       const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
