@@ -1,3 +1,27 @@
+# 2026-09-25 — Supabase Security Hardening — CLOSED / VERIFIED / DEPLOYED
+
+- VERIFIED: PR #295 merged by squash into `main` as `ea8f4582f60953e7a8029d5f6905e18454e85114`.
+- VERIFIED: final PR Quality run #2426 passed; W9 Orders QA run #613 passed.
+- VERIFIED: live migration `20260925105134_security_rls_and_search_path_hardening.sql` matches the repository migration filename.
+- VERIFIED: `scripts/migrate.mjs` reads `menu_v3._migrations` and skips migration names already recorded there; the live migration is recorded under the matching filename, so the merged release does not reapply or duplicate the security migration.
+- VERIFIED: Vercel Production deployment `dpl_DpPYroTFVJLpMxSFFH2WkLypTVnq` is READY, targets `production`, and reports GitHub commit `ea8f4582f60953e7a8029d5f6905e18454e85114`.
+- VERIFIED: Production == merged `main` for this security release batch.
+- BLOCKED / ACCEPTED RISK: Supabase Auth leaked-password protection remains disabled on the current Supabase plan/tooling. Revisit if the Supabase plan is upgraded; do not claim the Auth warning is resolved until Security Advisor confirms it.
+- VERIFIED: no themes, AI providers, ordering logic, or unrelated runtime behavior changed.
+
+## IMPLEMENTATION STATUS
+**DONE / CLOSED**
+
+## DEPLOYMENT STATUS
+**DEPLOYED / VERIFIED**
+
+## REAL-DEVICE QA STATUS
+**PENDING HUMAN OWNER EXECUTION**
+
+## EXACT NEXT TASK
+**Owner executes the real-device Production QA checklist for public menu, end-to-end test order, WhatsApp CTA, QR scan, guest profile/CRM creation, and rate-limit behavior. Do not simulate or claim device evidence from automation.**
+
+
 # CURRENT VERIFIED AI POSITION — 2026-09-24 — PHASE 6 CLOSED / VERIFIED / MERGED
 
 
