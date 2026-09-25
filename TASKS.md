@@ -1,3 +1,19 @@
+# 2026-09-25 — Order Receipt Print Isolation — MERGED / DEPLOYED
+
+- VERIFIED: PR #301 `fix(orders): isolate receipt print output` passed full Quality #2476 and W9 Orders QA #658.
+- VERIFIED: PR #301 squash merge commit is `027d765a11a7e6bf8e40468ea79ac7c3c5eda2de`.
+- VERIFIED: Vercel Production deployment is `dpl_7G9JMXYrdCXkQaDTZ7dtjVeBbHZh`, target `production`, state `READY`.
+- VERIFIED: deployed commit `027d765a11a7e6bf8e40468ea79ac7c3c5eda2de` matched `main` HEAD at deployment time.
+- VERIFIED: no Vercel build-rate-limit retry was required.
+- UNKNOWN: no physical printer/device output capture was performed in this session.
+- STATUS: **MERGED + DEPLOYED**.
+
+## EXACT NEXT TASK
+
+**No further receipt-print work. Wait for the next explicitly authorized task.**
+
+---
+
 # CURRENT VERIFIED POSITION — 2026-09-25 — ORDER RECEIPT PART CLOSED
 
 - VERIFIED: PR #298 `feat(orders): add informal customer receipts` is merged into `main`.
@@ -247,8 +263,7 @@ Merge commit: `8050d2f08a2904f5ee2d9085454c47bdba601392`
 
 ## Protected Scope
 
-- Essential, Editorial, Noir, Heritage/Taste, and Gallery.
-- Public menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls.
+- Essential, Editorial, Noir, Heritage/Taste, and Gallery.- Public menu behavior, customer actions, authentication, authorization, tenant/branch isolation, routing, migrations, and deployment controls.
 - Quick Add, Item Notes, Cart, Orders, Notifications, Import, AI provider infrastructure, Platform Admin security, subscription protection, and release-only Vercel workflow.
 - Do not repeat completed work without current reproducible regression evidence.
 
@@ -497,8 +512,7 @@ Merge PR #217 once, verify the resulting `main` SHA, then perform release-stage 
 - VERIFIED: Quality run `35490043010` succeeded on retry attempt 2, including typecheck, tests, lint, production build, all-theme browser QA, Studio browser QA, Platform Admin browser QA, and performance/diagnostic stages.
 - VERIFIED: W9 Orders QA run `35489610007` succeeded on the Atelier implementation head before merge.
 - VERIFIED: PR #221 had no unresolved review threads.
-- VERIFIED: GitHub combined status for the implementation merge commit is successful; Vercel reports success for `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.
-- UNKNOWN: whether that successful Vercel deployment is the current Production deployment identity versus a non-production deployment; no direct Production identity was established here.
+- VERIFIED: GitHub combined status for the implementation merge commit is successful; Vercel reports success for `bff4a03be234f3d011f35c935cc0ee57746b5a2d`.- UNKNOWN: whether that successful Vercel deployment is the current Production deployment identity versus a non-production deployment; no direct Production identity was established here.
 - UNKNOWN / EXTERNAL: physical Android/iOS QA of the merged Atelier public menu, including QR scanning and real-device typography, remains unverified.
 - Note: the first Quality attempt failed in an unrelated Studio responsive Playwright run with an execution-context-destroyed navigation race; the failed job was rerun without code changes and passed completely.
 
@@ -748,7 +762,6 @@ Exact next task after closure:
 Exact next task:
 **Phase 2 — fail-closed credential validation/key pools for TypeSafe/Jev (3), NVIDIA (2), Groq (1), Cloudflare (token + Account ID), Cerebras, Mistral, and Deepgram; no runtime activation.**
 
-
 ## 2026-09-24 — AI Provider Expansion / Phase 2 IN PROGRESS
 
 - Credential contract implemented as server-only module.
@@ -997,8 +1010,7 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - VERIFIED: Current main at task start was `ea8f4582f60953e7a8029d5f6905e18454e85114`.
 - VERIFIED: Before this task, tenant `/studio/billing` contained the `issueSubscriptionInvoice` server function and an Issue Invoice button; there was no Platform Admin invoice-issuance UI.
 - VERIFIED: PR #297 moves issuance to the Platform Admin `/admin/users` subscription screen and removes tenant-side issuance.
-- VERIFIED: Invoice creation is server-authorized by `requirePlatformAdmin`, records `created_by_user_id`, and tenant history filters to invoices whose creator is a Platform Admin.
-- VERIFIED: `subscription_invoices` is reused. Migration `20260925130000_platform_admin_invoice_issuance.sql` adds only `notes` and a cache-1 sequential invoice-number sequence.
+- VERIFIED: Invoice creation is server-authorized by `requirePlatformAdmin`, records `created_by_user_id`, and tenant history filters to invoices whose creator is a Platform Admin.- VERIFIED: `subscription_invoices` is reused. Migration `20260925130000_platform_admin_invoice_issuance.sql` adds only `notes` and a cache-1 sequential invoice-number sequence.
 - VERIFIED: Admin can issue for a selected tenant with plan, SAR amount, period start/end, and notes; admin history exposes print and the existing WhatsApp click-to-chat pattern.
 - VERIFIED: Tenant billing is read-only: review/print only; no customer-side issue or WhatsApp-send action remains.
 - VERIFIED: Invoice issuance does not mark payment status, change entitlements, or invoke a payment gateway, automatic charge, webhook, or payment automation.

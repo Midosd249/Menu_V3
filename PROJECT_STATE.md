@@ -1,3 +1,26 @@
+# 2026-09-25 — Order Receipt Print Isolation — MERGED / DEPLOYED
+
+- VERIFIED: PR #301 `fix(orders): isolate receipt print output` passed the full GitHub Quality run #2476, including all-theme browser QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, performance evidence upload, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #658 passed.
+- VERIFIED: PR #301 was squash-merged into `main` as `027d765a11a7e6bf8e40468ea79ac7c3c5eda2de`.
+- VERIFIED: canonical `main` HEAD at deployment time is `027d765a11a7e6bf8e40468ea79ac7c3c5eda2de`.
+- VERIFIED: Vercel Production deployment `dpl_7G9JMXYrdCXkQaDTZ7dtjVeBbHZh` reached READY for target `production`.
+- VERIFIED: Vercel deployment commit is `027d765a11a7e6bf8e40468ea79ac7c3c5eda2de`, exactly matching `main` HEAD at deployment time.
+- VERIFIED: deployment source is Git and the Production aliases were assigned successfully.
+- VERIFIED: no build-rate-limit retry was required; the post-merge Git-connected Production deployment completed successfully.
+- VERIFIED: receipt print isolation remains limited to the scoped receipt output: business identity/logo, branch, order number, Gregorian date/time, itemized lines, subtotal, optional VAT registration metadata, total, and the existing bilingual informal-receipt disclaimer.
+- VERIFIED: customer/contact controls, notes, internal workflow/status controls, and source metadata are excluded from the printed output.
+- VERIFIED: dynamic print title is `Receipt-{orderNumber}` and is restored after printing.
+- UNKNOWN: real-device physical printer output was not captured in this release session; CI/browser evidence and the implemented print structure are the verified evidence.
+- DEPLOYMENT STATUS: **DEPLOYED / VERIFIED**.
+- IMPLEMENTATION STATUS: **MERGED / VERIFIED**.
+
+## EXACT NEXT TASK
+
+**No further receipt-print work is authorized. Stop and wait for the next explicitly scoped task. Do not redo, redesign, or redeploy this receipt scope unless new evidence requires it.**
+
+---
+
 # CURRENT VERIFIED POSITION — 2026-09-25 — ORDER RECEIPT PART CLOSED
 
 - VERIFIED: PR #298 `feat(orders): add informal customer receipts` is merged into `main`.
@@ -247,8 +270,7 @@ Live Menu
 Do not turn the product into a generic AI chatbot, POS, accounting system, or autonomous restaurant operator.
 
 ## Continuity Rule
-At the end of every atomic task:
-1. reconcile Git head against GitHub `main`;
+At the end of every atomic task:1. reconcile Git head against GitHub `main`;
 2. distinguish implementation, CI, deployment, and device evidence;
 3. update continuity files when canonical state changes;
 4. record exactly one next authorized task;
@@ -497,8 +519,7 @@ Do not start another homepage redesign, theme redesign, product/category deep-li
 - VERIFIED: Double Espresso uses repository-owned `/homepage/menu-dish.webp`; public menu removes the redundant tenant lookup while preserving server session/tenant boundaries.
 - VERIFIED: Studio supports Website, Instagram, Snapchat, Facebook, and TikTok tenant links with server-side safe URL handling.
 - VERIFIED: branch maps are already supported by `/studio/branches`; Brand now explicitly links to that surface and explains why map data is branch-scoped.
-- VERIFIED: image uploads use a 450,000-character client/server contract with adaptive WebP compression.
-- VERIFIED: local recognizable social SVG marks are used without a runtime/CDN dependency.
+- VERIFIED: image uploads use a 450,000-character client/server contract with adaptive WebP compression.- VERIFIED: local recognizable social SVG marks are used without a runtime/CDN dependency.
 - VERIFIED: GitHub Quality `35477401543` passed all configured quality/browser/performance stages; W9 Orders QA `35477401542` passed.
 - VERIFIED: Vercel status for the final head is success; PR #217 has no unresolved review threads or submitted reviews.
 - UNKNOWN: Production deployment identity and physical Android/iOS/QR/device evidence.
@@ -748,7 +769,6 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 
 ## 2026-09-22 — Public Menu Image Performance Phase 2 — VERIFIED COMPLETE
-
 - VERIFIED: PR #241 merged once by squash as `9c262f43970384ba71faab67f88d74fd62672bc3`.
 - VERIFIED: resulting `main` SHA is `9c262f43970384ba71faab67f88d74fd62672bc3`.
 - VERIFIED: Quality #2256 passed and W9 Orders QA #486 passed for final PR head `41f07720621486472cdf04053fdf06f53add7f3e`.
@@ -998,7 +1018,6 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
 \n\n# 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / LIVE SMOKE PENDING\n\n- VERIFIED: current `main` before this task is `c5ee3cebbf4be6125367b61023da93feee59b0f8`.\n- IMPLEMENTED: branch `feat/ai-typesafe-jev-decision-adapter` adds `src/lib/menu/ai-typesafe.ts`.\n- IMPLEMENTED: TypeSafe System One endpoint, server-only Bearer credential handling, three-key rotation, typed question support, bounded request size, and strict response validation.\n- IMPLEMENTED: server-provided eligible candidate set is mandatory and candidate membership is validated for `selected_candidate`.\n- VERIFIED: no generic provider routing, database, auth/RLS, subscription, tenant/branch, Smart Menu Import, public-menu/performance, or deployment behavior was changed by this implementation.\n- UNKNOWN: authenticated TypeSafe live smoke.\n- BLOCKED only if the authorized runtime cannot access the configured TypeSafe key.\n\n## PROTECTED / MUST NOT REDO\n- Groq, NVIDIA, Cloudflare, Cerebras, Mistral, Deepgram.\n- Phase 1 registry/capability foundation.\n- Phase 2 credential contracts/key pools.\n- Existing generic structured and multimodal provider routing.\n- Smart Menu Import architecture.\n- Public-menu/performance phases 0–8.\n- Auth/RLS/subscription/tenant/branch boundaries.\n\n## IMPLEMENTATION STATUS\n**IMPLEMENTATION_IN_PROGRESS — awaiting CI verification**\n\n## DEPLOYMENT STATUS\n**NOT_REQUESTED / NOT_PERFORMED**\n\n## UNKNOWN / BLOCKED\n- UNKNOWN: authenticated TypeSafe/Jev provider response and live quota/latency behavior.\n- BLOCKED if no authorized runtime can supply the TypeSafe secret for smoke verification.\n\n## EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Keep TypeSafe `runtimeEligible:false` until smoke verification is complete.**\n
-
 ## 2026-09-24 — AI Provider Expansion / Phase 6 — VERIFIED IMPLEMENTATION
 
 - VERIFIED: current main at Phase 6 start was `9573de8fbe1eca6ed0f1761b7eecf150d547f6b0`.
