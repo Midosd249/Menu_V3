@@ -868,3 +868,17 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 **Owner reviews and authorizes the merge/release of PR #297; do not deploy automatically.**
 
+
+
+## 2026-09-25 — Per-Order Customer Receipt — IMPLEMENTED / VERIFIED BY CI
+
+- VERIFIED: PR #297 (Platform Admin subscription invoice ownership correction) is merged into `main`; no production deployment was performed for this session.
+- VERIFIED: Existing order storage is sufficient for an informal receipt: `orders.order_number`, `orders.tenant_id`, `orders.branch_id`, `orders.currency`, `orders.subtotal`, `orders.total`, `orders.created_at`, plus immutable `order_items` snapshots for product names, quantity, unit price, line total and selected options.
+- VERIFIED: The current order model has no stored tax/VAT amount field. The receipt does not invent a tax amount. If a tenant configures a VAT registration number, the receipt shows a transparent VAT line stating that tax is not recorded in the order data.
+- VERIFIED: No tenant VAT registration field existed before this task. Added the minimal optional `vat_registration_number` field with an empty default in the existing Brand settings flow.
+- VERIFIED: Staff/owner receipt rendering reuses the existing tenant-scoped Orders authorization and renders from the selected order snapshot. No receipt ledger/table was introduced.
+- VERIFIED: Guest receipt access requires the server-issued anonymous session cookie to match `orders.anonymous_session_id`, the session tenant to match the order tenant, and the session to remain active. Guessing another order id/number does not enumerate receipts.
+- VERIFIED: Receipt uses the existing `window.print()` pattern and is explicitly labeled in Arabic and English as an informal receipt, not a ZATCA-compliant tax invoice. It does not claim payment and does not perform electronic collection.
+- VERIFIED: Quality run `2442` passed typecheck, tests, lint, production build, all-theme browser QA, performance fixture, Studio browser QA and Platform Admin browser QA. W9 Orders QA run `627` is the corresponding browser check for the staff receipt action.
+- UNKNOWN: A live Production customer order was not used to send/print a receipt in this session; CI used isolated fixtures. No production deployment was authorized.
+- EXACT NEXT TASK: Owner reviews PR #298 and authorizes the single release batch; keep Production deployment held until explicit approval.
