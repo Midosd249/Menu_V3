@@ -39,7 +39,7 @@ test("guest receipt is session-bound and non-enumerable", () => {
 });
 test("VAT is optional metadata and receipt is explicitly informal", () => {
   assert.match(migration, /vat_registration_number text not null default ''/);
-  assert.match(types, /vatRegistrationNumber: string/);
+  assert.match(types, /vatRegistrationNumber\?: string/);
   assert.match(map, /vatRegistrationNumber/);
   assert.match(owner, /vatRegistrationNumber/);
   assert.match(brand, /VAT registration number \(optional\)/);
