@@ -28,7 +28,7 @@ test("staff receipt keeps tenant and branch authorization", () => {
   assert.match(orders, /tenant_members/);
   assert.match(domain, /getStaffOrderReceipt/);
   assert.match(domain, /has_branch_access/);
-  assert.match(orders, /branch_id is null/);
+  assert.match(domain, /branch_id is not null/);
   assert.match(studio, /OrderReceiptButton/);
 });
 test("guest receipt is session-bound and non-enumerable", () => {
