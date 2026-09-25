@@ -1,3 +1,24 @@
+# CURRENT VERIFIED POSITION — 2026-09-25 — ORDER RECEIPT PART CLOSED
+
+- VERIFIED: PR #298 `feat(orders): add informal customer receipts` is merged into `main`.
+- VERIFIED: merge commit is `a6f9ff63a360cdb65d5c831b46659829cf512e57`.
+- VERIFIED: `main` now points to `a6f9ff63a360cdb65d5c831b46659829cf512e57`.
+- VERIFIED: Pre-merge Quality #2470 and W9 Orders QA #655 passed on final implementation HEAD `25a1c75b6911c9c49a503e4e5bd9453f4142366e`.
+- VERIFIED: staff receipt access is server-authorized and branch-scoped; guest receipt access is bound to the server-controlled anonymous session.
+- VERIFIED: first-order anonymous-session binding was fixed and covered by contract tests.
+- VERIFIED: receipt uses existing `orders`/`order_items` data; no receipt ledger/table was added.
+- VERIFIED: optional tenant VAT registration metadata was added; no tax amount is invented.
+- VERIFIED: no payment processing, payment-status claim, ZATCA integration, or automated e-invoicing was introduced.
+- VERIFIED: PR #297 remains merged at `66e0a21ad19ea0fb15acd81582792f3f10d02753`.
+- UNKNOWN: post-merge GitHub Actions runs for the squash merge commit are not exposed by the PR-triggered workflow lookup; pre-merge quality gates are the verified CI evidence.
+- UNKNOWN: Production deployment of this merged change. No Production deployment was performed by this task.
+
+## EXACT NEXT TASK
+
+**No further implementation work for the order-receipt task. Treat PR #298 and this receipt scope as CLOSED. Do not redo, redesign, or redeploy this scope unless a new explicit task provides new evidence.**
+
+---
+
 # CURRENT VERIFIED AI POSITION — 2026-09-24 — PHASE 6 CLOSED / VERIFIED / MERGED
 
 - VERIFIED: canonical `main` HEAD before this continuity commit is `2dc9f7322b454625a6904c5838e7f016ecc4fe19`.
