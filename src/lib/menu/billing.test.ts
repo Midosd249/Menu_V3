@@ -19,6 +19,7 @@ const invoice: SubscriptionInvoice = {
   periodEnd: "2027-09-01T00:00:00.000Z",
   status: "issued",
   issuedAt: "2026-09-17T00:00:00.000Z",
+  notes: "Thank you for your continued partnership.",
 };
 
 test("PH-06 annual invoice WhatsApp message is explicit about issued status and interval", () => {
@@ -27,6 +28,7 @@ test("PH-06 annual invoice WhatsApp message is explicit about issued status and 
   assert.match(message, /1490\.00 SAR/);
   assert.match(message, /سنوية/);
   assert.match(message, /لا تمثل هذه الرسالة إثبات دفع/);
+  assert.match(message, /ملاحظات: Thank you for your continued partnership\./);
 });
 
 test("PH-05 invoice WhatsApp URL remains click-to-chat only", () => {
