@@ -34,6 +34,24 @@ jobs:
           alter table tenant_members add column if not exists is_active boolean not null default true;
           alter table orders add column if not exists archived_at timestamptz;
           alter table tenants add column if not exists vat_registration_number text not null default '';
+          create schema if not exists menu_v3;
+          create or replace function menu_v3.has_branch_access(p_user_id text, p_tenant_id text, p_branch_id text)
+          returns boolean
+          language sql stable
+          as $
+            select exists (
+              select 1
+              from tenant_members tm
+              where tm.user_id = p_user_id
+                and tm.tenant_id = p_tenant_id
+                and tm.is_active = true
+                and (
+                  tm.access_role in ('tenant_owner','branch_manager')
+                  or tm.branch_scope is null
+                  or p_branch_id = any(tm.branch_scope)
+                )
+            );
+          $;
           insert into tenant_members (tenant_id,user_id,role,access_role,branch_scope)
           values ('demo-nafas','dev-user','owner','tenant_owner',null)
           on conflict (tenant_id,user_id) do update set is_active=true,role='owner',access_role='tenant_owner',branch_scope=null;
