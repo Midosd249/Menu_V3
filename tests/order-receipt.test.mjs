@@ -49,7 +49,7 @@ test("VAT is optional metadata and receipt is explicitly informal", () => {
   assert.doesNotMatch(pub, /payment|paid|charge|webhook/i);
 });
 test("staff and guest surfaces expose print receipt", () => {
-  assert.match(studio, /طباعة الإيصال/);
+  assert.match(studio, /OrderReceiptButton/);
   assert.match(publicMenu, /OrderReceiptButton/);
   assert.match(taste, /OrderReceiptButton/);
   assert.match(signal, /OrderReceiptButton/);
