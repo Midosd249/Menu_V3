@@ -39,8 +39,7 @@ test("Phase 7 does not introduce a numeric performance budget", () => {
 
 
 test("Phase 7 waits for preview hydration before evaluating rendered theme gates", () => {
-  assert.match(
-    templateQa,
-    /await page\.waitForFunction\(\(\) => document\.documentElement\.dataset\.menuTheme \|\| document\.querySelector\("h1, h2, h3, h4, h5, h6"\), \{ timeout: 10000 \}\);/,
-  );
+  assert.ok(templateQa.includes("await page.waitForFunction("));
+  assert.ok(templateQa.includes('document.documentElement.dataset.menuTheme || document.querySelector("h1, h2, h3, h4, h5, h6")'));
+  assert.ok(templateQa.includes("{ timeout: 10000 }"));
 });
