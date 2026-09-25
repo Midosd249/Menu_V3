@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Printer } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import { getPublicOrderReceipt } from "@/lib/menu/order-public";
@@ -48,32 +49,29 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
       <section className="grid gap-2 border-b border-black/15 py-4 text-sm">
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "رقم الطلب" : "Order number"}</span><strong dir="ltr">#{receipt.orderNumber}</strong></div>
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "التاريخ والوقت" : "Date & time"}</span><span dir="ltr">{date(receipt.createdAt, lang)}</span></div>
-        {receipt.customerName ? <div className="flex justify-between gap-4"><span>{lang === "ar" ? "العميل" : "Customer"}</span><span dir="auto">{receipt.customerName}</span></div> : null}
       </section>
-      <section className="grid gap-3 py-4">
+      <section className="grid gap-2 py-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] gap-2 border-b border-black/15 pb-2 text-[10px] font-semibold uppercase tracking-wide text-black/55" dir={lang === "ar" ? "rtl" : "ltr"}>
+          <span>{lang === "ar" ? "الصنف" : "Item"}</span>
+          <span>{lang === "ar" ? "الكمية" : "Qty"}</span>
+          <span>{lang === "ar" ? "سعر الوحدة" : "Unit"}</span>
+          <span>{lang === "ar" ? "الإجمالي" : "Total"}</span>
+        </div>
         {receipt.items.map((item) => (
-          <div key={item.id} className="grid gap-1 border-b border-black/10 pb-3 last:border-b-0 last:pb-0">
-            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
-              <span dir="ltr">×{item.quantity}</span>
-              <span dir="auto">{lang === "ar" ? item.nameAr || item.nameEn : item.nameEn || item.nameAr}</span>
-              <span dir="ltr" className="whitespace-nowrap">{money(item.lineTotal, receipt.currency, lang)}</span>
-            </div>
-            <div className="flex justify-between gap-3 text-xs text-black/60" dir="ltr">
-              <span>{money(item.unitPrice, receipt.currency, lang)} × {item.quantity}</span>
-              {item.note ? <span dir="auto">{item.note}</span> : null}
-            </div>
+          <div key={item.id} className="grid grid-cols-[minmax(0,1fr)_auto_auto_auto] items-start gap-2 border-b border-black/10 py-2 last:border-b-0" dir={lang === "ar" ? "rtl" : "ltr"}>
+            <span className="min-w-0 break-words text-xs font-medium" dir="auto">{lang === "ar" ? item.nameAr || item.nameEn : item.nameEn || item.nameAr}</span>
+            <span className="text-xs tabular-nums" dir="ltr">{item.quantity}</span>
+            <span className="whitespace-nowrap text-xs tabular-nums" dir="ltr">{money(item.unitPrice, receipt.currency, lang)}</span>
+            <span className="whitespace-nowrap text-xs font-semibold tabular-nums" dir="ltr">{money(item.lineTotal, receipt.currency, lang)}</span>
           </div>
         ))}
       </section>
       <section className="grid gap-2 border-t border-black/20 pt-4 text-sm">
         <div className="flex justify-between gap-4"><span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span><span dir="ltr">{money(receipt.subtotal, receipt.currency, lang)}</span></div>
         {receipt.vatRegistrationNumber ? (
-          <div className="grid gap-1">
-            <div className="flex justify-between gap-4">
-              <span>{lang === "ar" ? "الضريبة / VAT" : "Tax / VAT"}</span>
-              <span>{lang === "ar" ? "غير مسجلة في الطلب" : "Not recorded in order data"}</span>
-            </div>
-            <div className="text-xs text-black/60" dir="ltr">{lang === "ar" ? "رقم التسجيل" : "VAT registration"}: {receipt.vatRegistrationNumber}</div>
+          <div className="flex justify-between gap-4">
+            <span>{lang === "ar" ? "رقم تسجيل VAT" : "VAT registration"}</span>
+            <span dir="ltr">{receipt.vatRegistrationNumber}</span>
           </div>
         ) : null}
         <div className="flex justify-between gap-4 border-t border-black/20 pt-2 text-base font-bold">
@@ -82,8 +80,7 @@ function ReceiptView({ receipt, lang }: { receipt: OrderReceiptData; lang: "ar" 
         </div>
       </section>
       <footer className="mt-6 border-t border-black/15 pt-4 text-center text-xs leading-5 text-black/60">
-        <p>{lang === "ar" ? "إيصال غير رسمي — ليس فاتورة ضريبية متوافقة مع ZATCA" : "Informal receipt — not a ZATCA-compliant tax invoice"}</p>
-        <p className="mt-1">{lang === "ar" ? "هذا الإيصال لا يثبت السداد ولا ينفذ أي تحصيل إلكتروني." : "This receipt does not confirm payment or perform electronic collection."}</p>
+        <p>{lang === "ar" ? "إيصال غير رسمي — ليس فاتورة ضريبية متوافقة مع متطلبات هيئة الزكاة والضريبة والجمارك (ZATCA)." : "Informal receipt — not a ZATCA-compliant tax invoice."}</p>
       </footer>
     </article>
   );
@@ -94,10 +91,15 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
   const [printable, setPrintable] = useState<OrderReceiptData | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const previousTitleRef = useRef<string | null>(null);
 
   useEffect(() => {
     const done = () => {
       document.body.classList.remove("printing-order-receipt");
+      if (previousTitleRef.current !== null) {
+        document.title = previousTitleRef.current;
+        previousTitleRef.current = null;
+      }
       setPrintable(null);
       setBusy(false);
     };
@@ -105,6 +107,10 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
     return () => {
       window.removeEventListener("afterprint", done);
       document.body.classList.remove("printing-order-receipt");
+      if (previousTitleRef.current !== null) {
+        document.title = previousTitleRef.current;
+        previousTitleRef.current = null;
+      }
     };
   }, []);
 
@@ -136,19 +142,51 @@ export function OrderReceiptButton({ receipt, orderId, staffOrderId, className }
       return;
     }
     setPrintable(data);
+    previousTitleRef.current = document.title;
+    document.title = `Receipt-${data.orderNumber}`;
     document.body.classList.add("printing-order-receipt");
     window.setTimeout(() => window.print(), 40);
   }
 
   return (
     <>
-      <style>{"@media print { body.printing-order-receipt > * { visibility:hidden!important; } body.printing-order-receipt .order-receipt-print { visibility:visible!important; position:fixed!important; inset:0!important; width:100%!important; max-width:none!important; min-height:100vh!important; } body.printing-order-receipt .order-receipt-print * { visibility:visible!important; } }"}</style>
+      <style>{`
+        .order-receipt-portal { display: none; }
+        @media print {
+          @page { size: auto; margin: 8mm; }
+          body.printing-order-receipt > *:not(.order-receipt-portal) { display: none !important; }
+          body.printing-order-receipt { margin: 0 !important; background: #fff !important; }
+          body.printing-order-receipt .order-receipt-portal {
+            display: block !important;
+            position: static !important;
+            width: 100% !important;
+            min-height: 0 !important;
+          }
+          body.printing-order-receipt .order-receipt-print {
+            width: 80mm !important;
+            max-width: 80mm !important;
+            min-height: 0 !important;
+            margin: 0 auto !important;
+            padding: 4mm !important;
+            box-shadow: none !important;
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+          }
+          body.printing-order-receipt .order-receipt-print section,
+          body.printing-order-receipt .order-receipt-print footer {
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+        }
+      `}</style>
       <button type="button" onClick={() => void printReceipt()} disabled={busy} className={cn("inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-paper px-4 text-sm font-medium", className)}>
         <Printer className="size-4" aria-hidden="true" />
         {busy ? (lang === "ar" ? "جاري تجهيز الإيصال…" : "Preparing receipt…") : (lang === "ar" ? "طباعة الإيصال" : "Print receipt")}
       </button>
       {error ? <p role="alert" className="text-xs text-danger">{error}</p> : null}
-      {printable ? <div className="hidden print:block"><ReceiptView receipt={printable} lang={lang} /></div> : null}
+      {printable && typeof document !== "undefined"
+        ? createPortal(<div className="order-receipt-portal"><ReceiptView receipt={printable} lang={lang} /></div>, document.body)
+        : null}
     </>
   );
 }
