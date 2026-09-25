@@ -34,6 +34,7 @@ test("staff receipt keeps tenant and branch authorization", () => {
 test("guest receipt is session-bound and non-enumerable", () => {
   assert.match(pub, /ANONYMOUS_SESSION_COOKIE/);
   assert.match(pub, /o\.anonymous_session_id = \$\{cookie\}/);
+  assert.match(pub, /const anonymousSessionId = anonymousSession\.id/);
   assert.match(pub, /s\.id = o\.anonymous_session_id/);
   assert.match(pub, /s\.expires_at > now\(\)/);
   assert.match(publicMenu, /id: result\.data\.orderId/);
