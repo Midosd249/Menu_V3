@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { callStructuredProvider, AI_PROVIDER_DEFAULTS } from "@/lib/menu/ai-providers";
@@ -6,6 +7,8 @@ export const AI_PROMPT_VERSION = "menu-v3-r1-2026-09-11";
 export const AI_DEFAULT_PROVIDER = "auto";
 export const AI_DEFAULT_MODEL = AI_PROVIDER_DEFAULTS.mercury;
 export const AI_DEFAULT_RATE_LIMIT_PER_MINUTE = 20;
+export const AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT = 500;
+export const AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE = 60;
 export const AI_MAX_PROMPT_CHARS = 12_000;
 export const AI_TIMEOUT_MS = 60_000;
 
@@ -37,7 +40,23 @@ function getRateLimit() {
   return Math.max(1, Math.min(120, Math.floor(configured)));
 }
 
-async function consumeRateLimit(sql: Sql, tenantId: string, userId: string) {
+function getGuestAssistantIpRateLimit() {
+  const configured = Number(
+    process.env.AI_GUEST_ASSISTANT_REQUESTS_PER_IP_PER_MINUTE ?? AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE,
+  );
+  if (!Number.isFinite(configured)) return AI_DEFAULT_GUEST_ASSISTANT_IP_RATE_LIMIT_PER_MINUTE;
+  return Math.max(1, Math.min(300, Math.floor(configured)));
+}
+
+function getGuestAssistantDailyLimit() {
+  const configured = Number(
+    process.env.AI_GUEST_ASSISTANT_REQUESTS_PER_TENANT_PER_DAY ?? AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT,
+  );
+  if (!Number.isFinite(configured)) return AI_DEFAULT_GUEST_ASSISTANT_DAILY_LIMIT;
+  return Math.max(1, Math.min(10_000, Math.floor(configured)));
+}
+
+async function consumeMinuteRateLimit(sql: Sql, tenantId: string, userId: string, limit: number) {
   const windowStart = new Date(Math.floor(Date.now() / 60_000) * 60_000);
   const rows = await sql<{ request_count: number }>`
     insert into ai_request_rate_limits (tenant_id, user_id, window_start, request_count)
@@ -46,12 +65,41 @@ async function consumeRateLimit(sql: Sql, tenantId: string, userId: string) {
     do update set request_count = ai_request_rate_limits.request_count + 1, updated_at = now()
     returning request_count
   `;
-  return Number(rows[0]?.request_count ?? 0) <= getRateLimit();
+  return Number(rows[0]?.request_count ?? 0) <= limit;
 }
 
-export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T>): Promise<{ ok: true; data: z.output<T> } | AiFailure> {
+async function consumeRateLimit(
+  sql: Sql,
+  tenantId: string,
+  userId: string,
+  operation: string,
+  ipKey?: string,
+) {
+  if (!(await consumeMinuteRateLimit(sql, tenantId, userId, getRateLimit()))) return false;
+
+  if (operation !== "guest.menu_assistant") return true;
+  const normalizedIpKey = ipKey?.trim() ? createHash("sha256").update(ipKey.trim()).digest("hex") : undefined;
+  if (normalizedIpKey && !(await consumeMinuteRateLimit(sql, tenantId, `guest-ip:${normalizedIpKey}`, getGuestAssistantIpRateLimit()))) return false;
+
+  const dailyLimit = getGuestAssistantDailyLimit();
+  const dailyWindowStart = new Date();
+  dailyWindowStart.setUTCHours(0, 0, 0, 0);
+  const dailyRows = await sql<{ request_count: number }>`
+    insert into ai_guest_assistant_daily_limits (tenant_id, window_start, request_count)
+    values (${tenantId}, ${dailyWindowStart}, 1)
+    on conflict (tenant_id, window_start)
+    do update
+      set request_count = ai_guest_assistant_daily_limits.request_count + 1,
+          updated_at = now()
+      where ai_guest_assistant_daily_limits.request_count < ${dailyLimit}
+    returning request_count
+  `;
+  return Number(dailyRows[0]?.request_count ?? dailyLimit + 1) <= dailyLimit;
+}
+
+export async function generateStructuredAi<T extends z.ZodTypeAny>(args: GenerateStructuredAiInput<T> & { rateLimitIp?: string }): Promise<{ ok: true; data: z.output<T> } | AiFailure> {
   try {
-    if (!(await consumeRateLimit(args.sql, args.tenantId, args.userId))) {
+    if (!(await consumeRateLimit(args.sql, args.tenantId, args.userId, args.operation, args.rateLimitIp))) {
       return { ok: false, code: "ai_rate_limited", error: "تم تجاوز حد استخدام مساعد الذكاء الاصطناعي مؤقتاً. حاول لاحقاً." };
     }
 
