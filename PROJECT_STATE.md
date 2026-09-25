@@ -1,3 +1,19 @@
+# 2026-09-25 — Unified Order Receipt Preview — READY FOR REVIEW
+
+- VERIFIED: PR #303 `feat(orders): unify receipt preview and printing` is open against `main`.
+- VERIFIED: PR #303 head is `61065efc2d64f7c60e236dc7f681460241616aa3`.
+- VERIFIED: The shared `OrderReceiptButton` / `ReceiptView` now provides one receipt presentation for Studio and public-menu flows.
+- VERIFIED: The Studio/owner flow opens a professional on-screen receipt preview before printing.
+- VERIFIED: Printed output remains isolated to the receipt portal at 80mm and keeps the dynamic `Receipt-{orderNumber}` title lifecycle.
+- VERIFIED: Arabic receipt dates explicitly use the Gregorian calendar.
+- VERIFIED: Receipt content excludes customer notes, customer contact actions, workflow/status controls, and source metadata.
+- VERIFIED: VAT registration is optional metadata only; no VAT amount is invented.
+- VERIFIED: GitHub Quality completed successfully on head `61065efc2d64f7c60e236dc7f681460241616aa3`.
+- VERIFIED: W9 Orders QA completed successfully on the same head.
+- UNKNOWN: Physical printer output on a real 57mm/80mm printer has not been directly observed.
+- BLOCKED: Vercel preview deployment is constrained by the current account deployment-rate limit; no retry was performed.
+- DEPLOYMENT: NOT DEPLOYED. Production remains on the previously verified receipt-print deployment.
+- EXACT NEXT TASK: Owner reviews PR #303 and authorizes merge/release if accepted; do not merge or deploy automatically.
 # 2026-09-25 — Order Receipt Print Isolation — MERGED / DEPLOYED
 
 - VERIFIED: PR #301 `fix(orders): isolate receipt print output` passed the full GitHub Quality run #2476, including all-theme browser QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, performance evidence upload, and cleanup.
