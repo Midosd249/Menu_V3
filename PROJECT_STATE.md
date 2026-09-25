@@ -1227,3 +1227,18 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - VERIFIED: Existing latest production deployment remains `dpl_2wvWPVsr1i2q7CnVBSkPs6xPtj78`, READY, target production, but it is still commit `b552a7d6a0c8b369a6b6b54774a0fd9b26461aa1`; therefore Production != main HEAD.
 - DEPLOYMENT STATUS: DEPLOYMENT_BLOCKED — no false production claim made.
 - EXACT NEXT ACTION: Once the Vercel deployment quota resets, deploy `main` commit `abb124101531242a6cabf070db1864dcda4aa9c1` exactly once to production, verify READY + target production + exact SHA + Production == main HEAD, then close this task.
+
+
+# 2026-09-26 — Guest Assistant Cost-Abuse Hardening — MERGED + DEPLOYED
+
+- VERIFIED: PR #304 merged into `main` with squash; application merge commit: `abb124101531242a6cabf070db1864dcda4aa9c1`.
+- VERIFIED: Continuity PR #305 merged; current `main` HEAD: `58019aff93a552c07717bb45abe2eca46d609a73`.
+- VERIFIED: GitHub Quality run `36200820867` SUCCESS, including typecheck, tests, lint, production build, Browser Template QA, Golden performance fixture, Customer Lifecycle browser QA, Studio browser QA and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA run `36200820957` SUCCESS.
+- VERIFIED: Production deployment `dpl_FhF8sWoimr7s5UdTUEGq5ZGVwqmK` is READY, target production, source git, commit `58019aff93a552c07717bb45abe2eca46d609a73`.
+- VERIFIED: Production deployment aliases include `menu-v3-kohl.vercel.app`, `menu-v3-midosd2s-projects.vercel.app`, and `menu-v3-git-main-midosd2s-projects.vercel.app`.
+- VERIFIED: Production == current `main` HEAD at verification time: `58019aff93a552c07717bb45abe2eca46d609a73`.
+- VERIFIED: No AI provider was added, removed, paused, reordered, or modified. Only Guest Assistant admission/rate-limiting logic and the required QA synchronization changed.
+- IMPLEMENTATION STATUS: MERGED.
+- DEPLOYMENT STATUS: DEPLOYED.
+- EXACT NEXT ACTION: None for this atomic task; stop.
