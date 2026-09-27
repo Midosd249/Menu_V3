@@ -27,9 +27,12 @@ const responseSchema = {
 
 const runtimeResponseSchema = z.object({ message: z.string().trim().min(20).max(2000) });
 
-/** Build the official click-to-chat URL without selecting a recipient. */
-export function buildWhatsAppShareUrl(message: string): string {
-  return `https://wa.me/?text=${encodeURIComponent(message)}`;
+/** Build the official click-to-chat URL, optionally selecting a fixed recipient. */
+export function buildWhatsAppShareUrl(message: string, recipient?: string): string {
+  const normalizedRecipient = recipient?.replace(/\D/g, "");
+  return normalizedRecipient
+    ? `https://wa.me/${normalizedRecipient}?text=${encodeURIComponent(message)}`
+    : `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
 export const generateWhatsAppReportMessage = createServerFn({ method: "POST" })

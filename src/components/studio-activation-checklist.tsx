@@ -58,7 +58,7 @@ export function StudioActivationChecklist() {
       titleEn: "Publish the menu",
       bodyAr: published ? "المنيو منشور ويمكن للضيوف الوصول إليه." : menuReady ? "راجع المنيو ثم انشره عندما يكون جاهزاً للضيوف." : "سيصبح النشر متاحاً بعد إضافة محتوى المنيو.",
       bodyEn: published ? "Your menu is published and available to guests." : menuReady ? "Review your menu, then publish when it is ready for guests." : "Publishing comes after you add menu content.",
-      href: "/studio/settings",
+      href: "/studio/settings#publishing",
       ctaAr: published ? "مراجعة النشر" : "مراجعة ونشر",
       ctaEn: published ? "Review publishing" : "Review & publish",
     },

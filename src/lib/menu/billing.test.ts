@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { buildInvoiceWhatsAppMessage, buildInvoiceWhatsAppUrl, type SubscriptionInvoice } from "./billing-whatsapp.ts";
+
+const billingRoute = readFileSync("src/routes/studio/billing.tsx", "utf8");
 
 const invoice: SubscriptionInvoice = {
   id: "invoice-1",
@@ -29,6 +32,18 @@ test("PH-06 annual invoice WhatsApp message is explicit about issued status and 
   assert.match(message, /سنوية/);
   assert.match(message, /لا تمثل هذه الرسالة إثبات دفع/);
   assert.match(message, /ملاحظات: Thank you for your continued partnership\./);
+});
+
+test("Billing upgrade CTA reuses the existing WhatsApp helper and carries tenant/plan context", () => {
+  assert.match(billingRoute, /buildWhatsAppShareUrl/);
+  assert.match(billingRoute, /billing\.tenantName/);
+  assert.match(billingRoute, /desiredPlan/);
+  assert.match(billingRoute, /Requested plan|الخطة المطلوبة/);
+  assert.match(billingRoute, /PLATFORM_ADMIN_WHATSAPP_RECIPIENT = "966549598318"/);
+});
+
+test("Billing upgrade CTA uses the fixed platform-admin WhatsApp recipient", () => {
+  assert.match(billingRoute, /buildWhatsAppShareUrl[\s\S]*PLATFORM_ADMIN_WHATSAPP_RECIPIENT/);
 });
 
 test("PH-05 invoice WhatsApp URL remains click-to-chat only", () => {
