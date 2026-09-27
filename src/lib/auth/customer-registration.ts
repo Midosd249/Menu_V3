@@ -36,20 +36,32 @@ export const saveCustomerRegistrationPhone = createServerFn({ method: "POST" })
       const phone = `+${digits}`;
       const sql = await getSql();
       const existing = await sql`select "id" from "user" where "phoneNumber" = ${phone} and "id" <> ${context.userId} limit 1`;
-      if (existing[0]) return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
+      if (existing[0]) return { ok: false, code: "conflict", error: "رقم الجوال مستخدم بالفعل. / Phone number is already in use." };
 
-      const sessionRows = await sql<{ user_created_at: string; session_created_at: string }>`
-        select u."createdAt" as user_created_at, s."createdAt" as session_created_at
-        from "user" u
-        join "session" s on s."userId" = u."id"
-        where u."id" = ${context.userId}
-        order by s."createdAt" desc
+      const userRows = await sql<{ phone_number: string | null; user_created_at: string; self_serve_eligible_at: string | null }>`
+        select "phoneNumber" as phone_number, "createdAt" as user_created_at, "selfServeEligibleAt" as self_serve_eligible_at
+        from "user"
+        where "id" = ${context.userId}
+        limit 1
+      `;
+      const userRow = userRows[0];
+      if (!userRow) return { ok: false, code: "not_found", error: GENERIC_REGISTRATION_ERROR.ar };
+      if (userRow.phone_number != null || userRow.self_serve_eligible_at != null) {
+        return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
+      }
+
+      const sessionRows = await sql<{ session_created_at: string }>`
+        select "createdAt" as session_created_at
+        from "session"
+        where "userId" = ${context.userId}
+        order by "createdAt" desc
         limit 1
       `;
       const session = sessionRows[0];
-      const userCreatedAt = session ? new Date(session.user_created_at).getTime() : 0;
+      const userCreatedAt = new Date(userRow.user_created_at).getTime();
       const sessionCreatedAt = session ? new Date(session.session_created_at).getTime() : 0;
       const isNewRegistration = userCreatedAt > 0 && sessionCreatedAt >= userCreatedAt && sessionCreatedAt - userCreatedAt <= NEW_REGISTRATION_SESSION_WINDOW_MS;
+      if (!isNewRegistration) return { ok: false, code: "unavailable", error: GENERIC_REGISTRATION_ERROR.ar };
 
       await sql`
         update "user"

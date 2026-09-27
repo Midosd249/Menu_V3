@@ -920,3 +920,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT TASK
 **Review PR #304 CI results; if all gates pass, owner reviews and authorizes merge. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Service Onboarding Blocking Fixes — PR #307
+
+- VERIFIED: PR #307 implements only the two blocking onboarding fixes: resumable signup after an incomplete phone-persistence step, and a server-side publish guard requiring at least one category and one available product.
+- VERIFIED: duplicate-phone validation remains server-side and now returns a clear bilingual conflict message without changing uniqueness enforcement.
+- VERIFIED: publish validation is enforced inside `updateTenant`; no branch-completeness requirement was added.
+- VERIFIED: GitHub Quality run #2508 passed typecheck, full repository tests, lint, production build, browser template QA, Golden performance fixture, Customer Lifecycle browser QA, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: W9 Orders QA run #684 passed.
+- VERIFIED: Vercel PR status is successful for the current PR head; no Production deployment was performed.
+- IMPLEMENTATION STATUS: VERIFIED_LOCALLY / CI VERIFIED — PR #307 OPEN.
+- DEPLOYMENT STATUS: NOT DEPLOYED — merge/deployment intentionally held for owner review.
+- UNKNOWN: live Production execution of the failed-phone retry and direct publish mutation was not performed in this session; CI covers the repository regression contracts and browser quality gates.
+
+## EXACT NEXT TASK
+**Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**

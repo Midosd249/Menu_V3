@@ -59,10 +59,12 @@ test("duplicate phone errors do not disclose account ownership", () => {
   assert.doesNotMatch(registration, /select "id" from "user" where "phoneNumber" = \$\{phone\} limit 1/);
 });
 
-test("duplicate email errors are mapped to the same generic registration error", () => {
+test("duplicate email retries the incomplete signup account instead of dead-ending", () => {
   const signupBlock = login.match(/const result = await authClient\.signUp\.email\([\s\S]*?if \(result\.error\)[\s\S]*?saveCustomerRegistrationPhone/);
-  assert.ok(signupBlock, "signup block should map Better Auth errors before phone persistence");
-  assert.match(signupBlock[0], /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
+  assert.ok(signupBlock, "signup block should remain ordered before phone persistence");
+  assert.match(signupBlock[0], /if \(result\.error\) \{[\s\S]*authClient\.signIn\.email\(\{ email, password \}\)/);
+  assert.match(signupBlock[0], /if \(retry\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
+  assert.doesNotMatch(signupBlock[0], /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
   assert.doesNotMatch(signupBlock[0], /result\.error\.message/);
   assert.match(contract, /We couldn't create the account/);
   assert.match(contract, /تعذر إنشاء الحساب/);
