@@ -10,7 +10,8 @@ const migration = read("migrations/20260927070000_self_serve_trial.sql");
 const subscriptions = read("src/lib/menu/subscriptions.ts");
 const commercial = read("src/lib/menu/commercial.ts");
 const studioShell = read("src/components/studio-shell.tsx");
-const billingWhatsApp = read("src/lib/menu/ai-whatsapp.ts");
+const billingWhatsApp = read("src/lib/menu/billing-whatsapp.ts");
+const whatsappShare = read("src/lib/menu/ai-whatsapp.ts");
 const platformSubscriptions = read("src/lib/menu/platform-subscriptions.ts");
 
 test("new tenant provisioning grants Pro 14-day trial at the database boundary", () => {
@@ -51,7 +52,7 @@ test("Studio trial banner shows remaining days and reversion contact CTA", () =>
 });
 
 test("billing WhatsApp click-to-chat pattern is reused rather than introducing a new recipient service", () => {
-  assert.match(billingWhatsApp, /buildWhatsAppShareUrl/);
+  assert.match(whatsappShare, /buildWhatsAppShareUrl/);
   assert.match(billingWhatsApp, /https:\/\/wa\.me\/\?text=/);
 });
 
