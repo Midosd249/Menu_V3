@@ -50,7 +50,7 @@ test("Studio activation guides a new owner toward first value without inventing 
   assert.match(page, /StudioActivationChecklist/);
   assert.match(activation, /\/studio\/menu/);
   assert.match(activation, /\/studio\/design/);
-  assert.match(activation, /\/studio\/settings/);
+  assert.match(activation, /\/studio\/settings#publishing/);
   assert.match(activation, /\/studio\/qr/);
   assert.match(activation, /tenant\.isPublished/);
   assert.match(activation, /categories\.some/);
