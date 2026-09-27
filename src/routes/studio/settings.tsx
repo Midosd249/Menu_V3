@@ -39,7 +39,7 @@ function SettingsPage() {
         </div>
       </section>
 
-      <section className="grid gap-3 rounded-xl border border-line p-5">
+      <section id="publishing" className="grid scroll-mt-6 gap-3 rounded-xl border border-line p-5">
         <h2 className="font-medium">{lang === "ar" ? "النشر" : "Publishing"}</h2>
         <p className="text-sm text-ink-soft">
           {tenant.isPublished
