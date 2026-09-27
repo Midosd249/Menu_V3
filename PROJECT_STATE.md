@@ -1297,3 +1297,21 @@ Owner review PR #309 after all required CI checks are green. Do not merge or dep
 
 ## EXACT NEXT ACTION
 Deploy the final continuity commit once CI is green, verify Production == main HEAD, then stop.
+
+
+# 2026-09-27 — Onboarding Commercial Medium Gaps — PR #311 — VERIFIED / OPEN
+
+- VERIFIED: PR #311 is open against `main`, head `ac913fedc6e35148048ffa821aced6abb839bcd2`, with no merge or Production deployment.
+- VERIFIED: Gap 1 keeps the existing Studio Activation Checklist as the primary entrypoint and deep-links the publish step to `/studio/settings#publishing`; no standalone route or publish behavior was added.
+- VERIFIED: Gap 2 adds a bilingual Billing upgrade CTA with Growth/Pro selection and reuses the existing `buildWhatsAppShareUrl` click-to-chat helper; the prefilled message contains the tenant name and requested plan.
+- VERIFIED: No trial, signup, publish-guard, payment gateway, automatic collection, entitlement override, database migration, auth/RLS, tenant isolation, or branch isolation changes are in the PR diff.
+- VERIFIED: GitHub Quality run `36328911931` passed typecheck, repository tests, W7.4–W7.10 contract gates, lint, production build, all-theme browser QA, Golden performance fixture, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA run `36328911910` passed the Orders browser suite.
+- VERIFIED: Vercel PR preview status is success; this is preview/status evidence only and is not a Production deployment claim.
+- UNKNOWN: No verified platform-admin WhatsApp phone number exists in the repository. The reused helper intentionally creates `https://wa.me/?text=` without selecting a recipient, so no unverified admin number was invented.
+- IMPLEMENTATION STATUS: `READY_TO_PUSH` / PR OPEN — CI VERIFIED.
+- DEPLOYMENT STATUS: `NOT DEPLOYED` — merge and deployment intentionally held for owner review.
+
+## EXACT NEXT TASK
+
+**Owner reviews PR #311 and authorizes merge/release if accepted; do not merge or deploy automatically.**
