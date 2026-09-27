@@ -1284,3 +1284,16 @@ Owner review PR #309 after all required CI checks are green. Do not merge or dep
 - VERIFIED: GitHub W9 Orders QA run #690 completed SUCCESS on the implementation head before this documentation-only continuity refresh.
 - VERIFIED: The only subsequent changes are this continuity documentation refresh; no application behavior changed after the successful implementation checks.
 - STATUS: PR #309 remains OPEN and merge/deployment remain held for owner review.
+
+
+# 2026-09-27 — Self-Serve 14-Day Pro Trial — MERGED + DEPLOYED
+
+- VERIFIED: PR #309 merged by squash into `main` at application commit `36d0accbff092df7d179bc54e0c2e383cd4ff4d4`.
+- VERIFIED: GitHub Quality #2518 = SUCCESS on the final PR head.
+- VERIFIED: W9 Orders QA #693 = SUCCESS on the final PR head.
+- VERIFIED: Vercel production deployment `dpl_71bSNP27oFvtYCDTNNRV7dC7pRFn` = READY, target production, exact commit `36d0accbff092df7d179bc54e0c2e383cd4ff4d4`.
+- STATUS: MERGED + DEPLOYED.
+- Continuity-only follow-up: this documentation commit must be deployed so the final Production == main HEAD invariant remains true.
+
+## EXACT NEXT ACTION
+Deploy the final continuity commit once CI is green, verify Production == main HEAD, then stop.
