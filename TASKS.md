@@ -1140,3 +1140,13 @@ Owner review PR #309 after GitHub Quality/W9 are green. Do not merge/deploy auto
 - VERIFIED: Quality #2515 = SUCCESS.
 - VERIFIED: W9 Orders QA #690 = SUCCESS.
 - PR #309 OPEN; merge/deployment held for owner review.
+
+
+# 2026-09-27 — Self-Serve Pro Trial — MERGED + DEPLOYED
+
+- VERIFIED: PR #309 merged by squash at application commit `36d0accbff092df7d179bc54e0c2e383cd4ff4d4`.
+- VERIFIED: Quality #2518 = SUCCESS.
+- VERIFIED: W9 Orders QA #693 = SUCCESS.
+- VERIFIED: Vercel production deployment `dpl_71bSNP27oFvtYCDTNNRV7dC7pRFn` = READY, target production, exact commit `36d0accbff092df7d179bc54e0c2e383cd4ff4d4`.
+- STATUS: MERGED + DEPLOYED.
+- Continuity-only follow-up required to make Production == final main HEAD after this documentation update.
