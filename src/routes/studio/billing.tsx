@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Printer, RefreshCw } from "lucide-react";
+import { Printer, RefreshCw, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Flash } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getBillingSummary, type BillingSummary, type SubscriptionInvoice } from "@/lib/menu/billing";
+import { buildWhatsAppShareUrl } from "@/lib/menu/ai-whatsapp";
 
 export const Route = createFileRoute("/studio/billing")({ component: BillingPage });
 
@@ -15,6 +16,7 @@ function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [ok, setOk] = useState(false);
+  const [desiredPlan, setDesiredPlan] = useState<"starter" | "pro">("pro");
 
   async function load() {
     setLoading(true);
@@ -37,6 +39,14 @@ function BillingPage() {
     ? (lang === "ar" ? "سنوية" : "Annual")
     : (lang === "ar" ? "شهرية" : "Monthly");
   const currentPrice = billing?.billingInterval === "annual" ? billing.annualPriceSar : billing?.monthlyPriceSar;
+  const desiredPlanName = desiredPlan === "pro"
+    ? (lang === "ar" ? "احترافي (Pro)" : "Pro")
+    : (lang === "ar" ? "نمو (Growth)" : "Growth");
+  const upgradeWhatsAppUrl = billing
+    ? buildWhatsAppShareUrl(lang === "ar"
+      ? `مرحباً، أريد الترقية في Menu V3.\nالمطعم: ${billing.tenantName}\nالخطة المطلوبة: ${desiredPlanName}`
+      : `Hello, I would like to upgrade my Menu V3 subscription.\nRestaurant: ${billing.tenantName}\nRequested plan: ${desiredPlanName}`)
+    : "";
 
   if (loading) return <div className="grid min-h-[50vh] place-items-center text-sm text-muted">{lang === "ar" ? "جارٍ تحميل الفوترة…" : "Loading billing…"}</div>;
 
@@ -78,6 +88,30 @@ function BillingPage() {
           </div>
 
           {billing.trialEndsAt ? <p className="rounded-2xl bg-sand/40 px-4 py-3 text-sm text-muted">{lang === "ar" ? "نهاية التجربة:" : "Trial ends:"} {formatDate(billing.trialEndsAt, lang)}</p> : null}
+
+          <div className="grid gap-3 rounded-2xl border border-line bg-sand/20 p-4 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="grid gap-2">
+              <div>
+                <p className="text-sm font-semibold">{lang === "ar" ? "الترقية أو الدفع" : "Upgrade or pay"}</p>
+                <p className="mt-1 text-sm leading-6 text-muted">
+                  {lang === "ar"
+                    ? "اختر الخطة المطلوبة وافتح واتساب برسالة جاهزة تتضمن اسم المطعم والخطة. استخدم جهة اتصال المنصة داخل واتساب لإكمال الطلب."
+                    : "Choose the requested plan and open WhatsApp with a prefilled message containing your restaurant name and plan. Use the platform contact in WhatsApp to complete the request."}
+                </p>
+              </div>
+              <label className="grid gap-1 text-xs text-muted">
+                <span>{lang === "ar" ? "الخطة المطلوبة" : "Requested plan"}</span>
+                <select className="h-10 rounded-md border border-line bg-paper px-3 text-sm text-ink" value={desiredPlan} onChange={(event) => setDesiredPlan(event.target.value as "starter" | "pro")}>
+                  <option value="starter">{lang === "ar" ? "نمو (Growth)" : "Growth"}</option>
+                  <option value="pro">{lang === "ar" ? "احترافي (Pro)" : "Pro"}</option>
+                </select>
+              </label>
+            </div>
+            <a href={upgradeWhatsAppUrl || undefined} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-medium text-paper hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <MessageCircle className="size-4" aria-hidden />
+              {lang === "ar" ? "تواصل معنا للترقية" : "Contact us to upgrade"}
+            </a>
+          </div>
 
        </section>
       ) : null}
