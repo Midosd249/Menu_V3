@@ -192,6 +192,23 @@ export const updateTenant = createServerFn({ method: "POST" })
       const member = await membershipOf(sql, context.userId);
       if (!member) return { ok: false, code: "not_found", error: "لا يوجد مطعم" };
       if (!canWriteSettings(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية" };
+
+      if (data.isPublished === true) {
+        const [categoryRows, availableProductRows] = await Promise.all([
+          sql<{ count: number }>`select count(*)::int as count from categories where tenant_id = ${member.tenant_id}`,
+          sql<{ count: number }>`select count(*)::int as count from products where tenant_id = ${member.tenant_id} and is_available = true`,
+        ]);
+        const categoryCount = Number(categoryRows[0]?.count ?? 0);
+        const availableProductCount = Number(availableProductRows[0]?.count ?? 0);
+        if (categoryCount < 1 || availableProductCount < 1) {
+          return {
+            ok: false,
+            code: "conflict",
+            error: "لا يمكن نشر المنيو قبل إضافة تصنيف واحد ومنتج متاح على الأقل. / Publish requires at least one category and one available product.",
+          };
+        }
+      }
+
       await sql`
         update tenants set
           name_ar = coalesce(${data.nameAr ?? null}, name_ar),
