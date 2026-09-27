@@ -45,7 +45,8 @@ function BillingPage() {
   const upgradeWhatsAppUrl = billing
     ? buildWhatsAppShareUrl(lang === "ar"
       ? `مرحباً، أريد الترقية في Menu V3.\nالمطعم: ${billing.tenantName}\nالخطة المطلوبة: ${desiredPlanName}`
-      : `Hello, I would like to upgrade my Menu V3 subscription.\nRestaurant: ${billing.tenantName}\nRequested plan: ${desiredPlanName}`)
+      : `Hello, I would like to upgrade my Menu V3 subscription.\nRestaurant: ${billing.tenantName}\nRequested plan: ${desiredPlanName}`,
+      PLATFORM_ADMIN_WHATSAPP_RECIPIENT)
     : "";
 
   if (loading) return <div className="grid min-h-[50vh] place-items-center text-sm text-muted">{lang === "ar" ? "جارٍ تحميل الفوترة…" : "Loading billing…"}</div>;
