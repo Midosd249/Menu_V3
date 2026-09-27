@@ -1258,3 +1258,24 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Service Onboarding Blocking Fixes — MERGED + DEPLOYED
+
+- VERIFIED: PR #307 was squash-merged into `main` as `2edc504b39c413ffdd06172f18d23a09d1e9d6dd` from PR head `fa22740e76c7ffa1ccc16ceae615f9ef5c8d5987`.
+- VERIFIED: GitHub Quality run #2509 completed SUCCESS on the final PR head.
+- VERIFIED: GitHub W9 Orders QA run #685 completed SUCCESS on the final PR head.
+- VERIFIED: Vercel Production deployment `dpl_8eRZZdXEo1WmoY6JbSDtDRFoZVma` is READY and targets `production`.
+- VERIFIED: Vercel deployment commit SHA is `2edc504b39c413ffdd06172f18d23a09d1e9d6dd`.
+- VERIFIED: Deployment ref is `main`, source is Git, and Production == main HEAD at final verification.
+- VERIFIED: Both scoped onboarding blockers are MERGED + DEPLOYED: resumable signup recovery and server-side empty-publish prevention requiring at least one category and one available product.
+- UNKNOWN: direct live transaction simulation was not executed; CI and deployment identity are the release evidence.
+
+## IMPLEMENTATION STATUS
+**MERGED / VERIFIED**
+
+## DEPLOYMENT STATUS
+**DEPLOYED / VERIFIED**
+
+## EXACT NEXT ACTION
+**None for this atomic task. Stop.**
