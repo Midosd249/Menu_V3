@@ -79,10 +79,14 @@ function Login() {
           throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
         }
         const result = await authClient.signUp.email({ email, password, name });
-        if (result.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
+        if (result.error) {
+          const retry = await authClient.signIn.email({ email, password });
+          if (retry.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
+        }
         const phoneResult = await saveCustomerRegistrationPhone({ data: { phone } });
         if (!phoneResult.ok) {
           if (phoneResult.code === "invalid") throw new Error(lang === "ar" ? "أدخل رقم جوال سعودي صحيح." : "Enter a valid Saudi phone number.");
+          if (phoneResult.code === "conflict") throw new Error(lang === "ar" ? "رقم الجوال مستخدم بالفعل. أدخل رقمًا آخر." : "Phone number is already in use. Enter another number.");
           throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
         }
         await refresh();
