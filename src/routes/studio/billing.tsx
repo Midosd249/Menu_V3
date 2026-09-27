@@ -7,6 +7,8 @@ import { useLang } from "@/lib/lang";
 import { getBillingSummary, type BillingSummary, type SubscriptionInvoice } from "@/lib/menu/billing";
 import { buildWhatsAppShareUrl } from "@/lib/menu/ai-whatsapp";
 
+const PLATFORM_ADMIN_WHATSAPP_RECIPIENT = "966549598318";
+
 export const Route = createFileRoute("/studio/billing")({ component: BillingPage });
 
 function BillingPage() {
