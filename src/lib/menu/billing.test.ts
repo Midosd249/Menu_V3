@@ -43,7 +43,7 @@ test("Billing upgrade CTA reuses the existing WhatsApp helper and carries tenant
 });
 
 test("Billing upgrade CTA uses the fixed platform-admin WhatsApp recipient", () => {
-  assert.match(billingRoute, /buildWhatsAppShareUrl[\\s\\S]*PLATFORM_ADMIN_WHATSAPP_RECIPIENT/);
+  assert.match(billingRoute, /buildWhatsAppShareUrl[\s\S]*PLATFORM_ADMIN_WHATSAPP_RECIPIENT/);
 });
 
 test("PH-05 invoice WhatsApp URL remains click-to-chat only", () => {
