@@ -1120,3 +1120,18 @@ None for this atomic task. Stop.
 
 ## EXACT NEXT TASK
 **Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Service Onboarding Blocking Fixes — MERGED + DEPLOYED
+
+- VERIFIED: PR #307 was squash-merged into `main` as `2edc504b39c413ffdd06172f18d23a09d1e9d6dd`.
+- VERIFIED: GitHub Quality #2509 = SUCCESS.
+- VERIFIED: GitHub W9 Orders QA #685 = SUCCESS.
+- VERIFIED: Vercel Production deployment `dpl_8eRZZdXEo1WmoY6JbSDtDRFoZVma` = READY, target `production`.
+- VERIFIED: Vercel Production commit = `2edc504b39c413ffdd06172f18d23a09d1e9d6dd`.
+- VERIFIED: Production == main HEAD.
+- VERIFIED: The two scoped onboarding blockers are MERGED + DEPLOYED.
+- UNKNOWN: direct live transaction simulation was not performed; CI/deployment evidence is the release evidence.
+
+## EXACT NEXT TASK
+**None for this atomic task. Stop.**
