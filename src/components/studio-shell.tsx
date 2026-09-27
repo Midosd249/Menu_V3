@@ -9,6 +9,8 @@ import { copy, t } from "@/lib/menu/i18n";
 import { useStudio } from "@/lib/menu/studio";
 import { canManageTeam, canWriteSettings, type Permission } from "@/lib/auth/permissions";
 import { getOrderNotificationSummary, type OrderNotificationSummary } from "@/lib/menu/order-notifications";
+import { getMySubscription, type CommercialSnapshot } from "@/lib/menu/commercial";
+import { buildWhatsAppShareUrl } from "@/lib/menu/ai-whatsapp";
 import { cn } from "@/lib/utils";
 import { Sheet } from "@/components/state-panel";
 import { MenuImportPanel } from "@/components/studio/menu-import-panel";
@@ -93,11 +95,20 @@ export function StudioShell() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [menuImportOpen, setMenuImportOpen] = useState(false);
   const [notificationSummary, setNotificationSummary] = useState<OrderNotificationSummary>({ newCount: 0, latestNewOrder: null });
+  const [commercial, setCommercial] = useState<CommercialSnapshot | null>(null);
   const [orderAlert, setOrderAlert] = useState<OrderNotificationSummary["latestNewOrder"]>(null);
   const initialNotificationLoad = useRef(true);
   const previousLatestId = useRef<string | null>(null);
   const isPlatformOwner = user?.primaryEmail?.toLowerCase() === PLATFORM_OWNER_EMAIL;
   const publicHref = `/m/${tenant.slug}${snapshot.branches[0] ? `/${snapshot.branches[0].slug}` : ""}`;
+  const trialDaysRemaining = commercial?.status === "trialing" && commercial.trialEndsAt
+    ? Math.max(1, Math.ceil((new Date(commercial.trialEndsAt).getTime() - Date.now()) / 86_400_000))
+    : null;
+  const paidPlanWhatsAppUrl = buildWhatsAppShareUrl(
+    lang === "ar"
+      ? "مرحباً، أريد الاستمرار على خطة مدفوعة في Menu V3."
+      : "Hello, I would like to continue on a paid plan in Menu V3.",
+  );
 
   const canView = (item: StudioNavItem) => {
     if (!item.permission) return true;
@@ -154,6 +165,20 @@ export function StudioShell() {
 
   useEffect(() => {
     let active = true;
+    const loadCommercial = async () => {
+      try {
+        const result = await getMySubscription();
+        if (active) setCommercial(result);
+      } catch {
+        if (active) setCommercial(null);
+      }
+    };
+    void loadCommercial();
+    return () => { active = false; };
+  }, [tenant.id]);
+
+  useEffect(() => {
+    let active = true;
     const poll = async () => {
       try {
         const result = await getOrderNotificationSummary({ data: { tenantId: tenant.id } });
@@ -199,6 +224,21 @@ export function StudioShell() {
       <header className="relative flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3 lg:px-8"><div className="min-w-0"><p className="truncate text-sm font-medium">{lang === "ar" ? tenant.nameAr : tenant.nameEn || tenant.nameAr}</p><p className="text-xs text-muted">{tenant.isPublished?t(copy.state.published,lang):t(copy.state.draft,lang)}</p></div><div className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
         {pathname === "/studio/menu" ? <button type="button" onClick={() => setMenuImportOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-xl border border-line bg-paper px-3 text-sm font-medium text-ink-soft hover:bg-sand" aria-label={lang === "ar" ? "استيراد القائمة" : "Import menu"}><Upload className="size-4" />{lang === "ar" ? "استيراد" : "Import"}</button> : null}
         <div className="relative"><button type="button" aria-label={lang === "ar" ? "نشاط وتنبيهات الطلبات" : "Order activity and notifications"} aria-expanded={notificationsOpen} onClick={() => { setNotificationsOpen((value) => !value); setOrderAlert(null); }} className={cn("relative grid size-11 place-items-center rounded-xl border border-line", notificationsOpen ? "bg-ink text-paper" : "bg-paper text-ink-soft hover:bg-sand")}><BellRing className="size-4" />{notificationSummary.newCount > 0 ? <span className="absolute -end-1 -top-1 grid min-w-5 place-items-center rounded-full bg-warn px-1 text-[10px] font-bold text-ink">{notificationSummary.newCount > 99 ? "99+" : notificationSummary.newCount}</span> : null}</button>{notificationsOpen ? <div className="fixed inset-x-3 top-16 z-50 max-h-[70dvh] w-auto overflow-auto rounded-2xl border border-line bg-paper p-4 shadow-2xl sm:absolute sm:start-0 sm:top-12 sm:max-h-[32rem] sm:w-[min(22rem,calc(100vw-2rem))]"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{lang === "ar" ? "نشاط الطلبات" : "Order activity"}</p><h2 className="mt-1 font-semibold">{notificationSummary.latestNewOrder?.restaurantName || (lang === "ar" ? "نشاطك" : "Your business")}</h2>{notificationSummary.latestNewOrder?.branchName ? <p className="mt-1 text-xs text-muted">{notificationSummary.latestNewOrder.branchName}</p> : null}<p className="mt-1 text-sm text-muted">{notificationSummary.newCount ? `${notificationSummary.newCount} ${lang === "ar" ? "طلب جديد" : "new orders"}` : (lang === "ar" ? "لا توجد طلبات جديدة" : "No new orders")}</p></div><button type="button" aria-label={lang === "ar" ? "إغلاق" : "Close"} onClick={() => setNotificationsOpen(false)} className="grid size-9 shrink-0 place-items-center rounded-lg hover:bg-sand"><X className="size-4" /></button></div>{notificationSummary.latestNewOrder ? <div className="mt-4 rounded-xl bg-sand/50 p-3"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-semibold">#{notificationSummary.latestNewOrder.orderNumber} · {notificationSummary.latestNewOrder.customerName || (lang === "ar" ? "عميل" : "Customer")}</p><p className="mt-1 text-xs text-muted">{notificationSummary.latestNewOrder.restaurantName} · {notificationSummary.latestNewOrder.branchName}</p><p className="mt-1 text-xs text-muted">{notificationSummary.latestNewOrder.total.toFixed(2)} {notificationSummary.latestNewOrder.currency} · {new Date(notificationSummary.latestNewOrder.createdAt).toLocaleString(lang === "ar" ? "ar-SA" : "en-US")}</p></div><span className="rounded-full bg-paper px-2 py-1 text-xs">{lang === "ar" ? "جديد" : "New"}</span></div></div> : null}<div className="mt-3 grid gap-2"><Link to="/studio/orders" onClick={() => setNotificationsOpen(false)} className="inline-flex h-10 items-center justify-center rounded-xl bg-ink px-4 text-sm font-medium text-paper">{lang === "ar" ? "فتح الطلبات" : "Open orders"}</Link>{typeof window !== "undefined" && "Notification" in window && Notification.permission !== "granted" ? <button type="button" onClick={() => void enableBrowserNotifications()} className="h-10 rounded-xl border border-line text-sm text-ink-soft">{lang === "ar" ? "تفعيل تنبيهات الجهاز" : "Enable device notifications"}</button> : null}</div></div> : null}</div><LangToggle /><div className="lg:hidden"><UserButton /></div></div></header>
+      {trialDaysRemaining !== null ? <div className="px-4 pt-4 lg:px-8">
+        <div role="status" className="rounded-2xl border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-ink">
+          <p className="font-semibold">{lang === "ar" ? "أنت الآن في التجربة المجانية" : "You are on your free trial"}</p>
+          <p className="mt-1 text-muted">{lang === "ar" ? "لديك " + trialDaysRemaining + " يوم متبقٍ للوصول الكامل إلى مزايا Pro." : trialDaysRemaining + " day" + (trialDaysRemaining === 1 ? "" : "s") + " remaining with full Pro access."}</p>
+        </div>
+      </div> : null}
+      {commercial?.trialExpired ? <div className="px-4 pt-4 lg:px-8">
+        <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-sand/50 px-4 py-3 text-sm text-ink">
+          <div>
+            <p className="font-semibold">{lang === "ar" ? "انتهت التجربة المجانية" : "Your free trial has ended"}</p>
+            <p className="mt-1 text-muted">{lang === "ar" ? "تمت إعادتك تلقائياً إلى حدود الخطة المجانية. تواصل معنا للاستمرار على خطة مدفوعة." : "You are now on Free-plan limits. Contact us to continue on a paid plan."}</p>
+          </div>
+          <a href={paidPlanWhatsAppUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center justify-center rounded-xl bg-ink px-4 text-sm font-medium text-paper">{lang === "ar" ? "تواصل معنا عبر واتساب" : "Contact us on WhatsApp"}</a>
+        </div>
+      </div> : null}
       <div className="flex-1 px-4 py-6 pb-28 lg:px-8"><Outlet /></div>
       <MobileBottomNav items={mobileItems} onSelect={navigateTo} />
     </div>

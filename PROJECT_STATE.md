@@ -1258,3 +1258,29 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Serve 14-Day Pro Trial — IN PROGRESS / PR #309
+
+- VERIFIED: Repository investigation found no existing Vercel Cron, Supabase scheduled function, pg_cron, or equivalent scheduled mechanism in the current codebase.
+- VERIFIED: Existing `trg_ph06_paid_plan_trial` is `BEFORE UPDATE OF plan_id` only; it does not fire on the initial `tenant_subscriptions` INSERT.
+- IMPLEMENTED: New tenant default subscription now provisions `pro / trialing / now() + 14 days` through the existing tenant-subscription trigger mechanism.
+- IMPLEMENTED: Lazy/on-access expiry enforcement reverts an untouched expired `trialing` subscription to `free / active / trial_ends_at = NULL`.
+- IMPLEMENTED: Platform Admin `trial_extended`, `trial_ended`, and `plan_changed` actions that touched the current trial state prevent automatic reversion; existing admin guards/controls were not changed.
+- IMPLEMENTED: Studio receives a non-blocking bilingual trial-days banner and a post-reversion Free-limit WhatsApp contact banner using the existing click-to-chat helper pattern.
+- IMPLEMENTED: Billing and server-side plan-limit reads invoke the same lazy expiry check.
+- ADDED: Regression coverage in `tests/self-serve-trial.test.mjs` for provisioning, INSERT/UPDATE trigger separation, expiry/reversion, admin-win protection, Studio banners, and existing admin controls.
+- NOT IMPLEMENTED: publish-surface gap and standalone billing contact CTA remain explicitly out of scope.
+- PR: #309 — `feat(onboarding): add 14-day Pro trial lifecycle`.
+- STATUS: IMPLEMENTATION_IN_PROGRESS pending GitHub Quality/W9 verification and owner review. Merge/deployment are not authorized by this task.
+
+## EXACT NEXT ACTION
+Owner review PR #309 after all required CI checks are green. Do not merge or deploy automatically.
+
+
+# 2026-09-27 — PR #309 Verification Update
+
+- VERIFIED: GitHub Quality run #2515 completed SUCCESS on the implementation head before this documentation-only continuity refresh. Typecheck, tests, lint, production build, browser/template QA, performance fixture, Customer Lifecycle browser QA, Studio browser QA, Platform Admin browser QA, and cleanup all succeeded.
+- VERIFIED: GitHub W9 Orders QA run #690 completed SUCCESS on the implementation head before this documentation-only continuity refresh.
+- VERIFIED: The only subsequent changes are this continuity documentation refresh; no application behavior changed after the successful implementation checks.
+- STATUS: PR #309 remains OPEN and merge/deployment remain held for owner review.

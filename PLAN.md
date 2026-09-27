@@ -936,3 +936,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ## EXACT NEXT TASK
 **Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Serve 14-Day Pro Trial — PR #309
+
+- Current atomic task: implement the owner-approved 14-day Pro trial for new tenants and lazy expiry reversion to Free.
+- Mechanism: lazy/on-access enforcement because the repository has no existing scheduled execution mechanism to reuse.
+- PR: #309.
+- Merge/deployment: HOLD for owner review.
+- Next task: owner review PR #309 after required checks complete.
+
+
+# 2026-09-27 — PR #309 Verification
+
+- VERIFIED: Quality #2515 = SUCCESS.
+- VERIFIED: W9 Orders QA #690 = SUCCESS.
+- PR #309 remains open; merge/deployment held for owner review.

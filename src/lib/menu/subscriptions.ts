@@ -19,9 +19,40 @@ export type SubscriptionSummary = {
   billingInterval: BillingInterval;
   trialEndsAt: string | null;
   currentPeriodEnd: string | null;
+  trialExpired: boolean;
 };
 
+export async function revertExpiredTrialIfEligible(sql: Sql, tenantId: string): Promise<boolean> {
+  const reverted = await sql<{ tenant_id: string }>`
+    update menu_v3.tenant_subscriptions ts
+    set plan_id = (
+      select id from menu_v3.subscription_plans
+      where code = 'free' and is_active = true
+      limit 1
+    ),
+    status = 'active',
+    trial_ends_at = NULL,
+    billing_interval = 'monthly',
+    updated_at = now()
+    where ts.tenant_id = ${tenantId}
+      and ts.status = 'trialing'
+      and ts.trial_ends_at is not null
+      and ts.trial_ends_at <= now()
+      and not exists (
+        select 1
+        from menu_v3.platform_admin_subscription_audit audit
+        where audit.tenant_id = ts.tenant_id
+          and audit.action in ('trial_extended', 'trial_ended', 'plan_changed')
+          and audit.after_state ->> 'status' = 'trialing'
+          and (audit.after_state ->> 'trialEndsAt')::timestamptz = ts.trial_ends_at
+      )
+    returning ts.tenant_id
+  `;
+  return reverted.length > 0;
+}
+
 export async function getSubscription(sql: Sql, tenantId: string): Promise<SubscriptionSummary | null> {
+  const reverted = await revertExpiredTrialIfEligible(sql, tenantId);
   const rows = await sql<{
     code: string;
     name_ar: string;
@@ -71,6 +102,7 @@ export async function getSubscription(sql: Sql, tenantId: string): Promise<Subsc
     billingInterval: row.billing_interval,
     trialEndsAt: row.trial_ends_at,
     currentPeriodEnd: row.current_period_end,
+    trialExpired: reverted,
   };
 }
 
@@ -79,6 +111,7 @@ export async function assertWithinPlanLimit(
   tenantId: string,
   resource: PlanResource,
 ) {
+  await revertExpiredTrialIfEligible(sql, tenantId);
   const rows = await sql<{
     max_branches: number;
     max_products: number | null;

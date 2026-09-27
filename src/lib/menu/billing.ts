@@ -4,6 +4,7 @@ import { authMiddleware } from "../auth/middleware.ts";
 import { getSql, type Sql } from "../db.ts";
 import type { SubscriptionInvoice } from "./billing-whatsapp.ts";
 import type { FnResult, Role } from "./types.ts";
+import { revertExpiredTrialIfEligible } from "./subscriptions.ts";
 
 export type { SubscriptionInvoice } from "./billing-whatsapp.ts";
 
@@ -65,6 +66,7 @@ function mapInvoice(row: Record<string, unknown>): SubscriptionInvoice {
 }
 
 async function loadBilling(sql: Sql, tenantId: string): Promise<BillingSummary | null> {
+  await revertExpiredTrialIfEligible(sql, tenantId);
   const rows = await sql<Record<string, unknown>>`
     select
       t.name_ar as tenant_name,
