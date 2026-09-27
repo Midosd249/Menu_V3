@@ -44,7 +44,7 @@ export async function revertExpiredTrialIfEligible(sql: Sql, tenantId: string): 
         where audit.tenant_id = ts.tenant_id
           and audit.action in ('trial_extended', 'trial_ended', 'plan_changed')
           and audit.after_state ->> 'status' = 'trialing'
-          and audit.after_state ->> 'trialEndsAt' = ts.trial_ends_at::text
+          and (audit.after_state ->> 'trialEndsAt')::timestamptz = ts.trial_ends_at
       )
     returning ts.tenant_id
   `;
