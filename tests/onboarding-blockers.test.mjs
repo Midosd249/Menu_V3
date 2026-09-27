@@ -17,8 +17,8 @@ test("failed phone persistence is resumable with the same email and credentials"
 });
 
 test("registration phone persistence only accepts the incomplete new-registration account", () => {
-  assert.match(registration, /select "phoneNumber", "createdAt" from "user"/);
-  assert.match(registration, /"phoneNumber" is null/);
+  assert.match(registration, /select "phoneNumber" as phone_number, "createdAt" as user_created_at/);
+  assert.match(registration, /userRow\.phone_number != null/);
   assert.match(registration, /sessionCreatedAt >= userCreatedAt/);
   assert.match(registration, /NEW_REGISTRATION_SESSION_WINDOW_MS/);
   assert.match(registration, /code: "conflict"/);
