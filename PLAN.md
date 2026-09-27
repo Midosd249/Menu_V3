@@ -945,3 +945,10 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 - PR: #309.
 - Merge/deployment: HOLD for owner review.
 - Next task: owner review PR #309 after required checks complete.
+
+
+# 2026-09-27 — PR #309 Verification
+
+- VERIFIED: Quality #2515 = SUCCESS.
+- VERIFIED: W9 Orders QA #690 = SUCCESS.
+- PR #309 remains open; merge/deployment held for owner review.
