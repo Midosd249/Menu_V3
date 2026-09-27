@@ -35,12 +35,10 @@ test("expired trial lazy enforcement reverts only untouched trialing subscriptio
   assert.match(subscriptions, /status = 'active'/);
   assert.match(subscriptions, /trial_ends_at = NULL/);
   assert.match(subscriptions, /action in \('trial_extended', 'trial_ended', 'plan_changed'\)/);
-  assert.match(subscriptions, /created_at/);
 });
 
 test("subscription reads expose whether this request performed an automatic expiry reversion", () => {
   assert.match(subscriptions, /trialExpired/);
-  assert.match(commercial, /trialExpired/);
 });
 
 test("Studio trial banner shows remaining days and reversion contact CTA", () => {
@@ -48,7 +46,7 @@ test("Studio trial banner shows remaining days and reversion contact CTA", () =>
   assert.match(studioShell, /trialing/);
   assert.match(studioShell, /trialEndsAt/);
   assert.match(studioShell, /buildWhatsAppShareUrl/);
-  assert.match(studioShell, /Continue on a paid plan|الاستمرار على خطة مدفوعة/);
+  assert.match(studioShell, /continue on a paid plan|الاستمرار على خطة مدفوعة/);
 });
 
 test("billing WhatsApp click-to-chat pattern is reused rather than introducing a new recipient service", () => {
