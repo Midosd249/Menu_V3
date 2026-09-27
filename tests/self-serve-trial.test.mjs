@@ -7,6 +7,7 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
 const migration = read("migrations/20260927070000_self_serve_trial.sql");
+const ph06Migration = read("migrations/20260917170000_ph06_commercial_activation.sql");
 const subscriptions = read("src/lib/menu/subscriptions.ts");
 const commercial = read("src/lib/menu/commercial.ts");
 const studioShell = read("src/components/studio-shell.tsx");
@@ -23,9 +24,9 @@ test("new tenant provisioning grants Pro 14-day trial at the database boundary",
 });
 
 test("paid-plan trial trigger remains UPDATE-only and cannot double-trigger on initial insert", () => {
-  assert.match(migration, /CREATE TRIGGER trg_ph06_paid_plan_trial/);
-  assert.match(migration, /BEFORE UPDATE OF plan_id ON menu_v3\.tenant_subscriptions/);
-  assert.doesNotMatch(migration, /BEFORE INSERT.*trg_ph06_paid_plan_trial/s);
+  assert.match(ph06Migration, /CREATE TRIGGER trg_ph06_paid_plan_trial/);
+  assert.match(ph06Migration, /BEFORE UPDATE OF plan_id ON menu_v3\.tenant_subscriptions/);
+  assert.doesNotMatch(ph06Migration, /BEFORE INSERT.*trg_ph06_paid_plan_trial/s);
 });
 
 test("expired trial lazy enforcement reverts only untouched trialing subscriptions", () => {
