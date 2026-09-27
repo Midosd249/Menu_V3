@@ -1120,3 +1120,16 @@ None for this atomic task. Stop.
 
 ## EXACT NEXT TASK
 **Owner reviews PR #307 and authorizes merge/release if satisfied. Do not merge or deploy automatically.**
+
+
+# 2026-09-27 — Self-Serve 14-Day Pro Trial — PR #309
+
+- IMPLEMENTED: New tenants provision as `pro / trialing / +14 days`.
+- IMPLEMENTED: Untouched expired trials lazily revert to `free / active / trial_ends_at = NULL`.
+- IMPLEMENTED: Platform Admin trial actions continue to win over automatic reversion.
+- IMPLEMENTED: Studio trial-days and post-reversion banners; no standalone billing contact CTA added.
+- IMPLEMENTED: Regression coverage added.
+- PR #309 OPEN — merge/deployment held for owner review.
+
+## EXACT NEXT TASK
+Owner review PR #309 after GitHub Quality/W9 are green. Do not merge/deploy automatically.
