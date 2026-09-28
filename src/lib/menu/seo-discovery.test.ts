@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildPublicMenuSitemapEntries, buildRobotsTxt, buildSitemapXml, getPublicOrigin, publicPath } from "./seo-discovery.ts";
 
-test("public discovery uses the configured production origin and stable public paths", () => {
+test("public discovery defaults to the Menu V3 production domain and supports explicit origin configuration", () => {
+  assert.equal(getPublicOrigin({}), "https://www.menuun.com");
+  assert.equal(getPublicOrigin({ MENU_V3_PUBLIC_ORIGIN: "https://menuun.com/" }), "https://menuun.com");
   assert.equal(getPublicOrigin({ VITE_VERCEL_PROJECT_PRODUCTION_URL: "menu.example.com/" }), "https://menu.example.com");
   assert.equal(publicPath("najd-kitchen", "olaya", "ar"), "/m/najd-kitchen/olaya");
   assert.equal(publicPath("najd-kitchen", "olaya", "en"), "/m/najd-kitchen/olaya?lang=en");
