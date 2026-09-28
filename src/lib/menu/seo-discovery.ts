@@ -1,6 +1,6 @@
 import type { PublicMenu } from "./types";
 
-export const DEFAULT_PUBLIC_ORIGIN = "https://menu-v3-kohl.vercel.app";
+export const DEFAULT_PUBLIC_ORIGIN = "https://www.menuun.com";
 
 function clean(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -13,7 +13,7 @@ function normalizeOrigin(value: string | undefined): string {
 }
 
 export function getPublicOrigin(env: Record<string, string | undefined> = {}): string {
-  return normalizeOrigin(env.VITE_VERCEL_PROJECT_PRODUCTION_URL ?? env.VERCEL_PROJECT_PRODUCTION_URL);
+  return normalizeOrigin(env.MENU_V3_PUBLIC_ORIGIN ?? env.VITE_VERCEL_PROJECT_PRODUCTION_URL ?? env.VERCEL_PROJECT_PRODUCTION_URL);
 }
 
 export function publicPath(slug: string, branch?: string, lang: "ar" | "en" = "ar"): string {
