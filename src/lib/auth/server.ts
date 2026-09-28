@@ -24,6 +24,9 @@ const globalAuthRef = globalThis as typeof globalThis & { __grokAuthPreviewSecre
 function previewAuthSecret(): string {
   const explicit = process.env.BETTER_AUTH_SECRET?.trim();
   if (explicit) return explicit;
+  if (runningOnVercel && env("VITE_AUTH_ENABLED") !== "false") {
+    throw new Error("BETTER_AUTH_SECRET is required for production authentication.");
+  }
   if (!globalAuthRef.__grokAuthPreviewSecret__) {
     const stableSource =
       process.env.SUPABASE_DB_URL?.trim() ??
@@ -62,6 +65,8 @@ const explicitBaseURL = env("BETTER_AUTH_URL");
 const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
 const LOCAL_DEV_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080", "http://[::1]:8080"];
 const VERCEL_ORIGINS = [
+  "https://www.menuun.com",
+  "https://menuun.com",
   "https://menu-v3-kohl.vercel.app",
   "https://menu-v3-midosd2s-projects.vercel.app",
   "https://menu-v3-git-main-midosd2s-projects.vercel.app",
@@ -70,7 +75,7 @@ const VERCEL_ORIGINS = [
 const baseURL = explicitBaseURL ?? {
   allowedHosts: [...previewAllowedHosts, "localhost", "127.0.0.1", "[::1]", "menu-v3-*.vercel.app"],
   protocol: "auto" as const,
-  fallback: "https://menu-v3-kohl.vercel.app",
+  fallback: "https://www.menuun.com",
 };
 const trustedOrigins = explicitBaseURL
   ? [explicitBaseURL, ...VERCEL_ORIGINS, ...LOCAL_DEV_ORIGINS]
