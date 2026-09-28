@@ -70,6 +70,11 @@ test("duplicate email retries the incomplete signup account instead of dead-endi
   assert.match(contract, /تعذر إنشاء الحساب/);
 });
 
+test("production authentication requires an explicit Better Auth secret", () => {
+  assert.match(authServer, /if \(runningOnVercel && env\("VITE_AUTH_ENABLED"\) !== "false"\) \{/);
+  assert.match(authServer, /BETTER_AUTH_SECRET is required for production authentication/);
+});
+
 test("registration preserves Better Auth and keeps mode=signup as navigation state", () => {
   assert.match(login, /authClient\.signUp\.email/);
   assert.match(login, /get\("mode"\) === "signup"/);
