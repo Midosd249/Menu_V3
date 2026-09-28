@@ -15,6 +15,7 @@ type PublicSitemapRow = {
 export default defineEventHandler(async (event) => {
   const pathname = getRequestURL(event).pathname;
   const origin = getPublicOrigin({
+    MENU_V3_PUBLIC_ORIGIN: process.env.MENU_V3_PUBLIC_ORIGIN,
     VITE_VERCEL_PROJECT_PRODUCTION_URL: process.env.VITE_VERCEL_PROJECT_PRODUCTION_URL,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
   });
