@@ -14,18 +14,37 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   assert.ok(root.includes("Menuun"));
   assert.ok(root.includes('href: "/favicon.svg"'));
   assert.ok(!root.includes("__grok/icon-180.png"));
-
   assert.ok(home.includes("MenuunLogo"));
-  assert.ok(home.includes('lang={lang}'));
-  assert.ok(!home.includes('className="font-semibold tracking-tight">\\n            Menu V3'));
-
+  assert.ok(home.includes("lang={lang}"));
+  assert.ok(!home.includes("Menu V3"));
   assert.ok(footer.includes("MenuunLogo"));
-  assert.ok(!footer.includes('className="font-display text-xl font-semibold">Menu V3'));
-
+  assert.ok(footer.includes("ahmed.mohamed@menuun.com"));
+  assert.ok(footer.includes("966549598318"));
+  assert.ok(footer.includes("Pricing"));
+  assert.ok(footer.includes("new Date().getFullYear()"));
+  assert.ok(!footer.includes("Menu V3"));
   assert.ok(logo.includes("menuun-logo-ar.svg"));
   assert.ok(logo.includes("menuun-logo-en.svg"));
   assert.ok(logo.includes("منيو رقمي للمطاعم والكافيهات"));
-
   assert.ok(favicon.includes("#0F1115"));
   assert.ok(favicon.includes('viewBox="264 1741 1955 1885"'));
+});
+
+test("customer-facing brand surfaces no longer expose the retired Menu V3 name", () => {
+  const surfaces = [
+    "src/routes/index.tsx",
+    "src/routes/login.tsx",
+    "src/routes/onboarding.tsx",
+    "src/routes/themes/index.tsx",
+    "src/routes/invite.$token.tsx",
+    "src/routes/studio/billing.tsx",
+    "src/components/marketing-footer.tsx",
+    "src/components/studio-shell.tsx",
+    "src/components/studio-menu-workspace-page.tsx",
+    "src/lib/menu/reports.ts",
+    "src/lib/menu/platform.ts",
+    "src/lib/menu/ai-whatsapp.ts",
+    "src/lib/menu/billing-whatsapp.ts",
+  ];
+  for (const path of surfaces) assert.doesNotMatch(read(path), /Menu V3|MenuV3/i, path);
 });
