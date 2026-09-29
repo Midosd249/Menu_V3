@@ -2,7 +2,6 @@ import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from "@
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { LangProvider } from "@/lib/lang";
-import menuunFavicon from "../../assets/brand/menuun/final/menuun-mark-mono.svg";
 import appCss from "../styles.css?url";
 import colorsCss from "../colors.css?url";
 import w8InternalVisualScopeFixCss from "../w8-internal-visual-scope-fix.css?url";
@@ -44,7 +43,7 @@ export const Route = createRootRoute({
       ...(searchConsoleVerification ? [{ name: "google-site-verification", content: searchConsoleVerification }] : []),
     ],
     links: [
-      { rel: "icon", type: "image/svg+xml", href: menuunFavicon },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" },
       { rel: "stylesheet", href: appCss },
