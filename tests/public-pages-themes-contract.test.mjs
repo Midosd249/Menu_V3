@@ -70,7 +70,7 @@ test("homepage exposes all protected themes without a premium gate", () => {
   for (const theme of expectedThemes) assert.match(registry, new RegExp(`key: "${theme}"`));
 });
 
-test("theme preview remains connected to the canonical Menu V3 renderer", () => {
+test("theme preview remains connected to the canonical public renderer", () => {
   assert.match(preview, /MenuThemeController/);
   assert.match(preview, /ThemeRenderer/);
   assert.match(preview, /getTheme/);
@@ -91,7 +91,7 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /to="\/login"/);
   assert.match(footer, /to="\/themes\/preview"/);
   assert.match(footer, /href="\/#faq"/);
-  assert.match(footer, /<LangToggle \/>/);
+  assert.match(footer, /<LangToggle \/>/);\n  assert.match(footer, /من نحن|About/);\n  assert.match(footer, /تواصل معنا|Contact/);\n  assert.match(footer, /ahmed\\.mohamed@menuun\\.com/);\n  assert.match(footer, /966549598318/);
   assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
 });
 
