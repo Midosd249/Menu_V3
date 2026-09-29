@@ -1,6 +1,28 @@
 # 2026-09-30 — Menuun Platform Attribution — CLOSED
 
 ## Final verified state
+- VERIFIED: PR #324 delivered the application implementation at `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
+- VERIFIED: GitHub Quality #2590 passed.
+- VERIFIED: W9 Orders QA #751 passed.
+- VERIFIED: implementation deployment `dpl_APMeXne3rQkaVa9VtjDuHYMpSpW4` reached READY for the implementation merge.
+- VERIFIED: continuity deployment `dpl_8io82PjFjwhrLYVdKSVLZ9G3EQWB` reached READY for the final `main` continuity state.
+- VERIFIED: Production aliases include `www.menuun.com` and `menuun.com`.
+- VERIFIED: no runtime errors were found in the checked 30-minute post-deployment window after the final continuity deployment.
+- UNKNOWN: direct physical Android/iOS rendering of the new attribution footer was not captured in this task.
+
+## Delivered
+- Shared `MenuunPoweredBy` footer for every public-menu render.
+- Charcoal `#0F1115` platform surface with the approved Menuun logo.
+- Arabic/English `مقدم من` / `Powered by` labels.
+- Menuun logo in Studio desktop sidebar and mobile header.
+- Regression coverage and brand-manifest wiring status.
+- No tenant identity, ordering, auth, RLS, subscription, or database behavior changes.
+
+## Release status
+- IMPLEMENTATION STATUS: DONE.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+- No further action is required for this atomic task.
+## Final verified state
 - VERIFIED: implementation landed through PR #324.
 - VERIFIED: merge commit / current `main`: `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
 - VERIFIED: GitHub Quality #2590 passed.
