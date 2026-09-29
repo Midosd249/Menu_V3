@@ -1,10 +1,22 @@
 {
   "brand": "Menuun",
   "source_of_truth": {
-    "svg": "assets/brand/menuun/source/menuun-reference.svg",
-    "png": "assets/brand/menuun/source/menuun-reference.png"
+    "production_svg": "assets/brand/menuun/source/image_3_cb1978.svg",
+    "background_reference_svg": "assets/brand/menuun/source/image_2_eadc7f.svg",
+    "historical_canva_svg": "assets/brand/menuun/source/menuun-reference.svg",
+    "historical_canva_png": "assets/brand/menuun/source/menuun-reference.png"
   },
   "source_audit": {
+    "transparent_source_sha256": "2230500af8a892f321db999304377503ad42285817362ce78f80c0a8f2d0201c",
+    "background_reference_sha256": "3b0ebb509c2ebe02fd5ac149f455234c474c3acfe25f7cf93aef77a2879612a0",
+    "transparent_source_main_paths_excluding_lower_right_group": 9,
+    "background_reference_main_paths_excluding_lower_right_group": 15,
+    "lower_right_group_paths_each_source": 12,
+    "transparent_source_total_paths": 21,
+    "background_reference_total_paths": 27,
+    "attachments_archived_byte_identically": true
+  },
+  "historical_canva_source_audit": {
     "main_head": "03f51b401b326a1b95164ec7a985ce9405f25ce1",
     "svg_blob_sha": "90add3bb35196454dd865df0dc2d629dcdbe9023",
     "png_blob_sha": "73eae179178ba843606d97cc1f172a0facd6f4a8",
@@ -30,6 +42,15 @@
     "saffron": "#FFC53D",
     "cream": "#FFF7ED"
   },
+  "production_variants": [
+    "assets/brand/menuun/final/menuun-logo.svg",
+    "assets/brand/menuun/final/menuun-logo-transparent.svg",
+    "assets/brand/menuun/final/menuun-logo-mono.svg",
+    "assets/brand/menuun/final/menuun-logo-en.svg",
+    "assets/brand/menuun/final/menuun-logo-ar.svg",
+    "assets/brand/menuun/final/menuun-mark.svg",
+    "assets/brand/menuun/final/menuun-mark-mono.svg"
+  ],
   "integration_status": "NOT_WIRED",
   "source_mutation_policy": "NEVER_OVERWRITE"
 }
