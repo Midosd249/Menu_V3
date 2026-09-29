@@ -453,3 +453,15 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - INFERRED: For Menuun's current small page set, a restrained four-part footer (brand, About, Contact, Links) is sufficient; adding nonexistent legal/help pages would create false navigation.
 - PROPOSED: Use the approved Menuun palette (Charcoal #0F1115, Ember #FF5A1F, Digital Mint #1FD1A5, Cream #FFF7ED) and existing typography guidance without introducing a separate footer visual language.
 - Scope boundary: No testimonials, customer logos, metrics, founding/team claims, or unverified legal routes were added.
+
+
+## 2026-09-30 — Menuun Platform Attribution
+
+- Category: repository + competitive UX research
+- VERIFIED finding: `main` already has approved Menuun production SVG variants, a reusable `MenuunLogo` component, and separate tenant `logoUrl` branding. The new platform attribution therefore does not require new logo artwork or changes to tenant identity.
+- VERIFIED finding: the supplied screenshot uses a compact dark end-of-page attribution with a short "مقدم من" label and platform logo rather than competing with restaurant content.
+- VERIFIED external finding: Menuo documents custom restaurant branding and explicitly offers removal of Menuo footer branding on a higher plan, confirming that platform attribution can be a deliberate product/commercial surface while remaining distinct from restaurant branding. Source: https://menuo.io/
+- VERIFIED external finding: W3C WCAG 2.2 requires at least 4.5:1 contrast for normal text and 3:1 for required non-text UI indicators; the attribution is therefore treated as a non-interactive informational footer with high-contrast logo treatment and no added customer action. Source: https://www.w3.org/TR/wcag/
+- Transferable principle: keep platform attribution visually subordinate, short, and isolated at the natural end of the public menu; do not place it in the restaurant header or over content.
+- What must not be copied: competitor logo, exact layout, wording beyond the generic attribution concept, proprietary assets, or exact styling.
+- Confidence: HIGH.

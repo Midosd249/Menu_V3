@@ -10,6 +10,9 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   const footer = read("src/components/marketing-footer.tsx");
   const logo = read("src/components/menuun-logo.tsx");
   const favicon = read("public/favicon.svg");
+  const studio = read("src/components/studio-shell.tsx");
+  const publicRoute = read("src/routes/m.$slug.tsx");
+  const poweredBy = read("src/components/menuun-powered-by.tsx");
 
   assert.ok(root.includes("Menuun"));
   assert.ok(root.includes('href: "/favicon.svg"'));
@@ -28,6 +31,12 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   assert.ok(logo.includes("منيو رقمي للمطاعم والكافيهات"));
   assert.ok(favicon.includes("#0F1115"));
   assert.ok(favicon.includes('viewBox="264 1741 1955 1885"'));
+  assert.ok(studio.includes("MenuunLogo"));
+  assert.ok(studio.includes('aria-label="Menuun"'));
+  assert.ok(publicRoute.includes("MenuunPoweredBy"));
+  assert.ok(poweredBy.includes("bg-[#0F1115]"));
+  assert.ok(poweredBy.includes("مقدم من"));
+  assert.ok(poweredBy.includes("Powered by"));
 });
 
 test("customer-facing brand surfaces no longer expose the retired Menu V3 name", () => {
