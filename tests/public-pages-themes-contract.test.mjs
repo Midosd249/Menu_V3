@@ -91,7 +91,11 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /to="\/login"/);
   assert.match(footer, /to="\/themes\/preview"/);
   assert.match(footer, /href="\/#faq"/);
-  assert.match(footer, /<LangToggle \/>/);\n  assert.match(footer, /من نحن|About/);\n  assert.match(footer, /تواصل معنا|Contact/);\n  assert.match(footer, /ahmed\\.mohamed@menuun\\.com/);\n  assert.match(footer, /966549598318/);
+  assert.match(footer, /<LangToggle \/>/);
+  assert.match(footer, /من نحن|About/);
+  assert.match(footer, /تواصل معنا|Contact/);
+  assert.match(footer, /ahmed\\.mohamed@menuun\\.com/);
+  assert.match(footer, /966549598318/);
   assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
 });
 
