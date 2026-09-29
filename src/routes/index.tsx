@@ -26,6 +26,7 @@ import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from 
 import { MENU_THEMES } from "@/lib/theme";
 import { DEMO_MENU } from "@/lib/menu/demo";
 import { MarketingFooter } from "@/components/marketing-footer";
+import { MenuunLogo } from "@/components/menuun-logo";
 import "./index.css";
 
 export const Route = createFileRoute("/")({ component: Home });
