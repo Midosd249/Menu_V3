@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from "@
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { LangProvider } from "@/lib/lang";
+import menuunFavicon from "../../assets/brand/menuun/final/menuun-mark-mono.svg";
 import appCss from "../styles.css?url";
 import colorsCss from "../colors.css?url";
 import w8InternalVisualScopeFixCss from "../w8-internal-visual-scope-fix.css?url";
@@ -28,7 +29,7 @@ import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?ur
 import qrFinalFixesCss from "../theme-qr-final-fixes.css?url";
 import signalTableCss from "../theme-signal-table.css?url";
 
-const APP_NAME = "منيو";
+const APP_NAME = "Menuun";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
 const searchConsoleVerification = env?.VITE_GOOGLE_SITE_VERIFICATION?.trim();
 
@@ -43,7 +44,7 @@ export const Route = createRootRoute({
       ...(searchConsoleVerification ? [{ name: "google-site-verification", content: searchConsoleVerification }] : []),
     ],
     links: [
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/svg+xml", href: menuunFavicon },
       { rel: "preconnect", href: "https://cdn.jsdelivr.net", crossOrigin: "anonymous" },
       { rel: "dns-prefetch", href: "https://cdn.jsdelivr.net" },
       { rel: "stylesheet", href: appCss },
@@ -72,7 +73,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: qrFinalFixesCss },
       { rel: "stylesheet", href: signalTableCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
+      { rel: "apple-touch-icon", href: menuunFavicon },
     ],
   }),
   component: RootDocument,
