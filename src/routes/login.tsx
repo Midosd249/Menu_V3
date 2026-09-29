@@ -43,7 +43,8 @@ function Login() {
   const [mode, setMode] = useState<"in" | "up">(initialMode);
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);\n  const [verified, setVerified] = useState(verifiedNotice);
+  const [busy, setBusy] = useState(false);
+  const [verified, setVerified] = useState(verifiedNotice);
   const invite = invitationToken();
 
   if (isPending) return <LoadingState label="جارٍ التحقق…" />;
