@@ -1,0 +1,35 @@
+{
+  "brand": "Menuun",
+  "source_of_truth": {
+    "svg": "assets/brand/menuun/source/menuun-reference.svg",
+    "png": "assets/brand/menuun/source/menuun-reference.png"
+  },
+  "source_audit": {
+    "main_head": "03f51b401b326a1b95164ec7a985ce9405f25ce1",
+    "svg_blob_sha": "90add3bb35196454dd865df0dc2d629dcdbe9023",
+    "png_blob_sha": "73eae179178ba843606d97cc1f172a0facd6f4a8",
+    "svg_canvas": "2000x2000",
+    "svg_viewbox": "0 0 1500 1499.999933",
+    "svg_paths": 34,
+    "svg_embedded_pngs": 3,
+    "svg_live_text_nodes": 0,
+    "preserves_canva_c2pa": true
+  },
+  "typography": {
+    "latin_heading": "Space Grotesk",
+    "latin_heading_weight": 700,
+    "arabic_accent": "Cairo",
+    "arabic_accent_weight": 700,
+    "arabic_body": "IBM Plex Sans Arabic",
+    "arabic_body_weight": 400
+  },
+  "palette": {
+    "charcoal": "#0F1115",
+    "ember_orange": "#FF5A1F",
+    "digital_mint": "#1FD1A5",
+    "saffron": "#FFC53D",
+    "cream": "#FFF7ED"
+  },
+  "integration_status": "NOT_WIRED",
+  "source_mutation_policy": "NEVER_OVERWRITE"
+}
