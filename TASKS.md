@@ -1231,3 +1231,19 @@ Owner review PR #309 after GitHub Quality/W9 are green. Do not merge/deploy auto
 ## EXACT NEXT TASK
 
 Owner review of the single PR for Menuun brand migration and footer redesign. Do not merge or deploy automatically.
+
+
+# 2026-09-29 — Menuun Auth Email Flow — ACTIVE
+
+- VERIFIED: Resend `mail.menuun.com` is fully verified and the owner created a restricted Sending access API key.
+- IMPLEMENTED: server-side Resend email service without adding a new dependency; Better Auth verification and password recovery callbacks; bilingual verification/recovery UI; guarded account deletion path.
+- IMPLEMENTED: signup no longer proceeds directly to onboarding before email verification; existing registration phone persistence is resumed after verified login.
+- VERIFIED: repository diff is scoped to auth email flow files plus its regression contract.
+- UNKNOWN: local command execution in the connector-only environment.
+- UNKNOWN: GitHub CI result for this branch until checks complete.
+- UNKNOWN: Vercel Preview environment has not yet been independently verified with `RESEND_API_KEY`.
+- DEPLOYMENT STATUS: NOT DEPLOYED.
+
+## EXACT NEXT TASK
+
+Verify the auth-email PR through GitHub CI. If green, configure the restricted Resend key in Vercel Preview and run safe end-to-end email/auth browser verification with a dedicated test account.
