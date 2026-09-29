@@ -157,6 +157,7 @@ function Login() {
           {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
           <Button type="submit" disabled={busy}>{busy ? t(copy.state.loading, lang) : signup ? (lang === "ar" ? "إنشاء الحساب" : "Create account") : t(copy.auth.signIn, lang)}</Button>
         </form>
+        {!signup && loginMethod === "email" ? <Link to="/forgot-password" className="text-center text-sm text-ink-soft underline-offset-4 hover:underline">{lang === "ar" ? "نسيت كلمة المرور؟" : "Forgot password?"}</Link> : null}
         <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{signup ? (lang === "ar" ? "لدي حساب بالفعل" : "I already have an account") : t(copy.auth.noAccount, lang)}</button>
       </> : <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>}
       <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>
