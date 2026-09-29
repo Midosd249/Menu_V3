@@ -106,7 +106,6 @@ export function StudioMenuWorkspace({
                 {snapshot.branches.filter((branch) => branch.isActive).map((branch) => <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr : branch.nameEn || branch.nameAr}</option>)}
               </select>
             </label>
-            </p>
           </div>
           <div className="flex w-full min-w-0 max-w-full flex-wrap gap-2 sm:w-auto">
             <Button type="button" variant="outline" disabled={menuQaBusy} onClick={onReviewMenu}>
