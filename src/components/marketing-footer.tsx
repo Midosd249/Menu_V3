@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
+import { MenuunLogo } from "@/components/menuun-logo";
 import { useLang } from "@/lib/lang";
 
 export function MarketingFooter() {
@@ -9,7 +10,9 @@ export function MarketingFooter() {
     <footer dir={ar ? "rtl" : "ltr"} className="border-t border-line bg-paper px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-10 text-ink">
       <div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-[1.4fr_1fr_1fr_auto]">
         <div className="max-w-sm">
-          <Link to="/" className="font-display text-xl font-semibold">Menu V3</Link>
+          <Link to="/" className="inline-flex min-h-10 items-center" aria-label="Menuun">
+            <MenuunLogo lang={lang} className="h-10 w-auto" />
+          </Link>
           <p className="mt-3 text-sm leading-7 text-muted">{ar ? "حضور رقمي عربي أولاً للمطاعم والكافيهات." : "Arabic-first digital restaurant presence for restaurants and cafés."}</p>
         </div>
         <nav className="grid content-start gap-2 text-sm" aria-label={ar ? "روابط المنتج" : "Product links"}>
@@ -26,7 +29,7 @@ export function MarketingFooter() {
         </nav>
         <div className="grid content-start justify-items-start gap-3 sm:justify-items-end">
           <LangToggle />
-          <span className="text-xs text-muted">© 2026 Menu V3</span>
+          <span className="text-xs text-muted">© 2026 Menuun</span>
         </div>
       </div>
     </footer>

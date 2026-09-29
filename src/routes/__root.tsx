@@ -28,7 +28,7 @@ import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?ur
 import qrFinalFixesCss from "../theme-qr-final-fixes.css?url";
 import signalTableCss from "../theme-signal-table.css?url";
 
-const APP_NAME = "منيو";
+const APP_NAME = "Menuun";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
 const searchConsoleVerification = env?.VITE_GOOGLE_SITE_VERIFICATION?.trim();
 
@@ -72,7 +72,6 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: qrFinalFixesCss },
       { rel: "stylesheet", href: signalTableCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
   }),
   component: RootDocument,

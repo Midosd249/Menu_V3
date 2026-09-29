@@ -26,6 +26,7 @@ import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from 
 import { MENU_THEMES } from "@/lib/theme";
 import { DEMO_MENU } from "@/lib/menu/demo";
 import { MarketingFooter } from "@/components/marketing-footer";
+import { MenuunLogo } from "@/components/menuun-logo";
 import "./index.css";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -161,8 +162,8 @@ function Home() {
     <main className="menuq-home min-h-screen bg-background text-foreground">
       <header className="menuq-nav sticky top-0 z-50 border-b">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link to="/" className="font-semibold tracking-tight">
-            Menu V3
+          <Link to="/" className="inline-flex min-h-10 items-center" aria-label="Menuun">
+            <MenuunLogo lang={lang} className="h-9 w-auto sm:h-10" />
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex" aria-label={lang === "ar" ? "التنقل الرئيسي" : "Primary navigation"}>
