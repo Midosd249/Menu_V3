@@ -443,3 +443,13 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - Relevance: SIGNAL TABLE mobile Arabic/English product cards.
 - Limitation: external documentation validates the CSS model; it does not prove the user's physical device rendering.
 - Confidence: high for the structural diagnosis; browser/device result remains UNKNOWN until direct visual execution.
+
+
+## 2026-09-29 — Menuun marketing footer research
+
+- VERIFIED: Toast documents site-wide footer customization with social links and optional location, hours, and menu links; the footer is treated as a persistent navigation/contact surface. Source: https://support.toasttab.com/en/article/Optimize-Toast-Websites
+- VERIFIED: Square documents universal footer/navigation sections and direct contact/help paths across its online-site experience. Source: https://squareup.com/help/gb/en/article/6867-create-pages-and-navigation-in-square-online
+- VERIFIED: current SaaS footer guidance consistently favors grouped navigation, concise brand positioning, contact paths, and a distinct lower copyright/legal row rather than a dense link dump. Source: https://www.browsermoon.com/templates/saas-footer
+- INFERRED: For Menuun's current small page set, a restrained four-part footer (brand, About, Contact, Links) is sufficient; adding nonexistent legal/help pages would create false navigation.
+- PROPOSED: Use the approved Menuun palette (Charcoal #0F1115, Ember #FF5A1F, Digital Mint #1FD1A5, Cream #FFF7ED) and existing typography guidance without introducing a separate footer visual language.
+- Scope boundary: No testimonials, customer logos, metrics, founding/team claims, or unverified legal routes were added.
