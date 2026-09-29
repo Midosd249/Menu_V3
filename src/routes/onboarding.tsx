@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
+import { signOut } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getMyStudio } from "@/lib/menu/owner";
+import { saveCustomerRegistrationPhone } from "@/lib/auth/customer-registration";
 import { getSelfServeWorkspaceEligibility, provisionCustomerWorkspace, selfServeWorkspaceSetupSchema } from "@/lib/menu/self-serve-provisioning";
 import { LangToggle } from "@/components/lang-toggle";
 import { LoadingState, ErrorState } from "@/components/state-panel";
@@ -24,6 +26,8 @@ function Onboarding() {
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
   const [provisioned, setProvisioned] = useState(false);
+  const [recoveryPhone, setRecoveryPhone] = useState("");
+  const [recoveryBusy, setRecoveryBusy] = useState(false);
 
   const checkAccess = useCallback(async () => {
     if (!user) { setChecking(false); return; }
@@ -45,11 +49,41 @@ function Onboarding() {
 
   useEffect(() => { void checkAccess(); }, [checkAccess]);
 
+  async function handleExit() {
+    try {
+      await signOut("/login");
+    } catch (err) {
+      setCheckError(err instanceof Error && err.message ? err.message : (lang === "ar" ? "تعذر تسجيل الخروج. حاول مرة أخرى." : "Could not sign out. Try again."));
+    }
+  }
+
+  async function repairPhone(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (recoveryBusy) return;
+    setRecoveryBusy(true);
+    setCheckError("");
+    try {
+      const result = await saveCustomerRegistrationPhone({ data: { phone: recoveryPhone } });
+      if (!result.ok) {
+        if (result.code === "invalid") throw new Error(lang === "ar" ? "أدخل رقم جوال سعودي صحيح." : "Enter a valid Saudi phone number.");
+        if (result.code === "conflict") throw new Error(lang === "ar" ? "رقم الجوال مستخدم بالفعل. تواصل مع الدعم إذا كان هذا حسابك." : "That phone number is already in use. Contact support if this is your account.");
+        throw new Error(lang === "ar" ? "تعذر حفظ رقم الجوال لهذا الحساب." : "We couldn't save the phone number for this account.");
+      }
+      setRecoveryPhone("");
+      await checkAccess();
+    } catch (err) {
+      setCheckError(err instanceof Error && err.message ? err.message : (lang === "ar" ? "تعذر حفظ رقم الجوال." : "Could not save the phone number."));
+    } finally {
+      setRecoveryBusy(false);
+    }
+  }
+
+
   if (isPending || checking) return <LoadingState label={lang === "ar" ? "جارٍ التحقق…" : "Checking…"} />;
   if (!user) return <RedirectToSignIn />;
   if (hasTenant || provisioned) return <Navigate to="/studio" replace />;
-  if (checkError) return <ErrorState message={checkError} onRetry={() => void checkAccess()} />;
-  if (!eligible) return <ErrorState message={lang === "ar" ? "أكمل رقم الجوال السعودي في الحساب قبل إنشاء مساحة العمل." : "Complete your Saudi phone number before creating the workspace."} onRetry={() => void checkAccess()} />;
+  if (checkError) return <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink"><section className="w-full max-w-xl rounded-3xl border border-line bg-white p-6 shadow-sm md:p-8"><ErrorState message={checkError} onRetry={() => void checkAccess()} /><div className="mt-4 flex flex-wrap gap-2"><Button type="button" variant="ghost" onClick={() => void handleExit()}>{lang === "ar" ? "تسجيل الخروج والعودة لتسجيل الدخول" : "Sign out and return to login"}</Button></div></section></main>;
+  if (!eligible) return <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink"><section className="w-full max-w-xl rounded-3xl border border-line bg-white p-6 shadow-sm md:p-8"><div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "نحتاج خطوة صغيرة" : "One small step"}</p><h1 className="font-display text-2xl font-semibold">{lang === "ar" ? "أكمل رقم الجوال السعودي" : "Complete your Saudi phone number"}</h1><p className="text-sm leading-6 text-muted">{lang === "ar" ? "يبدو أن رقم الجوال لم يُحفظ مع الحساب. يمكنك إصلاحه هنا دون إعادة إنشاء الحساب." : "Your phone number is not attached to this account yet. You can fix it here without creating the account again."}</p></div><form className="mt-6 grid gap-4" onSubmit={repairPhone}><Field label={lang === "ar" ? "رقم الجوال السعودي" : "Saudi phone number"}><Input value={recoveryPhone} onChange={(event) => setRecoveryPhone(event.target.value)} name="recoveryPhone" type="tel" required minLength={8} maxLength={30} inputMode="tel" autoComplete="tel" placeholder="05XXXXXXXX" /></Field>{checkError ? <p className="text-sm text-bad" role="alert">{checkError}</p> : null}<Button type="submit" disabled={recoveryBusy}>{recoveryBusy ? (lang === "ar" ? "جارٍ الحفظ…" : "Saving…") : (lang === "ar" ? "حفظ الرقم والمتابعة" : "Save number & continue")}</Button><Button type="button" variant="outline" onClick={() => void checkAccess()} disabled={recoveryBusy}>{lang === "ar" ? "إعادة المحاولة" : "Try again"}</Button><Button type="button" variant="ghost" onClick={() => void handleExit()} disabled={recoveryBusy}>{lang === "ar" ? "تسجيل الخروج والعودة لتسجيل الدخول" : "Sign out and return to login"}</Button></form></section></main>;
 
   return <SelfServeWorkspaceSetup busy={busy} setBusy={setBusy} error={formError} setError={setFormError} onProvisioned={() => setProvisioned(true)} />;
 }

@@ -14,8 +14,10 @@ test("new customer path is self-serve and does not expose approval UI", () => {
   assert.match(home, /mode: "signup"/);
   assert.doesNotMatch(home, /submitLead|request-service|إرسال الطلب|طلب عميل جديد/);
   assert.match(login, /authClient\.signUp\.email/);
-  assert.match(login, /saveCustomerRegistrationPhone/);
+  assert.match(login, /phoneNumber: validationResult\.data\.phone/);
   assert.match(onboarding, /provisionCustomerWorkspace/);
+  assert.match(onboarding, /saveCustomerRegistrationPhone/);
+  assert.match(onboarding, /signOut\("\/login"\)/);
   assert.doesNotMatch(onboarding, /getMyCustomerAccessStatus|submitActivationRequest|activateApprovedWorkspace|قيد المراجعة|مركز اعتماد/);
   assert.doesNotMatch(provisioning, /CUSTOMER_APPROVAL_REQUIRED/);
 });
