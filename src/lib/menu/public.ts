@@ -174,19 +174,24 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
           select jsonb_agg(jsonb_build_object(
             'id', c.id,
             'tenant_id', c.tenant_id,
-            'sort_order', c.sort_order,
+            'sort_order', coalesce(bco.sort_order, c.sort_order),
             'name_ar', c.name_ar,
             'name_en', c.name_en,
             'is_active', c.is_active
-          ) order by c.sort_order, c.created_at)
-          from categories c where c.tenant_id = t.id and c.is_active = true
+          ) order by coalesce(bco.sort_order, c.sort_order), c.created_at, c.id)
+          from categories c
+          left join branch_category_order bco
+            on bco.branch_id = b.id
+           and bco.tenant_id = t.id
+           and bco.category_id = c.id
+          where c.tenant_id = t.id and c.is_active = true
         ), '[]'::jsonb) as categories,
         coalesce((
           select jsonb_agg(jsonb_build_object(
             'id', p.id,
             'tenant_id', p.tenant_id,
             'category_id', p.category_id,
-            'sort_order', p.sort_order,
+            'sort_order', coalesce(bpo.sort_order, p.sort_order),
             'name_ar', p.name_ar,
             'name_en', p.name_en,
             'description_ar', p.description_ar,
@@ -203,8 +208,13 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
             'allergens', p.allergens,
             'tags', p.tags,
             'dietary_labels', p.dietary_labels
-          ) order by p.sort_order, p.created_at)
-          from products p where p.tenant_id = t.id
+          ) order by p.category_id nulls last, coalesce(bpo.sort_order, p.sort_order), p.created_at, p.id)
+          from products p
+          left join branch_product_order bpo
+            on bpo.branch_id = b.id
+           and bpo.tenant_id = t.id
+           and bpo.product_id = p.id
+          where p.tenant_id = t.id
         ), '[]'::jsonb) as products
       from tenants t
       join lateral (
