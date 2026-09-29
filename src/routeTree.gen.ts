@@ -11,11 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OwnerRouteImport } from './routes/owner'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AdminWorkspaceRouteImport } from './routes/admin/$workspace'
 import { Route as AdminOnboardingRouteImport } from './routes/admin/onboarding'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
@@ -57,6 +60,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -77,9 +85,19 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWorkspaceRoute = AdminWorkspaceRouteImport.update({
@@ -238,11 +256,14 @@ const ApiMediaTenantTenantIdKindRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRouteWithChildren
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/admin/users': typeof AdminUsersRoute
@@ -277,10 +298,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/admin/users': typeof AdminUsersRoute
@@ -316,11 +340,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRouteWithChildren
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/admin/users': typeof AdminUsersRoute
@@ -357,11 +384,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/forgot-password'
     | '/login'
     | '/onboarding'
     | '/owner'
     | '/pricing'
+    | '/reset-password'
     | '/studio'
+    | '/verify-email'
     | '/admin/$workspace'
     | '/admin/onboarding'
     | '/admin/users'
@@ -396,10 +426,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/forgot-password'
     | '/login'
     | '/onboarding'
     | '/owner'
     | '/pricing'
+    | '/reset-password'
+    | '/verify-email'
     | '/admin/$workspace'
     | '/admin/onboarding'
     | '/admin/users'
@@ -434,11 +467,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/forgot-password'
     | '/login'
     | '/onboarding'
     | '/owner'
     | '/pricing'
+    | '/reset-password'
     | '/studio'
+    | '/verify-email'
     | '/admin/$workspace'
     | '/admin/onboarding'
     | '/admin/users'
@@ -474,11 +510,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRouteWithChildren
   OwnerRoute: typeof OwnerRoute
   PricingRoute: typeof PricingRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   StudioRoute: typeof StudioRouteWithChildren
+  VerifyEmailRoute: typeof VerifyEmailRoute
   InviteTokenRoute: typeof InviteTokenRoute
   MSlugRoute: typeof MSlugRouteWithChildren
   ThemesPreviewRoute: typeof ThemesPreviewRoute
@@ -501,6 +540,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -531,11 +577,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/studio': {
       id: '/studio'
       path: '/studio'
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/$workspace': {
@@ -837,11 +897,14 @@ const MSlugRouteWithChildren = MSlugRoute._addFileChildren(MSlugRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRouteWithChildren,
   OwnerRoute: OwnerRoute,
   PricingRoute: PricingRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   StudioRoute: StudioRouteWithChildren,
+  VerifyEmailRoute: VerifyEmailRoute,
   InviteTokenRoute: InviteTokenRoute,
   MSlugRoute: MSlugRouteWithChildren,
   ThemesPreviewRoute: ThemesPreviewRoute,

@@ -1033,3 +1033,17 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 Owner review of the single PR for Menuun brand migration and footer redesign. Do not merge or deploy automatically.
+
+
+# 2026-09-29 — Menuun Auth Email Flow — ACTIVE TASK
+
+- VERIFIED: Resend domain verification is complete and the owner created a restricted Sending access API key.
+- IMPLEMENTED: Better Auth now has server-side verification email delivery through Resend, required verification for email/password login, password reset email delivery, session revocation on password reset, and guarded account hard-delete support for accounts with no restaurant linkage.
+- IMPLEMENTED: bilingual verification, forgot-password, and reset-password routes; signup now sends the user to verification before onboarding rather than creating an authenticated session immediately.
+- IMPLEMENTED: pending signup phone data remains in sessionStorage until the first verified login, then existing server-side phone persistence is used.
+- UNKNOWN: Vercel Preview does not yet have verified `RESEND_API_KEY` evidence for this change.
+- UNKNOWN: real email inbox delivery and full Preview browser flow.
+
+## EXACT NEXT TASK
+
+CI verification for the auth-email PR, followed by safe Preview environment configuration and end-to-end auth email verification. Do not deploy Production manually.

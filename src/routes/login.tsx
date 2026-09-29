@@ -16,6 +16,25 @@ export const Route = createFileRoute("/login")({ component: Login });
 
 function invitationToken() { if (typeof window === "undefined") return ""; const token = new URLSearchParams(window.location.search).get("invite")?.trim() || ""; return token.length >= 40 && token.length <= 200 ? token : ""; }
 function initialMode(): "in" | "up" { if (typeof window === "undefined") return "in"; return new URLSearchParams(window.location.search).get("mode") === "signup" ? "up" : "in"; }
+function verifiedNotice(): boolean { if (typeof window === "undefined") return false; return new URLSearchParams(window.location.search).get("verified") === "1"; }
+function savePendingRegistration(email: string, phone: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem("menuun.pending-registration-email", email);
+    window.sessionStorage.setItem("menuun.pending-registration-phone", phone);
+  } catch { /* storage unavailable — the user can still resend verification manually */ }
+}
+function readPendingRegistrationPhone(): string {
+  if (typeof window === "undefined") return "";
+  try { return window.sessionStorage.getItem("menuun.pending-registration-phone")?.trim() ?? ""; } catch { return ""; }
+}
+function clearPendingRegistration(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem("menuun.pending-registration-email");
+    window.sessionStorage.removeItem("menuun.pending-registration-phone");
+  } catch { /* storage unavailable */ }
+}
 
 function Login() {
   const { lang } = useLang();
@@ -25,6 +44,7 @@ function Login() {
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [verified, setVerified] = useState(verifiedNotice);
   const invite = invitationToken();
 
   if (isPending) return <LoadingState label="جارٍ التحقق…" />;
@@ -79,18 +99,16 @@ function Login() {
           throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
         }
         const result = await authClient.signUp.email({ email, password, name });
-        if (result.error) {
-          const retry = await authClient.signIn.email({ email, password });
-          if (retry.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
+        if (result.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
+        savePendingRegistration(email, phone);
+        const verification = await authClient.sendVerificationEmail({
+          email,
+          callbackURL: `/login?verified=1`,
+        });
+        if (verification.error) {
+          throw new Error(lang === "ar" ? "تم إنشاء الحساب، لكن تعذر إرسال رسالة التحقق. افتح صفحة التحقق لإعادة الإرسال." : "Your account was created, but the verification email could not be sent. Open the verification page to resend it.");
         }
-        const phoneResult = await saveCustomerRegistrationPhone({ data: { phone } });
-        if (!phoneResult.ok) {
-          if (phoneResult.code === "invalid") throw new Error(lang === "ar" ? "أدخل رقم جوال سعودي صحيح." : "Enter a valid Saudi phone number.");
-          if (phoneResult.code === "conflict") throw new Error(lang === "ar" ? "رقم الجوال مستخدم بالفعل. أدخل رقمًا آخر." : "Phone number is already in use. Enter another number.");
-          throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
-        }
-        await refresh();
-        await navigate({ to: "/onboarding", replace: true });
+        await navigate({ to: "/verify-email", replace: true });
         return;
       }
       if (loginMethod === "phone") {
@@ -99,6 +117,16 @@ function Login() {
       } else {
         const result = await authClient.signIn.email({ email: identity.toLowerCase(), password });
         if (result.error) throw new Error(result.error.message);
+      }
+      const pendingPhone = readPendingRegistrationPhone();
+      if (pendingPhone) {
+        const phoneResult = await saveCustomerRegistrationPhone({ data: { phone: pendingPhone } });
+        if (!phoneResult.ok) {
+          if (phoneResult.code === "invalid") throw new Error(lang === "ar" ? "رقم الجوال المحفوظ غير صالح." : "The saved phone number is invalid.");
+          if (phoneResult.code === "conflict") throw new Error(lang === "ar" ? "رقم الجوال مستخدم بالفعل. تواصل مع الدعم إذا كان هذا حسابك." : "That phone number is already in use. Contact support if this is your account.");
+          throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
+        }
+        clearPendingRegistration();
       }
       await refresh();
       if (invite) await navigate({ to: "/invite/$token", params: { token: invite }, replace: true });
@@ -116,6 +144,7 @@ function Login() {
       <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menuun" : "Start with Menuun"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أدخل بيانات حسابك، ثم أكمل بيانات المطعم في الخطوة التالية." : "Enter your account details, then complete your restaurant setup in the next step.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
       {authEnabled ? <>
         {!signup && <><div className="grid gap-2">{GROK_PROVIDERS.map((p) => <Button key={p.providerId} type="button" variant="outline" disabled={busy} onClick={() => signIn(p.providerId, { callbackURL: invite ? `/invite/${encodeURIComponent(invite)}` : "/studio" })}>{t(copy.auth.google, lang)}</Button>)}</div><p className="text-center text-xs text-muted">{t(copy.auth.or, lang)}</p></>}
+        {verified ? <p className="rounded-xl border border-line bg-sand/20 p-3 text-sm text-ink-soft" role="status">{lang === "ar" ? "تم التحقق من بريدك الإلكتروني. يمكنك تسجيل الدخول الآن." : "Your email has been verified. You can sign in now."}</p> : null}
         <form className="grid gap-3" onSubmit={onSubmit}>
           {signup ? <Field label={lang === "ar" ? "الاسم الكامل" : "Full name"}><Input name="name" required minLength={2} maxLength={100} autoComplete="name" /></Field> : null}
                     {signup ? <Field label={lang === "ar" ? "رقم الجوال السعودي" : "Saudi phone number"}><Input name="phone" type="tel" required minLength={8} maxLength={30} inputMode="tel" autoComplete="tel" placeholder="05XXXXXXXX" /></Field> : null}
@@ -128,6 +157,7 @@ function Login() {
           {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
           <Button type="submit" disabled={busy}>{busy ? t(copy.state.loading, lang) : signup ? (lang === "ar" ? "إنشاء الحساب" : "Create account") : t(copy.auth.signIn, lang)}</Button>
         </form>
+        {!signup && loginMethod === "email" ? <Link to="/forgot-password" className="text-center text-sm text-ink-soft underline-offset-4 hover:underline">{lang === "ar" ? "نسيت كلمة المرور؟" : "Forgot password?"}</Link> : null}
         <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{signup ? (lang === "ar" ? "لدي حساب بالفعل" : "I already have an account") : t(copy.auth.noAccount, lang)}</button>
       </> : <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>}
       <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>

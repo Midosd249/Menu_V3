@@ -6,14 +6,14 @@ const login = readFileSync("src/routes/login.tsx", "utf8");
 const registration = readFileSync("src/lib/auth/customer-registration.ts", "utf8");
 const owner = readFileSync("src/lib/menu/owner.ts", "utf8");
 
-test("failed phone persistence is resumable with the same email and credentials", () => {
-  const signupBlock = login.match(/const result = await authClient\.signUp\.email\([\s\S]*?await navigate\(\{ to: "\/onboarding"/);
-  assert.ok(signupBlock, "signup flow should remain a single resumable path");
-  assert.match(signupBlock[0], /if \(result\.error\)[\s\S]*authClient\.signIn\.email/);
-  assert.match(signupBlock[0], /authClient\.signIn\.email\(\{ email, password \}\)/);
-  assert.match(signupBlock[0], /saveCustomerRegistrationPhone\(\{ data: \{ phone \} \}\)/);
-  assert.match(signupBlock[0], /phoneResult\.ok/);
-  assert.match(signupBlock[0], /navigate\(\{ to: "\/onboarding"/);
+test("failed phone persistence remains resumable after verified login", () => {
+  assert.match(login, /savePendingRegistration\(email, phone\)/);
+  assert.match(login, /readPendingRegistrationPhone\(\)/);
+  assert.match(login, /saveCustomerRegistrationPhone\(\{ data: \{ phone: pendingPhone \} \}\)/);
+  assert.match(login, /phoneResult\.ok/);
+  assert.match(login, /clearPendingRegistration\(\)/);
+  assert.match(login, /authClient\.signIn\.email\(\{ email: identity\.toLowerCase\(\), password \}\)/);
+  assert.match(login, /await navigate\(\{ to: "\/studio", replace: true \}\)/);
 });
 
 test("registration phone persistence only accepts the incomplete new-registration account", () => {
@@ -27,7 +27,7 @@ test("registration phone persistence only accepts the incomplete new-registratio
 test("genuinely duplicate phone remains rejected with a clear bilingual message", () => {
   assert.match(registration, /where "phoneNumber" = \$\{phone\} and "id" <> \$\{context\.userId\}/);
   assert.match(login, /رقم الجوال مستخدم بالفعل/);
-  assert.match(login, /Phone number is already in use/);
+  assert.match(login, /That phone number is already in use/);
 });
 
 test("publish is guarded server-side by category and available-product readiness", () => {

@@ -1378,3 +1378,21 @@ Deploy the final continuity commit once CI is green, verify Production == main H
 ## EXACT NEXT TASK
 
 Owner review of the single PR for Menuun brand migration and footer redesign. Do not merge or deploy automatically.
+
+
+# 2026-09-29 — Menuun Auth Email Flow — IN_PROGRESS / PR PREPARATION
+
+- VERIFIED: current implementation branch is based directly on main SHA `688ac692292b8f92902331118c16b9d556ef6005`.
+- VERIFIED: Resend domain `mail.menuun.com` is fully verified according to owner-provided Resend evidence; the API key was created with Sending access rather than Full access.
+- VERIFIED: Better Auth email/password authentication already existed and was preserved.
+- IN_PROGRESS: added server-side Resend delivery, required email verification, password-reset email flow, verification resend UI, reset-password UI, and a guarded self-service account closure path.
+- VERIFIED: restaurant-linked accounts are blocked from hard deletion by server-side checks against `tenant_members` and `tenants.owner_user_id`.
+- UNKNOWN: the real Resend API key value is not available to the repository workflow and must never be committed or pasted into chat.
+- UNKNOWN: `RESEND_API_KEY` has not yet been verified in the target Vercel Preview environment.
+- UNKNOWN: real inbox delivery and end-to-end Preview auth flow have not yet been executed after this implementation.
+- DEPLOYMENT STATUS: NOT DEPLOYED / HOLD.
+- IMPLEMENTATION STATUS: IMPLEMENTATION_IN_PROGRESS / PR PREPARATION.
+
+## EXACT NEXT TASK
+
+Run GitHub CI for the auth-email PR. After CI passes, configure `RESEND_API_KEY` as a Vercel Preview server environment variable without exposing the value, then perform safe Preview signup → verification → login → forgot-password → reset-password → logout checks using a dedicated test account. Do not use destructive database actions in Preview.

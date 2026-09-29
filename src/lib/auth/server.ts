@@ -1,16 +1,18 @@
 /** Self-hosted Better Auth for Menu V3 (server-only). */
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { verifyPassword as verifyScryptPassword } from "better-auth/crypto";
 import { admin, bearer, genericOAuth, phoneNumber } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { createHash } from "node:crypto";
 import { Pool } from "pg";
-import { ensureDbReady, getPglite, POSTGRES_SCHEMA } from "../db";
+import { ensureDbReady, getPglite, getSql, POSTGRES_SCHEMA } from "../db";
 import { emailAndPasswordEnabled } from "./email-password";
 import { GATE_PROVIDER_ID, gateIdentitySessions } from "./gate-session.server";
 import { GROK_PROVIDERS } from "./providers";
 import { pgliteDialect } from "./pglite-dialect";
+import { sendMenuunEmail } from "./email";
 import {
   GROK_ISSUER_DEFAULT,
   PREVIEW_ALLOWED_HOSTS,
@@ -174,10 +176,81 @@ export const auth = betterAuth({
     },
   },
   session: { cookieCache: { enabled: true, maxAge: 300 } },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      void sendMenuunEmail({
+        to: user.email,
+        subject: "Verify your Menuun email",
+        preview: "Verify your Menuun email",
+        heading: "Verify your Menuun email",
+        body: "Welcome to Menuun. Please verify your email address to finish creating your account.",
+        actionLabel: "Verify email",
+        actionUrl: url,
+        footer: "This verification link expires in 60 minutes.",
+      }).catch((error) => console.error("[auth] verification email failed", error));
+    },
+    sendOnSignUp: false,
+    sendOnSignIn: true,
+    autoSignInAfterVerification: false,
+    expiresIn: 3600,
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url }) => {
+        void sendMenuunEmail({
+          to: user.email,
+          subject: "Confirm Menuun account deletion",
+          preview: "Confirm Menuun account deletion",
+          heading: "Confirm account deletion",
+          body: "A request was made to permanently delete your Menuun account. If you made this request and your account is not linked to a restaurant workspace, use the button below.",
+          actionLabel: "Delete account",
+          actionUrl: url,
+          footer: "This link permanently deletes the account. If you did not request this, ignore this email.",
+        }).catch((error) => console.error("[auth] account deletion email failed", error));
+      },
+      beforeDelete: async (user) => {
+        const sql = await getSql();
+        const linked = await sql.query<{ count: number }>(
+          `select count(*)::int as count
+           from (
+             select 1 from tenant_members where user_id = $1 limit 1
+           ) membership`,
+          [user.id],
+        );
+        const owned = await sql.query<{ count: number }>(
+          `select count(*)::int as count
+           from tenants where owner_user_id = $1 limit 1`,
+          [user.id],
+        );
+        if ((linked[0]?.count ?? 0) > 0 || (owned[0]?.count ?? 0) > 0) {
+          throw new APIError("BAD_REQUEST", {
+            message: "Restaurant-linked accounts cannot be permanently deleted yet. Contact Menuun support to transfer or close the restaurant workspace first.",
+          });
+        }
+      },
+    },
+  },
   ...(emailAndPasswordEnabled
     ? {
         emailAndPassword: {
           enabled: true,
+          requireEmailVerification: true,
+          autoSignIn: false,
+          resetPasswordTokenExpiresIn: 3600,
+          revokeSessionsOnPasswordReset: true,
+          sendResetPassword: async ({ user, url }) => {
+            void sendMenuunEmail({
+              to: user.email,
+              subject: "Reset your Menuun password",
+              preview: "Reset your Menuun password",
+              heading: "Reset your Menuun password",
+              body: "We received a request to reset your Menuun password. If you made this request, use the button below. If you did not request it, you can safely ignore this email.",
+              actionLabel: "Reset password",
+              actionUrl: url,
+              footer: "This link expires in 60 minutes.",
+            }).catch((error) => console.error("[auth] password reset email failed", error));
+          },
           password: {
             hash: async (password: string) => {
               const { hashPassword } = await import("better-auth/crypto");
