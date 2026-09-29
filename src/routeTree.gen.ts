@@ -303,6 +303,8 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
   '/admin/users': typeof AdminUsersRoute
@@ -571,13 +573,6 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
