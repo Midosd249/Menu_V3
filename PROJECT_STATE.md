@@ -1,3 +1,21 @@
+# 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
+
+- VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.
+- VERIFIED: PR #327 is open, mergeable, not merged, and targets main; head is 31f7fa4e84a5ab3053d3a8210bed26b12f632d09.
+- VERIFIED: Part A changed only the Taste/Mazaq template path and its regression contract; no other theme template was changed.
+- VERIFIED: Part B adds branch-scoped ordering overrides for categories and products, Studio up/down controls, server-side tenant/branch authorization, and public-menu ordering by saved branch order with fallback to existing sort_order.
+- VERIFIED: GitHub Quality run #2596 passed typecheck, tests, lint, production build, all-theme browser QA, Menuun brand browser QA, performance, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA #754 passed.
+- VERIFIED: Vercel PR preview status is success; this is preview evidence only, not Production deployment evidence.
+- UNKNOWN: direct physical-device interaction with the new ordering controls was not performed in this session.
+- IMPLEMENTATION STATUS: VERIFIED via CI repository execution evidence; READY_TO_PUSH / pushed to PR branch.
+- DEPLOYMENT STATUS: NOT_DEPLOYED / HOLD FOR OWNER REVIEW.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #327. Do not merge or deploy automatically. After approval, perform the normal controlled release workflow; Part C remains plan-only until explicitly approved.
+
+---
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
 - VERIFIED: PR #324 merged the Menuun platform-attribution implementation at `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.

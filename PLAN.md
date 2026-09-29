@@ -1,3 +1,18 @@
+# 2026-09-30 — Part C Offers/Promotions — PROPOSED / PLAN ONLY
+
+1. Data model: add one tenant-owned product_offers record per product for the MVP, with tenant_id, product_id, offer_type (sale_price, percent_off, fixed_amount, bogo), numeric value fields, starts_at, ends_at, is_active, and audit timestamps. Enforce tenant/product ownership and a single active offer per product.
+2. Studio UI: add an Offer section inside the existing product editor. Owner/admin/editor can create, edit, disable one offer for the item, choose the type, value, schedule, and bilingual customer-facing label. An offer is metadata on an existing product and does not create another menu item.
+3. Public menu: for an active offer, show the normal price plus a clear treatment such as was X → now Y for sale-price/fixed/percentage offers, or a concise BOGO badge. Use existing text(lang, ...) and RTL/LTR conventions; render only server-validated active offers.
+4. Order pricing: never trust the client-displayed discounted price. At submitPublicOrder, load the current active offer server-side, validate its time window, calculate the effective unit/line price, and persist the pricing snapshot into order_items. Recommended snapshot fields: original_unit_price, discount_amount, offer_id; existing unit_price and line_total remain the final charged values.
+5. Variants/modifiers: proposed MVP rule is percentage/fixed discounts apply to the selected variant price; modifier price deltas remain additive and are not discounted. A fixed sale_price is base-product-only unless variant-specific sale prices are introduced. BOGO initially applies only to identical product quantities and does not discount modifier deltas.
+6. Receipt/invoice flow: receipts already read persisted order_items.unit_price and line_total. Do not add client-side receipt math. Display the final unit price and line total; optionally show original price/discount only if the receipt product decision requires it. Existing orders.subtotal and orders.total remain authoritative.
+7. Stacking: default to no stacking for item-level offers. One product has at most one active offer, keeping calculations deterministic.
+8. Expiry/timezone: store timestamptz and evaluate validity on the server. Before implementation, confirm an explicit branch/tenant timezone contract; if absent, add that prerequisite rather than guessing from city or browser settings.
+9. Subscription limits: offers do not increase product count because they are metadata on an existing product. If a future plan limits promotional campaigns, enforce that as a distinct entitlement.
+10. Concurrency/audit: snapshot the applied offer and final price into the order so later edits/expiry cannot retroactively change existing orders or receipts. Test active/inactive/expired offers, fixed/percentage/BOGO math, variant/modifier interaction, tenant/branch isolation, and receipt totals.
+11. Migration/release: implement only after owner approval of the pricing rules above. No Offers/Promotions code is included in PR #327.
+
+---
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
 - VERIFIED: PR #324 introduced the Menuun platform-attribution implementation and merged as `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
