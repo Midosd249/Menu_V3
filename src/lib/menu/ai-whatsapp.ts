@@ -44,7 +44,7 @@ export const generateWhatsAppReportMessage = createServerFn({ method: "POST" })
       const rows = await sql<Member>`select tenant_id, role from tenant_members where user_id = ${context.userId} and is_active = true order by created_at limit 1`;
       if (!rows[0]) return { ok: false, code: "not_found", error: "لا يوجد حساب مطعم نشط" };
       if (!(rows[0].role === "owner" || rows[0].role === "admin")) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية إنشاء رسالة التقرير" };
-      const prompt = `Language: ${data.lang === "ar" ? "Arabic" : "English"}.\n\nWrite a polished WhatsApp message for the restaurant owner based only on this verified Menu V3 report. Keep it concise (roughly 5-9 short lines), mention the reporting period, 2-4 useful metrics, and 1-2 concrete priorities. End with a simple invitation to open the report in Menu V3. Do not add facts that are not in the report.\n\nREPORT:\n${data.reportText}`;
+      const prompt = `Language: ${data.lang === "ar" ? "Arabic" : "English"}.\n\nWrite a polished WhatsApp message for the restaurant owner based only on this verified Menuun report. Keep it concise (roughly 5-9 short lines), mention the reporting period, 2-4 useful metrics, and 1-2 concrete priorities. End with a simple invitation to open the report in Menuun. Do not add facts that are not in the report.\n\nREPORT:\n${data.reportText}`;
       const result = await generateStructuredAi({
         sql,
         tenantId: rows[0].tenant_id,
