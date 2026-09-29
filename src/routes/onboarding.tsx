@@ -86,7 +86,7 @@ function SelfServeWorkspaceSetup({ busy, setBusy, error, setError, onProvisioned
 
   return <main dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
     <section className="w-full max-w-xl rounded-3xl border border-line bg-white p-6 shadow-sm md:p-8">
-      <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">Menu V3</Link><LangToggle /></div>
+      <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">Menuun</Link><LangToggle /></div>
       <div className="mt-8 grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "الخطوة الثانية" : "Step 2"}</p><h1 className="font-display text-2xl font-semibold">{lang === "ar" ? "جهّز مساحة عملك" : "Set up your workspace"}</h1><p className="text-sm leading-6 text-muted">{lang === "ar" ? "لا توجد موافقة يدوية. بعد إنشاء الحساب، جهّز مساحة عملك وادخل مباشرة إلى الاستوديو." : "There is no manual approval. After creating your account, set up your workspace and go directly to Studio."}</p></div>
       <form className="mt-7 grid gap-4" onSubmit={submit} noValidate>
         <Field label={lang === "ar" ? "اسم البراند أو المطعم" : "Brand / restaurant name"}><Input name="nameAr" required minLength={2} maxLength={80} autoComplete="organization" /></Field>
