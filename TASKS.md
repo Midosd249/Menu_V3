@@ -1168,3 +1168,23 @@ Owner review PR #309 after GitHub Quality/W9 are green. Do not merge/deploy auto
 ## EXACT NEXT TASK
 
 **Owner reviews PR #311 and authorizes merge/release if accepted; do not merge or deploy automatically.**
+
+
+# 2026-09-29 — Menuun Production Logo Assets — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: Hermes production asset work was reviewed in PR #317 before merge.
+- VERIFIED: PR #317 `feat(brand): add Menuun production logo assets` passed GitHub `quality` and `orders-browser`; Vercel preview was READY and reported no unresolved feedback.
+- VERIFIED: the supplied transparent vector and cream-background vector were archived byte-identically; the earlier Canva SVG/PNG remain preserved as historical/reference sources.
+- VERIFIED: seven production SVG derivatives were added under `assets/brand/menuun/final/`, including transparent, monochrome, English, Arabic RTL, and standalone mark variants, plus Cairo OFL licensing and brand documentation.
+- VERIFIED: the source artwork was not AI-regenerated or redesigned; the production derivatives omit only the documented stray lower-right source group and source metadata.
+- VERIFIED: Arabic lockup uses the exact phrase `منيو رقمي للمطاعم والكافيهات` with Cairo Bold; the Latin `menuun` artwork remains as supplied paths.
+- VERIFIED: PR #317 was squash-merged into `main` as `f50f7810b11602a194f0715637ba1f5e07787f98`.
+- VERIFIED: `main` now points to `f50f7810b11602a194f0715637ba1f5e07787f98`.
+- VERIFIED: application code, homepage, header, favicon, runtime branding, database, auth/RLS, and deployment configuration were not changed by this task.
+- UNKNOWN: physical print/thermal-printer output and real-device logo rendering remain untested.
+- DEPLOYMENT: no intentional Production deployment was performed as part of this brand-asset task. Any automatic post-merge Vercel activity is not treated as verified Production deployment without exact READY/commit evidence.
+- IMPLEMENTATION STATUS: **MERGED / VERIFIED**.
+
+## EXACT NEXT TASK
+
+**Owner review of the new Menuun production logo assets. If approved, start a separate atomic task for application wiring (homepage/header/favicon/runtime branding). Do not wire the logo into the application in this task.**
