@@ -1335,3 +1335,26 @@ Deploy the final continuity commit once CI is green, verify Production == main H
 ## EXACT NEXT TASK
 
 **Owner review of the new Menuun production logo assets. If approved, start a separate atomic task for application wiring (homepage/header/favicon/runtime branding). Do not wire the logo into the application in this task.**
+
+
+# 2026-09-29 — Menuun Application Brand Wiring — CLOSED / VERIFIED / MERGED
+
+- VERIFIED: PR #319 `feat(brand): wire Menuun identity into app chrome` was merged by squash into `main`.
+- VERIFIED: merged `main` HEAD is `d865c5b9a08e6e2c7d90503f41e5584f98d486b1`, with a GitHub-verified commit signature.
+- VERIFIED: the verified Menuun production assets are now wired into the marketing homepage header and shared marketing footer.
+- VERIFIED: Arabic and English platform chrome select the corresponding supplied Menuun logo variant; the exact Arabic lockup remains `منيو رقمي للمطاعم والكافيهات`.
+- VERIFIED: the stable `/favicon.svg` path now serves the supplied Menuun monochrome mark instead of the legacy favicon artwork.
+- VERIFIED: root application title is now `Menuun`.
+- VERIFIED: tenant-specific `logoUrl` behavior was not changed; platform identity and restaurant identity remain separate.
+- VERIFIED: an automated regression contract was added for platform logo wiring, favicon path, Arabic lockup, and removal of the legacy platform chrome.
+- VERIFIED: GitHub Quality run `36536272645` passed typecheck, repository tests, W7.4–W7.10 contract gates, lint, production build, browser template QA, golden performance fixture, Studio browser QA, Platform Admin browser QA, performance evidence, and cleanup.
+- VERIFIED: GitHub W9 Orders QA run `36536272703` passed.
+- VERIFIED: Vercel reported successful PR preview status during the final verification cycle; this is preview evidence only.
+- UNKNOWN: direct real-device validation of the merged Menuun platform chrome has not been performed in this task.
+- UNKNOWN: Production deployment of `d865c5b9a08e6e2c7d90503f41e5584f98d486b1`; the observed post-merge Vercel status is `pending`, so it is not treated as a verified Production deployment.
+- DEPLOYMENT STATUS: **MERGED_TO_MAIN / PRODUCTION_STATUS_UNKNOWN**.
+- IMPLEMENTATION STATUS: **MERGED / VERIFIED**.
+
+## EXACT NEXT TASK
+
+**If Production rollout is required, start a separate release/deployment task for `main` SHA `d865c5b9a08e6e2c7d90503f41e5584f98d486b1`; verify READY, target production, exact commit SHA, and Production == main HEAD before claiming deployment. Otherwise stop and wait for the next atomic task.**
