@@ -1,3 +1,23 @@
+# 2026-09-30 — Self-Serve Signup → Verification → Login → Onboarding Recovery — VERIFIED / PR #323
+
+- VERIFIED: The reported blocker was the signup-to-onboarding handoff for newly created accounts when the phone number was not available in the authenticated user context.
+- VERIFIED: The normal signup path now passes the normalized Saudi phone directly to Better Auth during email signup, before verification, instead of relying on browser sessionStorage.
+- VERIFIED: Existing Resend verification and password-reset email flows were not modified by this task.
+- VERIFIED: Onboarding retains server-side phone recovery for older/incomplete accounts and now exposes retry plus explicit sign-out/return-to-login paths.
+- VERIFIED: CI Quality #2587 passed typecheck, tests, contract tests, lint, production build, browser/template QA, Menuun brand browser QA, Studio/Platform Admin browser QA, and performance evidence steps on PR #323 head `865db763552fb6f8bea3761952e02f9fcae5270a`.
+- VERIFIED: W9 Orders QA #749 passed typecheck, isolated fixture preparation, and the W9 browser suite on the same head.
+- VERIFIED: The initial CI failure on the earlier PR head was a TypeScript mismatch caused by passing an unsupported `action` prop to `ErrorState`; the current head removes that unsupported prop and the full gates pass.
+- VERIFIED: No Vercel Production deployment was triggered by this verification step.
+- UNKNOWN: Real-device verification of the newly fixed onboarding recovery screen has not been performed in this session.
+- UNKNOWN: Production runtime behavior for this exact head until a release deployment is directly evidenced.
+- IMPLEMENTATION STATUS: VERIFIED_LOCALLY / CI VERIFIED / READY_TO_MERGE
+- DEPLOYMENT STATUS: NOT_DEPLOYED_BY_THIS_TASK
+
+## EXACT NEXT ACTION
+
+Merge PR #323 only after the final diff review. Do not redo the existing Resend email implementation. After merge, verify the resulting production deployment only through direct Vercel evidence if a production release is explicitly authorized.
+
+---
 # Project Memory — Problems We Learned From
 
 This file exists to prevent Menu V3 from repeating expensive engineering mistakes. It records hard problems, their root causes, the approaches that failed or consumed time, and the lessons that should shape future work. It is intended for both human developers and AI agents. Update it after major milestones, incidents, repeated debugging loops, or other work that reveals a durable engineering lesson.
