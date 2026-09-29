@@ -11,21 +11,21 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   const logo = read("src/components/menuun-logo.tsx");
   const favicon = read("public/favicon.svg");
 
-  assert.match(root, /Menuun/);
-  assert.match(root, /menuun-mark-mono\\.svg/);
-  assert.doesNotMatch(root, /__grok\/icon-180\.png/);
+  assert.ok(root.includes("Menuun"));
+  assert.ok(root.includes("menuun-mark-mono.svg"));
+  assert.ok(!root.includes("__grok/icon-180.png"));
 
-  assert.match(home, /MenuunLogo/);
-  assert.match(home, /lang=\{lang\}/);
-  assert.doesNotMatch(home, /<Link to="\/" className="font-semibold tracking-tight">\s*Menu V3\s*<\/Link>/);
+  assert.ok(home.includes("MenuunLogo"));
+  assert.ok(home.includes('lang={lang}'));
+  assert.ok(!home.includes('className="font-semibold tracking-tight">\\n            Menu V3'));
 
-  assert.match(footer, /MenuunLogo/);
-  assert.doesNotMatch(footer, /<Link to="\/" className="font-display text-xl font-semibold">Menu V3<\/Link>/);
+  assert.ok(footer.includes("MenuunLogo"));
+  assert.ok(!footer.includes('className="font-display text-xl font-semibold">Menu V3'));
 
-  assert.match(logo, /menuun-logo-ar\.svg/);
-  assert.match(logo, /menuun-logo-en\.svg/);
-  assert.match(logo, /منيو رقمي للمطاعم والكافيهات/);
+  assert.ok(logo.includes("menuun-logo-ar.svg"));
+  assert.ok(logo.includes("menuun-logo-en.svg"));
+  assert.ok(logo.includes("منيو رقمي للمطاعم والكافيهات"));
 
-  assert.match(favicon, /#0F1115/);
-  assert.match(favicon, /<svg[^>]*viewBox="264 1741 1955 1885"/);
+  assert.ok(favicon.includes("#0F1115"));
+  assert.ok(favicon.includes('viewBox="264 1741 1955 1885"'));
 });
