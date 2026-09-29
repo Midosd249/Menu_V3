@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { saveCustomerRegistrationPhone, validateCustomerRegistrationContract } from "@/lib/auth/customer-registration";
+import { validateCustomerRegistrationContract } from "@/lib/auth/customer-registration";
 import { customerRegistrationSchema, GENERIC_REGISTRATION_ERROR } from "@/lib/auth/customer-registration-contract";
 import { LangToggle } from "@/components/lang-toggle";
 import { Button } from "@/components/ui/button";
@@ -17,25 +17,6 @@ export const Route = createFileRoute("/login")({ component: Login });
 function invitationToken() { if (typeof window === "undefined") return ""; const token = new URLSearchParams(window.location.search).get("invite")?.trim() || ""; return token.length >= 40 && token.length <= 200 ? token : ""; }
 function initialMode(): "in" | "up" { if (typeof window === "undefined") return "in"; return new URLSearchParams(window.location.search).get("mode") === "signup" ? "up" : "in"; }
 function verifiedNotice(): boolean { if (typeof window === "undefined") return false; return new URLSearchParams(window.location.search).get("verified") === "1"; }
-function savePendingRegistration(email: string, phone: string): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.setItem("menuun.pending-registration-email", email);
-    window.sessionStorage.setItem("menuun.pending-registration-phone", phone);
-  } catch { /* storage unavailable — the user can still resend verification manually */ }
-}
-function readPendingRegistrationPhone(): string {
-  if (typeof window === "undefined") return "";
-  try { return window.sessionStorage.getItem("menuun.pending-registration-phone")?.trim() ?? ""; } catch { return ""; }
-}
-function clearPendingRegistration(): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.removeItem("menuun.pending-registration-email");
-    window.sessionStorage.removeItem("menuun.pending-registration-phone");
-  } catch { /* storage unavailable */ }
-}
-
 function Login() {
   const { lang } = useLang();
   const navigate = useNavigate();
@@ -98,9 +79,8 @@ function Login() {
           if (validationResult.code === "invalid") throw new Error(lang === "ar" ? "أدخل رقم جوال سعودي صحيح." : "Enter a valid Saudi phone number.");
           throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
         }
-        const result = await authClient.signUp.email({ email, password, name });
+        const result = await authClient.signUp.email({ email, password, name, phoneNumber: validationResult.data.phone });
         if (result.error) throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
-        savePendingRegistration(email, phone);
         const verification = await authClient.sendVerificationEmail({
           email,
           callbackURL: `/login?verified=1`,
@@ -117,16 +97,6 @@ function Login() {
       } else {
         const result = await authClient.signIn.email({ email: identity.toLowerCase(), password });
         if (result.error) throw new Error(result.error.message);
-      }
-      const pendingPhone = readPendingRegistrationPhone();
-      if (pendingPhone) {
-        const phoneResult = await saveCustomerRegistrationPhone({ data: { phone: pendingPhone } });
-        if (!phoneResult.ok) {
-          if (phoneResult.code === "invalid") throw new Error(lang === "ar" ? "رقم الجوال المحفوظ غير صالح." : "The saved phone number is invalid.");
-          if (phoneResult.code === "conflict") throw new Error(lang === "ar" ? "رقم الجوال مستخدم بالفعل. تواصل مع الدعم إذا كان هذا حسابك." : "That phone number is already in use. Contact support if this is your account.");
-          throw new Error(GENERIC_REGISTRATION_ERROR[lang]);
-        }
-        clearPendingRegistration();
       }
       await refresh();
       if (invite) await navigate({ to: "/invite/$token", params: { token: invite }, replace: true });

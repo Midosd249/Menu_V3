@@ -64,7 +64,8 @@ test("signup enters email verification before onboarding", () => {
   assert.ok(signupBlock, "signup should route through verification before onboarding");
   assert.match(signupBlock[0], /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
   assert.match(signupBlock[0], /authClient\.sendVerificationEmail/);
-  assert.match(signupBlock[0], /savePendingRegistration\(email, phone\)/);
+  assert.match(signupBlock[0], /phoneNumber: validationResult\.data\.phone/);
+  assert.doesNotMatch(signupBlock[0], /sessionStorage|savePendingRegistration/);
   assert.match(signupBlock[0], /await navigate\(\{ to: "\/verify-email", replace: true \}\)/);
   assert.doesNotMatch(signupBlock[0], /authClient\.signIn\.email\(\{ email, password \}\)/);
   assert.match(contract, /We couldn't create the account/);
@@ -84,13 +85,14 @@ test("registration preserves Better Auth and keeps mode=signup as navigation sta
   assert.match(authServer, /emailAndPassword:/);
 });
 
-test("successful registration preserves phone state until verified login; workspace handoff remains deferred", () => {
+test("successful registration persists phone before verification; workspace handoff remains deferred", () => {
   assert.match(login, /validateCustomerRegistrationContract/);
   assert.match(login, /authClient\.signUp\.email/);
-  assert.match(login, /savePendingRegistration\(email, phone\)/);
+  assert.match(login, /phoneNumber: validationResult\.data\.phone/);
+  assert.doesNotMatch(login, /sessionStorage|savePendingRegistration|readPendingRegistrationPhone/);
   assert.match(login, /authClient\.sendVerificationEmail/);
   assert.match(login, /await navigate\(\{ to: "\/verify-email", replace: true \}\)/);
-  assert.match(login, /saveCustomerRegistrationPhone/);
+  assert.doesNotMatch(login, /saveCustomerRegistrationPhone/);
   assert.match(login, /await navigate\(\{ to: "\/studio", replace: true \}\)/);
   assert.doesNotMatch(login, /createRestaurant\(/);
   assert.doesNotMatch(login, /createSelfServeWorkspace/);
