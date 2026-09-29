@@ -11,7 +11,7 @@ test("buildWhatsAppShareUrl encodes Arabic, whitespace, and newlines safely", ()
 });
 
 test("buildWhatsAppShareUrl does not select or invent a recipient", () => {
-  const url = buildWhatsAppShareUrl("Hello from Menu V3");
+  const url = buildWhatsAppShareUrl("Hello from Menuun");
   assert.equal(url, "https://wa.me/?text=Hello%20from%20Menu%20V3");
   assert.ok(!url.match(/wa\.me\/\d/));
 });
