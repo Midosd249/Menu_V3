@@ -12,7 +12,7 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   const favicon = read("public/favicon.svg");
 
   assert.match(root, /Menuun/);
-  assert.match(root, /favicon\.svg/);
+  assert.match(root, /menuun-mark-mono\\.svg/);
   assert.doesNotMatch(root, /__grok\/icon-180\.png/);
 
   assert.match(home, /MenuunLogo/);
