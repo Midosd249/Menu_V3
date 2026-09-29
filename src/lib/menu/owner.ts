@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { indexOrder, moveByDirection, type OrderDirection } from "./reorder";
 import { getSql, type Sql } from "@/lib/db";
 import { newId, slugify } from "@/lib/utils";
 import { computeHealth } from "./health";
@@ -416,6 +417,136 @@ export const deleteProduct = createServerFn({ method: "POST" })
     } catch (err) {
       console.error("deleteProduct failed", err);
       return { ok: false, code: "unavailable", error: "تعذر حذف الصنف" };
+    }
+  });
+
+
+export type MenuOrdering = {
+  branchId: string;
+  categoryIds: string[];
+  productIdsByCategory: Record<string, string[]>;
+};
+
+async function assertMenuBranch(sql: Sql, member: MemberRow, branchId: string): Promise<boolean> {
+  const rows = await sql`
+    select b.id
+    from branches b
+    where b.id = ${branchId}
+      and b.tenant_id = ${member.tenant_id}
+      and b.is_active = true
+      and (
+        ${member.role === "owner" || member.role === "admin"}
+        or exists (
+          select 1 from member_branch_access mba
+          where mba.tenant_id = b.tenant_id
+            and mba.user_id = ${member.user_id}
+            and mba.branch_id = b.id
+        )
+        or exists (
+          select 1 from tenant_members tm
+          where tm.tenant_id = b.tenant_id
+            and tm.user_id = ${member.user_id}
+            and tm.is_active = true
+            and ${branchId} = any(tm.branch_scope)
+        )
+      )
+    limit 1
+  `;
+  return Boolean(rows[0]);
+}
+
+async function loadMenuOrdering(sql: Sql, tenantId: string, branchId: string): Promise<MenuOrdering> {
+  const [categoryRows, productRows] = await Promise.all([
+    sql<{ id: string }>`
+      select c.id from categories c
+      left join branch_category_order bco on bco.branch_id = ${branchId} and bco.tenant_id = ${tenantId} and bco.category_id = c.id
+      where c.tenant_id = ${tenantId} and c.is_active = true
+      order by coalesce(bco.sort_order, c.sort_order), c.created_at, c.id
+    `,
+    sql<{ id: string; category_id: string | null }>`
+      select p.id, p.category_id from products p
+      left join branch_product_order bpo on bpo.branch_id = ${branchId} and bpo.tenant_id = ${tenantId} and bpo.product_id = p.id
+      where p.tenant_id = ${tenantId}
+      order by p.category_id nulls last, coalesce(bpo.sort_order, p.sort_order), p.created_at, p.id
+    `,
+  ]);
+  const productIdsByCategory: Record<string, string[]> = {};
+  for (const row of productRows) {
+    if (!row.category_id) continue;
+    (productIdsByCategory[String(row.category_id)] ??= []).push(String(row.id));
+  }
+  const categoryIds = categoryRows.map((row) => String(row.id));
+  for (const categoryId of categoryIds) productIdsByCategory[categoryId] ??= [];
+  return { branchId, categoryIds, productIdsByCategory };
+}
+
+export const getMenuOrdering = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator(z.object({ branchId: z.string().min(1).max(80) }))
+  .handler(async ({ context, data }): Promise<FnResult<MenuOrdering>> => {
+    try {
+      const sql = await getSql();
+      const member = await membershipOf(sql, context.userId);
+      if (!member) return { ok: false, code: "not_found", error: "لا يوجد مطعم" };
+      if (!(await assertMenuBranch(sql, member, data.branchId))) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية لهذا الفرع" };
+      return { ok: true, data: await loadMenuOrdering(sql, member.tenant_id, data.branchId) };
+    } catch (err) {
+      console.error("getMenuOrdering failed", err);
+      return { ok: false, code: "unavailable", error: "تعذر تحميل ترتيب القائمة" };
+    }
+  });
+
+export const reorderMenu = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({
+    branchId: z.string().min(1).max(80),
+    type: z.enum(["category", "product"]),
+    id: z.string().min(1).max(120),
+    direction: z.enum(["up", "down"]),
+    categoryId: z.string().min(1).max(120).optional(),
+  }))
+  .handler(async ({ context, data }): Promise<FnResult<MenuOrdering>> => {
+    try {
+      const sql = await getSql();
+      const member = await membershipOf(sql, context.userId);
+      if (!member) return { ok: false, code: "not_found", error: "لا يوجد مطعم" };
+      if (!canWriteMenu(member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية" };
+      if (!(await assertMenuBranch(sql, member, data.branchId))) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية لهذا الفرع" };
+      const ordering = await loadMenuOrdering(sql, member.tenant_id, data.branchId);
+      const direction = data.direction as OrderDirection;
+      if (data.type === "category") {
+        const categories = ordering.categoryIds.map((id) => ({ id }));
+        const moved = moveByDirection(categories, data.id, direction);
+        if (moved.every((item, index) => item.id === categories[index]?.id)) return { ok: true, data: ordering };
+        for (const item of indexOrder(moved)) {
+          await sql`
+            insert into branch_category_order (branch_id, tenant_id, category_id, sort_order)
+            values (${data.branchId}, ${member.tenant_id}, ${item.id}, ${item.sortOrder})
+            on conflict (branch_id, category_id) do update set tenant_id = excluded.tenant_id, sort_order = excluded.sort_order
+          `;
+        }
+      } else {
+        if (!data.categoryId) return { ok: false, code: "invalid", error: "التصنيف مطلوب لترتيب الأصناف" };
+        if (!ordering.categoryIds.includes(data.categoryId)) return { ok: false, code: "invalid", error: "تصنيف غير صالح" };
+        const rows = await sql<{ id: string }>`select id from products where tenant_id = ${member.tenant_id} and category_id = ${data.categoryId}`;
+        const existingIds = new Set(rows.map((row) => String(row.id)));
+        if (!existingIds.has(data.id)) return { ok: false, code: "not_found", error: "الصنف غير موجود في التصنيف" };
+        const products = (ordering.productIdsByCategory[data.categoryId] ?? []).filter((id) => existingIds.has(id)).map((id) => ({ id }));
+        for (const id of existingIds) if (!products.some((item) => item.id === id)) products.push({ id });
+        const moved = moveByDirection(products, data.id, direction);
+        if (moved.every((item, index) => item.id === products[index]?.id)) return { ok: true, data: ordering };
+        for (const item of indexOrder(moved)) {
+          await sql`
+            insert into branch_product_order (branch_id, tenant_id, product_id, sort_order)
+            values (${data.branchId}, ${member.tenant_id}, ${item.id}, ${item.sortOrder})
+            on conflict (branch_id, product_id) do update set tenant_id = excluded.tenant_id, sort_order = excluded.sort_order
+          `;
+        }
+      }
+      return { ok: true, data: await loadMenuOrdering(sql, member.tenant_id, data.branchId) };
+    } catch (err) {
+      console.error("reorderMenu failed", err);
+      return { ok: false, code: "unavailable", error: "تعذر حفظ ترتيب القائمة" };
     }
   });
 
