@@ -1,3 +1,16 @@
+# 2026-09-30 — Menuun Platform Attribution — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: canonical `main` is `2e38263dfdc5d73a3e21f97fe029bf5fdd2d22cd`.
+- VERIFIED: Menuun production logo assets and the existing platform-brand component are already present on `main`; tenant-specific `logoUrl` remains separate.
+- VERIFIED: the supplied mobile screenshot shows a compact dark footer attribution pattern with a platform logo and a short "مقدم من" label.
+- PROPOSED: add a shared Menuun platform-attribution footer to every public-menu render, using the existing production logo on a restrained charcoal strip and keeping it outside restaurant identity/actions.
+- PROPOSED: surface the existing Menuun logo in the customer Studio shell sidebar and mobile header without changing tenant branding.
+- UNKNOWN: real-device/browser visual rendering of the new attribution on all five theme families until the repository browser QA runs.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Run the repository quality/browser gates for the attribution change, review the final diff, and only then prepare the controlled merge/release decision. Do not deploy automatically.
 # 2026-09-25 — Unified Order Receipt Preview — READY FOR REVIEW
 
 - VERIFIED: PR #303 `feat(orders): unify receipt preview and printing` is open and mergeable against `main`.
