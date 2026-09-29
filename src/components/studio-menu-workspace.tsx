@@ -16,6 +16,7 @@ type Props = {
   products: Product[];
   categories: Category[];
   branchId: string;
+  canReorder: boolean;
   orderingBusy: boolean;
   query: string;
   catFilter: string;
@@ -54,6 +55,7 @@ export function StudioMenuWorkspace({
   products,
   categories,
   branchId,
+  canReorder,
   orderingBusy,
   query,
   catFilter,
@@ -100,7 +102,7 @@ export function StudioMenuWorkspace({
             </p>
             <label className="mt-2 grid max-w-sm gap-1 text-xs text-muted">
               <span>{lang === "ar" ? "الفرع الذي تعدّل ترتيبه" : "Branch whose menu order you are editing"}</span>
-              <select value={branchId} onChange={(event) => onBranchChange(event.target.value)} disabled={orderingBusy || snapshot.branches.length === 0} className="h-10 rounded-xl border border-line bg-paper px-3 text-sm text-ink">
+              <select value={branchId} onChange={(event) => onBranchChange(event.target.value)} disabled={!canReorder || orderingBusy || snapshot.branches.length === 0} className="h-10 rounded-xl border border-line bg-paper px-3 text-sm text-ink">
                 {snapshot.branches.filter((branch) => branch.isActive).map((branch) => <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr : branch.nameEn || branch.nameAr}</option>)}
               </select>
             </label>
@@ -172,7 +174,7 @@ export function StudioMenuWorkspace({
           ))}
         </div>
 
-        {categories.length > 1 ? (
+        {canReorder && categories.length > 1 ? (
           <div className="grid gap-2 rounded-xl border border-line bg-sand/20 p-3" aria-label={lang === "ar" ? "ترتيب التصنيفات" : "Category ordering"}>
             <div className="flex items-center justify-between gap-3">
               <div><p className="text-sm font-semibold">{lang === "ar" ? "ترتيب التصنيفات" : "Category order"}</p><p className="text-xs text-muted">{lang === "ar" ? "استخدم الأسهم لتحريك التصنيف للأعلى أو للأسفل." : "Use the arrows to move a category up or down."}</p></div>
@@ -259,7 +261,7 @@ export function StudioMenuWorkspace({
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex flex-wrap justify-end gap-2">
-                          {catFilter !== "all" && !query.trim() && availabilityFilter === "all" ? <span className="flex gap-1" aria-label={lang === "ar" ? "ترتيب الصنف" : "Item order"}><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === 0} onClick={() => onMoveProduct(product.id, catFilter, "up")} aria-label={lang === "ar" ? "تحريك للأعلى" : "Move up"} title={lang === "ar" ? "للأعلى" : "Move up"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronUp className="size-4" /></button><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === products.length - 1} onClick={() => onMoveProduct(product.id, catFilter, "down")} aria-label={lang === "ar" ? "تحريك للأسفل" : "Move down"} title={lang === "ar" ? "للأسفل" : "Move down"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronDown className="size-4" /></button></span> : null}
+                          {canReorder && catFilter !== "all" && !query.trim() && availabilityFilter === "all" ? <span className="flex gap-1" aria-label={lang === "ar" ? "ترتيب الصنف" : "Item order"}><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === 0} onClick={() => onMoveProduct(product.id, catFilter, "up")} aria-label={lang === "ar" ? "تحريك للأعلى" : "Move up"} title={lang === "ar" ? "للأعلى" : "Move up"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronUp className="size-4" /></button><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === products.length - 1} onClick={() => onMoveProduct(product.id, catFilter, "down")} aria-label={lang === "ar" ? "تحريك للأسفل" : "Move down"} title={lang === "ar" ? "للأسفل" : "Move down"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronDown className="size-4" /></button></span> : null}
                           <Button type="button" size="sm" variant="outline" onClick={() => onEditProduct(product)}>{lang === "ar" ? "تعديل" : "Edit"}</Button>
                           <Button type="button" size="sm" variant="ghost" onClick={() => onToggleAvailability(product)}>{product.isAvailable ? lang === "ar" ? "إخفاء" : "Hide" : lang === "ar" ? "إتاحة" : "Make available"}</Button>
                         </div>

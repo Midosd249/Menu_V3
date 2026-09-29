@@ -68,45 +68,7 @@ export function StudioMenuWorkspacePage() {
     let active = true;
     if (!branchId) {
       setOrdering(null);
-      async function moveCategory(id: string, direction: "up" | "down") {
-    if (!branchId || orderingBusy) return;
-    setOrderingBusy(true);
-    flash.setError("");
-    try {
-      const result = await reorderMenu({ data: { branchId, type: "category", id, direction } });
-      if (!result.ok) {
-        flash.setError(result.error);
-        return;
-      }
-      setOrdering(result.data);
-      flash.setOk(true);
-    } catch (error) {
-      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
-    } finally {
-      setOrderingBusy(false);
-    }
-  }
-
-  async function moveProduct(id: string, categoryId: string, direction: "up" | "down") {
-    if (!branchId || orderingBusy) return;
-    setOrderingBusy(true);
-    flash.setError("");
-    try {
-      const result = await reorderMenu({ data: { branchId, type: "product", id, categoryId, direction } });
-      if (!result.ok) {
-        flash.setError(result.error);
-        return;
-      }
-      setOrdering(result.data);
-      flash.setOk(true);
-    } catch (error) {
-      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
-    } finally {
-      setOrderingBusy(false);
-    }
-  }
-
-  return () => { active = false; };
+      return () => { active = false; };
     }
     setOrdering(null);
     getMenuOrdering({ data: { branchId } }).then((result) => {
@@ -248,6 +210,44 @@ export function StudioMenuWorkspacePage() {
     if (category) setCatDraft({ id: category.id, nameAr: category.nameAr, nameEn: category.nameEn });
   };
 
+  async function moveCategory(id: string, direction: "up" | "down") {
+    if (!branchId || orderingBusy) return;
+    setOrderingBusy(true);
+    flash.setError("");
+    try {
+      const result = await reorderMenu({ data: { branchId, type: "category", id, direction } });
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+      setOrdering(result.data);
+      flash.setOk(true);
+    } catch (error) {
+      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
+    } finally {
+      setOrderingBusy(false);
+    }
+  }
+
+  async function moveProduct(id: string, categoryId: string, direction: "up" | "down") {
+    if (!branchId || orderingBusy) return;
+    setOrderingBusy(true);
+    flash.setError("");
+    try {
+      const result = await reorderMenu({ data: { branchId, type: "product", id, categoryId, direction } });
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+      setOrdering(result.data);
+      flash.setOk(true);
+    } catch (error) {
+      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
+    } finally {
+      setOrderingBusy(false);
+    }
+  }
+
   return (
     <>
       <StudioMenuWorkspace
@@ -256,6 +256,7 @@ export function StudioMenuWorkspacePage() {
         products={products}
         categories={orderedCategories}
         branchId={branchId}
+        canReorder={snapshot.role === "owner" || snapshot.role === "admin" || snapshot.role === "editor"}
         orderingBusy={orderingBusy}
         query={query}
         catFilter={catFilter}
