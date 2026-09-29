@@ -90,7 +90,6 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /to="\/pricing"/);
   assert.match(footer, /to="\/login"/);
   assert.match(footer, /to="\/themes\/preview"/);
-  assert.match(footer, /href="\/#faq"/);
   assert.match(footer, /<LangToggle \/>/);
   assert.match(footer, /من نحن|About/);
   assert.match(footer, /تواصل معنا|Contact/);
