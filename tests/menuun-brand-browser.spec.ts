@@ -6,7 +6,7 @@ test.describe("Menuun customer-facing brand surfaces", () => {
   test("homepage renders the approved Menuun brand in Arabic and English", async ({ page }) => {
     await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-    await expect(page.getByRole("img", { name: /Menuun.*منيو رقمي للمطاعم والكافيهات/ })).toBeVisible();
+    await expect(page.locator('header img[alt="Menuun — منيو رقمي للمطاعم والكافيهات"]')).toBeVisible();
     await expect(page.locator("footer")).toContainText("من نحن");
     await expect(page.locator("footer")).toContainText("تواصل معنا");
     await expect(page.locator("footer")).toContainText("ahmed.mohamed@menuun.com");
@@ -15,7 +15,7 @@ test.describe("Menuun customer-facing brand surfaces", () => {
 
     await page.goto(`${BASE_URL}/?lang=en`, { waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-    await expect(page.getByRole("img", { name: "Menuun" })).toBeVisible();
+    await expect(page.locator('header img[alt="Menuun"]')).toBeVisible();
     await expect(page.locator("footer")).toContainText("About");
     await expect(page.locator("footer")).toContainText("Contact");
     await expect(page.locator("footer")).toContainText("Pricing");
