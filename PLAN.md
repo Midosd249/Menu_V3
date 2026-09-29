@@ -1013,3 +1013,23 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **If Production rollout is required, start a separate release/deployment task for `main` SHA `d865c5b9a08e6e2c7d90503f41e5584f98d486b1`; verify READY, target production, exact commit SHA, and Production == main HEAD before claiming deployment. Otherwise stop and wait for the next atomic task.**
+
+
+# 2026-09-29 — Menuun Brand Migration + Professional Footer — PR OPEN / AWAITING OWNER REVIEW
+
+- VERIFIED: full repository customer-surface audit found retired Menu V3 copy in homepage marketing/FAQ, login, onboarding, themes, team invitation, Studio Billing, Studio shell WhatsApp CTA, menu workspace nutrition disclosure, reports, Platform Admin error handling, AI-generated WhatsApp report prompts, and subscription invoice WhatsApp messages.
+- VERIFIED: no MenuV3 literal was found in customer-facing source surfaces; no current /about, /contact, /privacy, or /terms route/content exists to link without inventing destinations.
+- VERIFIED: all identified customer-facing brand leaks in the task scope were changed to Menuun.
+- VERIFIED: login/onboarding/invitation/Studio surfaces now use Menuun where product identity is displayed; tenant-specific restaurant branding behavior was not changed.
+- VERIFIED: shared marketing footer was redesigned with brand, About, Contact, Links, language switch, and current-year bilingual copyright rows.
+- VERIFIED: official contact email is ahmed.mohamed@menuun.com; WhatsApp contact reuses the existing billing recipient 966549598318.
+- VERIFIED: footer copy states only that Menuun is a digital menu platform for restaurants and cafés in Saudi Arabia and does not introduce unsupported company/team/customer claims.
+- VERIFIED: footer uses approved Menuun palette guidance and existing typography system; no new dependency or design system was introduced.
+- UNKNOWN: browser QA and local command results are pending final verification for this branch.
+- UNKNOWN: production deployment is not part of this task and must not be started.
+- IMPLEMENTATION STATUS: IMPLEMENTATION_IN_PROGRESS / PR PREPARATION.
+- DEPLOYMENT STATUS: NOT_REQUESTED / HOLD.
+
+## EXACT NEXT TASK
+
+Owner review of the single PR for Menuun brand migration and footer redesign. Do not merge or deploy automatically.

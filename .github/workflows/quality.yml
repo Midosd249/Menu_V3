@@ -113,6 +113,23 @@ jobs:
           echo "[preview] failed to become ready — see .grok/preview.log"
           cat .grok/preview.log
           exit 1
+      - name: Menuun brand browser QA — homepage and login in Arabic and English
+        run: |
+          mkdir -p .grok
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/menuun-brand-browser.log 2>&1 < /dev/null &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 120); do
+            if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
+              MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 npx playwright test tests/menuun-brand-browser.spec.ts --workers=1
+              exit $?
+            fi
+            sleep 0.25
+          done
+          echo "[menuun-brand-browser] failed to become ready — see .grok/menuun-brand-browser.log"
+          cat .grok/menuun-brand-browser.log
+          exit 1
+
       - name: Golden performance fixture — 30 products
         env:
           GOLDEN_FIXTURE_OUTPUT: .grok/golden-performance-baseline.json

@@ -106,8 +106,8 @@ export function StudioShell() {
     : null;
   const paidPlanWhatsAppUrl = buildWhatsAppShareUrl(
     lang === "ar"
-      ? "مرحباً، أريد الاستمرار على خطة مدفوعة في Menu V3."
-      : "Hello, I would like to continue on a paid plan in Menu V3.",
+      ? "مرحباً، أريد الاستمرار على خطة مدفوعة في Menuun."
+      : "Hello, I would like to continue on a paid plan in Menuun.",
   );
 
   const canView = (item: StudioNavItem) => {

@@ -99,7 +99,7 @@ export function reportToText(report: MenuReport, lang: "ar" | "en"): string {
   const recommendations = report.advisor.actions.slice(0, 6);
   const lines = lang === "ar"
     ? [
-        `تقرير Menu V3 — ${name}`,
+        `تقرير Menuun — ${name}`,
         `الفترة: آخر ${report.rangeDays} أيام`,
         "",
         "ملخص تنفيذي",
@@ -130,7 +130,7 @@ export function reportToText(report: MenuReport, lang: "ar" | "en"): string {
         "ملاحظة البيانات: هذا التقرير يعتمد فقط على البيانات المسجلة والمتاحة في الحساب. المؤشرات السلوكية ليست إثباتًا للمبيعات أو الأرباح أو رضا العملاء.",
       ]
     : [
-        `Menu V3 Report — ${name}`,
+        `Menuun Report — ${name}`,
         `Range: last ${report.rangeDays} days`,
         "",
         "Executive summary",

@@ -46,8 +46,8 @@ function BillingPage() {
     : (lang === "ar" ? "نمو (Growth)" : "Growth");
   const upgradeWhatsAppUrl = billing
     ? buildWhatsAppShareUrl(lang === "ar"
-      ? `مرحباً، أريد الترقية في Menu V3.\nالمطعم: ${billing.tenantName}\nالخطة المطلوبة: ${desiredPlanName}`
-      : `Hello, I would like to upgrade my Menu V3 subscription.\nRestaurant: ${billing.tenantName}\nRequested plan: ${desiredPlanName}`,
+      ? `مرحباً، أريد الترقية في Menuun.\nالمطعم: ${billing.tenantName}\nالخطة المطلوبة: ${desiredPlanName}`
+      : `Hello, I would like to upgrade my Menuun subscription.\nRestaurant: ${billing.tenantName}\nRequested plan: ${desiredPlanName}`,
       PLATFORM_ADMIN_WHATSAPP_RECIPIENT)
     : "";
 
@@ -58,7 +58,7 @@ function BillingPage() {
       <header className="grid gap-2 rounded-3xl border border-line bg-paper p-5 md:p-7">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-medium text-muted">Menu V3</p>
+            <p className="text-xs font-medium text-muted">Menuun</p>
             <h1 className="mt-1 font-display text-2xl font-semibold">{lang === "ar" ? "الفوترة والفواتير" : "Billing & invoices"}</h1>
           </div>
           <Button variant="outline" onClick={() => void load()} disabled={loading}>
@@ -164,7 +164,7 @@ function InvoicePrintView({ invoice, lang, onClose }: { invoice: SubscriptionInv
       <div className="mx-auto my-6 max-w-2xl rounded-3xl bg-paper p-6 shadow-xl md:p-8" id="ph05-invoice-print">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-5">
           <div>
-            <p className="text-xs text-muted">Menu V3</p>
+            <p className="text-xs text-muted">Menuun</p>
             <h2 className="mt-1 font-display text-2xl font-semibold">{lang === "ar" ? "فاتورة اشتراك" : "Subscription invoice"}</h2>
           </div>
           <strong dir="ltr">{invoice.invoiceNumber}</strong>

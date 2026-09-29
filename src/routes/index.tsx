@@ -107,16 +107,16 @@ const DEMO_PREVIEW_PRODUCTS = DEMO_MENU.products.filter((product) => product.isF
 
 const FAQS = [
   {
-    qAr: "هل Menu V3 مجرد QR Menu؟",
-    qEn: "Is Menu V3 just a QR menu?",
+    qAr: "هل Menuun مجرد QR Menu؟",
+    qEn: "Is Menuun just a QR menu?",
     aAr: "لا. الـQR هو مدخل التجربة. المنصة تجمع الحضور العام للمنيو، إدارة المحتوى والفروع، Studio، التحليلات والذكاء والنمو ضمن منظومة واحدة.",
     aEn: "No. QR is the entry point. The platform brings together the public menu experience, content and branch management, Studio, analytics, intelligence, and growth capabilities.",
   },
   {
     qAr: "هل يدعم العربية والإنجليزية؟",
     qEn: "Does it support Arabic and English?",
-    aAr: "نعم. Menu V3 عربي أولاً مع دعم الإنجليزية وRTL/LTR، ويجب أن يبقى المحتوى المختلط جزءاً من اختبار الجودة.",
-    aEn: "Yes. Menu V3 is Arabic-first with English and RTL/LTR support, with mixed-direction content treated as a first-class quality case.",
+    aAr: "نعم. Menuun عربي أولاً مع دعم الإنجليزية وRTL/LTR، ويجب أن يبقى المحتوى المختلط جزءاً من اختبار الجودة.",
+    aEn: "Yes. Menuun is Arabic-first with English and RTL/LTR support, with mixed-direction content treated as a first-class quality case.",
   },
   {
     qAr: "هل أستطيع إدارة أكثر من فرع؟",
@@ -219,8 +219,8 @@ function Home() {
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               {lang === "ar"
-                ? "Menu V3 منصة حضور وتشغيل للمطاعم، عربي أولاً، تبني منيو يحمل هويتك، تجربة ضيف واضحة، ومساحة Studio تساعدك على الإدارة والفهم والنمو."
-                : "Menu V3 is an Arabic-first restaurant presence and operating platform: a branded menu, a clear guest experience, and Studio tools for management, insight, and growth."}
+                ? "Menuun منصة حضور وتشغيل للمطاعم، عربي أولاً، تبني منيو يحمل هويتك، تجربة ضيف واضحة، ومساحة Studio تساعدك على الإدارة والفهم والنمو."
+                : "Menuun is an Arabic-first restaurant presence and operating platform: a branded menu, a clear guest experience, and Studio tools for management, insight, and growth."}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">

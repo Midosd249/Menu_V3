@@ -16,7 +16,7 @@ function ThemesPage() {
           <Link to="/" className="w-fit text-sm text-muted hover:text-ink">← {lang === "ar" ? "العودة للرئيسية" : "Back home"}</Link>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div className="grid gap-3">
-              <div className="flex items-center gap-2 text-sm font-semibold text-accent"><Sparkles className="size-4" />Menu V3 Visual Themes</div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-accent"><Sparkles className="size-4" />Menuun Visual Themes</div>
               <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">{lang === "ar" ? "اختر شخصية المنيو، لا مجرد لون." : "Choose a menu personality, not just a color."}</h1>
               <p className="max-w-2xl leading-7 text-ink-soft">{lang === "ar" ? "خمسة أنظمة تصميم تستخدم نفس بيانات المطعم، لكن تختلف في الإيقاع، الكثافة، الصور، الحضور البصري وطريقة تقديم الأصناف. جميع الثيمات الحالية متاحة دون بوابة اصطناعية." : "Five design systems use the same restaurant data while differing in rhythm, density, imagery, visual presence, and product presentation. All current themes remain available without an artificial gate."}</p>
             </div>
@@ -50,7 +50,7 @@ function ThemesPage() {
           ))}
         </section>
 
-        <aside className="mt-8 rounded-2xl border border-line bg-sand/45 p-5 text-sm leading-7 text-ink-soft"><strong className="text-ink">{lang === "ar" ? "ملاحظة" : "Note"}</strong><p>{lang === "ar" ? "التصميم يغيّر تجربة العرض فقط؛ بيانات المطعم، الفروع، الصلاحيات، التحليلات ونظام النشر تبقى ضمن بنية Menu V3 الحالية." : "Themes change presentation only; restaurant data, branches, permissions, analytics, and publishing remain within the existing Menu V3 architecture."}</p></aside>
+        <aside className="mt-8 rounded-2xl border border-line bg-sand/45 p-5 text-sm leading-7 text-ink-soft"><strong className="text-ink">{lang === "ar" ? "ملاحظة" : "Note"}</strong><p>{lang === "ar" ? "التصميم يغيّر تجربة العرض فقط؛ بيانات المطعم، الفروع، الصلاحيات، التحليلات ونظام النشر تبقى ضمن بنية Menuun الحالية." : "Themes change presentation only; restaurant data, branches, permissions, analytics, and publishing remain within the existing Menuun architecture."}</p></aside>
       </div>
     </main>
   );
