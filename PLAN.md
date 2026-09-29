@@ -1,5 +1,21 @@
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
+- VERIFIED: PR #324 introduced the Menuun platform-attribution implementation and merged as `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
+- VERIFIED: GitHub Quality #2590 passed typecheck, tests, lint, production build, all-theme browser QA, Menuun brand browser QA, performance fixture, Studio/Admin browser QA, and diagnostics.
+- VERIFIED: W9 Orders QA #751 passed.
+- VERIFIED: Production deployment `dpl_APMeXne3rQkaVa9VtjDuHYMpSpW4` verified the implementation merge commit in production.
+- VERIFIED: the final continuity merge was subsequently deployed from `main` as `dpl_8io82PjFjwhrLYVdKSVLZ9G3EQWB`, READY, target production.
+- VERIFIED: Production aliases include `www.menuun.com` and `menuun.com`.
+- VERIFIED: no runtime errors were found in the checked 30-minute post-deployment window after the final continuity deployment.
+- VERIFIED: tenant-specific `logoUrl` remains separate from Menuun platform branding.
+- UNKNOWN: direct physical Android/iOS rendering of the new attribution footer was not captured in this task.
+- IMPLEMENTATION STATUS: DONE.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+
+## EXACT NEXT TASK
+
+No further work for this atomic branding task. Wait for the next explicitly scoped task.
+
 - VERIFIED: PR #324 was merged into `main` as `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
 - VERIFIED: GitHub Quality #2590 passed typecheck, tests, lint, production build, all-theme browser QA, Menuun brand browser QA, performance fixture, Studio/Admin browser QA, and diagnostics.
 - VERIFIED: W9 Orders QA #751 passed.
