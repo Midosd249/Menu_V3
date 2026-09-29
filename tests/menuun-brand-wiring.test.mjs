@@ -27,5 +27,5 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   assert.match(logo, /منيو رقمي للمطاعم والكافيهات/);
 
   assert.match(favicon, /#0F1115/);
-  assert.match(favicon, /<svg[^>]*viewBox="0 0 4974 1885"/);
+  assert.match(favicon, /<svg[^>]*viewBox="264 1741 1955 1885"/);
 });
