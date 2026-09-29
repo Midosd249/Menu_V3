@@ -211,18 +211,16 @@ export const auth = betterAuth({
       },
       beforeDelete: async (user) => {
         const sql = await getSql();
-        const linked = await sql<{ count: number }>(
+        const linked = await sql.query<{ count: number }>(
           `select count(*)::int as count
            from (
              select 1 from tenant_members where user_id = $1 limit 1
-           ) membership
-          `,
+           ) membership`,
           [user.id],
         );
-        const owned = await sql<{ count: number }>(
+        const owned = await sql.query<{ count: number }>(
           `select count(*)::int as count
-           from tenants where owner_user_id = $1 limit 1
-          `,
+           from tenants where owner_user_id = $1 limit 1`,
           [user.id],
         );
         if ((linked[0]?.count ?? 0) > 0 || (owned[0]?.count ?? 0) > 0) {
