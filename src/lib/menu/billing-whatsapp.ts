@@ -27,7 +27,7 @@ export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: 
     : (lang === "ar" ? "شهرية" : "Monthly");
   if (lang === "ar") {
     return [
-      "فاتورة اشتراك Menu V3",
+      "فاتورة اشتراك Menuun",
       `رقم الفاتورة: ${invoice.invoiceNumber}`,
       `العميل: ${invoice.tenantName}`,
       `الخطة: ${invoice.planNameAr}`,
@@ -39,7 +39,7 @@ export function buildInvoiceWhatsAppMessage(invoice: SubscriptionInvoice, lang: 
     ].join("\n");
   }
   return [
-    "Menu V3 Subscription Invoice",
+    "Menuun Subscription Invoice",
     `Invoice: ${invoice.invoiceNumber}`,
     `Customer: ${invoice.tenantName}`,
     `Plan: ${invoice.planNameEn}`,
