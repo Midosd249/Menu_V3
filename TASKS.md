@@ -1,4 +1,17 @@
-# 2026-09-30 — Menuun Platform Attribution — IMPLEMENTATION_IN_PROGRESS
+# 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
+
+- VERIFIED: PR #324 was merged into `main` as `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
+- VERIFIED: GitHub Quality #2590 and W9 Orders QA #751 passed.
+- VERIFIED: Vercel Production deployment `dpl_APMeXne3rQkaVa9VtjDuHYMpSpW4` is READY for `main` commit `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
+- VERIFIED: Menuun attribution is wired into the public menu and the Studio workspace without replacing tenant branding.
+- VERIFIED: Menuun brand manifest records `integration_status: WIRED`.
+- UNKNOWN: direct physical Android/iOS rendering evidence for the new footer.
+- IMPLEMENTATION STATUS: DONE.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+
+## EXACT NEXT TASK
+
+No further work for this atomic task. Wait for the next explicitly scoped task.
 
 - VERIFIED: canonical `main` is `2e38263dfdc5d73a3e21f97fe029bf5fdd2d22cd`.
 - VERIFIED: Menuun production logo assets and the existing platform-brand component are already present on `main`; tenant-specific `logoUrl` remains separate.
