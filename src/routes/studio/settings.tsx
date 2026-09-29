@@ -26,7 +26,7 @@ function AccountSecurity({ lang }: { lang: "ar" | "en" }) {
     if (!window.confirm(lang === "ar" ? "سيتم بدء حذف حسابك بشكل نهائي. هل تريد المتابعة؟" : "This starts permanent account deletion. Continue?")) return;
     setBusy(true); setError(""); setMessage("");
     try {
-      const result = await authClient.deleteUser(password ? { password, callbackURL: "/login?mode=signup" } : { callbackURL: "/login?mode=signup" });
+      const result = await authClient.deleteUser({ callbackURL: "/login?mode=signup" });
       if (result.error) throw new Error(result.error.message ?? "Unable to process the request.");
       setMessage(lang === "ar" ? "تم إرسال رسالة تأكيد إلى بريدك الإلكتروني. اتبع الرابط لإكمال العملية." : "A confirmation email was sent. Follow the link to complete the process.");
     } catch (err) {
