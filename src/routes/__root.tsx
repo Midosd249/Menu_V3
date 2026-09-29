@@ -73,7 +73,6 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: qrFinalFixesCss },
       { rel: "stylesheet", href: signalTableCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: menuunFavicon },
     ],
   }),
   component: RootDocument,
