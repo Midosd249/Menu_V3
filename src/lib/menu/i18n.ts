@@ -1,7 +1,7 @@
 import type { Lang } from "./types";
 
 export const copy = {
-  brand: { ar: "منيو", en: "Menu" },
+  brand: { ar: "Menuun", en: "Menuun" },
   brandMark: { ar: "منيو", en: "MENU" },
   tagline: {
     ar: "منصة المنـيو الرقمية للمطاعم السعودية",
