@@ -60,7 +60,7 @@ test("duplicate phone errors do not disclose account ownership", () => {
 });
 
 test("signup enters email verification before onboarding", () => {
-  const signupBlock = login.match(/const result = await authClient\.signUp\.email\([\s\S]*?await navigate\(\{ to: "\/verify-email"/);
+  const signupBlock = login.match(/const result = await authClient\.signUp\.email\([\s\S]*?await navigate\(\{ to: "\/verify-email"[^;]*\}\)/);
   assert.ok(signupBlock, "signup should route through verification before onboarding");
   assert.match(signupBlock[0], /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
   assert.match(signupBlock[0], /authClient\.sendVerificationEmail/);
