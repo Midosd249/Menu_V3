@@ -50,5 +50,5 @@ test("PH-05 invoice WhatsApp URL remains click-to-chat only", () => {
   const url = buildInvoiceWhatsAppUrl(invoice, "en");
   assert.ok(url.startsWith("https://wa.me/?text="));
   assert.equal(url.includes(invoice.tenantId), false);
-  assert.match(url, /Menu%20V3/);
+  assert.match(url, /Menuun%20Subscription%20Invoice/);
 });
