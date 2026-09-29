@@ -13,6 +13,7 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   const studio = read("src/components/studio-shell.tsx");
   const publicRoute = read("src/routes/m.$slug.tsx");
   const poweredBy = read("src/components/menuun-powered-by.tsx");
+  const manifest = read("assets/brand/menuun/brand-manifest.json");
 
   assert.ok(root.includes("Menuun"));
   assert.ok(root.includes('href: "/favicon.svg"'));
@@ -37,6 +38,7 @@ test("Menuun runtime brand assets are wired to the platform chrome", () => {
   assert.ok(poweredBy.includes("bg-[#0F1115]"));
   assert.ok(poweredBy.includes("مقدم من"));
   assert.ok(poweredBy.includes("Powered by"));
+  assert.ok(manifest.includes('"integration_status": "WIRED"'));
 });
 
 test("customer-facing brand surfaces no longer expose the retired Menu V3 name", () => {

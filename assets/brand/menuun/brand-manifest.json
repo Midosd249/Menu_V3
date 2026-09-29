@@ -51,6 +51,6 @@
     "assets/brand/menuun/final/menuun-mark.svg",
     "assets/brand/menuun/final/menuun-mark-mono.svg"
   ],
-  "integration_status": "NOT_WIRED",
+  "integration_status": "WIRED",
   "source_mutation_policy": "NEVER_OVERWRITE"
 }
