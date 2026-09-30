@@ -1458,3 +1458,14 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 Run GitHub CI for the auth-email PR. After CI passes, configure `RESEND_API_KEY` as a Vercel Preview server environment variable without exposing the value, then perform safe Preview signup → verification → login → forgot-password → reset-password → logout checks using a dedicated test account. Do not use destructive database actions in Preview.
+
+## 2026-09-30 — Combined Ordering + Offers Batch — VERIFIED / REVIEW HOLD
+- VERIFIED code head before continuity-only edits: b9a71e02c59676b885baea9cbd938cc9a0706c81.
+- VERIFIED Part A: public menu now consumes branch-effective category/product ordering through a normalized public render-order helper; route cache is explicitly disabled.
+- VERIFIED Part B: variants, modifier groups, and modifier options are tenant-scoped and now have product-editor Up/Down persistence plus public-order regression coverage.
+- VERIFIED Part C: product_offers, Riyadh-time evaluation, bilingual Studio UI, server-side pricing, and immutable order-line snapshots are implemented.
+- VERIFIED GitHub Quality run 2617 passed typecheck, full tests, lint, production build, all-theme browser QA, Menuun browser QA, performance fixture, Studio browser QA, Platform Admin browser QA.
+- VERIFIED GitHub W9 Orders QA run 775 passed.
+- UNKNOWN: no physical Android/iOS device QA was performed.
+- DEPLOYMENT: NOT_DEPLOYED / HOLD FOR OWNER REVIEW. PR #327 remains open.
+- NEXT ACTION: owner reviews PR #327; do not merge or deploy automatically.
