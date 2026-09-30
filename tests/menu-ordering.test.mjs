@@ -210,9 +210,9 @@ test("offer activation, expiry, tenant isolation, and product-limit boundaries a
 test("public offers filter uses one shared active-offer definition and hides when no visible offer exists", () => {
   const now = new Date("2026-09-30T05:00:00+03:00");
   const offers = {
-    active: { id: "o1", tenantId: "t", productId: "p1", offerType: "percentage", value: 20, labelAr: "خصم", labelEn: "Discount", startsAt: null, endsAt: null, isActive: true },
-    future: { id: "o2", tenantId: "t", productId: "p2", offerType: "sale_price", value: 50, labelAr: "قادم", labelEn: "Upcoming", startsAt: "2026-10-01T00:00:00Z", endsAt: null, isActive: true },
-    inactive: { id: "o3", tenantId: "t", productId: "p3", offerType: "fixed", value: 10, labelAr: "", labelEn: "", startsAt: null, endsAt: null, isActive: false },
+    p1: { id: "o1", tenantId: "t", productId: "p1", offerType: "percentage", value: 20, labelAr: "خصم", labelEn: "Discount", startsAt: null, endsAt: null, isActive: true },
+    p2: { id: "o2", tenantId: "t", productId: "p2", offerType: "sale_price", value: 50, labelAr: "قادم", labelEn: "Upcoming", startsAt: "2026-10-01T00:00:00Z", endsAt: null, isActive: true },
+    p3: { id: "o3", tenantId: "t", productId: "p3", offerType: "fixed", value: 10, labelAr: "", labelEn: "", startsAt: null, endsAt: null, isActive: false },
   };
   assert.deepEqual([...getActiveOfferProductIds(["p1", "p2", "p3"], offers, now)], ["p1"]);
   assert.equal(OFFERS_FILTER_ID, "__offers__");
