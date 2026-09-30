@@ -1,3 +1,25 @@
+# 2026-09-30 — Public Offers Visibility Upgrade — PR #328 / VERIFIED / READY FOR OWNER REVIEW
+
+- VERIFIED: main HEAD used as the task base is `4a2e48677e3c410e59722445fc860e50d8e73628`.
+- VERIFIED: Mazaq / Heritage is rendered by `TasteTemplate`, not `PublicMenuView`; its normal cards, ProductSheet, and Quick Add previously read base prices directly while its Featured block was the only offer-aware path.
+- VERIFIED: active-offer resolution remains centralized in `src/lib/menu/offers.ts`; the new `getActiveOfferProductIds` is consumed by the shared public renderer, Editorial, and Mazaq.
+- VERIFIED: Offers chip is conditionally rendered only when at least one public-visible product has a currently active offer; selecting it filters to active-offer products and preserves AR/EN plus RTL/LTR behavior.
+- VERIFIED: Essential, Noir, and Gallery inherit the shared Offers filter through `PublicMenuView`; Editorial and Heritage use theme-specific filter rails.
+- VERIFIED: Mazaq offer pricing/labels now flow through normal cards, ProductSheet, and simple-product Quick Add; Featured/Today's Pick are suppressed while Offers is selected so the result is offers-only.
+- VERIFIED: regression tests cover the shared active-offer source, Offers filter wiring, and Mazaq offer rendering path.
+- VERIFIED: GitHub Quality #2640 passed typecheck, full tests, contract tests, lint, production build, Playwright Chromium, all-theme Browser Template QA, performance, Studio/Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #797 passed.
+- VERIFIED: Browser Template QA passed all five themes across the repository viewport matrix, including Heritage/Mazaq RTL/LTR, no horizontal overflow, accessible names, and zero runtime console errors.
+- UNKNOWN: the repository browser fixture did not create a live product offer and therefore did not directly click the Offers chip against a populated offer fixture; the behavior is covered by the new deterministic tests and shared source wiring.
+- BLOCKED: Vercel status for the PR head reports build-rate-limit failure; no deployment was intentionally triggered and no Production evidence is claimed.
+- IMPLEMENTATION STATUS: VERIFIED_LOCALLY / READY_FOR_OWNER_REVIEW
+- DEPLOYMENT STATUS: NOT_DEPLOYED / HOLD FOR OWNER REVIEW
+
+## EXACT NEXT TASK
+
+Owner reviews PR #328. Do not merge or deploy automatically. After approval, perform the normal controlled release workflow.
+
+---
 # 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
 
 - VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.
