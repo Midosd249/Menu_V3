@@ -1,6 +1,7 @@
 import type { ProductOffer } from "./types";
 
 export const OFFER_TIME_ZONE = "Asia/Riyadh";
+export const OFFERS_FILTER_ID = "__offers__";
 
 export type OfferCalculation = {
   discountedBaseUnitPrice: number;
@@ -16,6 +17,13 @@ export function isOfferCurrentlyActive(
   const startsAt = offer.startsAt ? new Date(offer.startsAt).getTime() : Number.NEGATIVE_INFINITY;
   const endsAt = offer.endsAt ? new Date(offer.endsAt).getTime() : Number.POSITIVE_INFINITY;
   return now.getTime() >= startsAt && now.getTime() < endsAt;
+}
+
+export function getActiveOfferProductIds(productIds: readonly string[], offers: Record<string, ProductOffer> | undefined, now = new Date()): Set<string> {
+  return new Set(productIds.filter((productId) => {
+    const offer = offers?.[productId];
+    return Boolean(offer && isOfferCurrentlyActive(offer, now));
+  }));
 }
 
 export function calculateOffer(baseUnitPrice: number, modifierAddOnsPerUnit: number, quantity: number, offer: ProductOffer): OfferCalculation {
