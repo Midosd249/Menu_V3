@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Flash, Sheet } from "@/components/state-panel";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,12 @@ import { useLang } from "@/lib/lang";
 import { compressImageFile } from "@/lib/menu/image";
 import { copy, t } from "@/lib/menu/i18n";
 import { generateMenuAi, runMenuQa, type MenuQaResult } from "@/lib/menu/ai";
-import { deleteCategory, deleteProduct, saveCategory, saveProduct, toggleProduct } from "@/lib/menu/owner";
+import { deleteCategory, deleteProduct, getMenuOrdering, reorderMenu, saveCategory, saveProduct, toggleProduct, type MenuOrdering } from "@/lib/menu/owner";
 import { useStudio, useStudioFlash } from "@/lib/menu/studio";
 import type { Product } from "@/lib/menu/types";
 import { formatSar } from "@/lib/utils";
+import { ProductOptionsOrderingPanel } from "@/components/product-options-ordering-panel";
+import { ProductOfferPanel } from "@/components/product-offer-panel";
 
 type ProductDraft = {
   id?: string;
@@ -60,17 +62,55 @@ export function StudioMenuWorkspacePage() {
   const [aiPrice, setAiPrice] = useState<AiPrice | null>(null);
   const [menuQaBusy, setMenuQaBusy] = useState(false);
   const [menuQa, setMenuQa] = useState<MenuQaResult | null>(null);
+  const [branchId, setBranchId] = useState(() => snapshot.branches.find((branch) => branch.isActive)?.id ?? snapshot.branches[0]?.id ?? "");
+  const [ordering, setOrdering] = useState<MenuOrdering | null>(null);
+  const [orderingBusy, setOrderingBusy] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    if (!branchId) {
+      setOrdering(null);
+      return () => { active = false; };
+    }
+    setOrdering(null);
+    getMenuOrdering({ data: { branchId } }).then((result) => {
+      if (!active) return;
+      if (result.ok) setOrdering(result.data);
+      else flash.setError(result.error);
+    }).catch((error) => {
+      if (active) flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر تحميل ترتيب القائمة" : "Could not load menu order"));
+    });
+    return () => { active = false; };
+  }, [branchId, flash.setError, lang]);
+
+  const orderedCategories = useMemo(() => {
+    if (!ordering) return snapshot.categories;
+    const rank = new Map(ordering.categoryIds.map((id, index) => [id, index]));
+    return [...snapshot.categories].sort((a, b) => (rank.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (rank.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+  }, [snapshot.categories, ordering]);
+
+  const orderedProducts = useMemo(() => {
+    if (!ordering) return snapshot.products;
+    const categoryRank = new Map(orderedCategories.map((category, index) => [category.id, index]));
+    const productRank = new Map<string, number>();
+    for (const ids of Object.values(ordering.productIdsByCategory)) ids.forEach((id, index) => productRank.set(id, index));
+    return [...snapshot.products].sort((a, b) => {
+      const categoryDelta = (categoryRank.get(a.categoryId ?? "") ?? Number.MAX_SAFE_INTEGER) - (categoryRank.get(b.categoryId ?? "") ?? Number.MAX_SAFE_INTEGER);
+      if (categoryDelta !== 0) return categoryDelta;
+      return (productRank.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (productRank.get(b.id) ?? Number.MAX_SAFE_INTEGER);
+    });
+  }, [snapshot.products, orderedCategories, ordering]);
 
   const products = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    return snapshot.products.filter((product) => {
+    return orderedProducts.filter((product) => {
       if (catFilter !== "all" && product.categoryId !== catFilter) return false;
       if (availabilityFilter === "available" && !product.isAvailable) return false;
       if (availabilityFilter === "unavailable" && product.isAvailable) return false;
       if (!normalized) return true;
       return [product.nameAr, product.nameEn, product.descriptionAr, product.descriptionEn].some((value) => value.toLowerCase().includes(normalized));
     });
-  }, [snapshot.products, catFilter, availabilityFilter, query]);
+  }, [orderedProducts, catFilter, availabilityFilter, query]);
 
   async function saveItem() {
     if (!draft) return;
@@ -165,12 +205,50 @@ export function StudioMenuWorkspacePage() {
     }
   }
 
-  const addProduct = () => setDraft(emptyDraft(catFilter === "all" ? snapshot.categories[0]?.id ?? null : catFilter));
+  const addProduct = () => setDraft(emptyDraft(catFilter === "all" ? orderedCategories[0]?.id ?? null : catFilter));
   const addCategory = () => setCatDraft({ nameAr: "", nameEn: "" });
   const editCategory = () => {
-    const category = snapshot.categories.find((item) => item.id === catFilter);
+    const category = orderedCategories.find((item) => item.id === catFilter);
     if (category) setCatDraft({ id: category.id, nameAr: category.nameAr, nameEn: category.nameEn });
   };
+
+  async function moveCategory(id: string, direction: "up" | "down") {
+    if (!branchId || orderingBusy) return;
+    setOrderingBusy(true);
+    flash.setError("");
+    try {
+      const result = await reorderMenu({ data: { branchId, type: "category", id, direction } });
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+      setOrdering(result.data);
+      flash.setOk(true);
+    } catch (error) {
+      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
+    } finally {
+      setOrderingBusy(false);
+    }
+  }
+
+  async function moveProduct(id: string, categoryId: string, direction: "up" | "down") {
+    if (!branchId || orderingBusy) return;
+    setOrderingBusy(true);
+    flash.setError("");
+    try {
+      const result = await reorderMenu({ data: { branchId, type: "product", id, categoryId, direction } });
+      if (!result.ok) {
+        flash.setError(result.error);
+        return;
+      }
+      setOrdering(result.data);
+      flash.setOk(true);
+    } catch (error) {
+      flash.setError(error instanceof Error ? error.message : (lang === "ar" ? "تعذر حفظ ترتيب القائمة" : "Could not save menu order"));
+    } finally {
+      setOrderingBusy(false);
+    }
+  }
 
   return (
     <>
@@ -178,6 +256,10 @@ export function StudioMenuWorkspacePage() {
         lang={lang}
         snapshot={snapshot}
         products={products}
+        categories={orderedCategories}
+        branchId={branchId}
+        canReorder={snapshot.role === "owner" || snapshot.role === "admin" || snapshot.role === "editor"}
+        orderingBusy={orderingBusy}
         query={query}
         catFilter={catFilter}
         availabilityFilter={availabilityFilter}
@@ -192,6 +274,9 @@ export function StudioMenuWorkspacePage() {
         onToggleAvailability={(product) => void flash.run(() => toggleProduct({ data: { id: product.id, field: "isAvailable", value: !product.isAvailable } }))}
         onEditCategory={editCategory}
         onDeleteCategory={() => { if (catFilter !== "all") setPendingDelete({ type: "category", id: catFilter }); }}
+        onBranchChange={(value) => { setBranchId(value); setCatFilter("all"); }}
+        onMoveCategory={(id, direction) => void moveCategory(id, direction)}
+        onMoveProduct={(id, categoryId, direction) => void moveProduct(id, categoryId, direction)}
       />
       <Flash error={flash.error} ok={flash.ok} />
 
@@ -219,6 +304,8 @@ export function StudioMenuWorkspacePage() {
             <Field label={t(copy.studio.descAr, lang)}><Textarea value={draft.descriptionAr} onChange={(event) => setDraft({ ...draft, descriptionAr: event.target.value })} /></Field>
             <Field label={t(copy.studio.descEn, lang)}><Textarea value={draft.descriptionEn} onChange={(event) => setDraft({ ...draft, descriptionEn: event.target.value })} /></Field>
             <Field label={t(copy.studio.allergens, lang)}><Input value={draft.allergens} onChange={(event) => setDraft({ ...draft, allergens: event.target.value })} /></Field>
+            {draft.id ? <ProductOptionsOrderingPanel productId={draft.id} lang={lang} disabled={flash.busy || orderingBusy} /> : null}
+            {draft.id ? <ProductOfferPanel productId={draft.id} lang={lang} disabled={flash.busy || orderingBusy} /> : null}
             <Field label={t(copy.studio.imageUrl, lang)}><Input value={draft.imageUrl.startsWith("data:") ? "" : draft.imageUrl} placeholder="https://..." onChange={(event) => setDraft({ ...draft, imageUrl: event.target.value })} /></Field>
             <label className="inline-flex h-11 cursor-pointer items-center justify-center rounded-md border border-line text-sm">{imageBusy ? t(copy.state.loading, lang) : t(copy.studio.uploadImage, lang)}<input type="file" accept="image/*" className="sr-only" onChange={(event) => void onImage(event.target.files?.[0] ?? null)} /></label>
             {draft.imageUrl ? <img src={draft.imageUrl} alt="" className="h-32 w-full rounded-md object-cover" /> : null}

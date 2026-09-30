@@ -1,3 +1,21 @@
+# 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
+
+- VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.
+- VERIFIED: PR #327 is open, mergeable, not merged, and targets main; head is 31f7fa4e84a5ab3053d3a8210bed26b12f632d09.
+- VERIFIED: Part A changed only the Taste/Mazaq template path and its regression contract; no other theme template was changed.
+- VERIFIED: Part B adds branch-scoped ordering overrides for categories and products, Studio up/down controls, server-side tenant/branch authorization, and public-menu ordering by saved branch order with fallback to existing sort_order.
+- VERIFIED: GitHub Quality run #2596 passed typecheck, tests, lint, production build, all-theme browser QA, Menuun brand browser QA, performance, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA #754 passed.
+- VERIFIED: Vercel PR preview status is success; this is preview evidence only, not Production deployment evidence.
+- UNKNOWN: direct physical-device interaction with the new ordering controls was not performed in this session.
+- IMPLEMENTATION STATUS: VERIFIED via CI repository execution evidence; READY_TO_PUSH / pushed to PR branch.
+- DEPLOYMENT STATUS: NOT_DEPLOYED / HOLD FOR OWNER REVIEW.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #327. Do not merge or deploy automatically. After approval, perform the normal controlled release workflow; Part C remains plan-only until explicitly approved.
+
+---
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
 - VERIFIED: PR #324 merged the Menuun platform-attribution implementation at `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
@@ -1440,3 +1458,36 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 Run GitHub CI for the auth-email PR. After CI passes, configure `RESEND_API_KEY` as a Vercel Preview server environment variable without exposing the value, then perform safe Preview signup → verification → login → forgot-password → reset-password → logout checks using a dedicated test account. Do not use destructive database actions in Preview.
+
+## 2026-09-30 — Combined Ordering + Offers Batch — VERIFIED / REVIEW HOLD
+- VERIFIED code head before continuity-only edits: b9a71e02c59676b885baea9cbd938cc9a0706c81.
+- VERIFIED Part A: public menu now consumes branch-effective category/product ordering through a normalized public render-order helper; route cache is explicitly disabled.
+- VERIFIED Part B: variants, modifier groups, and modifier options are tenant-scoped and now have product-editor Up/Down persistence plus public-order regression coverage.
+- VERIFIED Part C: product_offers, Riyadh-time evaluation, bilingual Studio UI, server-side pricing, and immutable order-line snapshots are implemented.
+- VERIFIED GitHub Quality run 2617 passed typecheck, full tests, lint, production build, all-theme browser QA, Menuun browser QA, performance fixture, Studio browser QA, Platform Admin browser QA.
+- VERIFIED GitHub W9 Orders QA run 775 passed.
+- UNKNOWN: no physical Android/iOS device QA was performed.
+- DEPLOYMENT: NOT_DEPLOYED / HOLD FOR OWNER REVIEW. PR #327 remains open.
+- NEXT ACTION: owner reviews PR #327; do not merge or deploy automatically.
+
+## 2026-09-30 — Public Offers Visibility Follow-up — VERIFIED / REVIEW HOLD
+- VERIFIED: the existing public data path already loaded active product offers, but the public product-card and product-detail rendering did not consume that data; this was the direct visibility gap.
+- FIXED: active offers now render in featured cards, category product cards, and product details with bilingual labels and old/new pricing; BOGO uses a bilingual fallback label.
+- FIXED: quick-add now seeds the displayed active offer price for simple products; checkout remains server-authoritative.
+- ADDED: regression contract verifies the public renderer consumes productOffers and exposes the offer UI contract.
+- UNKNOWN: physical-device QA remains pending.
+- HOLD: PR #327 remains open; merge/deployment waits for owner review and the single release batch.
+
+## EXACT NEXT TASK
+Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Verification / Merge Hold
+- VERIFIED: PR #327 head before this continuity commit is `e620bb43f347bde538575d4c0dac13583f15e4b3`; Quality 2634 and W9 Orders QA 792 are green.
+- VERIFIED: `db4f23b34f94300765d2aa7338d77ab8945c2b67` exists as Vercel Preview deployment `dpl_5NHEMk8ujdBSpAgwqDL87r2qRiPR`; it is branch preview evidence, not Production.
+- VERIFIED: Preview for `52a7bb70e14ac99a77a2c0befcd4a3efdd52f809` reached READY and served `m/mndy-alwtnya` with the two active `productOffers` records in the SSR payload.
+- VERIFIED: Supabase canonical project `ublxptcqefujkbeepylc` contains two active offers associated with published tenant `mndy-alwtnya`; both products are available and featured.
+- VERIFIED: public source path filters active, currently valid offers for the exact ordered public products and passes `productOffers` into the renderer.
+- FIXED: public offer rendering contract and test alignment; active offers are consumed by featured cards, category cards, product details, and simple-product quick add while checkout remains server-authoritative.
+- FIXED: added migration `20260930023000_menu_ordering_offers_rls.sql` to enable RLS on branch ordering and offers tables. Live Supabase currently reports these three tables with RLS disabled until this migration is applied by the controlled release.
+- UNKNOWN: physical Android/iOS QA.
+- BLOCKED: Vercel is currently rejecting new deployment requests with `api-deployments-free-per-day` / build-rate-limit; no production deployment has been made for PR #327.
+- NEXT ACTION: merge PR #327 after final diff review, then perform the single controlled production release when Vercel permits it.

@@ -1,3 +1,21 @@
+# 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
+
+- VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.
+- VERIFIED: PR #327 is open, mergeable, not merged, and targets main; head is 31f7fa4e84a5ab3053d3a8210bed26b12f632d09.
+- VERIFIED: Part A changed only the Taste/Mazaq template path and its regression contract; no other theme template was changed.
+- VERIFIED: Part B adds branch-scoped ordering overrides for categories and products, Studio up/down controls, server-side tenant/branch authorization, and public-menu ordering by saved branch order with fallback to existing sort_order.
+- VERIFIED: GitHub Quality run #2596 passed typecheck, tests, lint, production build, all-theme browser QA, Menuun brand browser QA, performance, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA #754 passed.
+- VERIFIED: Vercel PR preview status is success; this is preview evidence only, not Production deployment evidence.
+- UNKNOWN: direct physical-device interaction with the new ordering controls was not performed in this session.
+- IMPLEMENTATION STATUS: VERIFIED via CI repository execution evidence; READY_TO_PUSH / pushed to PR branch.
+- DEPLOYMENT STATUS: NOT_DEPLOYED / HOLD FOR OWNER REVIEW.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #327. Do not merge or deploy automatically. After approval, perform the normal controlled release workflow; Part C remains plan-only until explicitly approved.
+
+---
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
 - VERIFIED: PR #324 merged the application implementation at `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
@@ -1287,3 +1305,28 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 Verify the auth-email PR through GitHub CI. If green, configure the restricted Resend key in Vercel Preview and run safe end-to-end email/auth browser verification with a dedicated test account.
+
+## 2026-09-30 — Combined Batch — READY FOR OWNER REVIEW
+- VERIFIED: public category/product ordering, item-internal ordering, and offers are implemented together in PR #327.
+- VERIFIED: final GitHub CI passed: Quality 2617; W9 Orders QA 775.
+- UNKNOWN: physical-device QA remains pending.
+- NEXT TASK: owner review PR #327; after approval, perform the single release/deployment batch.
+
+## 2026-09-30 — Public Offers Visibility Follow-up — READY FOR REVIEW
+- VERIFIED: the existing public data path already loaded active product offers, but the public product-card and product-detail rendering did not consume that data; this was the direct visibility gap.
+- FIXED: active offers now render in featured cards, category product cards, and product details with bilingual labels and old/new pricing; BOGO uses a bilingual fallback label.
+- FIXED: quick-add now seeds the displayed active offer price for simple products; checkout remains server-authoritative.
+- ADDED: regression contract verifies the public renderer consumes productOffers and exposes the offer UI contract.
+- UNKNOWN: physical-device QA remains pending.
+- HOLD: PR #327 remains open; merge/deployment waits for owner review and the single release batch.
+
+## EXACT NEXT TASK
+Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Verification — VERIFIED / RELEASE HOLD
+- VERIFIED: Quality 2634 and W9 Orders QA 792 passed on head `e620bb43f347bde538575d4c0dac13583f15e4b3`.
+- VERIFIED: Vercel preview commit `52a7bb70e14ac99a77a2c0befcd4a3efdd52f809` served the published `mndy-alwtnya` menu and SSR payload contained both active offers, including BOGO bilingual labels.
+- VERIFIED: Supabase data confirms two active offers for available/featured products in the published tenant.
+- FIXED: public renderer contract test and RLS migration.
+- UNKNOWN: physical-device QA.
+- BLOCKED: Vercel deployment requests are rate-limited; Production is not deployed from PR #327.
+- EXACT NEXT TASK: merge PR #327, then execute the single controlled production release once the Vercel deployment gate is available.

@@ -32,6 +32,8 @@ export function createThemeBootstrapScript(theme: ThemeKey, preview = false): st
 }
 
 export const Route = createFileRoute("/m/$slug")({
+  staleTime: 0,
+  headers: () => ({ "Cache-Control": "private, no-store" }),
   validateSearch: publicMenuSearchSchema,
   loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {

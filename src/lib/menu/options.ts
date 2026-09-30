@@ -224,3 +224,32 @@ export const deleteModifierOption = createServerFn({ method: "POST" })
       return { ok: false, code: "unavailable", error: "تعذر حذف الإضافة" };
     }
   });
+
+
+export const reorderProductOption = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ productId: z.string().min(1), type: z.enum(["variant", "group", "option"]), id: z.string().min(1), groupId: z.string().optional(), direction: z.enum(["up", "down"]) }))
+  .handler(async ({ context, data }): Promise<FnResult<{ reordered: true }>> => {
+    try {
+      const sql = await getSql();
+      const checked = await assertProduct(sql, context.userId, data.productId);
+      if (checked.error) return checked.error;
+      if (!canWrite(checked.member.role)) return { ok: false, code: "forbidden", error: "ليست لديك صلاحية" };
+      const { moveByDirection, indexOrder } = await import("./reorder");
+      if (data.type === "variant") {
+        const rows = await sql`select id from product_variants where product_id = ${data.productId} and tenant_id = ${checked.member.tenant_id} order by sort_order, created_at`;
+        const moved = moveByDirection(rows.map((row) => ({ id: String(row.id) })), data.id, data.direction);
+        for (const item of indexOrder(moved)) await sql`update product_variants set sort_order = ${item.sortOrder}, updated_at = now() where id = ${item.id} and product_id = ${data.productId} and tenant_id = ${checked.member.tenant_id}`;
+      } else if (data.type === "group") {
+        const rows = await sql`select g.id from modifier_groups g join product_modifier_groups p on p.modifier_group_id = g.id where p.product_id = ${data.productId} and g.tenant_id = ${checked.member.tenant_id} order by p.sort_order, g.sort_order, g.created_at`;
+        const moved = moveByDirection(rows.map((row) => ({ id: String(row.id) })), data.id, data.direction);
+        for (const item of indexOrder(moved)) await sql`update product_modifier_groups set sort_order = ${item.sortOrder} where product_id = ${data.productId} and modifier_group_id = ${item.id}`;
+      } else {
+        if (!data.groupId) return { ok: false, code: "invalid", error: "مجموعة الإضافة مطلوبة" };
+        const rows = await sql`select id from modifier_options where group_id = ${data.groupId} and tenant_id = ${checked.member.tenant_id} order by sort_order, created_at`;
+        const moved = moveByDirection(rows.map((row) => ({ id: String(row.id) })), data.id, data.direction);
+        for (const item of indexOrder(moved)) await sql`update modifier_options set sort_order = ${item.sortOrder}, updated_at = now() where id = ${item.id} and group_id = ${data.groupId} and tenant_id = ${checked.member.tenant_id}`;
+      }
+      return { ok: true, data: { reordered: true } };
+    } catch (error) { console.error("reorderProductOption failed", error); return { ok: false, code: "unavailable", error: "تعذر حفظ ترتيب الخيارات" }; }
+  });

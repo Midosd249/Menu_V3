@@ -1,3 +1,18 @@
+# 2026-09-30 — Part C Offers/Promotions — PROPOSED / PLAN ONLY
+
+1. Data model: add one tenant-owned product_offers record per product for the MVP, with tenant_id, product_id, offer_type (sale_price, percent_off, fixed_amount, bogo), numeric value fields, starts_at, ends_at, is_active, and audit timestamps. Enforce tenant/product ownership and a single active offer per product.
+2. Studio UI: add an Offer section inside the existing product editor. Owner/admin/editor can create, edit, disable one offer for the item, choose the type, value, schedule, and bilingual customer-facing label. An offer is metadata on an existing product and does not create another menu item.
+3. Public menu: for an active offer, show the normal price plus a clear treatment such as was X → now Y for sale-price/fixed/percentage offers, or a concise BOGO badge. Use existing text(lang, ...) and RTL/LTR conventions; render only server-validated active offers.
+4. Order pricing: never trust the client-displayed discounted price. At submitPublicOrder, load the current active offer server-side, validate its time window, calculate the effective unit/line price, and persist the pricing snapshot into order_items. Recommended snapshot fields: original_unit_price, discount_amount, offer_id; existing unit_price and line_total remain the final charged values.
+5. Variants/modifiers: proposed MVP rule is percentage/fixed discounts apply to the selected variant price; modifier price deltas remain additive and are not discounted. A fixed sale_price is base-product-only unless variant-specific sale prices are introduced. BOGO initially applies only to identical product quantities and does not discount modifier deltas.
+6. Receipt/invoice flow: receipts already read persisted order_items.unit_price and line_total. Do not add client-side receipt math. Display the final unit price and line total; optionally show original price/discount only if the receipt product decision requires it. Existing orders.subtotal and orders.total remain authoritative.
+7. Stacking: default to no stacking for item-level offers. One product has at most one active offer, keeping calculations deterministic.
+8. Expiry/timezone: store timestamptz and evaluate validity on the server. Before implementation, confirm an explicit branch/tenant timezone contract; if absent, add that prerequisite rather than guessing from city or browser settings.
+9. Subscription limits: offers do not increase product count because they are metadata on an existing product. If a future plan limits promotional campaigns, enforce that as a distinct entitlement.
+10. Concurrency/audit: snapshot the applied offer and final price into the order so later edits/expiry cannot retroactively change existing orders or receipts. Test active/inactive/expired offers, fixed/percentage/BOGO math, variant/modifier interaction, tenant/branch isolation, and receipt totals.
+11. Migration/release: implement only after owner approval of the pricing rules above. No Offers/Promotions code is included in PR #327.
+
+---
 # 2026-09-30 — Menuun Platform Attribution — CLOSED / VERIFIED / DEPLOYED
 
 - VERIFIED: PR #324 introduced the Menuun platform-attribution implementation and merged as `78550457a7ba7e2c23f2190856c1fb5c8cf71c3e`.
@@ -1092,3 +1107,26 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 CI verification for the auth-email PR, followed by safe Preview environment configuration and end-to-end auth email verification. Do not deploy Production manually.
+
+## 2026-09-30 — Combined Batch — CLOSED FOR REVIEW
+- VERIFIED: PR #327 now contains Part A public ordering fix, Part B item-internal ordering, and Part C Offers/Promotions implementation.
+- VERIFIED: Quality 2617 and W9 Orders QA 775 passed on the final code head b9a71e02c59676b885baea9cbd938cc9a0706c81.
+- HOLD: merge/deployment waits for owner review so this batch receives exactly one production deployment.
+- NEXT: owner review only.
+
+## 2026-09-30 — Public Offers Visibility Follow-up — CLOSED
+- VERIFIED: the existing public data path already loaded active product offers, but the public product-card and product-detail rendering did not consume that data; this was the direct visibility gap.
+- FIXED: active offers now render in featured cards, category product cards, and product details with bilingual labels and old/new pricing; BOGO uses a bilingual fallback label.
+- FIXED: quick-add now seeds the displayed active offer price for simple products; checkout remains server-authoritative.
+- ADDED: regression contract verifies the public renderer consumes productOffers and exposes the offer UI contract.
+- UNKNOWN: physical-device QA remains pending.
+- HOLD: PR #327 remains open; merge/deployment waits for owner review and the single release batch.
+
+## EXACT NEXT TASK
+Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Release Evidence
+- VERIFIED: public category/product ordering, item-internal ordering, and Offers/Promotions are implemented in one PR.
+- VERIFIED: public offer data is present in the canonical database and reaches the public SSR payload for a published menu.
+- VERIFIED: public renderer contract, typecheck, tests, lint, production build, all-theme browser QA, and W9 Orders QA are green on the current head.
+- BLOCKED: Production release is held by the Vercel deployment rate limit; do not retry randomly.
+- EXACT NEXT ACTION: merge PR #327, then one production deployment when the Vercel release gate is available.

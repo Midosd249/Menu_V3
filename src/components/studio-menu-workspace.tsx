@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { CheckCircle2, Eye, FileUp, Plus, Settings2, SlidersHorizontal, UtensilsCrossed, XCircle } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronUp, Eye, FileUp, Plus, Settings2, SlidersHorizontal, UtensilsCrossed, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { copy, t } from "@/lib/menu/i18n";
-import type { Product, StudioSnapshot } from "@/lib/menu/types";
+import type { Category, Product, StudioSnapshot } from "@/lib/menu/types";
 import { cn, formatSar } from "@/lib/utils";
 import { getOptimizedImageUrl } from "@/lib/menu/image";
 import type { Lang } from "@/lib/menu/types";
@@ -14,6 +14,10 @@ type Props = {
   lang: Lang;
   snapshot: StudioSnapshot;
   products: Product[];
+  categories: Category[];
+  branchId: string;
+  canReorder: boolean;
+  orderingBusy: boolean;
   query: string;
   catFilter: string;
   availabilityFilter: AvailabilityFilter;
@@ -28,6 +32,9 @@ type Props = {
   onToggleAvailability: (product: Product) => void;
   onEditCategory: () => void;
   onDeleteCategory: () => void;
+  onBranchChange: (value: string) => void;
+  onMoveCategory: (id: string, direction: "up" | "down") => void;
+  onMoveProduct: (id: string, categoryId: string, direction: "up" | "down") => void;
 };
 
 function ActionLink({ to, icon: Icon, label }: { to: "/studio/options" | "/studio/import" | "/studio/preview" | "/studio/qr"; icon: typeof SlidersHorizontal; label: string }) {
@@ -46,6 +53,10 @@ export function StudioMenuWorkspace({
   lang,
   snapshot,
   products,
+  categories,
+  branchId,
+  canReorder,
+  orderingBusy,
   query,
   catFilter,
   availabilityFilter,
@@ -60,6 +71,9 @@ export function StudioMenuWorkspace({
   onToggleAvailability,
   onEditCategory,
   onDeleteCategory,
+  onBranchChange,
+  onMoveCategory,
+  onMoveProduct,
 }: Props) {
   const unavailableCount = snapshot.products.filter((product) => !product.isAvailable).length;
   const attentionCount = snapshot.health.attention.length;
@@ -85,8 +99,13 @@ export function StudioMenuWorkspace({
             </p>
             <p className="mt-2 text-xs text-muted">
               {lang === "ar" ? snapshot.tenant.nameAr : snapshot.tenant.nameEn || snapshot.tenant.nameAr}
-              {snapshot.branches[0] ? ` · ${lang === "ar" ? snapshot.branches[0].nameAr : snapshot.branches[0].nameEn || snapshot.branches[0].nameAr}` : ""}
             </p>
+            <label className="mt-2 grid max-w-sm gap-1 text-xs text-muted">
+              <span>{lang === "ar" ? "الفرع الذي تعدّل ترتيبه" : "Branch whose menu order you are editing"}</span>
+              <select value={branchId} onChange={(event) => onBranchChange(event.target.value)} disabled={!canReorder || orderingBusy || snapshot.branches.length === 0} className="h-10 rounded-xl border border-line bg-paper px-3 text-sm text-ink">
+                {snapshot.branches.filter((branch) => branch.isActive).map((branch) => <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr : branch.nameEn || branch.nameAr}</option>)}
+              </select>
+            </label>
           </div>
           <div className="flex w-full min-w-0 max-w-full flex-wrap gap-2 sm:w-auto">
             <Button type="button" variant="outline" disabled={menuQaBusy} onClick={onReviewMenu}>
@@ -149,10 +168,25 @@ export function StudioMenuWorkspace({
 
         <div className="flex gap-2 overflow-x-auto no-scrollbar" aria-label={lang === "ar" ? "التصنيفات" : "Categories"}>
           <button type="button" onClick={() => onCategoryChange("all")} aria-pressed={catFilter === "all"} className={cn("min-h-10 shrink-0 rounded-full px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", catFilter === "all" ? "bg-ink text-paper" : "bg-sand text-ink-soft")}>{t(copy.menu.all, lang)}</button>
-          {snapshot.categories.map((category) => (
+          {categories.map((category) => (
             <button key={category.id} type="button" onClick={() => onCategoryChange(category.id)} aria-pressed={catFilter === category.id} className={cn("min-h-10 shrink-0 rounded-full px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", catFilter === category.id ? "bg-ink text-paper" : "bg-sand text-ink-soft")}>{lang === "ar" ? category.nameAr : category.nameEn || category.nameAr}</button>
           ))}
         </div>
+
+        {canReorder && categories.length > 1 ? (
+          <div className="grid gap-2 rounded-xl border border-line bg-sand/20 p-3" aria-label={lang === "ar" ? "ترتيب التصنيفات" : "Category ordering"}>
+            <div className="flex items-center justify-between gap-3">
+              <div><p className="text-sm font-semibold">{lang === "ar" ? "ترتيب التصنيفات" : "Category order"}</p><p className="text-xs text-muted">{lang === "ar" ? "استخدم الأسهم لتحريك التصنيف للأعلى أو للأسفل." : "Use the arrows to move a category up or down."}</p></div>
+              {orderingBusy ? <span className="text-xs text-muted">{lang === "ar" ? "جارٍ الحفظ…" : "Saving…"}</span> : null}
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {categories.map((category, index) => <div key={category.id} className="flex items-center justify-between gap-2 rounded-lg border border-line bg-paper px-3 py-2"><span className="min-w-0 truncate text-sm font-medium">{lang === "ar" ? category.nameAr : category.nameEn || category.nameAr}</span><span className="flex shrink-0 gap-1">
+                <button type="button" disabled={orderingBusy || index === 0} onClick={() => onMoveCategory(category.id, "up")} aria-label={lang === "ar" ? "تحريك للأعلى" : "Move up"} title={lang === "ar" ? "للأعلى" : "Move up"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronUp className="size-4" /></button>
+                <button type="button" disabled={orderingBusy || index === categories.length - 1} onClick={() => onMoveCategory(category.id, "down")} aria-label={lang === "ar" ? "تحريك للأسفل" : "Move down"} title={lang === "ar" ? "للأسفل" : "Move down"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronDown className="size-4" /></button>
+              </span></div>)}
+            </div>
+          </div>
+        ) : null}
 
         <div className="flex flex-wrap gap-2" aria-label={lang === "ar" ? "حالة التوفر" : "Availability"}>
           {(["all", "available", "unavailable"] as AvailabilityFilter[]).map((value) => {
@@ -198,7 +232,7 @@ export function StudioMenuWorkspace({
                   <th scope="col" className="px-4 py-3 text-start font-medium">{t(copy.studio.categories, lang)}</th>
                   <th scope="col" className="px-4 py-3 text-start font-medium">{t(copy.studio.price, lang)}</th>
                   <th scope="col" className="px-4 py-3 text-start font-medium">{lang === "ar" ? "التوفر" : "Availability"}</th>
-                  <th scope="col" className="px-4 py-3 text-end font-medium">{lang === "ar" ? "الإجراء" : "Action"}</th>
+                  <th scope="col" className="px-4 py-3 text-end font-medium">{lang === "ar" ? "الترتيب / الإجراء" : "Order / Action"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -225,7 +259,8 @@ export function StudioMenuWorkspace({
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="flex justify-end gap-2">
+                        <div className="flex flex-wrap justify-end gap-2">
+                          {canReorder && catFilter !== "all" && !query.trim() && availabilityFilter === "all" ? <span className="flex gap-1" aria-label={lang === "ar" ? "ترتيب الصنف" : "Item order"}><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === 0} onClick={() => onMoveProduct(product.id, catFilter, "up")} aria-label={lang === "ar" ? "تحريك للأعلى" : "Move up"} title={lang === "ar" ? "للأعلى" : "Move up"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronUp className="size-4" /></button><button type="button" disabled={orderingBusy || products.findIndex((item) => item.id === product.id) === products.length - 1} onClick={() => onMoveProduct(product.id, catFilter, "down")} aria-label={lang === "ar" ? "تحريك للأسفل" : "Move down"} title={lang === "ar" ? "للأسفل" : "Move down"} className="grid size-9 place-items-center rounded-lg border border-line disabled:opacity-40 hover:bg-sand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"><ChevronDown className="size-4" /></button></span> : null}
                           <Button type="button" size="sm" variant="outline" onClick={() => onEditProduct(product)}>{lang === "ar" ? "تعديل" : "Edit"}</Button>
                           <Button type="button" size="sm" variant="ghost" onClick={() => onToggleAvailability(product)}>{product.isAvailable ? lang === "ar" ? "إخفاء" : "Hide" : lang === "ar" ? "إتاحة" : "Make available"}</Button>
                         </div>

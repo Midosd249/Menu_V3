@@ -1,3 +1,39 @@
+## 2026-09-30 — Item-level Offers/Promotions light reference pass
+
+### Toast — item-level discounts and BOGO
+- Source: https://doc.toasttab.com/doc/platformguide/adminDiscountsDesigningDiscounts.html ; https://support.toasttab.com/en/article/Basic-Discount-Configuration ; https://doc.toasttab.com/doc/platformguide/adminDiscountPricing.html
+- Access date: 2026-09-30
+- Category: official restaurant-platform documentation
+- VERIFIED finding: Toast supports item-level fixed amount/percentage discounts, specific-item targeting, BOGO configurations, date availability, and explicit rules around discount effects and non-combinability. Toast documents that discounts affect item prices before tax is recalculated.
+- Transferable principle: keep offer eligibility, timing, and pricing rules explicit and server-enforced; preserve a clear distinction between original and discounted pricing.
+- Relevance: Menu V3 item-level offer model and order-price snapshot.
+- Limitation: Toast is a broader POS/ordering platform; its complexity is not a reason to reproduce the same feature breadth.
+- Confidence: HIGH
+- Must not copy: proprietary UI, labels, branding, layouts, assets, or code.
+
+### Square — online sale price and scheduled item updates
+- Source: https://squareup.com/help/us/en/article/7669-schedule-item-updates-with-square-online ; https://squareup.com/help/us/en/article/5362-apply-discounts
+- Access date: 2026-09-30
+- Category: official commerce/restaurant platform documentation
+- VERIFIED finding: Square supports an item-level online sale price and scheduling of item price/visibility changes; its discount documentation also covers percentage/dollar item discounts, automatic eligibility rules, BOGO, and exclusions.
+- Transferable principle: scheduled sale pricing should be explicit item state with server-enforced eligibility, not a cosmetic client-only label.
+- Relevance: Studio scheduling and public-menu pricing.
+- Limitation: Square's catalog and transaction model is larger than Menu V3's current order stack.
+- Confidence: HIGH
+- Must not copy: proprietary UI, layouts, branding, or implementation details.
+
+### GloriaFood — selected-item promotions, BOGO, and highlighted promotions
+- Source: https://www.gloriafood.com/restaurant-promotion-templates ; https://www.gloriafood.com/restaurant-ideas/restaurant-promotion-ideas-to-try
+- Access date: 2026-09-30
+- Category: official restaurant online-ordering documentation
+- VERIFIED finding: GloriaFood describes selected-item discounts, BOGO, time/expiration rules, and prominent promotion treatment in the online menu/cart.
+- Transferable principle: item-level offers should be visually obvious but tied to explicit eligibility/expiry rules; promotion presentation can be separated from the underlying menu item.
+- Relevance: public-menu badge/price treatment and expiry behavior.
+- Limitation: some sources are marketing-oriented rather than technical specification.
+- Confidence: MEDIUM-HIGH
+- Must not copy: proprietary visuals, promotional copy, layouts, or assets.
+
+---
 # Design Research Log
 
 Permanent evidence log for template, UX, visual, conversion, accessibility, performance, SEO, and Saudi-market decisions.
