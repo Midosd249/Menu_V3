@@ -5,8 +5,9 @@ import { useLang } from "@/lib/lang";
 import type { PublicMenu } from "@/lib/menu/types";
 import { Button } from "@/components/ui/button";
 import { fallbackGuestAnswer } from "@/lib/menu/guest-assistant-fallback";
+import { getActiveOfferProductIds } from "@/lib/menu/offers";
 
-const suggestions = {
+const baseSuggestions = {
   ar: ["ما الذي تنصحني به؟", "ما الأصناف المتاحة؟", "ما الخيارات الخفيفة؟"],
   en: ["What do you recommend?", "What is available?", "What are the lighter options?"],
 };
@@ -23,6 +24,14 @@ export function GuestMenuAssistant({ menu }: { menu: PublicMenu }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const products = useMemo(() => new Map(menu.products.map((p) => [p.id, p])), [menu.products]);
+  const hasActiveOffers = useMemo(
+    () => getActiveOfferProductIds(menu.products.map((product) => product.id), menu.productOffers).size > 0,
+    [menu.products, menu.productOffers],
+  );
+  const suggestions = useMemo(() => ({
+    ar: hasActiveOffers ? [...baseSuggestions.ar, "ما هي العروض المتوفرة؟"] : baseSuggestions.ar,
+    en: hasActiveOffers ? [...baseSuggestions.en, "What offers are available?"] : baseSuggestions.en,
+  }), [hasActiveOffers]);
   const visibleAnswer = lang === "ar" ? answer?.ar : answer?.en;
 
   useEffect(() => {
