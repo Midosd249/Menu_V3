@@ -7,7 +7,8 @@ import { mapBranch, mapCategory, mapHour, mapProduct, mapPublicTenant } from "./
 import { DEMO_MENU } from "./demo";
 import { ACTIVE_EXPERIMENT, getExperimentVariant } from "./experiment";
 import { resolveAnonymousSession } from "./session.server";
-import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOptions, ProductVariant, PublicMenu } from "./types";
+import { orderPublicMenuContent } from "./public-order";
+import type { EventType, FnResult, ModifierGroup, ModifierOption, ProductOffer, ProductOptions, ProductVariant, PublicMenu } from "./types";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
 
@@ -208,8 +209,10 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
             'allergens', p.allergens,
             'tags', p.tags,
             'dietary_labels', p.dietary_labels
-          ) order by p.category_id nulls last, coalesce(bpo.sort_order, p.sort_order), p.created_at, p.id)
+          ) order by coalesce(bpc.sort_order, pc.sort_order) nulls last, coalesce(bpo.sort_order, p.sort_order), p.created_at, p.id)
           from products p
+          left join categories pc on pc.id = p.category_id and pc.tenant_id = t.id
+          left join branch_category_order bpc on bpc.branch_id = b.id and bpc.tenant_id = t.id and bpc.category_id = p.category_id
           left join branch_product_order bpo
             on bpo.branch_id = b.id
            and bpo.tenant_id = t.id
@@ -230,14 +233,22 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
     if (!row) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
     const tenant = mapPublicTenant(row.tenant);
     const products = (row.products ?? []).map(mapProduct);
+    const ordered = orderPublicMenuContent((row.categories ?? []).map(mapCategory), products);
+    const offerRows = await sql<Record<string, unknown>>`select id, tenant_id, product_id, offer_type, value, label_ar, label_en, starts_at, ends_at, is_active
+      from product_offers
+      where tenant_id = ${tenant.id} and product_id = any(${ordered.products.map((p) => p.id)}) and is_active = true
+        and (starts_at is null or starts_at <= now()) and (ends_at is null or ends_at > now())`;
+    const productOffers: Record<string, ProductOffer> = {};
+    for (const offer of offerRows) productOffers[String(offer.product_id)] = { id: String(offer.id), tenantId: String(offer.tenant_id), productId: String(offer.product_id), offerType: offer.offer_type as ProductOffer["offerType"], value: offer.value == null ? null : Number(offer.value), labelAr: String(offer.label_ar ?? ""), labelEn: String(offer.label_en ?? ""), startsAt: offer.starts_at ? new Date(String(offer.starts_at)).toISOString() : null, endsAt: offer.ends_at ? new Date(String(offer.ends_at)).toISOString() : null, isActive: Boolean(offer.is_active) };
     const menu: PublicMenu = {
       tenant,
       branch: mapBranch(row.branch),
       branches: (row.branches ?? []).map(mapBranch),
       hours: (row.hours ?? []).map(mapHour),
-      categories: (row.categories ?? []).map(mapCategory),
-      products,
-      productOptions: await loadPublicOptions(sql, tenant.id, products.map((p) => p.id)),
+      categories: ordered.categories,
+      products: ordered.products,
+      productOptions: await loadPublicOptions(sql, tenant.id, ordered.products.map((p) => p.id)),
+      productOffers,
     };
     menuCache.set(cacheKey, { menu, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
     return { ok: true, data: menu };
