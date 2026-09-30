@@ -32,7 +32,7 @@ function ProductSheet({ lang, product, options, offer, close, add, submitting }:
   const basePrice = variants.find((v) => v.id === variantId)?.price ?? product.price;
   const optionTotal = (options?.options ?? []).filter((o) => selected.includes(o.id)).reduce((sum, o) => sum + o.priceDelta, 0);
   const activeOffer = offer && isOfferCurrentlyActive(offer) ? offer : null;
-  const pricing = activeOffer ? calculateOffer(basePrice, optionTotal, 1, offer) : null;
+  const pricing = activeOffer ? calculateOffer(basePrice, optionTotal, 1, activeOffer) : null;
   const total = pricing?.discountedBaseUnitPrice != null ? pricing.discountedBaseUnitPrice + optionTotal : basePrice + optionTotal;
   const toggle = (groupId: string, optionId: string, max: number) => setSelected((current) => {
     if (current.includes(optionId)) return current.filter((id) => id !== optionId);
