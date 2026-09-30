@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { indexOrder, moveByDirection } from "../src/lib/menu/reorder.ts";
 import { orderPublicMenuContent } from "../src/lib/menu/public-order.ts";
-import { calculateOffer, isOfferCurrentlyActive } from "../src/lib/menu/offers.ts";
+import { calculateOffer, getActiveOfferProductIds, isOfferCurrentlyActive, OFFERS_FILTER_ID } from "../src/lib/menu/offers.ts";
 
 test("branch menu ordering moves categories and products without changing unrelated rows", () => {
   const items = [{ id: "a" }, { id: "b" }, { id: "c" }];
@@ -204,4 +204,34 @@ test("offer activation, expiry, tenant isolation, and product-limit boundaries a
   assert.match(offers, /tenant_id =/);
   assert.match(panel, /Asia\/Riyadh/);
   assert.doesNotMatch(plans, /offer/i);
+});
+
+
+test("public offers filter uses one shared active-offer definition and hides when no visible offer exists", () => {
+  const now = new Date("2026-09-30T05:00:00+03:00");
+  const offers = {
+    p1: { id: "o1", tenantId: "t", productId: "p1", offerType: "percentage", value: 20, labelAr: "خصم", labelEn: "Discount", startsAt: null, endsAt: null, isActive: true },
+    p2: { id: "o2", tenantId: "t", productId: "p2", offerType: "sale_price", value: 50, labelAr: "قادم", labelEn: "Upcoming", startsAt: "2026-10-01T00:00:00Z", endsAt: null, isActive: true },
+    p3: { id: "o3", tenantId: "t", productId: "p3", offerType: "fixed", value: 10, labelAr: "", labelEn: "", startsAt: null, endsAt: null, isActive: false },
+  };
+  assert.deepEqual([...getActiveOfferProductIds(["p1", "p2", "p3"], offers, now)], ["p1"]);
+  assert.equal(OFFERS_FILTER_ID, "__offers__");
+  assert.deepEqual([...getActiveOfferProductIds(["p2", "p3"], offers, now)], []);
+});
+
+test("public offer filter is wired into the shared renderer and both custom category renderers", async () => {
+  const publicView = await readFile("src/components/public-menu.tsx", "utf8");
+  const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
+  const taste = await readFile("src/components/templates/taste.tsx", "utf8");
+  const chip = await readFile("src/components/public-offer-filter.tsx", "utf8");
+  for (const source of [publicView, signal, taste]) {
+    assert.match(source, /PublicOffersFilter/);
+    assert.match(source, /getActiveOfferProductIds/);
+    assert.match(source, /OFFERS_FILTER_ID/);
+    assert.match(source, /hasActiveOffers/);
+    assert.match(source, /categoryId === OFFERS_FILTER_ID/);
+  }
+  assert.match(chip, /data-public-offers-filter/);
+  assert.match(chip, /العروض/);
+  assert.match(chip, /Offers/);
 });

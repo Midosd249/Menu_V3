@@ -269,3 +269,9 @@ html[data-menu-theme="heritage"] .taste-empty-cart { display: grid; place-items:
   html[data-menu-theme="heritage"] .taste-page *::before,
   html[data-menu-theme="heritage"] .taste-page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transform: none !important; }
 }
+
+
+/* Public offers filter — Heritage / Mazaq */
+html[data-menu-theme="heritage"] .taste-offers-filter { border-color: var(--taste-gold); background: rgb(183 138 66 / .12); color: var(--taste-gold); box-shadow: 0 6px 18px rgb(183 138 66 / .12); }
+html[data-menu-theme="heritage"] .taste-offers-filter[aria-pressed="true"] { border-color: var(--taste-gold); background: var(--taste-gold); color: #fff; }
+html[data-menu-theme="heritage"] .taste-offers-filter:focus-visible { outline: 2px solid var(--taste-gold); outline-offset: 2px; }

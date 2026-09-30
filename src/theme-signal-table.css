@@ -121,3 +121,9 @@ html[data-menu-theme="editorial"] .signal-featured-card:focus-visible{outline:2p
   html[data-menu-theme="editorial"] .signal-hero-media{aspect-ratio:16/10}
   html[data-menu-theme="editorial"] .signal-featured-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+
+/* Public offers filter — Editorial */
+html[data-menu-theme="editorial"] .signal-categories .signal-offers-filter { min-block-size: 2.75rem; border-color: var(--signal-blue); background: color-mix(in srgb, var(--signal-blue) 12%, transparent); color: var(--signal-blue); box-shadow: 0 8px 20px rgb(0 0 0 / .06); }
+html[data-menu-theme="editorial"] .signal-categories .signal-offers-filter[aria-pressed="true"] { border-color: var(--signal-blue); background: var(--signal-blue); color: #fff; }
+html[data-menu-theme="editorial"] .signal-categories .signal-offers-filter:focus-visible { outline: 2px solid var(--signal-blue); outline-offset: 2px; }
