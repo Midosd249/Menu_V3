@@ -265,10 +265,11 @@ export const getPublicMenu = createServerFn({ method: "GET" })
     const result = await loadPublicMenu(data.slug, data.branch);
     if (!result.ok) return result;
 
-    const sql = await getSql();
-    const session = await resolveAnonymousSession(sql, result.data.tenant.id);
-    const experimentVariant = result.data.tenant.whatsapp?.trim()
-      ? getExperimentVariant(session.id)
+    const isStaticDemoMenu = result.data.tenant.id === DEMO_MENU.tenant.id;
+    const sql = isStaticDemoMenu ? null : await getSql();
+    const session = sql ? await resolveAnonymousSession(sql, result.data.tenant.id) : null;
+    const experimentVariant = !isStaticDemoMenu && result.data.tenant.whatsapp?.trim()
+      ? getExperimentVariant(session!.id)
       : "control" as const;
 
     return {

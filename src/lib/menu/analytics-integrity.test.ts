@@ -145,8 +145,9 @@ test("A.3 public event renderers no longer submit a client session id", () => {
 test("A.3 R6 experiment assignment uses the same server session as analytics", () => {
   const actionLinks = readFileSync(join(here, "../../components/public-action-links.tsx"), "utf8");
   assert.match(publicSource, /setResponseHeader\("Cache-Control", "private, no-store"\)/);
-  assert.match(publicSource, /const session = await resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
-  assert.match(publicSource, /const experimentVariant = result\.data\.tenant\.whatsapp\?\.trim\(\)\s+\? getExperimentVariant\(session\.id\)/);
+  assert.match(publicSource, /const isStaticDemoMenu = result\.data\.tenant\.id === DEMO_MENU\.tenant\.id/);
+  assert.match(publicSource, /const session = sql \? await resolveAnonymousSession\(sql, result\.data\.tenant\.id\) : null/);
+  assert.match(publicSource, /const experimentVariant = !isStaticDemoMenu && result\.data\.tenant\.whatsapp\?\.trim\(\)\s+\? getExperimentVariant\(session!\.id\)/);
   assert.match(actionLinks, /experimentVariant\?: "control" \| "prominent"/);
   assert.doesNotMatch(actionLinks, /getGuestSessionId|getExperimentVariant/);
   assert.match(actionLinks, /data-experiment-variant/);

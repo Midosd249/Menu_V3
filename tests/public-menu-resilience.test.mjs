@@ -19,6 +19,15 @@ test("public menu hides the hours status chip when no schedule exists", async ()
 
 const read = (path) => readFileSync(path, "utf8");
 const publicServer = read("src/lib/menu/public.ts");
+test("static demo menu does not initialize a database-backed anonymous session", () => {
+  assert.match(publicServer, /const isStaticDemoMenu = result\.data\.tenant\.id === DEMO_MENU\.tenant\.id/);
+  assert.match(publicServer, /const sql = isStaticDemoMenu \? null : await getSql\(\)/);
+  assert.match(publicServer, /const session = sql \? await resolveAnonymousSession\(sql, result\.data\.tenant\.id\) : null/);
+  assert.match(publicServer, /const experimentVariant = !isStaticDemoMenu && result\.data\.tenant\.whatsapp\?\.trim\(\)/);
+  assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas-tenant"/);
+});
+
+
 assert.match(publicServer, /resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
 const demo = read("src/lib/menu/demo.ts");
 assert.match(demo, /nameEn: "Double Espresso"[\s\S]*imageUrl: "\/homepage\/menu-dish\.webp"/);
