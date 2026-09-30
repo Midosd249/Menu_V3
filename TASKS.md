@@ -1322,3 +1322,11 @@ Verify the auth-email PR through GitHub CI. If green, configure the restricted R
 
 ## EXACT NEXT TASK
 Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Verification — VERIFIED / RELEASE HOLD
+- VERIFIED: Quality 2634 and W9 Orders QA 792 passed on head `e620bb43f347bde538575d4c0dac13583f15e4b3`.
+- VERIFIED: Vercel preview commit `52a7bb70e14ac99a77a2c0befcd4a3efdd52f809` served the published `mndy-alwtnya` menu and SSR payload contained both active offers, including BOGO bilingual labels.
+- VERIFIED: Supabase data confirms two active offers for available/featured products in the published tenant.
+- FIXED: public renderer contract test and RLS migration.
+- UNKNOWN: physical-device QA.
+- BLOCKED: Vercel deployment requests are rate-limited; Production is not deployed from PR #327.
+- EXACT NEXT TASK: merge PR #327, then execute the single controlled production release once the Vercel deployment gate is available.

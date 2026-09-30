@@ -1480,3 +1480,14 @@ Run GitHub CI for the auth-email PR. After CI passes, configure `RESEND_API_KEY`
 
 ## EXACT NEXT TASK
 Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Verification / Merge Hold
+- VERIFIED: PR #327 head before this continuity commit is `e620bb43f347bde538575d4c0dac13583f15e4b3`; Quality 2634 and W9 Orders QA 792 are green.
+- VERIFIED: `db4f23b34f94300765d2aa7338d77ab8945c2b67` exists as Vercel Preview deployment `dpl_5NHEMk8ujdBSpAgwqDL87r2qRiPR`; it is branch preview evidence, not Production.
+- VERIFIED: Preview for `52a7bb70e14ac99a77a2c0befcd4a3efdd52f809` reached READY and served `m/mndy-alwtnya` with the two active `productOffers` records in the SSR payload.
+- VERIFIED: Supabase canonical project `ublxptcqefujkbeepylc` contains two active offers associated with published tenant `mndy-alwtnya`; both products are available and featured.
+- VERIFIED: public source path filters active, currently valid offers for the exact ordered public products and passes `productOffers` into the renderer.
+- FIXED: public offer rendering contract and test alignment; active offers are consumed by featured cards, category cards, product details, and simple-product quick add while checkout remains server-authoritative.
+- FIXED: added migration `20260930023000_menu_ordering_offers_rls.sql` to enable RLS on branch ordering and offers tables. Live Supabase currently reports these three tables with RLS disabled until this migration is applied by the controlled release.
+- UNKNOWN: physical Android/iOS QA.
+- BLOCKED: Vercel is currently rejecting new deployment requests with `api-deployments-free-per-day` / build-rate-limit; no production deployment has been made for PR #327.
+- NEXT ACTION: merge PR #327 after final diff review, then perform the single controlled production release when Vercel permits it.

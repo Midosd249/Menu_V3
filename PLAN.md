@@ -1124,3 +1124,9 @@ CI verification for the auth-email PR, followed by safe Preview environment conf
 
 ## EXACT NEXT TASK
 Owner reviews PR #327. Do not merge or deploy automatically.
+## 2026-09-30 — PR #327 Public Offers Release Evidence
+- VERIFIED: public category/product ordering, item-internal ordering, and Offers/Promotions are implemented in one PR.
+- VERIFIED: public offer data is present in the canonical database and reaches the public SSR payload for a published menu.
+- VERIFIED: public renderer contract, typecheck, tests, lint, production build, all-theme browser QA, and W9 Orders QA are green on the current head.
+- BLOCKED: Production release is held by the Vercel deployment rate limit; do not retry randomly.
+- EXACT NEXT ACTION: merge PR #327, then one production deployment when the Vercel release gate is available.
