@@ -1330,3 +1330,15 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - UNKNOWN: physical-device QA.
 - BLOCKED: Vercel deployment requests are rate-limited; Production is not deployed from PR #327.
 - EXACT NEXT TASK: merge PR #327, then execute the single controlled production release once the Vercel deployment gate is available.
+
+
+## 2026-09-30 — PR #327 Current Verification State
+- VERIFIED: PR #327 head `f81c4f58eae49917c3602c8ae55ead22588e2709`.
+- VERIFIED: Quality #2635 passed; W9 Orders QA #793 passed.
+- VERIFIED: public offer rendering consumes active `productOffers` in featured/category cards and product details; checkout remains server-authoritative.
+- VERIFIED: live Supabase reports RLS enabled on `branch_category_order`, `branch_product_order`, and `product_offers` with zero public policies reported.
+- UNKNOWN: physical-device QA.
+- BLOCKED: Vercel deployment quota/rate limit; no Production deployment for PR #327 is verified.
+
+## EXACT NEXT TASK
+Re-check Vercel availability, then merge PR #327 and perform one controlled Production deployment with direct evidence.

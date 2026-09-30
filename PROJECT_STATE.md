@@ -1491,3 +1491,19 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - UNKNOWN: physical Android/iOS QA.
 - BLOCKED: Vercel is currently rejecting new deployment requests with `api-deployments-free-per-day` / build-rate-limit; no production deployment has been made for PR #327.
 - NEXT ACTION: merge PR #327 after final diff review, then perform the single controlled production release when Vercel permits it.
+
+
+## 2026-09-30 — PR #327 Continuation After Connection Interruption
+- VERIFIED: current PR #327 head is `f81c4f58eae49917c3602c8ae55ead22588e2709`; PR remains open, mergeable, and targets `main`.
+- VERIFIED: GitHub Quality #2635 completed successfully, including typecheck, tests, lint, production build, all-theme browser QA, Menuun browser QA, performance, Studio browser QA, Platform Admin browser QA, and cleanup.
+- VERIFIED: GitHub W9 Orders QA #793 completed successfully.
+- VERIFIED: `db4f23b34f94300765d2aa7338d77ab8945c2b67` is a READY Vercel Preview deployment only; it is not Production. Later previews proved the published `mndy-alwtnya` SSR payload contains active `productOffers`.
+- VERIFIED: current Supabase inspection reports RLS enabled on `branch_category_order`, `branch_product_order`, and `product_offers`; no public policies were reported. Earlier continuity text saying RLS was disabled is stale and superseded by direct live evidence.
+- VERIFIED: the public offer visibility root cause was renderer consumption, not missing offer data; the renderer now consumes active offers in featured cards, category cards, product details, and simple-product quick add.
+- UNKNOWN: physical Android/iOS QA.
+- BLOCKED: Vercel deployment requests currently fail with `api-deployments-free-per-day` / build-rate-limit. No Production deployment for PR #327 is verified.
+- IMPLEMENTATION STATUS: PUSHED / GITHUB QUALITY VERIFIED.
+- DEPLOYMENT STATUS: DEPLOYMENT_BLOCKED.
+
+## EXACT NEXT TASK
+When the Vercel deployment gate is available, re-check PR #327 required statuses and final head, merge PR #327 to `main`, then perform exactly one controlled Production deployment and verify the deployed commit and public-menu offer rendering. Do not retry Vercel randomly before the quota gate is available.

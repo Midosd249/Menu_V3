@@ -31,3 +31,11 @@ Supabase currently reports RLS disabled on `menu_v3.branch_category_order`, `men
 
 ## Exact next action
 Merge PR #327 after final diff review, then perform one controlled Production deployment when the Vercel gate is available.
+
+
+## Continuation update — 2026-09-30
+- VERIFIED: current PR head is `f81c4f58eae49917c3602c8ae55ead22588e2709`.
+- VERIFIED: Quality #2635 and W9 Orders QA #793 passed.
+- VERIFIED: live Supabase now reports RLS enabled on all three protected tables; the earlier note in this document that RLS was disabled is superseded by this later direct inspection.
+- BLOCKED: Vercel remains rate-limited for new deployments with `api-deployments-free-per-day`; no Production deployment is claimed.
+- EXACT NEXT ACTION: wait for the Vercel release gate, then re-check statuses, merge PR #327, and execute one controlled Production deployment.

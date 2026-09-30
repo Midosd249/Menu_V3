@@ -1130,3 +1130,14 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - VERIFIED: public renderer contract, typecheck, tests, lint, production build, all-theme browser QA, and W9 Orders QA are green on the current head.
 - BLOCKED: Production release is held by the Vercel deployment rate limit; do not retry randomly.
 - EXACT NEXT ACTION: merge PR #327, then one production deployment when the Vercel release gate is available.
+
+
+## 2026-09-30 — PR #327 Current Release State
+- VERIFIED: PR #327 head `f81c4f58eae49917c3602c8ae55ead22588e2709` is open and mergeable against main `4f53e397fac357b7dcada23d6a3e069d8fc64aa7`.
+- VERIFIED: Quality #2635 and W9 Orders QA #793 passed.
+- VERIFIED: public Offers visibility is fixed and preview SSR evidence contains the active offers for the published menu.
+- VERIFIED: live Supabase currently reports RLS enabled on the three protected ordering/offer tables; no public policies reported.
+- BLOCKED: Vercel deployment gate is rate-limited by `api-deployments-free-per-day`; Production release is not verified.
+
+## EXACT NEXT TASK
+Re-check the Vercel release gate when available, then merge PR #327 and execute one controlled Production deployment with direct commit/target verification.

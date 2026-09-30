@@ -26,3 +26,12 @@ No Production deployment has been made for PR #327.
 
 ## Exact next action
 Merge PR #327 after final diff review; then perform exactly one controlled Production deployment when Vercel permits it.
+
+
+## Continuation correction — 2026-09-30
+- VERIFIED: current PR head is `f81c4f58eae49917c3602c8ae55ead22588e2709`.
+- VERIFIED: Quality #2635 and W9 Orders QA #793 passed.
+- VERIFIED: current Supabase inspection reports RLS enabled on `branch_category_order`, `branch_product_order`, and `product_offers`, with no public policies reported. This supersedes the earlier stale statement that RLS was disabled.
+- VERIFIED: no Production deployment has been made/verified for PR #327.
+- BLOCKED: Vercel new deployment requests remain rate-limited by `api-deployments-free-per-day`.
+- EXACT NEXT ACTION: re-check Vercel availability, then merge PR #327 and execute one controlled Production deployment with direct commit/target evidence.
