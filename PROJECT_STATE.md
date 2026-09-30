@@ -1469,3 +1469,14 @@ Run GitHub CI for the auth-email PR. After CI passes, configure `RESEND_API_KEY`
 - UNKNOWN: no physical Android/iOS device QA was performed.
 - DEPLOYMENT: NOT_DEPLOYED / HOLD FOR OWNER REVIEW. PR #327 remains open.
 - NEXT ACTION: owner reviews PR #327; do not merge or deploy automatically.
+
+## 2026-09-30 — Public Offers Visibility Follow-up — VERIFIED / REVIEW HOLD
+- VERIFIED: the existing public data path already loaded active product offers, but the public product-card and product-detail rendering did not consume that data; this was the direct visibility gap.
+- FIXED: active offers now render in featured cards, category product cards, and product details with bilingual labels and old/new pricing; BOGO uses a bilingual fallback label.
+- FIXED: quick-add now seeds the displayed active offer price for simple products; checkout remains server-authoritative.
+- ADDED: regression contract verifies the public renderer consumes productOffers and exposes the offer UI contract.
+- UNKNOWN: physical-device QA remains pending.
+- HOLD: PR #327 remains open; merge/deployment waits for owner review and the single release batch.
+
+## EXACT NEXT TASK
+Owner reviews PR #327. Do not merge or deploy automatically.
