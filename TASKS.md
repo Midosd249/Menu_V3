@@ -1305,3 +1305,9 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 Verify the auth-email PR through GitHub CI. If green, configure the restricted Resend key in Vercel Preview and run safe end-to-end email/auth browser verification with a dedicated test account.
+
+## 2026-09-30 — Combined Batch — READY FOR OWNER REVIEW
+- VERIFIED: public category/product ordering, item-internal ordering, and offers are implemented together in PR #327.
+- VERIFIED: final GitHub CI passed: Quality 2617; W9 Orders QA 775.
+- UNKNOWN: physical-device QA remains pending.
+- NEXT TASK: owner review PR #327; after approval, perform the single release/deployment batch.
