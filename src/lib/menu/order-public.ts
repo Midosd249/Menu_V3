@@ -3,7 +3,8 @@ import { z } from "zod";
 import { getCookie } from "@tanstack/react-start/server";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
-import type { FnResult } from "./types";
+import type { FnResult, ProductOffer } from "./types";
+import { calculateOffer, isOfferCurrentlyActive } from "./offers";
 import { ANONYMOUS_SESSION_COOKIE, resolveAnonymousSession } from "./session.server";
 import type { OrderReceiptData } from "./order-receipt";
 
@@ -26,6 +27,7 @@ const submitOrderSchema = z.object({
 });
 
 type ProductRow = { id: string; tenant_id: string; name_ar: string; name_en: string; price: number; currency: string; is_available: boolean };
+type OfferRow = { id:string; tenant_id:string; product_id:string; offer_type:ProductOffer["offerType"]; value:number|null; label_ar:string; label_en:string; starts_at:string|null; ends_at:string|null; is_active:boolean };
 type VariantRow = { id: string; product_id: string; name_ar: string; name_en: string; price: number; is_available: boolean };
 type GroupRow = { id: string; product_id: string; name_ar: string; name_en: string; min_select: number; max_select: number; is_required: boolean };
 type OptionRow = { id: string; group_id: string; name_ar: string; name_en: string; price_delta: number; is_available: boolean };
@@ -40,6 +42,9 @@ type PreparedItem = {
   productNameAr: string;
   productNameEn: string;
   selectedOptions: PreparedSelectedOption[];
+  originalUnitPrice: number;
+  discountAmount: number;
+  offerId: string | null;
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
@@ -86,7 +91,7 @@ export const getPublicOrderReceipt = createServerFn({ method: "GET" })
           coalesce((select jsonb_agg(jsonb_build_object(
             'id', oi.id, 'name_ar', oi.product_name_ar, 'name_en', oi.product_name_en,
             'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total,
-            'selected_options', oi.selected_options
+            'selected_options', oi.selected_options, 'original_unit_price', oi.original_unit_price, 'discount_amount', oi.discount_amount, 'offer_id', oi.offer_id
           ) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
         from orders o
         join tenants t on t.id = o.tenant_id
@@ -211,6 +216,8 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         list.push(g); groupsByProduct.set(String(g.product_id), list);
       }
 
+      const offerRows = await sql<OfferRow>`select id, tenant_id, product_id, offer_type, value, label_ar, label_en, starts_at, ends_at, is_active from product_offers where tenant_id = ${tenant.id} and product_id = any(${productIds}) and is_active = true`;
+      const offerByProduct = new Map(offerRows.map((offer) => [String(offer.product_id), { id:String(offer.id), tenantId:String(offer.tenant_id), productId:String(offer.product_id), offerType:offer.offer_type, value:offer.value == null ? null : Number(offer.value), labelAr:offer.label_ar, labelEn:offer.label_en, startsAt:offer.starts_at ? new Date(String(offer.starts_at)).toISOString() : null, endsAt:offer.ends_at ? new Date(String(offer.ends_at)).toISOString() : null, isActive:offer.is_active } satisfies ProductOffer]));
       const variantIds = [...new Set(data.items.map((item) => item.selected.variantId).filter((id): id is string => Boolean(id)))];
       const modifierOptionIds = [...new Set(data.items.flatMap((item) => item.selected.modifierOptionIds))];
       const options = modifierOptionIds.length
@@ -250,11 +257,14 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         const note = item.selected.note?.trim().slice(0, 500) ?? "";
         if (note) selectedOptions.push({ type: "note", id: "item-note", nameAr: note, nameEn: note, priceDelta: 0 });
 
-        const unitPrice = Number(variant?.price ?? product.price) + optionRows.reduce((sum, option) => sum + Number(option.price_delta), 0);
-        prepared.push({
-          id: newId(), productId: String(product.id), quantity: item.quantity, unitPrice, lineTotal: unitPrice * item.quantity,
-          productNameAr: product.name_ar, productNameEn: product.name_en, selectedOptions,
-        });
+        const baseUnitPrice = Number(variant?.price ?? product.price);
+        const modifierAddOns = optionRows.reduce((sum, option) => sum + Number(option.price_delta), 0);
+        const originalUnitPrice = baseUnitPrice + modifierAddOns;
+        const offer = offerByProduct.get(item.productId);
+        const activeOffer = offer && isOfferCurrentlyActive(offer) ? offer : null;
+        const calculation = activeOffer ? calculateOffer(baseUnitPrice, modifierAddOns, item.quantity, activeOffer) : { discountedBaseUnitPrice: baseUnitPrice, discountAmount: 0, lineTotal: originalUnitPrice * item.quantity };
+        const unitPrice = calculation.lineTotal / item.quantity;
+        prepared.push({ id:newId(), productId:String(product.id), quantity:item.quantity, unitPrice, lineTotal:calculation.lineTotal, productNameAr:product.name_ar, productNameEn:product.name_en, selectedOptions, originalUnitPrice, discountAmount:calculation.discountAmount, offerId:activeOffer?.id ?? null });
       }
 
       const subtotal = prepared.reduce((sum, item) => sum + item.lineTotal, 0);
@@ -269,6 +279,9 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         product_name_ar: item.productNameAr,
         product_name_en: item.productNameEn,
         selected_options: item.selectedOptions,
+        original_unit_price: item.originalUnitPrice,
+        discount_amount: item.discountAmount,
+        offer_id: item.offerId,
       })));
 
       const reservation = await sql<{ client_token: string }>`
@@ -286,11 +299,11 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
           returning id, order_number
         ),
         inserted_items as (
-          insert into order_items (id, order_id, product_id, product_name_ar, product_name_en, quantity, unit_price, line_total, selected_options)
-          select item.id, new_order.id, item.product_id, item.product_name_ar, item.product_name_en, item.quantity, item.unit_price, item.line_total, item.selected_options
+          insert into order_items (id, order_id, product_id, product_name_ar, product_name_en, quantity, unit_price, line_total, selected_options, original_unit_price, discount_amount, offer_id)
+          select item.id, new_order.id, item.product_id, item.product_name_ar, item.product_name_en, item.quantity, item.unit_price, item.line_total, item.selected_options, item.original_unit_price, item.discount_amount, item.offer_id
           from new_order cross join lateral jsonb_to_recordset(${itemsJson}::jsonb) as item(
             id text, product_id text, quantity integer, unit_price numeric, line_total numeric,
-            product_name_ar text, product_name_en text, selected_options jsonb
+            product_name_ar text, product_name_en text, selected_options jsonb, original_unit_price numeric, discount_amount numeric, offer_id text
           ) returning order_id
         ),
         inserted_event as (
