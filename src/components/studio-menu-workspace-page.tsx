@@ -12,6 +12,8 @@ import { deleteCategory, deleteProduct, getMenuOrdering, reorderMenu, saveCatego
 import { useStudio, useStudioFlash } from "@/lib/menu/studio";
 import type { Product } from "@/lib/menu/types";
 import { formatSar } from "@/lib/utils";
+import { ProductOptionsOrderingPanel } from "@/components/product-options-ordering-panel";
+import { ProductOfferPanel } from "@/components/product-offer-panel";
 
 type ProductDraft = {
   id?: string;
