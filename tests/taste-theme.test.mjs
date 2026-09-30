@@ -57,3 +57,16 @@ test("Taste removes card chrome and clipping from the product list", async () =>
   assert.match(styles, /\.taste-product-price[\s\S]*white-space: nowrap/);
   assert.match(styles, /\.taste-floating-cart/);
 });
+
+
+test("Taste / Mazaq consumes active offers in list cards, details, quick add, and the public offers filter", async () => {
+  const source = await readFile("src/components/templates/taste.tsx", "utf8");
+  assert.match(source, /ProductSheet[\s\S]*offer=\{menu\.productOffers\?\.\[selected\.id\]\}/);
+  assert.match(source, /getActiveOfferProductIds/);
+  assert.match(source, /const activeOfferProductIds/);
+  assert.match(source, /calculateOffer\(product\.price, 0, 1, offer\)/);
+  assert.match(source, /offer\.offerType === "bogo"/);
+  assert.match(source, /PublicOffersFilter/);
+  assert.match(source, /taste-offers-filter/);
+  assert.match(source, /unitPrice, quantity: 1/);
+});
