@@ -1311,3 +1311,14 @@ Verify the auth-email PR through GitHub CI. If green, configure the restricted R
 - VERIFIED: final GitHub CI passed: Quality 2617; W9 Orders QA 775.
 - UNKNOWN: physical-device QA remains pending.
 - NEXT TASK: owner review PR #327; after approval, perform the single release/deployment batch.
+
+## 2026-09-30 — Public Offers Visibility Follow-up — READY FOR REVIEW
+- VERIFIED: the existing public data path already loaded active product offers, but the public product-card and product-detail rendering did not consume that data; this was the direct visibility gap.
+- FIXED: active offers now render in featured cards, category product cards, and product details with bilingual labels and old/new pricing; BOGO uses a bilingual fallback label.
+- FIXED: quick-add now seeds the displayed active offer price for simple products; checkout remains server-authoritative.
+- ADDED: regression contract verifies the public renderer consumes productOffers and exposes the offer UI contract.
+- UNKNOWN: physical-device QA remains pending.
+- HOLD: PR #327 remains open; merge/deployment waits for owner review and the single release batch.
+
+## EXACT NEXT TASK
+Owner reviews PR #327. Do not merge or deploy automatically.
