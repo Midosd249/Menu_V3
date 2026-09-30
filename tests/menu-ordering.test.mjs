@@ -92,7 +92,7 @@ test("item-internal ordering is tenant-scoped and public queries use saved sort 
   assert.match(publicView, /const publicPricing =/);
   assert.match(publicView, /data-public-offer/);
   assert.match(publicView, /Buy 1 Get 1 Free/);
-  assert.match(publicView, /menu\.productOffers\?\[selected\.id\]/);
+  assert.match(publicView, /offer=\{menu\.productOffers\?\.\[selected\.id\]\}/);
 });
 
 test("offers calculate server-side and preserve historical line snapshots", async () => {
