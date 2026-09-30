@@ -9,11 +9,13 @@ import { recordPublicEvent } from "@/lib/menu/public";
 import { buildWhatsAppOrderUrl, buildWhatsAppUrl } from "@/lib/menu/public-actions";
 import { submitPublicOrder } from "@/lib/menu/order-public";
 import { getQuickAddDecision, quickAddKey } from "@/lib/menu/quick-add";
-import { hasHighSalt, type Lang, type Product, type ProductOptions, type PublicMenu } from "@/lib/menu/types";
+import { hasHighSalt, type Lang, type Product, type ProductOffer, type ProductOptions, type PublicMenu } from "@/lib/menu/types";
+import { calculateOffer, isOfferCurrentlyActive } from "@/lib/menu/offers";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 import { getResponsiveImageSources } from "@/lib/menu/image";
 
 const label = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
+const publicPricing = (menu: PublicMenu, product: Product) => { const offer = menu.productOffers?.[product.id]; if (!offer || !isOfferCurrentlyActive(offer)) return { price: product.price, original: null as number | null, offer: null as ProductOffer | null }; const calculation = calculateOffer(product.price, 0, 1, offer); return { price: calculation.discountedBaseUnitPrice, original: product.price, offer }; };
 const value = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 
 type CartItem = {
