@@ -302,6 +302,8 @@ export function StudioMenuWorkspacePage() {
             <Field label={t(copy.studio.descAr, lang)}><Textarea value={draft.descriptionAr} onChange={(event) => setDraft({ ...draft, descriptionAr: event.target.value })} /></Field>
             <Field label={t(copy.studio.descEn, lang)}><Textarea value={draft.descriptionEn} onChange={(event) => setDraft({ ...draft, descriptionEn: event.target.value })} /></Field>
             <Field label={t(copy.studio.allergens, lang)}><Input value={draft.allergens} onChange={(event) => setDraft({ ...draft, allergens: event.target.value })} /></Field>
+            {draft.id ? <ProductOptionsOrderingPanel productId={draft.id} lang={lang} disabled={flash.busy || orderingBusy} /> : null}
+            {draft.id ? <ProductOfferPanel productId={draft.id} lang={lang} disabled={flash.busy || orderingBusy} /> : null}
             <Field label={t(copy.studio.imageUrl, lang)}><Input value={draft.imageUrl.startsWith("data:") ? "" : draft.imageUrl} placeholder="https://..." onChange={(event) => setDraft({ ...draft, imageUrl: event.target.value })} /></Field>
             <label className="inline-flex h-11 cursor-pointer items-center justify-center rounded-md border border-line text-sm">{imageBusy ? t(copy.state.loading, lang) : t(copy.studio.uploadImage, lang)}<input type="file" accept="image/*" className="sr-only" onChange={(event) => void onImage(event.target.files?.[0] ?? null)} /></label>
             {draft.imageUrl ? <img src={draft.imageUrl} alt="" className="h-32 w-full rounded-md object-cover" /> : null}
