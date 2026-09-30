@@ -4,7 +4,9 @@ import { z } from "zod";
 import { getSql } from "@/lib/db";
 import { generateStructuredAi } from "./ai-core";
 import { resolveAnonymousSession } from "./session.server";
-import type { FnResult } from "./types";
+import { getActiveOfferProductIds } from "./offers";
+import { buildGuestAssistantCatalog, type GuestCatalogProduct } from "./guest-assistant-catalog";
+import type { FnResult, ProductOffer } from "./types";
 
 const inputSchema = z.object({
   slug: z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/),
@@ -51,24 +53,22 @@ type MenuProductRow = {
   is_available: boolean;
 };
 
-type MenuProduct = {
+type MenuOfferRow = {
   id: string;
-  nameAr: string;
-  nameEn: string;
-  descriptionAr: string;
-  descriptionEn: string;
-  price: number;
-  currency: string;
-  allergens: string;
-  dietaryLabels: string[];
-  categoryAr: string;
-  categoryEn: string;
-  isAvailable: boolean;
+  tenant_id: string;
+  product_id: string;
+  offer_type: ProductOffer["offerType"];
+  value: number | null;
+  label_ar: string;
+  label_en: string;
+  starts_at: string | null;
+  ends_at: string | null;
+  is_active: boolean;
 };
 
-function clean(value: unknown, max: number) {
-  return String(value ?? "").replace(/\s+/g, " ").trim().slice(0, max);
-}
+type MenuProduct = GuestCatalogProduct;
+
+import { fallbackGuestAnswer } from "./guest-assistant-fallback";
 
 async function loadGuestCatalog(slug: string, branchSlug?: string) {
   const sql = await getSql();
@@ -93,50 +93,48 @@ async function loadGuestCatalog(slug: string, branchSlug?: string) {
     limit 250
   `;
   const products: MenuProduct[] = rows.map((row) => ({
-    id: String(row.id),
-    nameAr: String(row.name_ar),
-    nameEn: String(row.name_en ?? ""),
-    descriptionAr: String(row.description_ar ?? ""),
-    descriptionEn: String(row.description_en ?? ""),
-    price: Number(row.price),
-    currency: String(row.currency ?? "SAR"),
+    id: String(row.id), nameAr: String(row.name_ar), nameEn: String(row.name_en ?? ""),
+    descriptionAr: String(row.description_ar ?? ""), descriptionEn: String(row.description_en ?? ""),
+    price: Number(row.price), currency: String(row.currency ?? "SAR"),
     allergens: String(row.allergens ?? ""),
     dietaryLabels: Array.isArray(row.dietary_labels) ? row.dietary_labels.map(String) : [],
-    categoryAr: String(row.category_ar ?? ""),
-    categoryEn: String(row.category_en ?? ""),
+    categoryAr: String(row.category_ar ?? ""), categoryEn: String(row.category_en ?? ""),
     isAvailable: Boolean(row.is_available),
   }));
-  return { sql, tenantId: rows[0]?.tenant_id ?? null, products };
-}
-
-import { fallbackGuestAnswer } from "./guest-assistant-fallback";
-
-function buildCatalog(products: MenuProduct[]) {
-  return products.map((p, index) => [
-    `#${index + 1}`,
-    `ID=${clean(p.id, 80)}`,
-    `AR=${clean(p.nameAr, 120)}`,
-    `EN=${clean(p.nameEn, 120)}`,
-    `CAT_AR=${clean(p.categoryAr, 80)}`,
-    `CAT_EN=${clean(p.categoryEn, 80)}`,
-    `DESC_AR=${clean(p.descriptionAr, 240)}`,
-    `DESC_EN=${clean(p.descriptionEn, 240)}`,
-    `PRICE=${p.price} ${clean(p.currency, 12)}`,
-    `ALLERGENS=${clean(p.allergens, 180) || "غير مذكورة"}`,
-    `DIETARY=${clean(p.dietaryLabels.join(", "), 120) || "غير مذكورة"}`,
-  ].join(" | ")).join("\n");
+  const productIds = products.map((product) => product.id);
+  const offerRows = productIds.length
+    ? await sql<MenuOfferRow>`
+        select id, tenant_id, product_id, offer_type, value, label_ar, label_en, starts_at, ends_at, is_active
+        from product_offers
+        where tenant_id = ${rows[0]?.tenant_id ?? null} and product_id = any(${productIds}) and is_active = true
+      `
+    : [];
+  const offers: Record<string, ProductOffer> = {};
+  for (const offer of offerRows) {
+    offers[String(offer.product_id)] = {
+      id: String(offer.id), tenantId: String(offer.tenant_id), productId: String(offer.product_id),
+      offerType: offer.offer_type, value: offer.value == null ? null : Number(offer.value),
+      labelAr: String(offer.label_ar ?? ""), labelEn: String(offer.label_en ?? ""),
+      startsAt: offer.starts_at ? new Date(offer.starts_at).toISOString() : null,
+      endsAt: offer.ends_at ? new Date(offer.ends_at).toISOString() : null, isActive: Boolean(offer.is_active),
+    };
+  }
+  const activeOfferProductIds = getActiveOfferProductIds(productIds, offers);
+  const activeOffers: Record<string, ProductOffer> = {};
+  for (const productId of activeOfferProductIds) activeOffers[productId] = offers[productId];
+  return { sql, tenantId: rows[0]?.tenant_id ?? null, products, offers: activeOffers };
 }
 
 export const askGuestMenuAssistant = createServerFn({ method: "POST" })
   .validator(inputSchema)
   .handler(async ({ data }): Promise<FnResult<{ answerAr: string; answerEn: string; productIds: string[] }>> => {
     try {
-      const { sql, tenantId, products } = await loadGuestCatalog(data.slug, data.branchSlug);
+      const { sql, tenantId, products, offers } = await loadGuestCatalog(data.slug, data.branchSlug);
       if (!tenantId || !products.length) return { ok: false, code: "not_found", error: "لا توجد أصناف متاحة حالياً" };
 
       const anonymousSession = await resolveAnonymousSession(sql, tenantId);
       const allowedIds = new Set(products.map((p) => p.id));
-      const catalog = buildCatalog(products).slice(0, 32_000);
+      const catalog = buildGuestAssistantCatalog(products, offers).slice(0, 32_000);
       const result = await generateStructuredAi({
         sql,
         tenantId,
