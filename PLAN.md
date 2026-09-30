@@ -1107,3 +1107,9 @@ Owner review of the single PR for Menuun brand migration and footer redesign. Do
 ## EXACT NEXT TASK
 
 CI verification for the auth-email PR, followed by safe Preview environment configuration and end-to-end auth email verification. Do not deploy Production manually.
+
+## 2026-09-30 — Combined Batch — CLOSED FOR REVIEW
+- VERIFIED: PR #327 now contains Part A public ordering fix, Part B item-internal ordering, and Part C Offers/Promotions implementation.
+- VERIFIED: Quality 2617 and W9 Orders QA 775 passed on the final code head b9a71e02c59676b885baea9cbd938cc9a0706c81.
+- HOLD: merge/deployment waits for owner review so this batch receives exactly one production deployment.
+- NEXT: owner review only.
