@@ -121,9 +121,9 @@ test("offers are tenant-isolated and outside product subscription limits", async
   assert.match(migration, /product_offer tenant mismatch/);
   assert.match(migration, /product_offers_one_active_idx/);
   const rlsMigration = await readFile("migrations/20260930023000_menu_ordering_offers_rls.sql", "utf8");
-  assert.match(rlsMigration, /alter table menu_v3\\.branch_category_order enable row level security/i);
-  assert.match(rlsMigration, /alter table menu_v3\\.branch_product_order enable row level security/i);
-  assert.match(rlsMigration, /alter table menu_v3\\.product_offers enable row level security/i);
+  assert.match(rlsMigration, /alter table menu_v3\.branch_category_order enable row level security/i);
+  assert.match(rlsMigration, /alter table menu_v3\.branch_product_order enable row level security/i);
+  assert.match(rlsMigration, /alter table menu_v3\.product_offers enable row level security/i);
 
   assert.match(offers, /tenant_id = \$\{member\.tenant_id\}/);
   assert.doesNotMatch(plans, /offer/i);
