@@ -88,6 +88,11 @@ test("item-internal ordering is tenant-scoped and public queries use saved sort 
   assert.match(publicMenu, /order by product_id, sort_order, created_at/);
   assert.match(publicMenu, /order by p\.product_id, p\.sort_order, g\.sort_order, g\.created_at/);
   assert.match(publicMenu, /order by p\.product_id, o\.group_id, o\.sort_order, o\.created_at/);
+  const publicView = await readFile("src/components/public-menu.tsx", "utf8");
+  assert.match(publicView, /const publicPricing =/);
+  assert.match(publicView, /data-public-offer/);
+  assert.match(publicView, /Buy 1 Get 1 Free/);
+  assert.match(publicView, /menu\.productOffers\?\[selected\.id\]/);
 });
 
 test("offers calculate server-side and preserve historical line snapshots", async () => {
