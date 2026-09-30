@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
-import { getProductOffer, saveProductOffer, deleteProductOffer } from "@/lib/menu/offers.server";
+import { getProductOffer, saveProductOffer, deleteProductOffer } from "@/lib/menu/offers-api";
 import { isoToRiyadhLocal } from "@/lib/menu/offers";
 import type { Lang, OfferType, ProductOffer } from "@/lib/menu/types";
 const text=(lang:Lang,ar:string,en:string)=>lang==="ar"?ar:en;
