@@ -110,7 +110,7 @@ test("offers calculate server-side and preserve historical line snapshots", asyn
 
 test("offers are tenant-isolated and outside product subscription limits", async () => {
   const migration = await readFile("migrations/20260930020000_product_offers.sql", "utf8");
-  const offers = await readFile("src/lib/menu/offers.server.ts", "utf8");
+  const offers = await readFile("src/lib/menu/offers-api.ts", "utf8");
   const plans = await readFile("migrations/20260903025817_subscription_plans.sql", "utf8");
   assert.match(migration, /tenant_id text not null/);
   assert.match(migration, /product_offer tenant mismatch/);
