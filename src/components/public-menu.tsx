@@ -16,6 +16,19 @@ import { getResponsiveImageSources } from "@/lib/menu/image";
 
 const label = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
 const publicPricing = (menu: PublicMenu, product: Product) => { const offer = menu.productOffers?.[product.id]; if (!offer || !isOfferCurrentlyActive(offer)) return { price: product.price, original: null as number | null, offer: null as ProductOffer | null }; const calculation = calculateOffer(product.price, 0, 1, offer); return { price: calculation.discountedBaseUnitPrice, original: product.price, offer }; };
+function PublicPrice({ menu, product, lang }: { menu: PublicMenu; product: Product; lang: Lang }) {
+  const pricing = publicPricing(menu, product);
+  if (!pricing.offer || pricing.original == null) return <bdi dir="ltr" className="text-sm font-medium text-accent tabular bidi-isolate">{formatSar(pricing.price, lang)}</bdi>;
+  const offerLabel = value(lang, pricing.offer.labelAr, pricing.offer.labelEn);
+  const fallbackLabel = pricing.offer.offerType === "bogo" ? label(lang, "اشترِ 1 واحصل على 1 مجاناً", "Buy 1 Get 1 Free") : label(lang, "عرض", "Offer");
+  return <span className="grid gap-0.5" data-public-offer={pricing.offer.id}>
+    <span className="flex flex-wrap items-center gap-2">
+      <bdi dir="ltr" className="text-sm font-medium text-accent tabular bidi-isolate">{pricing.offer.offerType === "bogo" ? formatSar(pricing.original, lang) : formatSar(pricing.price, lang)}</bdi>
+      {pricing.offer.offerType !== "bogo" ? <del className="text-xs text-muted tabular"><bdi dir="ltr">{formatSar(pricing.original, lang)}</bdi></del> : null}
+    </span>
+    <span className="text-[11px] font-medium text-accent" dir="auto">{offerLabel || fallbackLabel}</span>
+  </span>;
+}
 const value = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 
 type CartItem = {
