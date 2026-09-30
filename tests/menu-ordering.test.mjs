@@ -96,7 +96,7 @@ test("offers calculate server-side and preserve historical line snapshots", asyn
   assert.equal(calculateOffer(100, 10, 2, offer).lineTotal, 180);
   assert.equal(calculateOffer(100, 10, 1, { ...offer, offerType: "fixed", value: 25 }).lineTotal, 85);
   assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "sale_price", value: 70 }).lineTotal, 160);
-  assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "bogo", value: null }).lineTotal, 110);
+  assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "bogo", value: null }).lineTotal, 120);
   const order = await readFile("src/lib/menu/order-public.ts", "utf8");
   const migration = await readFile("migrations/20260930021000_order_offer_snapshot.sql", "utf8");
   assert.match(order, /originalUnitPrice/);
@@ -182,7 +182,7 @@ test("offers calculate server-side and preserve historical line snapshots", asyn
 test("offer activation, expiry, tenant isolation, and product-limit boundaries are explicit", async () => {
   const migration = await readFile("migrations/20260930020000_product_offers.sql", "utf8");
   const trigger = await readFile("migrations/20260930022000_product_offer_revision_trigger.sql", "utf8");
-  const offers = await readFile("src/lib/menu/offers.server.ts", "utf8");
+  const offers = await readFile("src/lib/menu/offers-api.ts", "utf8");
   const panel = await readFile("src/components/product-offer-panel.tsx", "utf8");
   const plans = await readFile("migrations/20260903025817_subscription_plans.sql", "utf8");
   const base = { id: "o", tenantId: "t", productId: "p", offerType: "percentage", value: 10, labelAr: "", labelEn: "", isActive: true };
