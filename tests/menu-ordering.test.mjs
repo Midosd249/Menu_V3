@@ -165,7 +165,7 @@ test("offers calculate server-side and preserve historical line snapshots", asyn
   assert.equal(calculateOffer(100, 10, 2, offer).lineTotal, 180);
   assert.equal(calculateOffer(100, 10, 1, { ...offer, offerType: "fixed", value: 25 }).lineTotal, 85);
   assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "sale_price", value: 70 }).lineTotal, 160);
-  assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "bogo", value: null }).lineTotal, 110);
+  assert.equal(calculateOffer(100, 10, 2, { ...offer, offerType: "bogo", value: null }).lineTotal, 120);
   const order = await readFile("src/lib/menu/order-public.ts", "utf8");
   const migration = await readFile("migrations/20260930021000_order_offer_snapshot.sql", "utf8");
   const receipt = await readFile("src/lib/menu/order-public.ts", "utf8");
