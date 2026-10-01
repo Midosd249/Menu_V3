@@ -1,4 +1,6 @@
 # 2026-10-02 — Preparation Time + Estimated Ready Time — CLOSED / VERIFIED
+- VERIFIED: PR #339 is merged; its three-file scope is documentation-only (PROJECT_STATE.md, PLAN.md, TASKS.md) and contains no runtime/application changes.
+- UNKNOWN: direct real-device Production QA evidence is not established by the current GitHub evidence.
 
 - VERIFIED: preparation duration and estimated ready time are implemented and merged onto the current `main` lineage.
 - VERIFIED: focused security, authorization, validation, atomicity, concurrency, legacy-null, and bilingual/RTL contracts passed.
@@ -7,7 +9,7 @@
 - VERIFIED: Vercel Preview passed.
 - DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
 - VERIFIED: Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and targets `production`.
-- VERIFIED: Production commit exactly matches `main`: `ed995f264c0c821eeafade563c250c374f19f88f`.
+- VERIFIED: the runtime Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and serves release commit `ed995f264c0c821eeafade563c250c374f19f88f`. Current `main` is `596518efef78660cfda7b4ac8793008869ba36f1` because merged PR #339 adds documentation-only continuity changes after the runtime release; therefore Production intentionally does not equal the current documentation-only main HEAD.
 
 ## EXACT NEXT TASK
 
