@@ -1,3 +1,17 @@
+# 2026-10-02 — Preparation Time + Estimated Ready Time — CLOSED / VERIFIED
+
+- VERIFIED: preparation duration and estimated ready time are implemented and merged onto the current `main` lineage.
+- VERIFIED: focused security, authorization, validation, atomicity, concurrency, legacy-null, and bilingual/RTL contracts passed.
+- VERIFIED: Quality `36932980800` passed.
+- VERIFIED: W9 Orders QA `36932980956` passed.
+- VERIFIED: Vercel Preview passed.
+- DEPLOYMENT STATUS: pending production deployment from the merged release.
+
+## EXACT NEXT TASK
+
+No further work for this atomic feature. Wait for the next explicitly scoped task.
+
+---
 # 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
 
 - VERIFIED: PR #333 remains open and unmerged; previous head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.

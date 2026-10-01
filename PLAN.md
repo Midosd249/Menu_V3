@@ -1,3 +1,22 @@
+# 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
+
+- VERIFIED: the preparation-time implementation is integrated on current `main` from commit `3d19e408a3d6212cb6d95bf0d1bfa163de41e81d`.
+- VERIFIED: nullable `preparation_duration_minutes` and `estimated_ready_at` fields are added without backfill, index, or trigger.
+- VERIFIED: Studio `new -> confirmed` requires a server-validated whole-minute duration from 1–120 minutes; presets are 3/5/10/15/20/30 minutes.
+- VERIFIED: ETA uses database server time and is persisted atomically with status and the existing status-audit event under row locking.
+- VERIFIED: tenant/branch/actor authorization remains server-derived; concurrent confirmations retain compare-and-set protection.
+- VERIFIED: Studio Orders supports Arabic/English, RTL/LTR-safe ETA presentation, and mobile preset/custom controls.
+- VERIFIED: GitHub Quality run `36932980800` passed all stages, including typecheck, tests, lint, production build, browser/template QA, Studio/Admin browser QA, and performance fixtures.
+- VERIFIED: GitHub W9 Orders QA run `36932980956` passed.
+- VERIFIED: Vercel Preview for the final feature head passed.
+- VERIFIED: no real order was created and no WhatsApp message was sent.
+- DEPLOYMENT STATUS: pending production deployment from the merged `main` release.
+
+## EXACT NEXT TASK
+
+No further implementation work for this feature. Wait for the next explicitly scoped task.
+
+---
 # 2026-09-30 — Part C Offers/Promotions — PROPOSED / PLAN ONLY
 
 1. Data model: add one tenant-owned product_offers record per product for the MVP, with tenant_id, product_id, offer_type (sale_price, percent_off, fixed_amount, bogo), numeric value fields, starts_at, ends_at, is_active, and audit timestamps. Enforce tenant/product ownership and a single active offer per product.

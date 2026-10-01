@@ -1,5 +1,15 @@
 # W9 Orders QA
 
+## W9.1 — Preparation Time / ETA — VERIFIED / MERGED — 2026-10-02
+- VERIFIED: confirmation of a `new` order requires a server-validated whole-minute preparation duration from 1 through 120.
+- VERIFIED: quick presets are 3, 5, 10, 15, 20, and 30 minutes; custom whole-minute entry remains available.
+- VERIFIED: estimated ready time is derived from database `clock_timestamp()` at confirmation plus the selected duration.
+- VERIFIED: preparation fields are nullable and legacy orders remain readable.
+- VERIFIED: no automatic ready-status transition was introduced.
+- VERIFIED: final GitHub Quality `36933961780` and W9 Orders QA `36933961763` passed.
+
+
+
 Status: `IN_PROGRESS` until final Draft PR CI completes.
 
 ## Browser fixture

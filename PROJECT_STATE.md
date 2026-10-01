@@ -1,3 +1,19 @@
+# 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
+
+- VERIFIED: preparation-time feature is on the current release branch and passed final GitHub Quality and W9 Orders QA.
+- VERIFIED: commit `3d19e408a3d6212cb6d95bf0d1bfa163de41e81d` contains the feature on top of the security-remediated current main.
+- VERIFIED: preparation duration is server-validated to 1–120 whole minutes with presets 3/5/10/15/20/30.
+- VERIFIED: server-derived ETA, atomic status/audit persistence, tenant/branch authorization, row locking, and compare-and-set concurrency protection are preserved.
+- VERIFIED: legacy null preparation fields remain readable and no automatic `ready` transition exists.
+- VERIFIED: final Quality run `36932980800` passed; final W9 Orders QA run `36932980956` passed.
+- VERIFIED: Vercel Preview passed for the final feature head.
+- DEPLOYMENT STATUS: pending production deployment from merged `main`.
+
+## EXACT NEXT TASK
+
+No further implementation work for this feature. Wait for the next explicitly scoped task.
+
+---
 # 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
 
 - VERIFIED: `main` is `96402b5eda86ba6531afa48e93a0e8852572101b`; PR #333 is open, targets `main`, and the previous branch head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.

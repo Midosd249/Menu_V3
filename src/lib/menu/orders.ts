@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { authorizeMutation } from "@/lib/auth/authorization.server";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
@@ -17,8 +18,11 @@ export type { OrderStatus };
 
 export type SelectedOrderOption = { type: "variant" | "modifier" | "note"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
 export type OrderItemDetail = { id: string; productId: string; productNameAr: string; productNameEn: string; quantity: number; unitPrice: number; lineTotal: number; selectedOptions: SelectedOrderOption[] };
-export type AdminOrder = { id: string; orderNumber: number; tenantId: string; restaurantName: string; branchName: string; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
+export type AdminOrder = { id: string; orderNumber: number; tenantId: string; branchId: string | null; restaurantName: string; branchName: string; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; preparationDurationMinutes: number | null; estimatedReadyAt: string | null; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
 export type OrdersDashboard = { total: number; newCount: number; activeCount: number; completedCount: number; cancelledCount: number; orders: AdminOrder[] };
+
+export { PREPARATION_DURATION_PRESETS, CUSTOM_PREPARATION_DURATION_MINUTES, validatePreparationDurationMinutes, type PreparationDurationPreset } from "./order-preparation";
+import { validatePreparationDurationMinutes } from "./order-preparation";
 
 async function getClientTenantIds(userId: string): Promise<string[]> {
   const sql = await getSql();
@@ -76,7 +80,7 @@ function mapItem(row: Record<string, unknown>): OrderItemDetail {
 
 function mapOrder(row: Record<string, unknown>): AdminOrder {
   const rawItems = Array.isArray(row.items) ? row.items : [];
-  return { id: String(row.id), orderNumber: Number(row.order_number ?? 0), tenantId: String(row.tenant_id), restaurantName: String(row.restaurant_name ?? ""), branchName: String(row.branch_name ?? ""), status: row.status as OrderStatus, source: String(row.source ?? "web"), customerName: String(row.customer_name ?? ""), customerPhone: String(row.customer_phone ?? ""), customerEmail: String(row.customer_email ?? ""), notes: String(row.notes ?? ""), currency: String(row.currency ?? "SAR"), subtotal: Number(row.subtotal ?? 0), total: Number(row.total ?? 0), itemCount: Number(row.item_count ?? rawItems.length), items: rawItems.map((item) => mapItem(item as Record<string, unknown>)), createdAt: new Date(String(row.created_at)).toISOString(), updatedAt: new Date(String(row.updated_at ?? row.created_at)).toISOString() };
+  return { id: String(row.id), orderNumber: Number(row.order_number ?? 0), tenantId: String(row.tenant_id), branchId: row.branch_id == null ? null : String(row.branch_id), restaurantName: String(row.restaurant_name ?? ""), branchName: String(row.branch_name ?? ""), status: row.status as OrderStatus, source: String(row.source ?? "web"), customerName: String(row.customer_name ?? ""), customerPhone: String(row.customer_phone ?? ""), customerEmail: String(row.customer_email ?? ""), notes: String(row.notes ?? ""), currency: String(row.currency ?? "SAR"), subtotal: Number(row.subtotal ?? 0), total: Number(row.total ?? 0), preparationDurationMinutes: row.preparation_duration_minutes == null ? null : Number(row.preparation_duration_minutes), estimatedReadyAt: row.estimated_ready_at == null ? null : new Date(String(row.estimated_ready_at)).toISOString(), itemCount: Number(row.item_count ?? rawItems.length), items: rawItems.map((item) => mapItem(item as Record<string, unknown>)), createdAt: new Date(String(row.created_at)).toISOString(), updatedAt: new Date(String(row.updated_at ?? row.created_at)).toISOString() };
 }
 
 export const getOrdersDashboard = createServerFn({ method: "GET" })
@@ -118,32 +122,62 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
 
 export const updateOrderStatus = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .validator(z.object({ id: z.string().min(1).max(100), status: z.enum(ORDER_STATUSES) }))
+  .validator(z.object({
+    id: z.string().min(1).max(100),
+    status: z.enum(ORDER_STATUSES),
+    preparationDurationMinutes: z.unknown().optional(),
+  }))
   .handler(async ({ context, data }): Promise<FnResult<AdminOrder>> => {
     const permission = await assertOrderAccess(context.userId, data.id);
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const currentRows = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} and archived_at is null limit 1`;
+      const currentRows = await sql<{ tenant_id: string; branch_id: string | null; status: OrderStatus }>`
+        select tenant_id, branch_id, status
+        from orders
+        where id = ${data.id} and archived_at is null
+        limit 1
+      `;
       if (!currentRows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
       const fromStatus = currentRows[0].status;
       const transitionError = getOrderStatusTransitionError(fromStatus, data.status);
       if (transitionError) return transitionError;
 
+      const isNewConfirmation = fromStatus === "new" && data.status === "confirmed";
+      let duration: number | null = null;
+      if (isNewConfirmation) {
+        try {
+          await authorizeMutation(context.userId, "orders.write", { tenantId: currentRows[0].tenant_id, ...(currentRows[0].branch_id ? { branchId: currentRows[0].branch_id } : {}) });
+        } catch {
+          return { ok: false, code: "forbidden", error: "لا تملك صلاحية تأكيد هذا الطلب." };
+        }
+        const validation = validatePreparationDurationMinutes(data.preparationDurationMinutes);
+        if (!validation.ok) return validation;
+        duration = validation.data;
+      }
+
       const rows = await sql<Record<string, unknown>>`
         with locked as (
-          select status as from_status
+          select status as from_status, clock_timestamp() as confirmation_timestamp
           from orders
           where id = ${data.id} and archived_at is null
           for update
         ),
         updated as (
           update orders o
-          set status = ${data.status}, updated_at = now()
+          set status = ${data.status},
+              preparation_duration_minutes = case
+                when locked.from_status = 'new' and ${data.status} = 'confirmed' then ${duration}
+                else o.preparation_duration_minutes
+              end,
+              estimated_ready_at = case
+                when locked.from_status = 'new' and ${data.status} = 'confirmed' then locked.confirmation_timestamp + (${duration} * interval '1 minute')
+                else o.estimated_ready_at
+              end,
+              updated_at = locked.confirmation_timestamp
           from locked
-          where o.id = ${data.id}
-            and o.archived_at is null
-            and o.status = locked.from_status
+          where o.id = ${data.id} and o.archived_at is null and o.status = locked.from_status
+            and (${isNewConfirmation} or locked.from_status <> 'new')
           returning o.*, locked.from_status
         ),
         audit as (
@@ -155,7 +189,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
         )
         select * from updated
       `;
-      if (!rows[0]) return { ok: false, code: "conflict", error: "تغيّرت حالة الطلب أثناء التحديث. أعد المحاولة." };
+      if (!rows[0]) return { ok: false, code: "conflict", error: "تغيّر الطلب أثناء التحديث. أعد المحاولة." };
       const detail = await sql<Record<string, unknown>>`
         select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
           (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
@@ -163,12 +197,10 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
         from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
         where o.id = ${data.id} and o.archived_at is null limit 1
       `;
-      return detail[0] ? { ok: true, data: mapOrder(detail[0]) } : { ok: false, code: "not_found", error: "الطلب غير موجود" };
+      return detail[0] ? { ok: true, data: mapOrder(detail[0]) } : { ok: false, code: "not_found", error: "The order does not exist." };
     } catch (err) {
-      if (err instanceof Error && /invalid order status transition/i.test(err.message)) {
-        return { ok: false, code: "invalid", error: "لا يمكن نقل الطلب إلى الحالة المطلوبة من حالته الحالية." };
-      }
+      if (err instanceof Error && /invalid order status transition/i.test(err.message)) return { ok: false, code: "invalid", error: "لا يمكن نقل الطلب إلى الحالة المطلوبة من حالته الحالية." };
       console.error("updateOrderStatus failed", err);
-      return { ok: false, code: "unavailable", error: "تعذر تحديث حالة الطلب" };
+      return { ok: false, code: "unavailable", error: "تعذر تحديث الطلب" };
     }
   });

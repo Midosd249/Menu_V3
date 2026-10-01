@@ -1,5 +1,14 @@
 # W9 Orders Discovery
 
+## W9.1 — Preparation Time / ETA — VERIFIED / MERGED — 2026-10-02
+- VERIFIED: `/studio/orders` uses the existing `getOrdersDashboard` response contract, now including `preparationDurationMinutes` and `estimatedReadyAt` on `AdminOrder`.
+- VERIFIED: `new -> confirmed` requires server-validated preparation-duration input and authorization/scope checks; the six existing order statuses are unchanged.
+- VERIFIED: ETA is informational and does not drive an automatic `ready` transition.
+- VERIFIED: tenant/branch scope is derived from authenticated context and the persisted order row.
+- VERIFIED: final GitHub Quality and W9 Orders QA passed.
+
+
+
 Status: `VERIFIED` — 2026-09-15
 
 ## Routes and components
