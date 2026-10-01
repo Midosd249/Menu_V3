@@ -1,23 +1,16 @@
-# 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI EVIDENCE RECONCILIATION
+# 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
 
-- VERIFIED: `main` is `96402b5eda86ba6531afa48e93a0e8852572101b`; PR #333 is open, targets `main`, and branch `feat/safe-order-lifecycle-enforcement` is at head `ef57652c42443ebae51e3f141ba72eae281f336e`.
-- VERIFIED: PR #333 is not merged and remains outside `main`.
-- VERIFIED: changed files are exactly `PROJECT_STATE.md`, `TASKS.md`, `package.json`, `src/lib/menu/order-lifecycle.test.ts`, `src/lib/menu/orders.ts`, and `src/lib/menu/platform.ts`.
-- VERIFIED: the lifecycle implementation preserves `new -> confirmed/cancelled`, `confirmed -> preparing/cancelled`, `preparing -> ready/cancelled`, `ready -> completed/cancelled`; `completed` and `cancelled` remain terminal; same-status remains a no-op without a new audit event.
-- VERIFIED: order and platform status updates retain server-side authentication/authorization boundaries and use row locking plus atomic audit insertion.
-- VERIFIED: existing order lifecycle database trigger and migrations were not changed; sound, status-color/icon UI, WhatsApp, production configuration, and real-order behavior remain outside scope.
-- VERIFIED: repository CI workflows exist for `pull_request` to `main`: `.github/workflows/quality.yml` and `.github/workflows/w9-orders.yml`.
-- VERIFIED: the current GitHub combined status for the branch head reports one `Vercel` status in `failure` state.
-- VERIFIED: the Vercel bot PR comment simultaneously reports the latest Preview deployment as `Ready` at `2026-10-01T08:00:47Z`.
-- UNKNOWN: the reason for the GitHub `Vercel=failure` status is not exposed by the available GitHub connector; the latest bot deployment evidence does not by itself reconcile the failing status context.
-- UNKNOWN: no GitHub Actions workflow runs are exposed by the current PR-triggered workflow lookup for this head; therefore Quality/W9 pass status is not claimed.
-- UNKNOWN: local command execution is unavailable in the connector-only environment.
-- DEPLOYMENT STATUS: no Production deployment was performed by this task. The observed Vercel item is a PR Preview/automatic integration status, not Production evidence.
+- VERIFIED: PR #333 remains open and unmerged; previous head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.
+- VERIFIED: implementation scope remains the six-file PR scope; no migration or unrelated subsystem changes are authorized.
+- VERIFIED: lifecycle matrix, same-status/no-audit semantics, server-side authorization, tenant boundary, branch behavior, row locking, and atomic audit behavior remain unchanged.
+- VERIFIED: Vercel status for the previous head is success/Ready.
+- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `\n`; the test is being repaired now.
+- UNKNOWN: new-head Quality/W9 results until CI completes.
+- DEPLOYMENT STATUS: NOT DEPLOYED.
 
-## EXACT NEXT TASK
+### EXACT NEXT TASK
 
-Resolve the `Vercel=failure` vs latest `Preview=Ready` status discrepancy using direct Vercel/GitHub deployment evidence, then verify Quality/W9 on the final head before any merge decision. Do not merge or deploy automatically.
-
+Verify the repaired PR #333 head through Quality and W9. Do not merge or deploy automatically.
 ---
 
 # 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
