@@ -1358,3 +1358,14 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 
 ### EXACT NEXT TASK
 Owner reviews PR #333 after CI completes. Do not merge or deploy automatically.
+
+
+## 2026-10-01 — Orders Status Presentation
+
+- IN_PROGRESS: PR for focused Orders status presentation is being prepared on `feat/orders-status-presentation`.
+- VERIFIED: main baseline is `fc143c525190cfc60241113bb885a22e4836bb70`.
+- Implemented: shared status presentation mapping for `new`, `confirmed`, `preparing`, `ready`, `completed`, and `cancelled`; bilingual labels; status-specific token tones; Lucide icons; shared badge usage in Studio Orders and Studio Home recent activity.
+- Tests added: `src/lib/menu/order-status-presentation.test.ts`.
+- NOT CHANGED: lifecycle enforcement, database schema/migrations/triggers, auth/authz, tenant/branch isolation, polling/notifications, sound, WhatsApp, payments, public ordering, production settings.
+- PENDING: GitHub CI and browser/visual QA evidence.
+- NEXT TASK: review PR CI and visual evidence, then wait for explicit merge authorization.
