@@ -8,6 +8,25 @@ import type { FnResult } from "./types";
 export const ORDER_STATUSES = ["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
+export const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
+  new: ["confirmed", "cancelled"],
+  confirmed: ["preparing", "cancelled"],
+  preparing: ["ready", "cancelled"],
+  ready: ["completed", "cancelled"],
+  completed: [],
+  cancelled: [],
+};
+
+export function isOrderStatusTransitionAllowed(from: string, to: string): boolean {
+  return from === to || (ORDER_STATUS_TRANSITIONS[from as OrderStatus] ?? []).includes(to as OrderStatus);
+}
+
+export function getOrderStatusTransitionError(from: string, to: string): { ok: false; code: "invalid"; error: string } | null {
+  return isOrderStatusTransitionAllowed(from, to)
+    ? null
+    : { ok: false, code: "invalid", error: "لا يمكن نقل الطلب إلى الحالة المطلوبة من حالته الحالية." };
+}
+
 export type SelectedOrderOption = { type: "variant" | "modifier" | "note"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
 export type OrderItemDetail = { id: string; productId: string; productNameAr: string; productNameEn: string; quantity: number; unitPrice: number; lineTotal: number; selectedOptions: SelectedOrderOption[] };
 export type AdminOrder = { id: string; orderNumber: number; tenantId: string; restaurantName: string; branchName: string; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
@@ -120,9 +139,35 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       const currentRows = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} and archived_at is null limit 1`;
       if (!currentRows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
       const fromStatus = currentRows[0].status;
-      const rows = await sql<Record<string, unknown>>`update orders set status = ${data.status}, updated_at = now() where id = ${data.id} and archived_at is null returning *`;
-      if (!rows[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" };
-      if (fromStatus !== data.status) await sql`insert into order_status_events (id, order_id, from_status, to_status, actor_user_id) values (${newId()}, ${data.id}, ${fromStatus}, ${data.status}, ${context.userId})`;
+      const transitionError = getOrderStatusTransitionError(fromStatus, data.status);
+      if (transitionError) return transitionError;
+
+      const rows = await sql<Record<string, unknown>>`
+        with locked as (
+          select status as from_status
+          from orders
+          where id = ${data.id} and archived_at is null
+          for update
+        ),
+        updated as (
+          update orders o
+          set status = ${data.status}, updated_at = now()
+          from locked
+          where o.id = ${data.id}
+            and o.archived_at is null
+            and o.status = locked.from_status
+          returning o.*, locked.from_status
+        ),
+        audit as (
+          insert into order_status_events (id, order_id, from_status, to_status, actor_user_id)
+          select ${newId()}, id, from_status, status, ${context.userId}
+          from updated
+          where from_status <> status
+          returning id
+        )
+        select * from updated
+      `;
+      if (!rows[0]) return { ok: false, code: "conflict", error: "تغيّرت حالة الطلب أثناء التحديث. أعد المحاولة." };
       const detail = await sql<Record<string, unknown>>`
         select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
           (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
@@ -132,6 +177,9 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       `;
       return detail[0] ? { ok: true, data: mapOrder(detail[0]) } : { ok: false, code: "not_found", error: "الطلب غير موجود" };
     } catch (err) {
+      if (err instanceof Error && /invalid order status transition/i.test(err.message)) {
+        return { ok: false, code: "invalid", error: "لا يمكن نقل الطلب إلى الحالة المطلوبة من حالته الحالية." };
+      }
       console.error("updateOrderStatus failed", err);
       return { ok: false, code: "unavailable", error: "تعذر تحديث حالة الطلب" };
     }
