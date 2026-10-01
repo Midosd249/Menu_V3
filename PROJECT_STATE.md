@@ -11,7 +11,7 @@
 - VERIFIED: Vercel Preview passed for the final feature head.
 - DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
 - VERIFIED: Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and targets `production`.
-- VERIFIED: the runtime Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and serves release commit `ed995f264c0c821eeafade563c250c374f19f88f`. Current `main` is `596518efef78660cfda7b4ac8793008869ba36f1` because merged PR #339 adds documentation-only continuity changes after the runtime release; therefore Production intentionally does not equal the current documentation-only main HEAD.
+- VERIFIED: the runtime Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and serves release commit `ed995f264c0c821eeafade563c250c374f19f88f`. The subsequent continuity PRs (#339, #340, and this closeout) are documentation-only; Production therefore intentionally remains on the verified runtime release while `main` carries only continuity-documentation changes.
 
 ## EXACT NEXT TASK
 
