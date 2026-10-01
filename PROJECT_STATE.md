@@ -1,3 +1,44 @@
+# 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
+
+- VERIFIED: `main` is `96402b5eda86ba6531afa48e93a0e8852572101b`; PR #333 is open, targets `main`, and the previous branch head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.
+- VERIFIED: the PR remains unmerged and outside `main`.
+- VERIFIED: the scoped changed files remain exactly `PROJECT_STATE.md`, `TASKS.md`, `package.json`, `src/lib/menu/order-lifecycle.test.ts`, `src/lib/menu/orders.ts`, and `src/lib/menu/platform.ts`.
+- VERIFIED: legal transitions remain `new -> confirmed/cancelled`, `confirmed -> preparing/cancelled`, `preparing -> ready/cancelled`, `ready -> completed/cancelled`; `completed` and `cancelled` remain terminal; same-status remains allowed without a new audit event.
+- VERIFIED: order and platform mutation paths retain server-side authentication/authorization boundaries and use row locking with atomic audit insertion.
+- VERIFIED: existing lifecycle migrations and database trigger were not changed; sound, status colors/icons, WhatsApp, polling, payment, public ordering, and production configuration remain outside scope.
+- VERIFIED: the GitHub `Vercel` status for the previous head is `success`, and the latest Vercel PR comment reports the Preview as `Ready`.
+- VERIFIED: Quality run #2660 and W9 Orders QA run #813 failed on the previous head because `src/lib/menu/order-lifecycle.test.ts` contained an invalid literal `\n` sequence.
+- FIXING: the test-only syntax defect and its concurrency-source assertion are being corrected without changing production behavior.
+- UNKNOWN: CI results for the new head until the workflows complete.
+- UNKNOWN: local command execution is unavailable in the connector-only environment.
+- DEPLOYMENT STATUS: no Production deployment was performed.
+
+## EXACT NEXT TASK
+
+Verify Quality/W9 on the repaired head. If all applicable gates pass, review the final diff and hold for owner merge authorization. Do not merge or deploy automatically.
+---
+
+# 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / VERIFICATION PENDING
+
+- VERIFIED: implementation branch is `feat/safe-order-lifecycle-enforcement`, based directly on `main` SHA `96402b5eda86ba6531afa48e93a0e8852572101b`.
+- VERIFIED: PR #333 targets `main`, is open, not merged, and currently contains the scoped lifecycle implementation.
+- VERIFIED: legal transitions remain `new -> confirmed/cancelled`, `confirmed -> preparing/cancelled`, `preparing -> ready/cancelled`, `ready -> completed/cancelled`; `completed` and `cancelled` remain terminal.
+- VERIFIED: same-status requests remain accepted and do not create audit events.
+- VERIFIED: authorization remains behind `authMiddleware` and `assertOrderAccess`; Platform Admin status updates retain `authMiddleware` and `assertPlatformAdmin`.
+- VERIFIED: status mutation and audit insertion are now one concurrency-safe SQL operation using row locking; accepted changes create one event, while rejected changes create none.
+- VERIFIED: existing database transition trigger and migrations were not modified.
+- VERIFIED: safe domain errors are returned for invalid lifecycle transitions; concurrent status changes return a safe conflict error.
+- VERIFIED: no sound subsystem, status colors/icons, WhatsApp behavior, production configuration, or real orders were changed.
+- VERIFIED: current PR diff is limited to `package.json`, `src/lib/menu/order-lifecycle.test.ts`, `src/lib/menu/orders.ts`, and `src/lib/menu/platform.ts`.
+- IN_PROGRESS: GitHub Quality and W9 Orders workflows were triggered for PR #333; current visible runs are still in progress and final results for the latest branch HEAD are not yet verified.
+- UNKNOWN: local command execution is unavailable in the connector-only environment.
+- DEPLOYMENT STATUS: NOT DEPLOYED. An automatic Vercel PR/preview status was observed as pending; no Production deployment was requested or performed by this task.
+
+## EXACT NEXT TASK
+
+Owner reviews the final PR #333 CI results for the latest head `b21110321f22ae03fe0a304127c4f3b2cf94a6f2`; if all applicable gates pass, owner decides whether to merge. Do not merge or deploy automatically.
+
+
 # 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
 
 - VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.

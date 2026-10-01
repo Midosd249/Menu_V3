@@ -1,3 +1,18 @@
+# 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
+
+- VERIFIED: PR #333 remains open and unmerged; previous head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.
+- VERIFIED: implementation scope remains the six-file PR scope; no migration or unrelated subsystem changes are authorized.
+- VERIFIED: lifecycle matrix, same-status/no-audit semantics, server-side authorization, tenant boundary, branch behavior, row locking, and atomic audit behavior remain unchanged.
+- VERIFIED: Vercel status for the previous head is success/Ready.
+- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `\n`; the test is being repaired now.
+- UNKNOWN: new-head Quality/W9 results until CI completes.
+- DEPLOYMENT STATUS: NOT DEPLOYED.
+
+### EXACT NEXT TASK
+
+Verify the repaired PR #333 head through Quality and W9. Do not merge or deploy automatically.
+---
+
 # 2026-09-30 — Mazaq badge fix + branch-scoped menu ordering — PR #327 / READY FOR OWNER REVIEW
 
 - VERIFIED: current main HEAD at task start is 4f53e397fac357b7dcada23d6a3e069d8fc64aa7.
@@ -1330,3 +1345,16 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - UNKNOWN: physical-device QA.
 - BLOCKED: Vercel deployment requests are rate-limited; Production is not deployed from PR #327.
 - EXACT NEXT TASK: merge PR #327, then execute the single controlled production release once the Vercel deployment gate is available.
+
+
+## 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / VERIFICATION PENDING
+
+- VERIFIED: server-side lifecycle enforcement implemented on `feat/safe-order-lifecycle-enforcement`.
+- VERIFIED: existing legal transitions, same-status behavior, authorization, audit semantics, and DB trigger were preserved.
+- VERIFIED: concurrency-safe status mutation and audit insertion were added without a migration.
+- VERIFIED: focused lifecycle contract tests were added and included in `npm test`.
+- IN_PROGRESS: GitHub Quality/W9 verification is still running; final latest-head results are not yet verified.
+- DEPLOYMENT: NOT DEPLOYED / no Production deployment performed.
+
+### EXACT NEXT TASK
+Owner reviews PR #333 after CI completes. Do not merge or deploy automatically.
