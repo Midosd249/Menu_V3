@@ -5,7 +5,9 @@
 - VERIFIED: Quality `36932980800` passed.
 - VERIFIED: W9 Orders QA `36932980956` passed.
 - VERIFIED: Vercel Preview passed.
-- DEPLOYMENT STATUS: pending production deployment from the merged release.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+- VERIFIED: Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and targets `production`.
+- VERIFIED: Production commit exactly matches `main`: `ed995f264c0c821eeafade563c250c374f19f88f`.
 
 ## EXACT NEXT TASK
 
