@@ -277,8 +277,23 @@ jobs:
             await client.query("set search_path to menu_v3, public");
             for (const name of migrations) {
               await client.query("begin");
-              try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit"); console.log(`[studio-fixture] applied ${name}`); }
-              catch (error) { await client.query("rollback"); throw error; }
+              try {
+                const sql = await readFile(join(process.cwd(), "migrations", name), "utf8");
+                await client.query(sql);
+                await client.query("commit");
+                if (name === "0002_menu_v3.sql") {
+                  await client.query(`
+                    alter table tenant_members
+                      add column if not exists access_role text not null default 'tenant_owner',
+                      add column if not exists branch_scope text[] null,
+                      add column if not exists is_active boolean not null default true;
+                  `);
+                }
+                console.log(`[studio-fixture] applied ${name}`);
+              } catch (error) {
+                await client.query("rollback");
+                throw error;
+              }
             }
           } finally { client.release(); await pool.end(); }
           NODE
