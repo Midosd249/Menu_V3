@@ -10,7 +10,9 @@
 - VERIFIED: GitHub W9 Orders QA run `36932980956` passed.
 - VERIFIED: Vercel Preview for the final feature head passed.
 - VERIFIED: no real order was created and no WhatsApp message was sent.
-- DEPLOYMENT STATUS: pending production deployment from the merged `main` release.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+- VERIFIED: Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and targets `production`.
+- VERIFIED: Production commit exactly matches `main`: `ed995f264c0c821eeafade563c250c374f19f88f`.
 
 ## EXACT NEXT TASK
 

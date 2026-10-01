@@ -7,7 +7,9 @@
 - VERIFIED: legacy null preparation fields remain readable and no automatic `ready` transition exists.
 - VERIFIED: final Quality run `36932980800` passed; final W9 Orders QA run `36932980956` passed.
 - VERIFIED: Vercel Preview passed for the final feature head.
-- DEPLOYMENT STATUS: pending production deployment from merged `main`.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+- VERIFIED: Production deployment `dpl_58LkHc6RByWjfSnzFwNitsvbytgu` is READY and targets `production`.
+- VERIFIED: Production commit exactly matches `main`: `ed995f264c0c821eeafade563c250c374f19f88f`.
 
 ## EXACT NEXT TASK
 
