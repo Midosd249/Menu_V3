@@ -4,7 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { requirePlatformAdmin } from "@/lib/auth/platform-admin.server";
 import { getSql } from "@/lib/db";
 import type { FnResult } from "./types";
-import { getOrderStatusTransitionError, type OrderStatus } from "./orders";
+import { getOrderStatusTransitionError, type OrderStatus } from "./order-lifecycle";
 
 export type PlatformTenant = { id: string; ownerUserId: string; ownerName: string; ownerEmail: string; slug: string; nameAr: string; nameEn: string; city: string; country: string; isPublished: boolean; isActive: boolean; createdAt: string; branchCount: number; productCount: number; orderCount: number; memberCount: number; planCode: string };
 export type PlatformBranch = { id: string; tenantId: string; tenantName: string; nameAr: string; nameEn: string; city: string; phone: string; isActive: boolean };
