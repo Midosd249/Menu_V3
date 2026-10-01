@@ -1532,3 +1532,15 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - UNKNOWN: physical Android/iOS QA.
 - BLOCKED: Vercel is currently rejecting new deployment requests with `api-deployments-free-per-day` / build-rate-limit; no production deployment has been made for PR #327.
 - NEXT ACTION: merge PR #327 after final diff review, then perform the single controlled production release when Vercel permits it.
+
+
+## 2026-10-01 — Orders Status Presentation — PR IN PROGRESS
+
+- VERIFIED: `main` is `fc143c525190cfc60241113bb885a22e4836bb70`, the merge commit for PR #333 Safe Order Lifecycle Enforcement.
+- VERIFIED: the new feature branch is `feat/orders-status-presentation`, based directly on that main commit.
+- VERIFIED: Studio Orders previously rendered status badges as a uniform `bg-sand` pill; Studio Home recent order activity used generic tone-only `StatusBadge` labels.
+- IMPLEMENTED: a shared order-status presentation mapping and `OrderStatusBadge` now provide bilingual labels, status-specific token-based tones, and non-color icon semantics for all six existing statuses.
+- IMPLEMENTED: Studio Orders list/detail status presentation and Studio Home recent order activity now use the shared order-status semantics.
+- VERIFIED: no lifecycle enforcement, database migration/trigger, authentication/authorization, tenant/branch isolation, polling/notifications, sound, WhatsApp, payments, public ordering, or production configuration was changed in this task.
+- TODO: PR CI and browser/visual verification remain pending after PR creation.
+- NEXT TASK: after this PR is reviewed/merged by the user, perform the next explicitly authorized Orders task; do not start it automatically.
