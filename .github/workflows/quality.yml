@@ -255,12 +255,20 @@ jobs:
             "0005_demo_product_photos.sql",
             "0008_menu_product_options.sql",
             "0009_orders.sql",
+            "20260906001000_public_menu_content_revision.sql",
+            "20260903025817_subscription_plans.sql",
+            "20260903010000_subscription_entitlements.sql",
             "20260903003000_branch_scope_authorization.sql",
             "20260903005000_team_invitations.sql",
             "20260903008000_roles_permissions_foundation.sql",
             "20260913020000_guest_intelligence_foundation.sql",
             "20260913030000_r9_guest_relationships.sql",
-            "20260916020000_customer_phone_and_account_controls.sql"
+            "20260916020000_customer_phone_and_account_controls.sql",
+            "20260930010000_menu_branch_ordering.sql",
+            "20260930020000_product_offers.sql",
+            "20260930021000_order_offer_snapshot.sql",
+            "20260930022000_product_offer_revision_trigger.sql",
+            "20260930023000_menu_ordering_offers_rls.sql"
           ];
           const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
           const client = await pool.connect();
@@ -271,8 +279,23 @@ jobs:
             await client.query("set search_path to menu_v3, public");
             for (const name of migrations) {
               await client.query("begin");
-              try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit"); console.log(`[studio-fixture] applied ${name}`); }
-              catch (error) { await client.query("rollback"); throw error; }
+              try {
+                const sql = await readFile(join(process.cwd(), "migrations", name), "utf8");
+                await client.query(sql);
+                await client.query("commit");
+                if (name === "0002_menu_v3.sql") {
+                  await client.query(`
+                    alter table tenant_members
+                      add column if not exists access_role text not null default 'tenant_owner',
+                      add column if not exists branch_scope text[] null,
+                      add column if not exists is_active boolean not null default true;
+                  `);
+                }
+                console.log(`[studio-fixture] applied ${name}`);
+              } catch (error) {
+                await client.query("rollback");
+                throw error;
+              }
             }
           } finally { client.release(); await pool.end(); }
           NODE
@@ -340,7 +363,8 @@ jobs:
           exit 1
       - name: Prepare Platform Admin browser database
         env:
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+          ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+          PLATFORM_ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_admin_ci
         run: |
           node --input-type=module <<'NODE'
           import { readFile } from "node:fs/promises";
@@ -354,14 +378,30 @@ jobs:
             "0005_demo_product_photos.sql",
             "0008_menu_product_options.sql",
             "0009_orders.sql",
+            "20260906001000_public_menu_content_revision.sql",
+            "20260903025817_subscription_plans.sql",
+            "20260903010000_subscription_entitlements.sql",
             "20260903003000_branch_scope_authorization.sql",
             "20260903005000_team_invitations.sql",
             "20260903008000_roles_permissions_foundation.sql",
             "20260913020000_guest_intelligence_foundation.sql",
             "20260913030000_r9_guest_relationships.sql",
-            "20260916020000_customer_phone_and_account_controls.sql"
+            "20260916020000_customer_phone_and_account_controls.sql",
+            "20260930010000_menu_branch_ordering.sql",
+            "20260930020000_product_offers.sql",
+            "20260930021000_order_offer_snapshot.sql",
+            "20260930022000_product_offer_revision_trigger.sql",
+            "20260930023000_menu_ordering_offers_rls.sql"
           ];
-          const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
+          const adminPool = new pg.Pool({ connectionString: process.env.ADMIN_DATABASE_URL, max: 1 });
+          const adminClient = await adminPool.connect();
+          try {
+            await adminClient.query("create database menu_v3_admin_ci").catch((error) => { if (error.code !== "42P04") throw error; });
+          } finally {
+            adminClient.release();
+            await adminPool.end();
+          }
+          const pool = new pg.Pool({ connectionString: process.env.PLATFORM_ADMIN_DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
           const client = await pool.connect();
           try {
             await client.query("create schema if not exists menu_v3");
@@ -370,7 +410,15 @@ jobs:
             await client.query("set search_path to menu_v3, public");
             for (const name of migrations) {
               await client.query("begin");
-              try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit"); }
+              try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit");
+              if (name === "0002_menu_v3.sql") {
+                await client.query(`
+                  alter table tenant_members
+                    add column if not exists access_role text not null default 'tenant_owner',
+                    add column if not exists branch_scope text[] null,
+                    add column if not exists is_active boolean not null default true;
+                `);
+              } }
               catch (error) { await client.query("rollback"); throw error; }
             }
             await client.query("insert into platform_admins (user_id) values ($1) on conflict (user_id) do nothing", ["dev-user"]);
@@ -378,7 +426,7 @@ jobs:
           NODE
       - name: Platform Admin and W7.10 responsive browser QA — auth-disabled local mode
         env:
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_admin_ci
           VITE_AUTH_ENABLED: "false"
           MENU_V3_AUTH_DISABLED_TEST_DATABASE: "true"
           PLATFORM_ADMIN_USER_IDS: dev-user
