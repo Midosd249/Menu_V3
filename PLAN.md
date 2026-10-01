@@ -1,15 +1,20 @@
-# 2026-10-01 — Preparation Time + Estimated Ready Time — IMPLEMENTATION / PR PENDING
+# 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
 
-Scope is limited to the order confirmation flow and Studio Orders experience:
+- VERIFIED: the preparation-time implementation is integrated on current `main` from commit `3d19e408a3d6212cb6d95bf0d1bfa163de41e81d`.
+- VERIFIED: nullable `preparation_duration_minutes` and `estimated_ready_at` fields are added without backfill, index, or trigger.
+- VERIFIED: Studio `new -> confirmed` requires a server-validated whole-minute duration from 1–120 minutes; presets are 3/5/10/15/20/30 minutes.
+- VERIFIED: ETA uses database server time and is persisted atomically with status and the existing status-audit event under row locking.
+- VERIFIED: tenant/branch/actor authorization remains server-derived; concurrent confirmations retain compare-and-set protection.
+- VERIFIED: Studio Orders supports Arabic/English, RTL/LTR-safe ETA presentation, and mobile preset/custom controls.
+- VERIFIED: GitHub Quality run `36932980800` passed all stages, including typecheck, tests, lint, production build, browser/template QA, Studio/Admin browser QA, and performance fixtures.
+- VERIFIED: GitHub W9 Orders QA run `36932980956` passed.
+- VERIFIED: Vercel Preview for the final feature head passed.
+- VERIFIED: no real order was created and no WhatsApp message was sent.
+- DEPLOYMENT STATUS: pending production deployment from the merged `main` release.
 
-1. Add nullable order fields for preparation duration and server-derived ETA.
-2. Require and validate a whole-minute duration 1–120 for `new -> confirmed`.
-3. Persist status, duration, ETA, and the existing status audit event atomically under existing row locking.
-4. Preserve six-status lifecycle behavior, tenant/branch authorization, polling, notifications, sound, WhatsApp behavior, public ordering, payments, and production configuration.
-5. Display duration and ETA in Arabic/English with mobile-safe preset/custom controls and RTL/LTR time formatting.
-6. Verify focused duration, authorization, tenant/branch, atomicity, audit, concurrency, legacy-null, and bilingual/RTL contracts through repository CI.
+## EXACT NEXT TASK
 
-Implementation stops after one focused Pull Request is created; no merge, deploy, or unrelated feature work is authorized in this task.
+No further implementation work for this feature. Wait for the next explicitly scoped task.
 
 ---
 # 2026-09-30 — Part C Offers/Promotions — PROPOSED / PLAN ONLY

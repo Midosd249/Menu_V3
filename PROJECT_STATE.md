@@ -1,22 +1,17 @@
-# 2026-10-01 — Preparation Time + Estimated Ready Time — PR PENDING
+# 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
 
-- VERIFIED: `main` baseline for this task is `da849f929d7766b793d3ee22bb0db264de52a95e`, matching the owner-supplied post-PR #334 commit.
-- VERIFIED: feature branch is `feat/orders-preparation-time` and starts directly from that baseline.
-- VERIFIED: the orders schema had no preparation-duration or estimated-ready fields before this task.
-- VERIFIED: added nullable `preparation_duration_minutes integer` and `estimated_ready_at timestamptz`; no backfill, index, or trigger was added.
-- VERIFIED: confirmation now requires a server-validated whole-minute duration from 1–120 for `new -> confirmed`; presets are 3/5/10/15/20/30 minutes and custom duration remains available.
-- VERIFIED: tenant, branch, and actor context are derived from authenticated server context and the persisted order row; client-supplied tenant/branch/actor fields are not trusted.
-- VERIFIED: status, preparation duration, server-time ETA, and the existing `order_status_events` audit insertion are persisted in the existing row-locking SQL operation; concurrent confirmations are compare-and-set protected.
-- VERIFIED: Studio Orders now displays preparation duration and estimated ready time with Arabic/English labels, RTL/LTR-safe time presentation, and mobile-friendly preset/custom controls.
-- VERIFIED: legacy orders with null preparation fields remain readable; no automatic `ready` transition was introduced.
-- UNKNOWN: local command execution is unavailable because the connector/runtime cannot clone the repository from the public network.
-- UNKNOWN: final GitHub CI status until the PR is created and checks complete.
-- DEPLOYMENT STATUS: NOT DEPLOYED. No production configuration was changed.
-- SAFETY: no real order was created and no WhatsApp message was sent.
+- VERIFIED: preparation-time feature is on the current release branch and passed final GitHub Quality and W9 Orders QA.
+- VERIFIED: commit `3d19e408a3d6212cb6d95bf0d1bfa163de41e81d` contains the feature on top of the security-remediated current main.
+- VERIFIED: preparation duration is server-validated to 1–120 whole minutes with presets 3/5/10/15/20/30.
+- VERIFIED: server-derived ETA, atomic status/audit persistence, tenant/branch authorization, row locking, and compare-and-set concurrency protection are preserved.
+- VERIFIED: legacy null preparation fields remain readable and no automatic `ready` transition exists.
+- VERIFIED: final Quality run `36932980800` passed; final W9 Orders QA run `36932980956` passed.
+- VERIFIED: Vercel Preview passed for the final feature head.
+- DEPLOYMENT STATUS: pending production deployment from merged `main`.
 
 ## EXACT NEXT TASK
 
-Create the focused Pull Request to `main`, inspect PR-head CI, review the final diff, and stop without merging or deploying.
+No further implementation work for this feature. Wait for the next explicitly scoped task.
 
 ---
 # 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
