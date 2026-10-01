@@ -1,5 +1,13 @@
 # W9 Orders Discovery
 
+## W9.1 — Preparation Time / ETA Addendum — 2026-10-01
+- VERIFIED: `/studio/orders` uses the existing `getOrdersDashboard` response contract, now including `preparationDurationMinutes` and `estimatedReadyAt` on `AdminOrder`.
+- VERIFIED: `updateOrderStatus` remains the lifecycle mutation, but `new -> confirmed` now requires preparation-duration input and server-side authorization/scope checks.
+- VERIFIED: the six existing order statuses are unchanged; ETA is informational and does not drive an automatic `ready` transition.
+- VERIFIED: no separate preparation history table or `order_status_events` schema change was added; the initial duration/ETA live on the order row and the existing status audit event remains the audit contract.
+
+# W9 Orders Discovery
+
 Status: `VERIFIED` — 2026-09-15
 
 ## Routes and components

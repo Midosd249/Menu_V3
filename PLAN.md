@@ -1,3 +1,17 @@
+# 2026-10-01 — Preparation Time + Estimated Ready Time — IMPLEMENTATION / PR PENDING
+
+Scope is limited to the order confirmation flow and Studio Orders experience:
+
+1. Add nullable order fields for preparation duration and server-derived ETA.
+2. Require and validate a whole-minute duration 1–120 for `new -> confirmed`.
+3. Persist status, duration, ETA, and the existing status audit event atomically under existing row locking.
+4. Preserve six-status lifecycle behavior, tenant/branch authorization, polling, notifications, sound, WhatsApp behavior, public ordering, payments, and production configuration.
+5. Display duration and ETA in Arabic/English with mobile-safe preset/custom controls and RTL/LTR time formatting.
+6. Verify focused duration, authorization, tenant/branch, atomicity, audit, concurrency, legacy-null, and bilingual/RTL contracts through repository CI.
+
+Implementation stops after one focused Pull Request is created; no merge, deploy, or unrelated feature work is authorized in this task.
+
+---
 # 2026-09-30 — Part C Offers/Promotions — PROPOSED / PLAN ONLY
 
 1. Data model: add one tenant-owned product_offers record per product for the MVP, with tenant_id, product_id, offer_type (sale_price, percent_off, fixed_amount, bogo), numeric value fields, starts_at, ends_at, is_active, and audit timestamps. Enforce tenant/product ownership and a single active offer per product.

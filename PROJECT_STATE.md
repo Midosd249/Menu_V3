@@ -1,3 +1,24 @@
+# 2026-10-01 — Preparation Time + Estimated Ready Time — PR PENDING
+
+- VERIFIED: `main` baseline for this task is `da849f929d7766b793d3ee22bb0db264de52a95e`, matching the owner-supplied post-PR #334 commit.
+- VERIFIED: feature branch is `feat/orders-preparation-time` and starts directly from that baseline.
+- VERIFIED: the orders schema had no preparation-duration or estimated-ready fields before this task.
+- VERIFIED: added nullable `preparation_duration_minutes integer` and `estimated_ready_at timestamptz`; no backfill, index, or trigger was added.
+- VERIFIED: confirmation now requires a server-validated whole-minute duration from 1–120 for `new -> confirmed`; presets are 3/5/10/15/20/30 minutes and custom duration remains available.
+- VERIFIED: tenant, branch, and actor context are derived from authenticated server context and the persisted order row; client-supplied tenant/branch/actor fields are not trusted.
+- VERIFIED: status, preparation duration, server-time ETA, and the existing `order_status_events` audit insertion are persisted in the existing row-locking SQL operation; concurrent confirmations are compare-and-set protected.
+- VERIFIED: Studio Orders now displays preparation duration and estimated ready time with Arabic/English labels, RTL/LTR-safe time presentation, and mobile-friendly preset/custom controls.
+- VERIFIED: legacy orders with null preparation fields remain readable; no automatic `ready` transition was introduced.
+- UNKNOWN: local command execution is unavailable because the connector/runtime cannot clone the repository from the public network.
+- UNKNOWN: final GitHub CI status until the PR is created and checks complete.
+- DEPLOYMENT STATUS: NOT DEPLOYED. No production configuration was changed.
+- SAFETY: no real order was created and no WhatsApp message was sent.
+
+## EXACT NEXT TASK
+
+Create the focused Pull Request to `main`, inspect PR-head CI, review the final diff, and stop without merging or deploying.
+
+---
 # 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
 
 - VERIFIED: `main` is `96402b5eda86ba6531afa48e93a0e8852572101b`; PR #333 is open, targets `main`, and the previous branch head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.

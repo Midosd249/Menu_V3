@@ -1,5 +1,16 @@
 # W9 Orders QA
 
+## W9.1 — Preparation Time / ETA Contract
+- VERIFIED: confirmation of a `new` order requires a server-validated whole-minute preparation duration from 1 through 120.
+- VERIFIED: quick presets are 3, 5, 10, 15, 20, and 30 minutes; custom whole-minute entry remains available.
+- VERIFIED: estimated ready time is derived from database `clock_timestamp()` at confirmation plus the selected duration, not the browser clock or order creation time.
+- VERIFIED: preparation fields are nullable, so legacy orders remain readable with an honest empty state.
+- VERIFIED: no automatic ready-status transition was introduced.
+- VERIFIED: no real order or outbound WhatsApp message is used by the test contract.
+- UNKNOWN: final CI run IDs and browser screenshots for the new PR head until the PR is created.
+
+# W9 Orders QA
+
 Status: `IN_PROGRESS` until final Draft PR CI completes.
 
 ## Browser fixture

@@ -1,3 +1,17 @@
+# 2026-10-01 — Preparation Time + Estimated Ready Time — PR PENDING
+
+- VERIFIED: base `main` commit is `da849f929d7766b793d3ee22bb0db264de52a95e`; no rework of PR #332–#334 is included.
+- VERIFIED: migration, server duration validation, confirmation persistence, mobile picker, ETA display, and focused regression contracts are implemented on `feat/orders-preparation-time`.
+- VERIFIED: six existing statuses and lifecycle rules remain unchanged; confirmation is still `new -> confirmed` and readiness remains an explicit staff action.
+- VERIFIED: concurrency is protected by `FOR UPDATE` plus a new-state compare-and-set condition for confirmation attempts.
+- UNKNOWN: GitHub Quality/W9 status for the final PR head until PR creation.
+- DEPLOYMENT STATUS: NOT DEPLOYED.
+
+## EXACT NEXT TASK
+
+Create the focused PR against `main`, verify its final head checks, review the diff, and stop. Do not merge or deploy.
+
+---
 # 2026-10-01 — Safe Order Lifecycle Enforcement — PR #333 / CI REPAIR IN PROGRESS
 
 - VERIFIED: PR #333 remains open and unmerged; previous head was `cb3f3d218b309b859ce9f407412edcbbe789f25a`.
