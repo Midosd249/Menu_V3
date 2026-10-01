@@ -275,6 +275,12 @@ jobs:
             await client.query("create role anon nologin").catch((error) => { if (error.code !== "42710") throw error; });
             await client.query("create role authenticated nologin").catch((error) => { if (error.code !== "42710") throw error; });
             await client.query("set search_path to menu_v3, public");
+            await client.query(`
+              alter table tenant_members
+                add column if not exists access_role text not null default 'tenant_owner',
+                add column if not exists branch_scope text[] null,
+                add column if not exists is_active boolean not null default true;
+            `);
             for (const name of migrations) {
               await client.query("begin");
               try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit"); console.log(`[studio-fixture] applied ${name}`); }
@@ -378,6 +384,12 @@ jobs:
             await client.query("create role anon nologin").catch((error) => { if (error.code !== "42710") throw error; });
             await client.query("create role authenticated nologin").catch((error) => { if (error.code !== "42710") throw error; });
             await client.query("set search_path to menu_v3, public");
+            await client.query(`
+              alter table tenant_members
+                add column if not exists access_role text not null default 'tenant_owner',
+                add column if not exists branch_scope text[] null,
+                add column if not exists is_active boolean not null default true;
+            `);
             for (const name of migrations) {
               await client.query("begin");
               try { const sql = await readFile(join(process.cwd(), "migrations", name), "utf8"); await client.query(sql); await client.query("commit"); }
