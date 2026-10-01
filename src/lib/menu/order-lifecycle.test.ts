@@ -43,7 +43,7 @@ test("updateOrderStatus keeps authentication, authorization, audit, and concurre
   assert.match(ordersSource, /const permission = await assertOrderAccess\(context\.userId, data\.id\)/);
   assert.match(ordersSource, /order_status_events/);
   assert.match(ordersSource, /status = \$\{fromStatus\}/);
-  assert.match(ordersSource, /insert into order_status_events/);
+  assert.match(ordersSource, /insert into order_status_events/);\n  assert.match(ordersSource, /from_status <> status/);
 });
 
 test("updateOrderStatus maps database lifecycle rejection to a safe domain error", () => {
