@@ -42,7 +42,8 @@ test("updateOrderStatus keeps authentication, authorization, audit, and concurre
   assert.match(ordersSource, /\.middleware\(\[authMiddleware\]\)/);
   assert.match(ordersSource, /const permission = await assertOrderAccess\(context\.userId, data\.id\)/);
   assert.match(ordersSource, /order_status_events/);
-  assert.match(ordersSource, /status = \$\{fromStatus\}/);
+  assert.match(ordersSource, /o\.status = locked\.from_status/);
+  assert.match(ordersSource, /for update/);
   assert.match(ordersSource, /insert into order_status_events/);
   assert.match(ordersSource, /from_status <> status/);
 });
