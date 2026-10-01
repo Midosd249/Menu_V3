@@ -1130,3 +1130,13 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - VERIFIED: public renderer contract, typecheck, tests, lint, production build, all-theme browser QA, and W9 Orders QA are green on the current head.
 - BLOCKED: Production release is held by the Vercel deployment rate limit; do not retry randomly.
 - EXACT NEXT ACTION: merge PR #327, then one production deployment when the Vercel release gate is available.
+
+
+## 2026-10-01 — Orders Status Presentation
+
+- IN_PROGRESS: Focused Studio Orders status presentation improvement on `feat/orders-status-presentation`.
+- VERIFIED: Base is main merge commit `fc143c525190cfc60241113bb885a22e4836bb70`.
+- Scope: six existing order statuses only; shared bilingual label/icon/tone presentation; RTL/LTR-safe badge layout; preserve current actions and lifecycle behavior.
+- Out of scope: lifecycle rules, database schema/migrations/triggers, auth/authz, tenant/branch isolation, polling/notifications, sound, WhatsApp, payments, public ordering, production settings, and manual deployment.
+- Verification target: focused unit mapping coverage plus repository typecheck/tests/lint/build and applicable Studio/Orders browser QA through GitHub CI.
+- NEXT TASK: review the resulting PR and CI evidence; do not merge or deploy automatically.
