@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 const ordersSource = await readFile(new URL("./orders.ts", import.meta.url), "utf8");
 
 test("order lifecycle accepts only the defined forward/cancellation transitions and same-status no-op", async () => {
-  const lifecycle = await import("./orders.ts");
+  const lifecycle = await import("./order-lifecycle.ts");
   const expected: Record<string, string[]> = {
     new: ["confirmed", "cancelled"],
     confirmed: ["preparing", "cancelled"],
@@ -27,7 +27,7 @@ test("order lifecycle accepts only the defined forward/cancellation transitions 
 });
 
 test("invalid lifecycle transitions expose a safe domain error without database details", async () => {
-  const lifecycle = await import("./orders.ts");
+  const lifecycle = await import("./order-lifecycle.ts");
   const result = lifecycle.getOrderStatusTransitionError("completed", "new");
 
   assert.deepEqual(result, {
