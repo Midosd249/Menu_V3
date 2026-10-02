@@ -22,7 +22,15 @@ export type OrderValueAnalyticsPeriod =
 
 export type OrderValueAnalyticsInput = {
   period: OrderValueAnalyticsPeriod;
+  tenantId?: string;
   branchId?: string;
+};
+
+export type OrderValueAnalyticsTenant = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  branches: Array<{ id: string; nameAr: string; nameEn: string }>;
 };
 
 export type OrderValueAnalytics = {
@@ -63,6 +71,7 @@ const inputSchema = z.object({
     z.object({ type: z.literal("month") }),
     z.object({ type: z.literal("custom"), startLocal: z.string(), endLocal: z.string() }),
   ]),
+  tenantId: z.string().min(1).max(128).optional(),
   branchId: z.string().min(1).max(80).optional(),
 }).strict();
 
@@ -257,6 +266,61 @@ export async function queryOrderValueAnalytics(
   };
 }
 
+export const getOwnerOrderValueAnalyticsTenants = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .handler(async ({ context }): Promise<FnResult<OrderValueAnalyticsTenant[]>> => {
+    try {
+      const { getSql } = await import("../db.ts");
+      const sql = await getSql();
+      const tenantRows = await sql<{ id: string; name_ar: string; name_en: string }>\`
+        select t.id, t.name_ar, t.name_en
+        from tenants t
+        join tenant_members tm on tm.tenant_id = t.id
+        where tm.user_id = \${context.userId}
+          and tm.is_active = true
+          and t.is_active = true
+        order by t.created_at, t.id
+      \`;
+
+      const tenants: OrderValueAnalyticsTenant[] = [];
+      for (const tenant of tenantRows) {
+        const membership = await getMembership(sql, context.userId, String(tenant.id));
+        if (!membership) continue;
+        try {
+          requirePermissionForRole(membership.role, "analytics.read");
+        } catch {
+          continue;
+        }
+        const authorizedBranchIds = await resolveAuthorizedBranches(sql, membership);
+        const branchRows = authorizedBranchIds === null
+          ? await sql<{ id: string; name_ar: string; name_en: string }>\`
+              select id, name_ar, name_en from branches
+              where tenant_id = \${tenant.id} and is_active = true
+              order by created_at, id
+            \`
+          : await sql<{ id: string; name_ar: string; name_en: string }>\`
+              select id, name_ar, name_en from branches
+              where tenant_id = \${tenant.id} and is_active = true and id = any(\${authorizedBranchIds}::text[])
+              order by created_at, id
+            \`;
+        tenants.push({
+          id: String(tenant.id),
+          nameAr: String(tenant.name_ar ?? ""),
+          nameEn: String(tenant.name_en ?? ""),
+          branches: branchRows.map((branch) => ({
+            id: String(branch.id),
+            nameAr: String(branch.name_ar ?? ""),
+            nameEn: String(branch.name_en ?? ""),
+          })),
+        });
+      }
+      return { ok: true, data: tenants };
+    } catch (error) {
+      console.error("getOwnerOrderValueAnalyticsTenants failed", error);
+      return errorResult("unavailable", "Unable to load analytics tenants.");
+    }
+  });
+
 export const getOwnerOrderValueAnalytics = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .validator(inputSchema)
@@ -264,7 +328,7 @@ export const getOwnerOrderValueAnalytics = createServerFn({ method: "GET" })
     try {
       const { getSql } = await import("../db.ts");
       const sql = await getSql();
-      const membership = await getMembership(sql, context.userId);
+      const membership = await getMembership(sql, context.userId, data.tenantId);
       if (!membership) return errorResult("forbidden", "No active tenant membership.");
       try {
         requirePermissionForRole(membership.role, "analytics.read");
