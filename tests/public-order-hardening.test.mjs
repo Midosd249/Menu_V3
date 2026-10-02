@@ -4,6 +4,7 @@ import test from "node:test";
 
 const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
+const layeredAbuseMigration = await readFile("migrations/20261002090000_layered_public_order_abuse_controls.sql", "utf8");
 const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_security_definer_rpc_grants.sql", "utf8");
 const attributionMigration = await readFile("migrations/20260918020000_anonymous_session_order_attribution.sql", "utf8");
 
@@ -80,5 +81,5 @@ test("accepted order quota is applied only after business validation", () => {
 test("invalid order traffic has a separate throttle", () => {
   assert.match(orderSource, /public_order_invalid_rate_limits/);
   assert.match(orderSource, /recordInvalidAttempt/);
-  assert.match(abuseMigration, /create table if not exists menu_v3\.public_order_invalid_rate_limits/);
+  assert.match(layeredAbuseMigration, /create table if not exists menu_v3\.public_order_invalid_rate_limits/);
 });
