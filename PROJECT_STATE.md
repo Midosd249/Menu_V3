@@ -1,3 +1,20 @@
+# 2026-10-02 — P0.2 Layered Public Order Abuse Protection — MERGED / VERIFIED
+
+- VERIFIED: PR #349 merged into main as 5e2cdf847251f0bc6a8688667a7d3e060e768419.
+- VERIFIED: Quality #2731 completed successfully; all quality job steps passed.
+- VERIFIED: W9 Orders QA #869 completed successfully.
+- VERIFIED: Vercel PR preview for the verified P0.2 head reached READY.
+- VERIFIED: P0.2 acceptance criteria are implemented: layered server-issued session + request-IP limits, separate invalid-request throttling, post-validation accepted quota, and server-side tenant/branch authority.
+- VERIFIED: P0.1 atomic order/idempotency boundary remains intact.
+- VERIFIED: final diff was reviewed before merge; no review threads were pending.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_PERFORMED / Production status not established by this merge verification.
+
+## EXACT NEXT TASK
+
+P1.1 — Public Menu Cache/Session Decoupling: measure and then safely separate public-menu content caching from anonymous-session attribution work. Preserve tenant/user isolation and do not introduce shared caching without evidence.
+
+---
 # 2026-10-02 — P0.2 Layered Public Order Abuse Protection — IMPLEMENTATION IN PROGRESS
 
 - VERIFIED: current main HEAD is 7bfa8ceafff4340466d776d5410fe455d07d2f15, merging PR #348/P0.1.
