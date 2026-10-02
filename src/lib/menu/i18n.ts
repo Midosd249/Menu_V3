@@ -236,6 +236,7 @@ export const copy = {
     orderValueWeek: { ar: "هذا الأسبوع", en: "This Week" },
     orderValueMonth: { ar: "هذا الشهر", en: "This Month" },
     orderValueCustom: { ar: "فترة مخصصة", en: "Custom Period" },
+    orderValueCustomRequired: { ar: "حدد بداية ونهاية الفترة المخصصة لعرض النتائج.", en: "Select a start and end for the custom period to view results." },
     orderValueStart: { ar: "بداية الفترة", en: "Start" },
     orderValueEnd: { ar: "نهاية الفترة", en: "End boundary" },
     orderValueBranch: { ar: "الفرع", en: "Branch" },
