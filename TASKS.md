@@ -1641,3 +1641,16 @@ Do not begin automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+# 2026-10-02 — Supabase PostgreSQL 17.11 Security-Patch Readiness Audit — CLOSED / VERIFIED
+
+- VERIFIED: current project version is PostgreSQL `17.6.1.166` / server `17.6`.
+- VERIFIED: Supabase's official rollout target is PostgreSQL `17.11`; existing projects were scheduled to receive Dashboard upgrade availability from 2026-09-28.
+- VERIFIED: official prerequisite detections found no user-schema `reg*` columns, no logical replication slots, no affected `ltree`/`btree_gist` indexes, no affected custom operators, and no identified pgcrypto PGP data path.
+- VERIFIED: installed extensions are limited to `pg_stat_statements`, `pgcrypto`, `plpgsql`, `supabase_vault`, and `uuid-ossp`.
+- UNKNOWN: exact Dashboard eligibility/blockers and provider-side patch/backport status for this project.
+- NO DATABASE MUTATION: no upgrade or schema/data modification was performed.
+
+## EXACT NEXT TASK
+
+**Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify Dashboard eligibility/blockers, maintenance window, and backup readiness; only then authorize the actual upgrade.
