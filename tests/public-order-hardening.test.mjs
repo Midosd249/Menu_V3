@@ -59,3 +59,26 @@ test("public order reservation and finalization use one transaction", async () =
   assert.match(orderSource, /insert into order_items/);
   assert.match(orderSource, /insert into order_status_events/);
 });
+
+test("public order abuse protection is layered across server session and trusted request IP", () => {
+  assert.match(orderSource, /getRequestHeader\("x-forwarded-for"\)/);
+  assert.match(orderSource, /anonymousSession\.id/);
+  assert.match(orderSource, /rateIdentityTokens/);
+  assert.match(orderSource, /ip:/);
+  assert.match(orderSource, /session:/);
+  assert.match(orderSource, /public_order_rate_limits/);
+});
+
+test("accepted order quota is applied only after business validation", () => {
+  const validationIndex = orderSource.indexOf("const prepared: PreparedItem[] = [];");
+  const rateIndex = orderSource.indexOf("acceptedRateLimit");
+  assert.ok(validationIndex >= 0, "business validation must exist");
+  assert.ok(rateIndex > validationIndex, "accepted rate limiting must occur after business validation");
+  assert.doesNotMatch(orderSource.slice(0, validationIndex), /insert into public_order_rate_limits/);
+});
+
+test("invalid order traffic has a separate throttle", () => {
+  assert.match(orderSource, /public_order_invalid_rate_limits/);
+  assert.match(orderSource, /recordInvalidAttempt/);
+  assert.match(abuseMigration, /create table if not exists menu_v3\.public_order_invalid_rate_limits/);
+});
