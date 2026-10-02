@@ -159,3 +159,14 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Regression evidence: Quality #2785 passed the registered cache/session contract test, typecheck, full npm test, lint, production build, browser QA and performance gates; W9 Orders QA #918 also passed.
 - Lesson: a bounded scope-level fast path is appropriate only when its freshness window matches the existing public cache contract. Never replace server-derived tenant/branch identity with client identity, and invalidate parallel cache layers together.
 - Continuity lesson: a regression test file that is not registered in the canonical test command can create false confidence. Verify test registration before treating TDD/CI evidence as complete.
+
+
+## 2026-10-02 — Dual migration ledgers and live-schema drift
+
+- VERIFIED: the active repository migration runner uses `menu_v3._migrations` and currently records all 69 active top-level migration files.
+- VERIFIED: Supabase `supabase_migrations.schema_migrations` contains 44 historical versions that differ materially from the current repository filenames.
+- LESSON: migration history is not proof of live schema state; always inspect the actual database catalog before replaying or repairing anything.
+- VERIFIED: one concrete drift exists: `20261002090000_layered_public_order_abuse_controls.sql` is recorded in the active ledger, but live `menu_v3.public_order_invalid_rate_limits` has RLS disabled.
+- ANTI-PATTERN: do not replay repository-only migrations just because they are absent from the Supabase CLI history table.
+- ANTI-PATTERN: do not mutate migration history until live schema state and the active application ledger are reconciled.
+- DETECTION CHECKLIST: compare (1) repository basenames, (2) active application ledger, (3) Supabase CLI history, (4) live tables/columns/constraints/indexes/functions/triggers/RLS/policies/grants, and (5) recent migration-produced objects.
