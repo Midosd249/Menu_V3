@@ -55,7 +55,14 @@ function AnalyticsPage() {
     })
       .then((result) => {
         if (!active) return;
-        setOrderValueState(result.ok ? { status: "ok", data: result.data } : { status: "error", message: result.error });
+        if (!result.ok) {
+          setOrderValueState({
+            status: "error",
+            message: result.code === "data_quality" ? t(copy.analytics.orderValueDataQuality, lang) : result.error,
+          });
+          return;
+        }
+        setOrderValueState({ status: "ok", data: result.data });
       })
       .catch((error: unknown) => {
         if (!active) return;
@@ -414,7 +421,7 @@ function RatioCard({ label, metric, suffix = "%" }: { label: string; metric: { n
   return <div className="rounded-xl border border-line bg-paper p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl tabular">{metric.denominator > 0 ? `${metric.per100.toFixed(1)}${suffix}` : "—"}</p><p className="mt-1 text-xs text-muted tabular">{metric.numerator} / {metric.denominator}</p></div>;
 }
 
-function Stat({ label, value }: { label: string; value: number }) { return <div className="rounded-xl border border-line p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl tabular">{value}</p></div>; }
+function Stat({ label, value }: { label: string; value: number | string }) { return <div className="rounded-xl border border-line p-4"><p className="text-xs text-muted">{label}</p><p className="mt-1 font-display text-2xl tabular">{value}</p></div>; }
 
 function Rank({ title, rows, lang }: { title: string; rows: Array<{ id: string; nameAr: string; nameEn: string; count: number }>; lang: "ar" | "en" }) {
   if (!rows.length) return null;
