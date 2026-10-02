@@ -3,6 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const renderer = fs.readFileSync("src/components/theme-renderer.tsx", "utf8");
+const loader = fs.readFileSync("src/components/theme-template-loader.tsx", "utf8");
 const preview = fs.readFileSync("src/routes/themes/preview.tsx", "utf8");
 const registry = fs.readFileSync("src/lib/theme/registry.ts", "utf8");
 
@@ -12,15 +13,34 @@ test("all five canonical themes remain registered", () => {
   for (const theme of canonicalThemes) assert.match(registry, new RegExp(`key: "${theme}"`));
 });
 
-test("public theme renderer covers every canonical family", () => {
-  for (const marker of [
-    "theme === \"heritage\"",
-    "family === \"contemporary-restaurant\"",
-    "family === \"bakery-dessert\"",
-    "family === \"fine-dining-hospitality\"",
-    "family === \"small-menu\"",
-    "<PublicMenuView",
-  ]) assert.match(renderer, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+test("public theme renderer lazy-loads theme implementations", () => {
+  for (const theme of ["taste", "signal-table", "bakery-dessert", "fine-dining-hospitality", "small-menu"]) {
+    assert.match(loader, new RegExp(`import\\(["']@/components/templates/${theme}["']\\)`));
+  }
+  assert.doesNotMatch(renderer, /from ["']@\/components\/templates\//);
+  assert.match(loader, /lazy\(/);
+  assert.match(renderer, /Suspense/);
+});
+
+test("public route does not statically import theme implementations", () => {
+  const route = fs.readFileSync("src/routes/m.$slug.tsx", "utf8");
+  assert.doesNotMatch(route, /from ["']@\/components\/templates\//);
+  assert.match(route, /getLazyThemeTemplate/);
+});
+
+test("canonical themes map to the intended lazy templates", () => {
+  const loader = fs.readFileSync("src/components/theme-template-loader.tsx", "utf8");
+  for (const [theme, template] of [
+    ["essential", "SmallMenuTemplate"],
+    ["editorial", "SignalTableTemplate"],
+    ["noir", "FineDiningHospitalityTemplate"],
+    ["heritage", "TasteTemplate"],
+    ["gallery", "BakeryDessertTemplate"],
+  ]) {
+    assert.match(loader, new RegExp(theme + ": " + template));
+  }
+  assert.match(renderer, /getLazyThemeTemplate/);
+  assert.match(renderer, /Suspense/);
 });
 
 test("theme preview uses the same canonical renderer", () => {

@@ -30,16 +30,19 @@ test("SIGNAL TABLE contains no product or category numbering", async () => {
 
 test("SIGNAL TABLE owns the direct public menu route for the contemporary restaurant family", async () => {
   const route = await readFile("src/routes/m.$slug.tsx", "utf8");
-  assert.match(route, /import \{ SignalTableTemplate \} from "@\/components\/templates\/signal-table"/);
-  assert.match(route, /family === "contemporary-restaurant" \? <SignalTableTemplate/);
+  const loader = await readFile("src/components/theme-template-loader.tsx", "utf8");
+  assert.doesNotMatch(route, /import \{ SignalTableTemplate \} from "@\/components\/templates\/signal-table"/);
+  assert.match(route, /getLazyThemeTemplate/);
+  assert.match(loader, /editorial: SignalTableTemplate/);
   assert.doesNotMatch(route, /<ContemporaryRestaurantTemplate/);
 });
 
 test("SIGNAL TABLE uses one presentation owner and preserves configured actions", async () => {
   const renderer = await readFile("src/components/theme-renderer.tsx", "utf8");
+  const loader = await readFile("src/components/theme-template-loader.tsx", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
   const root = await readFile("src/routes/__root.tsx", "utf8");
-  assert.match(renderer, /SignalTableTemplate/);
+  assert.match(loader, /SignalTableTemplate/);
   assert.doesNotMatch(renderer, /ContemporaryRestaurantTemplate/);
   assert.match(template, /<PublicActionLinks\s/);
   assert.match(template, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
