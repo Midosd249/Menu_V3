@@ -1342,3 +1342,19 @@ Measure the current post-P1.2 public-menu baseline first. Do not begin unrelated
 **P1.3 — Public Menu Runtime Performance / Observability**
 
 Measure first. Keep the task atomic and do not start another task or deployment automatically.
+
+# 2026-10-02 — P1.3 Runtime Performance / Observability — MERGED / VERIFIED
+
+- VERIFIED: PR #354 squash-merged to `main` as `67f05fff4f7f6c07e87b56df1a9a676f2aee896d`.
+- VERIFIED: one evidence-backed atomic improvement completed: tenant/branch-scoped fast path for the existing 15-second public-menu process-local cache, eliminating the redundant `public_content_version` DB read on fresh in-process hits.
+- VERIFIED: Quality #2785 = SUCCESS; W9 Orders QA #918 = SUCCESS.
+- VERIFIED: all configured typecheck/test/lint/build/browser/performance gates in Quality #2785 passed.
+- VERIFIED: no Production deployment.
+- UNKNOWN: Production TTFB, cache-hit ratio, real DB read/write volume and physical-device performance.
+- BLOCKED: Vercel Preview is independently rate-limited by deployment quota and did not block GitHub verification.
+
+## EXACT NEXT TASK
+
+**P1.4 — Leaked Password Protection**
+
+Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d` as the source of truth.
