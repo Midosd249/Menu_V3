@@ -8,16 +8,17 @@ export type Permission =
   | "team.read"
   | "team.write"
   | "orders.read"
-  | "orders.write";
+  | "orders.write"
+  | "analytics.read";
 
 const ROLE_PERMISSIONS: Record<Role, ReadonlySet<Permission>> = {
   owner: new Set([
     "menu.read", "menu.write", "settings.read", "settings.write",
-    "team.read", "team.write", "orders.read", "orders.write",
+    "team.read", "team.write", "orders.read", "orders.write", "analytics.read",
   ]),
   admin: new Set([
     "menu.read", "menu.write", "settings.read", "settings.write",
-    "orders.read", "orders.write",
+    "orders.read", "orders.write", "analytics.read",
   ]),
   editor: new Set(["menu.read", "menu.write"]),
   staff: new Set(["menu.read"]),
