@@ -272,15 +272,15 @@ export const getOwnerOrderValueAnalyticsTenants = createServerFn({ method: "GET"
     try {
       const { getSql } = await import("../db.ts");
       const sql = await getSql();
-      const tenantRows = await sql<{ id: string; name_ar: string; name_en: string }>\`
+      const tenantRows = await sql<{ id: string; name_ar: string; name_en: string }>`
         select t.id, t.name_ar, t.name_en
         from tenants t
         join tenant_members tm on tm.tenant_id = t.id
-        where tm.user_id = \${context.userId}
+        where tm.user_id = ${context.userId}
           and tm.is_active = true
           and t.is_active = true
         order by t.created_at, t.id
-      \`;
+      `;
 
       const tenants: OrderValueAnalyticsTenant[] = [];
       for (const tenant of tenantRows) {
@@ -293,16 +293,16 @@ export const getOwnerOrderValueAnalyticsTenants = createServerFn({ method: "GET"
         }
         const authorizedBranchIds = await resolveAuthorizedBranches(sql, membership);
         const branchRows = authorizedBranchIds === null
-          ? await sql<{ id: string; name_ar: string; name_en: string }>\`
+          ? await sql<{ id: string; name_ar: string; name_en: string }>`
               select id, name_ar, name_en from branches
-              where tenant_id = \${tenant.id} and is_active = true
+              where tenant_id = ${tenant.id} and is_active = true
               order by created_at, id
-            \`
-          : await sql<{ id: string; name_ar: string; name_en: string }>\`
+            `
+          : await sql<{ id: string; name_ar: string; name_en: string }>`
               select id, name_ar, name_en from branches
-              where tenant_id = \${tenant.id} and is_active = true and id = any(\${authorizedBranchIds}::text[])
+              where tenant_id = ${tenant.id} and is_active = true and id = any(${authorizedBranchIds}::text[])
               order by created_at, id
-            \`;
+            `;
         tenants.push({
           id: String(tenant.id),
           nameAr: String(tenant.name_ar ?? ""),
