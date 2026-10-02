@@ -6,6 +6,7 @@ import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { buildGrowthMetrics } from "@/lib/menu/growth";
 import { getMyStudio, getOwnerAnalytics } from "@/lib/menu/owner";
+import { getOwnerOrderValueAnalytics, type OrderValueAnalytics, type OrderValueAnalyticsPeriod } from "@/lib/menu/order-value-analytics";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/analytics")({ component: AnalyticsPage });
@@ -13,6 +14,13 @@ export const Route = createFileRoute("/studio/analytics")({ component: Analytics
 function AnalyticsPage() {
   const { lang } = useLang();
   const [days, setDays] = useState<7 | 30>(7);
+  const [orderValuePeriod, setOrderValuePeriod] = useState<OrderValueAnalyticsPeriod>({ type: "today" });
+  const [orderValueBranchId, setOrderValueBranchId] = useState("all");
+  const [orderValueState, setOrderValueState] = useState<
+    | { status: "loading" }
+    | { status: "error"; message: string }
+    | { status: "ok"; data: OrderValueAnalytics }
+  >({ status: "loading" });
   const [state, setState] = useState<
     | { status: "loading" }
     | { status: "error"; message: string }
@@ -36,6 +44,28 @@ function AnalyticsPage() {
       .catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : t(copy.state.error, lang) }));
   }, [days, lang]);
 
+  useEffect(() => {
+    let active = true;
+    setOrderValueState({ status: "loading" });
+    void getOwnerOrderValueAnalytics({
+      data: {
+        period: orderValuePeriod,
+        branchId: orderValueBranchId === "all" ? undefined : orderValueBranchId,
+      },
+    })
+      .then((result) => {
+        if (!active) return;
+        setOrderValueState(result.ok ? { status: "ok", data: result.data } : { status: "error", message: result.error });
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        setOrderValueState({ status: "error", message: error instanceof Error ? error.message : t(copy.state.error, lang) });
+      });
+    return () => {
+      active = false;
+    };
+  }, [orderValuePeriod, orderValueBranchId, lang]);
+
   return (
     <div className="mx-auto grid max-w-5xl gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -43,7 +73,7 @@ function AnalyticsPage() {
           <h1 className="font-display text-2xl font-semibold">{t(copy.analytics.title, lang)}</h1>
           <p className="mt-1 text-sm text-muted">{lang === "ar" ? "من أرقام المنيو إلى قرارات نمو قابلة للتنفيذ." : "Turn menu signals into actionable growth decisions."}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button type="button" size="sm" variant={days === 7 ? "solid" : "outline"} onClick={() => setDays(7)}>{t(copy.analytics.days7, lang)}</Button>
           <Button type="button" size="sm" variant={days === 30 ? "solid" : "outline"} onClick={() => setDays(30)}>{t(copy.analytics.days30, lang)}</Button>
         </div>
@@ -51,7 +81,139 @@ function AnalyticsPage() {
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState message={state.message} /> : null}
       {state.status === "ok" ? <AnalyticsContent analytics={state.data} studio={state.studio} lang={lang} /> : null}
+      <OrderValueAnalyticsPanel
+        state={orderValueState}
+        period={orderValuePeriod}
+        branchId={orderValueBranchId}
+        branches={state.status === "ok" ? state.studio.branches : []}
+        onPeriodChange={setOrderValuePeriod}
+        onBranchChange={setOrderValueBranchId}
+        lang={lang}
+      />
     </div>
+  );
+}
+
+function formatSar(value: number, lang: "ar" | "en") {
+  return new Intl.NumberFormat(lang === "ar" ? "ar-SA" : "en-SA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+}
+
+function OrderValueAnalyticsPanel({
+  state,
+  period,
+  branchId,
+  branches,
+  onPeriodChange,
+  onBranchChange,
+  lang,
+}: {
+  state:
+    | { status: "loading" }
+    | { status: "error"; message: string }
+    | { status: "ok"; data: OrderValueAnalytics };
+  period: OrderValueAnalyticsPeriod;
+  branchId: string;
+  branches: StudioSnapshot["branches"];
+  onPeriodChange: (period: OrderValueAnalyticsPeriod) => void;
+  onBranchChange: (branchId: string) => void;
+  lang: "ar" | "en";
+}) {
+  const customStart = period.type === "custom" ? period.startLocal : "";
+  const customEnd = period.type === "custom" ? period.endLocal : "";
+  const updateCustom = (key: "startLocal" | "endLocal", value: string) => {
+    const next = { type: "custom", startLocal: customStart, endLocal: customEnd, [key]: value } as OrderValueAnalyticsPeriod;
+    onPeriodChange(next);
+  };
+  const periodButtons: Array<{ type: "today" | "week" | "month"; label: string }> = [
+    { type: "today", label: t(copy.analytics.orderValueToday, lang) },
+    { type: "week", label: t(copy.analytics.orderValueWeek, lang) },
+    { type: "month", label: t(copy.analytics.orderValueMonth, lang) },
+  ];
+  return (
+    <section className="grid gap-5 rounded-2xl border border-line bg-paper p-5" aria-labelledby="order-value-title">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-accent">{t(copy.analytics.orderValueEyebrow, lang)}</p>
+          <h2 id="order-value-title" className="mt-1 font-display text-xl font-semibold">{t(copy.analytics.orderValueTitle, lang)}</h2>
+          <p className="mt-1 max-w-2xl text-sm text-muted">{t(copy.analytics.orderValueDescription, lang)}</p>
+        </div>
+        <select
+          aria-label={t(copy.analytics.orderValueBranch, lang)}
+          value={branchId}
+          onChange={(event) => onBranchChange(event.target.value)}
+          className="min-h-10 rounded-lg border border-line bg-paper px-3 text-sm"
+        >
+          <option value="all">{t(copy.analytics.orderValueAllBranches, lang)}</option>
+          {branches.filter((branch) => branch.isActive).map((branch) => (
+            <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr || branch.nameEn : branch.nameEn || branch.nameAr}</option>
+          ))}
+        </select>
+      </div>
+      <div className="grid gap-3">
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t(copy.analytics.orderValuePeriod, lang)}>
+          {periodButtons.map((item) => (
+            <Button
+              key={item.type}
+              type="button"
+              size="sm"
+              variant={period.type === item.type ? "solid" : "outline"}
+              onClick={() => onPeriodChange({ type: item.type })}
+            >
+              {item.label}
+            </Button>
+          ))}
+          <Button type="button" size="sm" variant={period.type === "custom" ? "solid" : "outline"} onClick={() => onPeriodChange({ type: "custom", startLocal: customStart, endLocal: customEnd })}>
+            {t(copy.analytics.orderValueCustom, lang)}
+          </Button>
+        </div>
+        {period.type === "custom" ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="grid gap-1 text-sm">
+              <span>{t(copy.analytics.orderValueStart, lang)}</span>
+              <input type="datetime-local" value={customStart} onChange={(event) => updateCustom("startLocal", event.target.value)} className="min-h-10 rounded-lg border border-line bg-paper px-3" />
+            </label>
+            <label className="grid gap-1 text-sm">
+              <span>{t(copy.analytics.orderValueEnd, lang)}</span>
+              <input type="datetime-local" value={customEnd} onChange={(event) => updateCustom("endLocal", event.target.value)} className="min-h-10 rounded-lg border border-line bg-paper px-3" />
+            </label>
+          </div>
+        ) : null}
+      </div>
+      {state.status === "loading" ? <LoadingState label={t(copy.analytics.orderValueLoading, lang)} /> : null}
+      {state.status === "error" ? <ErrorState message={state.message} /> : null}
+      {state.status === "ok" ? <OrderValueContent data={state.data} lang={lang} /> : null}
+    </section>
+  );
+}
+
+function OrderValueContent({ data, lang }: { data: OrderValueAnalytics; lang: "ar" | "en" }) {
+  const max = Math.max(...data.dailyTrend.map((point) => point.orderValue), 1);
+  return (
+    <>
+      {!data.dataQuality.currencyConsistent ? <p className="rounded-lg border border-warn px-3 py-2 text-sm">{t(copy.analytics.orderValueDataQuality, lang)}</p> : null}
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Stat label={t(copy.analytics.orderValueMetric, lang)} value={formatSar(data.orderValue, lang)} />
+        <Stat label={t(copy.analytics.orderCountMetric, lang)} value={new Intl.NumberFormat(lang === "ar" ? "ar-SA" : "en-SA").format(data.orderCount)} />
+        <Stat label={t(copy.analytics.averageOrderValueMetric, lang)} value={data.averageOrderValue == null ? "—" : formatSar(data.averageOrderValue, lang)} />
+      </div>
+      <div className="grid gap-3 rounded-xl border border-line p-4">
+        <div>
+          <h3 className="font-medium">{t(copy.analytics.dailyOrderValue, lang)}</h3>
+          <p className="mt-1 text-xs text-muted">{data.period.start.slice(0, 10)} → {data.period.end.slice(0, 10)}</p>
+        </div>
+        {data.dailyTrend.length ? (
+          <div className="grid gap-2">
+            {data.dailyTrend.map((point) => (
+              <div key={point.day} className="grid gap-1">
+                <div className="flex justify-between text-xs"><span>{point.day}</span><span className="tabular">{formatSar(point.orderValue, lang)} SAR</span></div>
+                <div className="h-2 overflow-hidden rounded-full bg-sand"><div className="h-full rounded-full bg-accent" style={{ width: `${(point.orderValue / max) * 100}%` }} /></div>
+              </div>
+            ))}
+          </div>
+        ) : <p className="text-sm text-muted">{t(copy.analytics.orderValueNoTrend, lang)}</p>}
+      </div>
+      <p className="text-xs leading-5 text-muted">{t(copy.analytics.orderValueTransparency, lang)}</p>
+    </>
   );
 }
 
