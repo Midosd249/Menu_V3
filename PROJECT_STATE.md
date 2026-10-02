@@ -1858,3 +1858,25 @@ Do not begin automatically. First boot from current `main`, verify current Git/C
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+# 2026-10-02 — Audit Follow-up — Performance Advisor Unindexed Foreign Keys — VERIFIED / READ-ONLY
+
+- VERIFIED: task started from current main@83d0dce84de97a46c0ddec7372babd24dcd4ceb5 after repository/Git/CI boot.
+- VERIFIED: PR #359 remains OPEN and unmerged; its docs-only generated-any closeout was not assumed merged.
+- VERIFIED: current Supabase project is ublxptcqefujkbeepylc, PostgreSQL 17.6.1, ACTIVE_HEALTHY.
+- VERIFIED: Performance Advisor reports 18 unindexed foreign keys.
+- VERIFIED: all 18 findings were checked against current FK definitions, live indexes, table cardinality, index usage, repository query paths, pg_stat_statements, and representative EXPLAIN plans.
+- VERIFIED: menu_events.category_id is used in active analytics joins and already has menu_events_category_idx (tenant_id, category_id, created_at DESC); representative query planning uses existing indexes.
+- VERIFIED: branch_category_order.category_id and branch_product_order.product_id are accessed with branch/tenant predicates and already have primary/composite indexes shaped for those queries.
+- VERIFIED: menu_upsell_recommendations.source_product_id is used by current workload and already has menu_upsell_source_idx (tenant_id, source_product_id, status); recommended_product_id has no current material workload evidence.
+- VERIFIED: order_items.offer_id has only 32 live rows; current high-use order-item queries use order_id, and the existing order_items_order_idx is used heavily.
+- VERIFIED: affected guest/onboarding/billing/public platform tables are empty or near-empty in the current database, and no parent DELETE/UPDATE workload was found that demonstrates an FK-enforcement bottleneck.
+- VERIFIED: pg_stat_statements statistics began 2026-08-28T13:33:24Z; this is useful current workload evidence but remains observational rather than a guarantee about future growth.
+- DECISION: No index implementation. The Advisor finding is retained as an informational signal; the project will not create redundant indexes solely to make the warning disappear.
+- NO SCHEMA ACTION: no migration or live database mutation was performed.
+- DEPLOYMENT: not performed.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — review the remaining actionable performance/security Advisor findings and select the next atomic item from current live evidence.**
