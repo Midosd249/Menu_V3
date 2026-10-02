@@ -22,6 +22,13 @@ test("Browser template QA isolates the preview from runner process cleanup and c
   assert.ok(WORKFLOW.includes("echo \"[preview] Browser QA failed — preview log follows\""));
 });
 
+test("Studio browser fixture includes migrations required by the Studio subscription runtime", () => {
+  assert.match(
+    WORKFLOW,
+    /"20260917120000_ph04_platform_admin_subscription_controls\.sql"/,
+  );
+});
+
 test("performance audit measures the G6 baseline without imposing guessed budgets", () => {
   assert.match(PERFORMANCE_AUDIT, /largest-contentful-paint/);
   assert.match(PERFORMANCE_AUDIT, /layout-shift/);
