@@ -1401,7 +1401,7 @@ Owner reviews PR #333 after CI completes. Do not merge or deploy automatically.
 - VERIFIED: Order Value, Order Count, Average Order Value, and Riyadh daily trend are calculated from `orders` only; no `order_items` join is used.
 - VERIFIED: zero eligible orders return value 0, count 0, average null, and an empty trend.
 - VERIFIED: no migration, UI, engagement-analytics, order-lifecycle, preparation-time, payment/refund/tax/fee/revenue logic, Vercel setting, deployment, real order, WhatsApp action, or PR was added.
-- VERIFIED: branch diff contains only `package.json`, `src/lib/auth/permissions.ts`, `src/lib/menu/order-value-analytics.ts`, and `src/lib/menu/order-value-analytics.test.ts`.
+- VERIFIED: implementation diff contains `package.json`, `src/lib/auth/permissions.ts`, `src/lib/menu/order-value-analytics.ts`, and `src/lib/menu/order-value-analytics.test.ts`; continuity-only updates also append the required state record to `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`.
 - UNKNOWN: repository automated tests, typecheck, lint, and production build were not executable in this session because the available repository write/read path does not provide a local checkout, and the repository quality workflow triggers only on `main` pushes or pull requests. No PR was opened by instruction.
 - UNKNOWN: local working-tree status is not observable through the GitHub connector.
 - KNOWN LIMITATION: the implementation uses the Saudi fixed UTC+03 offset for `Asia/Riyadh`, which is deterministic for the approved Saudi-only milestone; no tenant-configurable timezone is introduced.
