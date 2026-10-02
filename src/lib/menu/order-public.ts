@@ -157,6 +157,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         orderRateKey(String(tenant.id), String(branchId), String(anonymousSessionId)),
         ...(clientIp ? [orderIpRateKey(String(tenant.id), String(branchId), clientIp)] : []),
       ];
+      const clientToken = rateIdentityTokens[0];
       const invalidIdentityTokens = rateIdentityTokens.map((token) => `invalid:${token}`);
       const invalidRateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
       const recordInvalidAttempt = async (error: string): Promise<FnResult<never>> => {
@@ -170,7 +171,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         if (rows.some((row) => Number(row.request_count ?? 0) > 6)) {
           return { ok: false, code: "unavailable", error: "تم إيقاف الطلبات غير الصالحة مؤقتاً. حاول مرة أخرى بعد قليل." };
         }
-        return await recordInvalidAttempt(error);
+        return fail(error);
       };
 
       const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId));
@@ -295,7 +296,6 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         offer_id: item.offerId,
       })));
 
-      const clientToken = rateIdentityTokens[0];
       const acceptedRateLimit = await sql.transaction(async (tx) => {
         const reservation = await tx<{ client_token: string }>`
           insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
