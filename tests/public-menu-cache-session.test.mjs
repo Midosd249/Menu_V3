@@ -42,4 +42,18 @@ test("attribution remains out of preview mode and does not weaken public-menu re
   assert.match(PUBLIC_ROUTE, /getPublicMenuAttribution/);
   assert.match(PUBLIC_ROUTE, /if \(previewTheme \|\| state\.status !== "ok" \|\| !state\.menu\.tenant\.whatsapp\?\.trim\(\)\)/);
   assert.match(BRANCH_ROUTE, /initialMenu=\{menuData\?\.menu\}/);
-});\ntest("public menu cache fast path can serve a fresh tenant/branch entry without a revision lookup", () => {\n  assert.match(PUBLIC_MENU, /const menuScopeCache = new Map/);\n  assert.match(PUBLIC_MENU, /const scopeCacheKey = `\\$\\{tenantSlug\\}:\\$\\{branchSlug \\?\\? "default"\\}`/);\n  assert.match(PUBLIC_MENU, /const scopedCached = menuScopeCache\\.get\\(scopeCacheKey\\)/);\n  const fastPathStart = PUBLIC_MENU.indexOf("const scopeCacheKey");\n  const sqlStart = PUBLIC_MENU.indexOf("const sql = await getSql()");\n  assert.ok(fastPathStart > 0);\n  assert.ok(sqlStart > fastPathStart);\n  assert.match(PUBLIC_MENU.slice(fastPathStart, sqlStart), /scopedCached/);\n});\n\ntest("public menu cache invalidation clears the tenant-scoped fast path", () => {\n  assert.match(PUBLIC_MENU, /menuScopeCache\\.delete\\(key\\)/);\n});\n
+});
+test("public menu cache fast path can serve a fresh tenant/branch entry without a revision lookup", () => {
+  assert.match(PUBLIC_MENU, /const menuScopeCache = new Map/);
+  assert.match(PUBLIC_MENU, /const scopeCacheKey = `\\$\\{tenantSlug\\}:\\$\\{branchSlug \\?\\? "default"\\}`/);
+  assert.match(PUBLIC_MENU, /const scopedCached = menuScopeCache\\.get\\(scopeCacheKey\\)/);
+  const fastPathStart = PUBLIC_MENU.indexOf("const scopeCacheKey");
+  const sqlStart = PUBLIC_MENU.indexOf("const sql = await getSql()");
+  assert.ok(fastPathStart > 0);
+  assert.ok(sqlStart > fastPathStart);
+  assert.match(PUBLIC_MENU.slice(fastPathStart, sqlStart), /scopedCached/);
+});
+
+test("public menu cache invalidation clears the tenant-scoped fast path", () => {
+  assert.match(PUBLIC_MENU, /menuScopeCache\\.delete\\(key\\)/);
+});
