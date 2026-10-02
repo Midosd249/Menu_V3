@@ -1585,3 +1585,21 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - IMPLEMENTATION STATUS: IMPLEMENTATION_IN_PROGRESS / PUSHED_TO_FOCUSED_BRANCH.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 - EXACT NEXT TASK: run the repository's focused/full automated verification in a local or CI-capable environment, fix only evidence-backed failures, then review the final diff before any later UI work. Do not open a PR or deploy automatically.
+
+
+# 2026-10-02 — Order Value Analytics UI — PR #343 — VERIFIED / AWAITING MERGE
+
+- VERIFIED: the existing server-side Order Value Analytics contract is now connected to `/studio/analytics`; no backend contract or authorization boundary was changed.
+- VERIFIED: the Studio surface exposes Order Value, Order Count, Average Order Value, and Daily Order Value Trend.
+- VERIFIED: approved period selectors are Today, This Week, This Month, and Custom Period.
+- VERIFIED: branch selection uses existing Studio branch records while server-side branch authorization remains authoritative.
+- VERIFIED: Arabic/English terminology and the approved payment/refund/tax/fee transparency notice are included.
+- VERIFIED: focused UI contract coverage was added to the repository test command.
+- VERIFIED: Quality `2705` and W9 Orders QA `848` passed.
+- VERIFIED: no database migration, order lifecycle, preparation-time, payment/refund/tax/fee/settlement/profit logic, public ordering, engagement analytics, Vercel configuration, or Production deployment was added.
+- DEPLOYMENT STATUS: NOT DEPLOYED.
+- IMPLEMENTATION STATUS: VERIFIED_LOCALLY / CI VERIFIED / PR OPEN.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #343 and explicitly authorizes merge. Do not merge or deploy automatically.
