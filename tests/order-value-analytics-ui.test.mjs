@@ -19,12 +19,17 @@ test("Order Value Analytics UI exposes the approved period selectors", () => {
   assert.match(route, /datetime-local/);
 });
 
-test("Order Value Analytics UI exposes the approved metrics and transparency notice", () => {
-  assert.match(route, /Order Value/);
-  assert.match(route, /Order Count/);
-  assert.match(route, /Average Order Value/);
+test("Order Value Analytics UI exposes the approved metrics and trend", () => {
   assert.match(route, /dailyTrend/);
-  assert.match(route, /Payment settlement, refunds, taxes, and fees are not included/);
+  assert.match(route, /orderValue/);
+  assert.match(route, /averageOrderValue/);
+});
+
+test("Order Value Analytics copy includes the approved metric labels and transparency notice", () => {
+  assert.match(copy, /Order Value/);
+  assert.match(copy, /Order Count/);
+  assert.match(copy, /Average Order Value/);
+  assert.match(copy, /Payment settlement, refunds, taxes, and fees are not included/);
 });
 
 test("Order Value Analytics copy remains bilingual and uses the approved terminology", () => {
