@@ -1641,11 +1641,11 @@ Wait for the next explicitly scoped task. Do not start another implementation, d
 - VERIFIED: the audited public-order idempotency reservation is now part of one transaction with orders, order_items, order_status_events, and idempotency finalization.
 - VERIFIED: PostgreSQL transactions use one checked-out pg client with BEGIN/COMMIT/ROLLBACK; PGlite uses its interactive transaction API.
 - VERIFIED: TDD RED was proven by Quality #2717: the new transaction regression contract failed because the transaction boundary did not exist.
-- VERIFIED: current head 4d36162b939294e74abf7168d279428879eac9f9 passes repository typecheck, full npm tests, contract tests, lint, and production build in Quality #2721 attempt 2.
+- VERIFIED: current head 29328dc4422c67dbdc0cd7dbd613a68de5aebf7c passes repository typecheck, full npm tests, contract tests, lint, and production build in Quality #2726.
 - VERIFIED: existing public-order composite reservation key and ON CONFLICT DO NOTHING remain unchanged for duplicate-request serialization.
 - UNKNOWN/BLOCKED: W9 Orders browser QA #860 attempt 2 still fails before reaching the order detail flow; the Orders heading/list item is not rendered. This failure is outside the P0.1 transaction code and is not treated as a P0.1 implementation failure.
-- UNKNOWN/BLOCKED: Quality #2721 attempt 2 Studio browser QA failed on existing workspace/onboarding expectations; the immediately preceding main continuity Quality #2716 passed the same Studio browser suite, so no unrelated browser fix is authorized here.
+- UNKNOWN/BLOCKED: Quality #2726 Studio browser QA failed on existing workspace/onboarding expectations; the immediately preceding main continuity Quality #2716 passed the same Studio browser suite, so no unrelated browser fix is authorized here.
 - PROTECTED: Order Value Analytics R2–R9 systems, server-side pricing, tenant/branch isolation, auth/RLS, themes, and unrelated browser issues were not changed.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
-- IMPLEMENTATION STATUS: PUSHED / CORE CI VERIFIED / PR OPEN.
-- EXACT NEXT TASK: owner reviews PR #348 and authorizes merge/release if accepted. Do not merge, deploy, or start P0.2 automatically.
+- IMPLEMENTATION STATUS: PUSHED / FULL CI VERIFIED / PR OPEN.
+- EXACT NEXT TASK: owner reviews PR #348 and explicitly authorizes merge/release if accepted. Do not merge, deploy, or start P0.2 automatically.
