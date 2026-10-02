@@ -12,7 +12,7 @@ const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(),
 
 export const Route = createFileRoute("/m/$slug/$branch")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "private, no-store" }),
+  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
   validateSearch: branchMenuSearchSchema,
   loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {

@@ -1,3 +1,36 @@
+## P1.1 Closeout Addendum — 2026-10-02 — VERIFIED
+
+### Implementation
+- VERIFIED: PR #351 implementation head is the final P1.1 PR head, directly based on main 9e2272f5cf626e0b7a8546f1442ff2172ab473f0.
+- VERIFIED: getPublicMenu is public-safe and no longer resolves/creates anonymous sessions during SSR.
+- VERIFIED: getPublicMenuAttribution is a POST, resolves the published active tenant from the public slug, and returns private, no-store attribution data.
+- VERIFIED: public routes use public, max-age=0, s-maxage=15, stale-while-revalidate=30. Existing process-local menu caching remains 15s and is keyed by tenant slug, branch slug, and content revision.
+- VERIFIED: last_seen_at updates are throttled to five minutes and still require session ID + tenant ID.
+- VERIFIED: experiment assignment remains server-derived and is reset across menu navigation.
+- PROTECTED: P0.1/P0.2 order security, Order Value Analytics, preparation-time/ETA, image delivery, five themes, auth/RLS, and unrelated migrations were not changed.
+
+### Measurement
+- SOURCE-LEVEL baseline: before P1.1, a valid anonymous-session public-menu request performed a session read and last_seen_at write after menu loading; invalid/new cookies could create a session. Public HTML was private/no-store and menu content cache was process-local for 15s.
+- SOURCE-LEVEL outcome: cacheable public SSR now performs no anonymous-session DB read/write; attribution is a separate POST; valid-session last_seen_at updates are limited to the five-minute interval.
+- UNKNOWN: runtime TTFB, DB read/write counters, CDN cache-hit ratio, HTML/SSR payload size, and production LCP before/after.
+
+### Isolation and verification
+- VERIFIED by source review, contract tests, and GitHub CI: public cached output does not depend on cookie/session identity; attribution is private/no-store; tenant resolution is server-side; menu queries remain tenant/branch scoped; branch cache identity is explicit.
+- VERIFIED: Quality #2756 passed typecheck, 466 tests, lint, production build, all-theme browser QA, Menuun brand QA, performance fixture, Studio browser QA, and Platform Admin browser QA.
+- VERIFIED: W9 Orders QA #892 passed.
+- VERIFIED: PR #351 remains open/unmerged; no automatic merge or Production deployment occurred.
+- VERIFIED: Vercel Preview for the final PR head is SUCCESS. No Production deployment was performed.
+
+TanStack Start's current guidance distinguishes public non-personalized cacheable server functions from cookie/session-dependent output and recommends private/no-store for personalized responses. Vercel's current CDN guidance likewise warns against publicly caching cookie-dependent output. The implementation follows those boundaries.
+
+## EXACT NEXT TASK
+
+**P1.2 — Theme Code Splitting**
+
+Before implementation, establish bundle-size, JS transfer/parse/evaluation, and selected-theme runtime/browser baselines. Preserve all five themes and public-menu behavior. Do not start P1.3 or deploy automatically.
+
+---
+
 # Menu V3 — Comprehensive Architecture, Security, Performance & Reliability Audit
 
 **Date:** 2026-10-02  

@@ -56,11 +56,30 @@ test("public visit and QR events retain the 30-minute duplicate suppression", ()
   assert.match(publicSource, /if \(recent\[0\]\) return \{ ok: true, data: \{ recorded: false \} \};/);
 });
 
-test("public events resolve the tenant from the published active slug", () => {
+test("public menu content is separated from anonymous-session attribution", () => {
+  const attributionStart = publicSource.indexOf("export const getPublicMenuAttribution");
+  assert.ok(attributionStart > 0);
+  const publicHandler = publicSource.slice(publicSource.indexOf("export const getPublicMenu"), attributionStart);
+  assert.match(publicHandler, /export const getPublicMenu = createServerFn\(\{ method: "GET" \}\)/);
+  assert.match(publicHandler, /setResponseHeader\("Cache-Control", "public, max-age=0, s-maxage=15, stale-while-revalidate=30"\)/);
+  assert.doesNotMatch(publicHandler, /resolveAnonymousSession/);
+  assert.doesNotMatch(publicHandler, /setAnonymousSessionCookie/);
+  assert.match(publicSource.slice(attributionStart), /export const getPublicMenuAttribution = createServerFn\(\{ method: "POST" \}\)/);
+  assert.match(publicSource.slice(attributionStart), /resolveAnonymousSession/);
+});
+
+test("public menu attribution resolves the tenant from the published active slug", () => {
   assert.match(
     publicSource,
     /select id, whatsapp from tenants\s+where slug = \$\{data\.slug\} and is_active = true and is_published = true\s+limit 1/,
   );
+  assert.match(publicSource, /setResponseHeader\("Cache-Control", "private, no-store"\)/);
+});
+
+test("anonymous session activity writes are throttled without changing tenant binding", () => {
+  assert.match(sessionSource, /ANONYMOUS_SESSION_TOUCH_INTERVAL_SECONDS = 5 \* 60/);
+  assert.match(sessionSource, /where id = \$\{session\.id\}\s+and tenant_id = \$\{tenantId\}/);
+  assert.match(sessionSource, /last_seen_at < now\(\) - \(\$\{ANONYMOUS_SESSION_TOUCH_INTERVAL_SECONDS\} \* interval '1 second'\)/);
 });
 
 test("Saudi disclosure keeps nutrition values nullable and derives high salt from sodium", () => {
@@ -142,12 +161,11 @@ test("A.3 public event renderers no longer submit a client session id", () => {
   assert.doesNotMatch(publicSource, /sessionId:\s*z\.string/);
 });
 
-test("A.3 R6 experiment assignment uses the same server session as analytics", () => {
+test("A.3 R6 experiment assignment uses a separate private attribution request", () => {
   const actionLinks = readFileSync(join(here, "../../components/public-action-links.tsx"), "utf8");
-  assert.match(publicSource, /setResponseHeader\("Cache-Control", "private, no-store"\)/);
-  assert.match(publicSource, /const isStaticDemoMenu = result\.data\.tenant\.id === DEMO_MENU\.tenant\.id/);
-  assert.match(publicSource, /const session = sql \? await resolveAnonymousSession\(sql, result\.data\.tenant\.id\) : null/);
-  assert.match(publicSource, /const experimentVariant = !isStaticDemoMenu && result\.data\.tenant\.whatsapp\?\.trim\(\)\s+\? getExperimentVariant\(session!\.id\)/);
+  assert.match(publicSource, /export const getPublicMenuAttribution = createServerFn\(\{ method: "POST" \}\)/);
+  assert.match(publicSource, /getPublicMenuAttribution[\s\S]*resolveAnonymousSession/);
+  assert.match(publicSource, /getExperimentVariant\(session\.id\)/);
   assert.match(actionLinks, /experimentVariant\?: "control" \| "prominent"/);
   assert.doesNotMatch(actionLinks, /getGuestSessionId|getExperimentVariant/);
   assert.match(actionLinks, /data-experiment-variant/);

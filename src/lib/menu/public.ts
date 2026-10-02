@@ -261,21 +261,32 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
 export const getPublicMenu = createServerFn({ method: "GET" })
   .validator(z.object({ slug: slugSchema, branch: z.string().max(63).optional() }))
   .handler(async ({ data }) => {
+    setResponseHeader("Cache-Control", "public, max-age=0, s-maxage=15, stale-while-revalidate=30");
+    return loadPublicMenu(data.slug, data.branch);
+  });
+
+export const getPublicMenuAttribution = createServerFn({ method: "POST" })
+  .validator(z.object({ slug: slugSchema }))
+  .handler(async ({ data }): Promise<FnResult<{ experimentVariant: "control" | "prominent" }>> => {
     setResponseHeader("Cache-Control", "private, no-store");
-    const result = await loadPublicMenu(data.slug, data.branch);
-    if (!result.ok) return result;
+    try {
+      const sql = await getSql();
+      const tenants = await sql<{ id: string; whatsapp: string | null }>`
+        select id, whatsapp
+        from tenants
+        where slug = ${data.slug} and is_active = true and is_published = true
+        limit 1
+      `;
+      const tenant = tenants[0];
+      if (!tenant) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
+      if (!tenant.whatsapp?.trim()) return { ok: true, data: { experimentVariant: "control" } };
 
-    const isStaticDemoMenu = result.data.tenant.id === DEMO_MENU.tenant.id;
-    const sql = isStaticDemoMenu ? null : await getSql();
-    const session = sql ? await resolveAnonymousSession(sql, result.data.tenant.id) : null;
-    const experimentVariant = !isStaticDemoMenu && result.data.tenant.whatsapp?.trim()
-      ? getExperimentVariant(session!.id)
-      : "control" as const;
-
-    return {
-      ok: true,
-      data: { ...result.data, experimentVariant },
-    };
+      const session = await resolveAnonymousSession(sql, String(tenant.id));
+      return { ok: true, data: { experimentVariant: getExperimentVariant(session.id) } };
+    } catch (err) {
+      console.error("getPublicMenuAttribution failed", err);
+      return { ok: false, code: "unavailable", error: "تعذر تهيئة تجربة المنيو" };
+    }
   });
 
 export const recordPublicEvent = createServerFn({ method: "POST" })
