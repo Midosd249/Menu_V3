@@ -1804,3 +1804,22 @@ Start with repository-first measurement of the post-P1.2 public-menu runtime. Es
 **P1.4 — Leaked Password Protection**
 
 Do not begin automatically. Start from `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d` and boot repository/Git evidence before implementation.
+
+# 2026-10-02 — P1.4 Deferred / Audit Reprioritization — OWNER DECISION
+
+- VERIFIED: Supabase documents leaked-password protection as available on Pro Plan and above; the current owner decision is to defer this capability because the current subscription does not provide it and it is not currently required.
+- DECISION: P1.4 — Leaked Password Protection is **DEFERRED / OUT OF CURRENT SCOPE**. It must not be treated as the active next task and must not block Menu V3 progress.
+- PROTECTED: the historical audit finding remains recorded as evidence; this is a prioritization/dependency decision, not a claim that the Security Advisor warning has disappeared.
+- VERIFIED: P0.1 atomic public-order creation and P0.2 layered public-order abuse protection are resolved/merged and must not be reimplemented without new evidence.
+- VERIFIED: P1.1 public-menu cache/session decoupling, P1.2 theme code splitting, and P1.3 public-menu runtime performance/observability are completed on current main.
+- DECISION: the highest remaining actionable audit item that is independent of the deferred Supabase Auth setting is **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
+- SCOPE: compare repository migration files, recorded Supabase migration history, and live database schema/functions/triggers/RLS; explain discrepancies; do not blindly replay migrations.
+- STATUS: DOCUMENTATION / REPRIORITIZATION ONLY. No runtime code, schema, auth, RLS, dependency, or deployment change was made.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — Supabase Migration Three-Way Reconciliation**
+
+Do not begin automatically. First boot from current `main`, verify current Git/CI/runtime evidence, then perform the reconciliation as one atomic task if explicitly authorized.
+

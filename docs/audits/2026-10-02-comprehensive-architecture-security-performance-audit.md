@@ -704,3 +704,46 @@ PR #354 adds a tenant/branch-scoped in-process fast path with the same 15-second
 **P1.4 — Leaked Password Protection**
 
 Remain queued. Do not start automatically.
+
+# 2026-10-02 — Owner Reprioritization Addendum — P1.4 DEFERRED
+
+- VERIFIED: the original audit found no Critical vulnerability.
+- VERIFIED: the historical P0.1 and P0.2 medium findings have since been resolved and verified by the current repository/CI evidence.
+- VERIFIED: the current P1.1/P1.2/P1.3 implementation sequence has also been completed.
+- DECISION: **P1.4 — Leaked Password Protection is DEFERRED / OUT OF CURRENT SCOPE.**
+- REASON: current Supabase subscription does not expose leaked-password protection; Supabase currently documents the feature as available on Pro Plan and above.
+- IMPORTANT: this does **not** change the Severity Matrix finding from "Medium" to "Resolved". The underlying Security Advisor warning may remain until the feature is enabled; it is simply an owner-approved deferred item.
+- REPRIORITIZED NEXT ACTION: **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
+- RATIONALE: it is an independent operational/DR integrity concern and can be investigated without changing the current auth/security architecture.
+- GUARDRAIL: reconciliation must compare repository migration files, `supabase_migrations.schema_migrations`, and actual live `pg_catalog` state. Do not blindly replay migrations.
+- NO CODE CHANGE: this addendum changes task priority only.
+
+## Current Severity Interpretation
+
+### Already addressed
+- P0.1 — Public-order idempotency atomicity: **RESOLVED / VERIFIED**.
+- P0.2 — Public-order abuse limiting: **RESOLVED / VERIFIED**.
+- P1.1 — Public-menu cache/session decoupling: **COMPLETED / VERIFIED**.
+- P1.2 — Theme code splitting: **COMPLETED / VERIFIED**.
+- P1.3 — Public-menu runtime performance/observability: **COMPLETED / VERIFIED**.
+
+### Deferred
+- P1.4 — Leaked Password Protection: **DEFERRED / OUT OF CURRENT SCOPE**.
+
+### Remaining actionable audit work
+1. **Migration history/repository/schema reconciliation — Medium operational/DR risk.**
+2. **Offline ordering — Medium capability gap, only if offline ordering becomes an explicit product requirement.**
+3. **18 unindexed foreign keys — Low; investigate only with query/workload evidence.**
+4. **Generated `any` — Low; enforce authored-source typing without hand-editing generated output.**
+5. **Saudi fixed UTC+03 — Low; address only when multi-timezone scope expands.**
+6. **AI token/cost/concurrency budgets — Low/conditional; add when AI cost or abuse evidence warrants it.**
+
+### Non-matrix security hardening to keep in view
+- Better Auth `trustedProxyHeaders: true` remains a configuration boundary that must stay behind a genuinely trusted reverse proxy. This is a hardening invariant, not a new task unless evidence shows a concrete exposure.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — Supabase Migration Three-Way Reconciliation**
+
+Do not start automatically. Re-boot from current Git/CI/runtime evidence before implementation or any schema action.
+

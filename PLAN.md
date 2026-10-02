@@ -1358,3 +1358,21 @@ Measure first. Keep the task atomic and do not start another task or deployment 
 **P1.4 — Leaked Password Protection**
 
 Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d` as the source of truth.
+
+# 2026-10-02 — Audit Reprioritization — P1.4 Deferred
+
+- DECISION: **P1.4 — Leaked Password Protection is deferred/out of current scope.**
+- REASON: current Supabase subscription does not expose the capability and the owner does not currently require it.
+- VERIFIED: this is consistent with current Supabase documentation, which states that leaked-password protection is available on Pro Plan and above.
+- IMPORTANT: the audit finding remains historically valid and is not marked resolved; it is simply not an active implementation task.
+- VERIFIED: P0.1/P0.2 and P1.1/P1.2/P1.3 completed their current scoped work.
+- NEXT PRIORITY: **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
+- PURPOSE: reconcile repository migrations, `supabase_migrations.schema_migrations`, and actual live `pg_catalog` schema/functions/triggers/RLS before the next schema release.
+- GUARDRAIL: do not blindly replay missing migrations or make schema changes during the reconciliation unless a separate, explicitly authorized implementation task is created.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — Supabase Migration Three-Way Reconciliation**
+
+Do not start automatically.
+
