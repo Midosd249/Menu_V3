@@ -1,3 +1,17 @@
+# 2026-10-02 — P0.2 Layered Public Order Abuse Protection — IMPLEMENTATION IN PROGRESS
+
+- VERIFIED: P0.1 merged as 7bfa8ceafff4340466d776d5410fe455d07d2f15.
+- IMPLEMENTATION_IN_PROGRESS: P0.2 implementation is scoped to public-order abuse controls only.
+- VERIFIED: focused regression contracts were added for layered identity, post-validation quota, and separate invalid throttling.
+- UNKNOWN: CI execution results until PR verification.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Verify the P0.2 PR quality gates and review the final diff before merge.
+
+---
+
 # 2026-10-02 — Order Value Analytics Tenant Scope — DONE / DEPLOYED / VERIFICATION CLOSEOUT
 - VERIFIED: Empty Order Value Analytics observation reproduced at the data-scope level for a multi-tenant account: the previous implementation selected the first active membership rather than the tested restaurant tenant.
 - VERIFIED: PR #345 adds tenant-aware Order Value Analytics selection without weakening tenant/branch isolation.

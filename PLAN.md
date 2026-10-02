@@ -1,3 +1,17 @@
+# 2026-10-02 — P0.2 Layered Public Order Abuse Protection — IMPLEMENTATION IN PROGRESS
+
+- VERIFIED: P0.1 is merged in main at 7bfa8ceafff4340466d776d5410fe455d07d2f15.
+- VERIFIED: P0.2 is the next canonical task in the comprehensive audit.
+- IMPLEMENTATION_IN_PROGRESS: layered session/IP accepted limits, separate invalid traffic throttle, and post-validation accepted quota.
+- UNKNOWN: final CI/browser gates until PR verification.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Verify GitHub Quality/W9 for the P0.2 PR and review the final diff before controlled merge.
+
+---
+
 # 2026-10-02 — Order Value Analytics Tenant Scope — CLOSED / DEPLOYED
 - VERIFIED: Order Value Analytics now supports explicit authorized tenant scope in addition to server-enforced branch scope.
 - VERIFIED: Multi-tenant owners/admins see only tenants for which they hold active `analytics.read` permission; the server validates the selected tenant membership and never trusts client role/permission claims.

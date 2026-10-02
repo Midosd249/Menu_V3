@@ -1,3 +1,19 @@
+# 2026-10-02 — P0.2 Layered Public Order Abuse Protection — IMPLEMENTATION IN PROGRESS
+
+- VERIFIED: current main HEAD is 7bfa8ceafff4340466d776d5410fe455d07d2f15, merging PR #348/P0.1.
+- VERIFIED: P0.1 is merged; its audited atomicity defect is resolved in current main.
+- VERIFIED: the pre-existing public-order limiter was phone/client-token based and incremented accepted quota before full business validation.
+- IMPLEMENTATION_IN_PROGRESS: P0.2 adds server-issued anonymous-session + request-IP layered limits, separate invalid-request throttling, and moves accepted quota consumption after full business validation while preserving server-side tenant/branch authority and P0.1 transactionality.
+- UNKNOWN: GitHub Quality/W9 results until the implementation PR completes.
+- BLOCKED: local command execution is unavailable in the connector-only environment.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+Open and verify the P0.2 implementation PR through GitHub Quality/W9, review the final diff, then hold for controlled merge. Do not deploy automatically.
+
+---
+
 # 2026-10-02 — Order Value Analytics Tenant Scope — MERGED / DEPLOYED / VERIFIED
 - VERIFIED: Production data for `مقهى زهر النعناع` contains 3 eligible SAR orders for the current Asia/Riyadh day totaling 265 SAR; the latest eligible order is inside the day boundary.
 - VERIFIED: root cause of the empty analytics observation was multi-tenant scope resolution: the authenticated account has multiple active tenant memberships, while the previous Order Value Analytics handler resolved the earliest membership when no tenant was explicitly selected.
