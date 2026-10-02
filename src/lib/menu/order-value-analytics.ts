@@ -103,10 +103,14 @@ function parseCustomLocal(value: string): Date | null {
   const [, year, month, day, hour, minute] = match.map(Number);
   if (month < 1 || month > 12 || day < 1 || day > 31 || hour > 23 || minute > 59) return null;
   const result = dateFromLocal({ year, month, day }, hour, minute);
-  const roundTrip = new Intl.DateTimeFormat("en-CA", {
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: ORDER_VALUE_ANALYTICS_TIME_ZONE,
     year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
-  }).format(result);
+  }).formatToParts(result);
+  const values = Object.fromEntries(
+    parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]),
+  );
+  const roundTrip = `${values.year}-${values.month}-${values.day}T${values.hour}:${values.minute}`;
   return roundTrip === value ? result : null;
 }
 
