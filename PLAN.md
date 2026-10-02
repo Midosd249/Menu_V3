@@ -1376,3 +1376,18 @@ Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d
 
 Do not start automatically.
 
+
+
+# 2026-10-02 — Supabase Migration Reconciliation Result
+
+- VERIFIED: 69 active repository migrations are all recorded in `menu_v3._migrations`.
+- VERIFIED: `supabase_migrations.schema_migrations` contains 44 historical/parallel versions and is not the active application migration ledger.
+- VERIFIED: live PostgreSQL contains the current migration-produced feature set.
+- DRIFT: `menu_v3.public_order_invalid_rate_limits` has RLS disabled although the repository migration enables it.
+- VERIFIED: direct grant inspection found no client-role table grants for that table.
+- ORDERING ANOMALY: duplicate timestamp `20260909001000` has an existing application order different from lexical filename order.
+- DECISION: no repair during reconciliation; findings are handed off to a separate authorized remediation task.
+
+## EXACT NEXT TASK
+
+**Dedicated schema-drift remediation — reconcile `menu_v3.public_order_invalid_rate_limits` RLS state against the repository migration contract, after explicit owner authorization.**
