@@ -1,3 +1,18 @@
+# 2026-10-02 — Order Value Analytics Tenant Scope — DONE / DEPLOYED / VERIFICATION CLOSEOUT
+- VERIFIED: Empty Order Value Analytics observation reproduced at the data-scope level for a multi-tenant account: the previous implementation selected the first active membership rather than the tested restaurant tenant.
+- VERIFIED: PR #345 adds tenant-aware Order Value Analytics selection without weakening tenant/branch isolation.
+- VERIFIED: Focused Order Value tests, UI contract tests, TypeScript, full npm test suite, lint, production build, Studio browser QA, Platform Admin browser QA, and W9 Orders QA passed through GitHub Actions.
+- VERIFIED: PR #345 merged into `main` at `e7a2d42660d2b563cc473b6845236d89de61025f`.
+- VERIFIED: Production deployment `dpl_6wCbjhxQJyZ8RKicBs7mhEX1Jvo2` is READY for the merged `main` commit.
+- UNKNOWN: authenticated owner-side visual confirmation of the selected tenant result in Production.
+- IMPLEMENTATION STATUS: DONE.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+
+## EXACT NEXT ACTION
+
+Run one authenticated Production smoke for `مقهى زهر النعناع` → Today → all permitted branches and confirm the expected live metrics; do not begin another implementation task automatically.
+
+---
 # 2026-10-02 — Preparation Time + Estimated Ready Time — CLOSED / VERIFIED
 - VERIFIED: PR #339 is merged; its three-file scope is documentation-only (PROJECT_STATE.md, PLAN.md, TASKS.md) and contains no runtime/application changes.
 - UNKNOWN: direct real-device Production QA evidence is not established by the current GitHub evidence.

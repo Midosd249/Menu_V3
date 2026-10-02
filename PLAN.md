@@ -1,3 +1,15 @@
+# 2026-10-02 — Order Value Analytics Tenant Scope — CLOSED / DEPLOYED
+- VERIFIED: Order Value Analytics now supports explicit authorized tenant scope in addition to server-enforced branch scope.
+- VERIFIED: Multi-tenant owners/admins see only tenants for which they hold active `analytics.read` permission; the server validates the selected tenant membership and never trusts client role/permission claims.
+- VERIFIED: PR #345 merged as `e7a2d42660d2b563cc473b6845236d89de61025f` and Production deployment `dpl_6wCbjhxQJyZ8RKicBs7mhEX1Jvo2` is READY.
+- VERIFIED: Quality `36961095902` and W9 Orders QA `36961095916` passed.
+- UNKNOWN: authenticated live UI smoke remains owner-side evidence pending.
+
+## Exact Next Task
+
+No additional implementation is authorized for Order Value Analytics. Perform the single authenticated Production smoke described in `PROJECT_STATE.md`; if it passes, stop.
+
+---
 # 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
 - VERIFIED: PR #339 is merged; its three-file scope is documentation-only (PROJECT_STATE.md, PLAN.md, TASKS.md) and contains no runtime/application changes.
 - UNKNOWN: direct real-device Production QA evidence is not established by the current GitHub evidence.
