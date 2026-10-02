@@ -1,4 +1,4 @@
-import { lazy, type ComponentType } from "react";
+import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 import type { PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 
@@ -27,7 +27,7 @@ const SmallMenuTemplate = lazy(() =>
   import("@/components/templates/small-menu").then(({ SmallMenuTemplate }) => ({ default: SmallMenuTemplate })),
 );
 
-const THEME_TEMPLATES: Record<ThemeKey, ComponentType<ThemeTemplateProps>> = {
+const THEME_TEMPLATES: Record<ThemeKey, LazyExoticComponent<ComponentType<ThemeTemplateProps>>> = {
   essential: SmallMenuTemplate,
   editorial: SignalTableTemplate,
   noir: FineDiningHospitalityTemplate,
@@ -35,6 +35,6 @@ const THEME_TEMPLATES: Record<ThemeKey, ComponentType<ThemeTemplateProps>> = {
   gallery: BakeryDessertTemplate,
 };
 
-export function getLazyThemeTemplate(theme: ThemeKey): ComponentType<ThemeTemplateProps> {
+export function getLazyThemeTemplate(theme: ThemeKey): LazyExoticComponent<ComponentType<ThemeTemplateProps>> {
   return THEME_TEMPLATES[theme];
 }
