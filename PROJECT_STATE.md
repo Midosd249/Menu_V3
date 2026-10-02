@@ -1761,3 +1761,22 @@ Wait for the next explicitly scoped task. Do not start another implementation, d
 **P1.3 — Public Menu Runtime Performance / Observability**
 
 Start with repository and current runtime evidence. Establish a measurable baseline for the current public-menu path after P1.1/P1.2, then make exactly one evidence-backed atomic performance improvement. Preserve all tenant/branch/auth/RLS, order, abuse-protection, five-theme, Arabic/English and RTL/LTR contracts. Do not deploy automatically.
+
+
+# 2026-10-02 — P1.2 Continuity Closeout — VERIFIED
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: Quality #2769 completed successfully and W9 Orders QA #904 completed successfully for the final P1.2 implementation.
+- VERIFIED: final P1.2 implementation is limited to theme code-splitting and its regression contracts; protected order, auth/RLS, tenant/branch, analytics, preparation-time/ETA, image-delivery, and unrelated migration systems were not changed.
+- VERIFIED: all five canonical themes remain mapped through `getLazyThemeTemplate()` and the public route/shared renderer no longer statically import theme implementations.
+- VERIFIED: final PR preview reached Ready; this is Preview evidence only and does not establish Production deployment.
+- UNKNOWN: direct physical-device QA and Production performance measurements remain outside this GitHub verification.
+- BLOCKED: Production deployment was not performed and must remain a separate release decision.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
+
+Start with repository-first measurement of the post-P1.2 public-menu runtime. Establish a numeric baseline where tooling permits, then make exactly one evidence-backed atomic improvement. Preserve P0.1/P0.2/P1.1/P1.2 and all tenant/branch/auth/RLS, Arabic/English, RTL/LTR, five-theme and order contracts. Do not deploy automatically.
