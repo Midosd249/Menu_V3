@@ -152,6 +152,7 @@ function OrderValueAnalyticsPanel({
   branchId,
   branches,
   onPeriodChange,
+  onTenantChange,
   onBranchChange,
   lang,
 }: {
