@@ -1447,3 +1447,20 @@ Owner reviews PR #333 after CI completes. Do not merge or deploy automatically.
 ## EXACT NEXT TASK
 
 Wait for the next explicitly scoped task. Do not deploy or start unrelated work automatically.
+
+# 2026-10-02 — P0.1 Atomic Public Order Creation — IMPLEMENTED / CI VERIFIED / PR OPEN
+
+- VERIFIED: PR #348 fix(order): make public order creation atomic is open against main.
+- VERIFIED: current head is 4d36162b939294e74abf7168d279428879eac9f9.
+- VERIFIED: database transaction support is implemented for PostgreSQL and PGlite.
+- VERIFIED: public-order idempotency reservation and finalization now occur in the same transaction as order/order_items/order_status_events creation.
+- VERIFIED: TDD RED was demonstrated by Quality #2717 before the implementation; the transaction contract then passes in the current Quality run.
+- VERIFIED: Quality #2721 attempt 2 passed typecheck, full npm test, contract tests, lint, and production build.
+- UNKNOWN/BLOCKED: W9 Orders browser QA #860 attempt 2 still fails before the order detail flow; this is outside the P0.1 transaction change.
+- UNKNOWN/BLOCKED: Studio browser QA in Quality #2721 attempt 2 failed on existing workspace/onboarding expectations; main Quality #2716 had passed the same suite immediately before this branch.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+- IMPLEMENTATION STATUS: PUSHED / CORE CI VERIFIED / PR OPEN.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #348 and authorizes merge/release if accepted. Do not merge, deploy, or start P0.2 automatically.
