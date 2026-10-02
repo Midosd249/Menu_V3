@@ -1,3 +1,24 @@
+# 2026-10-03 — PostgreSQL 17.11 Upgrade + Audit Cleanup — VERIFIED
+
+- VERIFIED: canonical `main` before this continuity update is `83d0dce84de97a46c0ddec7372babd24dcd4ceb5`.
+- VERIFIED: live Supabase project `ublxptcqefujkbeepylc` is `ACTIVE_HEALTHY` and now runs PostgreSQL `17.11.0.002`; SQL reports server version `17.11`.
+- VERIFIED: the PostgreSQL upgrade from `17.6.1.166` to `17.11.0.002` is complete. No migration, schema, RLS, auth, tenant/branch, ordering, analytics, theme, or application-code change was performed as part of the platform upgrade.
+- VERIFIED: owner completed the independent logical-backup recovery test and reported successful restore validation. The local custom-format backup remains outside the repository and no credential/backup file was sent to GitHub/chat.
+- VERIFIED: owner performed a post-upgrade authenticated trial-account product update and observed the change reflected in Supabase, providing direct application write-path smoke evidence after the upgrade.
+- VERIFIED: the upgrade's original purpose was to move from PostgreSQL 17.6 to the current 17.11 minor security/bug-fix release. PostgreSQL 17.11 fixes multiple security vulnerabilities and more than 110 bugs; the project had already been checked for the relevant Supabase/PostgreSQL prerequisites.
+- VERIFIED: migration reconciliation and the canonical-ledger decision are complete: `menu_v3._migrations` remains the operational migration source of truth; `supabase_migrations.schema_migrations` remains audit/history evidence only.
+- VERIFIED: P0.1, P0.2, P1.1, P1.2, and P1.3 remain completed/protected.
+- VERIFIED: P1.4 leaked-password protection remains deferred/out of current scope.
+- VERIFIED: the generated-`any`, unindexed-FK, and PostgreSQL 17.11 readiness audit work is closed for this cycle; no schema/index change was justified or applied by the unindexed-FK audit.
+- VERIFIED: temporary audit PRs #357, #359, #360, and #361 were closed after their findings were superseded/completed. Historical audit evidence remains preserved; it was not deleted from repository history.
+- REMAINING PLAN: conditional/low-priority items include offline ordering only if it becomes an explicit product requirement, fixed Saudi UTC+03 handling only if multi-timezone scope expands, AI token/cost/concurrency budgets when evidence warrants them, and continued protection of the trusted-proxy header boundary. These are not automatically authorized implementation tasks.
+- UNKNOWN: current Production deployment identity for the latest `main` is not re-established by this task.
+- UNKNOWN: physical Android/iOS Production QA for the latest `main` is separate from this database upgrade validation.
+
+## EXACT NEXT TASK
+
+**Owner-select the next explicitly scoped Menu V3 task after the PostgreSQL/audit closeout. Boot from current GitHub/Supabase evidence first; do not automatically start offline ordering, P1.4, index changes, migration changes, or deployment.**
+
 # 2026-10-02 — P1.1 Public Menu Cache/Session Decoupling — VERIFIED / PR #351
 
 - VERIFIED: main remains 9e2272f5cf626e0b7a8546f1442ff2172ab473f0; P0.1/P0.2 remain merged and untouched.
