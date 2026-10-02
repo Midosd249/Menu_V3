@@ -28,6 +28,7 @@ export interface Sql {
     text: string,
     params?: unknown[],
   ): Promise<T[]>;
+  transaction<T>(callback: (tx: Sql) => Promise<T>): Promise<T>;
 }
 
 const globalRef = globalThis as typeof globalThis & {
@@ -51,17 +52,20 @@ export function isPgliteIncompatibleMigration(sql: string): boolean {
   return /\bmenu_v3\./i.test(sql);
 }
 
-function toSql(run: Run): Sql {
+type TransactionRunner = <T>(callback: (tx: Sql) => Promise<T>) => Promise<T>;
+
+function toSql(run: Run, transaction: TransactionRunner): Sql {
   const sql = (async <T = Record<string, unknown>>(
     strings: TemplateStringsArray,
     ...values: unknown[]
   ): Promise<T[]> => {
     let text = strings[0];
-    for (let i = 0; i < values.length; i += 1) text += `$${i + 1}${strings[i + 1]}`;
+    for (let i = 0; i < values.length; i += 1) text += `${i + 1}${strings[i + 1]}`;
     return run<T>(text, values);
   }) as unknown as Sql;
   sql.query = <T = Record<string, unknown>>(text: string, params: unknown[] = []) =>
     run<T>(text, params);
+  sql.transaction = transaction;
   return sql;
 }
 
@@ -81,10 +85,36 @@ function createPostgresSql(): Promise<Sql> {
       connectionTimeoutMillis: 5000,
       keepAlive: true,
     });
-    return toSql(async <T>(text: string, params: unknown[]) => {
+    const run = async <T>(text: string, params: unknown[]) => {
       const res = await pool.query(text, params);
       return res.rows as T[];
-    });
+    };
+    const transaction: TransactionRunner = async <T>(callback) => {
+      const client = await pool.connect();
+      let started = false;
+      try {
+        await client.query("BEGIN");
+        started = true;
+        const tx = toSql(
+          async <R>(text: string, params: unknown[]) => {
+            const res = await client.query(text, params);
+            return res.rows as R[];
+          },
+          async () => {
+            throw new Error("Nested database transactions are not supported");
+          },
+        );
+        const result = await callback(tx);
+        await client.query("COMMIT");
+        return result;
+      } catch (error) {
+        if (started) await client.query("ROLLBACK").catch(() => undefined);
+        throw error;
+      } finally {
+        client.release();
+      }
+    };
+    return toSql(run, transaction);
   })().catch((err) => {
     globalRef.__pgSqlPromise__ = undefined;
     throw err;
@@ -140,10 +170,24 @@ async function createPgliteSql(): Promise<Sql> {
   globalRef.__pgliteMigrateChain__ = pass;
   await pass;
 
-  return toSql(async <T>(text: string, params: unknown[]) => {
+  const run = async <T>(text: string, params: unknown[]) => {
     const result = await pg.query<T>(text, params);
     return result.rows;
-  });
+  };
+  const transaction: TransactionRunner = async <T>(callback) =>
+    pg.transaction(async (tx) => {
+      const txSql = toSql(
+        async <R>(text: string, params: unknown[]) => {
+          const result = await tx.query<R>(text, params);
+          return result.rows;
+        },
+        async () => {
+          throw new Error("Nested database transactions are not supported");
+        },
+      );
+      return callback(txSql);
+    });
+  return toSql(run, transaction);
 }
 
 let sqlPromise: Promise<Sql> | null = null;
