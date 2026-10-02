@@ -1858,3 +1858,34 @@ Do not begin automatically. First boot from current `main`, verify current Git/C
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+## 2026-10-02 — Supabase PostgreSQL 17.11 Security-Patch Readiness Audit — VERIFIED
+
+### Current position
+- VERIFIED: project `ublxptcqefujkbeepylc` status is `ACTIVE_HEALTHY`.
+- VERIFIED: database version is `17.6.1.166` (server reports `17.6`).
+- VERIFIED: database size is approximately 18 MB.
+- VERIFIED: official Supabase rollout target is PostgreSQL `17.11`; official changelog says existing-project upgrades became available in the Dashboard on 2026-09-28.
+- VERIFIED: official PostgreSQL 17.11 release/security documentation lists fixes for CVE-2026-14666, CVE-2026-14664, and CVE-2026-14662, among other fixes.
+
+### Upgrade prerequisite checks
+| Check | Result | Interpretation |
+|---|---|---|
+| Read replicas | VERIFIED: 0 active streaming replicas visible | No database-session evidence of a read replica blocker; provider-level Dashboard eligibility remains UNKNOWN. |
+| Logical replication slots | VERIFIED: 0 | No slot blocker found. |
+| User-schema `reg*` columns | VERIFIED: 0 | No user-schema `pg_upgrade` reg-type blocker found. |
+| `ltree` | VERIFIED: not installed / 0 user columns / 0 affected indexes | No ltree reindex action identified. |
+| `btree_gist` | VERIFIED: not installed / 0 affected indexes | No btree_gist reindex action identified. |
+| `pgcrypto` | VERIFIED: installed; no user bytea columns and no code/function references to PGP encryption/decryption | No affected PGP data identified by current evidence. |
+| Custom operators | VERIFIED: official detection query returned 0 | No affected custom operator identified. |
+| Deprecated unsupported extensions | VERIFIED: installed extensions are `pg_stat_statements`, `pgcrypto`, `plpgsql`, `supabase_vault`, `uuid-ossp` | No listed self-hosted PG17-incompatible extension is installed; provider-side eligibility remains UNKNOWN. |
+
+### Decision
+**READINESS AUDIT COMPLETED — NO DATABASE CHANGE.** The evidence does not identify a schema/data remediation that must precede the 17.11 minor upgrade. The remaining gate is provider/Dashboard-specific eligibility plus owner-controlled maintenance/backup planning.
+
+### Continuity guardrail
+Do not infer that the upgrade has occurred from the release announcement. Do not claim the project is patched until the project metadata/version is directly re-read after an owner-authorized upgrade.
+
+## EXACT NEXT TASK
+
+**Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify Dashboard eligibility/blockers, maintenance window, and backup readiness; only then authorize the actual upgrade.
