@@ -19,17 +19,17 @@ test("public menu hides the hours status chip when no schedule exists", async ()
 
 const read = (path) => readFileSync(path, "utf8");
 const publicServer = read("src/lib/menu/public.ts");
-test("static demo menu does not initialize a database-backed anonymous session", () => {
-  assert.match(publicServer, /const isStaticDemoMenu = result\.data\.tenant\.id === DEMO_MENU\.tenant\.id/);
-  assert.match(publicServer, /const sql = isStaticDemoMenu \? null : await getSql\(\)/);
-  assert.match(publicServer, /const session = sql \? await resolveAnonymousSession\(sql, result\.data\.tenant\.id\) : null/);
-  assert.match(publicServer, /const experimentVariant = !isStaticDemoMenu && result\.data\.tenant\.whatsapp\?\.trim\(\)/);
-  assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas-tenant"/);
+test("public menu content no longer initializes anonymous sessions during SSR", () => {
+  const attributionStart = publicServer.indexOf("export const getPublicMenuAttribution");
+  assert.ok(attributionStart > 0);
+  const publicHandler = publicServer.slice(publicServer.indexOf("export const getPublicMenu"), attributionStart);
+  assert.doesNotMatch(publicHandler, /resolveAnonymousSession/);
+  assert.match(publicServer.slice(attributionStart), /createServerFn\(\{ method: "POST" \}\)/);
+  assert.match(publicServer.slice(attributionStart), /resolveAnonymousSession/);
+  assert.match(publicServer.slice(attributionStart), /Cache-Control", "private, no-store"/);
 });
-
-
-assert.match(publicServer, /resolveAnonymousSession\(sql, result\.data\.tenant\.id\)/);
 const demo = read("src/lib/menu/demo.ts");
+assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas-tenant"/);
 assert.match(demo, /nameEn: "Double Espresso"[\s\S]*imageUrl: "\/homepage\/menu-dish\.webp"/);
 assert.match(demo, /nameEn: "Nafas Latte"[\s\S]*imageUrl: image\("photo-1572442388796-11668a67e53d"\)/);
 const image = read("src/lib/menu/image.ts");

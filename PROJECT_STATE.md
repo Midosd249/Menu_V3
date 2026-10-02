@@ -1,3 +1,24 @@
+# 2026-10-02 — P1.1 Public Menu Cache/Session Decoupling — VERIFIED / PR #351
+
+- VERIFIED: main remains 9e2272f5cf626e0b7a8546f1442ff2172ab473f0; P0.1/P0.2 remain merged and untouched.
+- VERIFIED: PR #351 is open against main; final implementation head before this continuity commit is the final P1.1 PR head.
+- VERIFIED: public menu GET/SSR no longer resolves or creates anonymous sessions; attribution is a separate POST with private, no-store.
+- VERIFIED: public menu routes use public, max-age=0, s-maxage=15, stale-while-revalidate=30; cache identity remains tenant + branch + content revision.
+- VERIFIED: last_seen_at updates are throttled to five minutes while tenant binding remains enforced.
+- VERIFIED: Quality #2756 and W9 Orders QA #892 passed on the final implementation head.
+- VERIFIED: browser/performance CI gates passed where configured.
+- PROTECTED: P0.1/P0.2, Order Value Analytics, preparation-time/ETA, image delivery, five themes, auth/RLS, and unrelated migrations were not changed.
+- UNKNOWN: production TTFB, DB read/write counters, CDN hit ratio, HTML/SSR payload size, and production LCP before/after.
+- BLOCKED: Vercel Preview for the final PR head is VERIFIED / SUCCESS; no Production deployment was attempted.
+- IMPLEMENTATION STATUS: PUSHED / VERIFIED / HOLD FOR OWNER MERGE.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.2 — Theme Code Splitting**
+
+Before implementation, establish bundle/runtime baselines for the five themes. Do not start P1.3 or deploy automatically.
+
 # 2026-10-02 — P0.2 Closeout + Cross-Chat Handoff — VERIFIED
 
 - VERIFIED: P0.2 PR #349 merged into `main` as `5e2cdf847251f0bc6a8688667a7d3e060e768419`.

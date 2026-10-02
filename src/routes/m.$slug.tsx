@@ -17,7 +17,7 @@ import { FineDiningHospitalityTemplate } from "@/components/templates/fine-dinin
 import { SmallMenuTemplate } from "@/components/templates/small-menu";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
-import { getPublicMenu } from "@/lib/menu/public";
+import { getPublicMenu, getPublicMenuAttribution } from "@/lib/menu/public";
 import { getNotFoundMenuSeo, getPublicMenuSeo, resolvePublicMenuLocale } from "@/lib/menu/seo";
 import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
@@ -33,7 +33,7 @@ export function createThemeBootstrapScript(theme: ThemeKey, preview = false): st
 
 export const Route = createFileRoute("/m/$slug")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "private, no-store" }),
+  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
   validateSearch: publicMenuSearchSchema,
   loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme }),
   loader: async ({ params, deps }) => {
@@ -108,18 +108,25 @@ async function loadMenuWithRetry(slug: string, branch: string | undefined, local
 }
 function PublicMenuPage() { const { slug } = Route.useParams(); const { branch, lang, theme } = Route.useSearch(); const loaderData = Route.useLoaderData(); const menuData = loaderData?.ok ? loaderData.data as PublicMenuRouteData : undefined; return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} />; }
 export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu; previewTheme?: ThemeKey }) {
-  const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const { setLang } = useLang();
+  const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const [experimentVariant, setExperimentVariant] = useState<"control" | "prominent">(initialMenu?.experimentVariant ?? "control"); const { setLang } = useLang();
   useEffect(() => { setLang(locale); }, [locale, setLang]);
   function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); loadMenuWithRetry(slug, branch, locale).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch(() => { if (!instant) setState({ status: "error", message: failureMessage(locale, "unknown"), retry: load }); }); }
   useEffect(() => {
+    setExperimentVariant(initialMenu?.experimentVariant ?? "control");
     if (initialMenu) { writeCachedMenu(cacheKey, initialMenu); return; }
     load(); // eslint-disable-line react-hooks/exhaustive-deps
   }, [slug, branch, initialMenu, locale]);
+  useEffect(() => {
+    if (previewTheme || state.status !== "ok" || !state.menu.tenant.whatsapp?.trim()) return;
+    void getPublicMenuAttribution({ data: { slug } }).then((result) => {
+      if (result.ok) setExperimentVariant(result.data.experimentVariant);
+    });
+  }, [previewTheme, slug, state.status, state.status === "ok" ? state.menu.tenant.whatsapp : null]);
   if (state.status === "loading") return <LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />;
   if (state.status === "error") return <ErrorState message={state.message} onRetry={state.retry} />;
   const activeTheme = previewTheme ?? state.menu.tenant.themeKey;
   const family = getThemeFamily(activeTheme);
-  const themedMenu = { ...state.menu, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
+  const themedMenu = { ...state.menu, experimentVariant, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
   const hasInlineActions = activeTheme === "heritage" || family === "contemporary-restaurant";
   const socialTone = activeTheme === "noir" ? "bg-black/20 text-paper" : activeTheme === "heritage" ? "bg-[var(--menu-surface)] text-[var(--menu-foreground)]" : "bg-[var(--menu-surface)] text-[var(--menu-foreground)]";
   return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{activeTheme === "heritage" ? <TasteTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "contemporary-restaurant" ? <SignalTableTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}{!hasInlineActions ? <footer className={"mx-auto grid max-w-3xl gap-3 border-t px-4 py-8 " + socialTone} data-menu-social-footer><p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">{locale === "ar" ? "تابع وتواصل" : "Connect with us"}</p><PublicActionLinks tenant={themedMenu.tenant} branch={themedMenu.branch} lang={locale} preview={Boolean(previewTheme)} experimentVariant={themedMenu.experimentVariant} /></footer> : null}<MenuunPoweredBy lang={locale} /><MenuNutritionOverlay products={themedMenu.products} lang={locale} /><PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;

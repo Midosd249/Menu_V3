@@ -1,3 +1,19 @@
+# 2026-10-02 — P1.1 Closeout — VERIFIED / PR #351
+
+- VERIFIED: P1.1 final implementation passed Quality #2756 and W9 Orders QA #892.
+- VERIFIED: public content caching is separated from anonymous-session attribution.
+- VERIFIED: anonymous-session last_seen_at writes are throttled to five-minute intervals.
+- UNKNOWN: production TTFB/DB/cache-hit/HTML/LCP before-after measurements.
+- BLOCKED: Vercel Preview is VERIFIED / SUCCESS; Production was not attempted.
+- IMPLEMENTATION STATUS: PUSHED / VERIFIED / HOLD FOR OWNER MERGE.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.2 — Theme Code Splitting**
+
+Measure selected-theme bundle/runtime cost first. Preserve all five themes, RTL/LTR, Arabic/English behavior, shared public-menu contracts, and tenant isolation.
+
 # 2026-10-02 — P0.2 Closeout + Cross-Chat Handoff — VERIFIED
 
 - VERIFIED: P0.2 PR #349 merged into `main` as `5e2cdf847251f0bc6a8688667a7d3e060e768419`.

@@ -4,6 +4,7 @@ import type { getSql } from "@/lib/db";
 
 export const ANONYMOUS_SESSION_COOKIE = "__Host-menu_v3_sid";
 export const ANONYMOUS_SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
+export const ANONYMOUS_SESSION_TOUCH_INTERVAL_SECONDS = 5 * 60;
 
 type Sql = Awaited<ReturnType<typeof getSql>>;
 type AnonymousSessionRow = {
@@ -53,7 +54,9 @@ export async function resolveAnonymousSession(
       await sql`
         update anonymous_sessions
         set last_seen_at = now()
-        where id = ${session.id} and tenant_id = ${tenantId}
+        where id = ${session.id}
+          and tenant_id = ${tenantId}
+          and last_seen_at < now() - (${ANONYMOUS_SESSION_TOUCH_INTERVAL_SECONDS} * interval '1 second')
       `;
       return { id: String(session.id), fromValidCookie: true };
     }
