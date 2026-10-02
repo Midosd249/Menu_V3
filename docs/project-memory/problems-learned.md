@@ -149,3 +149,13 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Root cause: structural tests asserted obsolete source locations rather than the enduring architecture and behavior.
 - Final working solution: contracts now verify the canonical lazy loader, all five mappings, absence of static theme imports from route/renderer, and continued Suspense/renderer behavior.
 - Lesson: when implementation ownership moves, update tests around architectural invariants and user-visible behavior, not old file locations.
+
+## Problem: Public menu cache revision lookup defeated fresh in-process cache hits
+
+- Date / Context: 2026-10-02; P1.3 Public Menu Runtime Performance / Observability.
+- Symptom: the public-menu path had a 15-second process-local cache, but every request first queried `public_content_version` to construct the revision-qualified cache key. A fresh in-process cache hit therefore still required a DB read.
+- Root cause: cache identity included the current content revision, so the implementation needed a DB lookup before it could know which revision-keyed entry to inspect.
+- Final working solution: add a tenant/branch-scoped fast-path map with the same 15-second TTL. Fresh entries return before DB initialization/revision lookup; misses continue through the existing revision-keyed cache and SQL tenant/branch filters. `invalidatePublicMenuCache()` clears both layers.
+- Regression evidence: Quality #2785 passed the registered cache/session contract test, typecheck, full npm test, lint, production build, browser QA and performance gates; W9 Orders QA #918 also passed.
+- Lesson: a bounded scope-level fast path is appropriate only when its freshness window matches the existing public cache contract. Never replace server-derived tenant/branch identity with client identity, and invalidate parallel cache layers together.
+- Continuity lesson: a regression test file that is not registered in the canonical test command can create false confidence. Verify test registration before treating TDD/CI evidence as complete.
