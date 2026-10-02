@@ -89,7 +89,7 @@ function createPostgresSql(): Promise<Sql> {
       const res = await pool.query(text, params);
       return res.rows as T[];
     };
-    const transaction: TransactionRunner = async <T>(callback) => {
+    const transaction: TransactionRunner = async <T>(callback: (tx: Sql) => Promise<T>) => {
       const client = await pool.connect();
       let started = false;
       try {
@@ -174,7 +174,7 @@ async function createPgliteSql(): Promise<Sql> {
     const result = await pg.query<T>(text, params);
     return result.rows;
   };
-  const transaction: TransactionRunner = async <T>(callback) =>
+  const transaction: TransactionRunner = async <T>(callback: (tx: Sql) => Promise<T>) =>
     pg.transaction(async (tx) => {
       const txSql = toSql(
         async <R>(text: string, params: unknown[]) => {
