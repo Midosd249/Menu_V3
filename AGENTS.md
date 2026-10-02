@@ -167,3 +167,16 @@ Do not guess. If blocked by missing information, permissions, dependencies, envi
 
 ## Session Triggers
 `[BOOT]` read state and inspect git → `[PROVE]` find evidence → `[SCOPE]` one atomic task → `[RESEARCH]` reliable sources → `[DESIGN]` compatible solution → `[BUILD]` focused implementation → `[TEST]` verify → `[SECURE]` review → `[DIFF]` inspect → `[STATE]` update continuity → `[STOP]` stop.
+
+
+## Expanded Specialist Agent System — 2026-10-02
+
+The permanent specialist registry is `docs/agents/agent-registry.md`. The Principal Engineer is the single orchestrator and automatically composes relevant internal workflows.
+
+Five dedicated guards are now defined: Architect & Tenant Boundary Guard; Database & Performance Optimization; Security & Auth Resilience; Load Testing & Production Readiness; Strict Code Review & Anti-Over-Engineering.
+
+Do not run all specialists indiscriminately. Select by risk surface; cross-boundary work may use several in parallel for analysis, followed by one integrated implementation path. No specialist may widen scope, deploy, alter protected architecture, or treat recommendations as verified facts.
+
+Specialist prompts are technology-neutral guardrails. Redis, Cloudflare, PGlite, JWT refresh tokens, CSP, pagination, or a fixed latency target are not mandatory merely because a prompt names them; repository evidence, workload, architecture, authoritative documentation, and direct runtime/test evidence decide.
+
+Every material reusable problem, blocker, failed approach, hidden assumption, or expensive debugging loop must be written to `docs/project-memory/problems-learned.md` before closure when applicable; otherwise the session log must explicitly record that no new reusable problem was found.

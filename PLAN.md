@@ -1224,3 +1224,13 @@ Wait for the next explicitly scoped task. Do not deploy or begin unrelated work 
 - VERIFIED: full P0/P1/P2 action plan is canonical in `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`.
 - PROTECTED: do not rebuild completed analytics tenant scope, order pricing validation, image delivery or five-theme architecture without new evidence.
 - EXACT NEXT TASK: P0.1 Atomic Public Order Creation.
+
+
+# 2026-10-02 — Expanded Internal Specialist Agent System — DOCUMENTATION BATCH
+- VERIFIED: PR #347 head before this extension was `2b8fb97f9d4b03bc05a9de89d8f465ca55e510b7`; W9 Orders QA #854 (`36974000568`) and Quality #2715 (`36974000620`) had both passed.
+- VERIFIED: five requested specialist workflows are now defined as permanent internal workflows with a central registry and automatic routing.
+- VERIFIED: prompts were hardened against technology-by-prompt decisions and require evidence before adding infrastructure or fixed SLOs.
+- VERIFIED: problem-memory writeback is now mandatory for material reusable lessons.
+- UNKNOWN: post-change CI until the updated head is checked.
+- DEPLOYMENT STATUS: NOT_PERFORMED; this is documentation/governance only.
+- EXACT NEXT TASK: after verification, continue only with P0.1 Atomic Public Order Creation; do not start P0.2 automatically.

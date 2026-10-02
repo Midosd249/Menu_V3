@@ -154,3 +154,11 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 ## Canonical Architecture/Security Audit Continuity
 For future work touching authentication/authorization, tenant/branch isolation, public ordering, order analytics, public-menu performance/themes, database/RLS/migrations or offline behavior, read the canonical audit under `docs/audits/` before implementation. Re-verify current code/Git/CI/runtime evidence; current repository evidence wins if it differs from the audit.
 Current canonical audit: `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`
+
+
+## Expanded Specialist Agent Protocol — 2026-10-02
+- Read `docs/agents/agent-registry.md` during boot for meaningful work.
+- Select specialists automatically from `docs/automatic-specialist-routing.md`; never require the user to name them.
+- Independent specialists may analyze in parallel; implementation writes remain centralized through the Principal Engineer.
+- Technology names in specialist prompts are hypotheses, not mandates.
+- Before closing a task, update `docs/project-memory/problems-learned.md` for every material reusable problem/lesson, or record explicitly that no new reusable problem was found.
