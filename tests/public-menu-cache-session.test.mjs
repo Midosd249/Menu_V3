@@ -45,8 +45,8 @@ test("attribution remains out of preview mode and does not weaken public-menu re
 });
 test("public menu cache fast path can serve a fresh tenant/branch entry without a revision lookup", () => {
   assert.match(PUBLIC_MENU, /const menuScopeCache = new Map/);
-  assert.match(PUBLIC_MENU, /const scopeCacheKey = `\\$\\{tenantSlug\\}:\\$\\{branchSlug \\?\\? "default"\\}`/);
-  assert.match(PUBLIC_MENU, /const scopedCached = menuScopeCache\\.get\\(scopeCacheKey\\)/);
+  assert.match(PUBLIC_MENU, /const scopeCacheKey = `\$\{tenantSlug\}:\$\{branchSlug \?\? "default"\}`/);
+  assert.match(PUBLIC_MENU, /const scopedCached = menuScopeCache\.get\(scopeCacheKey\)/);
   const fastPathStart = PUBLIC_MENU.indexOf("const scopeCacheKey");
   const sqlStart = PUBLIC_MENU.indexOf("const sql = await getSql()");
   assert.ok(fastPathStart > 0);
@@ -55,5 +55,5 @@ test("public menu cache fast path can serve a fresh tenant/branch entry without 
 });
 
 test("public menu cache invalidation clears the tenant-scoped fast path", () => {
-  assert.match(PUBLIC_MENU, /menuScopeCache\\.delete\\(key\\)/);
+  assert.match(PUBLIC_MENU, /menuScopeCache\.delete\(key\)/);
 });
