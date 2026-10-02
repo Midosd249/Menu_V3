@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getCookie } from "@tanstack/react-start/server";
+import { getCookie, getRequestHeader } from "@tanstack/react-start/server";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult, ProductOffer } from "./types";
@@ -48,6 +48,7 @@ type PreparedItem = {
 };
 
 const fail = (error: string): FnResult<never> => ({ ok: false, code: "invalid", error });
+class PublicOrderRateLimitError extends Error {}
 const normalizePhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
 
 const stableDigest = (value: string) => {
@@ -61,8 +62,11 @@ const stableDigest = (value: string) => {
   return `${(left >>> 0).toString(16).padStart(8, "0")}${(right >>> 0).toString(16).padStart(8, "0")}`;
 };
 
-const orderRateKey = (tenantId: string, branchId: string, phone: string) =>
-  stableDigest(`${tenantId}:${branchId}:${normalizePhone(phone)}`);
+const orderRateKey = (tenantId: string, branchId: string, anonymousSessionId: string) =>
+  `session:${stableDigest(tenantId + ":" + branchId + ":session:" + anonymousSessionId)}`;
+
+const orderIpRateKey = (tenantId: string, branchId: string, clientIp: string) =>
+  `ip:${stableDigest(tenantId + ":" + branchId + ":ip:" + clientIp)}`;
 
 const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
   stableDigest(JSON.stringify({
@@ -148,19 +152,26 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
 
       const anonymousSession = await resolveAnonymousSession(sql, String(tenant.id));
       const anonymousSessionId = anonymousSession.id;
-
-      const clientToken = orderRateKey(String(tenant.id), String(branchId), data.customerPhone);
-      const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
-      const rateRows = await sql<{ request_count: number }>`
-        insert into public_order_rate_limits (tenant_id, branch_id, client_token, window_start, request_count)
-        values (${tenant.id}, ${branchId}, ${clientToken}, ${rateWindow}, 1)
-        on conflict (tenant_id, branch_id, client_token, window_start)
-        do update set request_count = public_order_rate_limits.request_count + 1, updated_at = now()
-        returning request_count
-      `;
-      if (Number(rateRows[0]?.request_count ?? 0) > 6) {
-        return { ok: false, code: "unavailable", error: "تم تجاوز عدد الطلبات المسموح به مؤقتاً. حاول مرة أخرى بعد قليل." };
-      }
+      const clientIp = getRequestHeader("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
+      const rateIdentityTokens = [
+        orderRateKey(String(tenant.id), String(branchId), String(anonymousSessionId)),
+        ...(clientIp ? [orderIpRateKey(String(tenant.id), String(branchId), clientIp)] : []),
+      ];
+      const invalidIdentityTokens = rateIdentityTokens.map((token) => `invalid:${token}`);
+      const invalidRateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
+      const recordInvalidAttempt = async (error: string): Promise<FnResult<never>> => {
+        const rows = await Promise.all(invalidIdentityTokens.map((identityToken) => sql<{ request_count: number }>`
+          insert into public_order_invalid_rate_limits (tenant_id, branch_id, identity_token, window_start, request_count)
+          values (${tenant.id}, ${branchId}, ${identityToken}, ${invalidRateWindow}, 1)
+          on conflict (tenant_id, branch_id, identity_token, window_start)
+          do update set request_count = public_order_invalid_rate_limits.request_count + 1, updated_at = now()
+          returning request_count
+        `));
+        if (rows.some((row) => Number(row.request_count ?? 0) > 6)) {
+          return { ok: false, code: "unavailable", error: "تم إيقاف الطلبات غير الصالحة مؤقتاً. حاول مرة أخرى بعد قليل." };
+        }
+        return await recordInvalidAttempt(error);
+      };
 
       const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId));
       const existing = await sql<{ order_id: string | null; order_number: number | null; total: number | null; currency: string | null; created_at: string }>`
@@ -188,8 +199,8 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         select id, tenant_id, name_ar, name_en, price, currency, is_available
         from products where tenant_id = ${tenant.id} and id = any(${productIds})
       `;
-      if (products.length !== productIds.length) return fail("يوجد صنف غير صالح في الطلب");
-      if (products.some((p) => !p.is_available)) return fail("أحد الأصناف غير متاح حالياً");
+      if (products.length !== productIds.length) return await recordInvalidAttempt("يوجد صنف غير صالح في الطلب");
+      if (products.some((p) => !p.is_available)) return await recordInvalidAttempt("أحد الأصناف غير متاح حالياً");
       const productById = new Map(products.map((p) => [String(p.id), p]));
 
       const [variants, groups] = await Promise.all([
@@ -228,27 +239,27 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
           `
         : [];
       const optionById = new Map(options.map((o) => [String(o.id), o]));
-      if (variantIds.some((id) => !variantById.has(id)) || options.length !== modifierOptionIds.length) return fail("أحد خيارات الطلب غير صالح");
-      if (options.some((o) => !o.is_available) || variantIds.some((id) => !variantById.get(id)?.is_available)) return fail("أحد خيارات الطلب غير متاح");
+      if (variantIds.some((id) => !variantById.has(id)) || options.length !== modifierOptionIds.length) return await recordInvalidAttempt("أحد خيارات الطلب غير صالح");
+      if (options.some((o) => !o.is_available) || variantIds.some((id) => !variantById.get(id)?.is_available)) return await recordInvalidAttempt("أحد خيارات الطلب غير متاح");
 
       const prepared: PreparedItem[] = [];
       for (const item of data.items) {
         const product = productById.get(item.productId)!;
         const productVariants = variantsByProduct.get(item.productId) ?? [];
         const variant = item.selected.variantId ? variantById.get(item.selected.variantId) : undefined;
-        if (productVariants.length > 0 && !variant) return fail("يجب اختيار الحجم للصنف");
-        if (variant && String(variant.product_id) !== item.productId) return fail("الحجم المحدد لا يطابق الصنف");
+        if (productVariants.length > 0 && !variant) return await recordInvalidAttempt("يجب اختيار الحجم للصنف");
+        if (variant && String(variant.product_id) !== item.productId) return await recordInvalidAttempt("الحجم المحدد لا يطابق الصنف");
 
         const optionRows = item.selected.modifierOptionIds.map((id) => optionById.get(id)).filter((o): o is OptionRow => Boolean(o));
-        if (new Set(optionRows.map((o) => String(o.id))).size !== optionRows.length) return fail("لا يمكن تكرار الإضافة نفسها");
+        if (new Set(optionRows.map((o) => String(o.id))).size !== optionRows.length) return await recordInvalidAttempt("لا يمكن تكرار الإضافة نفسها");
         const productGroups = groupsByProduct.get(item.productId) ?? [];
         const productGroupIds = new Set(productGroups.map((g) => String(g.id)));
-        if (optionRows.some((o) => !productGroupIds.has(String(o.group_id)))) return fail("الإضافة لا تنتمي إلى الصنف");
+        if (optionRows.some((o) => !productGroupIds.has(String(o.group_id)))) return await recordInvalidAttempt("الإضافة لا تنتمي إلى الصنف");
 
         for (const group of productGroups) {
           const count = optionRows.filter((o) => String(o.group_id) === String(group.id)).length;
-          if (count < Number(group.min_select) || count > Number(group.max_select)) return fail(`خيارات المجموعة «${group.name_ar}» غير مكتملة`);
-          if (group.is_required && count < 1) return fail(`يجب اختيار إضافة من «${group.name_ar}»`);
+          if (count < Number(group.min_select) || count > Number(group.max_select)) return await recordInvalidAttempt(`خيارات المجموعة «${group.name_ar}» غير مكتملة`);
+          if (group.is_required && count < 1) return await recordInvalidAttempt(`يجب اختيار إضافة من «${group.name_ar}»`);
         }
 
         const selectedOptions: PreparedItem["selectedOptions"] = [];
@@ -284,14 +295,27 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         offer_id: item.offerId,
       })));
 
-      const order = await sql.transaction(async (tx) => {
+      const clientToken = rateIdentityTokens[0];
+      const acceptedRateLimit = await sql.transaction(async (tx) => {
         const reservation = await tx<{ client_token: string }>`
           insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
           values (${tenant.id}, ${branchId}, ${clientToken}, ${idempotencyKey})
           on conflict (tenant_id, branch_id, client_token, idempotency_key) do nothing
           returning client_token
         `;
-        if (!reservation[0]) return null;
+        if (!reservation[0]) return { kind: "duplicate" as const };
+
+        const rateWindow = new Date(Math.floor(Date.now() / 600000) * 600000);
+        const rateRows = await Promise.all(rateIdentityTokens.map((identityToken) => tx<{ request_count: number }>`
+          insert into public_order_rate_limits (tenant_id, branch_id, client_token, window_start, request_count)
+          values (${tenant.id}, ${branchId}, ${identityToken}, ${rateWindow}, 1)
+          on conflict (tenant_id, branch_id, client_token, window_start)
+          do update set request_count = public_order_rate_limits.request_count + 1, updated_at = now()
+          returning request_count
+        `));
+        if (rateRows.some((row, index) => Number(row.request_count ?? 0) > (index === 0 ? 6 : 20))) {
+          throw new PublicOrderRateLimitError();
+        }
 
         const created = await tx<{ id: string; order_number: number }>`
           with new_order as (
@@ -322,12 +346,16 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
           set order_id = ${order.id}, order_number = ${order.order_number}, total = ${subtotal}, currency = ${tenant.currency || "SAR"}
           where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
         `;
-        return order;
+        return { kind: "created" as const, order };
       });
 
-      if (!order) return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
+      if (acceptedRateLimit.kind === "duplicate") return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
+      const order = acceptedRateLimit.order;
       return { ok: true, data: { orderId: String(order.id), orderNumber: Number(order.order_number), total: subtotal, currency: tenant.currency || "SAR" } };
     } catch (err) {
+      if (err instanceof PublicOrderRateLimitError) {
+        return { ok: false, code: "unavailable", error: "تم تجاوز عدد الطلبات المسموح به مؤقتاً. حاول مرة أخرى بعد قليل." };
+      }
       console.error("submitPublicOrder failed", err);
       return { ok: false, code: "unavailable", error: "تعذر إرسال الطلب حالياً. حاول مرة أخرى." };
     }
