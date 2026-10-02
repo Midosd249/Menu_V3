@@ -1823,3 +1823,38 @@ Do not begin automatically. Start from `main@67f05fff4f7f6c07e87b56df1a9a676f2ae
 
 Do not begin automatically. First boot from current `main`, verify current Git/CI/runtime evidence, then perform the reconciliation as one atomic task if explicitly authorized.
 
+
+# 2026-10-02 — Audit Follow-up — Supabase Migration Three-Way Reconciliation — VERIFIED
+
+- VERIFIED: PR #356 merged as `3291243387874c6543dc3e6d9a3250550ddf9ba1`; `main` is at that SHA.
+- VERIFIED: repository has 70 SQL files: 69 active top-level migrations plus nested `migrations/auth/0001_auth.sql`, intentionally excluded by the custom runner.
+- VERIFIED: `menu_v3._migrations` has 69 distinct rows matching the 69 active top-level migration basenames; latest is `20261002090000_layered_public_order_abuse_controls.sql`.
+- VERIFIED: `supabase_migrations.schema_migrations` has 46 entries; only two exact version overlaps with repository filenames are `20260903025817` and `20260925105134`.
+- VERIFIED: repository has no `supabase/config.toml` or `supabase/migrations/`; production migration execution is via `scripts/migrate.mjs` and `menu_v3._migrations`.
+- INFERRED: Supabase CLI history is a legacy/parallel ledger, not the active application ledger; this mismatch is not a reason to replay migrations.
+- VERIFIED: live `menu_v3` schema has 45 tables, 441 columns, 189 constraints, 148 indexes, 30 functions, 33 non-internal triggers, 7 policies, 44 RLS-enabled tables, and 0 unvalidated FKs.
+- VERIFIED: latest branch-ordering, product-offer, order-offer, preparation-time, and layered public-order-abuse objects are present live.
+- ORDERING ANOMALY: 20 migration positions differ between filename order and historical `applied_at` order; no repair was performed.
+- EXPECTED / BENIGN: nested auth migration is excluded by design; two files share timestamp prefix `20260909001000`.
+- SECURITY VERIFIED: `public_order_invalid_rate_limits` is the only `menu_v3` table without RLS and has no client table grants; 14/30 functions are SECURITY DEFINER and inspected server-only functions do not expose PUBLIC/anon/authenticated EXECUTE.
+- SECURITY UNKNOWN/DEFERRED: leaked-password protection remains disabled; 37 RLS-enabled/no-policy informational findings remain. PERFORMANCE VERIFIED: 18 unindexed FK findings remain separate.
+- DECISION: reconciliation was read-only. No migration replay, history repair, schema/RLS/function/trigger change, or deployment occurred.
+
+## EXACT NEXT TASK
+
+**Migration Ledger Strategy — decide whether to retain the custom `menu_v3._migrations` architecture or migrate to canonical Supabase CLI migration tracking.**
+
+
+# 2026-10-02 — Migration Ledger Owner Decision — VERIFIED
+
+- **DECISION:** The existing project operational migration ledger, `menu_v3._migrations`, remains the **canonical operational migration record** for Menu V3.
+- **DECISION:** `supabase_migrations.schema_migrations` is **not** the operational source of truth and is excluded from operational migration tracking, replay, and repair decisions for the current architecture.
+- **DECISION:** No migration repair, replay, reset, history modification, or migration-tracking migration is authorized by this decision.
+- **CONTINUITY GUARDRAIL:** Future agents/workflows must not infer pending migrations, schema drift, or required replay solely from differences between `supabase_migrations.schema_migrations` and the repository/custom ledger.
+- **ROLE BOUNDARY:** The project has one human owner/developer. ChatGPT is the internal AI orchestration workflow. Agent names in project documentation denote workflows, not additional human owners or teammates.
+- **REQUIRED BOOT RULE:** Before any migration action, read the repository migration runner and this decision. Treat `menu_v3._migrations` plus the repository runner as the operational migration chain unless the owner explicitly changes this decision.
+- **SUPABASE HISTORY RULE:** Supabase CLI history may be inspected for audit/evidence, but it must not be used as the operational canonical ledger under the current decision.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**

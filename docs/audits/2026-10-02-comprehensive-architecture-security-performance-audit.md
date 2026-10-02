@@ -747,3 +747,75 @@ Remain queued. Do not start automatically.
 
 Do not start automatically. Re-boot from current Git/CI/runtime evidence before implementation or any schema action.
 
+
+# 2026-10-02 — Supabase Migration Three-Way Reconciliation — VERIFIED
+
+## Scope
+Read-only reconciliation of repository migrations, `menu_v3._migrations`, `supabase_migrations.schema_migrations`, and live PostgreSQL catalog metadata. No migration replay or database mutation occurred.
+
+## Repository inventory
+- 70 SQL files under `migrations/`.
+- 69 top-level files are consumed by `scripts/migrate.mjs`.
+- `migrations/auth/0001_auth.sql` is nested and intentionally excluded by `scripts/migration-plan.mjs`.
+- Two files share timestamp prefix `20260909001000`: `order_archive_operations` and `public_order_abuse_controls`.
+
+## Application ledger
+- 69 rows / 69 distinct names in `menu_v3._migrations`.
+- The set matches the 69 active top-level repository basenames.
+- Latest applied migration: `20261002090000_layered_public_order_abuse_controls.sql`.
+- 20 filename/application-time position mismatches exist: **ORDERING ANOMALY**, not evidence of missing application.
+
+## Supabase CLI history
+- 46 rows in `supabase_migrations.schema_migrations`.
+- Only two exact version overlaps with repository filenames: `20260903025817`, `20260925105134`.
+- 44 history versions are **HISTORY-ONLY** relative to the current repository inventory.
+- Several names are semantically related to current migrations but use different versions.
+- Repository has no `supabase/migrations/` or `supabase/config.toml`; the active application runner is custom.
+- Classification: **EXPECTED / BENIGN** for current architecture, with Medium operational/continuity risk if the wrong ledger is assumed canonical. Do not replay or repair automatically.
+
+## Live schema inventory
+- 45 tables; 441 columns; 189 constraints; 148 indexes; 30 functions; 33 non-internal triggers; 7 RLS policies; 44 RLS-enabled tables; 0 views/materialized views.
+- Extensions: `pg_stat_statements`, `pgcrypto`, `plpgsql`, `supabase_vault`, `uuid-ossp`.
+- 67 foreign keys; 0 unvalidated.
+- Latest migration-controlled objects verified live: branch ordering tables, product offers, order-item offer snapshot fields, order preparation fields, and layered public-order rate-limit tables.
+- `public_order_invalid_rate_limits` is the only `menu_v3` table without RLS and has no client table grants.
+- 14/30 functions are SECURITY DEFINER; inspected server-only authorization/provisioning functions do not have PUBLIC/anon/authenticated EXECUTE.
+
+## Classification matrix
+| Finding | Classification | Action |
+|---|---|---|
+| 69 repo migrations vs 69 active ledger rows | VERIFIED MATCH | No repair |
+| Nested auth duplicate basename | EXPECTED / BENIGN | No repair |
+| 20 historical ordering mismatches | ORDERING ANOMALY | Document only |
+| Duplicate `20260909001000` prefix | ORDERING ANOMALY | Separate strategy task |
+| 46 Supabase CLI rows vs 69 active custom migrations | HISTORY-ONLY / EXPECTED-BENIGN | No history repair |
+| 44 Supabase history versions absent from repo | HISTORY-ONLY | No replay; provenance remains UNKNOWN |
+| Latest live objects present | VERIFIED MATCH | No repair |
+| 0 unvalidated FKs | VERIFIED MATCH | No repair |
+
+## Security/performance observations
+- Security Advisor: leaked-password protection disabled (already deferred) and 37 RLS-enabled/no-policy informational findings.
+- Performance Advisor: 18 unindexed foreign keys plus unused-index informational findings.
+- These are separate findings, not migration drift, and were not modified.
+
+## Final decision
+**RECONCILIATION_COMPLETED — READ ONLY.** No migration replay, history repair, schema/RLS/function/trigger change, or deployment.
+
+## EXACT NEXT TASK
+
+**Migration Ledger Strategy — decide whether Menu V3 should retain the custom `menu_v3._migrations` architecture or migrate to canonical Supabase CLI migration tracking.**
+
+
+# 2026-10-02 — Migration Ledger Owner Decision — VERIFIED
+
+- **DECISION:** The existing project operational migration ledger, `menu_v3._migrations`, remains the **canonical operational migration record** for Menu V3.
+- **DECISION:** `supabase_migrations.schema_migrations` is **not** the operational source of truth and is excluded from operational migration tracking, replay, and repair decisions for the current architecture.
+- **DECISION:** No migration repair, replay, reset, history modification, or migration-tracking migration is authorized by this decision.
+- **CONTINUITY GUARDRAIL:** Future agents/workflows must not infer pending migrations, schema drift, or required replay solely from differences between `supabase_migrations.schema_migrations` and the repository/custom ledger.
+- **ROLE BOUNDARY:** The project has one human owner/developer. ChatGPT is the internal AI orchestration workflow. Agent names in project documentation denote workflows, not additional human owners or teammates.
+- **REQUIRED BOOT RULE:** Before any migration action, read the repository migration runner and this decision. Treat `menu_v3._migrations` plus the repository runner as the operational migration chain unless the owner explicitly changes this decision.
+- **SUPABASE HISTORY RULE:** Supabase CLI history may be inspected for audit/evidence, but it must not be used as the operational canonical ledger under the current decision.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**

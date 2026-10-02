@@ -1376,3 +1376,33 @@ Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d
 
 Do not start automatically.
 
+
+# 2026-10-02 — Migration Reconciliation Closeout — VERIFIED
+
+- VERIFIED: PR #356 merged as `3291243387874c6543dc3e6d9a3250550ddf9ba1`.
+- VERIFIED: active application ledger = `menu_v3._migrations`; 69/69 top-level repository migrations are applied.
+- VERIFIED: Supabase `schema_migrations` has 46 legacy/parallel entries and is not the complete active application chain.
+- VERIFIED: live schema contains current latest migration objects; no unvalidated FKs found.
+- ORDERING ANOMALY: 20 filename/application-time order mismatches; no automatic repair authorized.
+- NO SCHEMA ACTION: reconciliation was read-only.
+
+## EXACT NEXT TASK
+
+**Migration Ledger Strategy — decide whether to retain the custom `menu_v3._migrations` architecture or migrate to canonical Supabase CLI migration tracking.**
+
+Do not implement or repair either path automatically.
+
+
+# 2026-10-02 — Migration Ledger Owner Decision — VERIFIED
+
+- **DECISION:** The existing project operational migration ledger, `menu_v3._migrations`, remains the **canonical operational migration record** for Menu V3.
+- **DECISION:** `supabase_migrations.schema_migrations` is **not** the operational source of truth and is excluded from operational migration tracking, replay, and repair decisions for the current architecture.
+- **DECISION:** No migration repair, replay, reset, history modification, or migration-tracking migration is authorized by this decision.
+- **CONTINUITY GUARDRAIL:** Future agents/workflows must not infer pending migrations, schema drift, or required replay solely from differences between `supabase_migrations.schema_migrations` and the repository/custom ledger.
+- **ROLE BOUNDARY:** The project has one human owner/developer. ChatGPT is the internal AI orchestration workflow. Agent names in project documentation denote workflows, not additional human owners or teammates.
+- **REQUIRED BOOT RULE:** Before any migration action, read the repository migration runner and this decision. Treat `menu_v3._migrations` plus the repository runner as the operational migration chain unless the owner explicitly changes this decision.
+- **SUPABASE HISTORY RULE:** Supabase CLI history may be inspected for audit/evidence, but it must not be used as the operational canonical ledger under the current decision.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
