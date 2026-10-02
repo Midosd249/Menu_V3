@@ -819,3 +819,45 @@ Read-only reconciliation of repository migrations, `menu_v3._migrations`, `supab
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+# 2026-10-02 — Performance Advisor Unindexed Foreign Keys Follow-up — VERIFIED
+
+## Scope
+Read-only investigation of the current Supabase Performance Advisor unindexed_foreign_keys finding. Objective: determine whether any of the 18 reported foreign keys are materially used by current workload/query paths before proposing an index.
+
+## Current live evidence
+- Supabase project: ublxptcqefujkbeepylc; PostgreSQL 17.6.1; project status ACTIVE_HEALTHY.
+- Performance Advisor observed 18 unindexed_foreign_keys findings at 2026-10-02T17:18:28Z.
+- pg_stat_statements statistics have been accumulating since 2026-08-28T13:33:24Z.
+- The affected FK paths were inspected with current pg_catalog constraint/index metadata, table cardinality, index usage, repository code search, and representative EXPLAIN plans.
+
+## Findings
+| FK area | Current evidence | Classification | Action |
+|---|---|---|---|
+| branch_category_order.category_id | Public/owner ordering queries join by branch + tenant + category; PK/composite indexes are shaped for this path. | VERIFIED / WORKLOAD-COVERED | No new index |
+| branch_product_order.product_id | Public/owner ordering queries join by branch + tenant + product; existing PK/composite indexes serve the access path. | VERIFIED / WORKLOAD-COVERED | No new index |
+| Guest campaign/feedback/loyalty FKs | Current affected tables are empty; existing tenant/branch indexes cover observed Studio relationship reads. | VERIFIED / LOW CURRENT VOLUME | No new index |
+| lead_onboarding.tenant_id | Table is empty; active reads use lead_id indexes. | VERIFIED / LOW CURRENT VOLUME | No new index |
+| menu_events.category_id | 523 live rows; repeated analytics workload. Existing menu_events_category_idx (tenant_id, category_id, created_at DESC) and other indexes are actively used; representative EXPLAIN uses existing indexes. | VERIFIED / WORKLOAD-COVERED | No new index |
+| Upsell recommendation FKs | Table is empty; source-product path uses menu_upsell_source_idx (tenant_id, source_product_id, status). | VERIFIED / LOW CURRENT VOLUME | No new index |
+| order_items.offer_id | 32 live rows; observed order-item workload filters by order_id, covered by order_items_order_idx. | VERIFIED / LOW CURRENT VOLUME | No new index |
+| subscription_invoices.created_by_user_id | 1 live row; observed reads are tenant-scoped. | VERIFIED / LOW CURRENT VOLUME | No new index |
+| Public growth/visibility/website FKs | Current tables are empty; observed access is report/project oriented and no FK-specific bottleneck is present. | VERIFIED / LOW CURRENT VOLUME | No new index |
+
+## Workload evidence
+- Repeated menu_events analytics queries are among the highest-frequency current queries, including 849 calls for tenant/time-window event aggregation and 848 calls for product/category analytics joins.
+- The active menu_events path already has tenant/category, tenant/created-at, tenant/branch/event/product, and session indexes with observed index usage.
+- Representative EXPLAIN plans selected existing indexes for current tenant/time-window/event workloads and primary-key joins; no missing FK-leading index was demonstrated as the cause of a current slow query.
+- No current parent-table DELETE/UPDATE workload was found for the affected relationships that demonstrates expensive referential-action scans.
+
+## Decision
+**NO INDEX CHANGE AUTHORIZED BY EVIDENCE.** The 18 Advisor findings remain informational. Creating 18 standalone FK indexes would add write/storage/maintenance overhead without demonstrated current benefit and would conflict with the task guardrail against mass index creation.
+
+Revisit only when a specific FK becomes materially used, a query plan demonstrates the missing index, table cardinality grows, or parent DELETE/UPDATE workload creates measurable referential-action cost.
+
+## Verification boundary
+- VERIFIED: live Advisor, catalog, index usage, pg_stat_statements, repository query paths, and representative EXPLAIN evidence.
+- VERIFIED: no database mutation occurred.
+- UNKNOWN: future workload growth and production traffic outside the observed statistics window.
+- UNKNOWN: real-device/application latency impact; this task is database-performance audit only.
