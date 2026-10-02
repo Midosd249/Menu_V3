@@ -1216,3 +1216,18 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 ## EXACT NEXT TASK
 
 Wait for the next explicitly scoped task. Do not deploy or begin unrelated work automatically.
+
+# 2026-10-02 — P0.1 Atomic Public Order Creation — IMPLEMENTED / REVIEW HOLD
+
+- VERIFIED: PR #348 implements the approved P0.1 scope on fix/p0-1-atomic-public-order-2026-10-02.
+- VERIFIED: public-order reservation, order/order_items/status-event creation, and idempotency finalization now share one database transaction.
+- VERIFIED: TDD RED was proven before implementation; Quality #2717 failed on the missing transaction contract.
+- VERIFIED: current head 29328dc4422c67dbdc0cd7dbd613a68de5aebf7c passed typecheck, full npm tests, contract gates, lint, and production build in Quality #2726.
+- VERIFIED: W9 Orders browser QA #865 attempt 1 passes the Orders browser flow.
+- UNKNOWN/BLOCKED: Studio browser QA in Quality #2726 failed on workspace/onboarding expectations that passed on main Quality #2716.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+- IMPLEMENTATION STATUS: PUSHED / FULL CI VERIFIED / PR OPEN.
+
+## EXACT NEXT TASK
+
+Owner reviews PR #348 and explicitly authorizes merge/release if accepted. Do not merge, deploy, or begin P0.2 automatically.

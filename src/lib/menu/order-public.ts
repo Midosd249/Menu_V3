@@ -284,42 +284,48 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         offer_id: item.offerId,
       })));
 
-      const reservation = await sql<{ client_token: string }>`
-        insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
-        values (${tenant.id}, ${branchId}, ${clientToken}, ${idempotencyKey})
-        on conflict (tenant_id, branch_id, client_token, idempotency_key) do nothing
-        returning client_token
-      `;
-      if (!reservation[0]) return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
+      const order = await sql.transaction(async (tx) => {
+        const reservation = await tx<{ client_token: string }>`
+          insert into public_order_idempotency (tenant_id, branch_id, client_token, idempotency_key)
+          values (${tenant.id}, ${branchId}, ${clientToken}, ${idempotencyKey})
+          on conflict (tenant_id, branch_id, client_token, idempotency_key) do nothing
+          returning client_token
+        `;
+        if (!reservation[0]) return null;
 
-      const created = await sql<{ id: string; order_number: number }>`
-        with new_order as (
-          insert into orders (id, tenant_id, branch_id, anonymous_session_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
-          values (${orderId}, ${tenant.id}, ${branchId}, ${anonymousSessionId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
-          returning id, order_number
-        ),
-        inserted_items as (
-          insert into order_items (id, order_id, product_id, product_name_ar, product_name_en, quantity, unit_price, line_total, selected_options, original_unit_price, discount_amount, offer_id)
-          select item.id, new_order.id, item.product_id, item.product_name_ar, item.product_name_en, item.quantity, item.unit_price, item.line_total, item.selected_options, item.original_unit_price, item.discount_amount, item.offer_id
-          from new_order cross join lateral jsonb_to_recordset(${itemsJson}::jsonb) as item(
-            id text, product_id text, quantity integer, unit_price numeric, line_total numeric,
-            product_name_ar text, product_name_en text, selected_options jsonb, original_unit_price numeric, discount_amount numeric, offer_id text
-          ) returning order_id
-        ),
-        inserted_event as (
-          insert into order_status_events (id, order_id, from_status, to_status)
-          select ${eventId}, id, null, 'new' from new_order returning order_id
-        )
-        select id, order_number from new_order
-      `;
+        const created = await tx<{ id: string; order_number: number }>`
+          with new_order as (
+            insert into orders (id, tenant_id, branch_id, anonymous_session_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
+            values (${orderId}, ${tenant.id}, ${branchId}, ${anonymousSessionId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
+            returning id, order_number
+          ),
+          inserted_items as (
+            insert into order_items (id, order_id, product_id, product_name_ar, product_name_en, quantity, unit_price, line_total, selected_options, original_unit_price, discount_amount, offer_id)
+            select item.id, new_order.id, item.product_id, item.product_name_ar, item.product_name_en, item.quantity, item.unit_price, item.line_total, item.selected_options, item.original_unit_price, item.discount_amount, item.offer_id
+            from new_order cross join lateral jsonb_to_recordset(${itemsJson}::jsonb) as item(
+              id text, product_id text, quantity integer, unit_price numeric, line_total numeric,
+              product_name_ar text, product_name_en text, selected_options jsonb, original_unit_price numeric, discount_amount numeric, offer_id text
+            ) returning order_id
+          ),
+          inserted_event as (
+            insert into order_status_events (id, order_id, from_status, to_status)
+            select ${eventId}, id, null, 'new' from new_order returning order_id
+          )
+          select id, order_number from new_order
+        `;
 
-      const order = created[0];
-      if (!order) return { ok: false, code: "unavailable", error: "تعذر إنشاء الطلب" };
-      await sql`
-        update public_order_idempotency
-        set order_id = ${order.id}, order_number = ${order.order_number}, total = ${subtotal}, currency = ${tenant.currency || "SAR"}
-        where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
-      `;
+        const order = created[0];
+        if (!order) throw new Error("Public order creation returned no order");
+
+        await tx`
+          update public_order_idempotency
+          set order_id = ${order.id}, order_number = ${order.order_number}, total = ${subtotal}, currency = ${tenant.currency || "SAR"}
+          where tenant_id = ${tenant.id} and branch_id = ${branchId} and client_token = ${clientToken} and idempotency_key = ${idempotencyKey}
+        `;
+        return order;
+      });
+
+      if (!order) return { ok: false, code: "unavailable", error: "يتم تجهيز طلبك بالفعل. حاول مرة أخرى بعد لحظات." };
       return { ok: true, data: { orderId: String(order.id), orderNumber: Number(order.order_number), total: subtotal, currency: tenant.currency || "SAR" } };
     } catch (err) {
       console.error("submitPublicOrder failed", err);

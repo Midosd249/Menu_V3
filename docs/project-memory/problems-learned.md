@@ -118,3 +118,15 @@ This file exists to prevent Menu V3 from repeating expensive engineering mistake
 
 ## Maintenance Rule
 When a new incident consumes significant time, causes repeated retries, exposes a hidden architectural assumption, or requires another agent to discover a better fix, add a concise entry here before the next major milestone. Record the causal lesson, not just the patch. Preserve uncertainty explicitly.
+
+## Problem: Public order idempotency reservation was outside the order-creation transaction
+
+- Date / Context: 2026-10-02; P0.1 Atomic Public Order Creation.
+- Symptom: submitPublicOrder inserted the idempotency reservation as one autocommit statement, created the order/items/status event in a separate statement, then finalized the reservation with another separate statement. A failure after reservation could leave a processing reservation without a committed order.
+- Root cause: the database abstraction exposed only independent autocommit queries. The public-order path had no shared transaction boundary, so PostgreSQL could not atomically commit or roll back the reservation and order writes together.
+- Evidence: current src/lib/menu/order-public.ts before P0.1 used separate SQL calls for reservation, order creation, and finalization. PostgreSQL transaction blocks are all-or-nothing, and node-postgres requires all transaction statements to use the same checked-out client.
+- Final working solution: add a single transaction abstraction to src/lib/db.ts; PostgreSQL uses one checked-out pool client with BEGIN/COMMIT/ROLLBACK, while PGlite delegates to its interactive transaction API. Public-order reservation, order/order_items/status-event creation, and finalization now execute through the transaction handle.
+- Regression evidence: TDD RED was verified by Quality #2717; the new transaction contract failed before implementation. Quality #2726 then passed typecheck, full npm tests, lint, and production build.
+- Files / components involved: src/lib/db.ts, src/lib/menu/order-public.ts, tests/public-order-hardening.test.mjs.
+- Lessons for future: any public mutation that creates a reservation/idempotency record plus durable domain rows must use one database transaction or an explicitly equivalent atomic/recovery mechanism. Never reserve first and finalize later through separate autocommit statements.
+- Detection checklist: identify multi-statement public mutations; check whether reservation, domain rows, audit/event rows, and finalization share one transaction/client; add a failure-after-reservation regression test; verify concurrent duplicate behavior through the unique key and transaction boundary.
