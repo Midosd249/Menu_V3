@@ -1406,3 +1406,23 @@ Do not implement or repair either path automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+# 2026-10-02 — Supabase PostgreSQL 17.11 Security-Patch Readiness Audit — VERIFIED
+
+- VERIFIED: Supabase project `ublxptcqefujkbeepylc` is `ACTIVE_HEALTHY` and reports PostgreSQL `17.6.1.166` / server `17.6`.
+- VERIFIED: official Supabase changelog states PostgreSQL `15.19 / 17.11` is rolling out from `15.14 / 17.6`, with existing-project upgrades available in the Dashboard from 2026-09-28.
+- VERIFIED: official PostgreSQL documentation identifies 17.11 as the fixed version for multiple 17.x security issues, including CVE-2026-14666, CVE-2026-14664, and CVE-2026-14662.
+- VERIFIED: project database size is approximately 18 MB.
+- VERIFIED: no logical replication slots were present and no active streaming replicas were visible through the database session.
+- VERIFIED: no user-schema `reg*` columns were found.
+- VERIFIED: `ltree` is not installed, there are no user-schema `ltree` columns/indexes, and no `btree_gist` extension is installed.
+- VERIFIED: `pgcrypto` is installed, but there are no user-schema `bytea` columns and no repository/database function references to `pgp_sym_*` or `pgp_pub_*`; no affected application data was identified by this evidence.
+- VERIFIED: no affected non-extension custom operators were returned by the official detection query.
+- VERIFIED: the only `reg*` columns are internal `realtime` objects and therefore are outside the user-schema upgrade check.
+- INFERRED: the project is on the pre-17.11 upstream minor version line and should be treated as requiring owner-controlled upgrade readiness/patch verification, but provider-side backport status for this exact project is not exposed by the connected project metadata.
+- UNKNOWN: project-specific Dashboard upgrade eligibility, scheduled maintenance window, and any provider-side patch/backport status for `17.6.1.166`.
+- NO DATABASE MUTATION: no upgrade, reindex, extension change, data rewrite, or configuration change was performed.
+
+## EXACT NEXT TASK
+
+**Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify the Dashboard shows the project as eligible, review any provider-reported blockers, choose a maintenance window, confirm backup readiness, and only then authorize the actual upgrade. Do not trigger the upgrade automatically from the AI workflow.
