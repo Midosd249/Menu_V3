@@ -1,3 +1,16 @@
+# 2026-10-02 — P0.2 Layered Public Order Abuse Protection — MERGED / VERIFIED
+
+- VERIFIED: PR #349 merged as 5e2cdf847251f0bc6a8688667a7d3e060e768419 after Quality #2731 and W9 Orders QA #869 passed.
+- VERIFIED: layered session/IP accepted-order protection and separate invalid-request throttling are now on main.
+- VERIFIED: accepted quota is consumed only after structural/business validation.
+- VERIFIED: P0.1 atomic order creation remains preserved.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+P1.1 — Public Menu Cache/Session Decoupling.
+
+---
 # 2026-10-02 — P0.2 Layered Public Order Abuse Protection — IMPLEMENTATION IN PROGRESS
 
 - VERIFIED: P0.1 is merged in main at 7bfa8ceafff4340466d776d5410fe455d07d2f15.
