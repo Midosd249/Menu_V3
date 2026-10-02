@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { authMiddleware } from "@/lib/auth/middleware";
+import { authMiddleware } from "../auth/middleware.ts";
 import {
   getMembership,
   requirePermissionForRole,
   type Membership,
-} from "@/lib/auth/authorization.server";
-import { getSql, type Sql } from "@/lib/db";
+} from "../auth/authorization.server.ts";
+import type { Sql } from "../db.ts";
 import type { FnResult } from "./types";
 
 export const ORDER_VALUE_ANALYTICS_TIME_ZONE = "Asia/Riyadh" as const;
@@ -196,7 +196,7 @@ export async function queryOrderValueAnalytics(
   period: ResolvedOrderValuePeriod,
   branchId: string | undefined,
   authorizedBranchIds: string[] | null,
-): Promise<OrderValueAnalytics | FnResult<never>> {
+): Promise<FnResult<OrderValueAnalytics>> {
   const effectiveBranchIds = branchId ? [branchId] : authorizedBranchIds;
   const branchPredicate = effectiveBranchIds === null ? "" : "and o.branch_id = any($4::text[])";
   const params = effectiveBranchIds === null
@@ -244,13 +244,16 @@ export async function queryOrderValueAnalytics(
   const orderValue = numeric(aggregate[0]?.order_value);
   const orderCount = numeric(aggregate[0]?.order_count);
   return {
-    period: { type: period.type, start: period.start.toISOString(), end: period.end.toISOString(), timeZone: ORDER_VALUE_ANALYTICS_TIME_ZONE },
-    currency: ORDER_VALUE_ANALYTICS_CURRENCY,
-    orderValue,
-    orderCount,
-    averageOrderValue: orderCount === 0 ? null : orderValue / orderCount,
-    dailyTrend: trend.map((row) => ({ day: String(row.day), orderValue: numeric(row.order_value) })),
-    dataQuality: { currencyConsistent: true },
+    ok: true,
+    data: {
+      period: { type: period.type, start: period.start.toISOString(), end: period.end.toISOString(), timeZone: ORDER_VALUE_ANALYTICS_TIME_ZONE },
+      currency: ORDER_VALUE_ANALYTICS_CURRENCY,
+      orderValue,
+      orderCount,
+      averageOrderValue: orderCount === 0 ? null : orderValue / orderCount,
+      dailyTrend: trend.map((row) => ({ day: String(row.day), orderValue: numeric(row.order_value) })),
+      dataQuality: { currencyConsistent: true },
+    },
   };
 }
 
@@ -259,6 +262,7 @@ export const getOwnerOrderValueAnalytics = createServerFn({ method: "GET" })
   .validator(inputSchema)
   .handler(async ({ context, data }): Promise<FnResult<OrderValueAnalytics>> => {
     try {
+      const { getSql } = await import("../db.ts");
       const sql = await getSql();
       const membership = await getMembership(sql, context.userId);
       if (!membership) return errorResult("forbidden", "No active tenant membership.");

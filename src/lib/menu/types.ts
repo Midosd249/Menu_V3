@@ -8,7 +8,7 @@ export function accessRoleToRole(accessRole: AccessRole): Role { switch (accessR
 export function roleToAccessRole(role: Role): AccessRole { switch (role) { case "owner": return "tenant_owner"; case "admin": return "branch_manager"; case "editor": return "editor"; case "staff": return "staff"; } }
 export type EventType = "visit" | "product_view" | "qr_scan" | "whatsapp" | "search" | "category_view" | "add_to_cart";
 export type FnOk<T> = { ok: true; data: T };
-export type FnErr = { ok: false; error: string; code: "not_found" | "unauthorized" | "forbidden" | "unavailable" | "invalid" | "conflict" };
+export type FnErr = { ok: false; error: string; code: "not_found" | "unauthorized" | "forbidden" | "unavailable" | "invalid" | "conflict" | "data_quality" };
 export type FnResult<T> = FnOk<T> | FnErr;
 export type Tenant = { id: string; ownerUserId: string; slug: string; nameAr: string; nameEn: string; taglineAr: string; taglineEn: string; logoUrl: string; coverUrl: string; instagramUrl: string; websiteUrl?: string; snapchatUrl?: string; facebookUrl?: string; tiktokUrl?: string; vatRegistrationNumber?: string; whatsapp: string; whatsappTemplate: string; primaryColor: string; accentColor: string; themeKey: ThemeKey; currency: string; city: string; country: string; isPublished: boolean; isActive: boolean; createdAt: string; updatedAt: string };
 export type PublicTenant = Omit<Tenant, "ownerUserId" | "isPublished" | "isActive" | "createdAt" | "updatedAt">;

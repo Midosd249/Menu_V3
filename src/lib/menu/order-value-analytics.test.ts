@@ -75,7 +75,7 @@ test("tenant isolation and client-controlled tenant/role/permission scope are re
   assert.match(source, /getMembership\(sql, context\.userId\)/);
   assert.doesNotMatch(source, /data\.tenantId|data\.role|data\.permission/);
   assert.match(source, /o\.tenant_id = \$1/);
-  assert.match(source, /inputSchema[\\s\\S]*\.strict\(\)/);
+  assert.match(source, /inputSchema[\s\S]*\.strict\(\)/);
 });
 
 test("branch scope is derived from trusted membership and tenant-owned branch records", () => {
