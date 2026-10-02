@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { z } from "zod";
 import { MenuThemeController } from "@/components/menu-theme-controller";
+import { getLazyThemeTemplate } from "@/components/theme-template-loader";
 import { PublicActionLinks } from "@/components/public-action-links";
 import { GuestMenuAssistant } from "@/components/guest-menu-assistant";
-import { PublicMenuView } from "@/components/public-menu";
 import { MenuunPoweredBy } from "@/components/menuun-powered-by";
 import { PublicUpsellPanel } from "@/components/public-upsell-panel";
 import { MenuNutritionOverlay } from "@/components/menu-nutrition-overlay";
-import { TasteTemplate } from "@/components/templates/taste";
-import { SignalTableTemplate } from "@/components/templates/signal-table";
-import { SpecialtyCafeTemplate } from "@/components/templates/specialty-cafe";
-import { BakeryDessertTemplate } from "@/components/templates/bakery-dessert";
-import { FastCasualTemplate } from "@/components/templates/fast-casual";
-import { FineDiningHospitalityTemplate } from "@/components/templates/fine-dining-hospitality";
-import { SmallMenuTemplate } from "@/components/templates/small-menu";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
 import { getPublicMenu, getPublicMenuAttribution } from "@/lib/menu/public";
@@ -129,5 +122,6 @@ export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: 
   const themedMenu = { ...state.menu, experimentVariant, tenant: { ...state.menu.tenant, themeKey: activeTheme } };
   const hasInlineActions = activeTheme === "heritage" || family === "contemporary-restaurant";
   const socialTone = activeTheme === "noir" ? "bg-black/20 text-paper" : activeTheme === "heritage" ? "bg-[var(--menu-surface)] text-[var(--menu-foreground)]" : "bg-[var(--menu-surface)] text-[var(--menu-foreground)]";
-  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} />{activeTheme === "heritage" ? <TasteTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "specialty-cafe" ? <SpecialtyCafeTemplate menu={themedMenu} /> : family === "bakery-dessert" ? <BakeryDessertTemplate menu={themedMenu} /> : family === "fast-casual" ? <FastCasualTemplate menu={themedMenu} /> : family === "fine-dining-hospitality" ? <FineDiningHospitalityTemplate menu={themedMenu} /> : family === "small-menu" ? <SmallMenuTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : family === "contemporary-restaurant" ? <SignalTableTemplate menu={themedMenu} preview={Boolean(previewTheme)} /> : <PublicMenuView menu={themedMenu} preview={Boolean(previewTheme)} />}{!hasInlineActions ? <footer className={"mx-auto grid max-w-3xl gap-3 border-t px-4 py-8 " + socialTone} data-menu-social-footer><p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">{locale === "ar" ? "تابع وتواصل" : "Connect with us"}</p><PublicActionLinks tenant={themedMenu.tenant} branch={themedMenu.branch} lang={locale} preview={Boolean(previewTheme)} experimentVariant={themedMenu.experimentVariant} /></footer> : null}<MenuunPoweredBy lang={locale} /><MenuNutritionOverlay products={themedMenu.products} lang={locale} /><PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;
+  const ThemeTemplate = getLazyThemeTemplate(activeTheme);
+  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} /><Suspense fallback={<LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />}><ThemeTemplate menu={themedMenu} preview={Boolean(previewTheme)} /></Suspense>{!hasInlineActions ? <footer className={"mx-auto grid max-w-3xl gap-3 border-t px-4 py-8 " + socialTone} data-menu-social-footer><p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">{locale === "ar" ? "تابع وتواصل" : "Connect with us"}</p><PublicActionLinks tenant={themedMenu.tenant} branch={themedMenu.branch} lang={locale} preview={Boolean(previewTheme)} experimentVariant={themedMenu.experimentVariant} /></footer> : null}<MenuunPoweredBy lang={locale} /><MenuNutritionOverlay products={themedMenu.products} lang={locale} /><PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;
 }
