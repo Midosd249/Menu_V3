@@ -46,6 +46,12 @@ function AnalyticsPage() {
 
   useEffect(() => {
     let active = true;
+    if (orderValuePeriod.type === "custom" && (!orderValuePeriod.startLocal || !orderValuePeriod.endLocal)) {
+      setOrderValueState({ status: "error", message: t(copy.analytics.orderValueCustomRequired, lang) });
+      return () => {
+        active = false;
+      };
+    }
     setOrderValueState({ status: "loading" });
     void getOwnerOrderValueAnalytics({
       data: {
