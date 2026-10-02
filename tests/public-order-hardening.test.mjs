@@ -47,3 +47,15 @@ test("public orders attach only a valid server-controlled tenant session", () =>
   assert.doesNotMatch(orderSource, /anonymous_session_id.*data\./);
   assert.match(attributionMigration, /foreign key \(tenant_id, anonymous_session_id\)\s+references anonymous_sessions \(tenant_id, id\)/);
 });
+
+
+test("public order reservation and finalization use one transaction", async () => {
+  const dbSource = await readFile("src/lib/db.ts", "utf8");
+  assert.match(dbSource, /transaction<.*\(callback/);
+  assert.match(orderSource, /await sql\.transaction\(/);
+  assert.match(orderSource, /insert into public_order_idempotency/);
+  assert.match(orderSource, /update public_order_idempotency/);
+  assert.match(orderSource, /insert into orders/);
+  assert.match(orderSource, /insert into order_items/);
+  assert.match(orderSource, /insert into order_status_events/);
+});
