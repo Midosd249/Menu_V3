@@ -6,7 +6,7 @@ import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { buildGrowthMetrics } from "@/lib/menu/growth";
 import { getMyStudio, getOwnerAnalytics } from "@/lib/menu/owner";
-import { getOwnerOrderValueAnalytics, type OrderValueAnalytics, type OrderValueAnalyticsPeriod } from "@/lib/menu/order-value-analytics";
+import { getOwnerOrderValueAnalytics, getOwnerOrderValueAnalyticsTenants, type OrderValueAnalytics, type OrderValueAnalyticsPeriod, type OrderValueAnalyticsTenant } from "@/lib/menu/order-value-analytics";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/studio/analytics")({ component: AnalyticsPage });
@@ -15,6 +15,8 @@ function AnalyticsPage() {
   const { lang } = useLang();
   const [days, setDays] = useState<7 | 30>(7);
   const [orderValuePeriod, setOrderValuePeriod] = useState<OrderValueAnalyticsPeriod>({ type: "today" });
+  const [orderValueTenants, setOrderValueTenants] = useState<OrderValueAnalyticsTenant[]>([]);
+  const [orderValueTenantId, setOrderValueTenantId] = useState("");
   const [orderValueBranchId, setOrderValueBranchId] = useState("all");
   const [orderValueState, setOrderValueState] = useState<
     | { status: "loading" }
@@ -46,6 +48,30 @@ function AnalyticsPage() {
 
   useEffect(() => {
     let active = true;
+    void getOwnerOrderValueAnalyticsTenants()
+      .then((result) => {
+        if (!active) return;
+        if (!result.ok) {
+          setOrderValueState({ status: "error", message: result.error });
+          return;
+        }
+        setOrderValueTenants(result.data);
+        setOrderValueTenantId((current) => current && result.data.some((tenant) => tenant.id === current)
+          ? current
+          : result.data[0]?.id ?? "");
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        setOrderValueState({ status: "error", message: error instanceof Error ? error.message : t(copy.state.error, lang) });
+      });
+    return () => {
+      active = false;
+    };
+  }, [lang]);
+
+  useEffect(() => {
+    let active = true;
+    if (!orderValueTenantId) return () => { active = false; };
     if (orderValuePeriod.type === "custom" && (!orderValuePeriod.startLocal || !orderValuePeriod.endLocal)) {
       setOrderValueState({ status: "error", message: t(copy.analytics.orderValueCustomRequired, lang) });
       return () => {
@@ -56,6 +82,7 @@ function AnalyticsPage() {
     void getOwnerOrderValueAnalytics({
       data: {
         period: orderValuePeriod,
+        tenantId: orderValueTenantId,
         branchId: orderValueBranchId === "all" ? undefined : orderValueBranchId,
       },
     })
@@ -77,7 +104,7 @@ function AnalyticsPage() {
     return () => {
       active = false;
     };
-  }, [orderValuePeriod, orderValueBranchId, lang]);
+  }, [orderValuePeriod, orderValueTenantId, orderValueBranchId, lang]);
 
   return (
     <div className="mx-auto grid max-w-5xl gap-6">
@@ -97,9 +124,15 @@ function AnalyticsPage() {
       <OrderValueAnalyticsPanel
         state={orderValueState}
         period={orderValuePeriod}
+        tenantId={orderValueTenantId}
+        tenants={orderValueTenants}
         branchId={orderValueBranchId}
-        branches={state.status === "ok" ? state.studio.branches : []}
+        branches={orderValueTenants.find((tenant) => tenant.id === orderValueTenantId)?.branches ?? []}
         onPeriodChange={setOrderValuePeriod}
+        onTenantChange={(tenantId) => {
+          setOrderValueTenantId(tenantId);
+          setOrderValueBranchId("all");
+        }}
         onBranchChange={setOrderValueBranchId}
         lang={lang}
       />
@@ -114,9 +147,12 @@ function formatSar(value: number, lang: "ar" | "en") {
 function OrderValueAnalyticsPanel({
   state,
   period,
+  tenantId,
+  tenants,
   branchId,
   branches,
   onPeriodChange,
+  onTenantChange,
   onBranchChange,
   lang,
 }: {
@@ -125,9 +161,12 @@ function OrderValueAnalyticsPanel({
     | { status: "error"; message: string }
     | { status: "ok"; data: OrderValueAnalytics };
   period: OrderValueAnalyticsPeriod;
+  tenantId: string;
+  tenants: OrderValueAnalyticsTenant[];
   branchId: string;
-  branches: StudioSnapshot["branches"];
+  branches: OrderValueAnalyticsTenant["branches"];
   onPeriodChange: (period: OrderValueAnalyticsPeriod) => void;
+  onTenantChange: (tenantId: string) => void;
   onBranchChange: (branchId: string) => void;
   lang: "ar" | "en";
 }) {
@@ -150,17 +189,35 @@ function OrderValueAnalyticsPanel({
           <h2 id="order-value-title" className="mt-1 font-display text-xl font-semibold">{t(copy.analytics.orderValueTitle, lang)}</h2>
           <p className="mt-1 max-w-2xl text-sm text-muted">{t(copy.analytics.orderValueDescription, lang)}</p>
         </div>
-        <select
-          aria-label={t(copy.analytics.orderValueBranch, lang)}
-          value={branchId}
-          onChange={(event) => onBranchChange(event.target.value)}
-          className="min-h-10 rounded-lg border border-line bg-paper px-3 text-sm"
-        >
-          <option value="all">{t(copy.analytics.orderValueAllBranches, lang)}</option>
-          {branches.filter((branch) => branch.isActive).map((branch) => (
-            <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr || branch.nameEn : branch.nameEn || branch.nameAr}</option>
-          ))}
-        </select>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="grid gap-1 text-sm">
+            <span>{t(copy.analytics.orderValueTenant, lang)}</span>
+            <select
+              aria-label={t(copy.analytics.orderValueTenant, lang)}
+              value={tenantId}
+              onChange={(event) => onTenantChange(event.target.value)}
+              className="min-h-10 rounded-lg border border-line bg-paper px-3 text-sm"
+            >
+              {tenants.map((tenant) => (
+                <option key={tenant.id} value={tenant.id}>{lang === "ar" ? tenant.nameAr || tenant.nameEn : tenant.nameEn || tenant.nameAr}</option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1 text-sm">
+            <span>{t(copy.analytics.orderValueBranch, lang)}</span>
+            <select
+              aria-label={t(copy.analytics.orderValueBranch, lang)}
+              value={branchId}
+              onChange={(event) => onBranchChange(event.target.value)}
+              className="min-h-10 rounded-lg border border-line bg-paper px-3 text-sm"
+            >
+              <option value="all">{t(copy.analytics.orderValueAllBranches, lang)}</option>
+              {branches.map((branch) => (
+                <option key={branch.id} value={branch.id}>{lang === "ar" ? branch.nameAr || branch.nameEn : branch.nameEn || branch.nameAr}</option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
       <div className="grid gap-3">
         <div className="flex flex-wrap gap-2" role="group" aria-label={t(copy.analytics.orderValuePeriod, lang)}>

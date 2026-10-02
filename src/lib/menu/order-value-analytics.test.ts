@@ -71,9 +71,12 @@ test("SQL enforces exact half-open [start,end) boundaries and Riyadh daily group
   assert.ok(calls.some((query) => query.includes("at time zone 'Asia/Riyadh'") && query.includes("group by day")));
 });
 
-test("tenant isolation and client-controlled tenant/role/permission scope are rejected", () => {
-  assert.match(source, /getMembership\(sql, context\.userId\)/);
-  assert.doesNotMatch(source, /data\.tenantId|data\.role|data\.permission/);
+test("tenant scope is explicitly selected and validated server-side", () => {
+  assert.match(source, /tenantId: z\.string\(\)\.min\(1\)\.max\(128\)\.optional\(\)/);
+  assert.match(source, /getMembership\(sql, context\.userId, data\.tenantId\)/);
+  assert.match(source, /join tenant_members tm on tm\.tenant_id = t\.id/);
+  assert.match(source, /tm\.user_id = \$\{context\.userId\}/);
+  assert.match(source, /requirePermissionForRole\(membership\.role, "analytics\.read"\)/);
   assert.match(source, /o\.tenant_id = \$1/);
   assert.match(source, /inputSchema[\s\S]*\.strict\(\)/);
 });

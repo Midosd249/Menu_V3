@@ -239,6 +239,7 @@ export const copy = {
     orderValueCustomRequired: { ar: "حدد بداية ونهاية الفترة المخصصة لعرض النتائج.", en: "Select a start and end for the custom period to view results." },
     orderValueStart: { ar: "بداية الفترة", en: "Start" },
     orderValueEnd: { ar: "نهاية الفترة", en: "End boundary" },
+    orderValueTenant: { ar: "المطعم", en: "Restaurant" },
     orderValueBranch: { ar: "الفرع", en: "Branch" },
     orderValueAllBranches: { ar: "كل الفروع المسموح بها", en: "All permitted branches" },
     orderValuePeriod: { ar: "الفترة", en: "Period" },
