@@ -1741,3 +1741,23 @@ Wait for the next explicitly scoped task. Do not start another implementation, d
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 - IMPLEMENTATION STATUS: PUSHED / FULL CI VERIFIED / PR OPEN.
 - EXACT NEXT TASK: owner reviews PR #348 and explicitly authorizes merge/release if accepted. Do not merge, deploy, or start P0.2 automatically.
+
+# 2026-10-02 — P1.2 Theme Code Splitting — MERGED / VERIFIED
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: P1.2 lazy-loads the selected canonical public-menu theme implementation through `src/components/theme-template-loader.tsx`; the public route and shared renderer no longer statically import theme implementations.
+- VERIFIED: all five canonical themes remain mapped: Essential → SmallMenuTemplate, Editorial → SignalTableTemplate, Noir → FineDiningHospitalityTemplate, Heritage → TasteTemplate, Gallery → BakeryDessertTemplate.
+- VERIFIED: GitHub Quality #2769 passed all configured gates, including typecheck, tests, lint, production build, all-theme browser QA, Arabic/English Menuun browser QA, performance fixture, Studio/Platform Admin browser QA, and diagnostics upload.
+- VERIFIED: W9 Orders QA #904 passed.
+- VERIFIED: Vercel Preview status for the final PR deployment is SUCCESS / Ready. This is Preview evidence only.
+- VERIFIED: P0.1/P0.2 and protected Order Value Analytics, preparation-time/ETA, image delivery, auth/RLS, tenant/branch boundaries, and unrelated migrations were not changed.
+- UNKNOWN: direct physical-device QA and Production performance measurements for selected-theme bundle transfer/parse/evaluation remain outside this CI evidence.
+- BLOCKED: no Production deployment was performed; deployment is intentionally separate from implementation verification.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
+
+Start with repository and current runtime evidence. Establish a measurable baseline for the current public-menu path after P1.1/P1.2, then make exactly one evidence-backed atomic performance improvement. Preserve all tenant/branch/auth/RLS, order, abuse-protection, five-theme, Arabic/English and RTL/LTR contracts. Do not deploy automatically.
