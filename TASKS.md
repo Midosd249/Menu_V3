@@ -1593,3 +1593,20 @@ Repository-first baseline and evidence before implementation; preserve all compl
 **P1.4 — Leaked Password Protection**
 
 No P1.4 implementation has started. Do not deploy or perform unrelated work automatically.
+
+# 2026-10-02 — P1.4 Deferred / Severity Matrix Reprioritized
+
+- VERIFIED: P1.4 leaked-password protection is not currently actionable under the owner's present Supabase subscription and is not required for the current product scope.
+- DECISION: remove P1.4 from the active task queue and mark it **DEFERRED / OUT OF CURRENT SCOPE**.
+- PROTECTED: retain the historical audit/security finding so future plan upgrades can reactivate it without losing evidence.
+- VERIFIED: the major P0 security/reliability findings were already resolved through P0.1 and P0.2.
+- VERIFIED: the current P1.1/P1.2/P1.3 performance/cache/theme work is complete.
+- NEXT PRIORITY: **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
+- ACCEPTANCE: repository migration inventory, Supabase migration history, and live schema/functions/triggers/RLS are compared; every discrepancy is classified; no migration is blindly replayed; no production schema change occurs unless separately authorized.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — Supabase Migration Three-Way Reconciliation**
+
+Do not begin automatically. 
+
