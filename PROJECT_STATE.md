@@ -1823,3 +1823,27 @@ Do not begin automatically. Start from `main@67f05fff4f7f6c07e87b56df1a9a676f2ae
 
 Do not begin automatically. First boot from current `main`, verify current Git/CI/runtime evidence, then perform the reconciliation as one atomic task if explicitly authorized.
 
+
+
+# 2026-10-02 — Supabase Migration Reconciliation — VERIFIED / DRIFT FOUND
+
+- VERIFIED: PR #356 merged to `main` as `3291243387874c6543dc3e6d9a3250550ddf9ba1` and P1.4 remains deferred/out of scope.
+- VERIFIED: active `main-protection` requires only GitHub `quality`; Vercel is not a required merge gate. No deployment was triggered by this merge action.
+- VERIFIED: current main HEAD is `3291243387874c6543dc3e6d9a3250550ddf9ba1`.
+- VERIFIED: repository has 69 active top-level SQL migration files; nested `migrations/auth/0001_auth.sql` duplicates the top-level file and is not consumed by the active runner.
+- VERIFIED: `menu_v3._migrations` contains exactly 69 distinct applied basenames, matching the 69 active repository migrations.
+- VERIFIED: `supabase_migrations.schema_migrations` contains 44 historical versions; only two timestamps exactly overlap current repository filenames.
+- INFERRED: `supabase_migrations.schema_migrations` is a legacy/parallel tracker; the active application migration ledger is `menu_v3._migrations`, used by `scripts/migrate.mjs`.
+- VERIFIED: live Supabase project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY on PostgreSQL 17.6.1.
+- VERIFIED: live `menu_v3` contains 45 tables, 148 indexes, 30 functions, 33 non-internal triggers, 7 RLS policies, and 189 constraints.
+- VERIFIED: current live schema contains branch ordering, product offers, anonymous sessions, order preparation, and layered public-order objects.
+- DRIFT: live `menu_v3.public_order_invalid_rate_limits` has RLS disabled, while migration `20261002090000_layered_public_order_abuse_controls.sql` explicitly enables RLS.
+- VERIFIED: direct grants for that table do not include `anon`, `authenticated`, `public`, or `service_role`; current public exposure is not established by this grant evidence.
+- VERIFIED: Security Advisor flags the disabled-RLS table as Critical; leaked-password protection remains a separate deferred warning.
+- ORDERING ANOMALY: two repository files share timestamp `20260909001000`; custom history records public-order abuse before archive operations, differing from lexical filename order. Both are applied and live objects exist.
+- GUARDRAIL: no migration replay, history repair, RLS change, schema modification, corrective migration, or deployment was performed.
+- STATUS: DONE / VERIFIED for reconciliation evidence.
+
+## EXACT NEXT TASK
+
+**Dedicated schema-drift remediation — reconcile `menu_v3.public_order_invalid_rate_limits` RLS state against the repository migration contract, after explicit owner authorization.**
