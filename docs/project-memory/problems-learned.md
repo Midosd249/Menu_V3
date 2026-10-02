@@ -140,3 +140,12 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Final working solution: update contracts to assert the canonical lazy loader, five theme mappings, absence of static theme imports from the route/renderer, and continued Suspense/renderer behavior.
 - Lesson: when moving implementation ownership, update tests to protect the architecture and behavior that must remain true, not the obsolete source location.
 - Detection checklist: identify the new owner; verify all canonical mappings; assert prohibited old imports are absent; retain behavior/route/browser contracts; run full CI before merge.
+
+
+## Problem: Theme code-splitting contract tests can become stale after implementation ownership moves
+
+- Date / Context: 2026-10-02; P1.2 Theme Code Splitting.
+- Symptom: Quality initially failed because existing tests expected theme implementations and `lazy()` to remain in `theme-renderer.tsx` after ownership moved to `theme-template-loader.tsx`.
+- Root cause: structural tests asserted obsolete source locations rather than the enduring architecture and behavior.
+- Final working solution: contracts now verify the canonical lazy loader, all five mappings, absence of static theme imports from route/renderer, and continued Suspense/renderer behavior.
+- Lesson: when implementation ownership moves, update tests around architectural invariants and user-visible behavior, not old file locations.
