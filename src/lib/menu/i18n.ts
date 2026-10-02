@@ -240,7 +240,6 @@ export const copy = {
     orderValueStart: { ar: "بداية الفترة", en: "Start" },
     orderValueEnd: { ar: "نهاية الفترة", en: "End boundary" },
     orderValueTenant: { ar: "المطعم", en: "Restaurant" },
-    orderValueAllTenants: { ar: "كل المطاعم المسموح بها", en: "All permitted restaurants" },
     orderValueBranch: { ar: "الفرع", en: "Branch" },
     orderValueAllBranches: { ar: "كل الفروع المسموح بها", en: "All permitted branches" },
     orderValuePeriod: { ar: "الفترة", en: "Period" },
