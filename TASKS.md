@@ -1610,3 +1610,19 @@ No P1.4 implementation has started. Do not deploy or perform unrelated work auto
 
 Do not begin automatically. 
 
+
+
+# 2026-10-02 — Supabase Migration Three-Way Reconciliation — CLOSED / VERIFIED
+
+- VERIFIED: PR #356 merged as `3291243387874c6543dc3e6d9a3250550ddf9ba1`.
+- VERIFIED: repository inventory = 69 active top-level migration files; active `menu_v3._migrations` ledger = 69/69 applied.
+- VERIFIED: Supabase CLI history = 44 legacy versions; only two exact timestamps overlap current filenames.
+- VERIFIED: live schema/catalog inspection covered tables, columns, constraints, indexes, functions, triggers, RLS/policies, views, and relevant grants.
+- DRIFT: `menu_v3.public_order_invalid_rate_limits` is RLS-disabled despite the repository migration enabling RLS; no client-role grant was found.
+- ORDERING ANOMALY: duplicate migration timestamp `20260909001000` has a historical application order different from lexical filename ordering.
+- VERIFIED: no repair/replay/history mutation/schema DDL/deployment was performed.
+- STATUS: DONE / VERIFIED.
+
+## EXACT NEXT TASK
+
+**Dedicated schema-drift remediation — reconcile `menu_v3.public_order_invalid_rate_limits` RLS state against the repository migration contract, after explicit owner authorization.**
