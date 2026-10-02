@@ -1,3 +1,20 @@
+# 2026-10-02 — Order Value Analytics Tenant Scope — MERGED / DEPLOYED / VERIFIED
+- VERIFIED: Production data for `مقهى زهر النعناع` contains 3 eligible SAR orders for the current Asia/Riyadh day totaling 265 SAR; the latest eligible order is inside the day boundary.
+- VERIFIED: root cause of the empty analytics observation was multi-tenant scope resolution: the authenticated account has multiple active tenant memberships, while the previous Order Value Analytics handler resolved the earliest membership when no tenant was explicitly selected.
+- VERIFIED: PR #345 adds server-authorized tenant discovery, explicit tenant selection, selected-tenant branch scope, and server-side membership/analytics.read validation.
+- VERIFIED: Quality run `36961095902` passed all configured gates; W9 Orders QA run `36961095916` passed.
+- VERIFIED: PR #345 merged to `main` as `e7a2d42660d2b563cc473b6845236d89de61025f`.
+- VERIFIED: Vercel Production deployment `dpl_6wCbjhxQJyZ8RKicBs7mhEX1Jvo2` is READY and serves `main` commit `e7a2d42660d2b563cc473b6845236d89de61025f`.
+- VERIFIED: Production `/studio/analytics` returns HTTP 200; the checked 10-minute production error/warning window has no logs.
+- UNKNOWN: an authenticated browser session for the owner was not available to independently click the tenant selector and visually confirm the 265 SAR result in the live UI.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: DEPLOYED / VERIFIED.
+
+## EXACT NEXT ACTION
+
+Owner performs one authenticated Production smoke on `/studio/analytics`: select `مقهى زهر النعناع` → `اليوم` → `كل الفروع` and confirm `265 SAR`, `3 orders`, and approximately `88.33 SAR` average. If that live UI check fails, return the visible error/state for the next scoped diagnostic; otherwise stop.
+
+---
 # 2026-10-02 — Preparation Time + Estimated Ready Time — VERIFIED / MERGED
 - VERIFIED: PR #339 is merged; its three-file scope is documentation-only (PROJECT_STATE.md, PLAN.md, TASKS.md) and contains no runtime/application changes.
 - UNKNOWN: direct real-device Production QA evidence is not established by the current GitHub evidence.
