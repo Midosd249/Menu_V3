@@ -1575,3 +1575,21 @@ Repository-first investigation and measurement baseline only before implementati
 **P1.3 — Public Menu Runtime Performance / Observability**
 
 Repository-first baseline and evidence before implementation; preserve all completed milestones.
+
+# 2026-10-02 — P1.3 Runtime Performance / Observability — MERGED / VERIFIED
+
+- VERIFIED: PR #354 merged into `main` as `67f05fff4f7f6c07e87b56df1a9a676f2aee896d`.
+- VERIFIED: changed runtime/test scope was limited to `src/lib/menu/public.ts`, `tests/public-menu-cache-session.test.mjs`, and `package.json` test registration.
+- VERIFIED: fresh tenant/branch cache hits avoid the revision lookup while preserving the existing 15-second TTL and revision-keyed miss path.
+- VERIFIED: Quality #2785 = SUCCESS; W9 Orders QA #918 = SUCCESS.
+- VERIFIED: no Production deployment.
+- UNKNOWN: Production/physical-device performance evidence.
+- BLOCKED: Vercel Preview deployment remains blocked by the platform deployment quota.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.4 — Leaked Password Protection**
+
+No P1.4 implementation has started. Do not deploy or perform unrelated work automatically.
