@@ -1610,3 +1610,19 @@ No P1.4 implementation has started. Do not deploy or perform unrelated work auto
 
 Do not begin automatically. 
 
+
+# 2026-10-02 — Migration Reconciliation Closeout — VERIFIED
+
+- VERIFIED: PR #356 merged at `3291243387874c6543dc3e6d9a3250550ddf9ba1`.
+- VERIFIED: repository migration inventory = 69 active top-level migrations + 1 intentionally excluded nested auth migration.
+- VERIFIED: active application ledger = 69/69 applied in `menu_v3._migrations`.
+- VERIFIED: Supabase CLI history = 46 entries and is not the active application ledger.
+- VERIFIED: live PostgreSQL catalog was inspected for tables, columns, constraints, indexes, functions, triggers, RLS, policies, grants, and extensions.
+- VERIFIED: no unvalidated FKs found.
+- ORDERING ANOMALY: 20 historical application-time positions differ from filename order.
+- UNKNOWN: exact provenance of every legacy Supabase history row cannot be reconstructed from current repository files alone.
+- NO IMPLEMENTATION: no database or deployment mutation was performed.
+
+## EXACT NEXT TASK
+
+**Migration Ledger Strategy — choose and document the canonical migration tracking workflow before any migration-history repair or schema release.**

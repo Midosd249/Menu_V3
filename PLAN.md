@@ -1376,3 +1376,18 @@ Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d
 
 Do not start automatically.
 
+
+# 2026-10-02 — Migration Reconciliation Closeout — VERIFIED
+
+- VERIFIED: PR #356 merged as `3291243387874c6543dc3e6d9a3250550ddf9ba1`.
+- VERIFIED: active application ledger = `menu_v3._migrations`; 69/69 top-level repository migrations are applied.
+- VERIFIED: Supabase `schema_migrations` has 46 legacy/parallel entries and is not the complete active application chain.
+- VERIFIED: live schema contains current latest migration objects; no unvalidated FKs found.
+- ORDERING ANOMALY: 20 filename/application-time order mismatches; no automatic repair authorized.
+- NO SCHEMA ACTION: reconciliation was read-only.
+
+## EXACT NEXT TASK
+
+**Migration Ledger Strategy — decide whether to retain the custom `menu_v3._migrations` architecture or migrate to canonical Supabase CLI migration tracking.**
+
+Do not implement or repair either path automatically.

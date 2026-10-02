@@ -159,3 +159,13 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Regression evidence: Quality #2785 passed the registered cache/session contract test, typecheck, full npm test, lint, production build, browser QA and performance gates; W9 Orders QA #918 also passed.
 - Lesson: a bounded scope-level fast path is appropriate only when its freshness window matches the existing public cache contract. Never replace server-derived tenant/branch identity with client identity, and invalidate parallel cache layers together.
 - Continuity lesson: a regression test file that is not registered in the canonical test command can create false confidence. Verify test registration before treating TDD/CI evidence as complete.
+
+## Problem: Menu V3 has parallel migration ledgers
+
+- Date / Context: 2026-10-02; Supabase migration three-way reconciliation.
+- Symptom: 69 active repository migrations are tracked by `menu_v3._migrations`, while `supabase_migrations.schema_migrations` contains 46 historical CLI entries with only two exact version overlaps.
+- Root cause: VERIFIED — the application uses `scripts/migrate.mjs` plus a basename-keyed `menu_v3._migrations` ledger; the repository lacks the canonical Supabase CLI migration directory/config.
+- Risk: future operators could treat the Supabase CLI history as canonical and replay or repair against the wrong migration system.
+- Lesson: before migration repair or Supabase CLI adoption, identify the actual runner, ledger, directory, ordering rules, and live schema. Never infer the canonical ledger from the existence of `supabase_migrations.schema_migrations` alone.
+- Anti-patterns: replaying repository migrations because they are absent from `schema_migrations`; repairing history without proving which runner owns production; introducing a second migration system without an explicit canonical-ledger decision.
+- Detection checklist: inspect runner → inspect migration directory/order → compare active ledger → query Supabase history → inspect `pg_catalog` → decide canonical ledger before repair.
