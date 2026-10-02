@@ -171,3 +171,22 @@ Require all future work reports in Arabic to use:
 The user is the sole human owner and primary developer of Menu V3. Git commits, pull requests, branches, CI activity, documentation history, and automated workflow activity are repository evidence and must not be interpreted as proof of multiple human developers.
 
 No specialist workflow may independently widen scope, deploy, publish, modify protected architecture, or perform an external side effect. The Principal Engineer remains the orchestration point and the user's authorized workflow boundary remains authoritative.
+
+
+## Expanded Specialist Routing — 2026-10-02
+
+| Workflow | Trigger | Main collaboration |
+|---|---|---|
+| Architect & Tenant Boundary Guard | architecture, tenant/branch scope, server authority, migrations | Security, Database Performance, Strict Review, QA |
+| Database & Performance Optimization | SQL/Drizzle/Supabase, public-menu/API reads, latency, indexes, payloads, caching | Architect, Load Testing, Strict Review |
+| Security & Auth Resilience | auth/session, authorization, public APIs, abuse, AI cost, validation, privacy | Architect, Database Performance, QA, Strict Review |
+| Load Testing & Production Readiness | capacity, concurrency, performance, resilience, offline/mobile, production readiness | Database Performance, Security, Design, QA, Release |
+| Strict Code Review & Anti-Over-Engineering | every material code/PR review, especially AI-generated or multi-file changes | Architect, Security, Database Performance, QA |
+
+Default composition: `BOOT → MEMORY → RESEARCH → SPECIALIST ANALYSIS → PRINCIPAL INTEGRATION → IMPLEMENT → STRICT REVIEW → QA/LOAD → CONTINUITY → STOP`.
+
+Independent analysis may run in parallel; conflicting implementation writes are forbidden. The Principal Engineer owns integration. Specialists must return evidence, severity, acceptance criteria, verification plan, risks, and UNKNOWN/BLOCKED items.
+
+Trigger examples: public ordering uses Architect + Security + Database Performance + Strict Review + QA, adding Load Testing when concurrency/reliability matters; public-menu/theme/performance uses Design + Database Performance + Load Testing + Strict Review + QA, adding Security when data/actions change; auth/tenant/RLS uses Architect + Security + Database Performance + Strict Review + QA; migration/data-model work adds explicit migration reconciliation and rollback planning.
+
+Every specialist discovering a material problem hands the Principal Engineer a memory candidate containing symptom, evidence, root cause, attempted approaches, final solution, verification, preventive rule, detection checklist, and remaining uncertainty.

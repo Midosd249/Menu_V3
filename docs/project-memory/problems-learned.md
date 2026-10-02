@@ -118,3 +118,21 @@ This file exists to prevent Menu V3 from repeating expensive engineering mistake
 
 ## Maintenance Rule
 When a new incident consumes significant time, causes repeated retries, exposes a hidden architectural assumption, or requires another agent to discover a better fix, add a concise entry here before the next major milestone. Record the causal lesson, not just the patch. Preserve uncertainty explicitly.
+
+
+## Problem Recording Contract — Added 2026-10-02
+
+This file is the permanent learning ledger, not optional narrative documentation.
+
+When a session discovers a material defect, blocker, failed/wasteful approach, hidden assumption, repeated regression, security/performance risk, or non-obvious fix, the Principal Engineer must add a record here before closing the task, or explicitly record in the session continuity log that no new reusable problem was found.
+
+Required fields: Problem ID/title; date/context; status; symptom; impact/severity; evidence; root cause; failed/wasted attempts; final working solution; files/components; verification; preventive rule; detection checklist; remaining uncertainty.
+
+Do not delete old records to shorten the file. Supersede obsolete lessons with an appended evidence-backed note.
+
+### Governance learning — 2026-10-02
+- Problem: the requested five specialist guardrails were not previously represented as one explicit registry with deterministic collaboration and trigger rules.
+- Root cause: existing routing named broad workflows such as Security/data and QA/regression without dedicated documents for the requested architecture, database-performance, auth-resilience, load-readiness, and anti-over-engineering guards.
+- Solution: added `docs/agents/agent-registry.md`, five dedicated workflow documents, expanded automatic routing, and a mandatory problem-memory writeback contract.
+- Prevention: keep specialist responsibilities discoverable in one registry and require every material reusable lesson to be written back before task closure.
+- Verification: documentation batch committed to the existing PR branch; post-change CI is required.
