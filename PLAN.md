@@ -1,3 +1,30 @@
+# 2026-10-03 — PostgreSQL 17.11 Upgrade + Audit Closeout — VERIFIED
+
+- VERIFIED: Supabase PostgreSQL is now `17.11.0.002`; the planned `17.6.1.166 → 17.11.0.002` minor upgrade is complete.
+- VERIFIED: the upgrade was pursued for the current PostgreSQL 17 minor security and bug-fix release, not for an application feature or schema migration.
+- VERIFIED: independent logical-backup recovery validation was completed by the owner; no backup credential or backup file entered the repository.
+- VERIFIED: post-upgrade authenticated product-edit smoke confirmed the application can still write data to the live Supabase database.
+- VERIFIED: no application/schema/migration/RLS/auth/tenant/branch change was bundled with the platform upgrade.
+- VERIFIED: P0.1/P0.2/P1.1/P1.2/P1.3 are complete and protected.
+- VERIFIED: P1.4 remains deferred/out of scope.
+- VERIFIED: migration three-way reconciliation is complete and the custom `menu_v3._migrations` ledger remains canonical.
+- VERIFIED: generated-`any`, unindexed-FK, and PostgreSQL readiness audits are closed for this cycle; the 18 unindexed-FK findings remain INFO-level and no index change was justified by workload evidence.
+- CLEANUP: temporary audit PRs #357/#359/#360/#361 were closed; historical audit records remain preserved.
+
+## Remaining plan
+
+1. **Product roadmap / explicitly authorized feature work:** no new implementation is started until the owner selects the next atomic task.
+2. **Offline ordering:** conditional only if offline ordering becomes an explicit product requirement; it is not currently authorized.
+3. **Saudi fixed UTC+03:** conditional low-priority item if the product expands beyond the current timezone scope.
+4. **AI token/cost/concurrency budgets:** conditional low-priority hardening when real cost/abuse evidence warrants it.
+5. **Trusted proxy boundary:** preserve the existing `trustedProxyHeaders` security invariant; audit only if new evidence indicates exposure.
+6. **Supabase Advisor:** INFO/WARN findings remain separate scoped work; do not create indexes or rewrite RLS policies solely to clear Advisor output without workload/security evidence.
+7. **Release/device evidence:** Production identity and physical-device QA remain separate from the database-upgrade closeout.
+
+## EXACT NEXT TASK
+
+**Owner-select the next explicitly scoped Menu V3 task. First boot from current repository/GitHub/Supabase evidence and reconcile the plan before implementation.**
+
 # 2026-10-02 — P1.1 Closeout — VERIFIED / PR #351
 
 - VERIFIED: P1.1 final implementation passed Quality #2756 and W9 Orders QA #892.
