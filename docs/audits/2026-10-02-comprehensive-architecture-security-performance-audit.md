@@ -515,3 +515,91 @@ The original audit baseline remains historical evidence. Current code, Git, CI a
 ## Exact next task
 
 **Run the P0.2 GitHub Quality/W9 gates on the implementation PR, review the final diff, and only then decide the controlled merge. Do not deploy automatically.**
+
+
+# 2026-10-02 — Current-State Reconciliation After P0.1 + P0.2 — VERIFIED
+
+## Supersession rule
+
+This addendum supersedes the historical baseline and action-status claims above wherever they conflict with current repository/Git/CI evidence. The audit remains valuable as the original architectural/security/performance baseline, but current code, Git, CI and runtime evidence take precedence.
+
+## Git/CI current state
+
+- VERIFIED: P0.1 merged as PR #348, merge commit `7bfa8ceafff4340466d776d5410fe455d07d2f15`.
+- VERIFIED: P0.2 merged as PR #349, merge commit `5e2cdf847251f0bc6a8688667a7d3e060e768419`.
+- VERIFIED: P0.2 final Quality #2731 passed.
+- VERIFIED: P0.2 final W9 Orders QA #869 passed.
+- VERIFIED: the continuity PR #350 head `917809310cd0a0c56b09ec8f52e69d52a472456f` has Quality #2733 = success, W9 #870 = success, and Vercel status = success.
+- UNKNOWN: PR #350 merge state until the merge is directly confirmed.
+- UNKNOWN: Production deployment corresponding to P0.2/PR #350; no deployment was performed by this closeout.
+
+## Resolved audit findings
+
+### P0.1 — Atomic Public Order Creation
+**VERIFIED — RESOLVED**
+
+The historical non-atomic idempotency finding is resolved by PR #348. Reservation, order, order_items, status event, and idempotency finalization now share the transaction boundary. Do not reimplement this fix unless new evidence shows a regression.
+
+### P0.2 — Layered Public Order Abuse Protection
+**VERIFIED — RESOLVED / MERGED**
+
+The historical limiter finding is resolved by PR #349. The implementation adds server-issued anonymous-session + request-IP layering, separate invalid-request throttling, and accepted-quota consumption after full business validation while preserving server-side tenant/branch authority and the P0.1 atomic boundary.
+
+Do not weaken or replace these controls in P1.1.
+
+## Remaining prioritized work
+
+### P1.1 — Public Menu Cache/Session Decoupling
+**EXACT NEXT TASK**
+
+Before implementation, establish a measurement baseline for:
+- TTFB;
+- DB reads and writes;
+- menu-cache hit/miss behavior;
+- anonymous-session attribution reads/writes, especially `last_seen_at`;
+- HTML/SSR payload size;
+- LCP where browser evidence is available.
+
+Then safely separate public-safe menu content caching from anonymous-session attribution. Reduce/stabilize attribution writes without changing tenant/user semantics. Prove that no cache can cross user/tenant boundaries.
+
+**Guardrail:** do not introduce shared/CDN caching merely because it is theoretically faster. Evidence must establish safety and benefit first.
+
+### P1.2 — Theme Code Splitting
+Remain queued after P1.1. Do not begin automatically.
+
+### P1.3 — Migration Reconciliation
+Remain queued after P1.2. Do not blindly replay migration files.
+
+### P1.4 — Leaked Password Protection
+Remain queued after P1.3.
+
+## Protected systems
+
+The following are explicitly protected from opportunistic refactors during P1.1:
+- Order Value Analytics tenant/branch scope and its existing verified behavior;
+- P0.1 transaction boundary;
+- P0.2 layered abuse controls;
+- server-authoritative order pricing/validation;
+- preparation-time/ETA concurrency protections;
+- auth, RLS, SECURITY DEFINER, tenant and branch isolation;
+- existing image delivery;
+- the five existing themes and their shared renderer contracts;
+- migration history/schema until the dedicated reconciliation task.
+
+## Verification boundary
+
+**VERIFIED:** current GitHub CI evidence for P0.1/P0.2 and the documentation PR head.
+
+**UNKNOWN:** production cache-hit ratio, DB-write volume, TTFB and LCP baseline; these must be measured as part of P1.1 where tooling permits.
+
+**UNKNOWN:** authenticated Production browser smoke and physical-device QA.
+
+**BLOCKED:** local shell execution is unavailable in the current connector-only execution surface.
+
+## Exact cross-chat handoff
+
+Start the next chat at **P1.1 — Public Menu Cache/Session Decoupling**.
+
+First action: boot from repository/Git evidence and confirm the continuity PR #350 is merged before creating or editing a P1.1 implementation branch.
+
+Do not start P1.2, deployment, redesign, cleanup, or unrelated migration work automatically.
