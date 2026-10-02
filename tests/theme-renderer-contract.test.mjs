@@ -3,6 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const renderer = fs.readFileSync("src/components/theme-renderer.tsx", "utf8");
+const loader = fs.readFileSync("src/components/theme-template-loader.tsx", "utf8");
 const preview = fs.readFileSync("src/routes/themes/preview.tsx", "utf8");
 const registry = fs.readFileSync("src/lib/theme/registry.ts", "utf8");
 
@@ -14,7 +15,7 @@ test("all five canonical themes remain registered", () => {
 
 test("public theme renderer lazy-loads theme implementations", () => {
   for (const theme of ["taste", "signal-table", "bakery-dessert", "fine-dining-hospitality", "small-menu"]) {
-    assert.match(renderer, new RegExp(`import\\(["']@/components/templates/${theme}["']\\)`));
+    assert.match(loader, new RegExp(`import\\(["']@/components/templates/${theme}["']\\)`));
   }
   assert.doesNotMatch(renderer, /from ["']@\/components\/templates\//);
   assert.match(renderer, /lazy\(/);
