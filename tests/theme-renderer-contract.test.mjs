@@ -12,6 +12,21 @@ test("all five canonical themes remain registered", () => {
   for (const theme of canonicalThemes) assert.match(registry, new RegExp(`key: "${theme}"`));
 });
 
+test("public theme renderer lazy-loads theme implementations", () => {
+  for (const theme of ["taste", "signal-table", "bakery-dessert", "fine-dining-hospitality", "small-menu"]) {
+    assert.match(renderer, new RegExp(`import\\(["']@/components/templates/${theme}["']\\)`));
+  }
+  assert.doesNotMatch(renderer, /from ["']@\/components\/templates\//);
+  assert.match(renderer, /lazy\(/);
+  assert.match(renderer, /Suspense/);
+});
+
+test("public route does not statically import theme implementations", () => {
+  const route = fs.readFileSync("src/routes/m.$slug.tsx", "utf8");
+  assert.doesNotMatch(route, /from ["']@\/components\/templates\//);
+  assert.match(route, /getLazyThemeTemplate/);
+});
+
 test("public theme renderer covers every canonical family", () => {
   for (const marker of [
     "theme === \"heritage\"",
