@@ -18,7 +18,7 @@ test("public theme renderer lazy-loads theme implementations", () => {
     assert.match(loader, new RegExp(`import\\(["']@/components/templates/${theme}["']\\)`));
   }
   assert.doesNotMatch(renderer, /from ["']@\/components\/templates\//);
-  assert.match(renderer, /lazy\(/);
+  assert.match(loader, /lazy\(/);
   assert.match(renderer, /Suspense/);
 });
 
