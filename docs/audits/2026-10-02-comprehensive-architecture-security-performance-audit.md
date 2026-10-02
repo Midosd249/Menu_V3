@@ -673,3 +673,34 @@ Do not start P1.2, deployment, redesign, cleanup, or unrelated migration work au
 ## EXACT NEXT TASK
 
 **P1.3 — Public Menu Runtime Performance / Observability**
+
+## P1.3 Runtime Performance / Observability — Closeout — 2026-10-02
+
+### Baseline
+- VERIFIED: CI golden 30-product fixture at 390x844 measured 20,587 bytes HTML transfer, 20,287 decoded HTML bytes, 31 image resources, 202,708 image-transfer bytes, and FCP 116 ms.
+- VERIFIED: separate Editorial browser evidence measured 40 JS requests / 48,957 transfer bytes, 6 font requests / 226,752 transfer bytes, 10 image requests / 698,810 transfer bytes, and FCP 324 ms.
+- UNKNOWN: Production TTFB, real cache hit/miss ratio, DB reads/writes per public-menu request, and real-device Arabic/English performance.
+
+### Evidence-backed bottleneck
+The existing 15-second revision-keyed process-local menu cache still performed a `public_content_version` database lookup before checking whether a fresh cached menu existed. This made a cache hit pay one DB read.
+
+### Atomic improvement
+PR #354 adds a tenant/branch-scoped in-process fast path with the same 15-second TTL. The key is server-derived as `tenantSlug:branchSlug/default`; a fresh entry returns before `getSql()` and revision lookup. Misses retain the existing revision-keyed cache and SQL tenant/branch filters. Cache invalidation clears both maps.
+
+### Security / isolation
+- VERIFIED: no client-supplied identity, tenant, branch, role, entitlement or price is trusted by the new path.
+- VERIFIED: no shared/CDN cache was introduced.
+- VERIFIED: no auth, RLS, SECURITY DEFINER, order, abuse-protection, analytics, ETA, image-delivery, theme-identity, or migration behavior was changed.
+
+### Verification
+- VERIFIED: Quality #2785 = SUCCESS, including typecheck, full npm test, lint, production build, all-theme browser QA, Arabic/English browser QA, golden performance fixture, Studio/Platform Admin browser QA and diagnostics.
+- VERIFIED: W9 Orders QA #918 = SUCCESS.
+- VERIFIED: PR #354 squash-merged into `main` as `67f05fff4f7f6c07e87b56df1a9a676f2aee896d`.
+- UNKNOWN: the new contract's pre-implementation RED state was not captured because the test file was not initially registered in `npm test`; registration was corrected before final verification and the final suite passed.
+- BLOCKED: Vercel Preview is independently rate-limited by `api-deployments-free-per-day`; no Production deployment was attempted.
+
+## EXACT NEXT TASK
+
+**P1.4 — Leaked Password Protection**
+
+Remain queued. Do not start automatically.
