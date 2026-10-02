@@ -819,3 +819,25 @@ Read-only reconciliation of repository migrations, `menu_v3._migrations`, `supab
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+## 2026-10-02 — Supabase PostgreSQL 17.11 Security-Patch Readiness Audit — VERIFIED
+
+### Research / evidence
+- VERIFIED: Supabase project `ublxptcqefujkbeepylc` reports `ACTIVE_HEALTHY`, PostgreSQL `17.6.1.166`, server `17.6`, database size approximately 18 MB.
+- VERIFIED: Supabase official changelog announces rollout of PostgreSQL `15.19 / 17.11` from `15.14 / 17.6`, with existing-project Dashboard upgrade availability from 2026-09-28.
+- VERIFIED: PostgreSQL 17.11 official release/security documentation fixes multiple 17.x vulnerabilities, including CVE-2026-14666, CVE-2026-14664, and CVE-2026-14662.
+- VERIFIED: no logical replication slots, no active streaming replicas visible in the database session, and no user-schema `reg*` columns.
+- VERIFIED: `ltree` and `btree_gist` are not installed and no affected indexes were found.
+- VERIFIED: `pgcrypto` is installed, but no user-schema `bytea` columns or database/repository PGP encrypt/decrypt paths were identified.
+- VERIFIED: no affected non-extension custom operators were returned by the official detection query.
+- VERIFIED: no self-hosted PG17-incompatible extensions from the official Supabase upgrade guidance are installed.
+
+### Interpretation
+- INFERRED: the project is on the pre-17.11 upstream minor line and should be treated as awaiting provider-level patch verification/upgrade, but the connected Supabase project metadata does not expose Dashboard eligibility or provider-side backport details.
+- UNKNOWN: exact project-specific upgrade eligibility, blockers, scheduled maintenance, and provider backport status.
+
+### Decision
+**READINESS AUDIT COMPLETED — NO DATABASE MUTATION.** No pre-upgrade schema/data remediation was identified from the documented detection checks. The next action is owner-controlled Dashboard verification and maintenance/backup planning, not an automatic upgrade.
+
+### Exact next action
+**Verify the Supabase Dashboard upgrade eligibility/blockers for project `ublxptcqefujkbeepylc`, confirm backup readiness and a maintenance window, then explicitly authorize the upgrade if proceeding.** Re-read the project version after any upgrade before claiming the security patch is applied.
