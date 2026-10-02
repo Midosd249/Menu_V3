@@ -116,7 +116,10 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
     const revision = String(revisionRows[0]?.public_content_version ?? "0");
     const cacheKey = `${tenantSlug}:${branchSlug ?? "default"}:${revision}`;
     const cached = menuCache.get(cacheKey);
-    if (cached && cached.expiresAt > Date.now()) return { ok: true, data: cached.menu };
+    if (cached && cached.expiresAt > Date.now()) {
+      menuScopeCache.set(scopeCacheKey, cached);
+      return { ok: true, data: cached.menu };
+    }
 
     const rows = await sql<PublicMenuRow>`
       select
@@ -261,7 +264,9 @@ async function loadPublicMenu(tenantSlug: string, branchSlug?: string | null): P
       productOptions: await loadPublicOptions(sql, tenant.id, ordered.products.map((p) => p.id)),
       productOffers,
     };
-    menuCache.set(cacheKey, { menu, expiresAt: Date.now() + MENU_CACHE_TTL_MS });
+    const cacheEntry = { menu, expiresAt: Date.now() + MENU_CACHE_TTL_MS };
+    menuCache.set(cacheKey, cacheEntry);
+    menuScopeCache.set(scopeCacheKey, cacheEntry);
     return { ok: true, data: menu };
   } catch (err) {
     console.error("loadPublicMenu failed", err);
