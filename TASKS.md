@@ -1641,3 +1641,18 @@ Do not begin automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+# 2026-10-02 — Audit Follow-up — Performance Advisor Unindexed Foreign Keys — VERIFIED / READ-ONLY
+
+- VERIFIED: Supabase Performance Advisor reports 18 unindexed_foreign_keys findings.
+- VERIFIED: live-schema/index inspection and repository/workload tracing show no evidence that the 18 findings currently create a material performance bottleneck.
+- VERIFIED: active menu_events workload is already served by tenant/branch/category/product composite indexes; representative EXPLAIN plans use existing indexes.
+- VERIFIED: branch-ordering and upsell query paths already use workload-shaped composite/primary indexes.
+- VERIFIED: remaining affected tables have zero or near-zero live rows or no observed parent DELETE/UPDATE pressure that would justify additional indexes now.
+- DECISION: do not add 18 standalone indexes and do not change schema solely to clear the Advisor INFO finding.
+- NO IMPLEMENTATION: audit/continuity only; no database mutation and no deployment.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — review the remaining actionable performance/security Advisor findings and select the next atomic item from current live evidence.**
