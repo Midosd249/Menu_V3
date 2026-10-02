@@ -130,3 +130,13 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Files / components involved: src/lib/db.ts, src/lib/menu/order-public.ts, tests/public-order-hardening.test.mjs.
 - Lessons for future: any public mutation that creates a reservation/idempotency record plus durable domain rows must use one database transaction or an explicitly equivalent atomic/recovery mechanism. Never reserve first and finalize later through separate autocommit statements.
 - Detection checklist: identify multi-statement public mutations; check whether reservation, domain rows, audit/event rows, and finalization share one transaction/client; add a failure-after-reservation regression test; verify concurrent duplicate behavior through the unique key and transaction boundary.
+
+
+## Problem: Theme code-splitting contract tests can become stale when ownership moves
+
+- Date / Context: 2026-10-02; P1.2 Theme Code Splitting.
+- Symptom: Quality initially failed because existing theme contract tests expected theme implementations and `lazy()` to remain in `theme-renderer.tsx` after the implementation intentionally moved lazy-loading ownership into `theme-template-loader.tsx`.
+- Root cause: structural tests asserted the previous implementation location rather than the enduring architectural contract.
+- Final working solution: update contracts to assert the canonical lazy loader, five theme mappings, absence of static theme imports from the route/renderer, and continued Suspense/renderer behavior.
+- Lesson: when moving implementation ownership, update tests to protect the architecture and behavior that must remain true, not the obsolete source location.
+- Detection checklist: identify the new owner; verify all canonical mappings; assert prohibited old imports are absent; retain behavior/route/browser contracts; run full CI before merge.
