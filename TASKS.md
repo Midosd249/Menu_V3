@@ -1387,3 +1387,24 @@ Owner reviews PR #333 after CI completes. Do not merge or deploy automatically.
 - NOT CHANGED: lifecycle enforcement, database schema/migrations/triggers, auth/authz, tenant/branch isolation, polling/notifications, sound, WhatsApp, payments, public ordering, production settings.
 - PENDING: GitHub CI and browser/visual QA evidence.
 - NEXT TASK: review PR CI and visual evidence, then wait for explicit merge authorization.
+
+
+# 2026-10-02 — Order Value Analytics Backend — IMPLEMENTATION / VERIFICATION STATE
+
+- VERIFIED: focused implementation branch is `feat/order-value-analytics-backend`, created directly from current `main` commit `e370caabe179a9795409e76b5357530de4ccb63d`.
+- VERIFIED: backend implementation adds the explicit `analytics.read` permission for owner/admin only, preserving least privilege for editor/staff.
+- VERIFIED: the new server function `getOwnerOrderValueAnalytics` derives tenant membership from `context.userId`; no tenant, role, or permission is accepted from client input.
+- VERIFIED: branch access is resolved server-side from tenant-owned branch records plus trusted membership branch scope; requested branches are checked against that trusted set.
+- VERIFIED: periods are resolved server-side in `Asia/Riyadh` with explicit Sunday week-start configuration and half-open `[start,end)` UTC timestamps.
+- VERIFIED: eligible statuses are `confirmed`, `preparing`, `ready`, `completed`; `new` and `cancelled` are excluded.
+- VERIFIED: SAR consistency is checked before aggregation; eligible non-SAR historical rows return deterministic `data_quality` instead of a silent partial total.
+- VERIFIED: Order Value, Order Count, Average Order Value, and Riyadh daily trend are calculated from `orders` only; no `order_items` join is used.
+- VERIFIED: zero eligible orders return value 0, count 0, average null, and an empty trend.
+- VERIFIED: no migration, UI, engagement-analytics, order-lifecycle, preparation-time, payment/refund/tax/fee/revenue logic, Vercel setting, deployment, real order, WhatsApp action, or PR was added.
+- VERIFIED: branch diff contains only `package.json`, `src/lib/auth/permissions.ts`, `src/lib/menu/order-value-analytics.ts`, and `src/lib/menu/order-value-analytics.test.ts`.
+- UNKNOWN: repository automated tests, typecheck, lint, and production build were not executable in this session because the available repository write/read path does not provide a local checkout, and the repository quality workflow triggers only on `main` pushes or pull requests. No PR was opened by instruction.
+- UNKNOWN: local working-tree status is not observable through the GitHub connector.
+- KNOWN LIMITATION: the implementation uses the Saudi fixed UTC+03 offset for `Asia/Riyadh`, which is deterministic for the approved Saudi-only milestone; no tenant-configurable timezone is introduced.
+- IMPLEMENTATION STATUS: IMPLEMENTATION_IN_PROGRESS / PUSHED_TO_FOCUSED_BRANCH.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+- EXACT NEXT TASK: run the repository's focused/full automated verification in a local or CI-capable environment, fix only evidence-backed failures, then review the final diff before any later UI work. Do not open a PR or deploy automatically.
