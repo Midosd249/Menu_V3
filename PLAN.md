@@ -1184,3 +1184,12 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 - IMPLEMENTATION STATUS: IMPLEMENTATION_IN_PROGRESS / PUSHED_TO_FOCUSED_BRANCH.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 - EXACT NEXT TASK: run the repository's focused/full automated verification in a local or CI-capable environment, fix only evidence-backed failures, then review the final diff before any later UI work. Do not open a PR or deploy automatically.
+
+
+# 2026-10-02 — Order Value Analytics UI — PR #343 — VERIFIED / AWAITING MERGE
+
+- VERIFIED: `/studio/analytics` now consumes `getOwnerOrderValueAnalytics` for the approved Order Value v1 contract.
+- VERIFIED: period selectors, branch scope selection, bilingual copy, transparency notice, and daily trend presentation are implemented without changing the backend contract.
+- VERIFIED: Quality `2705` and W9 Orders QA `848` both passed on head `0445ac2f8875b736966733f6c76c3bca3b3a74f1`.
+- DEPLOYMENT: not performed; Vercel is intentionally outside the development gate.
+- NEXT TASK: owner review PR #343 and authorize merge; no automatic merge/deployment.
