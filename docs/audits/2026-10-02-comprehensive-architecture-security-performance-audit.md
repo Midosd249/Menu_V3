@@ -747,3 +747,57 @@ Remain queued. Do not start automatically.
 
 Do not start automatically. Re-boot from current Git/CI/runtime evidence before implementation or any schema action.
 
+
+
+# 2026-10-02 — Supabase Migration Three-Way Reconciliation Addendum — VERIFIED
+
+## Inventory and active ledger
+
+- VERIFIED: 69 active top-level SQL migration files exist under `migrations/`.
+- VERIFIED: `migrations/auth/0001_auth.sql` duplicates `migrations/0001_auth.sql` and is excluded by the active top-level migration runner.
+- VERIFIED: `menu_v3._migrations` has exactly 69 distinct rows, matching the active repository inventory.
+
+## Supabase CLI migration history
+
+- VERIFIED: `supabase_migrations.schema_migrations` has 44 versions.
+- VERIFIED: only `20260903025817` and `20260925105134` exactly overlap current repository migration timestamps.
+- REPOSITORY-ONLY (relative to CLI history): 67 current repository migration files are absent from `schema_migrations`.
+- HISTORY-ONLY: 42 CLI history versions are absent from current repository filenames.
+- EXPECTED / BENIGN interpretation: the mismatch is consistent with a legacy/parallel CLI history because the active application ledger contains 69/69 repository files and live schema contains current feature objects. It is not evidence for blind replay.
+- INFERRED: the project transitioned from an earlier Supabase CLI migration history to the custom `menu_v3._migrations` runner.
+
+## Live schema
+
+- VERIFIED: PostgreSQL 17.6.1.166, project ACTIVE_HEALTHY.
+- VERIFIED: `menu_v3` has 45 tables, 148 indexes, 30 functions, 33 non-internal triggers, 7 policies, and 189 constraints.
+- VERIFIED: no views or materialized views were found in `public` or `menu_v3` by catalog inspection.
+- VERIFIED: 44/45 `menu_v3` tables have RLS enabled; `public_order_invalid_rate_limits` is the sole RLS-disabled table.
+- VERIFIED: live columns include `orders.preparation_duration_minutes` and `orders.estimated_ready_at`; live branch-order and product-offer objects and current integrity triggers are present.
+
+## Findings
+
+| Finding | Classification | Evidence | Impact | Severity | Repair | Owner decision |
+|---|---|---|---|---|---|---|
+| Current repo vs Supabase CLI history | REPOSITORY-ONLY + HISTORY-ONLY / EXPECTED-BENIGN | 69/69 active files in `menu_v3._migrations`; 44 legacy CLI rows | Future CLI sync tooling may report divergence | Medium operational/DR | Separate migration-system decision only | Required before using CLI migration commands against current production |
+| Duplicate `20260909001000` timestamp | ORDERING ANOMALY | Two files share the version prefix; custom ledger application times differ from lexical order | Future tooling can face ambiguous ordering | Low/Medium | No automatic repair | Document/preserve existing order |
+| `public_order_invalid_rate_limits` RLS disabled | DRIFT | Migration explicitly enables RLS; live `pg_class.relrowsecurity=false` | Current live state violates migration contract; Security Advisor flags it | High/Critical per Advisor | Separate authorized remediation | Required |
+| Recent migration-produced objects | VERIFIED MATCH | Live catalog/table metadata confirms recent tables, columns, functions, triggers | Confirms current schema includes recent capabilities | None | None | None |
+| No client grants on server-only `menu_v3` tables | EXPECTED / BENIGN | Direct role-table grant query returned no client-role grants | Supports server-side access boundary | None | None | None |
+
+## Security notes
+
+- VERIFIED: Security Advisor reports the RLS-disabled table as a Critical finding. Direct grant inspection does not establish public access, so the advisor severity and actual observed privilege state must be kept distinct.
+- VERIFIED: Security Advisor also reports 37 RLS-enabled/no-policy informational findings for server-only `menu_v3` tables and the separate leaked-password warning.
+- VERIFIED: Performance Advisor reports 18 unindexed foreign keys; no change was made because this audit is reconciliation-only.
+
+## Guardrails
+
+- VERIFIED: no migration replay.
+- VERIFIED: no `schema_migrations` repair or mutation.
+- VERIFIED: no production schema/RLS/function/trigger/index/constraint change.
+- VERIFIED: no corrective migration generated.
+- VERIFIED: no deployment.
+
+## EXACT NEXT TASK
+
+**Dedicated schema-drift remediation — reconcile `menu_v3.public_order_invalid_rate_limits` RLS state against the repository migration contract, after explicit owner authorization.**
