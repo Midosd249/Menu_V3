@@ -711,7 +711,7 @@ Remain queued. Do not start automatically.
 - VERIFIED: the historical P0.1 and P0.2 medium findings have since been resolved and verified by the current repository/CI evidence.
 - VERIFIED: the current P1.1/P1.2/P1.3 implementation sequence has also been completed.
 - DECISION: **P1.4 — Leaked Password Protection is DEFERRED / OUT OF CURRENT SCOPE.**
-- REASON: current Supabase subscription does not expose leaked-password protection; Supabase currently documents the feature as available on Pro Plan and above. citeturn0search0turn0search1
+- REASON: current Supabase subscription does not expose leaked-password protection; Supabase currently documents the feature as available on Pro Plan and above.
 - IMPORTANT: this does **not** change the Severity Matrix finding from "Medium" to "Resolved". The underlying Security Advisor warning may remain until the feature is enabled; it is simply an owner-approved deferred item.
 - REPRIORITIZED NEXT ACTION: **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
 - RATIONALE: it is an independent operational/DR integrity concern and can be investigated without changing the current auth/security architecture.
