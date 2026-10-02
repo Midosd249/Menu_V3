@@ -841,3 +841,36 @@ Read-only reconciliation of repository migrations, `menu_v3._migrations`, `supab
 
 ### Exact next action
 **Verify the Supabase Dashboard upgrade eligibility/blockers for project `ublxptcqefujkbeepylc`, confirm backup readiness and a maintenance window, then explicitly authorize the upgrade if proceeding.** Re-read the project version after any upgrade before claiming the security patch is applied.
+
+## 2026-10-02 — PostgreSQL 17.11 Pre-Upgrade Safety Check — VERIFIED
+
+### Repository / release evidence
+- VERIFIED: main remains `83d0dce84de97a46c0ddec7372babd24dcd4ceb5`.
+- VERIFIED: PR #359/#360/#361 are documentation-only. Required GitHub workflow runs inspected for their heads passed. Vercel for #360/#361 is currently `failure` with a `build-rate-limit` target; no deployment success is claimed.
+- VERIFIED: no application/database changes were introduced by this safety check.
+
+### Supabase live evidence
+- VERIFIED: project `ublxptcqefujkbeepylc` = `ACTIVE_HEALTHY`; PostgreSQL `17.6.1.166` / server `17.6`; database size `18 MB`.
+- VERIFIED: owner Dashboard evidence shows target `17.11.0.002` and an available `Upgrade project` action. No action was taken.
+- VERIFIED: 0 replication slots, 0 streaming replicas, 0 affected `reg*` columns in `menu_v3/public`, 0 custom operators in `menu_v3/public`, 0 user `ltree` objects, no `btree_gist` extension, and 0 md5 login roles.
+- VERIFIED: installed extensions are `pg_stat_statements`, `pgcrypto`, `plpgsql`, `supabase_vault`, and `uuid-ossp`; no deprecated Postgres 17 extension is installed.
+- VERIFIED: live schema snapshot is 45 tables / 441 columns / 189 constraints / 148 indexes / 30 functions / 33 non-internal triggers / 7 policies, with 0 unvalidated constraints.
+- VERIFIED: 44/45 `menu_v3` tables have RLS enabled; no RLS/auth/migration change was made.
+- VERIFIED: `menu_v3._migrations` contains 69 applied migrations and latest is `20261002090000_layered_public_order_abuse_controls.sql`.
+- VERIFIED: current 24-hour PostgreSQL log review found no ERROR/FATAL/PANIC events outside `mgmt-api`; observed management API errors corresponded to audit/tooling SQL attempts, not application failures.
+
+### Compatibility analysis
+- VERIFIED: PostgreSQL 17.11 is a minor release; PostgreSQL states dump/restore is not required within 17.x and calls out ltree, btree_gist, logical replication, and pgcrypto-related data as upgrade-sensitive. citeturn2view2
+- VERIFIED: Supabase requires no read replicas, no logical replication slots, no unsupported extensions, and no problematic reg* data for its in-place upgrade path. citeturn2view1
+- VERIFIED: no current live evidence shows those blockers in Menu V3.
+
+### Backup / recovery gate
+- VERIFIED: current Supabase organization plan is `free`.
+- VERIFIED: Supabase documents daily automated backups for Pro/Team/Enterprise and recommends free-tier projects maintain their own logical/off-site exports; PITR is a Pro/Team/Enterprise add-on. citeturn2view0
+- UNKNOWN: current backup artifact/recency, restore test, and PITR recovery window for this project.
+
+### Decision
+**PRE-UPGRADE SAFETY CHECK COMPLETE — EXECUTION BLOCKED BY UNVERIFIED BACKUP/RECOVERY READINESS.** No schema/data remediation is required from the compatibility checks performed. No PostgreSQL upgrade, migration, reindex, extension change, or configuration mutation was performed.
+
+### Exact next action
+**Create and verify a fresh logical backup of the ~18 MB database, record recovery evidence, then choose the maintenance window. After explicit owner authorization, perform the Supabase Dashboard upgrade and re-read version/health before declaring success.**

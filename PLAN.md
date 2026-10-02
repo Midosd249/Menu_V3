@@ -1426,3 +1426,20 @@ Do not implement or repair either path automatically.
 ## EXACT NEXT TASK
 
 **Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify the Dashboard shows the project as eligible, review any provider-reported blockers, choose a maintenance window, confirm backup readiness, and only then authorize the actual upgrade. Do not trigger the upgrade automatically from the AI workflow.
+
+## 2026-10-02 — PostgreSQL 17.11 Pre-Upgrade Safety Check — VERIFIED / BLOCKED ON BACKUP GATE
+
+- VERIFIED: main baseline is `83d0dce84de97a46c0ddec7372babd24dcd4ceb5`; PR #359/#360/#361 remain open and documentation-only. Inspected GitHub workflow runs passed; Vercel for #360/#361 currently reports `failure` with a `build-rate-limit` target, so no deployment success is claimed.
+- VERIFIED: Supabase project `ublxptcqefujkbeepylc` is `ACTIVE_HEALTHY`, PostgreSQL `17.6.1.166` / server `17.6`, database size `18 MB`.
+- VERIFIED: owner-provided Dashboard evidence shows upgrade target `17.11.0.002`; no upgrade was triggered.
+- VERIFIED: installed extensions are `pg_stat_statements 1.11`, `pgcrypto 1.3`, `plpgsql 1.0`, `supabase_vault 0.3.1`, and `uuid-ossp 1.1`; no deprecated PG17 extension is installed.
+- VERIFIED: 0 logical replication slots, 0 streaming replicas, 0 affected `reg*` columns in `menu_v3/public`, 0 custom operators in `menu_v3/public`, 0 user `ltree` objects, no `btree_gist` extension, and 0 login roles using md5 passwords.
+- VERIFIED: live `menu_v3` snapshot remains 45 tables, 441 columns, 189 constraints, 148 indexes, 30 functions, 33 non-internal triggers, 7 policies, and 0 unvalidated constraints; 44/45 tables have RLS enabled.
+- VERIFIED: canonical `menu_v3._migrations` has 69 applied migrations; latest is `20261002090000_layered_public_order_abuse_controls.sql`. No migration or schema mutation was performed.
+- VERIFIED: current workload snapshot shows 1 non-idle DB session; inspected 24-hour PostgreSQL logs show no ERROR/FATAL/PANIC outside `mgmt-api` audit/tooling activity.
+- VERIFIED: organization plan is `free`. Supabase documents daily automated backups for Pro/Team/Enterprise and recommends free-tier projects maintain their own logical/off-site exports; PITR is a Pro/Team/Enterprise add-on.
+- UNKNOWN / BLOCKED: no current backup artifact, backup timestamp, restore test, or PITR recovery window was exposed by connected project metadata. Backup/recovery readiness is therefore not verified.
+- DECISION: do not execute the PostgreSQL upgrade yet. Compatibility checks are clear enough to continue, but the backup/recovery gate is not cleared.
+
+### Exact next action
+**Create and verify a fresh logical backup of the ~18 MB database using `pg_dump`/Supabase CLI, record its timestamp/location and recovery evidence, then choose a maintenance window. Only after that should the Dashboard `Upgrade project` action be explicitly authorized.**

@@ -1889,3 +1889,35 @@ Do not infer that the upgrade has occurred from the release announcement. Do not
 ## EXACT NEXT TASK
 
 **Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify Dashboard eligibility/blockers, maintenance window, and backup readiness; only then authorize the actual upgrade.
+
+## 2026-10-02 — PostgreSQL 17.11 Pre-Upgrade Safety Check — VERIFIED / BACKUP GATE NOT CLEARED
+
+### Current position
+- VERIFIED: `main@83d0dce84de97a46c0ddec7372babd24dcd4ceb5` is current.
+- VERIFIED: PR #359/#360/#361 are open and documentation-only; inspected GitHub workflow runs passed. Vercel for #360/#361 reports `failure` with a `build-rate-limit` target; this is not treated as Production success.
+- VERIFIED: Supabase project `ublxptcqefujkbeepylc` is `ACTIVE_HEALTHY`, PostgreSQL `17.6.1.166`, server `17.6`, database size `18 MB`.
+- VERIFIED: owner-provided Dashboard evidence shows upgrade availability to `17.11.0.002`; upgrade has not been triggered.
+
+### Safety gates
+| Gate | Result |
+|---|---|
+| Provider upgrade target | VERIFIED — 17.11.0.002 |
+| Read replicas | VERIFIED — 0 |
+| Logical replication slots | VERIFIED — 0 |
+| User-schema reg* blockers | VERIFIED — 0 |
+| ltree / btree_gist blockers | VERIFIED — absent |
+| Deprecated PG17 extensions | VERIFIED — absent |
+| md5 login roles | VERIFIED — 0 |
+| Schema integrity | VERIFIED — 0 unvalidated constraints |
+| Canonical migration state | VERIFIED — 69/69; latest 20261002090000_layered_public_order_abuse_controls.sql |
+| Current DB health | VERIFIED — ACTIVE_HEALTHY |
+| Application PostgreSQL ERROR/FATAL/PANIC snapshot | VERIFIED — none outside mgmt-api audit/tooling activity |
+| Backup recency | UNKNOWN |
+| Restore/recovery test | UNKNOWN |
+| PITR readiness | UNKNOWN / not available on current Free-plan entitlement |
+
+### Decision
+**PRE-UPGRADE SAFETY CHECK: NOT CLEARED FOR EXECUTION.** No PostgreSQL 17.11 compatibility remediation is currently indicated. The remaining hard gate is owner-controlled backup/recovery evidence.
+
+### Exact next task
+**Create and verify a fresh logical backup for this ~18 MB database, record the backup timestamp/location and recovery path, then select the maintenance window. Do not click Upgrade project until that gate is cleared and explicitly authorized.**

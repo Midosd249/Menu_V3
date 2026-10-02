@@ -1654,3 +1654,16 @@ Do not begin automatically.
 ## EXACT NEXT TASK
 
 **Owner-controlled Supabase PostgreSQL 17.6.1 → 17.11 upgrade execution readiness:** verify Dashboard eligibility/blockers, maintenance window, and backup readiness; only then authorize the actual upgrade.
+
+## 2026-10-02 — PostgreSQL 17.11 Pre-Upgrade Safety Check — VERIFIED / BLOCKED ON BACKUP GATE
+
+- VERIFIED: Dashboard offers PostgreSQL `17.11.0.002`; no upgrade executed.
+- VERIFIED: project is `ACTIVE_HEALTHY`, PostgreSQL `17.6.1.166`, database size `18 MB`.
+- VERIFIED: 0 read replicas, 0 logical replication slots, 0 affected `reg*` columns, no `ltree`/`btree_gist` blockers, no deprecated PG17 extensions, and 0 md5 login roles.
+- VERIFIED: canonical `menu_v3._migrations` is 69/69 with latest `20261002090000_layered_public_order_abuse_controls.sql`; no schema mutation occurred.
+- VERIFIED: organization plan is Free; backup recency and restore readiness are not exposed by connected project metadata.
+- DECISION: do not upgrade yet. Compatibility gate is clear; backup/recovery gate is UNKNOWN and blocks execution.
+
+## EXACT NEXT TASK
+
+**Owner-controlled backup gate: create a fresh logical backup with pg_dump/Supabase CLI, verify it is readable/restorable, record evidence, then choose the maintenance window. Only after explicit authorization should the Supabase Dashboard upgrade be executed.**
