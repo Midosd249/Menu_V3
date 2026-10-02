@@ -168,7 +168,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
           do update set request_count = public_order_invalid_rate_limits.request_count + 1, updated_at = now()
           returning request_count
         `));
-        if (rows.some((row) => Number(row.request_count ?? 0) > 6)) {
+        if (rows.some((row) => Number(row[0]?.request_count ?? 0) > 6)) {
           return { ok: false, code: "unavailable", error: "تم إيقاف الطلبات غير الصالحة مؤقتاً. حاول مرة أخرى بعد قليل." };
         }
         return fail(error);
@@ -313,7 +313,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
           do update set request_count = public_order_rate_limits.request_count + 1, updated_at = now()
           returning request_count
         `));
-        if (rateRows.some((row, index) => Number(row.request_count ?? 0) > (index === 0 ? 6 : 20))) {
+        if (rateRows.some((row, index) => Number(row[0]?.request_count ?? 0) > (index === 0 ? 6 : 20))) {
           throw new PublicOrderRateLimitError();
         }
 
