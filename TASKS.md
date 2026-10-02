@@ -1,3 +1,41 @@
+# 2026-10-02 — P0.2 Closeout + Cross-Chat Handoff — VERIFIED
+
+- VERIFIED: P0.2 PR #349 merged into `main` as `5e2cdf847251f0bc6a8688667a7d3e060e768419`.
+- VERIFIED: Quality #2731 and W9 Orders QA #869 passed on the final P0.2 head.
+- VERIFIED: PR #350 continuity branch now also has current audit/continuity reconciliation work.
+- VERIFIED: PR #350 head `917809310cd0a0c56b09ec8f52e69d52a472456f` currently has successful GitHub Quality #2733, W9 Orders QA #870, and Vercel status.
+- VERIFIED: No Production deployment was performed as part of P0.2 or this continuity closeout.
+- VERIFIED: P0.1 and P0.2 are closed implementation milestones and must not be reimplemented without new evidence.
+- PROTECTED: Order Value Analytics tenant scope, preparation-time system, image delivery, auth/RLS boundaries, and existing theme implementations are not part of P1.1.
+- UNKNOWN: authenticated Production browser smoke, physical Android/iOS QA, and production cache/DB/LCP measurements remain outside current GitHub evidence.
+- BLOCKED: local shell/test execution is unavailable through the current connector-only execution surface; CI evidence is therefore the available verification source for this documentation closeout.
+
+## CROSS-CHAT HANDOFF — DO NOT LOSE CONTEXT
+
+The next canonical implementation task is exactly:
+
+**P1.1 — Public Menu Cache/Session Decoupling**
+
+Start the next chat by re-reading the repository, not by relying on conversation memory. The required starting point is:
+
+1. verify current `main` HEAD and PR #350 merge state;
+2. read `AGENTS.md`, `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README, `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`, `docs/project-memory/problems-learned.md`, and relevant routing/research docs;
+3. prove P0.1/P0.2 remain merged before touching code;
+4. inspect current public-menu/session/cache code and tests;
+5. establish a focused measurement baseline before changing caching;
+6. preserve tenant/user isolation and do not introduce shared/CDN caching without evidence;
+7. keep this task atomic and stop after verification/documentation.
+
+**P1.1 acceptance criteria:**
+- public-menu content caching is separated from anonymous-session attribution;
+- `last_seen_at` writes are reduced/stabilized without breaking attribution semantics;
+- no cross-user or cross-tenant cache leakage is possible;
+- TTFB, DB reads/writes, cache-hit behavior, HTML/SSR payload and LCP are measured before/after where tooling permits;
+- no unrelated theme, analytics, auth/RLS, order, preparation-time, or migration work is included;
+- Production deployment is not automatic.
+
+**STOP CONDITION FOR THE NEW CHAT:** Do not start P1.2 or any deployment after P1.1. End with exactly one next task recorded in continuity.
+
 # 2026-10-02 — P0.2 Layered Public Order Abuse Protection — MERGED / VERIFIED
 
 - VERIFIED: PR #349 merged into main at 5e2cdf847251f0bc6a8688667a7d3e060e768419.
