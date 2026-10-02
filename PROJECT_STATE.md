@@ -1780,3 +1780,27 @@ Start with repository and current runtime evidence. Establish a measurable basel
 **P1.3 — Public Menu Runtime Performance / Observability**
 
 Start with repository-first measurement of the post-P1.2 public-menu runtime. Establish a numeric baseline where tooling permits, then make exactly one evidence-backed atomic improvement. Preserve P0.1/P0.2/P1.1/P1.2 and all tenant/branch/auth/RLS, Arabic/English, RTL/LTR, five-theme and order contracts. Do not deploy automatically.
+
+# 2026-10-02 — P1.3 Public Menu Runtime Performance / Observability — MERGED / VERIFIED
+
+- VERIFIED: PR #354 was squash-merged into `main` as `67f05fff4f7f6c07e87b56df1a9a676f2aee896d`.
+- VERIFIED: P0.1, P0.2, P1.1, P1.2 and P1.2 continuity PR #353 remain merged before P1.3.
+- VERIFIED: post-P1.2 CI baseline: golden 30-product fixture at 390x844 measured 20,587 bytes HTML transfer, 20,287 decoded HTML bytes, 31 image resources / 202,708 image-transfer bytes, FCP 116 ms. Separate Editorial browser evidence measured 40 JS requests / 48,957 transfer bytes, 6 font requests / 226,752 transfer bytes, and FCP 324 ms. These are CI measurements, not Production/device measurements.
+- VERIFIED: every request previously queried `public_content_version` before checking the existing 15-second revision-keyed process-local cache, so fresh in-process cache hits still paid a DB read.
+- VERIFIED: P1.3 adds a tenant/branch-scoped fast path using the same 15-second TTL; fresh hits return before `getSql()`/revision lookup, while misses retain the existing revision-keyed cache and server-authoritative SQL isolation.
+- VERIFIED: `invalidatePublicMenuCache()` clears both cache layers. No client identity is used in the new cache key.
+- VERIFIED: no changes to tenant/branch isolation, auth/RLS, SECURITY DEFINER, pricing, P0.1/P0.2, P1.1 session separation, P1.2 theme loading, Order Value Analytics, preparation/ETA, image delivery, or migrations.
+- VERIFIED: Quality #2785 passed typecheck, tests, contract gates, lint, production build, all-theme browser QA, Arabic/English browser QA, golden performance fixture, Studio/Platform Admin browser QA and diagnostics.
+- VERIFIED: W9 Orders QA #918 passed.
+- VERIFIED: no Production deployment was performed.
+- UNKNOWN: direct Production TTFB/cache-hit ratio/DB-query counts and physical-device performance.
+- UNKNOWN: CI did not capture the pre-implementation RED state because the existing cache/session test file was not initially registered in `npm test`; registration was corrected before final GREEN verification, and the final suite passed.
+- BLOCKED: Vercel Preview is independently blocked by `api-deployments-free-per-day`; this did not block GitHub Quality/W9 and no deployment retry was performed.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.4 — Leaked Password Protection**
+
+Do not begin automatically. Start from `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d` and boot repository/Git evidence before implementation.
