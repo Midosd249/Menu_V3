@@ -149,3 +149,8 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
 - Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
 - A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
+
+---
+## Canonical Architecture/Security Audit Continuity
+For future work touching authentication/authorization, tenant/branch isolation, public ordering, order analytics, public-menu performance/themes, database/RLS/migrations or offline behavior, read the canonical audit under `docs/audits/` before implementation. Re-verify current code/Git/CI/runtime evidence; current repository evidence wins if it differs from the audit.
+Current canonical audit: `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`

@@ -94,3 +94,5 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 ## Current product state
 
 The repository continuity files record G1–G7.2 as completed. The five-theme visual system is implemented: Essential, Editorial, Noir, Heritage, and Gallery have completed repository/CI implementation milestones. Heritage and Gallery use dedicated scoped presentation layers while preserving shared public-menu behavior. The current verification task is authenticated browser/device QA across the five preview variants; this remains separate from CI and deployment evidence. The temporary premium-theme testing override must be reviewed and disabled before commercial production launch.
+
+- `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md` — canonical architecture/security/performance/order-reliability audit baseline; required reading for relevant future tasks.

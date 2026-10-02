@@ -1216,3 +1216,11 @@ Owner reviews PR #327. Do not merge or deploy automatically.
 ## EXACT NEXT TASK
 
 Wait for the next explicitly scoped task. Do not deploy or begin unrelated work automatically.
+
+---
+# 2026-10-02 — Comprehensive Architecture/Security/Performance Audit — BASELINE RECORDED
+- VERIFIED: audit baseline `main` `5acf2e8ad7e9f9aafc410f0d3a25ba905e764c4a`.
+- VERIFIED: no Critical finding confirmed.
+- VERIFIED: full P0/P1/P2 action plan is canonical in `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`.
+- PROTECTED: do not rebuild completed analytics tenant scope, order pricing validation, image delivery or five-theme architecture without new evidence.
+- EXACT NEXT TASK: P0.1 Atomic Public Order Creation.

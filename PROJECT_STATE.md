@@ -1634,3 +1634,15 @@ Owner reviews PR #343 and explicitly authorizes merge. Do not merge or deploy au
 ## EXACT NEXT TASK
 
 Wait for the next explicitly scoped task. Do not start another implementation, deployment, redesign, or cleanup automatically.
+
+# 2026-10-02 — Comprehensive Architecture/Security/Performance Audit — CLOSED / REFERENCE BASELINE
+- VERIFIED: audited main `5acf2e8ad7e9f9aafc410f0d3a25ba905e764c4a`; comprehensive architecture/security/performance/order/RLS/migration/offline audit completed.
+- VERIFIED: no Critical vulnerability confirmed.
+- VERIFIED: principal Medium risks are non-atomic public-order idempotency, identifier-rotatable public-order abuse limiting, and public-menu scale pressure from `private, no-store` + anonymous-session DB work + static theme bundling.
+- VERIFIED: live Supabase RLS/grants/SECURITY DEFINER/search_path, Security Advisor and Performance Advisor were reviewed.
+- UNKNOWN: authenticated Production browser smoke, physical Android/iOS QA, production traffic metrics, and dedicated migration-history reconciliation.
+- PROTECTED: analytics tenant scope, server-authoritative order pricing, image delivery, five-theme system, RLS/auth boundaries and preparation-time implementation.
+- DOCUMENT: `docs/audits/2026-10-02-comprehensive-architecture-security-performance-audit.md`.
+
+## EXACT NEXT TASK
+**P0.1 — Atomic Public Order Creation.** Make public-order idempotency reservation + order/order_items/event/finalization atomic or deterministically recoverable, with failure-after-reservation and concurrent-duplicate regression tests. Stop after this atomic task.
