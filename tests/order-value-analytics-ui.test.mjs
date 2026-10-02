@@ -8,7 +8,7 @@ const copy = readFileSync("src/lib/menu/i18n.ts", "utf8");
 test("Order Value Analytics UI consumes the server-side order value contract", () => {
   assert.match(route, /getOwnerOrderValueAnalytics/);
   assert.match(route, /period: orderValuePeriod/);
-  assert.match(route, /branchId: branchId === "all" \? undefined : branchId/);
+  assert.match(route, /orderValueBranchId === "all"/);
 });
 
 test("Order Value Analytics UI exposes the approved period selectors", () => {
