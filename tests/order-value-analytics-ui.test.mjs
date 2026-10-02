@@ -7,7 +7,8 @@ const copy = readFileSync("src/lib/menu/i18n.ts", "utf8");
 
 test("Order Value Analytics UI consumes the server-side order value contract", () => {
   assert.match(route, /getOwnerOrderValueAnalytics/);
-  assert.match(route, /period: orderValuePeriod/);
+  assert.match(route, /getOwnerOrderValueAnalyticsTenants/);
+  assert.match(route, /tenantId: orderValueTenantId/);
   assert.match(route, /orderValueBranchId === "all"/);
 });
 
@@ -38,4 +39,12 @@ test("Order Value Analytics copy remains bilingual and uses the approved termino
   assert.match(copy, /متوسط قيمة الطلب/);
   assert.match(copy, /Average Order Value/);
   assert.match(copy, /تسوية المدفوعات أو الاستردادات أو الضرائب أو الرسوم/);
+});
+
+
+test("Order Value Analytics UI exposes tenant and branch scope controls", () => {
+  assert.match(route, /orderValueTenant/);
+  assert.match(route, /onTenantChange/);
+  assert.match(route, /tenants\.map/);
+  assert.match(route, /branches\.map/);
 });
