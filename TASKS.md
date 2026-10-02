@@ -1,3 +1,21 @@
+
+
+# 2026-10-02 — Order Value Analytics — Stage 1 + Task 1 — APPROVED / DOCUMENTED
+- VERIFIED: current main HEAD is `e370caabe179a9795409e76b5357530de4ccb63d`.
+- APPROVED: Order Value Analytics (تحليلات قيمة الطلبات) is an operational recorded-order-value metric, not payment or accounting revenue analytics.
+- APPROVED: eligible statuses are confirmed, preparing, ready, completed; new and cancelled are excluded.
+- APPROVED: Order Value = SUM(orders.total) over eligible orders; Order Count = COUNT(*); Average Order Value = SUM(orders.total) / COUNT(*), with null/no-data average when count is zero.
+- APPROVED: Saudi Arabia scope, Asia/Riyadh timezone, SAR currency, server-side half-open `[start,end)` boundaries for Today/Week/Month/Custom.
+- VERIFIED: current repository has no `analytics.read` permission; explicit authorization work is required before implementation can be considered secure.
+- VERIFIED: current order schema provides tenant_id, nullable branch_id, status, currency, total, created_at; no migration is justified by Task 1 findings.
+- APPROVED: dedicated server-side Order Value Analytics boundary; do not fold order-value aggregation into existing engagement analytics if that would inherit weaker date/branch authorization behavior.
+- VERIFIED: no application code, migration, PR, merge, deployment, real order, or WhatsApp message was created/performed by this task.
+- VERIFIED: dedicated planning document created at `docs/analytics/order-value-analytics.md`.
+- IMPLEMENTATION STATUS: NOT_STARTED for application implementation; Task 1 backend contract/design is VERIFIED / DOCUMENTED.
+- DEPLOYMENT STATUS: NOT_REQUESTED / NOT_PERFORMED.
+
+## EXACT NEXT TASK
+Implement the smallest backend server contract from `docs/analytics/order-value-analytics.md`, including `analytics.read` authorization and focused tests. Stop before UI/migration/PR/deployment unless later evidence requires otherwise.
 # 2026-10-02 — Preparation Time + Estimated Ready Time — CLOSED / VERIFIED
 - VERIFIED: PR #339 is merged; its three-file scope is documentation-only (PROJECT_STATE.md, PLAN.md, TASKS.md) and contains no runtime/application changes.
 - UNKNOWN: direct real-device Production QA evidence is not established by the current GitHub evidence.
