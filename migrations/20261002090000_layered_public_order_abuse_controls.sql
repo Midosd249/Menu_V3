@@ -11,4 +11,6 @@ create table if not exists menu_v3.public_order_invalid_rate_limits (
 create index if not exists public_order_invalid_rate_limits_updated_idx
   on menu_v3.public_order_invalid_rate_limits (updated_at);
 
+alter table menu_v3.public_order_invalid_rate_limits enable row level security;
+
 revoke all on table menu_v3.public_order_invalid_rate_limits from public, anon, authenticated;
