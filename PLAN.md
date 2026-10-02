@@ -1363,7 +1363,7 @@ Do not start automatically. Treat `main@67f05fff4f7f6c07e87b56df1a9a676f2aee896d
 
 - DECISION: **P1.4 — Leaked Password Protection is deferred/out of current scope.**
 - REASON: current Supabase subscription does not expose the capability and the owner does not currently require it.
-- VERIFIED: this is consistent with current Supabase documentation, which states that leaked-password protection is available on Pro Plan and above. citeturn0search0turn0search1
+- VERIFIED: this is consistent with current Supabase documentation, which states that leaked-password protection is available on Pro Plan and above.
 - IMPORTANT: the audit finding remains historically valid and is not marked resolved; it is simply not an active implementation task.
 - VERIFIED: P0.1/P0.2 and P1.1/P1.2/P1.3 completed their current scoped work.
 - NEXT PRIORITY: **Audit Follow-up — Supabase Migration Three-Way Reconciliation**.
