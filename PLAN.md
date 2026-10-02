@@ -1312,3 +1312,33 @@ Wait for the next explicitly scoped task. Do not deploy or begin unrelated work 
 ## EXACT NEXT TASK
 
 Owner reviews PR #348 and explicitly authorizes merge/release if accepted. Do not merge, deploy, or begin P0.2 automatically.
+
+# 2026-10-02 — P1.2 Closeout — VERIFIED / PR #352
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: selected public-menu themes are now lazy-loaded through a typed canonical theme loader; static theme implementation imports were removed from the public route and shared renderer.
+- VERIFIED: Quality #2769 passed; W9 Orders QA #904 passed; Vercel Preview reached Ready.
+- VERIFIED: all five canonical themes, preview/shared renderer contracts, Arabic/English and RTL/LTR behavior, and protected security/order systems remain covered by the implementation/CI scope.
+- UNKNOWN: Production bundle transfer/parse/evaluation and physical-device performance evidence.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
+
+Measure the current post-P1.2 public-menu baseline first. Do not begin unrelated optimization, do not redesign themes, and do not deploy automatically.
+
+
+# 2026-10-02 — P1.2 Continuity Closeout — VERIFIED
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: Quality #2769 = SUCCESS; W9 Orders QA #904 = SUCCESS.
+- VERIFIED: five canonical public themes use the lazy theme loader and static theme implementation imports were removed from the public route/shared renderer.
+- UNKNOWN: Production/physical-device performance evidence.
+- DEPLOYMENT STATUS: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
+
+Measure first. Keep the task atomic and do not start another task or deployment automatically.

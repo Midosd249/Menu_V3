@@ -636,3 +636,40 @@ Start the next chat at **P1.1 — Public Menu Cache/Session Decoupling**.
 First action: boot from repository/Git evidence and confirm the continuity PR #350 is merged before creating or editing a P1.1 implementation branch.
 
 Do not start P1.2, deployment, redesign, cleanup, or unrelated migration work automatically.
+
+
+## P1.2 Closeout Addendum — 2026-10-02 — VERIFIED
+
+### Theme loading
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: the selected canonical public-menu theme is loaded through `getLazyThemeTemplate()` and React `Suspense`; theme implementations are no longer statically imported by the public route or shared renderer.
+- VERIFIED: all five canonical mappings remain intact: Essential/Small Menu, Editorial/Signal Table, Noir/Fine Dining Hospitality, Heritage/Taste, Gallery/Bakery Dessert.
+- VERIFIED: Quality #2769 and W9 Orders QA #904 passed. Quality included all-theme browser QA and the configured performance fixture.
+- VERIFIED: Vercel Preview reached Ready for the final PR state.
+
+### Security / regression boundary
+- VERIFIED: no changes to tenant/branch authorization, RLS, authentication, server-authoritative pricing, P0.1 atomic order creation, P0.2 abuse protection, Order Value Analytics, preparation-time/ETA, image delivery, or unrelated migrations.
+- UNKNOWN: direct physical-device verification and Production performance measurements remain outstanding.
+
+### Performance interpretation
+- VERIFIED: P1.2 changes code-loading structure only; it does not by itself establish a numeric Production LCP/TTFB improvement.
+- UNKNOWN: actual Production JS transfer, parse/evaluation, selected-theme runtime cost and user-device impact.
+- PROPOSED NEXT: P1.3 should establish a post-P1.2 runtime measurement baseline before any further optimization.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
+
+
+## P1.2 Closeout Addendum — 2026-10-02 — VERIFIED
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: selected public-menu theme implementations are lazy-loaded through `getLazyThemeTemplate()`; route and shared renderer no longer statically import the theme implementations.
+- VERIFIED: Quality #2769 and W9 Orders QA #904 passed.
+- VERIFIED: all five canonical theme mappings remain intact.
+- VERIFIED: P0.1/P0.2, P1.1, auth/RLS, tenant/branch boundaries, order validation/atomicity/abuse protection, Order Value Analytics, preparation-time/ETA, image delivery and unrelated migrations were not changed by P1.2.
+- UNKNOWN: numeric Production performance impact and physical-device evidence.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
