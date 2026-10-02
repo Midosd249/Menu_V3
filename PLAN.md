@@ -1315,7 +1315,7 @@ Owner reviews PR #348 and explicitly authorizes merge/release if accepted. Do no
 
 # 2026-10-02 — P1.2 Closeout — VERIFIED / PR #352
 
-- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4821543ec3485164b`.
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
 - VERIFIED: selected public-menu themes are now lazy-loaded through a typed canonical theme loader; static theme implementation imports were removed from the public route and shared renderer.
 - VERIFIED: Quality #2769 passed; W9 Orders QA #904 passed; Vercel Preview reached Ready.
 - VERIFIED: all five canonical themes, preview/shared renderer contracts, Arabic/English and RTL/LTR behavior, and protected security/order systems remain covered by the implementation/CI scope.
