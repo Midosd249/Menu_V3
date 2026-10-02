@@ -1,3 +1,25 @@
+# 2026-10-03 — PostgreSQL 17.11 Upgrade + Audit Closeout — VERIFIED
+
+- VERIFIED: Supabase PostgreSQL is `17.11.0.002`.
+- VERIFIED: the upgrade safety gate is cleared after owner-reported independent restore validation and a post-upgrade authenticated product-edit smoke.
+- VERIFIED: no application/database migration/schema/RLS change was performed by the platform upgrade.
+- VERIFIED: migration reconciliation and canonical-ledger decision are closed.
+- VERIFIED: generated-`any`, unindexed-FK, and PostgreSQL 17.11 readiness audit tracks are closed for this cycle.
+- VERIFIED: temporary audit PRs #357, #359, #360, and #361 are closed; historical audit evidence remains preserved.
+
+## EXACT NEXT TASK
+
+**Owner-select the next explicitly scoped Menu V3 task. Do not automatically begin another audit, migration change, index change, P1.4, offline ordering, or deployment.**
+
+## Guardrails
+
+- `menu_v3._migrations` remains the canonical operational migration ledger.
+- `supabase_migrations.schema_migrations` is audit/history evidence only.
+- P0.1/P0.2/P1.1/P1.2/P1.3 are protected and must not be reimplemented without new evidence.
+- P1.4 leaked-password protection remains deferred/out of current scope.
+- PostgreSQL platform upgrades are not application migrations.
+- Do not claim Production/deployment state without direct evidence.
+
 # 2026-10-02 — P1.1 Closeout — VERIFIED / PR #351
 
 - VERIFIED: P1.1 is complete on the implementation head the final P1.1 PR head.
