@@ -659,3 +659,17 @@ Do not start P1.2, deployment, redesign, cleanup, or unrelated migration work au
 ## EXACT NEXT TASK
 
 **P1.3 — Public Menu Runtime Performance / Observability**
+
+
+## P1.2 Closeout Addendum — 2026-10-02 — VERIFIED
+
+- VERIFIED: PR #352 merged into `main` as `66d46d0512f9d50120f053e4826dcfc3ca62278b`.
+- VERIFIED: selected public-menu theme implementations are lazy-loaded through `getLazyThemeTemplate()`; route and shared renderer no longer statically import the theme implementations.
+- VERIFIED: Quality #2769 and W9 Orders QA #904 passed.
+- VERIFIED: all five canonical theme mappings remain intact.
+- VERIFIED: P0.1/P0.2, P1.1, auth/RLS, tenant/branch boundaries, order validation/atomicity/abuse protection, Order Value Analytics, preparation-time/ETA, image delivery and unrelated migrations were not changed by P1.2.
+- UNKNOWN: numeric Production performance impact and physical-device evidence.
+
+## EXACT NEXT TASK
+
+**P1.3 — Public Menu Runtime Performance / Observability**
