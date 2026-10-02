@@ -1406,3 +1406,24 @@ Do not implement or repair either path automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+# 2026-10-02 — Audit Follow-up — Performance Advisor Unindexed Foreign Keys — VERIFIED / READ-ONLY
+
+- VERIFIED: current main baseline at task start is 83d0dce84de97a46c0ddec7372babd24dcd4ceb5.
+- VERIFIED: Supabase Performance Advisor currently reports 18 unindexed_foreign_keys findings; all were inspected against live PostgreSQL indexes, row counts, index usage, repository query paths, and pg_stat_statements workload evidence.
+- VERIFIED: the 18 findings are distributed across 14 tables/FK paths: branch ordering (2), guest relationship tables (5), onboarding (1), menu events (1), upsell recommendations (3), order items (1), subscription invoices (1), and three public-schema platform tables (3).
+- VERIFIED: several findings are already covered by workload-appropriate composite indexes even though the Advisor check does not consider the FK column covered unless it is index-leading. Examples include branch_category_order, branch_product_order, menu_events.category_id, and menu_upsell_recommendations.source_product_id.
+- VERIFIED: current workload evidence shows menu_events is the only materially active high-volume finding among the 18: 523 live rows, repeated analytics queries, and active index usage. Its existing menu_events_category_idx (tenant_id, category_id, created_at DESC) and other tenant/branch indexes match the observed query shapes; representative EXPLAIN used existing indexes and primary-key joins.
+- VERIFIED: branch ordering queries use the existing primary/composite indexes with branch/tenant leading columns; the Advisor warning on category/product FK columns does not establish a missing workload index.
+- VERIFIED: menu_upsell_recommendations currently has 0 live rows; its observed source-product workload uses menu_upsell_source_idx (tenant_id, source_product_id, status).
+- VERIFIED: order_items has 32 live rows and existing order_items_order_idx (order_id, created_at) covers the observed high-use order-item access path; no current workload evidence justifies an additional offer_id index.
+- VERIFIED: guest_campaigns, guest_feedback, guest_loyalty_accounts, guest_loyalty_ledger, lead_onboarding, subscription_invoices, growth_reports, visibility_audits, and website_projects currently have zero or near-zero live rows in the observed database; no material query workload or parent-row delete/update pressure justifies indexes solely to silence the Advisor.
+- VERIFIED: pg_stat_statements statistics have been collecting since 2026-08-28T13:33:24Z; no current DELETE/UPDATE workload was found for the affected parent relationships that demonstrates FK enforcement scans as a material bottleneck.
+- DECISION: No schema/index change is justified by the current evidence. Do not mass-create 18 indexes merely to clear an INFO-level Advisor finding.
+- GUARDRAIL: revisit individual FKs when row counts, delete/update patterns, or query plans demonstrate a real bottleneck; prefer a workload-shaped composite index over a redundant standalone FK index when the composite index already matches the access path.
+- NO SCHEMA ACTION: no index, migration, RLS, function, trigger, data, or runtime change was performed.
+
+## EXACT NEXT TASK
+
+**Audit Follow-up — review the remaining actionable performance/security Advisor findings and select the next atomic item from current live evidence; do not automatically create indexes for the 18 FK warnings.**
