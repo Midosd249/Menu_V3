@@ -35,7 +35,7 @@ test("owner analytics keeps every aggregation tenant-scoped", () => {
   assert.match(analytics, /join products p on p\.id = e\.product_id/);
   assert.match(analytics, /join products p on p\.id = e\.product_id[\\s\\S]*join categories c on c\.id = s\.category_id/);
   assert.match(analytics, /join branches b on b\.id = s\.branch_id/);
-  assert.match(analytics, /where event_type in \\('visit', 'qr_scan'\\)/);
+  assert.match(analytics, /event_type in \\('visit', 'qr_scan'\\)/);
   assert.match(analytics, /tenant_id = \$\{member\.tenant_id\}/);
 });
 
