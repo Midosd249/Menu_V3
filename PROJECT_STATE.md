@@ -1,3 +1,36 @@
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: current `main` = `d9d83c89c0070413c61f8a75e3120447006e4828` and P1.4 is closed/merged.
+- VERIFIED: repository audit identified correlated `order_items` aggregation in `getOrdersDashboard` and `getPlatformOrders`, plus per-tenant correlated count subqueries in `getPlatformDashboard`.
+- IMPLEMENTED: bounded order pages now aggregate `order_items` once and join the aggregate; Platform dashboard tenant counts use grouped CTEs.
+- PROTECTED: auth/Better Auth, RLS, tenant/branch isolation, order lifecycle, analytics authorization, preparation-time/ETA, themes, subscriptions, SEO, and migrations.
+- UNKNOWN: exact runtime DB execution time, exact DB round-trip reduction, and deep pagination requirements.
+- BLOCKED: local shell execution unavailable; GitHub CI is the available automated verification source.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT STATE
+
+**P1.5 — Database Query Consolidation: IMPLEMENTATION_IN_PROGRESS**
+
+Branch: `perf/p1-5-query-consolidation-2026-10-03`
+Base: `main` at `d9d83c89c0070413c61f8a75e3120447006e4828`
+
+## ACCEPTANCE STATUS
+
+- [x] Repository-first audit.
+- [x] Proven correlated order-item paths identified.
+- [x] Proven Platform tenant count paths identified.
+- [x] Query consolidation implemented.
+- [x] Regression coverage added.
+- [ ] GitHub Quality/W9 verification.
+- [ ] Final diff review after CI.
+- [ ] Runtime query-plan measurement.
+
+## EXACT NEXT TASK
+
+**Finish P1.5 verification and continuity closeout.**
+
+---
 # 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
 - VERIFIED: P1.4 started from main `6b2eef2b619c7aa003649b516a1ca0fbbbab88e4` after P1.2/P1.3 closeout.
