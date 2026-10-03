@@ -28,7 +28,60 @@ export const getPlatformDashboard = createServerFn({ method: "GET" }).middleware
   try {
     const sql = await getSql();
     const [tenants, branches, members, projects, activity, counts, analytics] = await Promise.all([
-      sql<Record<string, unknown>>`select t.id, t.owner_user_id, coalesce(u.name, '') as owner_name, coalesce(u.email, '') as owner_email, t.slug, t.name_ar, t.name_en, t.city, t.country, t.is_published, t.is_active, t.created_at, (select count(*)::int from branches b where b.tenant_id = t.id) as branch_count, (select count(*)::int from products p where p.tenant_id = t.id) as product_count, (select count(*)::int from orders o where o.tenant_id = t.id and o.archived_at is null) as order_count, (select count(*)::int from tenant_members tm where tm.tenant_id = t.id) as member_count, coalesce((select sp.code from tenant_subscriptions ts join subscription_plans sp on sp.id = ts.plan_id where ts.tenant_id = t.id limit 1), 'free') as plan_code from tenants t left join "user" u on u.id = t.owner_user_id order by t.created_at desc limit 500`,
+      sql<Record<string, unknown>>`with
+        branch_counts as (
+          select tenant_id, count(*)::int as branch_count
+          from branches
+          group by tenant_id
+        ),
+        product_counts as (
+          select tenant_id, count(*)::int as product_count
+          from products
+          group by tenant_id
+        ),
+        order_counts as (
+          select tenant_id, count(*)::int as order_count
+          from orders
+          where archived_at is null
+          group by tenant_id
+        ),
+        member_counts as (
+          select tenant_id, count(*)::int as member_count
+          from tenant_members
+          group by tenant_id
+        ),
+        plan_codes as (
+          select ts.tenant_id, sp.code
+          from tenant_subscriptions ts
+          join subscription_plans sp on sp.id = ts.plan_id
+        )
+        select
+          t.id,
+          t.owner_user_id,
+          coalesce(u.name, '') as owner_name,
+          coalesce(u.email, '') as owner_email,
+          t.slug,
+          t.name_ar,
+          t.name_en,
+          t.city,
+          t.country,
+          t.is_published,
+          t.is_active,
+          t.created_at,
+          coalesce(bc.branch_count, 0) as branch_count,
+          coalesce(pc.product_count, 0) as product_count,
+          coalesce(oc.order_count, 0) as order_count,
+          coalesce(mc.member_count, 0) as member_count,
+          coalesce(pl.code, 'free') as plan_code
+        from tenants t
+        left join "user" u on u.id = t.owner_user_id
+        left join branch_counts bc on bc.tenant_id = t.id
+        left join product_counts pc on pc.tenant_id = t.id
+        left join order_counts oc on oc.tenant_id = t.id
+        left join member_counts mc on mc.tenant_id = t.id
+        left join plan_codes pl on pl.tenant_id = t.id
+        order by t.created_at desc
+        limit 500`,
       sql<Record<string, unknown>>`select b.id, b.tenant_id, t.name_ar as tenant_name, b.name_ar, b.name_en, coalesce(t.city, '') as city, coalesce(b.phone, '') as phone, b.is_active from branches b join tenants t on t.id = b.tenant_id order by t.created_at desc, b.created_at desc limit 1000`,
       sql<Record<string, unknown>>`select tm.tenant_id, t.name_ar as tenant_name, tm.user_id, coalesce(u.name, '') as name, coalesce(u.email, '') as email, tm.role, tm.created_at from tenant_members tm join tenants t on t.id = tm.tenant_id left join "user" u on u.id = tm.user_id order by tm.created_at desc limit 1000`,
       sql<Record<string, unknown>>`select id, coalesce(tenant_id::text, '') as tenant_id, coalesce(name_ar, '') as business_name, status, coalesce(contact_name, '') as contact_name, coalesce(contact_phone, '') as contact_phone, coalesce(city, '') as city, created_at from public.website_projects order by created_at desc limit 100`,
@@ -60,7 +113,79 @@ export const getPlatformCustomerNotifications = createServerFn({ method: "GET" }
 });
 
 const orderStatusSchema = z.enum(["new", "confirmed", "preparing", "ready", "completed", "cancelled"] as const);
-export const getPlatformOrders = createServerFn({ method: "GET" }).middleware([authMiddleware]).validator(z.object({ status: orderStatusSchema.optional(), q: z.string().trim().max(120).optional() })).handler(async ({ context, data }): Promise<FnResult<PlatformOrder[]>> => { const permission = await assertPlatformAdmin(context.userId); if (!permission.ok) return permission; try { const sql = await getSql(); const q = data.q ? `%${data.q.toLowerCase()}%` : null; const rows = await sql<Record<string, unknown>>`with filtered as (select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name, (select count(*) from order_items oi where oi.order_id = o.id) as item_count, coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id where o.archived_at is null and (${data.status ?? null}::text is null or o.status = ${data.status ?? null}) and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q} or cast(o.order_number as text) like ${q})) select * from filtered order by created_at desc limit 200`; return { ok: true, data: rows.map(mapPlatformOrder) }; } catch (error) { console.error("getPlatformOrders failed", error); return { ok: false, code: "unavailable", error: "تعذر تحميل طلبات المنصة" }; } });
+export const getPlatformOrders = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator(z.object({ status: orderStatusSchema.optional(), q: z.string().trim().max(120).optional() }))
+  .handler(async ({ context, data }): Promise<FnResult<PlatformOrder[]>> => {
+    const permission = await assertPlatformAdmin(context.userId);
+    if (!permission.ok) return permission;
+    try {
+      const sql = await getSql();
+      const q = data.q ? `%${data.q.toLowerCase()}%` : null;
+      const rows = await sql<Record<string, unknown>>`
+        with filtered as (
+          select
+            o.*,
+            t.name_ar as restaurant_name,
+            coalesce(b.name_ar, 'كل الفروع') as branch_name
+          from orders o
+          join tenants t on t.id = o.tenant_id
+          left join branches b on b.id = o.branch_id
+          where o.archived_at is null
+            and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
+            and (
+              ${q}::text is null
+              or lower(t.name_ar) like ${q}
+              or lower(coalesce(t.name_en,'')) like ${q}
+              or lower(coalesce(b.name_ar,'')) like ${q}
+              or o.customer_phone like ${q}
+              or lower(o.customer_name) like ${q}
+              or cast(o.order_number as text) like ${q}
+            )
+        ),
+        page_orders as (
+          select *
+          from filtered
+          order by created_at desc, id desc
+          limit 200
+        ),
+        item_agg as (
+          select
+            oi.order_id,
+            count(*)::int as item_count,
+            coalesce(
+              jsonb_agg(
+                jsonb_build_object(
+                  'id', oi.id,
+                  'product_name_ar', oi.product_name_ar,
+                  'product_name_en', oi.product_name_en,
+                  'quantity', oi.quantity,
+                  'unit_price', oi.unit_price,
+                  'line_total', oi.line_total,
+                  'selected_options', oi.selected_options
+                ) order by oi.created_at
+              ),
+              '[]'::jsonb
+            ) as items
+          from order_items oi
+          join page_orders p on p.id = oi.order_id
+          group by oi.order_id
+        )
+        select
+          to_jsonb(p) || jsonb_build_object(
+            'item_count', coalesce(a.item_count, 0),
+            'items', coalesce(a.items, '[]'::jsonb)
+          ) as row
+        from page_orders p
+        left join item_agg a on a.order_id = p.id
+        order by p.created_at desc, p.id desc
+      `;
+      return { ok: true, data: rows.map((row) => mapPlatformOrder(row.row as Record<string, unknown>)) };
+    } catch (error) {
+      console.error("getPlatformOrders failed", error);
+      return { ok: false, code: "unavailable", error: "تعذر تحميل طلبات المنصة" };
+    }
+  });
 export const updatePlatformOrderStatus = createServerFn({ method: "POST" }).middleware([authMiddleware]).validator(z.object({ id: z.string().min(1).max(100), status: orderStatusSchema })).handler(async ({ context, data }): Promise<FnResult<PlatformOrder>> => { const permission = await assertPlatformAdmin(context.userId); if (!permission.ok) return permission; try { const sql = await getSql(); const current = await sql<{ status: OrderStatus }>`select status from orders where id = ${data.id} and archived_at is null limit 1`; if (!current[0]) return { ok: false, code: "not_found", error: "الطلب غير موجود" }; const fromStatus = current[0].status; const transitionError = getOrderStatusTransitionError(fromStatus, data.status); if (transitionError) return transitionError; const rows = await sql<Record<string, unknown>>`
       with locked as (
         select status as from_status

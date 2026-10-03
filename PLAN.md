@@ -1,3 +1,31 @@
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `main` is `d9d83c89c0070413c61f8a75e3120447006e4828`; P1.4 is merged and closed.
+- VERIFIED: repository audit found correlated `order_items` aggregation in Studio and Platform order readers and per-tenant correlated counts in the Platform dashboard.
+- IMPLEMENTED: Studio/Platform order readers now aggregate `order_items` once for their bounded result page; Platform tenant counts now use grouped CTEs and joins.
+- IMPLEMENTED: regression coverage added in `tests/p1-5-query-consolidation.test.mjs` and registered in `npm test`.
+- UNKNOWN: runtime DB latency/round-trip reduction until representative query plans/runtime evidence are available.
+- UNKNOWN: deep cursor pagination beyond the existing bounded pages; no speculative pagination API was added.
+- BLOCKED: local shell execution is unavailable through the current connector-only execution surface; GitHub CI is the required verification gate.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## CURRENT P1.5 SCOPE
+
+1. Consolidate proven correlated `order_items` reads in Studio and Platform order dashboards.
+2. Consolidate proven per-tenant Platform dashboard count reads.
+3. Preserve authorization, tenant/branch isolation, response shape, ordering semantics, and bounded UI payloads.
+4. Do not add indexes or schema changes without query-plan evidence.
+5. Do not claim pagination completion; deeper cursor pagination remains a separate evidence-backed slice.
+
+## EXACT NEXT VERIFICATION
+
+GitHub Quality/W9 gates → final diff review → close P1.5 continuity. If a gate fails, fix only the proven failure and rerun the affected gate.
+
+## EXACT NEXT TASK AFTER P1.5
+
+**Pagination follow-up — stable cursor/keyset pagination for a proven large chronological UI dataset**, only after confirming which current UI requires traversal beyond the existing bounded page.
+
+---
 # 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
 - VERIFIED: request mapping covered public menu, Studio, Admin, Auth, preview, and not-found source boundaries.
