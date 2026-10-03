@@ -6,11 +6,14 @@ const root = new URL("../", import.meta.url);
 const css = fs.readFileSync(new URL("src/accessibility.css", root), "utf8");
 const publicMenu = fs.readFileSync(new URL("src/components/public-menu.tsx", root), "utf8");
 const rootRoute = fs.readFileSync(new URL("src/routes/__root.tsx", root), "utf8");
+const runtimeStyles = fs.readFileSync(new URL("src/lib/theme/runtime-styles.ts", root), "utf8");
 const langToggle = fs.readFileSync(new URL("src/components/lang-toggle.tsx", root), "utf8");
 
-test("shared accessibility layer is loaded before protected themes", () => {
+test("shared accessibility layer is root-loaded while protected themes remain runtime-managed", () => {
   assert.match(rootRoute, /accessibilityCss/);
-  assert.ok(rootRoute.indexOf("href: accessibilityCss") < rootRoute.indexOf("href: themeCss"));
+  assert.match(rootRoute, /href: accessibilityCss/);
+  assert.match(runtimeStyles, /THEME_STYLESHEETS/);
+  assert.doesNotMatch(rootRoute, /theme-(?:premium|essential|noir|heritage|gallery|refinements|refinements-v2|signal-table|public-quality-recovery|gallery-canva-parity|gallery-hardening|noir-hardening|w16-mobile-qr-hardening|final-visual-hardening|qr-final-fixes|price-consistency|quick-add-compact-refinement)-[^"]*\.css\?url/);
 });
 
 test("focus visibility accounts for fixed and sticky interface chrome", () => {
