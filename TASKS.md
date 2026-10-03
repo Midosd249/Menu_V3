@@ -1,3 +1,23 @@
+# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
+
+- VERIFIED: PR #373 was squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
+- VERIFIED: `getOwnerAnalytics` now uses one authorized server-side SQL boundary with a tenant-scoped `MATERIALIZED` CTE and server-side JSON aggregation.
+- VERIFIED: `authMiddleware`, server-derived tenant membership, validated `days` input, response shape, and analytics semantics were preserved.
+- VERIFIED: GitHub Quality #2836 and W9 Orders QA #958 passed on the final P1.6 head.
+- VERIFIED: no personalized analytics caching was added because current evidence does not justify shared/private cache complexity.
+- VERIFIED: no schema, migration, index, auth/RLS, or tenant-isolation change was made.
+- VERIFIED: no current UI was proven to require traversal beyond existing bounded analytics/dashboard result pages, so no speculative cursor pagination API was introduced.
+- UNKNOWN: end-to-end browser/network request reduction and production analytics latency remain unmeasured.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**P1.7 — Vite/Rolldown Chunk Optimization**
+
+Start with repository-first production build/chunk evidence. Optimize only a proven oversized or duplicated chunk; do not add speculative manual chunking and do not deploy automatically.
+
+---
+
 # 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: P1.4 is closed/merged; current `main` is `d9d83c89c0070413c61f8a75e3120447006e4828`.
