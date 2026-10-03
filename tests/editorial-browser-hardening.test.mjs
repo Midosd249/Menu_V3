@@ -42,6 +42,7 @@ test("SIGNAL TABLE uses one presentation owner and preserves configured actions"
   const loader = await readFile("src/components/theme-template-loader.tsx", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
   const root = await readFile("src/routes/__root.tsx", "utf8");
+  const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
   assert.match(loader, /SignalTableTemplate/);
   assert.doesNotMatch(renderer, /ContemporaryRestaurantTemplate/);
   assert.match(template, /<PublicActionLinks\s/);
