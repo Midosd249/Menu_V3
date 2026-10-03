@@ -1,34 +1,30 @@
-# 2026-10-03 — P1.4 Request Waterfall Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
-- VERIFIED: current main baseline is 6b2eef2b619c7aa003649b516a1ca0fbbbab88e4.
-- VERIFIED: P1.2 and P1.3 are closed on main; no prior performance milestone was reimplemented.
-- VERIFIED: repository audit found duplicate getMyStudio() calls on /studio/analytics and /studio/reports; StudioGate already loads the same authorized StudioSnapshot and exposes it through useStudio().
-- VERIFIED: getOwnerAnalytics() remains an independent request because it supplies time-windowed analytics data.
-- IMPLEMENTED: Analytics and Reports now reuse useStudio().snapshot and no longer call getMyStudio() themselves.
-- ADDED: tests/p1-4-request-waterfall.test.mjs regression contract, registered in npm test.
-- PROTECTED: authentication, authorization, tenant/branch isolation, analytics authorization, independent loading boundaries, public menu, themes, SEO, subscriptions, ordering, and database schema.
-- UNKNOWN: browser/network request counts, DCL/LCP, local typecheck/lint/test/build, and GitHub Quality/W9 results for this branch.
+- VERIFIED: repository-wide request-boundary audit identified the redundant Studio snapshot calls in Analytics and Reports.
+- IMPLEMENTED: both routes reuse the existing authorized `StudioGate` snapshot.
+- VERIFIED: regression contract `tests/p1-4-request-waterfall.test.mjs` is registered in `npm test`.
+- VERIFIED: Quality #2824 = SUCCESS; W9 Orders QA #949 = SUCCESS.
+- VERIFIED: final diff review completed; PR #370 squash-merged into `main` as `1bb30fc675ee2cdf448cba380223dd00240dee0a`.
+- UNKNOWN: exact production/browser request count, production DCL/LCP, and physical-device performance.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
-
-## EXACT CURRENT TASK
-
-P1.4 — Request Waterfall Consolidation
-
-Map request boundaries first and remove only proven redundant requests. Current implementation scope is limited to reusing the already-authorized Studio snapshot on Analytics and Reports.
 
 ## ACCEPTANCE STATUS
 
-- [x] Proven duplicate Studio snapshot request identified.
-- [x] Duplicate removed from Analytics.
-- [x] Duplicate removed from Reports.
-- [x] Regression contract added and registered.
-- [ ] Full automated verification.
-- [ ] Browser/network measurement proving actual request reduction.
-- [ ] Final diff review after CI.
+- [x] Proven duplicate identified.
+- [x] Analytics duplicate removed.
+- [x] Reports duplicate removed.
+- [x] Regression coverage added.
+- [x] Full automated/browser CI verification passed.
+- [x] Final diff reviewed.
+- [x] PR merged.
+- [ ] Runtime request-budget measurement.
 
 ## EXACT NEXT TASK
 
-Run and inspect focused P1.4 regression plus repository Quality/W9 verification on the branch, review the final diff, then prepare one coherent PR. Do not deploy automatically.
+**P1.5 — Database Query Consolidation and Pagination**
+
+Perform repository-first query/code audit only. Inspect `owner.ts`, `orders.ts`, `platform.ts`, analytics modules, and N+1/pagination candidates. Stop at evidence; do not start DB changes without a proven target.
+
 # 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: canonical `main` at task start is `ad428e13d3a2f483d342829df11cff3d7fe99692`.
