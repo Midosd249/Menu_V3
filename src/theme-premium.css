@@ -1,4 +1,4 @@
-/* Runtime theme polish kept separate so the core Tailwind stylesheet remains stable. */
+/* Runtime public-menu polish shared by every active theme. */
 .menu-public-shell {
   overflow-x: clip;
 }
@@ -26,12 +26,4 @@
 .menu-public-shell select {
   font-family: var(--menu-body-font, var(--font-sans));
   font-weight: var(--menu-body-weight, 400);
-}
-html[data-menu-theme="noir"] .menu-public-shell button,
-html[data-menu-theme="noir"] .menu-public-shell a {
-  color-scheme: dark;
-}html[data-menu-theme="heritage"] .menu-public-shell main > section,
-html[data-menu-theme="gallery"] .menu-public-shell main > section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 420px;
 }
