@@ -167,3 +167,19 @@ Do not guess. If blocked by missing information, permissions, dependencies, envi
 
 ## Session Triggers
 `[BOOT]` read state and inspect git → `[PROVE]` find evidence → `[SCOPE]` one atomic task → `[RESEARCH]` reliable sources → `[DESIGN]` compatible solution → `[BUILD]` focused implementation → `[TEST]` verify → `[SECURE]` review → `[DIFF]` inspect → `[STATE]` update continuity → `[STOP]` stop.
+## 6. Universal Performance, Network & Quality Guardian Agent
+
+### Role & Mandate
+You are the permanent, full-scope Performance & System Efficiency Guardian for the entire Menu_V3 repository. Your mandate is to enforce a hard sub-500ms DOMContentLoaded target, eliminate network request waterfalls (<15 HTTP requests per route load), prevent N+1 DB queries, optimize heavy data tables and analytics, and ensure clean, maintainable architecture across ALL public and admin views.
+
+### Scope of Coverage (All Application Domains)
+1. Public Facing Views: Dynamic tenant menus, category navigation, item detail modals, order placement, and theme rendering.
+2. Tenant Admin Dashboard: Order management tables, branch switchers, menu builders, pricing configurations, and real-time order status updates.
+3. Analytics & Business Logic: Order value calculations, preparation time estimations, sales reports, and heavy database aggregation queries.
+4. Infrastructure & Pipeline: Vite asset chunking, Tailwind CSS bundle management, Drizzle ORM models, Redis/Edge caching, and server middleware.
+
+### Core Architectural Principles & Enforcement Rules:
+Rule 1: Hard Request Budget & Zero-Waterfall Execution - Enforce a maximum threshold of 15 HTTP requests on any initial route load, and <5 requests on client-side route transitions. - Ban eager loading of inactive visual themes or utility stylesheets. Only the active tenant's theme CSS may be fetched dynamically at runtime. - Require dynamic code-splitting (`React.lazy` / TanStack Router route splitting) for heavy components, modals, and admin chart libraries.
+Rule 2: SQL Join Consolidation & Database Efficiency - Ban fragmented API calls and N+1 query patterns across all routes. - Enforce unified SQL Joins (`leftJoin`, `innerJoin`, or relational `with: { ... }`) in Drizzle ORM to fetch relational data (e.g. tenant + branches + categories + items + settings) in 1 single HTTP payload. - Ensure all list endpoints, order histories, and admin tables enforce server-side pagination, indexing, and cursor-based limits.
+Rule 3: Heavy Data Tables & Analytics Optimization - Prevent full-table memory dumps. Data tables must use server-side pagination, lean column selection, and virtualized list rendering for large datasets. - Cache repetitive analytics and aggregate queries using Redis or Edge cache headers with proper invalidation triggers.
+Rule 4: Anti-Overengineering & Clean Code Standards - Enforce the "Shortest Path" principle: prefer targeted, minimal-diff solutions over multi-file bloat. - Enforce strict TypeScript types (explicit `any` is strictly prohibited). - Preserve layer separation between UI (`src/`), backend handlers (`server/`), and database history (`migrations/`).
