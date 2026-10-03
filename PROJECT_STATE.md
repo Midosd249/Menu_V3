@@ -1,3 +1,42 @@
+# 2026-10-03 — P1.7 Vite/Rolldown Chunk Optimization — CLOSED / VERIFIED — NO CODE CHANGE
+
+- VERIFIED: P1.6 continuity PR #374 was squash-merged into `main` as `1f1dbc3a853efcfaa3aca620989635dcc3ffecc5`.
+- VERIFIED: current production client build uses Vite 8.2.2/Rolldown.
+- VERIFIED: the current production client build produced 142 JavaScript asset rows; the largest client chunk was `index-BDOzjaAe.js` at 272.62 kB raw / 88.49 kB gzip.
+- VERIFIED: no client chunk exceeded Vite's default 500 kB warning threshold.
+- VERIFIED: automatic code splitting is already enabled; no `manualChunks` or `rolldownOptions` override exists.
+- VERIFIED: current evidence does not identify duplicated module ownership or a safe manual grouping with a proven net request/transfer benefit.
+- VERIFIED: no runtime/configuration code was changed by P1.7.
+- UNKNOWN: browser-level initial JS transfer, client-transition request count, cache reuse, main-thread execution cost, and route-specific module dependency graphs.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT STATE
+
+**P1.7 — Vite/Rolldown Chunk Optimization: CLOSED / VERIFIED — NO CODE CHANGE REQUIRED**
+
+Branch: `perf/p1-7-vite-rolldown-chunk-optimization-2026-10-03`
+
+Audit: `docs/performance/p1-7-vite-rolldown-chunk-audit.md`
+
+## ACCEPTANCE STATUS
+
+- [x] Current main and P1.6 continuity merge verified.
+- [x] Vite/Rolldown production build baseline captured from GitHub Quality.
+- [x] Client chunk inventory analyzed.
+- [x] Oversized/duplicated chunk evidence assessed.
+- [x] Manual chunking risk assessed against current Rolldown behavior.
+- [x] No speculative chunking introduced.
+- [ ] Browser-level JS transfer/cache/client-transition measurements remain UNKNOWN.
+- [x] Deployment not performed.
+
+## EXACT NEXT TASK
+
+**P1.8 — Performance Gates**
+
+Turn the existing performance targets into repeatable regression evidence for request count, client transitions, DCL/LCP, JS/CSS transfer, main-thread work, and representative DB/API measurements where the available tooling supports them.
+
+---
+
 # 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
 
 - VERIFIED: PR #373 was squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
