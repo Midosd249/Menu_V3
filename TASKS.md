@@ -1708,3 +1708,19 @@ Do not begin automatically.
 - UNKNOWN: direct production/physical-device performance measurements remain unverified.
 - EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
 - Do not start P1.4 or unrelated optimization before P1.3 is completed and continuity is updated.
+
+
+## 2026-10-03 — P1.3 CLOSEOUT — VERIFIED / NO CODE CHANGE
+
+- VERIFIED: P1.3 was evaluated against the actual TanStack Start/Vite integration.
+- VERIFIED: automatic route code splitting is already provided by the existing TanStack Start integration; PR #367's explicit setting was redundant and was closed without merge.
+- VERIFIED: Quality #2820 = SUCCESS; W9 Orders QA #946 = SUCCESS.
+- VERIFIED: production-build client chunk inventory remained 145 unique JS chunks with unchanged route chunk sizes.
+- UNKNOWN: exact production client-transition request count and quantified initial-route JS reduction remain unverified.
+- BLOCKED: Vercel Preview for PR #367 failed due build-rate-limit; no Production deployment was attempted.
+
+## EXACT NEXT TASK
+
+**P1.4 — Request Waterfall Consolidation**
+
+Do not begin database consolidation, analytics caching, or unrelated cleanup before request-level evidence identifies a direct need.
