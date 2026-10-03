@@ -1,3 +1,34 @@
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: current main baseline is 6b2eef2b619c7aa003649b516a1ca0fbbbab88e4.
+- VERIFIED: P1.2 and P1.3 are closed on main; no prior performance milestone was reimplemented.
+- VERIFIED: repository audit found duplicate getMyStudio() calls on /studio/analytics and /studio/reports; StudioGate already loads the same authorized StudioSnapshot and exposes it through useStudio().
+- VERIFIED: getOwnerAnalytics() remains an independent request because it supplies time-windowed analytics data.
+- IMPLEMENTED: Analytics and Reports now reuse useStudio().snapshot and no longer call getMyStudio() themselves.
+- ADDED: tests/p1-4-request-waterfall.test.mjs regression contract, registered in npm test.
+- PROTECTED: authentication, authorization, tenant/branch isolation, analytics authorization, independent loading boundaries, public menu, themes, SEO, subscriptions, ordering, and database schema.
+- UNKNOWN: browser/network request counts, DCL/LCP, local typecheck/lint/test/build, and GitHub Quality/W9 results for this branch.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT TASK
+
+P1.4 — Request Waterfall Consolidation
+
+Map request boundaries first and remove only proven redundant requests. Current implementation scope is limited to reusing the already-authorized Studio snapshot on Analytics and Reports.
+
+## ACCEPTANCE STATUS
+
+- [x] Proven duplicate Studio snapshot request identified.
+- [x] Duplicate removed from Analytics.
+- [x] Duplicate removed from Reports.
+- [x] Regression contract added and registered.
+- [ ] Full automated verification.
+- [ ] Browser/network measurement proving actual request reduction.
+- [ ] Final diff review after CI.
+
+## EXACT NEXT TASK
+
+Run and inspect focused P1.4 regression plus repository Quality/W9 verification on the branch, review the final diff, then prepare one coherent PR. Do not deploy automatically.
 # 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — VERIFIED / PR #366
 
 - VERIFIED: PR #366 targets `main` and its final implementation head `d1809de4f5ff02032c5bd443a511a625d0c23b75` has passed GitHub Quality #2816 and W9 Orders QA #943.

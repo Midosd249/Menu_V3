@@ -1,3 +1,22 @@
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — IN_PROGRESS
+
+- VERIFIED: request mapping is now repository-backed rather than based on the historical approximately 117-request observation alone.
+- VERIFIED: duplicate getMyStudio() requests were removed from Studio Analytics and Reports by reusing the existing StudioGate snapshot.
+- VERIFIED: Team already uses parallel independent loads; Home already uses independent analytics/orders loads; auth session reads already share cached/in-flight state; public menu P1.1 already prevents the known SSR/client duplicate.
+- DEFERRED: Studio Preview has overlapping data between getMyStudio() and getOwnerPreviewMenu(), but source evidence does not yet prove that changing the boundary would reduce requests or improve payload/UX.
+- UNKNOWN: browser/network request counts and DCL/LCP remain runtime evidence gaps.
+
+## P1.4 current acceptance
+
+- request map: VERIFIED
+- proven duplicate consolidation: IMPLEMENTED
+- regression contract: IMPLEMENTED
+- full CI/browser verification: TODO
+- exact request-budget measurement: UNKNOWN
+
+## EXACT NEXT TASK
+
+Run P1.4 focused/full verification and final diff review; only then select one additional evidence-backed request boundary if needed.
 # Menu V3 — Universal Performance, Network & Quality Master Plan
 
 **Date:** 2026-10-03  
