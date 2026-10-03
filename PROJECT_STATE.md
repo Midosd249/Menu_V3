@@ -1,4 +1,24 @@
-# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED\n\n- VERIFIED: PR #373 squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.\n- VERIFIED: OwnerAnalytics was consolidated from five sequential SQL reads to one authorized server-side SQL boundary.\n- VERIFIED: tenant isolation, auth middleware, validated filters, response shape, and analytics semantics were preserved.\n- VERIFIED: Quality #2836 and W9 Orders QA #958 passed on the final implementation head.\n- UNKNOWN: production/browser end-to-end latency and request-budget impact.\n- VERIFIED: caching was not added because personalized analytics caching is not justified by current evidence.\n- VERIFIED: no schema/migration/index/auth/RLS changes were made.\n- VERIFIED: no cursor pagination was added because no current UI is proven to require traversal beyond bounded pages.\n- DEPLOYMENT STATUS: NOT_PERFORMED.\n\n## EXACT NEXT TASK\n\n**P1.7 — Vite/Rolldown Chunk Optimization**\n\nBegin with repository-first production build/chunk evidence. Change only a proven chunk inefficiency; no speculative manual chunking or deployment.\n\n---\n# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
+
+- VERIFIED: PR #373 was squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
+- VERIFIED: `getOwnerAnalytics` now uses one authorized server-side SQL boundary with a tenant-scoped `MATERIALIZED` CTE and server-side JSON aggregation.
+- VERIFIED: `authMiddleware`, server-derived tenant membership, validated `days` input, response shape, and analytics semantics were preserved.
+- VERIFIED: GitHub Quality #2836 and W9 Orders QA #958 passed on the final P1.6 head.
+- VERIFIED: no personalized analytics caching was added because current evidence does not justify shared/private cache complexity.
+- VERIFIED: no schema, migration, index, auth/RLS, or tenant-isolation change was made.
+- VERIFIED: no current UI was proven to require traversal beyond existing bounded analytics/dashboard result pages, so no speculative cursor pagination API was introduced.
+- UNKNOWN: end-to-end browser/network request reduction and production analytics latency remain unmeasured.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**P1.7 — Vite/Rolldown Chunk Optimization**
+
+Start with repository-first production build/chunk evidence. Optimize only a proven oversized or duplicated chunk; do not add speculative manual chunking and do not deploy automatically.
+
+---
+
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: current `main` = `d9d83c89c0070413c61f8a75e3120447006e4828` and P1.4 is closed/merged.
 - VERIFIED: repository audit identified correlated `order_items` aggregation in `getOrdersDashboard` and `getPlatformOrders`, plus per-tenant correlated count subqueries in `getPlatformDashboard`.
