@@ -870,7 +870,8 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 
 ### Verification Update — Phase 1 CI attempt
-- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \\n marker at line 62.
+- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \
+ marker at line 62.
 - VERIFIED: the failure was isolated from application logic and corrected in commit `8347a3204f501f6a08a085616a3e2cea10e00882`.
 - UNKNOWN: CI rerun for the corrected head has not yet completed/appeared through the connected GitHub workflow surface.
 - Exact Next Task: **Obtain the corrected-head CI result; if green, perform final diff review and Phase 1 performance verification; if red, fix only the reported Phase 1 issue.**
@@ -1005,7 +1006,9 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Deepgram isolated STT/audio specialist adapter, without entering generic LLM routing.**
-\n\n## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
 
 - VERIFIED: PR #279 merged by squash as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
 - VERIFIED: official Deepgram pre-recorded STT contract researched through primary documentation.
@@ -1044,7 +1047,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
-\n\n## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING\n\n- IMPLEMENTED: dedicated `src/lib/menu/ai-typesafe.ts` decision-orchestrator adapter.\n- IMPLEMENTED: three-key rotation, official System One endpoint, typed Noul/Choice/Score handling, bounded request size, candidate-set boundary, and malformed-decision rejection.\n- VERIFIED: TypeSafe is not added to generic structured or multimodal routing.\n- UNKNOWN: live authenticated TypeSafe behavior.\n- PROTECTED: existing provider adapters, Smart Menu Import, public-menu/performance phases 0–8, auth/RLS/subscription/tenant/branch boundaries.\n\n### EXACT NEXT TASK\n**Run Quality/W9 verification for the TypeSafe branch and one authenticated smoke when the configured key is available; keep runtime activation disabled until verified.**\n
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING
+
+- IMPLEMENTED: dedicated `src/lib/menu/ai-typesafe.ts` decision-orchestrator adapter.
+- IMPLEMENTED: three-key rotation, official System One endpoint, typed Noul/Choice/Score handling, bounded request size, candidate-set boundary, and malformed-decision rejection.
+- VERIFIED: TypeSafe is not added to generic structured or multimodal routing.
+- UNKNOWN: live authenticated TypeSafe behavior.
+- PROTECTED: existing provider adapters, Smart Menu Import, public-menu/performance phases 0–8, auth/RLS/subscription/tenant/branch boundaries.
+
+### EXACT NEXT TASK
+**Run Quality/W9 verification for the TypeSafe branch and one authenticated smoke when the configured key is available; keep runtime activation disabled until verified.**
+
 
 ## 2026-09-24 — AI Provider Expansion / Phase 6 — CAPABILITY-AWARE ROUTING
 
@@ -1146,7 +1161,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **Provide the TypeSafe credential to the authorized smoke runtime securely, then run exactly one authenticated smoke and record HTTP status, decision validity, selected candidate, confidence when returned, latency, and any bounded usage metadata.**
-\n\n# 2026-09-24 — Post-Merge Continuity Anchor\n\n- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.\n- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.\n- VERIFIED: the smoke was not repeated after the credential blocker was observed.\n- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.\n\n## EXACT NEXT TASK\n\n**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**\n
+
+
+# 2026-09-24 — Post-Merge Continuity Anchor
+
+- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.
+- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.
+- VERIFIED: the smoke was not repeated after the credential blocker was observed.
+- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.
+
+## EXACT NEXT TASK
+
+**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**
+
 
 # 2026-09-25 — Platform-Admin Invoice Ownership Correction — IMPLEMENTED / VERIFIED / PR #297
 
