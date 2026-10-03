@@ -32,14 +32,16 @@ test("Public theme recovery preserves mobile safe-area clearance and reduced mot
   assert.doesNotMatch(styles, /setTimeout\(/);
 });
 
-test("Public theme recovery is loaded after existing theme hardening", async () => {
-  const source = await readFile("src/routes/__root.tsx", "utf8");
+test("Public theme recovery is mapped after existing theme hardening", async () => {
   const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
 
-  assert.match(source, /import publicThemeQualityRecoveryCss from "\.\.\/theme-public-quality-recovery\.css\?url"/);
-  assert.match(source, /href: galleryHardeningCss \},\s*\{ rel: "stylesheet", href: publicThemeQualityRecoveryCss \}/);
+  assert.match(runtimeStyles, /galleryHardeningCss/);
+  assert.match(runtimeStyles, /publicThemeQualityRecoveryCss/);
+  assert.match(
+    runtimeStyles,
+    /gallery:\s*\[[\s\S]*galleryHardeningCss,[\s\S]*publicThemeQualityRecoveryCss/,
+  );
 });
-
 
 test("Essential featured cards keep full surfaces with the shared quick-add action", async () => {
   const template = await readFile("src/components/public-menu.tsx", "utf8");
