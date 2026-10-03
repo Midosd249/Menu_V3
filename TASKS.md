@@ -1,3 +1,31 @@
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: P1.4 is closed/merged; current `main` is `d9d83c89c0070413c61f8a75e3120447006e4828`.
+- VERIFIED: `getOrdersDashboard` and `getPlatformOrders` contained correlated `order_items` count/JSON aggregation per returned order.
+- VERIFIED: `getPlatformDashboard` contained correlated per-tenant branch/product/order/member count subqueries.
+- IMPLEMENTED: grouped `item_agg` + bounded `page_orders` for Studio and Platform order readers.
+- IMPLEMENTED: grouped tenant count CTEs + joins for Platform dashboard tenants.
+- IMPLEMENTED: `tests/p1-5-query-consolidation.test.mjs` registered in `npm test`.
+- UNKNOWN: runtime query-plan/latency improvement and exact DB round-trip counts.
+- BLOCKED: local shell execution unavailable; CI is the verification gate.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## ACCEPTANCE STATUS
+
+- [x] Repository-first query audit completed.
+- [x] Concrete correlated order-item inefficiency proven.
+- [x] Concrete Platform per-tenant count inefficiency proven.
+- [x] Query consolidation implemented without schema changes.
+- [x] Regression contract added and registered.
+- [ ] GitHub Quality/W9 verification passed.
+- [ ] Final diff reviewed after CI.
+- [ ] Runtime DB plan/latency measurement.
+
+## EXACT NEXT TASK
+
+**Finish P1.5 verification and continuity closeout.** Do not start cursor pagination, indexes, migrations, or deployment until this task is closed.
+
+---
 # 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
 - VERIFIED: repository-wide request-boundary audit identified the redundant Studio snapshot calls in Analytics and Reports.
