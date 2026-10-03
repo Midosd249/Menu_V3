@@ -1463,3 +1463,13 @@ Do not implement or repair either path automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+## 2026-10-03 — P1.2 CLOSEOUT — VERIFIED
+
+- VERIFIED: P1.2 is complete on PR #366 head `d1809de4f5ff02032c5bd443a511a625d0c23b75`.
+- VERIFIED: Quality #2816 = SUCCESS; W9 Orders QA #943 = SUCCESS.
+- VERIFIED: Vercel Preview = Ready / SUCCESS.
+- UNKNOWN: direct production/physical-device performance measurements remain unverified.
+- EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
+- Do not start P1.4 or unrelated optimization before P1.3 is completed and continuity is updated.
