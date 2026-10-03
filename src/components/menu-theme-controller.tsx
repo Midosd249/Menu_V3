@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { DEFAULT_THEME_KEY, getTheme, normalizeThemeKey, type ThemeKey } from "@/lib/theme";
+import { syncThemeStylesheets } from "@/lib/theme/runtime-styles";
 
 function setThemeTokens(theme: ThemeKey) {
   const root = document.documentElement;
@@ -75,18 +76,13 @@ export function MenuThemeController({
     const pathname = new URL(location, window.location.origin).pathname;
     const isThemePreviewRoute = pathname === "/themes/preview" || pathname === "/studio/preview";
 
-    if (isThemePreviewRoute) {
-      const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
-      root.dataset.menuTheme = key;
-      root.dataset.menuThemeMode = "preview";
-      setThemeTokens(key);
-      return;
-    }
-
     const key = normalizeThemeKey(theme) ?? DEFAULT_THEME_KEY;
     root.dataset.menuTheme = key;
-    root.dataset.menuThemeMode = preview ? "preview" : "published";
+    root.dataset.menuThemeMode = isThemePreviewRoute || preview ? "preview" : "published";
     setThemeTokens(key);
+    void syncThemeStylesheets(key).catch((error: unknown) => {
+      console.error("[menu-theme] stylesheet load failed", error);
+    });
   }, [theme, preview, location]);
 
   useLayoutEffect(() => () => clearThemeTokens(), []);
