@@ -123,3 +123,15 @@ test("public menu routes convert not-found data into router-level 404s", () => {
   assert.ok(BRANCH_PUBLIC_MENU_ROUTE.includes('import { createFileRoute, notFound } from "@tanstack/react-router";'));
   assert.match(BRANCH_PUBLIC_MENU_ROUTE, /if \(result\.code === "not_found"\) throw notFound\(\)/);
 });
+
+
+test("performance audit captures P1.8 regression evidence without guessing numeric budgets", () => {
+  assert.match(PERFORMANCE_AUDIT, /initialRequestCount/);
+  assert.match(PERFORMANCE_AUDIT, /stylesheet/);
+  assert.match(PERFORMANCE_AUDIT, /longtask/);
+  assert.match(PERFORMANCE_AUDIT, /clientTransitionSelector/);
+  assert.match(PERFORMANCE_AUDIT, /clientTransition/);
+  assert.match(PERFORMANCE_AUDIT, /html:\s*navigation/);
+  assert.match(PERFORMANCE_AUDIT, /transferBytes/);
+  assert.doesNotMatch(PERFORMANCE_AUDIT, /initialRequestCount.*(?:budget|threshold)|DCL.*(?:budget|threshold)|resourceCount.*(?:budget|threshold)/i);
+});

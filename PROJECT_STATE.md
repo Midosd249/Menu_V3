@@ -1,3 +1,49 @@
+# 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
+
+- VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.
+- IMPLEMENTED: `scripts/performance-audit.mjs` now captures Playwright initial request count, HTML/JS/CSS/image/font transfer evidence, long-task evidence, and optional client-transition evidence.
+- IMPLEMENTED: LCP/CLS/INP fields remain nullable/explicitly supported rather than being fabricated when the headless environment does not expose them.
+- IMPLEMENTED: regression coverage was added to `scripts/quality-workflow.test.mjs`.
+- VERIFIED: GitHub Quality #2860 passed, including typecheck, tests, lint, production build, browser QA, golden performance fixture, Studio QA, Platform Admin QA, and browser performance baseline upload.
+- VERIFIED: W9 Orders QA #979 passed.
+- VERIFIED: controlled preview baseline recorded 103 initial requests, 771.7ms DCL, 776ms FCP, 0 long tasks, and 48,957 transferred JS bytes.
+- VERIFIED: golden 30-product fixture recorded 32 initial requests, 28.4ms DCL, 44ms FCP, and 20,587 transferred HTML bytes.
+- UNKNOWN: client-transition numeric baseline because no real transition selector is configured in the current harness.
+- UNKNOWN: LCP in the current headless measurement.
+- DECISION: no hard numeric performance budget was introduced yet; current evidence is sufficient for repeatable measurement, not for a stable production-equivalent threshold.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT STATE
+
+**P1.8 — Performance Gates: CLOSED / VERIFIED**
+
+Branch: `perf/p1-8-performance-gates-2026-10-03`
+
+Audit: `docs/performance/p1-8-performance-gates-audit.md`
+
+## ACCEPTANCE STATUS
+
+- [x] Initial request count evidence.
+- [x] DCL/load evidence.
+- [x] HTML/JS/CSS/image/font transfer evidence.
+- [x] Long-task/main-thread evidence.
+- [x] Optional client-transition measurement path.
+- [x] LCP/CLS/INP support state recorded.
+- [x] Regression contract.
+- [x] Quality #2860.
+- [x] W9 Orders QA #979.
+- [ ] Client-transition numeric baseline.
+- [ ] Production/real-device LCP.
+- [ ] Hard numeric budgets.
+
+## EXACT NEXT TASK
+
+**P1.9 — Real-route performance evidence and budget decision**
+
+Use the new measurement surface on representative public-menu and ordinary client-transition flows. Only after stable repeated evidence exists should hard numeric regression budgets be proposed.
+
+---
+
 # 2026-10-03 — P1.7 Vite/Rolldown Chunk Optimization — CLOSED / VERIFIED — NO CODE CHANGE
 
 - VERIFIED: P1.6 continuity PR #374 was squash-merged into `main` as `1f1dbc3a853efcfaa3aca620989635dcc3ffecc5`.
