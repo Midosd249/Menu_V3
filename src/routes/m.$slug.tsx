@@ -15,6 +15,7 @@ import { getNotFoundMenuSeo, getPublicMenuSeo, resolvePublicMenuLocale } from "@
 import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
+import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
 
 const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional() });
 type PublicMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
@@ -58,7 +59,7 @@ export const Route = createFileRoute("/m/$slug")({
         { property: "og:locale", content: locale === "ar" ? "ar_SA" : "en_US" },
         { name: "twitter:card", content: "summary_large_image" },
         ...(seo.image ? [{ property: "og:image", content: seo.image }, { name: "twitter:image", content: seo.image }] : []),
-      ], links: [{ rel: "canonical", href: seo.canonical }, ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href }))], scripts: [{ children: createThemeBootstrapScript(activeTheme, Boolean(previewTheme)) }, { type: "application/ld+json", children: JSON.stringify(seo.schema) }] };
+      ], links: [{ rel: "canonical", href: seo.canonical }, ...seo.alternates.map((alternate) => ({ rel: "alternate", hreflang: alternate.hreflang, href: alternate.href })), ...getThemeStylesheets(activeTheme).map((href) => ({ rel: "stylesheet" as const, href }))], scripts: [{ children: createThemeBootstrapScript(activeTheme, Boolean(previewTheme)) }, { type: "application/ld+json", children: JSON.stringify(seo.schema) }] };
     }
     const fallback = getNotFoundMenuSeo(pathname);
     return { meta: [{ title: "المنيو غير موجود" }, { name: "robots", content: fallback.robots }], links: [{ rel: "canonical", href: fallback.canonical }] };

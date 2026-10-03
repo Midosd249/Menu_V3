@@ -1,3 +1,46 @@
+# 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: canonical `main` at task start is `ad428e13d3a2f483d342829df11cff3d7fe99692`.
+- VERIFIED: PR #365 is a separate documentation-only Performance Guardian registration branch; it is not the implementation branch for this task.
+- VERIFIED: the repository already has lazy theme *template/component* loading through `getLazyThemeTemplate()`; that completed capability is protected and is not being reimplemented.
+- VERIFIED: `src/routes/__root.tsx` previously linked the full theme/refinement stylesheet set eagerly.
+- VERIFIED: `MenuThemeController` previously changed theme tokens but did not own stylesheet lifecycle.
+- VERIFIED: public menu routes already have SSR theme bootstrap through `createThemeBootstrapScript()`.
+- USER-OBSERVED: homepage request count was approximately 117 HTTP requests; this has not been independently browser-verified in the current connector-only session.
+- VERIFIED: a permanent performance master plan is now recorded at `docs/performance/performance-optimization-master-plan.md`.
+- VERIFIED: implementation branch is `perf/p1-2-theme-css-code-splitting-2026-10-03`.
+- IMPLEMENTATION_IN_PROGRESS: active-theme stylesheet registry, SSR active-theme links, client stylesheet synchronization, shared/theme-specific CSS separation, and regression contract are being implemented.
+- PROTECTED: auth/RLS, tenant/branch isolation, order lifecycle, analytics authorization, preparation-time/ETA, image delivery, five theme identities, and existing lazy theme template architecture.
+- UNKNOWN: browser request waterfall, DCL, LCP, CSS/JS transfer sizes, production DB timings, and production cache behavior until browser/runtime evidence is collected.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT TASK
+
+**P1.2 — Active Theme Stylesheet Code Splitting**
+
+### Acceptance criteria
+1. No theme stylesheet is eagerly linked from `src/routes/__root.tsx`.
+2. Public menu SSR links only the stylesheet set for the active canonical theme.
+3. Client theme/preview changes remove obsolete managed stylesheets and load only the new active set.
+4. SSR theme bootstrap remains intact.
+5. All five canonical themes remain available: `essential`, `editorial`, `noir`, `heritage`, `gallery`.
+6. Arabic/English and RTL/LTR behavior are unchanged.
+7. A regression contract prevents reintroducing root-level eager theme CSS.
+8. Relevant tests/typecheck/lint/build/browser checks are run when tooling permits.
+9. Final diff contains only task-scoped changes.
+10. No Production deployment occurs automatically.
+
+## EXACT NEXT VERIFICATION
+
+Run focused theme CSS contract, then typecheck, full test suite, lint, production build, and browser/all-theme network evidence where available. Review the final diff. If verification is blocked by the connector-only environment, record the exact command and remaining risk.
+
+## EXACT NEXT TASK AFTER P1.2
+
+**P1.3 — Route Code-Splitting / Client Transition Budget**
+
+Do not start P1.3 until P1.2 is closed and this continuity state is updated.
+
+
 # 2026-10-03 — CI Studio Fixture Dependency — VERIFIED / MERGED
 
 - VERIFIED: the Quality #2801 failure was caused by the Studio browser fixture omitting the existing PH-04 migration `20260917120000_ph04_platform_admin_subscription_controls.sql`, which creates `menu_v3.platform_admin_subscription_audit` consumed by the Studio subscription runtime.
@@ -1420,3 +1463,13 @@ Do not implement or repair either path automatically.
 ## EXACT NEXT TASK
 
 **Audit Follow-up — prioritize the next actionable audit finding from the current repository audit, excluding deferred P1.4 and the already-completed migration reconciliation.**
+
+
+## 2026-10-03 — P1.2 CLOSEOUT — VERIFIED
+
+- VERIFIED: P1.2 is complete on PR #366 head `d1809de4f5ff02032c5bd443a511a625d0c23b75`.
+- VERIFIED: Quality #2816 = SUCCESS; W9 Orders QA #943 = SUCCESS.
+- VERIFIED: Vercel Preview = Ready / SUCCESS.
+- UNKNOWN: direct production/physical-device performance measurements remain unverified.
+- EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
+- Do not start P1.4 or unrelated optimization before P1.3 is completed and continuity is updated.

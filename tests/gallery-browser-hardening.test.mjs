@@ -41,13 +41,16 @@ test("Gallery keeps explicit Quick Add/options selectors isolated from its card 
   assert.match(styles, /:not\(\.public-menu-quick-add\):not\(\.public-menu-options-action\)/);
 });
 
-test("Gallery parity stylesheet is loaded after base Gallery layers", async () => {
-  const source = await readFile("src/routes/__root.tsx", "utf8");
+test("Gallery parity stylesheet is mapped after base Gallery layers", async () => {
+  const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
 
-  assert.match(source, /import galleryThemeCss from "\.\.\/theme-gallery\.css\?url"/);
-  assert.match(source, /import galleryHardeningCss from "\.\.\/theme-gallery-hardening\.css\?url"/);
-  assert.match(source, /import galleryCanvaParityCss from "\.\.\/theme-gallery-canva-parity\.css\?url"/);
-  assert.match(source, /href: galleryCanvaParityCss/);
+  assert.match(runtimeStyles, /galleryThemeCss/);
+  assert.match(runtimeStyles, /galleryHardeningCss/);
+  assert.match(runtimeStyles, /galleryCanvaParityCss/);
+  assert.match(
+    runtimeStyles,
+    /gallery:\s*\[[\s\S]*galleryThemeCss,[\s\S]*galleryHardeningCss,[\s\S]*galleryCanvaParityCss/,
+  );
 });
 
 test("Gallery preserves RTL/LTR and reduced-motion safeguards", async () => {

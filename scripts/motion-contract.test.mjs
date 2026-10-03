@@ -5,6 +5,7 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const css = fs.readFileSync(new URL("src/motion.css", root), "utf8");
 const rootRoute = fs.readFileSync(new URL("src/routes/__root.tsx", root), "utf8");
+const runtimeStyles = fs.readFileSync(new URL("src/lib/theme/runtime-styles.ts", root), "utf8");
 const publicMenu = fs.readFileSync(new URL("src/components/public-menu.tsx", root), "utf8");
 
 test("motion system centralizes durations, easing, distances, and scale", () => {
@@ -24,10 +25,11 @@ test("motion system centralizes durations, easing, distances, and scale", () => 
   ]) assert.match(css, new RegExp(token.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")));
 });
 
-test("motion system is loaded before protected themes", () => {
+test("motion system is root-loaded while protected themes remain runtime-managed", () => {
   assert.match(rootRoute, /motionCss/);
   assert.match(rootRoute, /href: motionCss/);
-  assert.ok(rootRoute.indexOf("href: motionCss") < rootRoute.indexOf("href: themeCss"));
+  assert.match(runtimeStyles, /THEME_STYLESHEETS/);
+  assert.doesNotMatch(rootRoute, /theme-(?:premium|essential|noir|heritage|gallery|refinements|refinements-v2|signal-table|public-quality-recovery|gallery-canva-parity|gallery-hardening|noir-hardening|w16-mobile-qr-hardening|final-visual-hardening|qr-final-fixes|price-consistency|quick-add-compact-refinement)-[^"]*\.css\?url/);
 });
 
 test("interactive motion avoids layout properties and supports reduced motion", () => {
