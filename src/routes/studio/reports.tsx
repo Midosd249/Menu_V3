@@ -4,7 +4,8 @@ import { Check, Copy, MessageCircle, Printer, RefreshCw, Sparkles } from "lucide
 import { Button } from "@/components/ui/button";
 import { ErrorState, LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
-import { getOwnerAnalytics, getMyStudio } from "@/lib/menu/owner";
+import { getOwnerAnalytics } from "@/lib/menu/owner";
+import { useStudio } from "@/lib/menu/studio";
 import { buildMenuReport, reportToText, type MenuReport } from "@/lib/menu/reports";
 import { buildWhatsAppShareUrl, generateWhatsAppReportMessage } from "@/lib/menu/ai-whatsapp";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
@@ -19,6 +20,7 @@ type WhatsAppState = { status: "idle" | "loading" | "ready" | "error"; message?:
 
 function ReportsPage() {
   const { lang } = useLang();
+  const { snapshot } = useStudio();
   const [days, setDays] = useState<7 | 30>(7);
   const [state, setState] = useState<State>({ status: "loading" });
   const [refreshing, setRefreshing] = useState(false);
@@ -26,13 +28,10 @@ function ReportsPage() {
 
   const load = () => {
     setRefreshing(true);
-    Promise.all([getOwnerAnalytics({ data: { days } }), getMyStudio()])
-      .then(([analytics, studio]) => {
+    getOwnerAnalytics({ data: { days } })
+      .then((analytics) => {
         if (!analytics.ok) return setState({ status: "error", message: analytics.error });
-        if (!studio.ok || !studio.data || !("tenant" in studio.data) || !studio.data.tenant) {
-          return setState({ status: "error", message: lang === "ar" ? "تعذر تحميل بيانات المنشأة" : "Unable to load business data" });
-        }
-        setState({ status: "ready", report: buildMenuReport(studio.data as StudioSnapshot, analytics.data as OwnerAnalytics) });
+        setState({ status: "ready", report: buildMenuReport(snapshot as StudioSnapshot, analytics.data as OwnerAnalytics) });
         setWaState({ status: "idle" });
       })
       .catch((error: unknown) => setState({ status: "error", message: error instanceof Error ? error.message : (lang === "ar" ? "تعذر إنشاء التقرير" : "Unable to create report") }))

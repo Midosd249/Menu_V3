@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
 import { buildGrowthMetrics } from "@/lib/menu/growth";
-import { getMyStudio, getOwnerAnalytics } from "@/lib/menu/owner";
+import { getOwnerAnalytics } from "@/lib/menu/owner";
+import { useStudio } from "@/lib/menu/studio";
 import { getOwnerOrderValueAnalytics, getOwnerOrderValueAnalyticsTenants, type OrderValueAnalytics, type OrderValueAnalyticsPeriod, type OrderValueAnalyticsTenant } from "@/lib/menu/order-value-analytics";
 import type { OwnerAnalytics, StudioSnapshot } from "@/lib/menu/types";
 
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/studio/analytics")({ component: Analytics
 
 function AnalyticsPage() {
   const { lang } = useLang();
+  const { snapshot } = useStudio();
   const [days, setDays] = useState<7 | 30>(7);
   const [orderValuePeriod, setOrderValuePeriod] = useState<OrderValueAnalyticsPeriod>({ type: "today" });
   const [orderValueTenants, setOrderValueTenants] = useState<OrderValueAnalyticsTenant[]>([]);
@@ -26,22 +28,18 @@ function AnalyticsPage() {
   const [state, setState] = useState<
     | { status: "loading" }
     | { status: "error"; message: string }
-    | { status: "ok"; data: OwnerAnalytics; studio: StudioSnapshot }
+    | { status: "ok"; data: OwnerAnalytics }
   >({ status: "loading" });
 
   useEffect(() => {
     setState({ status: "loading" });
-    Promise.all([getOwnerAnalytics({ data: { days } }), getMyStudio()])
-      .then(([analyticsResult, studioResult]) => {
+    getOwnerAnalytics({ data: { days } })
+      .then((analyticsResult) => {
         if (!analyticsResult.ok) {
           setState({ status: "error", message: analyticsResult.error });
           return;
         }
-        if (!studioResult.ok || !studioResult.data || !("tenant" in studioResult.data) || !studioResult.data.tenant) {
-          setState({ status: "error", message: "تعذر تحميل بيانات المطعم" });
-          return;
-        }
-        setState({ status: "ok", data: analyticsResult.data, studio: studioResult.data });
+        setState({ status: "ok", data: analyticsResult.data });
       })
       .catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : t(copy.state.error, lang) }));
   }, [days, lang]);
@@ -120,7 +118,7 @@ function AnalyticsPage() {
       </div>
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState message={state.message} /> : null}
-      {state.status === "ok" ? <AnalyticsContent analytics={state.data} studio={state.studio} lang={lang} /> : null}
+      {state.status === "ok" ? <AnalyticsContent analytics={state.data} studio={snapshot} lang={lang} /> : null}
       <OrderValueAnalyticsPanel
         state={orderValueState}
         period={orderValuePeriod}

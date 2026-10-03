@@ -1,3 +1,26 @@
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: P1.4 began from main 6b2eef2b619c7aa003649b516a1ca0fbbbab88e4 after P1.2/P1.3 closeout.
+- VERIFIED: TanStack evidence confirms route loading/preload work can be parallelized/shared; this task is driven by repository evidence rather than speculative router configuration.
+- VERIFIED: StudioGate loads getMyStudio() once and exposes the resulting authorized StudioSnapshot through useStudio().
+- VERIFIED: Analytics and Reports independently called getMyStudio() despite being descendants of StudioGate.
+- IMPLEMENTED: both routes now reuse useStudio().snapshot; their independent analytics request remains separate.
+- VERIFIED: Studio Team already parallelizes getTeamMembers() and listTeamInvitations(); no change was justified there.
+- VERIFIED: Studio Home already launches analytics and orders independently; no waterfall was proven.
+- VERIFIED: public menu P1.1 already prevents the known SSR/client duplicate getPublicMenu path.
+- VERIFIED: auth session reads already use a 15-second cache plus in-flight request sharing.
+- UNKNOWN: direct browser/network waterfall measurements remain unavailable in the connector-only environment.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## CURRENT P1.4 SCOPE
+
+1. Remove duplicate getMyStudio() calls from Analytics and Reports by reusing the existing parent context.
+2. Preserve independent analytics and Order Value Analytics loading boundaries.
+3. Do not merge Team, public-menu, auth, preview, or Admin requests without stronger evidence.
+
+## EXACT NEXT VERIFICATION
+
+Run focused/full automated checks through GitHub CI, inspect the final diff, and collect browser/network evidence if a suitable QA environment is available. Only then decide whether another single P1.4 request issue is sufficiently proven for a separate atomic change.
 # 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: canonical `main` at task start is `ad428e13d3a2f483d342829df11cff3d7fe99692`.
