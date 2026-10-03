@@ -748,106 +748,75 @@ export const getOwnerAnalytics = createServerFn({ method: "GET" })
       const days = data.days === 30 ? 30 : 7;
       const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 
-      const totals = await sql<{
-        visits: number;
-        views: number;
-        qr: number;
-        wa: number;
-        sessions: number;
-        lang_ar: number;
-        lang_en: number;
+      const rows = await sql<{
+        visits: number; views: number; qr: number; wa: number; sessions: number; lang_ar: number; lang_en: number;
+        series: Array<{ day: string; visits: number; views: number }>;
+        top_products: Array<{ id: string; nameAr: string; nameEn: string; count: number }>;
+        by_category: Array<{ id: string; nameAr: string; nameEn: string; count: number }>;
+        by_branch: Array<{ id: string; nameAr: string; nameEn: string; count: number }>;
       }>`
-        select
-          count(*) filter (where event_type = 'visit')::int as visits,
-          count(*) filter (where event_type = 'product_view')::int as views,
-          count(*) filter (where event_type = 'qr_scan')::int as qr,
-          count(*) filter (where event_type = 'whatsapp')::int as wa,
-          count(distinct session_id)::int as sessions,
-          count(*) filter (where lang = 'ar')::int as lang_ar,
-          count(*) filter (where lang = 'en')::int as lang_en
-        from menu_events
-        where tenant_id = ${member.tenant_id} and created_at >= ${since}
+        with scoped as materialized (
+          select e.event_type, e.session_id, e.lang, e.product_id, e.branch_id, e.created_at
+          from menu_events e
+          where e.tenant_id = ${member.tenant_id} and e.created_at >= ${since}
+        ),
+        totals as (
+          select
+            count(*) filter (where event_type = 'visit')::int as visits,
+            count(*) filter (where event_type = 'product_view')::int as views,
+            count(*) filter (where event_type = 'qr_scan')::int as qr,
+            count(*) filter (where event_type = 'whatsapp')::int as wa,
+            count(distinct session_id)::int as sessions,
+            count(*) filter (where lang = 'ar')::int as lang_ar,
+            count(*) filter (where lang = 'en')::int as lang_en
+          from scoped
+        ),
+        series as (
+          select coalesce(jsonb_agg(jsonb_build_object('day', day, 'visits', visits, 'views', views) order by day), '[]'::jsonb) as data
+          from (
+            select to_char(date_trunc('day', created_at), 'YYYY-MM-DD') as day,
+              count(*) filter (where event_type = 'visit')::int as visits,
+              count(*) filter (where event_type = 'product_view')::int as views
+            from scoped group by 1
+          ) s
+        ),
+        top_products as (
+          select coalesce(jsonb_agg(jsonb_build_object('id', p.id, 'nameAr', p.name_ar, 'nameEn', p.name_en, 'count', s.count) order by s.count desc, p.id), '[]'::jsonb) as data
+          from (
+            select product_id, count(*)::int as count from scoped
+            where event_type = 'product_view' and product_id is not null
+            group by product_id order by count desc, product_id limit 8
+          ) s join products p on p.id = s.product_id
+        ),
+        by_category as (
+          select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'nameAr', c.name_ar, 'nameEn', c.name_en, 'count', s.count) order by s.count desc, c.id), '[]'::jsonb) as data
+          from (
+            select p.category_id, count(*)::int as count
+            from scoped e join products p on p.id = e.product_id
+            where e.event_type = 'product_view' and p.category_id is not null
+            group by p.category_id order by count desc, p.category_id
+          ) s join categories c on c.id = s.category_id
+        ),
+        by_branch as (
+          select coalesce(jsonb_agg(jsonb_build_object('id', b.id, 'nameAr', b.name_ar, 'nameEn', b.name_en, 'count', s.count) order by s.count desc, b.id), '[]'::jsonb) as data
+          from (
+            select branch_id, count(*)::int as count from scoped
+            where event_type in ('visit', 'qr_scan') and branch_id is not null
+            group by branch_id order by count desc, branch_id
+          ) s join branches b on b.id = s.branch_id
+        )
+        select t.visits, t.views, t.qr, t.wa, t.sessions, t.lang_ar, t.lang_en,
+          s.data as series, tp.data as top_products, bc.data as by_category, bb.data as by_branch
+        from totals t cross join series s cross join top_products tp cross join by_category bc cross join by_branch bb
       `;
 
-      const seriesRows = await sql<{ day: string; visits: number; views: number }>`
-        select
-          to_char(date_trunc('day', created_at), 'YYYY-MM-DD') as day,
-          count(*) filter (where event_type = 'visit')::int as visits,
-          count(*) filter (where event_type = 'product_view')::int as views
-        from menu_events
-        where tenant_id = ${member.tenant_id} and created_at >= ${since}
-        group by 1
-        order by 1
-      `;
-
-      const topProducts = await sql<{ id: string; name_ar: string; name_en: string; count: number }>`
-        select p.id, p.name_ar, p.name_en, count(*)::int as count
-        from menu_events e
-        join products p on p.id = e.product_id
-        where e.tenant_id = ${member.tenant_id}
-          and e.event_type = 'product_view'
-          and e.created_at >= ${since}
-        group by p.id, p.name_ar, p.name_en
-        order by count desc
-        limit 8
-      `;
-
-      const byCategory = await sql<{ id: string; name_ar: string; name_en: string; count: number }>`
-        select c.id, c.name_ar, c.name_en, count(*)::int as count
-        from menu_events e
-        join products p on p.id = e.product_id
-        join categories c on c.id = p.category_id
-        where e.tenant_id = ${member.tenant_id}
-          and e.event_type = 'product_view'
-          and e.created_at >= ${since}
-        group by c.id, c.name_ar, c.name_en
-        order by count desc
-      `;
-
-      const byBranch = await sql<{ id: string; name_ar: string; name_en: string; count: number }>`
-        select b.id, b.name_ar, b.name_en, count(*)::int as count
-        from menu_events e
-        join branches b on b.id = e.branch_id
-        where e.tenant_id = ${member.tenant_id}
-          and e.event_type in ('visit', 'qr_scan')
-          and e.created_at >= ${since}
-        group by b.id, b.name_ar, b.name_en
-        order by count desc
-      `;
-
-      const t = totals[0];
-      return {
-        ok: true,
-        data: {
-          rangeDays: days,
-          visits: t?.visits ?? 0,
-          uniqueSessions: t?.sessions ?? 0,
-          productViews: t?.views ?? 0,
-          qrScans: t?.qr ?? 0,
-          whatsappClicks: t?.wa ?? 0,
-          langAr: t?.lang_ar ?? 0,
-          langEn: t?.lang_en ?? 0,
-          series: seriesRows.map((r) => ({ day: r.day, visits: r.visits, views: r.views })),
-          topProducts: topProducts.map((r) => ({
-            id: r.id,
-            nameAr: r.name_ar,
-            nameEn: r.name_en,
-            count: r.count,
-          })),
-          byCategory: byCategory.map((r) => ({
-            id: r.id,
-            nameAr: r.name_ar,
-            nameEn: r.name_en,
-            count: r.count,
-          })),
-          byBranch: byBranch.map((r) => ({
-            id: r.id,
-            nameAr: r.name_ar,
-            nameEn: r.name_en,
-            count: r.count,
-          })),
-        },
-      };
+      const result = rows[0];
+      return { ok: true, data: {
+        rangeDays: days, visits: result?.visits ?? 0, uniqueSessions: result?.sessions ?? 0,
+        productViews: result?.views ?? 0, qrScans: result?.qr ?? 0, whatsappClicks: result?.wa ?? 0,
+        langAr: result?.lang_ar ?? 0, langEn: result?.lang_en ?? 0, series: result?.series ?? [],
+        topProducts: result?.top_products ?? [], byCategory: result?.by_category ?? [], byBranch: result?.by_branch ?? [],
+      }};
     } catch (err) {
       console.error("getOwnerAnalytics failed", err);
       return { ok: false, code: "unavailable", error: "تعذر تحميل التحليلات" };

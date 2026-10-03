@@ -29,12 +29,14 @@ test("owner analytics accepts only the supported 7/30 day ranges", () => {
 
 test("owner analytics keeps every aggregation tenant-scoped", () => {
   const analytics = ownerSource.slice(ownerSource.indexOf("export const getOwnerAnalytics"));
-  assert.equal((analytics.match(/from menu_events/g) ?? []).length, 5, "expected all menu_events aggregations");
-  assert.match(analytics, /from menu_events\s+where tenant_id = \$\{member\.tenant_id\} and created_at >= \$\{since\}/);
-  assert.match(analytics, /from menu_events e\s+join products p on p\.id = e\.product_id\s+where e\.tenant_id = \$\{member\.tenant_id\}/);
-  assert.match(analytics, /join categories c on c\.id = p\.category_id\s+where e\.tenant_id = \$\{member\.tenant_id\}/);
-  assert.match(analytics, /join branches b on b\.id = e\.branch_id\s+where e\.tenant_id = \$\{member\.tenant_id\}/);
-  assert.match(analytics, /and e\.event_type in \('visit', 'qr_scan'\)/);
+  assert.equal((analytics.match(/from menu_events/g) ?? []).length, 1, "expected one scoped menu_events source");
+  assert.match(analytics, /with scoped as materialized \(/i);
+  assert.match(analytics, /from menu_events e\s+where e\.tenant_id = \$\{member\.tenant_id\}\s+and e\.created_at >= \$\{since\}/);
+  assert.match(analytics, /join products p on p\.id = e\.product_id/);
+  assert.match(analytics, /join categories c on c\.id = s\.category_id/);
+  assert.match(analytics, /join branches b on b\.id = s\.branch_id/);
+  assert.match(analytics, /event_type in \('visit', 'qr_scan'\)/);
+  assert.match(analytics, /tenant_id = \$\{member\.tenant_id\}/);
 });
 
 test("public product views reject missing or cross-tenant products", () => {
