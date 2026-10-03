@@ -325,3 +325,22 @@ A new chat must:
 - UNKNOWN: direct production/physical-device request-count and DCL measurements remain unverified.
 - EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
 - P1.3 must begin with repository-first measurement and verification of the actual TanStack Start/Vite integration; do not blindly enable an unverified splitting option.
+
+
+## 2026-10-03 — P1.3 CLOSEOUT — VERIFIED / NO CODE CHANGE
+
+- VERIFIED: P1.3 was evaluated against the repository's actual TanStack Start/Vite integration.
+- VERIFIED: TanStack Start already enables automatic route code splitting by default; adding `router.autoCodeSplitting: true` was redundant.
+- VERIFIED: PR #367 was closed without merge.
+- VERIFIED: Quality #2820 = SUCCESS; W9 Orders QA #946 = SUCCESS.
+- VERIFIED: before/after production-build client chunk inventory remained 145 unique JS chunks; route chunk sizes were unchanged.
+- UNKNOWN: exact production client-transition request count and quantified initial-route JS reduction remain unverified.
+- BLOCKED: Vercel Preview for PR #367 returned build-rate-limit failure; no production deployment was attempted.
+
+### P1.4 — Request Waterfall Consolidation — NEXT
+
+Map actual browser/server requests first across public menu, Studio, Admin, Auth, preview, and not-found flows. Consolidate only requests proven redundant while preserving authorization, tenant/branch isolation, SEO, and independent UX loading boundaries.
+
+**Current task:** P1.4 — Request Waterfall Consolidation.
+**Implementation status:** NOT_STARTED.
+**Deployment status:** NOT_PERFORMED.

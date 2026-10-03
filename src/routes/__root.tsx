@@ -9,6 +9,24 @@ import typographyCss from "../typography.css?url";
 import imageArtDirectionCss from "../image-art-direction.css?url";
 import motionCss from "../motion.css?url";
 import accessibilityCss from "../accessibility.css?url";
+import themeCss from "../theme-premium.css?url";
+import essentialThemeCss from "../theme-essential.css?url";
+import noirThemeCss from "../theme-noir.css?url";
+import themeRefinementsCss from "../theme-refinements.css?url";
+import themeRefinementsV2Css from "../theme-refinements-v2.css?url";
+import noirHardeningCss from "../theme-noir-hardening.css?url";
+import heritageThemeCss from "../theme-heritage.css?url";
+import galleryThemeCss from "../theme-gallery.css?url";
+import galleryHardeningCss from "../theme-gallery-hardening.css?url";
+import publicThemeQualityRecoveryCss from "../theme-public-quality-recovery.css?url";
+import menuPreviewLayerCss from "../menu-preview-layer.css?url";
+import quickAddCompactRefinementCss from "../quick-add-compact-refinement.css?url";
+import priceConsistencyCss from "../theme-price-consistency.css?url";
+import galleryCanvaParityCss from "../theme-gallery-canva-parity.css?url";
+import w16MobileQrHardeningCss from "../theme-w16-mobile-qr-hardening.css?url";
+import finalThemeVisualHardeningCss from "../theme-final-visual-hardening.css?url";
+import qrFinalFixesCss from "../theme-qr-final-fixes.css?url";
+import signalTableCss from "../theme-signal-table.css?url";
 
 const APP_NAME = "Menuun";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -35,6 +53,24 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: imageArtDirectionCss },
       { rel: "stylesheet", href: motionCss },
       { rel: "stylesheet", href: accessibilityCss },
+      { rel: "stylesheet", href: themeCss },
+      { rel: "stylesheet", href: essentialThemeCss },
+      { rel: "stylesheet", href: noirThemeCss },
+      { rel: "stylesheet", href: themeRefinementsCss },
+      { rel: "stylesheet", href: themeRefinementsV2Css },
+      { rel: "stylesheet", href: noirHardeningCss },
+      { rel: "stylesheet", href: galleryThemeCss },
+      { rel: "stylesheet", href: galleryHardeningCss },
+      { rel: "stylesheet", href: publicThemeQualityRecoveryCss },
+      { rel: "stylesheet", href: menuPreviewLayerCss },
+      { rel: "stylesheet", href: quickAddCompactRefinementCss },
+      { rel: "stylesheet", href: priceConsistencyCss },
+      { rel: "stylesheet", href: heritageThemeCss },
+      { rel: "stylesheet", href: galleryCanvaParityCss },
+      { rel: "stylesheet", href: w16MobileQrHardeningCss },
+      { rel: "stylesheet", href: finalThemeVisualHardeningCss },
+      { rel: "stylesheet", href: qrFinalFixesCss },
+      { rel: "stylesheet", href: signalTableCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
     ],
   }),

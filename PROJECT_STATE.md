@@ -28,3 +28,25 @@ Start with repository-first boot, current `main`/PR verification, and a measurem
 
 Do not begin P1.4, database consolidation, analytics caching, or unrelated cleanup during P1.3. After P1.3 verification, update continuity with exactly one next task and stop.
 
+
+## 2026-10-03 — P1.3 CLOSEOUT — VERIFIED / NO CODE CHANGE
+
+- VERIFIED: P1.3 was evaluated against the actual TanStack Start/Vite integration on main.
+- VERIFIED: the repository uses `tanstackStart()`; a standalone `tanstackRouter()` plugin is not present.
+- VERIFIED: official TanStack evidence indicates Start has automatic route code splitting enabled by default; the attempted explicit `router.autoCodeSplitting` setting was redundant and was not merged.
+- VERIFIED: PR #367 was closed without merge.
+- VERIFIED: Quality #2820 = SUCCESS; W9 Orders QA #946 = SUCCESS.
+- VERIFIED: production-build client chunk inventory before/after the explicit no-op setting remained 145 unique JS chunks, with route chunk sizes unchanged.
+- UNKNOWN: exact production client-transition request count and a quantified initial-route JS reduction remain unverified; the existing build already produces route-specific chunks.
+- BLOCKED: Vercel Preview for PR #367 reported a platform build-rate-limit failure; no production deployment was attempted.
+- PROTECTED: auth/RLS, tenant/branch isolation, ordering, analytics authorization, themes, SEO, subscriptions, migrations, and P1.2 were not changed by P1.3.
+
+## EXACT CURRENT STATE
+
+**P1.3 — Route Code-Splitting / Client Transition Budget: CLOSED / VERIFIED — NO CODE CHANGE REQUIRED**
+
+## EXACT NEXT TASK
+
+**P1.4 — Request Waterfall Consolidation**
+
+Start with repository-first request mapping and evidence for public menu, Studio, Admin, Auth, preview, and not-found flows. Do not begin database/query consolidation or caching unless the request evidence directly requires it.

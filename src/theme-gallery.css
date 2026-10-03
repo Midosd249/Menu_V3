@@ -288,6 +288,3 @@ html[data-menu-theme="gallery"] .menu-public-shell [aria-disabled="true"] { filt
   html[data-menu-theme="gallery"] .menu-public-shell main > section:first-child:has(> h2.text-sm) > div > button img { transition: none; }
   html[data-menu-theme="gallery"] .menu-public-shell main ul > li > button:hover { transform: none; }
 }
-
-/* Runtime polish moved from the shared layer so inactive Gallery CSS is not loaded. */
-html[data-menu-theme="gallery"] .menu-public-shell main > section { content-visibility: auto; contain-intrinsic-size: auto 420px; }

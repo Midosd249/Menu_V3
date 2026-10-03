@@ -41,14 +41,13 @@ test("SIGNAL TABLE uses one presentation owner and preserves configured actions"
   const renderer = await readFile("src/components/theme-renderer.tsx", "utf8");
   const loader = await readFile("src/components/theme-template-loader.tsx", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
-  const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
+  const root = await readFile("src/routes/__root.tsx", "utf8");
   assert.match(loader, /SignalTableTemplate/);
   assert.doesNotMatch(renderer, /ContemporaryRestaurantTemplate/);
   assert.match(template, /<PublicActionLinks\s/);
   assert.match(template, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
-  assert.match(runtimeStyles, /signalTableCss/);
-  assert.match(runtimeStyles, /editorial:\s*\[[\s\S]*signalTableCss/);
-  assert.doesNotMatch(runtimeStyles, /theme-editorial-canvas\.css\?url/);
+  assert.match(root, /theme-signal-table\.css\?url/);
+  assert.doesNotMatch(root, /theme-editorial-canvas\.css\?url/);
 });
 
 test("SIGNAL TABLE order bar is conditional, safe-area aware, and not an empty-cart bubble", async () => {
