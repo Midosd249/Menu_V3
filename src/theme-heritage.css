@@ -275,3 +275,6 @@ html[data-menu-theme="heritage"] .taste-empty-cart { display: grid; place-items:
 html[data-menu-theme="heritage"] .taste-offers-filter { border-color: var(--taste-gold); background: rgb(183 138 66 / .12); color: var(--taste-gold); box-shadow: 0 6px 18px rgb(183 138 66 / .12); }
 html[data-menu-theme="heritage"] .taste-offers-filter[aria-pressed="true"] { border-color: var(--taste-gold); background: var(--taste-gold); color: #fff; }
 html[data-menu-theme="heritage"] .taste-offers-filter:focus-visible { outline: 2px solid var(--taste-gold); outline-offset: 2px; }
+
+/* Runtime polish moved from the shared layer so inactive Heritage CSS is not loaded. */
+html[data-menu-theme="heritage"] .menu-public-shell main > section { content-visibility: auto; contain-intrinsic-size: auto 420px; }
