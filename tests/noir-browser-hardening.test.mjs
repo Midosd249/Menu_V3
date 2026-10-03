@@ -30,6 +30,7 @@ test("Noir hardening preserves RTL/LTR and safe-area action space", async () => 
 
 test("Noir hardening is loaded after the existing Noir refinement layers", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
+  const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
 
   assert.match(source, /import noirThemeCss from "\.\.\/theme-noir\.css\?url"/);
   assert.match(source, /import themeRefinementsCss from "\.\.\/theme-refinements\.css\?url"/);
