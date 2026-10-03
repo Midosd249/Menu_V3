@@ -38,11 +38,54 @@ try {
   const viewportWidth = Number(process.env.PERFORMANCE_AUDIT_VIEWPORT_WIDTH || 390);
   const viewportHeight = Number(process.env.PERFORMANCE_AUDIT_VIEWPORT_HEIGHT || 844);
   const page = await browser.newPage({ viewport: { width: viewportWidth, height: viewportHeight } });
+  const initialRequests = [];
+  let transitionRequests = null;
+  page.on("request", (request) => {
+    if (transitionRequests) transitionRequests.push(request);
+    else initialRequests.push(request);
+  });
+
   const response = await page.goto(target.toString(), {
     waitUntil: "networkidle",
     timeout: 45000,
   });
   await page.waitForTimeout(1200);
+
+  const transitionSelector = process.env.PERFORMANCE_AUDIT_TRANSITION_SELECTOR || null;
+  const transition = {
+    configured: Boolean(transitionSelector),
+    selector: transitionSelector,
+    requestCount: null,
+    durationMs: null,
+    urlChanged: false,
+    navigationEntryCountBefore: null,
+    navigationEntryCountAfter: null,
+    sameDocument: null,
+    error: null,
+  };
+
+  if (transitionSelector) {
+    try {
+      await page.locator(transitionSelector).waitFor({ state: "visible", timeout: 5000 });
+      const beforeUrl = page.url();
+      const navigationEntriesBefore = await page.evaluate(() => performance.getEntriesByType("navigation").length);
+      transitionRequests = [];
+      const startedAt = performance.now();
+      await page.locator(transitionSelector).click();
+      await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
+      await page.waitForTimeout(500);
+      transition.durationMs = Math.round(performance.now() - startedAt);
+      transition.requestCount = transitionRequests.length;
+      transition.urlChanged = page.url() !== beforeUrl;
+      transition.navigationEntryCountBefore = navigationEntriesBefore;
+      transition.navigationEntryCountAfter = await page.evaluate(() => performance.getEntriesByType("navigation").length);
+      transition.sameDocument = transition.navigationEntryCountAfter === navigationEntriesBefore && transition.urlChanged;
+    } catch (error) {
+      transition.error = error instanceof Error ? error.message : String(error);
+    } finally {
+      transitionRequests = null;
+    }
+  }
 
   const initialImageRequestCount = await page.evaluate(
     () => performance.getEntriesByType("resource").filter((entry) => {
@@ -92,6 +135,7 @@ try {
 
     const navigation = performance.getEntriesByType("navigation")[0];
     const paint = performance.getEntriesByType("paint");
+    const longTasks = performance.getEntriesByType("longtask");
     const lcpObserver = PerformanceObserver.supportedEntryTypes?.includes("largest-contentful-paint")
       ? new PerformanceObserver(() => {}).observe({ type: "largest-contentful-paint", buffered: true })
       : undefined;
@@ -122,6 +166,7 @@ try {
     const js = resources.filter((item) => item.isScript);
     const images = resources.filter((item) => item.isImage);
     const fonts = resources.filter((item) => item.isFont);
+    const stylesheets = resources.filter((item) => item.isStylesheet);
     const cached = resources.filter((item) => item.cached);
     const lazyImages = [...document.images].filter((image) => image.loading === "lazy").length;
 
@@ -130,6 +175,7 @@ try {
       viewport: { width: window.innerWidth, height: window.innerHeight },
       navigation: navigation
         ? {
+            initialRequestCount: initialRequests.length,
             dnsMs: Math.max(0, navigation.domainLookupEnd - navigation.domainLookupStart),
             connectionMs: Math.max(0, navigation.connectEnd - navigation.connectStart),
             requestMs: Math.max(0, navigation.responseStart - navigation.requestStart),
@@ -151,6 +197,13 @@ try {
         inpMs: inp,
         inpSupported,
       },
+      transition,
+      mainThread: {
+        longTaskSupported: PerformanceObserver.supportedEntryTypes?.includes("longtask") || false,
+        longTaskCount: longTasks.length,
+        longTaskTotalMs: sum(longTasks, "duration"),
+        longestTaskMs: longTasks.reduce((max, entry) => Math.max(max, Number(entry.duration || 0)), 0),
+      },
       transfer: {
         resourceCount: resources.length,
         js: {
@@ -168,6 +221,24 @@ try {
           transferBytes: sum(fonts, "transferSize"),
           decodedBytes: sum(fonts, "decodedBodySize"),
         },
+        css: {
+          requestCount: stylesheets.length,
+          transferBytes: sum(stylesheets, "transferSize"),
+          decodedBytes: sum(stylesheets, "decodedBodySize"),
+        },
+        html: navigation
+          ? {
+              requestCount: 1,
+              transferBytes: Number(navigation.transferSize || 0),
+              encodedBytes: Number(navigation.encodedBodySize || 0),
+              decodedBytes: Number(navigation.decodedBodySize || 0),
+            }
+          : {
+              requestCount: 0,
+              transferBytes: 0,
+              encodedBytes: 0,
+              decodedBytes: 0,
+            },
       },
       media: {
         documentImageCount: document.images.length,
