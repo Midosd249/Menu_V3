@@ -93,24 +93,77 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
       if (!tenantIds.length) return { ok: true, data: { total: 0, newCount: 0, activeCount: 0, completedCount: 0, cancelledCount: 0, orders: [] } };
       const q = data.q ? `%${data.q.toLowerCase()}%` : null;
       const rows = await sql<Record<string, unknown>>`
-        with scope as (select unnest(${tenantIds}::text[]) as tenant_id),
+        with scope as (select ${tenantIds}::text[] as tenant_id),
         filtered as (
-          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
-            (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
-            coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
-          from orders o join scope s on s.tenant_id = o.tenant_id join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
+          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name
+          from orders o
+          join scope s on s.tenant_id = o.tenant_id
+          join tenants t on t.id = o.tenant_id
+          left join branches b on b.id = o.branch_id
           where o.archived_at is null
             and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
             and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q})
+        ),
+        page_orders as (
+          select * from filtered
+          order by created_at desc, id desc
+          limit 100
+        ),
+        item_agg as (
+          select
+            oi.order_id,
+            count(*)::int as item_count,
+            coalesce(
+              jsonb_agg(
+                jsonb_build_object(
+                  'id', oi.id,
+                  'product_id', oi.product_id,
+                  'product_name_ar', oi.product_name_ar,
+                  'product_name_en', oi.product_name_en,
+                  'quantity', oi.quantity,
+                  'unit_price', oi.unit_price,
+                  'line_total', oi.line_total,
+                  'selected_options', oi.selected_options
+                ) order by oi.created_at
+              ),
+              '[]'::jsonb
+            ) as items
+          from order_items oi
+          join page_orders p on p.id = oi.order_id
+          group by oi.order_id
+        ),
+        summary as (
+          select
+            count(*)::int as total,
+            count(*) filter (where o.status = 'new')::int as new_count,
+            count(*) filter (where o.status in ('confirmed','preparing','ready'))::int as active_count,
+            count(*) filter (where o.status = 'completed')::int as completed_count,
+            count(*) filter (where o.status = 'cancelled')::int as cancelled_count
+          from orders o
+          join scope s on s.tenant_id = o.tenant_id
+          where o.archived_at is null
         )
         select
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null) as total,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'new') as new_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status in ('confirmed','preparing','ready')) as active_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'completed') as completed_count,
-          (select count(*)::int from orders o join scope s on s.tenant_id = o.tenant_id where o.archived_at is null and o.status = 'cancelled') as cancelled_count,
-          coalesce((select jsonb_agg(to_jsonb(x) order by x.created_at desc) from (select * from filtered order by created_at desc limit 100) x), '[]'::jsonb) as orders
-      `;
+          summary.total,
+          summary.new_count,
+          summary.active_count,
+          summary.completed_count,
+          summary.cancelled_count,
+          coalesce(
+            (
+              select jsonb_agg(
+                to_jsonb(p) || jsonb_build_object(
+                  'item_count', coalesce(a.item_count, 0),
+                  'items', coalesce(a.items, '[]'::jsonb)
+                )
+                order by p.created_at desc, p.id desc
+              )
+              from page_orders p
+              left join item_agg a on a.order_id = p.id
+            ),
+            '[]'::jsonb
+          ) as orders
+        from summary      `;
       const row = rows[0];
       const orders = Array.isArray(row?.orders) ? row.orders.map((o) => mapOrder(o as Record<string, unknown>)) : [];
       return { ok: true, data: { total: Number(row?.total ?? 0), newCount: Number(row?.new_count ?? 0), activeCount: Number(row?.active_count ?? 0), completedCount: Number(row?.completed_count ?? 0), cancelledCount: Number(row?.cancelled_count ?? 0), orders } };
