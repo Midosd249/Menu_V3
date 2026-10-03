@@ -6,7 +6,9 @@ const orders = await readFile(new URL("../src/lib/menu/orders.ts", import.meta.u
 const platform = await readFile(new URL("../src/lib/menu/platform.ts", import.meta.url), "utf8");
 
 test("P1.5 orders dashboard aggregates order items once for the bounded page", () => {
-  const source = orders.slice(orders.indexOf("export const getOrdersDashboard"));
+  const start = orders.indexOf("export const getOrdersDashboard");
+  const end = orders.indexOf("export const updateOrderStatus", start);
+  const source = orders.slice(start, end);
   assert.match(source, /page_orders as \(/);
   assert.match(source, /item_agg as \(/);
   assert.match(source, /join page_orders p on p\.id = oi\.order_id/);
@@ -17,7 +19,9 @@ test("P1.5 orders dashboard aggregates order items once for the bounded page", (
 });
 
 test("P1.5 platform orders aggregates order items once for the bounded page", () => {
-  const source = platform.slice(platform.indexOf("export const getPlatformOrders"));
+  const start = platform.indexOf("export const getPlatformOrders");
+  const end = platform.indexOf("export const updatePlatformOrderStatus", start);
+  const source = platform.slice(start, end);
   assert.match(source, /page_orders as \(/);
   assert.match(source, /item_agg as \(/);
   assert.match(source, /join page_orders p on p\.id = oi\.order_id/);
