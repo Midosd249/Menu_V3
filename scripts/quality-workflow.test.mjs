@@ -129,7 +129,7 @@ test("performance audit captures P1.8 regression evidence without guessing numer
   assert.match(PERFORMANCE_AUDIT, /initialRequestCount/);
   assert.match(PERFORMANCE_AUDIT, /stylesheet/);
   assert.match(PERFORMANCE_AUDIT, /longtask/);
-  assert.match(PERFORMANCE_AUDIT, /transitionSelector/);
+  assert.match(PERFORMANCE_AUDIT, /clientTransitionSelector/);
   assert.match(PERFORMANCE_AUDIT, /clientTransition/);
   assert.match(PERFORMANCE_AUDIT, /html.*transferBytes|transferBytes.*html/i);
   assert.doesNotMatch(PERFORMANCE_AUDIT, /initialRequestCount.*(?:budget|threshold)|DCL.*(?:budget|threshold)|resourceCount.*(?:budget|threshold)/i);
