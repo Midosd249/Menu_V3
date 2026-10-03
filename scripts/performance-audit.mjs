@@ -109,7 +109,7 @@ try {
     await page.waitForTimeout(700);
   }
 
-  const result = await page.evaluate(({ initialImages, scrollAll }) => {
+  const result = await page.evaluate(({ initialImages, scrollAll, initialRequestCount }) => {
     const resources = performance.getEntriesByType("resource").map((entry) => {
       const resource = entry;
       const name = resource.name;
@@ -175,7 +175,7 @@ try {
       viewport: { width: window.innerWidth, height: window.innerHeight },
       navigation: navigation
         ? {
-            initialRequestCount: initialRequests.length,
+            initialRequestCount,
             dnsMs: Math.max(0, navigation.domainLookupEnd - navigation.domainLookupStart),
             connectionMs: Math.max(0, navigation.connectEnd - navigation.connectStart),
             requestMs: Math.max(0, navigation.responseStart - navigation.requestStart),
@@ -257,7 +257,7 @@ try {
       firstContentfulPaintMs:
         paint.find((entry) => entry.name === "first-contentful-paint")?.startTime || null,
     };
-  }, { initialImages: initialImageRequestCount, scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1" });
+  }, {\n    initialImages: initialImageRequestCount,\n    scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1",\n    initialRequestCount: initialRequests.length,\n  });
 
   const status = response?.status() ?? 0;
   const payload = {
