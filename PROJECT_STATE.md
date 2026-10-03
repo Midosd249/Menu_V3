@@ -1,34 +1,39 @@
-# 2026-10-03 — P1.4 Request Waterfall Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
-- VERIFIED: current main baseline is 6b2eef2b619c7aa003649b516a1ca0fbbbab88e4.
-- VERIFIED: P1.2 and P1.3 are closed on main; no prior performance milestone was reimplemented.
-- VERIFIED: repository audit found duplicate getMyStudio() calls on /studio/analytics and /studio/reports; StudioGate already loads the same authorized StudioSnapshot and exposes it through useStudio().
-- VERIFIED: getOwnerAnalytics() remains an independent request because it supplies time-windowed analytics data.
-- IMPLEMENTED: Analytics and Reports now reuse useStudio().snapshot and no longer call getMyStudio() themselves.
-- ADDED: tests/p1-4-request-waterfall.test.mjs regression contract, registered in npm test.
-- PROTECTED: authentication, authorization, tenant/branch isolation, analytics authorization, independent loading boundaries, public menu, themes, SEO, subscriptions, ordering, and database schema.
-- UNKNOWN: browser/network request counts, DCL/LCP, local typecheck/lint/test/build, and GitHub Quality/W9 results for this branch.
+- VERIFIED: P1.4 started from main `6b2eef2b619c7aa003649b516a1ca0fbbbab88e4` after P1.2/P1.3 closeout.
+- VERIFIED: repository audit proved duplicate `getMyStudio()` calls on `/studio/analytics` and `/studio/reports`; `StudioGate` already loaded the same authorized `StudioSnapshot` and exposed it through `useStudio()`.
+- VERIFIED: Analytics and Reports now reuse `useStudio().snapshot`; `getOwnerAnalytics()` remains an independent loading boundary.
+- VERIFIED: `tests/p1-4-request-waterfall.test.mjs` was added and registered in `npm test`.
+- VERIFIED: GitHub Quality #2824 = SUCCESS and W9 Orders QA #949 = SUCCESS on head `5ee71e1ae7c64bf6d359f171126675fb56955259`.
+- VERIFIED: final PR #370 diff was reviewed and squash-merged into `main` as `1bb30fc675ee2cdf448cba380223dd00240dee0a`.
+- UNKNOWN: exact browser/network request-count reduction, production DCL/LCP, physical-device performance, and local-shell verification remain unmeasured/unavailable.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 
-## EXACT CURRENT TASK
+## EXACT CURRENT STATE
 
-P1.4 — Request Waterfall Consolidation
+**P1.4 — Request Waterfall Consolidation: CLOSED / VERIFIED**
 
-Map request boundaries first and remove only proven redundant requests. Current implementation scope is limited to reusing the already-authorized Studio snapshot on Analytics and Reports.
+PR: #370
+Verified implementation head: `5ee71e1ae7c64bf6d359f171126675fb56955259`
+Merge commit: `1bb30fc675ee2cdf448cba380223dd00240dee0a`
 
 ## ACCEPTANCE STATUS
 
+- [x] Request boundaries audited across public menu, Studio, Admin, Auth, preview, and not-found flows.
 - [x] Proven duplicate Studio snapshot request identified.
 - [x] Duplicate removed from Analytics.
 - [x] Duplicate removed from Reports.
 - [x] Regression contract added and registered.
-- [ ] Full automated verification.
-- [ ] Browser/network measurement proving actual request reduction.
-- [ ] Final diff review after CI.
+- [x] Full GitHub Quality/W9 verification passed.
+- [x] Final diff reviewed and PR merged.
+- [ ] Exact production/browser request-budget measurement.
 
 ## EXACT NEXT TASK
 
-Run and inspect focused P1.4 regression plus repository Quality/W9 verification on the branch, review the final diff, then prepare one coherent PR. Do not deploy automatically.
+**P1.5 — Database Query Consolidation and Pagination**
+
+Do not begin implementation from the roadmap wording alone. Start with repository-first query/code audit and evidence for `owner.ts`, `orders.ts`, `platform.ts`, analytics modules, and any N+1 path. Preserve tenant/branch authorization and do not introduce migrations or query changes until a concrete DB/request inefficiency is proven.
+
 # 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — VERIFIED / PR #366
 
 - VERIFIED: PR #366 targets `main` and its final implementation head `d1809de4f5ff02032c5bd443a511a625d0c23b75` has passed GitHub Quality #2816 and W9 Orders QA #943.

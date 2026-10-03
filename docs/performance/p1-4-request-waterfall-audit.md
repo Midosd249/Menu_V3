@@ -1,4 +1,4 @@
-# P1.4 Request Waterfall Audit — 2026-10-03
+# P1.4 Request Waterfall Audit — 2026-10-03 — CLOSED / VERIFIED
 
 ## Scope
 Repository-first audit of request boundaries across public menu, Studio, Admin, Auth, preview, and not-found flows. No browser request count is claimed from source inspection.
@@ -28,6 +28,13 @@ No client-supplied tenant, branch, role, permission, or entitlement was introduc
 
 Official TanStack Router documentation confirms route loaders are loaded in parallel at the route level and preload/navigation can share in-flight loader work. This supports using existing route/context boundaries instead of speculative client fetch orchestration.
 
-## Verification limitations
+## Verification
 
-Source and GitHub inspection prove the duplicate existed and that the child calls were removed. They do not prove an exact browser request count, DCL/LCP, or end-to-end network waterfall. Those remain UNKNOWN until browser-capable QA is performed.
+- VERIFIED: GitHub Quality #2824 passed, including typecheck, full tests, lint, production build, Studio/Admin browser QA, theme/browser QA, and performance fixtures.
+- VERIFIED: W9 Orders QA #949 passed, including Orders browser QA.
+- VERIFIED: final PR #370 diff was reviewed and squash-merged into `main` as `1bb30fc675ee2cdf448cba380223dd00240dee0a`.
+- UNKNOWN: these CI browser suites do not establish a production-like exact request count for this P1.4 change, nor production DCL/LCP. Those remain runtime evidence gaps.
+
+## P1.4 closeout
+
+The task is closed. No additional request consolidation was introduced without stronger evidence. The next performance task is P1.5 Database Query Consolidation and Pagination.

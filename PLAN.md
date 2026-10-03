@@ -1,26 +1,26 @@
-# 2026-10-03 — P1.4 Request Waterfall Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
-- VERIFIED: P1.4 began from main 6b2eef2b619c7aa003649b516a1ca0fbbbab88e4 after P1.2/P1.3 closeout.
-- VERIFIED: TanStack evidence confirms route loading/preload work can be parallelized/shared; this task is driven by repository evidence rather than speculative router configuration.
-- VERIFIED: StudioGate loads getMyStudio() once and exposes the resulting authorized StudioSnapshot through useStudio().
-- VERIFIED: Analytics and Reports independently called getMyStudio() despite being descendants of StudioGate.
-- IMPLEMENTED: both routes now reuse useStudio().snapshot; their independent analytics request remains separate.
-- VERIFIED: Studio Team already parallelizes getTeamMembers() and listTeamInvitations(); no change was justified there.
-- VERIFIED: Studio Home already launches analytics and orders independently; no waterfall was proven.
-- VERIFIED: public menu P1.1 already prevents the known SSR/client duplicate getPublicMenu path.
-- VERIFIED: auth session reads already use a 15-second cache plus in-flight request sharing.
-- UNKNOWN: direct browser/network waterfall measurements remain unavailable in the connector-only environment.
+- VERIFIED: request mapping covered public menu, Studio, Admin, Auth, preview, and not-found source boundaries.
+- VERIFIED: StudioGate already provides an authorized `StudioSnapshot`; Analytics and Reports were redundantly calling `getMyStudio()`.
+- IMPLEMENTED: Analytics and Reports now reuse `useStudio().snapshot`; independent analytics and Order Value Analytics boundaries remain intact.
+- VERIFIED: Studio Team and Studio Home already use independent/parallel loading where appropriate; no speculative consolidation was added.
+- VERIFIED: GitHub Quality #2824 and W9 Orders QA #949 passed on the final P1.4 head.
+- VERIFIED: PR #370 was squash-merged into `main` as `1bb30fc675ee2cdf448cba380223dd00240dee0a`.
+- UNKNOWN: exact browser/network request-count reduction and production DCL/LCP remain unmeasured.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 
-## CURRENT P1.4 SCOPE
+## CURRENT P1.4 SCOPE — CLOSED
 
-1. Remove duplicate getMyStudio() calls from Analytics and Reports by reusing the existing parent context.
+1. Remove duplicate `getMyStudio()` calls from Analytics and Reports by reusing the existing parent context.
 2. Preserve independent analytics and Order Value Analytics loading boundaries.
 3. Do not merge Team, public-menu, auth, preview, or Admin requests without stronger evidence.
 
-## EXACT NEXT VERIFICATION
+## EXACT NEXT TASK
 
-Run focused/full automated checks through GitHub CI, inspect the final diff, and collect browser/network evidence if a suitable QA environment is available. Only then decide whether another single P1.4 request issue is sufficiently proven for a separate atomic change.
+**P1.5 — Database Query Consolidation and Pagination**
+
+Begin with a repository-first query/code audit and evidence-backed identification of DB round trips, N+1 paths, oversized dashboard queries, and pagination gaps. Do not modify schema/query behavior until a concrete inefficiency is proven.
+
 # 2026-10-03 — P1.2 Active Theme Stylesheet Code Splitting — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: canonical `main` at task start is `ad428e13d3a2f483d342829df11cff3d7fe99692`.

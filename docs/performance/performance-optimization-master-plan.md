@@ -1,22 +1,26 @@
-# 2026-10-03 — P1.4 Request Waterfall Consolidation — IN_PROGRESS
+# 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
-- VERIFIED: request mapping is now repository-backed rather than based on the historical approximately 117-request observation alone.
-- VERIFIED: duplicate getMyStudio() requests were removed from Studio Analytics and Reports by reusing the existing StudioGate snapshot.
-- VERIFIED: Team already uses parallel independent loads; Home already uses independent analytics/orders loads; auth session reads already share cached/in-flight state; public menu P1.1 already prevents the known SSR/client duplicate.
-- DEFERRED: Studio Preview has overlapping data between getMyStudio() and getOwnerPreviewMenu(), but source evidence does not yet prove that changing the boundary would reduce requests or improve payload/UX.
-- UNKNOWN: browser/network request counts and DCL/LCP remain runtime evidence gaps.
+- VERIFIED: repository request mapping was completed across public menu, Studio, Admin, Auth, preview, and not-found flows.
+- VERIFIED: duplicate `getMyStudio()` requests were removed from Studio Analytics and Reports by reusing the existing authorized `StudioGate` snapshot.
+- VERIFIED: independent analytics, Order Value Analytics, Team, Home, auth, and public-menu boundaries were preserved where no stronger consolidation evidence existed.
+- VERIFIED: Quality #2824 and W9 Orders QA #949 passed; final PR #370 was merged into `main` as `1bb30fc675ee2cdf448cba380223dd00240dee0a`.
+- UNKNOWN: exact browser/network request counts and DCL/LCP remain runtime evidence gaps; the P1.4 change is proven by source and CI, not by a production request-budget benchmark.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
 
-## P1.4 current acceptance
+## P1.4 acceptance
 
 - request map: VERIFIED
-- proven duplicate consolidation: IMPLEMENTED
-- regression contract: IMPLEMENTED
-- full CI/browser verification: TODO
+- proven duplicate consolidation: VERIFIED
+- regression contract: VERIFIED
+- full CI/browser verification: VERIFIED
 - exact request-budget measurement: UNKNOWN
 
 ## EXACT NEXT TASK
 
-Run P1.4 focused/full verification and final diff review; only then select one additional evidence-backed request boundary if needed.
+**P1.5 — Database Query Consolidation and Pagination**
+
+Start with repository-first query/code audit and identify one concrete, evidence-backed DB round-trip, N+1, oversized dashboard payload, or pagination issue. Do not introduce schema/query changes or caching without evidence.
+
 # Menu V3 — Universal Performance, Network & Quality Master Plan
 
 **Date:** 2026-10-03  
