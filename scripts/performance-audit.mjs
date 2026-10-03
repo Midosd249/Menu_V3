@@ -39,9 +39,9 @@ try {
   const viewportHeight = Number(process.env.PERFORMANCE_AUDIT_VIEWPORT_HEIGHT || 844);
   const page = await browser.newPage({ viewport: { width: viewportWidth, height: viewportHeight } });
   const initialRequests = [];
-  let transitionRequests = null;
+  let clientTransitionRequests = null;
   page.on("request", (request) => {
-    if (transitionRequests) transitionRequests.push(request);
+    if (clientTransitionRequests) clientTransitionRequests.push(request);
     else initialRequests.push(request);
   });
 
@@ -51,10 +51,10 @@ try {
   });
   await page.waitForTimeout(1200);
 
-  const transitionSelector = process.env.PERFORMANCE_AUDIT_TRANSITION_SELECTOR || null;
-  const transition = {
-    configured: Boolean(transitionSelector),
-    selector: transitionSelector,
+  const clientTransitionSelector = process.env.PERFORMANCE_AUDIT_TRANSITION_SELECTOR || null;
+  const clientTransition = {
+    configured: Boolean(clientTransitionSelector),
+    selector: clientTransitionSelector,
     requestCount: null,
     durationMs: null,
     urlChanged: false,
@@ -64,26 +64,26 @@ try {
     error: null,
   };
 
-  if (transitionSelector) {
+  if (clientTransitionSelector) {
     try {
-      await page.locator(transitionSelector).waitFor({ state: "visible", timeout: 5000 });
+      await page.locator(clientTransitionSelector).waitFor({ state: "visible", timeout: 5000 });
       const beforeUrl = page.url();
       const navigationEntriesBefore = await page.evaluate(() => performance.getEntriesByType("navigation").length);
-      transitionRequests = [];
+      clientTransitionRequests = [];
       const startedAt = performance.now();
-      await page.locator(transitionSelector).click();
+      await page.locator(clientTransitionSelector).click();
       await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
       await page.waitForTimeout(500);
-      transition.durationMs = Math.round(performance.now() - startedAt);
-      transition.requestCount = transitionRequests.length;
-      transition.urlChanged = page.url() !== beforeUrl;
-      transition.navigationEntryCountBefore = navigationEntriesBefore;
-      transition.navigationEntryCountAfter = await page.evaluate(() => performance.getEntriesByType("navigation").length);
-      transition.sameDocument = transition.navigationEntryCountAfter === navigationEntriesBefore && transition.urlChanged;
+      clientTransition.durationMs = Math.round(performance.now() - startedAt);
+      clientTransition.requestCount = clientTransitionRequests.length;
+      clientTransition.urlChanged = page.url() !== beforeUrl;
+      clientTransition.navigationEntryCountBefore = navigationEntriesBefore;
+      clientTransition.navigationEntryCountAfter = await page.evaluate(() => performance.getEntriesByType("navigation").length);
+      clientTransition.sameDocument = clientTransition.navigationEntryCountAfter === navigationEntriesBefore && clientTransition.urlChanged;
     } catch (error) {
-      transition.error = error instanceof Error ? error.message : String(error);
+      clientTransition.error = error instanceof Error ? error.message : String(error);
     } finally {
-      transitionRequests = null;
+      clientTransitionRequests = null;
     }
   }
 
@@ -197,7 +197,7 @@ try {
         inpMs: inp,
         inpSupported,
       },
-      transition,
+      clientTransition,
       mainThread: {
         longTaskSupported: PerformanceObserver.supportedEntryTypes?.includes("longtask") || false,
         longTaskCount: longTasks.length,
