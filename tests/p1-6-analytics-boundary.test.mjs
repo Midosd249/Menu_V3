@@ -14,7 +14,7 @@ const tenantsFn = orderValue.slice(
 test("P1.6 OwnerAnalytics uses one server-side database boundary", () => {
   const sqlCalls = ownerAnalytics.match(/await sql/g) ?? [];
   assert.equal(sqlCalls.length, 1, "OwnerAnalytics should use one authorized SQL boundary");
-  assert.match(ownerAnalytics, /WITH scoped AS MATERIALIZED/);
+  assert.match(ownerAnalytics, /with scoped as materialized/i);
   assert.match(ownerAnalytics, /jsonb_agg/);
   assert.match(ownerAnalytics, /tenant_id = \$\{member\.tenant_id\}/);
 });
