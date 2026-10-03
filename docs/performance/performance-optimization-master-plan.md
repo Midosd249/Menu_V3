@@ -279,6 +279,24 @@ aggregate `order_items` once by `order_id`, then join the aggregate to the pagin
 5. preserve SSR/Nitro compatibility;
 6. verify no client/server chunk leakage.
 
+### P1.7 — Vite/Rolldown Chunk Optimization — CLOSED / VERIFIED
+
+**Result:** no code/configuration change required.
+
+**Evidence:**
+- Vite 8.2.2/Rolldown production client build is already active.
+- Current production client output contains 142 JavaScript asset rows.
+- Largest client chunk: `index-BDOzjaAe.js` — 272.62 kB raw / 88.49 kB gzip.
+- No client chunk exceeds the default 500 kB warning threshold.
+- No current `manualChunks` or `rolldownOptions` override exists.
+- Automatic code splitting is already enabled.
+- No duplicated module ownership or safe manual grouping with proven net benefit was established.
+- Manual splitting was intentionally not introduced because it can increase requests/cache fragmentation and may affect side-effect execution order.
+
+**UNKNOWN:** browser-level initial JS transfer, client-transition requests, cache reuse, main-thread cost, and route-specific dependency graphs.
+
+**Audit:** `docs/performance/p1-7-vite-rolldown-chunk-audit.md`.
+
 ### P1.8 — Performance Gates
 
 **Goal:** turn the targets into repeatable regression checks.
@@ -368,39 +386,14 @@ A new chat must:
 
 ## 9. Current task handoff
 
-**Current task:** P1.2 — Active Theme Stylesheet Code Splitting.
+**Current task:** P1.8 — Performance Gates.
 
-**Implementation branch:** `perf/p1-2-theme-css-code-splitting-2026-10-03`.
+**P1.7 status:** CLOSED / VERIFIED — NO CODE CHANGE REQUIRED.
 
-**Next required verification:** focused contract test → typecheck → full tests → lint → build → browser/all-theme network evidence → final diff review.
+**P1.7 evidence:** production client build on GitHub Quality #2846 / job #111286147999 used Vite 8.2.2/Rolldown and produced 142 client JavaScript asset rows; largest client chunk was 272.62 kB raw / 88.49 kB gzip; no client chunk exceeded the default 500 kB warning threshold. No safe manual chunking change was proven.
 
-**Do not start P1.3 until P1.2 is closed and continuity is updated.**
+**Next required work:** establish repeatable browser/performance regression evidence for initial requests, client transitions, DCL/LCP, JS/CSS transfer, main-thread work, and representative DB/API measurements where tooling supports them.
 
-
-## 2026-10-03 — P1.2 CLOSEOUT — VERIFIED
-
-- VERIFIED: P1.2 Active Theme Stylesheet Code Splitting is complete on PR #366 head `d1809de4f5ff02032c5bd443a511a625d0c23b75`.
-- VERIFIED: Quality #2816 = SUCCESS; W9 Orders QA #943 = SUCCESS.
-- VERIFIED: Vercel Preview status = SUCCESS / Ready.
-- UNKNOWN: direct production/physical-device request-count and DCL measurements remain unverified.
-- EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
-- P1.3 must begin with repository-first measurement and verification of the actual TanStack Start/Vite integration; do not blindly enable an unverified splitting option.
-
-
-## 2026-10-03 — P1.3 CLOSEOUT — VERIFIED / NO CODE CHANGE
-
-- VERIFIED: P1.3 was evaluated against the repository's actual TanStack Start/Vite integration.
-- VERIFIED: TanStack Start already enables automatic route code splitting by default; adding router.autoCodeSplitting: true was redundant.
-- VERIFIED: PR #367 was closed without merge.
-- VERIFIED: Quality #2820 = SUCCESS; W9 Orders QA #946 = SUCCESS.
-- VERIFIED: before/after production-build client chunk inventory remained 145 unique JS chunks; route chunk sizes were unchanged.
-- UNKNOWN: exact production client-transition request count and quantified initial-route JS reduction remain unverified.
-- BLOCKED: Vercel Preview for PR #367 returned build-rate-limit failure; no production deployment was attempted.
-
-### P1.4 — Request Waterfall Consolidation — NEXT
-
-Map actual browser/server requests first across public menu, Studio, Admin, Auth, preview, and not-found flows. Consolidate only requests proven redundant while preserving authorization, tenant/branch isolation, SEO, and independent UX loading boundaries.
-
-**Current task:** P1.4 — Request Waterfall Consolidation.
-**Implementation status:** NOT_STARTED.
 **Deployment status:** NOT_PERFORMED.
+
+Do not deploy automatically. Do not reopen P1.7 unless new evidence identifies a concrete chunk regression or a measurable safe optimization.
