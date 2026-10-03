@@ -1,3 +1,31 @@
+# 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
+
+- VERIFIED: P1.7 was merged into `main` before this slice; P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.
+- IMPLEMENTED: browser performance audit now captures initial request count, HTML/JS/CSS/image/font transfer evidence, long tasks, and optional client-transition measurements.
+- IMPLEMENTED: regression contract protects the new evidence surface without inventing numeric thresholds.
+- VERIFIED: Quality #2860 passed and W9 Orders QA #979 passed.
+- VERIFIED: controlled preview evidence: 103 initial requests, 771.7ms DCL, 776ms FCP, 0 long tasks, 48,957 JS transfer bytes.
+- VERIFIED: golden 30-product evidence: 32 initial requests, 28.4ms DCL, 44ms FCP, 20,587 HTML transfer bytes.
+- UNKNOWN: client-transition numeric baseline and production/real-device LCP.
+- DECISION: keep numeric budgets report-only until representative real-route evidence is stable enough to justify thresholds.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## Current implementation branch
+
+`perf/p1-8-performance-gates-2026-10-03`
+
+## P1.8 audit
+
+`docs/performance/p1-8-performance-gates-audit.md`
+
+## Exact next task
+
+**P1.9 — Real-route performance evidence and budget decision**
+
+Use the P1.8 measurement surface on representative public-menu and ordinary client-transition flows. Only after stable repeated evidence exists should hard numeric regression budgets be proposed.
+
+---
+
 # 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
 
 - VERIFIED: PR #373 was squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
@@ -64,7 +92,7 @@ Start with repository-first query/code audit and identify one concrete, evidence
 **Status:** ACTIVE — performance program  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
-**Current implementation branch:** `perf/p1-5-query-consolidation-2026-10-03`
+**Current implementation branch:** `perf/p1-8-performance-gates-2026-10-03`
 
 ## 1. Purpose
 
