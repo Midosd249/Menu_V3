@@ -1,3 +1,17 @@
+# 2026-10-03 — CI Studio Fixture Dependency — VERIFIED / MERGED
+
+- VERIFIED: the Quality #2801 failure was caused by the Studio browser fixture omitting the existing PH-04 migration `20260917120000_ph04_platform_admin_subscription_controls.sql`, which creates `menu_v3.platform_admin_subscription_audit` consumed by the Studio subscription runtime.
+- VERIFIED: the fix is CI/test-only; no production database, migration, RLS, auth, tenant/branch, or application-runtime change was made.
+- VERIFIED: PR #363 was squash-merged into `main` as `968f8bd30a8f5c82e35cb02a26e5e16a1f11bce9`.
+- VERIFIED: final Quality #2804 passed all stages, including Studio browser fixture preparation and Studio/Admin browser QA.
+- VERIFIED: W9 Orders QA #933 passed on the same final head.
+- VERIFIED: the regression guard in `scripts/quality-workflow.test.mjs` now protects the Studio fixture from dropping this migration dependency.
+- DEPLOYMENT STATUS: NOT_PERFORMED. This was a CI/test infrastructure fix only.
+
+## EXACT NEXT TASK
+
+**Owner-select the next explicitly scoped Menu V3 task. Do not start another implementation, deployment, or audit automatically.**
+
 # 2026-10-02 — P1.1 Closeout — VERIFIED / PR #351
 
 - VERIFIED: P1.1 is complete on the implementation head the final P1.1 PR head.
