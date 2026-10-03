@@ -34,6 +34,7 @@ test("Public theme recovery preserves mobile safe-area clearance and reduced mot
 
 test("Public theme recovery is loaded after existing theme hardening", async () => {
   const source = await readFile("src/routes/__root.tsx", "utf8");
+  const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
 
   assert.match(source, /import publicThemeQualityRecoveryCss from "\.\.\/theme-public-quality-recovery\.css\?url"/);
   assert.match(source, /href: galleryHardeningCss \},\s*\{ rel: "stylesheet", href: publicThemeQualityRecoveryCss \}/);
