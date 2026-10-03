@@ -28,7 +28,7 @@ function AnalyticsPage() {
   const [state, setState] = useState<
     | { status: "loading" }
     | { status: "error"; message: string }
-    | { status: "ok"; data: OwnerAnalytics; studio: StudioSnapshot }
+    | { status: "ok"; data: OwnerAnalytics }
   >({ status: "loading" });
 
   useEffect(() => {
@@ -39,10 +39,10 @@ function AnalyticsPage() {
           setState({ status: "error", message: analyticsResult.error });
           return;
         }
-        setState({ status: "ok", data: analyticsResult.data, studio: snapshot });
+        setState({ status: "ok", data: analyticsResult.data });
       })
       .catch((err: unknown) => setState({ status: "error", message: err instanceof Error ? err.message : t(copy.state.error, lang) }));
-  }, [days, lang, snapshot]);
+  }, [days, lang]);
 
   useEffect(() => {
     let active = true;
@@ -118,7 +118,7 @@ function AnalyticsPage() {
       </div>
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState message={state.message} /> : null}
-      {state.status === "ok" ? <AnalyticsContent analytics={state.data} studio={state.studio} lang={lang} /> : null}
+      {state.status === "ok" ? <AnalyticsContent analytics={state.data} studio={snapshot} lang={lang} /> : null}
       <OrderValueAnalyticsPanel
         state={orderValueState}
         period={orderValuePeriod}
