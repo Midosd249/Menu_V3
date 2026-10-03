@@ -1,3 +1,20 @@
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: P1.4 is closed/merged on `main`.
+- VERIFIED: correlated `order_items` aggregation was present in Studio and Platform order readers; Platform dashboard also had per-tenant correlated counts.
+- IMPLEMENTED: order-item aggregation now runs once for each bounded page; Platform tenant counts now use grouped CTEs and joins.
+- UNKNOWN: runtime DB latency/round-trip measurements until representative query plans are captured.
+- UNKNOWN: deep cursor pagination beyond bounded pages; no speculative pagination API was added.
+- BLOCKED: local shell execution is unavailable; GitHub CI is the current verification gate.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT CURRENT TASK
+
+**P1.5 — Database Query Consolidation and Pagination**
+
+Finish CI verification and continuity closeout for the proven query-consolidation slice. Do not add indexes, migrations, or broad pagination APIs without new evidence.
+
+---
 # 2026-10-03 — P1.4 Request Waterfall Consolidation — CLOSED / VERIFIED
 
 - VERIFIED: repository request mapping was completed across public menu, Studio, Admin, Auth, preview, and not-found flows.
@@ -27,7 +44,7 @@ Start with repository-first query/code audit and identify one concrete, evidence
 **Status:** ACTIVE — performance program  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
-**Current implementation branch:** `perf/p1-2-theme-css-code-splitting-2026-10-03`
+**Current implementation branch:** `perf/p1-5-query-consolidation-2026-10-03`
 
 ## 1. Purpose
 
