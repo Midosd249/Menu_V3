@@ -1,4 +1,23 @@
-# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED\n\n- VERIFIED: PR #373 squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.\n- VERIFIED: OwnerAnalytics was consolidated from five sequential SQL reads to one authorized server-side SQL boundary.\n- VERIFIED: tenant isolation, auth middleware, validated filters, response shape, and analytics semantics were preserved.\n- VERIFIED: Quality #2836 and W9 Orders QA #958 passed on the final implementation head.\n- UNKNOWN: production/browser end-to-end latency and request-budget impact.\n- VERIFIED: caching was not added because personalized analytics caching is not justified by current evidence.\n- VERIFIED: no schema/migration/index/auth/RLS changes were made.\n- VERIFIED: no cursor pagination was added because no current UI is proven to require traversal beyond bounded pages.\n- DEPLOYMENT STATUS: NOT_PERFORMED.\n\n## EXACT NEXT TASK\n\n**P1.7 — Vite/Rolldown Chunk Optimization**\n\nBegin with repository-first production build/chunk evidence. Change only a proven chunk inefficiency; no speculative manual chunking or deployment.\n\n---\n# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
+
+- VERIFIED: PR #373 squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
+- VERIFIED: OwnerAnalytics was consolidated from five sequential SQL reads to one authorized server-side SQL boundary.
+- VERIFIED: tenant isolation, auth middleware, validated filters, response shape, and analytics semantics were preserved.
+- VERIFIED: Quality #2836 and W9 Orders QA #958 passed on the final implementation head.
+- UNKNOWN: production/browser end-to-end latency and request-budget impact.
+- VERIFIED: caching was not added because personalized analytics caching is not justified by current evidence.
+- VERIFIED: no schema/migration/index/auth/RLS changes were made.
+- VERIFIED: no cursor pagination was added because no current UI is proven to require traversal beyond bounded pages.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**P1.7 — Vite/Rolldown Chunk Optimization**
+
+Begin with repository-first production build/chunk evidence. Change only a proven chunk inefficiency; no speculative manual chunking or deployment.
+
+---
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: `main` is `d9d83c89c0070413c61f8a75e3120447006e4828`; P1.4 is merged and closed.
 - VERIFIED: repository audit found correlated `order_items` aggregation in Studio and Platform order readers and per-tenant correlated counts in the Platform dashboard.
