@@ -109,7 +109,7 @@ try {
     await page.waitForTimeout(700);
   }
 
-  const result = await page.evaluate(({ initialImages, scrollAll, initialRequestCount }) => {
+  const result = await page.evaluate(({ initialImages, scrollAll, initialRequestCount, clientTransition }) => {
     const resources = performance.getEntriesByType("resource").map((entry) => {
       const resource = entry;
       const name = resource.name;
@@ -261,6 +261,7 @@ try {
     initialImages: initialImageRequestCount,
     scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1",
     initialRequestCount: initialRequests.length,
+    clientTransition,
   });
 
   const status = response?.status() ?? 0;
