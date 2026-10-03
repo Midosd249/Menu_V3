@@ -229,7 +229,8 @@ No further work for this atomic feature. Wait for the next explicitly scoped tas
 - VERIFIED: implementation scope remains the six-file PR scope; no migration or unrelated subsystem changes are authorized.
 - VERIFIED: lifecycle matrix, same-status/no-audit semantics, server-side authorization, tenant boundary, branch behavior, row locking, and atomic audit behavior remain unchanged.
 - VERIFIED: Vercel status for the previous head is success/Ready.
-- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `\n`; the test is being repaired now.
+- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `
+`; the test is being repaired now.
 - UNKNOWN: new-head Quality/W9 results until CI completes.
 - DEPLOYMENT STATUS: NOT DEPLOYED.
 
@@ -978,7 +979,8 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 
 ### Verification Update — Phase 1 CI attempt
-- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \\n marker at line 62.
+- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \
+ marker at line 62.
 - VERIFIED: the failure was isolated from application logic and corrected in commit `8347a3204f501f6a08a085616a3e2cea10e00882`.
 - UNKNOWN: CI rerun for the corrected head has not yet completed/appeared through the connected GitHub workflow surface.
 - Exact Next Task: **Obtain the corrected-head CI result; if green, perform final diff review and Phase 1 performance verification; if red, fix only the reported Phase 1 issue.**
@@ -1175,7 +1177,9 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Deepgram isolated STT/audio specialist adapter.**
-\n\n## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
 
 - VERIFIED: PR #279 merged by squash as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
 - VERIFIED: Deepgram isolated pre-recorded STT adapter is active only for `audio_stt`.
@@ -1214,7 +1218,20 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
-\n\n## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING\n\n- IMPLEMENTED: `src/lib/menu/ai-typesafe.ts` dedicated System One / Jev decision adapter.\n- IMPLEMENTED: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` rotation without secret logging.\n- IMPLEMENTED: Noul/Choice/Score validation, candidate membership guard, bounded state/questions/candidates, and 60-second timeout.\n- VERIFIED: no generic routing activation; registry remains `runtimeEligible:false`.\n- UNKNOWN: authenticated live TypeSafe smoke.\n- MUST NOT REDO: completed provider adapters and all protected product/security/data boundaries.\n\n### EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe before the smoke is verified.**\n
+
+
+## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING
+
+- IMPLEMENTED: `src/lib/menu/ai-typesafe.ts` dedicated System One / Jev decision adapter.
+- IMPLEMENTED: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` rotation without secret logging.
+- IMPLEMENTED: Noul/Choice/Score validation, candidate membership guard, bounded state/questions/candidates, and 60-second timeout.
+- VERIFIED: no generic routing activation; registry remains `runtimeEligible:false`.
+- UNKNOWN: authenticated live TypeSafe smoke.
+- MUST NOT REDO: completed provider adapters and all protected product/security/data boundaries.
+
+### EXACT NEXT TASK
+**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe before the smoke is verified.**
+
 
 ## 2026-09-24 — AI Provider Expansion / Phase 6 — CAPABILITY-AWARE ROUTING
 
@@ -1313,7 +1330,19 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **Securely expose the configured TypeSafe credential to one authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real evidence.**
-\n\n# 2026-09-24 — Post-Merge Continuity Anchor\n\n- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.\n- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.\n- VERIFIED: the smoke was not repeated after the credential blocker was observed.\n- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.\n\n## EXACT NEXT TASK\n\n**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**\n
+
+
+# 2026-09-24 — Post-Merge Continuity Anchor
+
+- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.
+- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.
+- VERIFIED: the smoke was not repeated after the credential blocker was observed.
+- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.
+
+## EXACT NEXT TASK
+
+**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**
+
 
 # 2026-09-25 — Platform-Admin Invoice Ownership Correction — IMPLEMENTED / VERIFIED / PR #297
 
