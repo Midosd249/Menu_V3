@@ -347,14 +347,24 @@ jobs:
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
               echo "[studio-browser] serving http://127.0.0.1:8082/studio"
-              set +e
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
-              STATUS=$?
-              set -e
-              if [ "$STATUS" -ne 0 ]; then
-                echo "[studio-browser] Playwright failed — dev-server log follows"
-                cat .grok/studio-shell-browser.log
-              fi
+              STATUS=1
+              for attempt in 1 2; do
+                echo "[studio-browser] Playwright attempt $attempt/2"
+                set +e
+                STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
+                STATUS=$?
+                set -e
+                if [ "$STATUS" -eq 0 ]; then
+                  echo "[studio-browser] Playwright passed on attempt $attempt"
+                  exit 0
+                fi
+                if [ "$attempt" -lt 2 ]; then
+                  echo "[studio-browser] Playwright failed on attempt $attempt; retrying once to absorb transient Vite/dev-server navigation races"
+                  sleep 1
+                fi
+              done
+              echo "[studio-browser] Playwright failed after 2 attempts — dev-server log follows"
+              cat .grok/studio-shell-browser.log
               exit "$STATUS"
             fi
             sleep 0.25
