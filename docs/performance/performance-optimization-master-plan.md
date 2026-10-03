@@ -315,3 +315,13 @@ A new chat must:
 **Next required verification:** focused contract test → typecheck → full tests → lint → build → browser/all-theme network evidence → final diff review.
 
 **Do not start P1.3 until P1.2 is closed and continuity is updated.**
+
+
+## 2026-10-03 — P1.2 CLOSEOUT — VERIFIED
+
+- VERIFIED: P1.2 Active Theme Stylesheet Code Splitting is complete on PR #366 head `d1809de4f5ff02032c5bd443a511a625d0c23b75`.
+- VERIFIED: Quality #2816 = SUCCESS; W9 Orders QA #943 = SUCCESS.
+- VERIFIED: Vercel Preview status = SUCCESS / Ready.
+- UNKNOWN: direct production/physical-device request-count and DCL measurements remain unverified.
+- EXACT NEXT TASK: **P1.3 — Route Code-Splitting / Client Transition Budget**.
+- P1.3 must begin with repository-first measurement and verification of the actual TanStack Start/Vite integration; do not blindly enable an unverified splitting option.
