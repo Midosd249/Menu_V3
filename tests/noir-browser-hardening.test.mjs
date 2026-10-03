@@ -28,15 +28,17 @@ test("Noir hardening preserves RTL/LTR and safe-area action space", async () => 
   assert.match(styles, /noir-template-menu > \.menu-public-shell > nav\[aria-label="Menu actions"\]/);
 });
 
-test("Noir hardening is loaded after the existing Noir refinement layers", async () => {
-  const source = await readFile("src/routes/__root.tsx", "utf8");
+test("Noir hardening is mapped after the existing Noir refinement layers", async () => {
   const runtimeStyles = await readFile("src/lib/theme/runtime-styles.ts", "utf8");
 
-  assert.match(source, /import noirThemeCss from "\.\.\/theme-noir\.css\?url"/);
-  assert.match(source, /import themeRefinementsCss from "\.\.\/theme-refinements\.css\?url"/);
-  assert.match(source, /import themeRefinementsV2Css from "\.\.\/theme-refinements-v2\.css\?url"/);
-  assert.match(source, /import noirHardeningCss from "\.\.\/theme-noir-hardening\.css\?url"/);
-  assert.match(source, /href: noirThemeCss \},\s*\{ rel: "stylesheet", href: themeRefinementsCss \},\s*\{ rel: "stylesheet", href: themeRefinementsV2Css \},\s*\{ rel: "stylesheet", href: noirHardeningCss \}/);
+  assert.match(runtimeStyles, /noirThemeCss/);
+  assert.match(runtimeStyles, /themeRefinementsCss/);
+  assert.match(runtimeStyles, /themeRefinementsV2Css/);
+  assert.match(runtimeStyles, /noirHardeningCss/);
+  assert.match(
+    runtimeStyles,
+    /noir:\s*\[[\s\S]*noirThemeCss,[\s\S]*themeRefinementsCss,[\s\S]*themeRefinementsV2Css,[\s\S]*noirHardeningCss/,
+  );
 });
 
 test("Noir does not trap shared modals inside the public content stacking context", async () => {
