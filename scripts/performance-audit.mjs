@@ -257,7 +257,11 @@ try {
       firstContentfulPaintMs:
         paint.find((entry) => entry.name === "first-contentful-paint")?.startTime || null,
     };
-  }, {\n    initialImages: initialImageRequestCount,\n    scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1",\n    initialRequestCount: initialRequests.length,\n  });
+  }, {
+    initialImages: initialImageRequestCount,
+    scrollAll: process.env.PERFORMANCE_AUDIT_SCROLL_ALL === "1",
+    initialRequestCount: initialRequests.length,
+  });
 
   const status = response?.status() ?? 0;
   const payload = {
