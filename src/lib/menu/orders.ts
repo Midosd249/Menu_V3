@@ -93,7 +93,7 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
       if (!tenantIds.length) return { ok: true, data: { total: 0, newCount: 0, activeCount: 0, completedCount: 0, cancelledCount: 0, orders: [] } };
       const q = data.q ? `%${data.q.toLowerCase()}%` : null;
       const rows = await sql<Record<string, unknown>>`
-        with scope as (select ${tenantIds}::text[] as tenant_id),
+        with scope as (select unnest(${tenantIds}::text[]) as tenant_id),
         filtered as (
           select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name
           from orders o
