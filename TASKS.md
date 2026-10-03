@@ -1,4 +1,24 @@
-# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED\n\n- VERIFIED: PR #373 squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.\n- VERIFIED: OwnerAnalytics was consolidated from five sequential SQL reads to one authorized server-side SQL boundary.\n- VERIFIED: tenant isolation, auth middleware, validated filters, response shape, and analytics semantics were preserved.\n- VERIFIED: Quality #2836 and W9 Orders QA #958 passed on the final implementation head.\n- UNKNOWN: production/browser end-to-end latency and request-budget impact.\n- VERIFIED: caching was not added because personalized analytics caching is not justified by current evidence.\n- VERIFIED: no schema/migration/index/auth/RLS changes were made.\n- VERIFIED: no cursor pagination was added because no current UI is proven to require traversal beyond bounded pages.\n- DEPLOYMENT STATUS: NOT_PERFORMED.\n\n## EXACT NEXT TASK\n\n**P1.7 — Vite/Rolldown Chunk Optimization**\n\nBegin with repository-first production build/chunk evidence. Change only a proven chunk inefficiency; no speculative manual chunking or deployment.\n\n---\n# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
+# 2026-10-03 — P1.6 Analytics Boundary & Caching — CLOSED / VERIFIED
+
+- VERIFIED: PR #373 was squash-merged into `main` as `f2f1271d4ffb146ffe64ffb2dac5f3665d324855`.
+- VERIFIED: `getOwnerAnalytics` now uses one authorized server-side SQL boundary with a tenant-scoped `MATERIALIZED` CTE and server-side JSON aggregation.
+- VERIFIED: `authMiddleware`, server-derived tenant membership, validated `days` input, response shape, and analytics semantics were preserved.
+- VERIFIED: GitHub Quality #2836 and W9 Orders QA #958 passed on the final P1.6 head.
+- VERIFIED: no personalized analytics caching was added because current evidence does not justify shared/private cache complexity.
+- VERIFIED: no schema, migration, index, auth/RLS, or tenant-isolation change was made.
+- VERIFIED: no current UI was proven to require traversal beyond existing bounded analytics/dashboard result pages, so no speculative cursor pagination API was introduced.
+- UNKNOWN: end-to-end browser/network request reduction and production analytics latency remain unmeasured.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+
+## EXACT NEXT TASK
+
+**P1.7 — Vite/Rolldown Chunk Optimization**
+
+Start with repository-first production build/chunk evidence. Optimize only a proven oversized or duplicated chunk; do not add speculative manual chunking and do not deploy automatically.
+
+---
+
+# 2026-10-03 — P1.5 Database Query Consolidation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: P1.4 is closed/merged; current `main` is `d9d83c89c0070413c61f8a75e3120447006e4828`.
 - VERIFIED: `getOrdersDashboard` and `getPlatformOrders` contained correlated `order_items` count/JSON aggregation per returned order.
@@ -229,8 +249,7 @@ No further work for this atomic feature. Wait for the next explicitly scoped tas
 - VERIFIED: implementation scope remains the six-file PR scope; no migration or unrelated subsystem changes are authorized.
 - VERIFIED: lifecycle matrix, same-status/no-audit semantics, server-side authorization, tenant boundary, branch behavior, row locking, and atomic audit behavior remain unchanged.
 - VERIFIED: Vercel status for the previous head is success/Ready.
-- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `
-`; the test is being repaired now.
+- FIXING: Quality/W9 previously failed at the TypeScript parse/typecheck stage because the new test contained a literal `\n`; the test is being repaired now.
 - UNKNOWN: new-head Quality/W9 results until CI completes.
 - DEPLOYMENT STATUS: NOT DEPLOYED.
 
@@ -979,8 +998,7 @@ Merge PR #232 once, verify resulting `main` SHA, then execute the single authori
 
 
 ### Verification Update — Phase 1 CI attempt
-- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \
- marker at line 62.
+- VERIFIED: GitHub Quality run #2232 and W9 Orders QA #464 reached the new Phase 1 code and failed before full verification because `src/lib/menu/image.ts` contained an accidental literal \\n marker at line 62.
 - VERIFIED: the failure was isolated from application logic and corrected in commit `8347a3204f501f6a08a085616a3e2cea10e00882`.
 - UNKNOWN: CI rerun for the corrected head has not yet completed/appeared through the connected GitHub workflow surface.
 - Exact Next Task: **Obtain the corrected-head CI result; if green, perform final diff review and Phase 1 performance verification; if red, fix only the reported Phase 1 issue.**
@@ -1177,9 +1195,7 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### Exact Next Task
 **Implement and verify the Deepgram isolated STT/audio specialist adapter.**
-
-
-## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
+\n\n## 2026-09-24 — AI Provider Expansion / Phase 3 Deepgram — CLOSED / VERIFIED
 
 - VERIFIED: PR #279 merged by squash as `e5ca7dbe854f6788875a6ee5233214c5a1cc6b53`.
 - VERIFIED: Deepgram isolated pre-recorded STT adapter is active only for `audio_stt`.
@@ -1218,20 +1234,7 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 
 ### EXACT NEXT ACTION
 **Make `DEEPGRAM_API_KEY` available to the authorized runtime used for smoke verification, then run exactly one authenticated pre-recorded Deepgram STT smoke and record the real HTTP/result evidence. Do not reimplement or modify the Deepgram adapter.**
-
-
-## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING
-
-- IMPLEMENTED: `src/lib/menu/ai-typesafe.ts` dedicated System One / Jev decision adapter.
-- IMPLEMENTED: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` rotation without secret logging.
-- IMPLEMENTED: Noul/Choice/Score validation, candidate membership guard, bounded state/questions/candidates, and 60-second timeout.
-- VERIFIED: no generic routing activation; registry remains `runtimeEligible:false`.
-- UNKNOWN: authenticated live TypeSafe smoke.
-- MUST NOT REDO: completed provider adapters and all protected product/security/data boundaries.
-
-### EXACT NEXT TASK
-**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe before the smoke is verified.**
-
+\n\n## 2026-09-24 — AI Provider Expansion / Phase 5 TypeSafe/Jev — IMPLEMENTED / CI PENDING\n\n- IMPLEMENTED: `src/lib/menu/ai-typesafe.ts` dedicated System One / Jev decision adapter.\n- IMPLEMENTED: `TYPESAFE_API_KEY`, `TYPESAFE_API_KEY_2`, `TYPESAFE_API_KEY_3` rotation without secret logging.\n- IMPLEMENTED: Noul/Choice/Score validation, candidate membership guard, bounded state/questions/candidates, and 60-second timeout.\n- VERIFIED: no generic routing activation; registry remains `runtimeEligible:false`.\n- UNKNOWN: authenticated live TypeSafe smoke.\n- MUST NOT REDO: completed provider adapters and all protected product/security/data boundaries.\n\n### EXACT NEXT TASK\n**Run the TypeSafe/Jev CI gates and one authenticated smoke if the configured credential is available; otherwise record the real credential blocker. Do not activate TypeSafe before the smoke is verified.**\n
 
 ## 2026-09-24 — AI Provider Expansion / Phase 6 — CAPABILITY-AWARE ROUTING
 
@@ -1330,19 +1333,7 @@ Protected / MUST NOT REDO: Groq adapter and smoke; Phase 1 registry; Phase 2 cre
 ## EXACT NEXT TASK
 
 **Securely expose the configured TypeSafe credential to one authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real evidence.**
-
-
-# 2026-09-24 — Post-Merge Continuity Anchor
-
-- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.
-- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.
-- VERIFIED: the smoke was not repeated after the credential blocker was observed.
-- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.
-
-## EXACT NEXT TASK
-
-**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**
-
+\n\n# 2026-09-24 — Post-Merge Continuity Anchor\n\n- VERIFIED: canonical `main` HEAD is now `4e47f783e3a189b760daf71fff92cd81b2881501`.\n- VERIFIED: this commit contains the continuity record for the single blocked TypeSafe/Jev smoke attempt.\n- VERIFIED: the smoke was not repeated after the credential blocker was observed.\n- BLOCKED: the next TypeSafe/Jev smoke requires an authorized runtime with the configured credential.\n\n## EXACT NEXT TASK\n\n**Securely make the configured TypeSafe credential available to the authorized smoke runtime, then run exactly one authenticated TypeSafe/Jev smoke and record the real HTTP/decision evidence. Do not repeat the smoke before that prerequisite is verified.**\n
 
 # 2026-09-25 — Platform-Admin Invoice Ownership Correction — IMPLEMENTED / VERIFIED / PR #297
 
