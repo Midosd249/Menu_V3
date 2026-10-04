@@ -84,6 +84,6 @@ test("official Nafas demo remains rich, deterministic, and self-contained", () =
   assert.match(demo, /demo-strawberry-matcha/);
   assert.match(demo, /demo-cheesecake/);
   assert.match(demo, /productOffers:/);
-  assert.doesNotMatch(demo, /instagramUrl: "https:\/\/instagram\.com\/"\/);
+  assert.doesNotMatch(demo, /instagramUrl: "https:\/\/instagram\.com\/"/);
   assert.doesNotMatch(demo, /whatsapp: "\+966500000000"/);
 });
