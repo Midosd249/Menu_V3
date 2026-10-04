@@ -1,3 +1,21 @@
+## 2026-10-04 — Official Nafas Studio Sync — VERIFIED
+
+- Completed the authorized Nafas demo task against the correct menu_v3 schema.
+- Replaced the previous synthetic product set with the current 12 demo-nafas Studio products and all five current categories.
+- Added exact Studio logo/cover assets to public/demo/.
+- Preserved current branch, hours, contact, allergens, availability, nutrition fields, and selected image URLs.
+- Preserved demo-only option/offer enrichment for showcasing the existing product-option and offer UX.
+- Fixed and verified regression tests that still referenced the previous synthetic demo IDs/products.
+- VERIFIED: Quality #2888 = SUCCESS.
+- VERIFIED: W9 Orders QA #1006 = SUCCESS.
+- VERIFIED: Vercel Preview = READY.
+- UNKNOWN: physical-device QA.
+- PRODUCTION: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+Final diff review → owner approval → merge PR #377 → one production deployment → real-device QA. P1.9 remains deferred.
+
 # 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTATION / VERIFICATION PENDING
 
 - Scope: official static Nafas showcase data.
