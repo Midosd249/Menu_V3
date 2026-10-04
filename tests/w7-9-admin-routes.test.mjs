@@ -89,9 +89,9 @@ test("Admin does not fabricate retired request data", () => {
 });
 
 test("Admin navigation remains URL-based through the dynamic workspace adapter", () => {
-  assert.ok(platformAdmin.includes("function selectTab(next: Tab) { setTab(next);"));
+  assert.ok(platformAdmin.includes("function selectTab(next: Tab) {"));
   assert.ok(platformAdmin.includes('navigate({ to: "/admin/$workspace", params: { workspace }'));
-  assert.ok(platformAdmin.includes('navigate({ to: "/admin" })'));
+  assert.ok(platformAdmin.includes('void navigate({ to: "/admin" })'));\n  assert.ok(platformAdmin.includes('void navigate({ to: "/admin/$workspace", params: { workspace } })'));\n  assert.ok(!platformAdmin.includes("window.location.assign"));
   assert.ok(platformAdmin.includes('aria-current={tab === item.id ? "page"'));
 });
 
