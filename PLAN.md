@@ -1672,3 +1672,16 @@ Do not implement or repair either path automatically.
 **P1.4 — Request Waterfall Consolidation**
 
 Map actual requests first; preserve auth/tenant/branch boundaries and avoid unrelated database/query/caching work.
+
+
+# 2026-10-04 — External Product Action Retirement — VERIFIED / PR #378
+
+- VERIFIED: main baseline before this task is a7f642d5fe8a7f46abfa84f80c74ac129995b3fa, which already includes the official Nafas demo and P1.4–P1.8 performance work.
+- VERIFIED: external Quick Add was still visible in Gallery because the existing retirement stylesheet was loaded only for Heritage/Taste; Heritage/Taste also had a local product action.
+- IMPLEMENTED: quick-add-compact-refinement.css now retires both .public-menu-quick-add and .public-menu-options-action, plus the local Heritage/Taste control.
+- IMPLEMENTED: the existing stylesheet is loaded last for all five canonical themes; no new network dependency was introduced.
+- PROTECTED: product details/options, modifiers, variants, notes, cart/order behavior, analytics, auth/RLS, tenant isolation, Supabase data, and P1.4–P1.8 performance architecture.
+- VERIFIED: GitHub W9 Orders QA #1011 passed; GitHub Quality #2894 passed through browser template QA for all themes and the remaining Studio/Platform browser gates on implementation head 2466b20f681c2b9dff2fee3f32a72109be896460.
+- UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
+- STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
+- EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.

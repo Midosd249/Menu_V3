@@ -80,3 +80,13 @@ Browser-level scenarios still requiring execution:
 
 ## Rollback
 Revert the Gallery-specific additions in `src/theme-gallery-hardening.css` and the associated regression assertion. No data or migration rollback is required.
+
+
+## 2026-10-04 — External Product Action Retirement
+
+- **VERIFIED:** the visible Gallery Quick Add regression came from the canonical Gallery renderer still emitting the shared `.public-menu-quick-add` control while the retirement stylesheet was loaded only for Heritage/Taste.
+- **VERIFIED:** Gallery-specific CSS previously styled the shared Quick Add/options selectors, so hiding the control must be enforced after the Gallery presentation layers.
+- **IMPLEMENTED:** the existing `quick-add-compact-refinement.css` retirement layer is now loaded last for all five canonical themes and hides both external product actions.
+- **IMPLEMENTED:** Heritage/Taste's local legacy product button is also fully hidden; the Product Sheet remains the only catalogue-level add flow.
+- **VERIFIED:** no cart/order business logic is removed; the persistent cart remains available and the existing product-details/options surface remains unchanged.
+- **Research:** CSS cascade and `display:none` behavior verified against MDN; later author rules and important declarations determine the winning presentation, and `display:none` removes the hidden control from layout/accessibility tree.

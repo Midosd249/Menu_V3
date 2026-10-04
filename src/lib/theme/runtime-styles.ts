@@ -22,8 +22,8 @@ import signalTableCss from "../../theme-signal-table.css?url";
 const SHARED_PUBLIC_STYLESHEETS = [themeCss, menuPreviewLayerCss] as const;
 
 const THEME_STYLESHEETS: Record<ThemeKey, readonly string[]> = {
-  essential: [essentialThemeCss, w16MobileQrHardeningCss],
-  editorial: [priceConsistencyCss, signalTableCss],
+  essential: [essentialThemeCss, w16MobileQrHardeningCss, quickAddCompactRefinementCss],
+  editorial: [priceConsistencyCss, signalTableCss, quickAddCompactRefinementCss],
   noir: [
     noirThemeCss,
     themeRefinementsCss,
@@ -33,13 +33,14 @@ const THEME_STYLESHEETS: Record<ThemeKey, readonly string[]> = {
     priceConsistencyCss,
     w16MobileQrHardeningCss,
     finalThemeVisualHardeningCss,
+    quickAddCompactRefinementCss,
   ],
   heritage: [
     heritageThemeCss,
     publicThemeQualityRecoveryCss,
-    quickAddCompactRefinementCss,
     priceConsistencyCss,
     qrFinalFixesCss,
+    quickAddCompactRefinementCss,
   ],
   gallery: [
     galleryThemeCss,
@@ -49,6 +50,7 @@ const THEME_STYLESHEETS: Record<ThemeKey, readonly string[]> = {
     galleryCanvaParityCss,
     w16MobileQrHardeningCss,
     finalThemeVisualHardeningCss,
+    quickAddCompactRefinementCss,
   ],
 };
 
