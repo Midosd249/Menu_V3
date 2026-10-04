@@ -14,7 +14,6 @@ export const DEMO_MENU: PublicMenu = {
     logoUrl: "/api/media/tenant/demo-nafas/logo",
     coverUrl: "/api/media/tenant/demo-nafas/cover",
     instagramUrl: "https://instagram.com/nafas",
-    websiteUrl: "https://menuun.com",
     whatsapp: "966500000000",
     whatsappTemplate: "السلام عليكم، أريد الاستفسار عن {product} من {restaurant}.",
     primaryColor: "#1c1712",
@@ -54,6 +53,7 @@ export const DEMO_MENU: PublicMenu = {
     { id:"demo-cat-bakery", tenantId: DEMO_TENANT_ID, sortOrder:2, nameAr:"المخبوزات", nameEn:"Bakery", isActive:true },
     { id:"demo-cat-kitchen", tenantId: DEMO_TENANT_ID, sortOrder:3, nameAr:"المطبخ", nameEn:"Kitchen", isActive:true },
     { id:"demo-cat-sweet", tenantId: DEMO_TENANT_ID, sortOrder:4, nameAr:"الحلى", nameEn:"Sweets", isActive:true },
+    { id:"872f4d2a-2963-44a4-bc2e-ab4528292620", tenantId: DEMO_TENANT_ID, sortOrder:50, nameAr:"الأكثر شراء", nameEn:"Best sale", isActive:true },
   ],
   products: [
     { id:"demo-p-croissant", tenantId: DEMO_TENANT_ID, categoryId:"demo-cat-bakery", sortOrder:10, nameAr:"كرواسون زبدة", nameEn:"Butter croissant", descriptionAr:"طبقات يومية من الزبدة الفرنسية. يُخبز فجراً.", descriptionEn:"Laminated daily with French butter. Baked at dawn.", price:14, currency:"SAR", imageUrl:"https://images.unsplash.com/photo-1725545901708-27d59e5c4226?auto=format&fit=crop&fm=jpg&q=85&w=1200", calories:280, sodiumMg:null, caffeineMg:null, caffeineBasis:null, isAvailable:true, isFeatured:true, allergens:"غلوتين,حليب,بيض", tags:[], dietaryLabels:[] },
