@@ -278,3 +278,15 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+# 2026-10-04 — External Product Action Retirement — MERGED / VERIFIED
+
+- VERIFIED: PR #378 was merged directly into `main` as `6c001073084a26e0fb383664a646285123e645df`.
+- VERIFIED: `main` already contained the official Nafas demo from PR #377 at baseline `a7f642d5fe8a7f46abfa84f80c74ac129995b3fa`; the merge preserves the demo together with the external product-action retirement.
+- VERIFIED: PR #378 head `1e0f9e024e61dc5ce24871b9b5a6ee97a1fad5cf` was merged with all 8 commits and its 9 changed files.
+- VERIFIED: external catalogue-level Quick Add / Choose Options controls are retired across all five canonical themes, while the existing Product Sheet/details/options add flow and cart/order infrastructure remain protected.
+- VERIFIED: P1.4–P1.8 performance architecture remains preserved; P1.9 remains deferred.
+- UNKNOWN: final Production/real-device visual verification is not available because Vercel is being handled separately by the owner.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_PERFORMED_BY_THIS_TASK; Vercel is owner-managed.
+- EXACT NEXT TASK: owner handles the Vercel release/production flow; do not start P1.9 or unrelated work automatically.
