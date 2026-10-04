@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const admin = await readFile(new URL("../src/routes/admin.tsx", import.meta.url), "utf8");
+const adminRoutes = await readFile(new URL("../src/lib/admin/routes.ts", import.meta.url), "utf8");
+const platformAdmin = await readFile(new URL("../src/components/admin/platform-admin-page.tsx", import.meta.url), "utf8");
 const workspaceRoute = await readFile(new URL("../src/routes/admin/$workspace.tsx", import.meta.url), "utf8");
 const routeTree = await readFile(new URL("../src/routeTree.gen.ts", import.meta.url), "utf8");
 const platform = await readFile(new URL("../src/lib/menu/platform.ts", import.meta.url), "utf8");
@@ -36,9 +38,9 @@ const workspaceMappings = {
 test("Admin exposes only the active platform workspaces", () => {
   assert.ok(admin.includes('createFileRoute("/admin")'));
   assert.ok(workspaceRoute.includes('createFileRoute("/admin/$workspace")'));
-  for (const path of Object.values(routeMappings)) assert.ok(admin.includes(`"${path}"`), `missing Admin route mapping: ${path}`);
-  assert.ok(!admin.includes("/admin/service-requests"));
-  assert.ok(!admin.includes("/admin/leads"));
+  for (const path of Object.values(routeMappings)) assert.ok(adminRoutes.includes(`"${path}"`), `missing Admin route mapping: ${path}`);
+  assert.ok(!adminRoutes.includes("/admin/service-requests"));
+  assert.ok(!adminRoutes.includes("/admin/leads"));
 });
 
 test("generated route tree still contains the dynamic Admin workspace adapter", () => {
@@ -49,10 +51,10 @@ test("generated route tree still contains the dynamic Admin workspace adapter", 
 });
 
 test("active Admin workspace mappings are explicit", () => {
-  for (const [tab, path] of Object.entries(routeMappings)) assert.ok(admin.includes(`${tab}: "${path}"`), `missing ${tab} → ${path}`);
-  assert.ok(admin.includes("const ADMIN_WORKSPACE_TABS: Record<string, Tab>"));
-  for (const [workspace, tab] of Object.entries(workspaceMappings)) assert.ok(admin.includes(`${workspace}: "${tab}"`), `missing ${workspace} → ${tab}`);
-  assert.ok(!admin.includes('"service-requests": "requests"'));
+  for (const [tab, path] of Object.entries(routeMappings)) assert.ok(adminRoutes.includes(`${tab}: "${path}"`), `missing ${tab} → ${path}`);
+  assert.ok(adminRoutes.includes("const ADMIN_WORKSPACE_TABS: Record<string, Tab>"));
+  for (const [workspace, tab] of Object.entries(workspaceMappings)) assert.ok(adminRoutes.includes(`${workspace}: "${tab}"`), `missing ${workspace} → ${tab}`);
+  assert.ok(!adminRoutes.includes('"service-requests": "requests"'));
 });
 
 test("legacy tab compatibility safely redirects retired workspaces", () => {
@@ -76,41 +78,40 @@ test("Platform Admin authorization remains server-side", () => {
   assert.ok(platform.includes("assertPlatformAdmin(context.userId)"));
   assert.ok(platform.includes("requirePlatformAdmin(userId)"));
   assert.ok(auth.includes("requirePlatformAdmin"));
-  assert.ok(admin.includes("useCurrentUserState"));
-  assert.ok(admin.includes('navigate({ to: "/login"'));
+  assert.ok(platformAdmin.includes("useCurrentUserState"));
+  assert.ok(platformAdmin.includes('navigate({ to: "/login"'));
 });
 
 test("Admin does not fabricate retired request data", () => {
-  assert.ok(!/serviceRequests|PlatformServiceRequest|customer_requests|service_requests/i.test(admin));
-  assert.ok(!/fake|sample data|demo data/i.test(admin));
-  assert.ok(!/health score|security events|revenue trend|predicted/i.test(admin));
+  assert.ok(!/serviceRequests|PlatformServiceRequest|customer_requests|service_requests/i.test(platformAdmin));
+  assert.ok(!/fake|sample data|demo data/i.test(platformAdmin));
+  assert.ok(!/health score|security events|revenue trend|predicted/i.test(platformAdmin));
 });
 
 test("Admin navigation remains URL-based through the dynamic workspace adapter", () => {
-  assert.ok(admin.includes("function selectTab(next: Tab) { setTab(next);"));
-  assert.ok(admin.includes('navigate({ to: "/admin/$workspace", params: { workspace }'));
-  assert.ok(admin.includes('navigate({ to: "/admin" })'));
-  assert.ok(admin.includes('aria-current={tab === item.id ? "page"'));
+  assert.ok(platformAdmin.includes("function selectTab(next: Tab) { setTab(next);"));
+  assert.ok(platformAdmin.includes('navigate({ to: "/admin/$workspace", params: { workspace }'));
+  assert.ok(platformAdmin.includes('navigate({ to: "/admin" })'));
+  assert.ok(platformAdmin.includes('aria-current={tab === item.id ? "page"'));
 });
-
 
 test("Platform Admin exposes server-authorized new-customer notifications without reviving legacy request flows", () => {
   assert.ok(platform.includes("getPlatformCustomerNotifications"));
   assert.ok(platform.includes("assertPlatformAdmin(context.userId)"));
   assert.ok(platform.includes("from tenants t"));
   assert.ok(platform.includes("newCustomers"));
-  assert.ok(admin.includes("customer-notifications-read-at"));
-  assert.ok(admin.includes("setInterval(() => void pollCustomerNotifications(), 10000)"));
-  assert.ok(admin.includes("Notification.requestPermission"));
-  assert.ok(admin.includes('to="/admin/users"'));
-  assert.ok(!admin.includes("service-requests"));
-  assert.ok(!admin.includes("customer_requests"));
+  assert.ok(platformAdmin.includes("customer-notifications-read-at"));
+  assert.ok(platformAdmin.includes("setInterval(() => void pollCustomerNotifications(), 10000)"));
+  assert.ok(platformAdmin.includes("Notification.requestPermission"));
+  assert.ok(platformAdmin.includes('to="/admin/users"'));
+  assert.ok(!platformAdmin.includes("service-requests"));
+  assert.ok(!platformAdmin.includes("customer_requests"));
 });
 
 test("Orders remains an operational platform surface independent of customer signup", () => {
-  assert.ok(admin.includes('orders: "/admin/orders"'));
-  assert.ok(admin.includes("getPlatformOrders"));
-  assert.ok(admin.includes("updatePlatformOrderStatus"));
-  assert.ok(admin.includes("archivePlatformOrder"));
-  assert.ok(admin.includes("فتح الطلبات"));
+  assert.ok(platformAdmin.includes('orders: "/admin/orders"'));
+  assert.ok(platformAdmin.includes("getPlatformOrders"));
+  assert.ok(platformAdmin.includes("updatePlatformOrderStatus"));
+  assert.ok(platformAdmin.includes("archivePlatformOrder"));
+  assert.ok(platformAdmin.includes("فتح الطلبات"));
 });
