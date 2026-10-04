@@ -11,7 +11,7 @@ export const DEMO_MENU: PublicMenu = {
     nameEn: "Nafas",
     taglineAr: "قهوة مختصة ومخبوزات يومية في العليا",
     taglineEn: "Specialty coffee and daily pastry in Al Olaya",
-    logoUrl: "/api/media/tenant/demo-nafas/logo",
+    // Use the live Studio-selected tenant media through the existing published, tenant-scoped media route.\n    // This preserves the exact logo/cover without embedding the ~330 KB Base64 values in the demo bundle.\n    logoUrl: "/api/media/tenant/demo-nafas/logo",
     coverUrl: "/api/media/tenant/demo-nafas/cover",
     instagramUrl: "https://instagram.com/nafas",
     whatsapp: "966500000000",
