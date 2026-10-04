@@ -8,6 +8,7 @@ const onboarding = await readFile(new URL("../src/routes/onboarding.tsx", import
 const provisioning = await readFile(new URL("../src/lib/menu/self-serve-provisioning.ts", import.meta.url), "utf8");
 const admin = await readFile(new URL("../src/routes/admin.tsx", import.meta.url), "utf8");
 const platformAdmin = await readFile(new URL("../src/components/admin/platform-admin-page.tsx", import.meta.url), "utf8");
+const adminRoutes = await readFile(new URL("../src/lib/admin/routes.ts", import.meta.url), "utf8");
 const adminUsers = await readFile(new URL("../src/routes/admin/users.tsx", import.meta.url), "utf8");
 const migration = await readFile(new URL("../migrations/20260917160000_retire_legacy_customer_request_flows.sql", import.meta.url), "utf8");
 
@@ -25,7 +26,7 @@ test("new customer path is self-serve and does not expose approval UI", () => {
 
 test("Platform Admin keeps server-authorized customer controls", () => {
   assert.match(admin, /createFileRoute\("/admin"\)/);
-  assert.match(platformAdmin, /\/admin\/clients/);
+  assert.match(adminRoutes, /clients: "\/admin\/clients"/);
   assert.match(platformAdmin, /\/admin\/users/);
   assert.doesNotMatch(platformAdmin, /طلبات الخدمات|العملاء المحتملون|serviceRequests|approveLead/);
   assert.match(adminUsers, /setPlatformUserBan/);
