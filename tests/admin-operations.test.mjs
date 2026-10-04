@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const platform = await readFile(new URL("../src/lib/menu/platform.ts", import.meta.url), "utf8");
-const admin = await readFile(new URL("../src/routes/admin.tsx", import.meta.url), "utf8");
+const admin = await readFile(new URL("../src/components/admin/platform-admin-page.tsx", import.meta.url), "utf8");
 const orders = await readFile(new URL("../src/lib/menu/orders.ts", import.meta.url), "utf8");
 const migration = await readFile(new URL("../migrations/20260909001000_order_archive_operations.sql", import.meta.url), "utf8");
 
