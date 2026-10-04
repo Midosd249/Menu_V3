@@ -62,6 +62,7 @@ test("anonymous theme previews use the official Nafas data source", () => {
   assert.match(demo, /themeKey: "heritage"/);
   assert.match(demo, /productOptions:/);
   assert.match(demo, /hours:/);
+  assert.match(demo, /872f4d2a-2963-44a4-bc2e-ab4528292620/);
   assert.match(demo, /whatsapp:/);
 });
 
