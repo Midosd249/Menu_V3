@@ -1,3 +1,28 @@
+## 2026-10-04 — Official Nafas Studio Sync — VERIFIED
+
+- VERIFIED: the prior blocker was resolved by using the correct menu_v3 schema in the connected Supabase project. The earlier public-schema query was the wrong source and must not be repeated.
+- VERIFIED: demo-nafas is a real tenant in menu_v3, with 12 current products, 5 categories, 1 branch, 7 branch-hour rows, and 1 active product offer.
+- IMPLEMENTED: DEMO_MENU now uses the current 12 Studio products and their selected product image URLs.
+- IMPLEMENTED: exact Studio logo and cover are packaged as public/demo/nafas-logo.webp and public/demo/nafas-cover.webp; this avoids CI/preview 404s from the Studio media endpoint and avoids embedding large Base64 media in the JS fixture.
+- IMPLEMENTED: demo-only enrichment remains limited to selected real products: variants, modifier groups/options, and the existing V60 offer.
+- VERIFIED: GitHub Quality #2888 = SUCCESS; W9 Orders QA #1006 = SUCCESS.
+- VERIFIED: Vercel Preview for head 79e9d73e931b43c12714932229cd47a06b29995b = READY.
+- UNKNOWN: direct physical-device QA remains unverified.
+- BLOCKED: none for the authorized demo implementation.
+- PRODUCTION: unchanged; no production deployment and no merge to main.
+
+## EXACT CURRENT STATE
+
+Official Nafas Demo Sync: IMPLEMENTATION COMPLETE / VERIFIED LOCALLY + CI / PREVIEW
+
+Branch: feat/official-nafas-demo-2026-10-04
+PR: #377
+Verified head: 79e9d73e931b43c12714932229cd47a06b29995b
+
+## EXACT NEXT TASK
+
+Final diff review → owner approval → merge PR #377 → one production deployment → real-device QA. P1.9 remains deferred.
+
 # 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTED / VERIFICATION PENDING
 
 - VERIFIED: `main` HEAD before this task was `fad0ad90ece050631dea668138ed4a70c8ba1db2` (P1.8 Performance Gates).
