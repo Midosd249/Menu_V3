@@ -72,7 +72,7 @@ test("theme gallery exposes the real guest route and on-demand QR", () => {
 });
 
 test("official Nafas demo uses the current Studio product snapshot plus demo-only enrichment", () => {
-  const productCount = (demo.match(/id: "demo-p-/g) ?? []).length;
+  const productCount = (demo.match(/id:"demo-p-/g) ?? []).length;
   assert.equal(productCount, 12, `expected the 12 current demo-nafas Studio products, found ${productCount}`);
   for (const id of [
     "demo-p-v60", "demo-p-flatwhite", "demo-p-croissant", "demo-p-date", "demo-p-zaatar",
