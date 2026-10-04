@@ -54,11 +54,11 @@ test("theme preview uses the same canonical renderer", () => {
 const demo = fs.readFileSync("src/lib/menu/demo.ts", "utf8");
 const themesIndex = fs.readFileSync("src/routes/themes/index.tsx", "utf8");
 
-test("anonymous theme previews use stable local demo data and a branded logo", () => {
+test("anonymous theme previews use the official Nafas data source", () => {
   assert.match(preview, /DEMO_MENU/);
   assert.match(demo, /logoUrl: "\/demo\/nafas-logo\.svg"/);
   assert.match(demo, /productOptions:/);
-  assert.match(demo, /hours:/);
+  assert.match(demo, /coverUrl: \"\\/api\\/media\\/tenant\\/demo-nafas\\/cover\"/);\n  assert.match(demo, /themeKey: \"heritage\"/);\n  assert.match(demo, /hours:/);
   assert.match(demo, /whatsapp:/);
 });
 
@@ -68,22 +68,27 @@ test("theme gallery exposes the real guest route and on-demand QR", () => {
   assert.match(themesIndex, /Guest-flow QR|QR لتجربة الضيف/);
 });
 
-test("official Nafas demo remains rich, deterministic, and self-contained", () => {
-  const productCount = (demo.match(/\b(?:product\(|id: "demo-[^"]+", tenantId: DEMO_TENANT_ID, categoryId:)/g) ?? []).length - 1;
-  assert.ok(productCount >= 20, `expected at least 20 demo products, found ${productCount}`);
-  assert.match(demo, /branches:\s*\[/);
-  assert.match(demo, /DEMO_BRANCH_KING_FAHD_ID/);
-  assert.match(demo, /instagramUrl: "https:\/\/instagram\.com\/nafas\.demo"/);
-  assert.match(demo, /snapchatUrl:/);
-  assert.match(demo, /facebookUrl:/);
-  assert.match(demo, /tiktokUrl:/);
+test("official Nafas demo uses the current Studio product snapshot plus demo-only enrichment", () => {
+  const productCount = (demo.match(/id: \"demo-p-/g) ?? []).length;
+  assert.equal(productCount, 12, `expected the 12 current demo-nafas Studio products, found ${productCount}`);
+  for (const id of [
+    "demo-p-v60", "demo-p-flatwhite", "demo-p-croissant", "demo-p-date", "demo-p-zaatar",
+    "demo-p-arabic", "demo-p-spiced", "demo-p-shakshuka", "demo-p-halloumi", "demo-p-salad",
+    "demo-p-kunafa", "demo-p-basbousa",
+  ]) assert.match(demo, new RegExp(id));
+  assert.match(demo, /https:\\/\\/images\\.unsplash\\.com\\/photo-1725545901708/);
+  assert.match(demo, /https:\\/\\/as2\\.ftcdn\\.net\\/jpg\\/17\\/59\\/31\\/01/);
   assert.match(demo, /allergens:/);
   assert.match(demo, /dietaryLabels:/);
   assert.match(demo, /productOptions:/);
-  assert.match(demo, /demo-pistachio/);
-  assert.match(demo, /demo-strawberry-matcha/);
-  assert.match(demo, /demo-cheesecake/);
+  assert.match(demo, /demo-v60-extra/);
+  assert.match(demo, /demo-flatwhite-milk/);
+  assert.match(demo, /demo-croissant-extra/);
+  assert.match(demo, /demo-shakshuka-extra/);
   assert.match(demo, /productOffers:/);
-  assert.doesNotMatch(demo, /instagramUrl: "https:\/\/instagram\.com\/"/);
-  assert.doesNotMatch(demo, /whatsapp: "\+966500000000"/);
+  assert.match(demo, /خصم للنصف/);
+  assert.doesNotMatch(demo, /demo-pistachio/);
+  assert.doesNotMatch(demo, /demo-strawberry-matcha/);
+  assert.doesNotMatch(demo, /instagram\\.com\\/nafas\\.demo/);
+  assert.doesNotMatch(demo, /\\+966500000000/);
 });
