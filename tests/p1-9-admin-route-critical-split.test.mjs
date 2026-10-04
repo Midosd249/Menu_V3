@@ -15,6 +15,10 @@ test("Admin route keeps the heavy platform implementation out of the route refer
   assert.ok(!adminRoute.includes("export function PlatformAdminPage"));
   assert.ok(!adminRoute.includes("function PlatformAdminPage"));
   assert.ok(platformAdmin.includes("export function PlatformAdminPage"));
+  assert.ok(platformAdmin.includes("function Overview("));
+  assert.ok(platformAdmin.includes("function Orders("));
+  assert.ok(platformAdmin.includes("function Row("));
+  assert.ok(platformAdmin.includes("function isOpenOrder("));
 });
 
 test("Admin route does not export route component implementation", () => {
