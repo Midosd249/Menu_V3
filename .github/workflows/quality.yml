@@ -147,7 +147,7 @@ jobs:
           const summary = {
             generatedAt: new Date().toISOString(),
             routes: {
-              arabic: await summarize(files.filter((n) => /^nafas-[1-5]\\.json$/.test(n))),
+              arabic: await summarize(files.filter((n) => /^nafas-[1-5]\.json$/.test(n))),
               english: await summarize(files.filter((n) => n.startsWith("nafas-en-"))),
               branch: await summarize(files.filter((n) => n.startsWith("nafas-olaya-"))),
             },
