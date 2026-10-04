@@ -8,7 +8,7 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { archivePlatformOrder, getPlatformCustomerNotifications, getPlatformDashboard, getPlatformOrders, updatePlatformOrderStatus, updatePlatformTenantStatus, type PlatformCustomerNotification, type PlatformDashboard, type PlatformOrder, type PlatformTenant } from "@/lib/menu/platform";
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/menu/orders";
-import { ADMIN_WORKSPACE_TABS, type Tab } from "@/lib/admin/routes";
+import { ADMIN_ROUTES, ADMIN_WORKSPACE_TABS, type Tab } from "@/lib/admin/routes";
 
 const ORDER_LABELS: Record<OrderStatus, string> = { new: "جديد", confirmed: "مؤكد", preparing: "قيد التحضير", ready: "جاهز", completed: "مكتمل", cancelled: "ملغى" };
 const emptyPlatform = (): PlatformDashboard => ({ tenants: [], branches: [], members: [], projects: [], activity: [], analytics: { visits: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, orders: 0, completedOrders: 0 }, tenantCount: 0, activeTenantCount: 0, publishedTenantCount: 0, branchCount: 0, productCount: 0, orderCount: 0, openOrderCount: 0, menuEventCount: 0, activeSubscriptionCount: 0, trialSubscriptionCount: 0 });
@@ -37,8 +37,7 @@ export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Ta
         window.localStorage.setItem(customerNotificationReadKey, customerNotificationCursor.current);
         return;
       }
-      if (!result.data.newCustomers.length) return;
-      setCustomerNotificationCount((count) => count + result.data.newCustomers.length);
+      if (!result.data.newCustomers.length) return;      setCustomerNotificationCount((count) => count + result.data.newCustomers.length);
       const latest = result.data.newCustomers[0];
       setCustomerAlert(latest);
       if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
@@ -77,8 +76,7 @@ export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Ta
   function toggleCustomerNotifications() {
     setCustomerNotificationsOpen((value) => !value);
     setCustomerNotificationCount(0);
-    if (typeof window !== "undefined") window.localStorage.setItem(customerNotificationReadKey, new Date().toISOString());
-  }
+    if (typeof window !== "undefined") window.localStorage.setItem(customerNotificationReadKey, new Date().toISOString());  }
   async function enableBrowserNotifications() {
     if (typeof window === "undefined" || !("Notification" in window)) return;
     await Notification.requestPermission();
@@ -117,8 +115,7 @@ export function PlatformAdminPage({ initialTab = "overview" }: { initialTab?: Ta
           {loading && !platform.tenants.length ? <LoadingState label="جارٍ تحميل مساحة إدارة المنصة…" /> : null}
           {!loading || platform.tenants.length ? <>
             <section className="rounded-2xl border border-line bg-paper p-4">
-              <SectionHeader title="لقطة تشغيلية" description="أرقام حقيقية من بيانات المنصة الحالية فقط." />
-              <div className="mt-2 grid gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+              <SectionHeader title="لقطة تشغيلية" description="أرقام حقيقية من بيانات المنصة الحالية فقط." />              <div className="mt-2 grid gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 <MetricRow label="المطاعم" value={platform.tenantCount.toLocaleString("ar-SA")} />
                 <MetricRow label="النشطة" value={platform.activeTenantCount.toLocaleString("ar-SA")} />
                 <MetricRow label="المنشورة" value={platform.publishedTenantCount.toLocaleString("ar-SA")} />
@@ -157,8 +154,7 @@ function CustomerNotificationPanel({ notifications, onClose, onOpenAccounts, onE
         <h2 className="mt-1 font-semibold">آخر العملاء المسجلين</h2>
       </div>
       <button type="button" aria-label="إغلاق" onClick={onClose} className="rounded-lg px-2 py-1 text-sm hover:bg-sand">×</button>
-    </div>
-    <div className="mt-3 grid max-h-80 gap-2 overflow-auto">
+    </div>    <div className="mt-3 grid max-h-80 gap-2 overflow-auto">
       {notifications.length ? notifications.map((customer) => <Link key={customer.tenantId} to="/admin/users" onClick={onOpenAccounts} className="rounded-xl border border-line bg-sand/30 p-3 text-start hover:bg-sand">
         <p className="text-sm font-semibold">{customer.tenantName || "مساحة عمل جديدة"}</p>
         <p className="mt-1 text-xs text-muted">{customer.customerName || customer.email || "عميل جديد"}</p>
