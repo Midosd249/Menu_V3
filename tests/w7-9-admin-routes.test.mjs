@@ -69,7 +69,9 @@ test("child route remains a protected adapter over the verified workspace mappin
   assert.ok(workspaceRoute.includes("const { workspace } = Route.useParams()"));
   assert.ok(workspaceRoute.includes("if (!initialTab)"));
   assert.ok(workspaceRoute.includes('Navigate to="/admin" replace'));
-  assert.ok(workspaceRoute.includes("const PlatformAdminPage = lazy(() =>"));\n  assert.ok(workspaceRoute.includes("import(\"@/routes/admin\")"));\n  assert.ok(workspaceRoute.includes("<Suspense fallback={null}>"));
+  assert.ok(workspaceRoute.includes("const PlatformAdminPage = lazy(() =>"));
+  assert.ok(workspaceRoute.includes('import("@/routes/admin")'));
+  assert.ok(workspaceRoute.includes("<Suspense fallback={null}>"));
 });
 
 test("Platform Admin authorization remains server-side", () => {
