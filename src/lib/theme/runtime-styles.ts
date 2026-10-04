@@ -38,9 +38,9 @@ const THEME_STYLESHEETS: Record<ThemeKey, readonly string[]> = {
   heritage: [
     heritageThemeCss,
     publicThemeQualityRecoveryCss,
-    quickAddCompactRefinementCss,
     priceConsistencyCss,
     qrFinalFixesCss,
+    quickAddCompactRefinementCss,
   ],
   gallery: [
     galleryThemeCss,
