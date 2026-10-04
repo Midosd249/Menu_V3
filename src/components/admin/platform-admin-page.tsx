@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Activity, Archive, BarChart3, BellRing, Building2, CheckCircle2, ExternalLink, LayoutDashboard, Mail, MessageCircle, PackageCheck, Clock3, Phone, Search, Settings, ShieldCheck, Store, Users, Wallet, Wrench, XCircle } from "lucide-react";
 import { ErrorState, LoadingState, MetricRow, PageHeader, SectionHeader } from "@/components/internal-design-system";
