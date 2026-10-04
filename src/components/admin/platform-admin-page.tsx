@@ -8,7 +8,7 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { archivePlatformOrder, getPlatformCustomerNotifications, getPlatformDashboard, getPlatformOrders, updatePlatformOrderStatus, updatePlatformTenantStatus, type PlatformCustomerNotification, type PlatformDashboard, type PlatformOrder, type PlatformTenant } from "@/lib/menu/platform";
 import { cn } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/menu/orders";
-import { ADMIN_ROUTES, type Tab } from "@/lib/admin/routes";
+import { ADMIN_ROUTES, ADMIN_WORKSPACE_TABS, type Tab } from "@/lib/admin/routes";
 
 const ORDER_LABELS: Record<OrderStatus, string> = { new: "جديد", confirmed: "مؤكد", preparing: "قيد التحضير", ready: "جاهز", completed: "مكتمل", cancelled: "ملغى" };
 const emptyPlatform = (): PlatformDashboard => ({ tenants: [], branches: [], members: [], projects: [], activity: [], analytics: { visits: 0, productViews: 0, qrScans: 0, whatsappClicks: 0, orders: 0, completedOrders: 0 }, tenantCount: 0, activeTenantCount: 0, publishedTenantCount: 0, branchCount: 0, productCount: 0, orderCount: 0, openOrderCount: 0, menuEventCount: 0, activeSubscriptionCount: 0, trialSubscriptionCount: 0 });
