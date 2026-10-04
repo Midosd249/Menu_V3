@@ -7,7 +7,8 @@
 - IMPLEMENTED: focused regression coverage protects demo richness and rejects the old placeholder Instagram/WhatsApp values.
 - RESEARCH: repository-first review plus Exa/Unsplash licensing research; Unsplash states its images are available for commercial and noncommercial use subject to its license and restrictions.
 - SCOPE: no database mutation, tenant data mutation, auth/RLS change, schema change, Vercel deployment, or production release.
-- VERIFICATION STATUS: GitHub Quality verification pending; local shell execution is unavailable in this connector-only session.
+- VERIFIED: GitHub Quality run `37175844434` / run #2870 passed all repository quality, build, browser-template, Menuun brand, performance-fixture, Studio, and Platform Admin gates; W9 Orders QA run `37175844371` / run #988 also passed.
+- VERIFIED: the final preview deployment for head `1f68f1cdd177c2a9b74522083a2d11449ff59e7b` reached Vercel `READY`.
 - DEPLOYMENT STATUS: NOT_PERFORMED.
 - EXACT NEXT TASK: P1.9 — Real-route performance evidence and budget decision, unless the owner explicitly authorizes another atomic task first.
 

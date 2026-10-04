@@ -4,7 +4,8 @@
 - Completed: 20+ products, five categories, two branches, hours, social/contact links, allergens, dietary labels, tags, variants, modifier groups/options, and three item offers.
 - Completed: focused regression coverage in `tests/theme-renderer-contract.test.mjs`.
 - Protected: existing `DEMO_MENU` architecture and recent P1.4–P1.8 performance work.
-- Verification pending: GitHub Quality workflow on the implementation branch.
+- Verified: GitHub Quality #2870 and W9 Orders QA #988 passed on the final implementation head; Vercel preview is READY.
+- Production release remains intentionally unperformed.
 - Deployment: NOT_PERFORMED.
 - Next: P1.9 — Real-route performance evidence and budget decision.
 

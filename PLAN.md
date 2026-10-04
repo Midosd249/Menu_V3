@@ -3,7 +3,8 @@
 - VERIFIED: user-authorized demo hardening is implemented on `feat/official-nafas-demo-2026-10-04`.
 - IMPLEMENTED: `DEMO_MENU` now contains 20+ products, five categories, two branches, hours, social/contact metadata, product metadata, modifiers, variants, and offers.
 - PROTECTED: static demo architecture, logo path, cover image, legacy products, theme renderer, public-menu business logic, auth/RLS, database schema, and recent P1.4–P1.8 performance work.
-- VERIFICATION: pending GitHub Quality evidence; no deployment performed.
+- VERIFIED: GitHub Quality run `37175844434` / #2870 passed; W9 Orders QA run `37175844371` / #988 passed; Vercel preview for the final implementation head is `READY`.
+- VERIFIED: no production deployment or merge to `main` was performed.
 - HANDOFF: performance roadmap remains at **P1.9 — Real-route performance evidence and budget decision**.
 
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
