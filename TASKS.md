@@ -1,3 +1,15 @@
+# 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTATION / VERIFICATION PENDING
+
+- Scope: official static Nafas showcase data.
+- Completed: 20+ products, five categories, two branches, hours, social/contact links, allergens, dietary labels, tags, variants, modifier groups/options, and three item offers.
+- Completed: focused regression coverage in `tests/theme-renderer-contract.test.mjs`.
+- Protected: existing `DEMO_MENU` architecture and recent P1.4–P1.8 performance work.
+- Verification pending: GitHub Quality workflow on the implementation branch.
+- Deployment: NOT_PERFORMED.
+- Next: P1.9 — Real-route performance evidence and budget decision.
+
+---
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.

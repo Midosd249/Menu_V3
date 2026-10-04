@@ -1,3 +1,27 @@
+## 2026-10-04 — Official Nafas Demo data/asset hardening
+
+### Repository evidence — static demo architecture
+- Source: `src/lib/menu/demo.ts`, `src/lib/menu/public.ts`, `tests/theme-renderer-contract.test.mjs`
+- Access date: 2026-10-04
+- Category: repository evidence
+- VERIFIED finding: anonymous theme/public demo flows use deterministic `DEMO_MENU`; the public loader has an explicit `nafas` demo branch before database-backed tenant loading.
+- Transferable principle: keep the showcase dataset self-contained and deterministic; do not couple it to a mutable real tenant.
+- Relevance: official Menu V3 demo stability and low request/dependency count.
+- Limitation: repository evidence does not prove final browser rendering until CI/browser QA executes.
+- Confidence: HIGH
+- Must not copy: real tenant data or private customer information into the static demo.
+
+### Unsplash Help Center — commercial use
+- Source: https://help.unsplash.com/en/articles/2612315-can-i-use-unsplash-images-for-personal-or-commercial-projects
+- Access date: 2026-10-04
+- Category: official asset-license guidance
+- VERIFIED finding: Unsplash states its images are free to use for most commercial, personal, and editorial projects, subject to its Terms and restrictions.
+- Transferable principle: demo imagery may use appropriately licensed stock imagery while avoiding misleading brand/person endorsements and prohibited uses.
+- Relevance: expanded Nafas demo product imagery.
+- Limitation: individual images can contain separate rights considerations for recognizable people, trademarks, logos, or depicted works.
+- Confidence: HIGH
+- Must not copy: Unsplash's image service/catalog or compile imagery to replicate a competing image service.
+
 ## 2026-09-30 — Item-level Offers/Promotions light reference pass
 
 ### Toast — item-level discounts and BOGO

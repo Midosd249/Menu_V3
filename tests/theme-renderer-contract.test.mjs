@@ -67,3 +67,23 @@ test("theme gallery exposes the real guest route and on-demand QR", () => {
   assert.match(themesIndex, /qrcode/);
   assert.match(themesIndex, /Guest-flow QR|QR لتجربة الضيف/);
 });
+
+test("official Nafas demo remains rich, deterministic, and self-contained", () => {
+  const productCount = (demo.match(/\b(?:product\(|id: "demo-[^"]+", tenantId: DEMO_TENANT_ID, categoryId:)/g) ?? []).length - 1;
+  assert.ok(productCount >= 20, `expected at least 20 demo products, found ${productCount}`);
+  assert.match(demo, /branches:\s*\[/);
+  assert.match(demo, /DEMO_BRANCH_KING_FAHD_ID/);
+  assert.match(demo, /instagramUrl: "https:\/\/instagram\.com\/nafas\.demo"/);
+  assert.match(demo, /snapchatUrl:/);
+  assert.match(demo, /facebookUrl:/);
+  assert.match(demo, /tiktokUrl:/);
+  assert.match(demo, /allergens:/);
+  assert.match(demo, /dietaryLabels:/);
+  assert.match(demo, /productOptions:/);
+  assert.match(demo, /demo-pistachio/);
+  assert.match(demo, /demo-strawberry-matcha/);
+  assert.match(demo, /demo-cheesecake/);
+  assert.match(demo, /productOffers:/);
+  assert.doesNotMatch(demo, /instagramUrl: "https:\/\/instagram\.com\/" );
+  assert.doesNotMatch(demo, /whatsapp: "\+966500000000"/);
+});

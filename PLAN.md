@@ -1,3 +1,11 @@
+## 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTATION SLICE
+
+- VERIFIED: user-authorized demo hardening is implemented on `feat/official-nafas-demo-2026-10-04`.
+- IMPLEMENTED: `DEMO_MENU` now contains 20+ products, five categories, two branches, hours, social/contact metadata, product metadata, modifiers, variants, and offers.
+- PROTECTED: static demo architecture, logo path, cover image, legacy products, theme renderer, public-menu business logic, auth/RLS, database schema, and recent P1.4–P1.8 performance work.
+- VERIFICATION: pending GitHub Quality evidence; no deployment performed.
+- HANDOFF: performance roadmap remains at **P1.9 — Real-route performance evidence and budget decision**.
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.

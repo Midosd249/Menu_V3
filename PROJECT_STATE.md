@@ -1,3 +1,18 @@
+# 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTED / VERIFICATION PENDING
+
+- VERIFIED: `main` HEAD before this task was `fad0ad90ece050631dea668138ed4a70c8ba1db2` (P1.8 Performance Gates).
+- VERIFIED: the public demo is intentionally served from static `DEMO_MENU` for the `nafas` slug; this task preserves deterministic separation from real tenant data.
+- IMPLEMENTED: the official Nafas demo was expanded to 20+ products across five categories while preserving the existing logo path, cover image, and core products.
+- IMPLEMENTED: demo-only branch data, opening hours, social/contact links, allergens, dietary labels, tags, variants, modifier groups/options, and item offers.
+- IMPLEMENTED: focused regression coverage protects demo richness and rejects the old placeholder Instagram/WhatsApp values.
+- RESEARCH: repository-first review plus Exa/Unsplash licensing research; Unsplash states its images are available for commercial and noncommercial use subject to its license and restrictions.
+- SCOPE: no database mutation, tenant data mutation, auth/RLS change, schema change, Vercel deployment, or production release.
+- VERIFICATION STATUS: GitHub Quality verification pending; local shell execution is unavailable in this connector-only session.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+- EXACT NEXT TASK: P1.9 — Real-route performance evidence and budget decision, unless the owner explicitly authorizes another atomic task first.
+
+---
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.
