@@ -1928,3 +1928,18 @@ Do not begin database consolidation, analytics caching, or unrelated cleanup bef
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-05 — P1.9 Admin Critical Route Split — VERIFIED / MERGED
+- Completed the authorized P1.9 implementation slice: isolate Platform Admin UI and metadata from the Admin route reference graph.
+- Added regression contracts for route ownership, Admin navigation, authorization, customer notifications, orders, and generated-route compatibility.
+- Added the branch-scoped five-run real-route performance evidence harness and artifact upload.
+- VERIFIED: Quality #2921 = SUCCESS; W9 Orders QA #1037 = SUCCESS; Vercel Preview = SUCCESS for the implementation head.
+- VERIFIED: public-route initial-request medians after the fix were 91 / 96 / 92 versus 107 / 112 / 108 prior evidence.
+- VERIFIED: DCL medians were 496.9ms / 485.0ms / 462.3ms; EN transition was 10 requests / 559ms; CLS 0 and long tasks 0 in route samples.
+- MERGED: PR #382 → main at `a449d1f3ac81366431addd2c2b2637355f72131f`.
+- NOT VERIFIED: post-merge GitHub workflow completion, Production deployment, real-device performance, production LCP/INP, and authorized DB query-plan evidence.
+- DECISION: do not close P1.9 as budget-compliant.
+
+## EXACT NEXT TASK
+**P1.9-B — Production/real-device performance validation and remaining public-route preload investigation.**
