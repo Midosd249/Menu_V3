@@ -1,3 +1,13 @@
+## 2026-10-04 — Official Nafas Studio media/data sync
+
+- Category: repository + Supabase source verification + primary storage research
+- VERIFIED: the authoritative Menu V3 source is the dedicated menu_v3 schema in the connected Supabase project; querying public for tenant/product data was incorrect for this architecture.
+- VERIFIED: demo-nafas contains 12 current products, 5 categories, 1 branch, 7 branch-hour rows, and 1 active product offer.
+- VERIFIED: the selected Studio logo and cover are stored as image data on the tenant record; they were extracted without changing Supabase data and committed as deterministic public demo assets.
+- VERIFIED external research: Supabase documents public Storage assets as CDN-cacheable and recommends stable public URLs for public assets; the demo instead packages the Studio-selected logo/cover locally to keep the showcase deterministic and CI-safe.
+- DECISION: public demo branding must not depend on the live Studio media endpoint when the CI fixture does not contain tenant media. Package the exact current Studio-selected assets instead.
+- Scope boundary: no production data mutation, auth/RLS/schema change, or P1.9 work.
+
 ## 2026-10-04 — Official Nafas Demo data/asset hardening
 
 ### Repository evidence — static demo architecture
