@@ -139,7 +139,7 @@ jobs:
               dclMs: median(rows.map((r) => r.navigation?.domContentLoadedMs)),
               loadMs: median(rows.map((r) => r.navigation?.loadEventMs)),
               jsTransferBytes: median(rows.map((r) => r.transfer?.js?.transferBytes)),
-              failedRequests: rows.map((r) => r.ok ? 0 : 1).reduce((a, b) => a + b, 0),
+              failedResponses: rows.map((r) => r.ok ? 0 : 1).reduce((a, b) => a + b, 0),
               cls: rows.map((r) => r.coreWebVitals?.cls).filter(Number.isFinite),
               longTaskCounts: rows.map((r) => r.mainThread?.longTaskCount),
             };
@@ -147,7 +147,7 @@ jobs:
           const summary = {
             generatedAt: new Date().toISOString(),
             routes: {
-              arabic: await summarize(files.filter((n) => n.startsWith("nafas-")) === false ? [] : files.filter((n) => n.startsWith("nafas-"))),
+              arabic: await summarize(files.filter((n) => /^nafas-[1-5]\\.json$/.test(n))),
               english: await summarize(files.filter((n) => n.startsWith("nafas-en-"))),
               branch: await summarize(files.filter((n) => n.startsWith("nafas-olaya-"))),
             },
