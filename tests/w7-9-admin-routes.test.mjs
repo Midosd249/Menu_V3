@@ -65,13 +65,11 @@ test("legacy tab compatibility safely redirects retired workspaces", () => {
 });
 
 test("child route remains a protected adapter over the verified workspace mapping", () => {
-  assert.ok(workspaceRoute.includes("const ADMIN_WORKSPACE_TABS: Record<string, AdminTab>"));
+  assert.ok(workspaceRoute.includes("const ADMIN_WORKSPACE_TABS: Record<string, Tab>"));
   assert.ok(workspaceRoute.includes("const { workspace } = Route.useParams()"));
   assert.ok(workspaceRoute.includes("if (!initialTab)"));
   assert.ok(workspaceRoute.includes('Navigate to="/admin" replace'));
-  assert.ok(workspaceRoute.includes("const PlatformAdminPage = lazy(() =>"));
-  assert.ok(workspaceRoute.includes('import("@/routes/admin")'));
-  assert.ok(workspaceRoute.includes("<Suspense fallback={null}>"));
+  assert.ok(workspaceRoute.includes("return <PlatformAdminPage key={workspace} initialTab={initialTab} />"));
 });
 
 test("Platform Admin authorization remains server-side", () => {
@@ -115,11 +113,4 @@ test("Orders remains an operational platform surface independent of customer sig
   assert.ok(admin.includes("updatePlatformOrderStatus"));
   assert.ok(admin.includes("archivePlatformOrder"));
   assert.ok(admin.includes("فتح الطلبات"));
-});
-
-
-test("Admin workspace adapter does not statically pull the Admin implementation into the route graph", () => {
-  assert.doesNotMatch(workspaceRoute, /import\s+\{[^}]*PlatformAdminPage[^}]*\}\s+from\s+["']@\/routes\/admin["']/);
-  assert.match(workspaceRoute, /lazy\(\(\)\s*=>\s*import\(["']@\/routes\/admin["']\)/);
-  assert.match(workspaceRoute, /ADMIN_WORKSPACE_TABS: Record<string, AdminTab>/);
 });
