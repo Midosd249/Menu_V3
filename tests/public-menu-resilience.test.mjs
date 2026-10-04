@@ -29,9 +29,9 @@ test("public menu content no longer initializes anonymous sessions during SSR", 
   assert.match(publicServer.slice(attributionStart), /Cache-Control", "private, no-store"/);
 });
 const demo = read("src/lib/menu/demo.ts");
-assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas-tenant"/);
-assert.match(demo, /nameEn: "Double Espresso"[\s\S]*imageUrl: "\/homepage\/menu-dish\.webp"/);
-assert.match(demo, /nameEn: "Nafas Latte"[\s\S]*imageUrl: image\("photo-1572442388796-11668a67e53d"\)/);
+assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas"/);
+assert.match(demo, /nameEn: "Flat White"[\s\S]*imageUrl: "https:\/\/images\.unsplash\.com\/photo-1727080409436/);
+assert.match(demo, /nameEn: "Zaatar manakish"[\s\S]*imageUrl: "https:\/\/as2\.ftcdn\.net\/jpg\/17\/59\/31\/01/);
 const image = read("src/lib/menu/image.ts");
 assert.match(image, /MAX_IMAGE_DATA_URL_LENGTH = 450_000/);
 assert.match(image, /image\/webp/);
