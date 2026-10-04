@@ -64,6 +64,8 @@ test("anonymous theme previews use the official Nafas data source", () => {
   assert.match(demo, /hours:/);
   assert.match(demo, /872f4d2a-2963-44a4-bc2e-ab4528292620/);
   assert.match(demo, /whatsapp:/);
+  assert.equal(fs.existsSync("public/demo/nafas-logo.webp"), true);
+  assert.equal(fs.existsSync("public/demo/nafas-cover.webp"), true);
 });
 
 test("theme gallery exposes the real guest route and on-demand QR", () => {
