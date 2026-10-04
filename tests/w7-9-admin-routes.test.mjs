@@ -109,7 +109,7 @@ test("Platform Admin exposes server-authorized new-customer notifications withou
 });
 
 test("Orders remains an operational platform surface independent of customer signup", () => {
-  assert.ok(platformAdmin.includes('orders: "/admin/orders"'));
+  assert.ok(adminRoutes.includes('orders: "/admin/orders"'));
   assert.ok(platformAdmin.includes("getPlatformOrders"));
   assert.ok(platformAdmin.includes("updatePlatformOrderStatus"));
   assert.ok(platformAdmin.includes("archivePlatformOrder"));
