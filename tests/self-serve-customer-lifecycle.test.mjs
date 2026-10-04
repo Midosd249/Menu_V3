@@ -25,7 +25,7 @@ test("new customer path is self-serve and does not expose approval UI", () => {
 });
 
 test("Platform Admin keeps server-authorized customer controls", () => {
-  assert.match(admin, /createFileRoute\("/admin"\)/);
+  assert.match(admin, /createFileRoute\("\/admin"\)/);
   assert.match(adminRoutes, /clients: "\/admin\/clients"/);
   assert.match(platformAdmin, /\/admin\/users/);
   assert.doesNotMatch(platformAdmin, /طلبات الخدمات|العملاء المحتملون|serviceRequests|approveLead/);
