@@ -1,5 +1,6 @@
 import { createFileRoute, Navigate, notFound, redirect } from "@tanstack/react-router";
-import { ADMIN_WORKSPACE_TABS as ADMIN_WORKSPACE_TAB_MAP, PlatformAdminPage, type Tab } from "@/routes/admin";
+import { PlatformAdminPage } from "@/components/admin/platform-admin-page";
+import { ADMIN_WORKSPACE_TABS as ADMIN_WORKSPACE_TAB_MAP, type Tab } from "@/lib/admin/routes";
 
 const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
   ...ADMIN_WORKSPACE_TAB_MAP,
