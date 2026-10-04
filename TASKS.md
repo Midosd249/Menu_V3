@@ -1,3 +1,34 @@
+## 2026-10-04 — Official Nafas Studio Sync — VERIFIED
+
+- Completed the authorized Nafas demo task against the correct menu_v3 schema.
+- Replaced the previous synthetic product set with the current 12 demo-nafas Studio products and all five current categories.
+- Added exact Studio logo/cover assets to public/demo/.
+- Preserved current branch, hours, contact, allergens, availability, nutrition fields, and selected image URLs.
+- Preserved demo-only option/offer enrichment for showcasing the existing product-option and offer UX.
+- Fixed and verified regression tests that still referenced the previous synthetic demo IDs/products.
+- VERIFIED: Quality #2888 = SUCCESS.
+- VERIFIED: W9 Orders QA #1006 = SUCCESS.
+- VERIFIED: Vercel Preview = READY.
+- UNKNOWN: physical-device QA.
+- PRODUCTION: NOT_DEPLOYED.
+
+## EXACT NEXT TASK
+
+Final diff review → owner approval → merge PR #377 → one production deployment → real-device QA. P1.9 remains deferred.
+
+# 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTATION / VERIFICATION PENDING
+
+- Scope: official static Nafas showcase data.
+- Completed: 20+ products, five categories, two branches, hours, social/contact links, allergens, dietary labels, tags, variants, modifier groups/options, and three item offers.
+- Completed: focused regression coverage in `tests/theme-renderer-contract.test.mjs`.
+- Protected: existing `DEMO_MENU` architecture and recent P1.4–P1.8 performance work.
+- Verified: GitHub Quality #2870 and W9 Orders QA #988 passed on the final implementation head; Vercel preview is READY.
+- Production release remains intentionally unperformed.
+- Deployment: NOT_PERFORMED.
+- Next: P1.9 — Real-route performance evidence and budget decision.
+
+---
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.

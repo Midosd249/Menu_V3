@@ -54,16 +54,47 @@ test("theme preview uses the same canonical renderer", () => {
 const demo = fs.readFileSync("src/lib/menu/demo.ts", "utf8");
 const themesIndex = fs.readFileSync("src/routes/themes/index.tsx", "utf8");
 
-test("anonymous theme previews use stable local demo data and a branded logo", () => {
+test("anonymous theme previews use the official Nafas data source", () => {
   assert.match(preview, /DEMO_MENU/);
-  assert.match(demo, /logoUrl: "\/demo\/nafas-logo\.svg"/);
+  assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas"/);
+  assert.match(demo, /logoUrl: "\/demo\/nafas-logo\.webp"/);
+  assert.match(demo, /coverUrl: "\/demo\/nafas-cover\.webp"/);
+  assert.match(demo, /themeKey: "heritage"/);
   assert.match(demo, /productOptions:/);
   assert.match(demo, /hours:/);
+  assert.match(demo, /872f4d2a-2963-44a4-bc2e-ab4528292620/);
   assert.match(demo, /whatsapp:/);
+  assert.equal(fs.existsSync("public/demo/nafas-logo.webp"), true);
+  assert.equal(fs.existsSync("public/demo/nafas-cover.webp"), true);
 });
 
 test("theme gallery exposes the real guest route and on-demand QR", () => {
   assert.match(themesIndex, /\/m\/nafas\?theme=/);
   assert.match(themesIndex, /qrcode/);
   assert.match(themesIndex, /Guest-flow QR|QR لتجربة الضيف/);
+});
+
+test("official Nafas demo uses the current Studio product snapshot plus demo-only enrichment", () => {
+  const productCount = (demo.match(/id:"demo-p-/g) ?? []).length;
+  assert.equal(productCount, 12, `expected the 12 current demo-nafas Studio products, found ${productCount}`);
+  for (const id of [
+    "demo-p-v60", "demo-p-flatwhite", "demo-p-croissant", "demo-p-date", "demo-p-zaatar",
+    "demo-p-arabic", "demo-p-spiced", "demo-p-shakshuka", "demo-p-halloumi", "demo-p-salad",
+    "demo-p-kunafa", "demo-p-basbousa",
+  ]) assert.match(demo, new RegExp(id));
+  assert.match(demo, /https:\/\/images\.unsplash\.com\/photo-1727080409436/);
+  assert.match(demo, /https:\/\/as2\.ftcdn\.net\/jpg\/17\/59\/31\/01/);
+  assert.match(demo, /allergens:/);
+  assert.match(demo, /dietaryLabels:/);
+  assert.match(demo, /productOptions:/);
+  assert.match(demo, /demo-v60-extra/);
+  assert.match(demo, /demo-flatwhite-milk/);
+  assert.match(demo, /demo-croissant-extra/);
+  assert.match(demo, /demo-shakshuka-extra/);
+  assert.match(demo, /productOffers:/);
+  assert.match(demo, /خصم للنصف/);
+  assert.doesNotMatch(demo, /demo-pistachio/);
+  assert.doesNotMatch(demo, /demo-strawberry-matcha/);
+  assert.doesNotMatch(demo, /instagram\.com\/nafas\.demo/);
+  assert.doesNotMatch(demo, /\+966500000000/);
 });

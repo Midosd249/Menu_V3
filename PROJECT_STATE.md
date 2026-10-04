@@ -1,3 +1,44 @@
+## 2026-10-04 — Official Nafas Studio Sync — VERIFIED
+
+- VERIFIED: the prior blocker was resolved by using the correct menu_v3 schema in the connected Supabase project. The earlier public-schema query was the wrong source and must not be repeated.
+- VERIFIED: demo-nafas is a real tenant in menu_v3, with 12 current products, 5 categories, 1 branch, 7 branch-hour rows, and 1 active product offer.
+- IMPLEMENTED: DEMO_MENU now uses the current 12 Studio products and their selected product image URLs.
+- IMPLEMENTED: exact Studio logo and cover are packaged as public/demo/nafas-logo.webp and public/demo/nafas-cover.webp; this avoids CI/preview 404s from the Studio media endpoint and avoids embedding large Base64 media in the JS fixture.
+- IMPLEMENTED: demo-only enrichment remains limited to selected real products: variants, modifier groups/options, and the existing V60 offer.
+- VERIFIED: GitHub Quality #2888 = SUCCESS; W9 Orders QA #1006 = SUCCESS.
+- VERIFIED: Vercel Preview for head 79e9d73e931b43c12714932229cd47a06b29995b = READY.
+- UNKNOWN: direct physical-device QA remains unverified.
+- BLOCKED: none for the authorized demo implementation.
+- PRODUCTION: unchanged; no production deployment and no merge to main.
+
+## EXACT CURRENT STATE
+
+Official Nafas Demo Sync: IMPLEMENTATION COMPLETE / VERIFIED LOCALLY + CI / PREVIEW
+
+Branch: feat/official-nafas-demo-2026-10-04
+PR: #377
+Verified head: 79e9d73e931b43c12714932229cd47a06b29995b
+
+## EXACT NEXT TASK
+
+Final diff review → owner approval → merge PR #377 → one production deployment → real-device QA. P1.9 remains deferred.
+
+# 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTED / VERIFICATION PENDING
+
+- VERIFIED: `main` HEAD before this task was `fad0ad90ece050631dea668138ed4a70c8ba1db2` (P1.8 Performance Gates).
+- VERIFIED: the public demo is intentionally served from static `DEMO_MENU` for the `nafas` slug; this task preserves deterministic separation from real tenant data.
+- IMPLEMENTED: the official Nafas demo was expanded to 20+ products across five categories while preserving the existing logo path, cover image, and core products.
+- IMPLEMENTED: demo-only branch data, opening hours, social/contact links, allergens, dietary labels, tags, variants, modifier groups/options, and item offers.
+- IMPLEMENTED: focused regression coverage protects demo richness and rejects the old placeholder Instagram/WhatsApp values.
+- RESEARCH: repository-first review plus Exa/Unsplash licensing research; Unsplash states its images are available for commercial and noncommercial use subject to its license and restrictions.
+- SCOPE: no database mutation, tenant data mutation, auth/RLS change, schema change, Vercel deployment, or production release.
+- VERIFIED: GitHub Quality run `37175844434` / run #2870 passed all repository quality, build, browser-template, Menuun brand, performance-fixture, Studio, and Platform Admin gates; W9 Orders QA run `37175844371` / run #988 also passed.
+- VERIFIED: the final preview deployment for head `1f68f1cdd177c2a9b74522083a2d11449ff59e7b` reached Vercel `READY`.
+- DEPLOYMENT STATUS: NOT_PERFORMED.
+- EXACT NEXT TASK: P1.9 — Real-route performance evidence and budget decision, unless the owner explicitly authorizes another atomic task first.
+
+---
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.

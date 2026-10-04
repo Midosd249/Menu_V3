@@ -1,3 +1,29 @@
+# 2026-10-04 — Official Nafas Studio Sync — VERIFIED
+
+- VERIFIED: the connected Supabase project is the Menu V3 project; the relevant source is the dedicated menu_v3 schema, not public.
+- VERIFIED: menu_v3.tenants.id = demo-nafas, slug nafas, active and published.
+- VERIFIED: current Studio source contains 12 products, 5 categories, 1 branch, 7 branch-hour rows, and 1 active product offer.
+- VERIFIED: all 12 current Studio product image URLs were copied into the official demo fixture without replacing the product media.
+- VERIFIED: the current Studio logo and cover were extracted from menu_v3.tenants and committed as public/demo/nafas-logo.webp and public/demo/nafas-cover.webp.
+- IMPLEMENTED: selected real Studio products received demo-only variants/modifier groups/options and the existing V60 offer to demonstrate the product-option UX without inventing additional restaurant products.
+- VERIFIED: GitHub Quality #2888 and W9 Orders QA #1006 passed on the verified head 79e9d73e931b43c12714932229cd47a06b29995b.
+- VERIFIED: Vercel Preview deployment dpl_DbptTT6qxG3qujW8Vz7UrcupqWKs is READY for the verified branch head.
+- UNKNOWN: direct physical-device validation of the new official Nafas demo remains unverified.
+- DEPLOYMENT: no production deployment and no merge to main.
+
+## EXACT NEXT TASK
+
+Final diff review → owner approval → merge PR #377 → one production deployment → real-device QA. P1.9 remains deferred.
+
+## 2026-10-04 — Official Nafas Demo Hardening — IMPLEMENTATION SLICE
+
+- VERIFIED: user-authorized demo hardening is implemented on `feat/official-nafas-demo-2026-10-04`.
+- IMPLEMENTED: `DEMO_MENU` now contains 20+ products, five categories, two branches, hours, social/contact metadata, product metadata, modifiers, variants, and offers.
+- PROTECTED: static demo architecture, logo path, cover image, legacy products, theme renderer, public-menu business logic, auth/RLS, database schema, and recent P1.4–P1.8 performance work.
+- VERIFIED: GitHub Quality run `37175844434` / #2870 passed; W9 Orders QA run `37175844371` / #988 passed; Vercel preview for the final implementation head is `READY`.
+- VERIFIED: no production deployment or merge to `main` was performed.
+- HANDOFF: performance roadmap remains at **P1.9 — Real-route performance evidence and budget decision**.
+
 # 2026-10-03 — P1.8 Performance Gates — CLOSED / VERIFIED
 
 - VERIFIED: P1.7 PR #375 was merged into `main` before P1.8 started; current P1.8 implementation head is `dfbecb52d765169668c48184215f24a031719a48`.
