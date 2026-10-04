@@ -85,6 +85,91 @@ jobs:
         run: npm install --no-save --no-package-lock --no-audit --no-fund @playwright/test@1.63.0
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
+      - name: P1.9 real-route performance evidence — route graph branch only
+        if: startsWith(github.head_ref, 'perf/p1-9-')
+        env:
+          P19_BASE_URL: http://127.0.0.1:8081
+          PERFORMANCE_AUDIT_VIEWPORT_WIDTH: 390
+          PERFORMANCE_AUDIT_VIEWPORT_HEIGHT: 844
+          PERFORMANCE_AUDIT_TRANSITION_SELECTOR: 'button:has-text("EN")'
+        run: |
+          mkdir -p .grok/p1-9-real-route
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/p1-9-real-route/preview.log 2>&1 < /dev/null &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 120); do
+            if curl --silent --show-error --fail "$P19_BASE_URL/" >/dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+          curl --silent --show-error --fail "$P19_BASE_URL/m/nafas" > .grok/p1-9-real-route/nafas.html
+          node --input-type=module <<'NODE'
+          import { readFile } from "node:fs/promises";
+          const html = await readFile(".grok/p1-9-real-route/nafas.html", "utf8");
+          const links = [...html.matchAll(/<link[^>]+rel=["']modulepreload["'][^>]+>/g)].map((m) => m[0]);
+          await import("node:fs/promises").then(({ writeFile }) =>
+            writeFile(".grok/p1-9-real-route/modulepreload-links.json", JSON.stringify(links, null, 2))
+          );
+          console.log("[p1.9] modulepreload link count:", links.length);
+          NODE
+          for route in             "nafas|$P19_BASE_URL/m/nafas"             "nafas-en|$P19_BASE_URL/m/nafas?lang=en"             "nafas-olaya|$P19_BASE_URL/m/nafas/olaya"; do
+            IFS='|' read -r name url <<< "$route"
+            for run in 1 2 3 4 5; do
+              PERFORMANCE_AUDIT_OUTPUT=".grok/p1-9-real-route/$name-$run.json"                 PERFORMANCE_AUDIT_TRANSITION_SELECTOR=""                 npm run performance:audit -- "$url"
+            done
+          done
+          for run in 1 2 3 4 5; do
+            PERFORMANCE_AUDIT_OUTPUT=".grok/p1-9-real-route/transition-$run.json"               PERFORMANCE_AUDIT_TRANSITION_SELECTOR='button:has-text("EN")'               npm run performance:audit -- "$P19_BASE_URL/m/nafas"
+          done
+          node --input-type=module <<'NODE'
+          import { readdir, readFile, writeFile } from "node:fs/promises";
+          const files = (await readdir(".grok/p1-9-real-route")).filter((name) => /^(nafas|nafas-en|nafas-olaya)-[1-5]\.json$/.test(name));
+          const transitionFiles = (await readdir(".grok/p1-9-real-route")).filter((name) => /^transition-[1-5]\.json$/.test(name));
+          const read = async (name) => JSON.parse(await readFile(".grok/p1-9-real-route/" + name, "utf8"));
+          const median = (values) => {
+            const xs = values.filter((v) => Number.isFinite(v)).sort((a, b) => a - b);
+            return xs.length ? xs[Math.floor(xs.length / 2)] : null;
+          };
+          const summarize = async (names) => {
+            const rows = await Promise.all(names.map(read));
+            return {
+              runs: rows.length,
+              initialRequests: median(rows.map((r) => r.navigation?.initialRequestCount)),
+              dclMs: median(rows.map((r) => r.navigation?.domContentLoadedMs)),
+              loadMs: median(rows.map((r) => r.navigation?.loadEventMs)),
+              jsTransferBytes: median(rows.map((r) => r.transfer?.js?.transferBytes)),
+              failedResponses: rows.map((r) => r.ok ? 0 : 1).reduce((a, b) => a + b, 0),
+              cls: rows.map((r) => r.coreWebVitals?.cls).filter(Number.isFinite),
+              longTaskCounts: rows.map((r) => r.mainThread?.longTaskCount),
+            };
+          };
+          const summary = {
+            generatedAt: new Date().toISOString(),
+            routes: {
+              arabic: await summarize(files.filter((n) => /^nafas-[1-5]\.json$/.test(n))),
+              english: await summarize(files.filter((n) => n.startsWith("nafas-en-"))),
+              branch: await summarize(files.filter((n) => n.startsWith("nafas-olaya-"))),
+            },
+            transition: {
+              runs: transitionFiles.length,
+              requestCounts: (await Promise.all(transitionFiles.map(read))).map((r) => r.clientTransition?.requestCount),
+              durationsMs: (await Promise.all(transitionFiles.map(read))).map((r) => r.clientTransition?.durationMs),
+              urlChanged: (await Promise.all(transitionFiles.map(read))).map((r) => r.clientTransition?.urlChanged),
+            },
+          };
+          await writeFile(".grok/p1-9-real-route/summary.json", JSON.stringify(summary, null, 2));
+          console.log(JSON.stringify(summary, null, 2));
+          NODE
+      - name: Upload P1.9 real-route performance evidence
+        if: always() && startsWith(github.head_ref, 'perf/p1-9-')
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-9-real-route-performance-evidence
+          path: .grok/p1-9-real-route
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Browser template QA — all themes
         run: |
           mkdir -p .grok
