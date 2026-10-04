@@ -57,8 +57,8 @@ const themesIndex = fs.readFileSync("src/routes/themes/index.tsx", "utf8");
 test("anonymous theme previews use the official Nafas data source", () => {
   assert.match(preview, /DEMO_MENU/);
   assert.match(demo, /const DEMO_TENANT_ID = "demo-nafas"/);
-  assert.match(demo, /logoUrl: "\/api\/media\/tenant\/demo-nafas\/logo"/);
-  assert.match(demo, /coverUrl: "\/api\/media\/tenant\/demo-nafas\/cover"/);
+  assert.match(demo, /logoUrl: "\/demo\/nafas-logo\.webp"/);
+  assert.match(demo, /coverUrl: "\/demo\/nafas-cover\.webp"/);
   assert.match(demo, /themeKey: "heritage"/);
   assert.match(demo, /productOptions:/);
   assert.match(demo, /hours:/);
