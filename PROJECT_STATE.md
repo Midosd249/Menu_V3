@@ -278,3 +278,23 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+## 2026-10-04 — P1.9 Real-Route Performance Evidence — VERIFIED_LOCAL_BUILD_PARTIAL
+
+- VERIFIED: full `npm run build` passed and served successfully through the production preview runtime.
+- VERIFIED: five-run Chromium captures completed for `/m/nafas`, `/m/nafas?lang=en`, and `/m/nafas/olaya`.
+- VERIFIED: initial requests were 101–104; Arabic→English transition was 9 requests and ~1.07s; failed requests and console errors were zero.
+- VERIFIED: CLS was 0 and no long tasks were captured; LCP, production-host, physical-device, and runtime query-plan evidence remain UNKNOWN.
+- VERIFIED: the trial `router.autoCodeSplitting` configuration had no measurable build/waterfall effect and was reverted.
+- NOT PASSED: request and transition budgets are not met; P1.9 must not be marked DONE.
+- AUDIT: `docs/performance/p1-9-real-route-performance-audit.md`.
+- PRODUCTION: unchanged; no deployment or merge to main.
+
+## EXACT CURRENT STATE
+
+P1.9: VERIFIED_LOCAL_BUILD_PARTIAL / BUDGET_FAIL_WITH_EXPLICIT_UNKNOWN_GATES
+
+Branch: `perf/p1-9-real-route-evidence-2026-10-04`
+
+## EXACT NEXT TASK
+
+Run a separately scoped route-graph reduction investigation: explain why non-public route chunks are emitted/preloaded for `/m/nafas`, then repeat the same five-run protocol. Obtain production-host, real-device, and authorized query-plan evidence before any final budget claim.

@@ -1685,3 +1685,22 @@ Map actual requests first; preserve auth/tenant/branch boundaries and avoid unre
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+## 2026-10-04 — P1.9 Real-Route Performance Evidence — VERIFIED_LOCAL_BUILD_PARTIAL
+
+- Full production build and local preview passed.
+- Representative public and branch routes were measured five times each in system Chromium.
+- Initial request budget failed at 101–104 requests; language transition budget failed at 9 requests.
+- Zero failed requests, zero console errors, CLS 0, and zero captured long tasks were verified locally.
+- LCP, production-host latency, physical-device behavior, and runtime query plans remain UNKNOWN.
+- The audit is complete as an evidence report, not as a passing performance gate: `docs/performance/p1-9-real-route-performance-audit.md`.
+- No speculative code optimization was retained after `autoCodeSplitting` produced identical output.
+
+## EXACT CURRENT STATE
+
+**P1.9 — Real-route performance evidence: VERIFIED LOCAL BUILD / BUDGET FAIL / EXTERNAL GATES UNKNOWN**
+
+Branch: `perf/p1-9-real-route-evidence-2026-10-04`
+
+## EXACT NEXT TASK
+
+Investigate and separately implement the route-graph reduction needed to stop non-public route chunks from being emitted/preloaded for the public menu. Re-run the same protocol; do not close P1.9 until the request/transition decision and required production/real-device/query-plan evidence are available.

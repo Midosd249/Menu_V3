@@ -1928,3 +1928,16 @@ Do not begin database consolidation, analytics caching, or unrelated cleanup bef
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+## 2026-10-04 — P1.9 Real-Route Performance Evidence — PARTIAL / NOT DONE
+
+- Completed: five-run production-preview measurement on Arabic public, English public, and branch routes.
+- Completed: real language-transition measurement; 9 requests and approximately 1.07 seconds per transition.
+- Completed: build, preview readiness, failed-request, console-error, CLS, and long-task checks.
+- Failed: initial request budget (`101–104`, target `<15`) and transition budget (`9`, target `<8`).
+- Unknown: LCP in this harness, production-host results, physical-device results, and authorized runtime query plans.
+- Audit: `docs/performance/p1-9-real-route-performance-audit.md`.
+- Do not mark P1.9 DONE.
+
+## EXACT NEXT TASK
+
+Separate route-graph reduction investigation and implementation, followed by the identical five-run protocol and the missing production/real-device/query-plan evidence gates.
