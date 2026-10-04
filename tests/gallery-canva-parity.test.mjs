@@ -36,7 +36,7 @@ test("Gallery keeps the Canva visual tokens", () => {
   }
 });
 
-test("Gallery preserves Quick Add and product-options hooks", () => {
-  assert.match(parity, /public-menu-quick-add/);
-  assert.match(parity, /public-menu-options-action/);
+test("Gallery does not own external product-action presentation", () => {
+  assert.doesNotMatch(parity, /\\.public-menu-quick-add\\s*\\{/);
+  assert.doesNotMatch(parity, /\\.public-menu-options-action\\s*\\{/);
 });
