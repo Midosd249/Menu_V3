@@ -1,8 +1,22 @@
+import { lazy, Suspense } from "react";
 import { createFileRoute, Navigate, notFound, redirect } from "@tanstack/react-router";
-import { ADMIN_WORKSPACE_TABS as ADMIN_WORKSPACE_TAB_MAP, PlatformAdminPage, type Tab } from "@/routes/admin";
 
-const ADMIN_WORKSPACE_TABS: Record<string, Tab> = {
-  ...ADMIN_WORKSPACE_TAB_MAP,
+type AdminTab =
+  | "tenants"
+  | "orders"
+  | "clients"
+  | "branches"
+  | "projects"
+  | "subscriptions"
+  | "analytics"
+  | "activity"
+  | "system";
+
+const PlatformAdminPage = lazy(() =>
+  import("@/routes/admin").then(({ PlatformAdminPage }) => ({ default: PlatformAdminPage })),
+);
+
+const ADMIN_WORKSPACE_TABS: Record<string, AdminTab> = {
   restaurants: "tenants",
   orders: "orders",
   clients: "clients",
@@ -32,5 +46,9 @@ function PlatformAdminWorkspaceRoute() {
   if (!initialTab) {
     return <Navigate to="/admin" replace />;
   }
-  return <PlatformAdminPage key={workspace} initialTab={initialTab} />;
+  return (
+    <Suspense fallback={null}>
+      <PlatformAdminPage key={workspace} initialTab={initialTab} />
+    </Suspense>
+  );
 }
