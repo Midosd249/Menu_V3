@@ -317,7 +317,9 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
@@ -359,8 +361,10 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRouteWithChildren
   '/owner': typeof OwnerRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/studio': typeof StudioRouteWithChildren
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/admin/$workspace': typeof AdminWorkspaceRoute
   '/admin/onboarding': typeof AdminOnboardingRoute
@@ -404,8 +408,10 @@ export interface FileRouteTypes {
     | '/owner'
     | '/pricing'
     | '/privacy'
+    | '/privacy'
     | '/reset-password'
     | '/studio'
+    | '/terms'
     | '/terms'
     | '/verify-email'
     | '/admin/$workspace'
@@ -447,7 +453,9 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/owner'
     | '/pricing'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/verify-email'
     | '/admin/$workspace'
     | '/admin/onboarding'
@@ -595,6 +603,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -607,13 +622,6 @@ declare module '@tanstack/react-router' {
       path: '/studio'
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
