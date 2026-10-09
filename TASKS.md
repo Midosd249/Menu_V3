@@ -1978,3 +1978,18 @@ Do not begin database consolidation, analytics caching, or unrelated cleanup bef
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-09 — Platform Light/Dark Mode — IMPLEMENTATION_IN_PROGRESS
+
+- Base `main`: `771c6a78aa8ce8c2be5028eb109e262089f1f016`.
+- Implemented scoped platform theme tokens, early root preference initialization, and an accessible toggle.
+- Target surfaces: Studio shell, homepage, pricing, login/signup, Terms, Privacy.
+- Preference: `menu-theme` in localStorage; follows OS preference until an explicit choice is saved.
+- Palette contrast assertions and protected-theme isolation assertions added to `scripts/color-contract.test.mjs`.
+- No public-menu theme stylesheet is intentionally changed.
+- CI, browser QA, typecheck, lint, and build remain unverified pending the PR's latest-head checks.
+- No merge or deployment.
+
+### Exact next task
+Inspect tests, create one review PR, verify latest-head CI/browser gates, and stop for owner review.
