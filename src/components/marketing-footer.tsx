@@ -1,4 +1,3 @@
-import { Mail, MessageCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuunLogo } from "@/components/menuun-logo";
