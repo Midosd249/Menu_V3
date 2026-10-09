@@ -1,3 +1,16 @@
+## 2026-10-09 — Footer Contact Icon & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #385 head before this follow-up failed only at the Menuun brand browser step; its assertion still expected the visible email address after the footer changed to icon + accessible label. Typecheck, unit tests, lint, build, and all-theme browser QA passed in that run; W9 Orders QA passed.
+- FIXED: browser assertions now verify the exact mailto/WhatsApp destinations, accessible names, visible icons, one link each, no visible phone/email text, legal links, and dynamic copyright year.
+- IMPLEMENTED: added `public/menuun-app-icon.svg`, a dedicated square icon with opaque brand background and centered mark inside the maskable safe zone; manifest now references it instead of treating the transparent favicon as maskable.
+- ADDED: contract coverage for Menuun title/favicon/manifest and app-icon metadata.
+- VERIFIED: official MDN/W3C manifest guidance confirms scalable SVG icons are valid and that maskable artwork must respect a central safe zone; platform-specific icon rendering still needs real-device/browser verification.
+- UNKNOWN: latest-head GitHub Actions runs have not yet been confirmed as completed; no merge or production deployment performed. Vercel currently reports a PR Preview status only, not production.
+- Current follow-up code/test head: `55e3cf4dd98c440534ed6991be858aa714f98b51` (verify current branch HEAD again after continuity commits).
+- Exact next task: inspect latest-head CI results, fix any remaining failures, review final diff, and stop before release if a required gate is not green.
+
+---
+
 ## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: base `main` HEAD is `fd3d92cbac172476c4f7507b4b0b9582ce91b821`; implementation branch is `fix/marketing-footer-structure-2026-10-09`.
