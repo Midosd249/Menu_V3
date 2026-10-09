@@ -325,3 +325,17 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-09 — Platform Light/Dark Mode — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: base `main` HEAD for this task is `771c6a78aa8ce8c2be5028eb109e262089f1f016`.
+- VERIFIED: the platform already has shared semantic aliases in `src/colors.css` and `src/styles.css`; the internal Studio/Admin visual scope also contains hard-coded light surfaces. The marketing homepage has a separate `--mq-*` palette. This is partial centralization, not a fully tokenized cross-site system.
+- VERIFIED: Tailwind CSS v4 is installed; no root `tailwind.config.js` or `tailwind.config.ts` exists. No Tailwind dark-mode strategy was previously configured.
+- VERIFIED: language persistence is `localStorage["menu-lang"]`; theme preference uses analogous `localStorage["menu-theme"]` values `light`/`dark`, defaults to `prefers-color-scheme`, and updates the root `data-platform-theme` attribute.
+- IMPLEMENTED: added scoped platform theme tokens/CSS and an accessible sun/moon toggle to Studio, homepage, pricing, login/signup, Terms, and Privacy. Added early root-document preference initialization to reduce theme flash.
+- PROTECTED: no public-menu theme stylesheet was edited. New CSS explicitly scopes to `data-platform-chrome` and excludes `.menu-public-shell` subtrees.
+- PALETTE: `#0F1115` canvas, `#171B22` surface, `#1F252E` elevated, `#252B35` subtle, `#FFF7ED` text, `#D0D5DD` secondary, `#A7AFBA` muted, `#3A414D` border, `#FF5A1F` Ember, `#1FD1A5` Digital Mint. Automated contrast assertions were added; final check results are pending CI.
+- UNKNOWN: local shell/test/typecheck/lint/build/browser QA cannot be inferred from GitHub file edits; run evidence must be checked on the PR head.
+- RELEASE: one review PR only; no merge and no deployment without owner review.
+- Exact next task: inspect the new theme contract tests, create one review PR, and verify latest-head CI plus available browser coverage; fix failures before asking for review.
