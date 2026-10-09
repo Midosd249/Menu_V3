@@ -10,6 +10,7 @@ import imageArtDirectionCss from "../image-art-direction.css?url";
 import motionCss from "../motion.css?url";
 import accessibilityCss from "../accessibility.css?url";
 import platformThemeCss from "../platform-theme.css?url";
+import homepageDarkModeFixCss from "../homepage-dark-mode-fix.css?url";
 
 const APP_NAME = "Menuun";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -33,6 +34,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: colorsCss },
       { rel: "stylesheet", href: w8InternalVisualScopeFixCss },
       { rel: "stylesheet", href: platformThemeCss },
+      { rel: "stylesheet", href: homepageDarkModeFixCss },
       { rel: "stylesheet", href: typographyCss },
       { rel: "stylesheet", href: imageArtDirectionCss },
       { rel: "stylesheet", href: motionCss },
