@@ -18,7 +18,7 @@ One atomic marketing-footer structure fix. Preserve all existing destinations, c
 - Release boundary: one draft review PR; no merge or deployment.
 
 ### Exact next task
-Review the single PR's diff and require Quality, W9, and applicable browser QA to pass. Stop for owner review.
+Review PR #385's final diff and require Quality, W9, and applicable browser QA to pass on the latest head. Stop for owner review.
 
 ---
 

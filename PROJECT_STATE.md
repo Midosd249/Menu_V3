@@ -9,7 +9,7 @@
 
 ## Exact next task
 
-Open one draft PR, wait for the required Quality/W9/browser checks, review the diff and check results, then stop for owner review. Do not merge or deploy.
+PR #385 is open as Draft. Wait for Quality/W9/browser checks on the latest head, review the final diff and results, then stop for owner review. Do not merge or deploy.
 
 ---
 

@@ -10,7 +10,7 @@
 - Deployment: NOT REQUESTED; hold merge and deployment for owner review.
 
 ## Exact next task
-Open one draft PR, inspect Quality/W9/browser QA and final diff, then stop for owner review.
+PR #385 is open as Draft; inspect Quality/W9/browser QA on the latest head and review the final diff, then stop for owner review.
 
 ---
 
