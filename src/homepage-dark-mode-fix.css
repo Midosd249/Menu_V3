@@ -91,3 +91,13 @@ html[data-platform-theme="dark"] .menuq-home > header a[aria-label="Menuun"] {
   border-radius: 0.65rem;
   background: #fffdf8 !important;
 }
+
+
+/* Match the header wordmark treatment for the footer logo on the dark canvas. */
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a[aria-label="Menuun"] {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #e8e5dd;
+  border-radius: 0.65rem;
+  background: #fffdf8 !important;
+}
