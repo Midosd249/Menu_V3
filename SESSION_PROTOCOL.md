@@ -156,3 +156,12 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
 - Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
 - A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- Base SHA: `b1f9c5fa9eee8fe899cd23b24e4948e6682cd578`; branch: `fix/login-dark-footer-overflow-2026-10-09`.
+- The login page's vertically centered grid was replaced with a flex-column shell and vertical auto margins, preserving centering when content fits while allowing normal top-to-bottom scrolling when it does not.
+- Added a browser regression test at 390×650 for the final footer link/copyright across Arabic/English and light/dark themes.
+- CI, deployment, and physical-device verification are not yet verified. Do not merge/deploy automatically.
+- Exact next action: create a PR and inspect the latest CI result, then stop before release.
