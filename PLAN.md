@@ -1819,3 +1819,5 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Added a mobile browser regression test covering the last footer link and copyright area at 390×650 across Arabic/English and light/dark themes.
 - Verification pending: GitHub Actions browser/quality checks and final diff review. No merge/deployment authorized by this task.
 - Exact next action: open a PR and evaluate the latest CI evidence; stop before release.
+
+- CI follow-up: the initial new browser test failed before asserting layout because it accessed `localStorage` on `about:blank`. Corrected test setup to establish the app origin first; latest-head CI rerun pending.
