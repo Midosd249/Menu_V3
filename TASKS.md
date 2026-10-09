@@ -1,3 +1,18 @@
+## 2026-10-09 — Footer Contact Icons & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- Root cause found in Quality run `37880278153`: stale browser test expected the visible email address after email contact changed to an icon with an accessible label.
+- Browser regression contract updated for mailto/WhatsApp destinations, accessible names, visible icons, unique actions, hidden raw contact details, legal links, and dynamic copyright year.
+- Added dedicated square `public/menuun-app-icon.svg` with opaque brand background and safe-zone padding; `public/manifest.webmanifest` now points to it as an `any maskable` icon.
+- Added automated contract checks for Menuun title, favicon, manifest, and app-icon metadata.
+- Previous CI evidence: typecheck/tests/lint/build/all-theme browser QA passed, but Menuun brand browser QA failed on the stale email-text assertion; W9 Orders QA passed. These results do not verify the current head.
+- Latest code/test head before continuity updates: `55e3cf4dd98c440534ed6991be858aa714f98b51`; current-head CI remains to be verified.
+- Deployment: no production deployment. Vercel PR Preview status is not production evidence.
+
+### Exact next task
+Verify all required checks on the latest PR #385 head and fix any remaining failure; do not merge with a failing or pending required check.
+
+---
+
 ## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
 
 - Changed: `src/components/marketing-footer.tsx`; `tests/public-pages-themes-contract.test.mjs`; `tests/menuun-brand-browser.spec.ts`.
