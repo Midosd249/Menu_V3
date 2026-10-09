@@ -168,3 +168,10 @@ html[data-platform-theme="dark"] [data-platform-chrome] nav[aria-label="تنقل
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link] { color: #D0D5DD !important; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link]:hover,
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link]:focus-visible { color: #FFF7ED !important; }
+
+
+/* The login footer intentionally keeps its light brand surface in dark mode.
+   Do not let platform dark-theme text tokens turn its links/copy pale on cream. */
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p) {
+  color: #343A40 !important;
+}
