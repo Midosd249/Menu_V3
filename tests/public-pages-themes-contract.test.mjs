@@ -12,6 +12,7 @@ const catalog = read("src/lib/menu/commercial-catalog.ts");
 const registry = read("src/lib/theme/registry.ts");
 const root = read("src/routes/__root.tsx");
 const appManifest = JSON.parse(read("public/manifest.webmanifest"));
+const appIcon = read("public/menuun-app-icon.svg");
 
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
@@ -188,6 +189,10 @@ test("application identity uses Menuun metadata, favicon, and web app manifest",
   assert.equal(appManifest.start_url, "/");
   assert.equal(appManifest.display, "standalone");
   assert.equal(appManifest.icons.length, 1);
-  assert.equal(appManifest.icons[0].src, "/favicon.svg");
+  assert.equal(appManifest.icons[0].src, "/menuun-app-icon.svg");
   assert.equal(appManifest.icons[0].type, "image/svg+xml");
+  assert.equal(appManifest.icons[0].purpose, "any maskable");
+  assert.match(appIcon, /<rect width="512" height="512" fill="#344331"\/>/);
+  assert.match(appIcon, /<svg x="106" y="106" width="300" height="300"/);
+  assert.match(appIcon, /fill="#FFF7ED"/);
 });
