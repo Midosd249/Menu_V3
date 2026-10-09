@@ -1,12 +1,14 @@
 ## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
 
-- Changed: `src/components/marketing-footer.tsx`; `tests/public-pages-themes-contract.test.mjs`.
+- Changed: `src/components/marketing-footer.tsx`; `tests/public-pages-themes-contract.test.mjs`; `tests/menuun-brand-browser.spec.ts`.
 - Footer structure: Brand → Links → Contact → Copyright.
 - Contact email and WhatsApp are each rendered once, under Contact only.
 - Brand tagline consolidated; duplicate About paragraph removed.
 - Footer links include Pricing, Preview, Sign in, `/terms`, and `/privacy` in Arabic and English.
 - Regression contract added for structure/order, contact uniqueness, legal destinations, and RTL/LTR direction.
-- UNKNOWN: local commands and browser rendering unavailable in this connected GitHub session; required CI/browser evidence pending.
+- Initial browser QA caught stale expectations for the removed About block; the Playwright browser spec now asserts the intended bilingual footer instead.
+- VERIFIED: typecheck, tests, lint, production build, and all-theme browser QA passed on the previous PR head; the Menuun brand browser QA failed only on stale About assertions.
+- UNKNOWN: rerun Quality/W9/browser QA after the corrective browser-spec update is pending. No local commands run in this connected GitHub session.
 - Deployment: NOT REQUESTED; hold merge and deployment for owner review.
 
 ## Exact next task

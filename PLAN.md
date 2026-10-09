@@ -9,12 +9,13 @@ One atomic marketing-footer structure fix. Preserve all existing destinations, c
 - Updated shared markup to Brand → Links → Contact → Copyright, with the same DOM order and `dir`-driven Arabic RTL / English LTR behavior.
 - Brand now has one concise tagline. Email and WhatsApp are only rendered under Contact.
 - Links explicitly include Pricing, Preview, Sign in, `/terms`, and `/privacy`.
-- Added regression assertions to `tests/public-pages-themes-contract.test.mjs` for section order, contact uniqueness, legal links, and RTL/LTR direction.
+- Added regression assertions to `tests/public-pages-themes-contract.test.mjs` and updated `tests/menuun-brand-browser.spec.ts` to verify section order, contact uniqueness, legal links, and Arabic/English homepage/login rendering.
 - Research preflight: U.S. Web Design System footer guidance emphasizes curated footer link groups and keyboard focus; W3C WAI semantic HTML landmark guidance supports using a labeled `nav` landmark for the site links. These sources informed structure/accessibility, not runtime claims.
 
 ### Verification
 - VERIFIED: source inspection and regression-contract implementation.
-- UNKNOWN: local test/typecheck/lint/build and rendered browser QA until GitHub Actions completes.
+- VERIFIED: first browser run found an obsolete `About` expectation; browser assertions were updated to the new contract.
+- UNKNOWN: corrective Quality/W9/browser run results are pending; local test/typecheck/lint/build and manual rendered browser QA were not run here.
 - Release boundary: one draft review PR; no merge or deployment.
 
 ### Exact next task

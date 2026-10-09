@@ -3,8 +3,9 @@
 - VERIFIED: base `main` HEAD is `fd3d92cbac172476c4f7507b4b0b9582ce91b821`; implementation branch is `fix/marketing-footer-structure-2026-10-09`.
 - VERIFIED: before the fix, `src/components/marketing-footer.tsx` rendered email and WhatsApp twice (once under the brand block and again under Contact), included a separate About paragraph duplicating the tagline, and placed Contact before Links.
 - IMPLEMENTED: footer order is now Brand → Links → Contact → Copyright in shared markup used by Arabic RTL and English LTR; contact actions exist only in Contact; the redundant About block and duplicate tagline are removed.
-- VERIFIED BY SOURCE: footer Links includes Pricing, Preview, Sign in, `/terms`, and `/privacy`; a regression contract checks destinations, section order, RTL/LTR direction, and single contact hrefs.
-- UNKNOWN: local typecheck/test/lint/build and browser rendering are not run in this GitHub-connected environment. GitHub Actions Quality, W9, and browser QA must complete on the PR head.
+- VERIFIED BY SOURCE: footer Links includes Pricing, Preview, Sign in, `/terms`, and `/privacy`; regression coverage now spans `tests/public-pages-themes-contract.test.mjs` and `tests/menuun-brand-browser.spec.ts`, checking destinations, section order, RTL/LTR direction, and single contact hrefs.
+- VERIFIED: first Quality browser run exposed stale `About` expectations in `tests/menuun-brand-browser.spec.ts`; updated the browser contract to assert the new bilingual footer and one email/WhatsApp/legal-link target each.
+- UNKNOWN: the corrective commit's Quality/W9/browser QA results are pending; local commands remain unavailable in this GitHub-connected environment.
 - RELEASE: one review PR only; do not merge or deploy before owner review.
 
 ## Exact next task
