@@ -156,3 +156,25 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Do not create avoidable commits for intermediate wording, partial reports, or duplicated continuity updates.
 - Avoid unnecessary pushes because connected Git workflows may trigger CI and Vercel activity.
 - A documentation-only task must not intentionally trigger deployment, but any automatic external status must be reported honestly.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- Base SHA: `b1f9c5fa9eee8fe899cd23b24e4948e6682cd578`; branch: `fix/login-dark-footer-overflow-2026-10-09`.
+- The login page's vertically centered grid was replaced with a flex-column shell and vertical auto margins, preserving centering when content fits while allowing normal top-to-bottom scrolling when it does not.
+- Added a browser regression test at 390×650 for the final footer link/copyright across Arabic/English and light/dark themes.
+- VERIFIED: latest-head Quality and W9 Orders QA both passed on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`; the new footer reachability browser test passed.
+- UNKNOWN: deployment and physical-device verification remain unperformed. Do not merge/deploy automatically.
+- Exact next action: owner review PR #390 and its diff, then stop before release.
+
+- CI follow-up: first browser run failed due to test setup accessing localStorage before navigation (`about:blank` security error), not a layout assertion. Test now initializes theme after navigating to the app origin; latest-head CI rerun pending.
+
+
+## 2026-10-09 — Login Footer Contrast Correction — IMPLEMENTATION_IN_PROGRESS
+
+- Corrected scope after owner clarification: this is a contrast/color defect in the last footer section on /login in dark mode, not primarily a scrolling/reachability issue.
+- The login footer keeps a light brand surface. Its text-bearing links and paragraphs must use dark foreground colors in dark mode; override is scoped to [data-auth-page] and the footer only.
+- Added Playwright coverage for Arabic and English that calculates contrast ratio for all text links and both footer paragraphs; target >= 4.5:1.
+- Do not alter homepage/footer appearance outside login, auth behavior, public-menu themes, or release/deployment configuration.
+- VERIFIED: Quality run 37957188131 and W9 Orders QA run 37957188277 passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb; the Menuun brand browser QA step succeeded.
+- Exact next action: owner review PR #390 and final diff; do not merge/deploy automatically.

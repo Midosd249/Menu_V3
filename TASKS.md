@@ -2024,3 +2024,26 @@ Inspect tests, create one review PR, verify latest-head CI/browser gates, and st
 
 ### Exact next task
 Verify the continuity-only commit's latest-head CI, then complete PR #386 merge after diff review; stop before deployment.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IN PROGRESS
+
+- [x] Confirm current main SHA and inspect login route, platform theme CSS, shared footer, existing browser coverage, and relevant project memory.
+- [x] Fix vertical overflow behavior in `src/routes/login.tsx` only.
+- [x] Add short-mobile viewport regression coverage in `tests/menuun-brand-browser.spec.ts` for both themes and languages.
+- [x] Open PR #390 and verify latest CI/browser checks.
+- [x] Review final diff; only login layout, focused browser test, and continuity docs changed. Merge and production deployment remain out of scope.
+
+- [x] Diagnose and correct the first CI failure: browser test attempted localStorage access before navigation (opaque origin).
+- [x] Confirm latest-head CI/browser checks pass (Quality + W9 Orders QA succeeded on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`).
+
+
+## 2026-10-09 — Login Footer Contrast in Dark Mode — IN PROGRESS
+
+- [x] Re-check current PR #390, login route, shared footer markup, platform theme CSS, and existing browser coverage.
+- [x] Identify why the bottom links can lose contrast: dark-theme text tokens are applied to descendants while the footer retains a light background.
+- [x] Add a dark-mode CSS override scoped to footer links and paragraphs inside the login route.
+- [x] Add Arabic/English browser regression coverage measuring WCAG normal-text contrast.
+- [x] Verify latest-head GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 succeeded on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
+- [x] Review final diff; only the login footer contrast CSS, focused browser regression, prior login reachability fix, and continuity records are changed.
+- Exact next action: owner review PR #390. No merge or deployment is authorized by this task.

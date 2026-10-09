@@ -368,3 +368,28 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - PERFORMANCE GUARDIAN STATUS: the repository's existing `performance:audit` CI path and Golden fixture ran successfully. A separately registered agent named “Performance Guardian” is NOT present on `main`; PR #365 was closed unmerged. Its proposed fixed budget of fewer than 15 requests is not adopted because the current measured preview baseline is 98 requests and P1.9's budget decision remains deferred.
 - RELEASE: PR #386 remains open and draft pending latest-head verification; no deployment has been performed.
 - EXACT NEXT ACTION: verify the continuity-only commit's CI on the latest branch head, then review and complete the explicitly requested PR merge; do not start a deployment.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `main` baseline at task start was `b1f9c5fa9eee8fe899cd23b24e4948e6682cd578`; isolated branch `fix/login-dark-footer-overflow-2026-10-09` created from that commit.
+- VERIFIED: `/login` used a vertically centered grid (`min-h-dvh place-items-center`) around a tall content stack ending in the shared `MarketingFooter`; this layout can center overflowed content above/below the viewport on short screens. This is the only route being changed.
+- IMPLEMENTED: changed the login page shell to a column flex layout and gave its content wrapper vertical auto margins. This centers the content when space is available and lets it start at the top and scroll normally when content exceeds the viewport.
+- ADDED: browser regression coverage for the final privacy link and copyright area at 390×650 in Arabic/English and light/dark themes.
+- RESEARCH: WCAG 2.2 SC 1.4.10 Reflow requires content at 320 CSS px width without loss of information/functionality or two-dimensional scrolling; official source: https://www.w3.org/TR/WCAG22/.
+- VERIFIED: PR #390 latest-head checks passed on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`: Menu V3 Quality and W9 Orders QA both succeeded; browser test confirmed footer privacy link/copyright reachability at 390×650 in Arabic/English and light/dark themes.
+- UNKNOWN: production deployment and real-device verification remain pending. No deployment performed.
+- EXACT NEXT ACTION: owner review PR #390 and final diff; do not merge or deploy automatically.
+
+- CI DIAGNOSIS: first PR browser run exposed a regression-test setup error, not an application failure: the test attempted to access `localStorage` on the initial opaque `about:blank` origin. The test now navigates to `/login` first, sets the theme on the app origin, reloads, and verifies the footer. Rerun on the latest head is pending.
+
+
+## 2026-10-09 — Login Footer Dark-Mode Contrast — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: the prior PR #390 change addressed footer reachability, not the reported contrast defect.
+- VERIFIED: the shared marketing footer retains a light cream background and uses muted text utility classes; platform dark-mode token overrides can make descendants pale against that light background inside /login.
+- IMPLEMENTED: scoped dark-theme text-color override to text links and paragraphs inside the login page's marketing footer only. Homepage/shared-footer theme behavior and public-menu themes are untouched.
+- ADDED: Playwright regression asserting contrast ratio >= 4.5:1 for every text-bearing footer link and paragraph in Arabic and English on a 390×844 viewport in dark mode.
+- VERIFIED: GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 both completed successfully on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb. The Menuun brand browser QA step passed.
+- UNKNOWN: production deployment and physical-device QA remain unperformed.
+- EXACT NEXT ACTION: owner review PR #390 and the final diff; do not merge or deploy automatically.

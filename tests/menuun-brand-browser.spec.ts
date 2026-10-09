@@ -175,3 +175,77 @@ test("dark login links remain visible, underlined, and high-contrast in Arabic a
   await expect(page.locator("[data-auth-page] [data-auth-link]").first()).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 });
+
+
+test("login footer links remain reachable on short mobile viewports in light and dark themes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 650 });
+  for (const theme of ["light", "dark"] as const) {
+    for (const language of ["ar", "en"] as const) {
+      const query = language === "en" ? "?lang=en" : "";
+      await page.goto(`${BASE_URL}/login${query}`, { waitUntil: "domcontentloaded" });
+      await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await expect(page.locator("html")).toHaveAttribute("data-platform-theme", theme);
+      const footer = page.locator(MARKETING_FOOTER);
+      const finalLink = footer.locator('a[href="/privacy"]');
+      await expect(finalLink).toBeAttached();
+      const documentBounds = await footer.evaluate((element) => ({
+        bottom: element.getBoundingClientRect().bottom + window.scrollY,
+        documentHeight: document.documentElement.scrollHeight,
+      }));
+      expect(documentBounds.bottom).toBeLessThanOrEqual(documentBounds.documentHeight + 1);
+      await finalLink.scrollIntoViewIfNeeded();
+      const linkBounds = await finalLink.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { top: rect.top, bottom: rect.bottom, viewportHeight: window.innerHeight };
+      });
+      expect(linkBounds.top).toBeGreaterThanOrEqual(0);
+      expect(linkBounds.bottom).toBeLessThanOrEqual(linkBounds.viewportHeight);
+      const copyright = footer.locator("p").filter({ hasText: /Menuun/ }).last();
+      await copyright.scrollIntoViewIfNeeded();
+      await expect(copyright).toBeInViewport();
+    }
+  }
+});
+
+
+test("dark login footer text keeps accessible contrast on its light brand surface in Arabic and English", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+
+  for (const language of ["ar", "en"] as const) {
+    await page.goto(`${BASE_URL}/login${language === "en" ? "?lang=en" : ""}`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+    const footer = page.locator("[data-auth-page] footer:not(.menuq-live-footer)");
+    const background = await footer.evaluate((element) => getComputedStyle(element).backgroundColor);
+    const contrastRatio = (foregroundColor: string, backgroundColor: string) => {
+      const channels = (value: string) => value.match(/\d+/g)!.slice(0, 3).map(Number);
+      const luminance = (rgb: number[]) => rgb
+        .map((value) => value / 255)
+        .map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4)
+        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+      const foreground = luminance(channels(foregroundColor));
+      const backdrop = luminance(channels(backgroundColor));
+      return (Math.max(foreground, backdrop) + 0.05) / (Math.min(foreground, backdrop) + 0.05);
+    };
+
+    const assertReadableText = async (elements: import("@playwright/test").Locator) => {
+      for (const element of await elements.all()) {
+        await expect(element).toBeVisible();
+        const color = await element.evaluate((node) => getComputedStyle(node).color);
+        expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
+      }
+    };
+
+    const textLinks = footer.locator('a:not([aria-label="Menuun"])');
+    await expect(textLinks).toHaveCount(7);
+    await assertReadableText(textLinks);
+    await assertReadableText(footer.locator("a span"));
+    await expect(footer.locator("h2")).toHaveCount(2);
+    await assertReadableText(footer.locator("h2"));
+    const footerCopy = footer.locator("p");
+    await expect(footerCopy).toHaveCount(2);
+    await assertReadableText(footerCopy);
+  }
+});

@@ -1810,3 +1810,23 @@ Review theme test correctness, open one PR, inspect its checks and diff, and sto
 
 ### Exact next task
 Verify CI on the continuity-only head, then review and merge PR #386 as previously authorized. Do not deploy in this task.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- Scope: login route layout only; do not alter homepage, shared footer design, theme colors, or auth behavior.
+- Implemented a scroll-safe flex-column shell with vertical auto margins so tall login content does not become centered beyond the viewport.
+- Added a mobile browser regression test covering the last footer link and copyright area at 390×650 across Arabic/English and light/dark themes.
+- VERIFIED: latest-head GitHub Quality and W9 Orders QA passed; focused browser regression passed across Arabic/English and light/dark at 390×650.
+- Diff reviewed: only login page layout, its browser regression test, and continuity records changed. No merge/deployment authorized by this task.
+- Exact next action: owner review PR #390; stop before merge/deployment.
+
+- CI follow-up: the initial new browser test failed before asserting layout because it accessed `localStorage` on `about:blank`. Corrected test setup to establish the app origin first; latest-head CI rerun pending.
+
+
+## 2026-10-09 — Login Footer Contrast Correction — IMPLEMENTATION_IN_PROGRESS
+
+- Correct the login-only dark-mode contrast defect in the shared marketing footer; do not change the homepage footer, login main content, auth behavior, or public-menu themes.
+- Regression criteria: all footer text links and paragraphs have computed contrast >= 4.5:1 against the footer's light background in Arabic and English at mobile width.
+- VERIFIED: focused Arabic/English contrast regression passed as part of Menu V3 Quality run 37957188131; W9 Orders QA run 37957188277 also passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
+- Exact next action: owner review PR #390 and the final diff; stop before merge/deployment.
