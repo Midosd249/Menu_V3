@@ -55,7 +55,13 @@ export function ThemeToggle({ className }: { className?: string }) {
   }, []);
 
   const toggleTheme = () => {
-    const nextDark = !dark;
+    // The DOM attribute is the source of truth during hydration and route transitions:
+    // React state may still reflect the previous render while the root script has already
+    // applied the stored/system preference. Derive the next value from the effective theme.
+    const effectiveTheme = document.documentElement.getAttribute("data-platform-theme");
+    const nextDark = effectiveTheme
+      ? effectiveTheme !== "dark"
+      : !(storedPreference.current === "dark" || (storedPreference.current !== "light" && readSystemTheme()));
     storedPreference.current = nextDark ? "dark" : "light";
     initialized.current = true;
     setDark(nextDark);
