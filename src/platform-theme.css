@@ -156,3 +156,15 @@ html[data-platform-theme="dark"] [data-platform-chrome] :where(a, button, input,
 @media (prefers-reduced-motion: reduce) {
   html[data-platform-theme="dark"] [data-platform-chrome] :where(button, a) { transition-duration: 0.01ms; }
 }
+
+
+/* Dark-mode clarity for the fixed Studio mobile navigation. */
+html[data-platform-theme="dark"] [data-platform-chrome] nav[aria-label="تنقل مساحة العمل على الهاتف"] { background: #0B0D11 !important; border-color: #56606E !important; box-shadow: 0 -8px 24px rgb(0 0 0 / 0.35); }
+html[data-platform-theme="dark"] [data-platform-chrome] nav[aria-label="تنقل مساحة العمل على الهاتف"] button { color: #D0D5DD; }
+html[data-platform-theme="dark"] [data-platform-chrome] nav[aria-label="تنقل مساحة العمل على الهاتف"] button:hover { background: #252B35; color: #FFF7ED; }
+html[data-platform-theme="dark"] [data-platform-chrome] nav[aria-label="تنقل مساحة العمل على الهاتف"] button[aria-current="page"] { background: #252B35 !important; color: #FFF7ED !important; box-shadow: inset 0 2px 0 #1FD1A5; }
+
+/* Authentication links remain visibly identifiable on the dark canvas. */
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link] { color: #D0D5DD !important; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link]:hover,
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link]:focus-visible { color: #FFF7ED !important; }
