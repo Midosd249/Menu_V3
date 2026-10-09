@@ -81,3 +81,13 @@ html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a:fo
 html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) > div > div:last-child {
   border-color: #3a414d;
 }
+
+
+/* Keep the supplied dark wordmark legible on the platform's dark navigation.
+   The light brand plate preserves the original full-color logo without filters. */
+html[data-platform-theme="dark"] .menuq-home > header a[aria-label="Menuun"] {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #e8e5dd;
+  border-radius: 0.65rem;
+  background: #fffdf8 !important;
+}
