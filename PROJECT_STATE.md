@@ -392,4 +392,13 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - ADDED: Playwright regression asserting contrast ratio >= 4.5:1 for every text-bearing footer link and paragraph in Arabic and English on a 390×844 viewport in dark mode.
 - VERIFIED: GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 both completed successfully on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb. The Menuun brand browser QA step passed.
 - UNKNOWN: production deployment and physical-device QA remain unperformed.
-- EXACT NEXT ACTION: owner review PR #390 and the final diff; do not merge or deploy automatically.
+- Superseded by the PR #390 merge/continuity record below.
+
+## 2026-10-09 — PR #390 Merged: Login Footer Dark-Mode Contrast — MERGED / POST-MERGE QUALITY VERIFIED
+
+- VERIFIED: PR #390 merged into `main` using squash merge. Merge commit / current `main` SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- VERIFIED: pre-merge head `a8507826958fea08fec3c4805aabaf314c1bcac4` passed Menu V3 Quality run `37958748646` and W9 Orders QA run `37958748617`.
+- VERIFIED: main-branch Menu V3 Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- INCLUDED: login-only dark-theme footer foreground override and Arabic/English Playwright contrast regression; prior login overflow/reachability fix remains included.
+- DEPLOYMENT: no deployment was requested or performed. Physical-device QA remains UNKNOWN.
+- EXACT NEXT ACTION after this continuity PR merges: verify `main` contains these records, then stop. Do not deploy or start another task automatically.
