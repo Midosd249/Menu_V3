@@ -175,3 +175,10 @@ html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-au
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p) {
   color: #343A40 !important;
 }
+
+
+/* The login footer intentionally keeps its light brand surface in dark mode.
+   Keep its links and copy dark against that light background. */
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p) {
+  color: #343A40 !important;
+}
