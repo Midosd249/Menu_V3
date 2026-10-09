@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Mail, MessageCircle } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { MenuunLogo } from "@/components/menuun-logo";
 import { useLang } from "@/lib/lang";
@@ -38,8 +39,8 @@ export function MarketingFooter() {
           <section>
             <h2 className="text-sm font-semibold tracking-tight">{ar ? "تواصل معنا" : "Contact"}</h2>
             <div className="mt-4 grid gap-1">
-              <a href={`mailto:${CONTACT_EMAIL}`} className={linkClass}>{CONTACT_EMAIL}</a>
-              <a href={whatsappUrl} target="_blank" rel="noreferrer" className={linkClass}>{ar ? "+966 54 959 8318 · واتساب" : "+966 54 959 8318 · WhatsApp"}</a>
+              <a href={`mailto:${CONTACT_EMAIL}`} className={`${linkClass} inline-flex items-center gap-2`} aria-label={ar ? "إرسال بريد إلكتروني" : "Send email"}><Mail aria-hidden="true" className="h-4 w-4 shrink-0" /><span>{ar ? "راسلنا عبر البريد الإلكتروني" : "Email us"}</span></a>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className={`${linkClass} inline-flex items-center gap-2`} aria-label={ar ? "التواصل عبر واتساب" : "Contact us on WhatsApp"}><MessageCircle aria-hidden="true" className="h-4 w-4 shrink-0" /><span>WhatsApp</span></a>
             </div>
           </section>
         </div>
