@@ -163,7 +163,8 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Base SHA: `b1f9c5fa9eee8fe899cd23b24e4948e6682cd578`; branch: `fix/login-dark-footer-overflow-2026-10-09`.
 - The login page's vertically centered grid was replaced with a flex-column shell and vertical auto margins, preserving centering when content fits while allowing normal top-to-bottom scrolling when it does not.
 - Added a browser regression test at 390×650 for the final footer link/copyright across Arabic/English and light/dark themes.
-- CI, deployment, and physical-device verification are not yet verified. Do not merge/deploy automatically.
-- Exact next action: create a PR and inspect the latest CI result, then stop before release.
+- VERIFIED: latest-head Quality and W9 Orders QA both passed on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`; the new footer reachability browser test passed.
+- UNKNOWN: deployment and physical-device verification remain unperformed. Do not merge/deploy automatically.
+- Exact next action: owner review PR #390 and its diff, then stop before release.
 
 - CI follow-up: first browser run failed due to test setup accessing localStorage before navigation (`about:blank` security error), not a layout assertion. Test now initializes theme after navigating to the app origin; latest-head CI rerun pending.
