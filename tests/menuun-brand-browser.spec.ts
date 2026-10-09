@@ -175,3 +175,34 @@ test("dark login links remain visible, underlined, and high-contrast in Arabic a
   await expect(page.locator("[data-auth-page] [data-auth-link]").first()).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 });
+
+
+test("login footer links remain reachable on short mobile viewports in light and dark themes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 650 });
+  for (const theme of ["light", "dark"] as const) {
+    for (const language of ["ar", "en"] as const) {
+      await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
+      const query = language === "en" ? "?lang=en" : "";
+      await page.goto(`${BASE_URL}/login${query}`, { waitUntil: "domcontentloaded" });
+      await expect(page.locator("html")).toHaveAttribute("data-platform-theme", theme);
+      const footer = page.locator(MARKETING_FOOTER);
+      const finalLink = footer.locator('a[href="/privacy"]');
+      await expect(finalLink).toBeAttached();
+      const documentBounds = await footer.evaluate((element) => ({
+        bottom: element.getBoundingClientRect().bottom + window.scrollY,
+        documentHeight: document.documentElement.scrollHeight,
+      }));
+      expect(documentBounds.bottom).toBeLessThanOrEqual(documentBounds.documentHeight + 1);
+      await finalLink.scrollIntoViewIfNeeded();
+      const linkBounds = await finalLink.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { top: rect.top, bottom: rect.bottom, viewportHeight: window.innerHeight };
+      });
+      expect(linkBounds.top).toBeGreaterThanOrEqual(0);
+      expect(linkBounds.bottom).toBeLessThanOrEqual(linkBounds.viewportHeight);
+      const copyright = footer.locator("p").filter({ hasText: /Menuun/ }).last();
+      await copyright.scrollIntoViewIfNeeded();
+      await expect(copyright).toBeInViewport();
+    }
+  }
+});
