@@ -1,3 +1,27 @@
+## 2026-10-09 — Marketing Footer Structure Fix
+
+### Scope
+One atomic marketing-footer structure fix. Preserve all existing destinations, contact targets, bilingual behavior, and language toggle; no deployment.
+
+### Evidence and implementation
+- Base `main` HEAD: `fd3d92cbac172476c4f7507b4b0b9582ce91b821`.
+- `src/components/marketing-footer.tsx` previously showed email and WhatsApp under Brand and again under Contact; an About section repeated the tagline; section order was Brand → About → Contact → Links.
+- Updated shared markup to Brand → Links → Contact → Copyright, with the same DOM order and `dir`-driven Arabic RTL / English LTR behavior.
+- Brand now has one concise tagline. Email and WhatsApp are only rendered under Contact.
+- Links explicitly include Pricing, Preview, Sign in, `/terms`, and `/privacy`.
+- Added regression assertions to `tests/public-pages-themes-contract.test.mjs` for section order, contact uniqueness, legal links, and RTL/LTR direction.
+- Research preflight: U.S. Web Design System footer guidance emphasizes curated footer link groups and keyboard focus; W3C WAI semantic HTML landmark guidance supports using a labeled `nav` landmark for the site links. These sources informed structure/accessibility, not runtime claims.
+
+### Verification
+- VERIFIED: source inspection and regression-contract implementation.
+- UNKNOWN: local test/typecheck/lint/build and rendered browser QA until GitHub Actions completes.
+- Release boundary: one draft review PR; no merge or deployment.
+
+### Exact next task
+Review the single PR's diff and require Quality, W9, and applicable browser QA to pass. Stop for owner review.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.
