@@ -1776,3 +1776,21 @@ Add independent platform chrome light/dark mode for Studio and marketing/auth/le
 
 ### Exact next task
 Review theme test correctness, open one PR, inspect its checks and diff, and stop before merge/deployment.
+
+
+## 2026-10-09 — Platform Light/Dark Mode — Browser Regression Resolution
+
+### Evidence-backed diagnosis
+- First failing assertion: the theme control was server-rendered and visible before React hydration attached the click handler. The test now waits for the component's explicit `data-theme-toggle-ready="true"` signal before interacting.
+- Second failing assertion: the Studio test returned the interface to Arabic and then expected English navigation labels. Updated the assertions to the current Arabic locale and retained theme readiness synchronization.
+- Source/test fix commit verified: `6a28131d8cb688ee703e8e2d7a3520febb68098b`.
+
+### Verified CI
+- Quality run `37910685922`: SUCCESS — typecheck, tests/contracts, lint, build, all-theme browser QA, Menuun Arabic/English browser QA, Golden 30-product performance fixture, Studio browser QA, Platform Admin browser QA, and performance-baseline artifact upload all succeeded.
+- W9 Orders QA run `37910686056`: SUCCESS.
+- Performance evidence on that SHA: Editorial preview HTTP 200 / `ok: true`; 98 initial requests; DCL 1223 ms; load 1662.2 ms; CLS 0; zero long tasks. Golden fixture HTTP 200 / `ok: true`; current cover 32 requests / DCL 24.2 ms / load 39.9 ms; legacy cover 31 requests / DCL 39 ms / load 40.1 ms; CLS 0 and zero long tasks in both variants.
+- Limitations: synthetic CI did not populate LCP/INP. The P1.9 real-route evidence branch was skipped by workflow conditions; no P1.9 claim is made.
+- Performance Guardian: the automated performance audit and golden fixture are operational and passed. A distinct agent registration is absent from `main`; closed PR #365's proposed <15-request budget was not imported because the measured baseline is 98 requests and P1.9 budget-setting remains deferred.
+
+### Exact next task
+Verify CI on the continuity-only head, then review and merge PR #386 as previously authorized. Do not deploy in this task.

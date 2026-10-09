@@ -1993,3 +1993,18 @@ Do not begin database consolidation, analytics caching, or unrelated cleanup bef
 
 ### Exact next task
 Inspect tests, create one review PR, verify latest-head CI/browser gates, and stop for owner review.
+
+
+## 2026-10-09 — Platform Theme Regression — VERIFIED SOURCE SHA / LATEST-HEAD CI PENDING
+
+- Source/test SHA verified: `6a28131d8cb688ee703e8e2d7a3520febb68098b`.
+- Fixed the theme browser test by waiting for the toggle's explicit hydration-ready signal before clicking.
+- Fixed Studio browser assertions to expect Arabic navigation labels after switching back to Arabic.
+- VERIFIED: Quality run `37910685922` passed all quality/browser gates, including all themes, marketing/auth RTL/LTR light/dark routes, Studio, Platform Admin, and the Golden 30-product performance fixture.
+- VERIFIED: W9 Orders QA run `37910686056` passed.
+- VERIFIED performance audit: Editorial preview HTTP 200 / `ok: true`, 98 requests, DCL 1223 ms, load 1662.2 ms, CLS 0, zero long tasks. Golden fixture current/legacy cover variants passed with 32/31 requests, DCL 24.2/39 ms, load 39.9/40.1 ms, CLS 0, zero long tasks.
+- LIMITATION: LCP/INP remain unpopulated; P1.9 route evidence was skipped. The audit workflow passed, but a standalone registered Performance Guardian agent is absent from `main`; PR #365 remains closed unmerged.
+- Current PR #386 remains draft/open. No deployment has been performed.
+
+### Exact next task
+Verify the continuity-only commit's latest-head CI, then complete PR #386 merge after diff review; stop before deployment.

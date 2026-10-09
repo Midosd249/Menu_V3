@@ -339,3 +339,16 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: local shell/test/typecheck/lint/build/browser QA cannot be inferred from GitHub file edits; run evidence must be checked on the PR head.
 - RELEASE: one review PR only; no merge and no deployment without owner review.
 - Exact next task: inspect the new theme contract tests, create one review PR, and verify latest-head CI plus available browser coverage; fix failures before asking for review.
+
+
+## 2026-10-09 — Platform Theme Browser Regression — VERIFIED IN CI / PR #386
+
+- VERIFIED: latest source/test commit `6a28131d8cb688ee703e8e2d7a3520febb68098b` passed GitHub Quality run [37910685922](https://github.com/Midosd249/Menu_V3/actions/runs/37910685922) and W9 Orders QA run [37910686056](https://github.com/Midosd249/Menu_V3/actions/runs/37910686056).
+- VERIFIED: typecheck, unit/contract tests, lint, production build, all-theme browser QA, Menuun Arabic/English browser QA (including light/dark × RTL/LTR across marketing/auth/pricing/legal routes), Golden 30-product performance fixture, Studio browser QA, and Platform Admin browser QA all passed on that SHA.
+- ROOT CAUSE 1: the SSR-rendered theme button can be visible before React attaches its handler. The theme regression test now waits for `data-theme-toggle-ready="true"` before clicking; the toggle sets this signal after synchronizing the initial theme.
+- ROOT CAUSE 2: the Studio shell test switched the UI back to Arabic but still asserted English navigation labels. The assertions now match the current Arabic locale and the test also waits for theme-toggle readiness.
+- VERIFIED performance evidence from the same CI run: controlled Editorial preview returned HTTP 200 / `ok: true`, 98 initial requests, DOMContentLoaded 1223 ms, load 1662.2 ms, CLS 0, and 0 long tasks. Golden 30-product fixture returned HTTP 200 / `ok: true`; current-cover variant recorded 32 requests, DCL 24.2 ms, load 39.9 ms; legacy-cover variant recorded 31 requests, DCL 39 ms, load 40.1 ms; both had CLS 0 and 0 long tasks.
+- LIMITATION: LCP/INP were not populated by these synthetic CI measurements. P1.9 real-route evidence was skipped by its workflow condition and is not claimed as verified.
+- PERFORMANCE GUARDIAN STATUS: the repository's existing `performance:audit` CI path and Golden fixture ran successfully. A separately registered agent named “Performance Guardian” is NOT present on `main`; PR #365 was closed unmerged. Its proposed fixed budget of fewer than 15 requests is not adopted because the current measured preview baseline is 98 requests and P1.9's budget decision remains deferred.
+- RELEASE: PR #386 remains open and draft pending latest-head verification; no deployment has been performed.
+- EXACT NEXT ACTION: verify the continuity-only commit's CI on the latest branch head, then review and complete the explicitly requested PR merge; do not start a deployment.
