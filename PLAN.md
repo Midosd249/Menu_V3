@@ -1831,10 +1831,10 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - VERIFIED: focused Arabic/English contrast regression passed as part of Menu V3 Quality run 37957188131; W9 Orders QA run 37957188277 also passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
 - Superseded by the PR #390 merge/continuity record below.
 
-## 2026-10-09 — PR #390 Closure — MERGED / POST-MERGE CI IN PROGRESS
+## 2026-10-09 — PR #390 Closure — MERGED / POST-MERGE QUALITY VERIFIED
 
 - PR #390 merged to `main` at `1d4a347a37928f4f8661ee48fb417b8457f10929` with squash merge.
 - Pre-merge validation passed: Menu V3 Quality `37958748646`, W9 Orders QA `37958748617`.
-- Main-branch Quality run `37961255049` was still in progress at the time of this update; post-merge verification is not yet complete.
+- Main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No production deployment was requested or performed.
-- Exact next action: verify post-merge main CI for the merge SHA, then stop. Do not automatically begin PR #386 or deployment.
+- Exact next action: complete required checks and merge continuity-only PR #391; then stop. Do not automatically begin PR #386 or deployment.

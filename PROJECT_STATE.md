@@ -394,11 +394,11 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: production deployment and physical-device QA remain unperformed.
 - Superseded by the PR #390 merge/continuity record below.
 
-## 2026-10-09 — PR #390 Merged: Login Footer Dark-Mode Contrast — MERGED / POST-MERGE CI IN PROGRESS
+## 2026-10-09 — PR #390 Merged: Login Footer Dark-Mode Contrast — MERGED / POST-MERGE QUALITY VERIFIED
 
 - VERIFIED: PR #390 merged into `main` using squash merge. Merge commit / current `main` SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - VERIFIED: pre-merge head `a8507826958fea08fec3c4805aabaf314c1bcac4` passed Menu V3 Quality run `37958748646` and W9 Orders QA run `37958748617`.
-- VERIFIED: merged commit triggered main-branch Menu V3 Quality run `37961255049`; it was in progress when continuity was prepared. Do not claim post-merge CI success until it completes.
+- VERIFIED: main-branch Menu V3 Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - INCLUDED: login-only dark-theme footer foreground override and Arabic/English Playwright contrast regression; prior login overflow/reachability fix remains included.
 - DEPLOYMENT: no deployment was requested or performed. Physical-device QA remains UNKNOWN.
-- EXACT NEXT ACTION: verify post-merge main CI for `1d4a347a37928f4f8661ee48fb417b8457f10929`, then stop. Do not deploy or start another task automatically.
+- EXACT NEXT ACTION: finish review/merge of continuity-only PR #391 after its required checks pass; then stop. Do not deploy or start another task automatically.

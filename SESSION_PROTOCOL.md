@@ -179,11 +179,11 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - VERIFIED: Quality run 37957188131 and W9 Orders QA run 37957188277 passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb; the Menuun brand browser QA step succeeded.
 - Superseded by the PR #390 merge/continuity record below.
 
-## 2026-10-09 — PR #390 Merge and Continuity Update — MERGED / POST-MERGE CI IN PROGRESS
+## 2026-10-09 — PR #390 Merge and Continuity Update — MERGED / POST-MERGE QUALITY VERIFIED
 
 - Verified PR #390 was open, mergeable, and targeted `main`; changed files were limited to continuity docs, login route, platform theme CSS, and its browser regression test.
 - Squash merge succeeded. Merge commit/current `main` SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - Pre-merge CI: Menu V3 Quality `37958748646` and W9 Orders QA `37958748617` succeeded on PR head `a8507826958fea08fec3c4805aabaf314c1bcac4`.
-- Main-branch Quality run `37961255049` was in progress at the time of this update. Post-merge CI is not yet verified.
+- VERIFIED: main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No deployment was requested or performed. Do not infer deployment from merge.
-- Exact next action: verify post-merge main CI, update this status if needed, and stop.
+- Exact next action: complete required checks and merge continuity-only PR #391, then stop.
