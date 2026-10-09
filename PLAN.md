@@ -1838,3 +1838,12 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No production deployment was requested or performed.
 - Exact next action after this continuity PR merges: verify `main` contains these records, then stop. Do not automatically begin PR #386 or deployment.
+
+## 2026-10-09 — Final Continuity State After PR #391 — VERIFIED
+
+- PR #390 implementation merged at `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- Continuity-only PR #391 merged at `ee8db7dc1fd0c83422f3100f797445d72e840559`, verified `main` HEAD at the time of this record.
+- PR #391 checks succeeded: Menu V3 Quality `37963664719` and W9 Orders QA `37963664727` on head `57df76ebb2b38ff71a5aa76c3c58702bfedf5ad0`.
+- Post-merge Menu V3 Quality run `37961255049` succeeded for PR #390 merge commit.
+- No production deployment was requested or performed. Real-device QA remains UNKNOWN.
+- Exact next action: stop; do not automatically start another task or deploy.
