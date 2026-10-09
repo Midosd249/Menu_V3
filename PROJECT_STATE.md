@@ -1,3 +1,19 @@
+## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.
+- IMPLEMENTED: added bilingual `/terms` and `/privacy` routes, linked them from the shared marketing footer, and added Arabic/English homepage Open Graph and Twitter Card metadata.
+- VERIFIED: `public/og.jpg` is a JPEG with dimensions 1200 × 630 (blob SHA `9efe69d064762539c2d16a0da46261412a0665d8`).
+- RESEARCH: official SDAIA/National Data Governance Platform guidance describes Saudi PDPL and its implementing regulations as the relevant personal-data framework. The policy explicitly avoids claiming certification or a completed compliance audit.
+- UNKNOWN: local typecheck/test/lint/build could not be run in this connected GitHub-only workspace; the PR's GitHub Actions quality run must be checked.
+- UNKNOWN: visual rendering of `og.jpg` in actual social platforms has not been directly observed; its file format and dimensions are verified.
+- RELEASE: one review PR only; do not merge or deploy until owner reviews the legal wording.
+
+## Exact next task
+
+Review the open PR's legal wording and CI evidence with the owner. Do not merge or deploy without explicit owner approval.
+
+---
+
 ## 2026-10-04 — Official Nafas Studio Sync — VERIFIED
 
 - VERIFIED: the prior blocker was resolved by using the correct menu_v3 schema in the connected Supabase project. The earlier public-schema query was the wrong source and must not be repeated.
