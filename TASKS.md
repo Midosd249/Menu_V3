@@ -1,3 +1,19 @@
+## 2026-10-09 — Dark-Mode Visual/Functional Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: canonical `main` at task start was `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; this task is isolated on branch `fix/dark-mode-contrast-audit-2026-10-09`.
+- VERIFIED: PR #388 is merged and its latest-head GitHub Quality run `37929000553` and W9 Orders QA run `37929000522` both completed successfully. Existing browser coverage captured the dark homepage and Studio, but did not assert the Studio bottom-nav color/contrast or the homepage footer wordmark plate.
+- VERIFIED: `src/homepage-dark-mode-fix.css` already protects the top homepage wordmark on a light brand plate; the final homepage footer wordmark had no equivalent protection while its footer surface switches to dark.
+- VERIFIED: the login page had three visually important secondary actions without an explicit dark-mode contrast/underline contract; the shared theme tokens alone did not guarantee link discoverability.
+- IMPLEMENTED: add a consistent light brand plate to the homepage footer logo, explicit underlined/high-contrast dark login links, and an opaque high-contrast dark Studio mobile bottom navigation with a distinct active state.
+- ADDED: browser assertions for footer logo, login link visibility/contrast/underline in Arabic and English, and Studio mobile navigation surface/active/inactive contrast.
+- RESEARCH: W3C WCAG 2.2 SC 1.4.3 requires 4.5:1 contrast for normal text; SC 1.4.11 requires 3:1 for essential UI component/state visuals. Source: https://www.w3.org/TR/WCAG22/ and https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
+- SCOPE: no restaurant-owned public-menu theme CSS, authentication logic, business behavior, or deployment configuration changes.
+- VERIFICATION: pending CI/browser execution on this branch head. Local shell and manual screenshot inspection are unavailable in this GitHub-connected session; no local execution is claimed.
+- DEPLOYMENT: no production deployment requested or performed.
+- EXACT NEXT ACTION: run current-head CI/browser/performance gates, inspect failures and changed-file diff, repair only proven failures, then stop before merge/deployment.
+
+---
+
 ## 2026-10-09 — Footer Contact Icons & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - Root cause found in Quality run `37880278153`: stale browser test expected the visible email address after email contact changed to an icon with an accessible label.
