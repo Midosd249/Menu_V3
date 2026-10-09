@@ -181,9 +181,10 @@ test("login footer links remain reachable on short mobile viewports in light and
   await page.setViewportSize({ width: 390, height: 650 });
   for (const theme of ["light", "dark"] as const) {
     for (const language of ["ar", "en"] as const) {
-      await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
       const query = language === "en" ? "?lang=en" : "";
       await page.goto(`${BASE_URL}/login${query}`, { waitUntil: "domcontentloaded" });
+      await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
+      await page.reload({ waitUntil: "domcontentloaded" });
       await expect(page.locator("html")).toHaveAttribute("data-platform-theme", theme);
       const footer = page.locator(MARKETING_FOOTER);
       const finalLink = footer.locator('a[href="/privacy"]');
