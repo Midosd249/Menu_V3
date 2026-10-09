@@ -109,8 +109,8 @@ function Login() {
 
   const isPhoneLogin = mode === "in" && loginMethod === "phone";
   const signup = mode === "up";
-  return <main data-platform-chrome data-auth-page dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
-    <div className="w-full max-w-md grid gap-6">
+  return <main data-platform-chrome data-auth-page dir={lang === "ar" ? "rtl" : "ltr"} className="flex min-h-dvh flex-col items-center bg-paper px-5 py-10 text-ink">
+    <div className="my-auto w-full max-w-md grid gap-6">
       <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">{t(copy.brand, lang)}</Link><div className="flex items-center gap-2"><ThemeToggle /><LangToggle /></div></div>
       <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menuun" : "Start with Menuun"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أدخل بيانات حسابك، ثم أكمل بيانات المطعم في الخطوة التالية." : "Enter your account details, then complete your restaurant setup in the next step.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
       {authEnabled ? <>
