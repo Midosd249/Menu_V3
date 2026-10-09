@@ -10,6 +10,8 @@ const themes = read("src/routes/themes/index.tsx");
 const preview = read("src/routes/themes/preview.tsx");
 const catalog = read("src/lib/menu/commercial-catalog.ts");
 const registry = read("src/lib/theme/registry.ts");
+const root = read("src/routes/__root.tsx");
+const appManifest = JSON.parse(read("public/manifest.webmanifest"));
 
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
@@ -173,4 +175,19 @@ test("marketing footer has one ordered Brand → Links → Contact → Copyright
   assert.match(footer, /Terms of Service/);
   assert.match(footer, /سياسة الخصوصية/);
   assert.match(footer, /Privacy Policy/);
+});
+
+
+test("application identity uses Menuun metadata, favicon, and web app manifest", () => {
+  assert.match(root, /const APP_NAME = "Menuun"/);
+  assert.match(root, /\{ title: APP_NAME \}/);
+  assert.match(root, /href: "\/favicon\.svg"/);
+  assert.match(root, /rel: "manifest", href: "\/manifest\.webmanifest"/);
+  assert.equal(appManifest.name, "Menuun");
+  assert.equal(appManifest.short_name, "Menuun");
+  assert.equal(appManifest.start_url, "/");
+  assert.equal(appManifest.display, "standalone");
+  assert.equal(appManifest.icons.length, 1);
+  assert.equal(appManifest.icons[0].src, "/favicon.svg");
+  assert.equal(appManifest.icons[0].type, "image/svg+xml");
 });
