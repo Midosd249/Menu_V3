@@ -2046,4 +2046,14 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - [x] Add Arabic/English browser regression coverage measuring WCAG normal-text contrast.
 - [x] Verify latest-head GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 succeeded on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
 - [x] Review final diff; only the login footer contrast CSS, focused browser regression, prior login reachability fix, and continuity records are changed.
-- Exact next action: owner review PR #390. No merge or deployment is authorized by this task.
+- Superseded by the PR #390 merge/continuity record below.
+
+## 2026-10-09 — Login Footer Contrast — MERGED / POST-MERGE CI IN PROGRESS
+
+- [x] Review PR #390 state, diff scope, mergeability, and latest head.
+- [x] Verify pre-merge Menu V3 Quality run `37958748646` and W9 Orders QA run `37958748617` succeeded.
+- [x] Squash-merge PR #390 into `main`; merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- [x] Prepare continuity closure record.
+- [ ] Verify main-branch Quality run `37961255049` and any relevant post-merge checks.
+- No deployment was requested or performed.
+- Exact next action: verify post-merge CI, then stop; do not begin another task automatically.

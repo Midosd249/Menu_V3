@@ -177,4 +177,13 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Added Playwright coverage for Arabic and English that calculates contrast ratio for all text links and both footer paragraphs; target >= 4.5:1.
 - Do not alter homepage/footer appearance outside login, auth behavior, public-menu themes, or release/deployment configuration.
 - VERIFIED: Quality run 37957188131 and W9 Orders QA run 37957188277 passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb; the Menuun brand browser QA step succeeded.
-- Exact next action: owner review PR #390 and final diff; do not merge/deploy automatically.
+- Superseded by the PR #390 merge/continuity record below.
+
+## 2026-10-09 — PR #390 Merge and Continuity Update — MERGED / POST-MERGE CI IN PROGRESS
+
+- Verified PR #390 was open, mergeable, and targeted `main`; changed files were limited to continuity docs, login route, platform theme CSS, and its browser regression test.
+- Squash merge succeeded. Merge commit/current `main` SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- Pre-merge CI: Menu V3 Quality `37958748646` and W9 Orders QA `37958748617` succeeded on PR head `a8507826958fea08fec3c4805aabaf314c1bcac4`.
+- Main-branch Quality run `37961255049` was in progress at the time of this update. Post-merge CI is not yet verified.
+- No deployment was requested or performed. Do not infer deployment from merge.
+- Exact next action: verify post-merge main CI, update this status if needed, and stop.

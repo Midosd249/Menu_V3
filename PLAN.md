@@ -1829,4 +1829,12 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Correct the login-only dark-mode contrast defect in the shared marketing footer; do not change the homepage footer, login main content, auth behavior, or public-menu themes.
 - Regression criteria: all footer text links and paragraphs have computed contrast >= 4.5:1 against the footer's light background in Arabic and English at mobile width.
 - VERIFIED: focused Arabic/English contrast regression passed as part of Menu V3 Quality run 37957188131; W9 Orders QA run 37957188277 also passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
-- Exact next action: owner review PR #390 and the final diff; stop before merge/deployment.
+- Superseded by the PR #390 merge/continuity record below.
+
+## 2026-10-09 — PR #390 Closure — MERGED / POST-MERGE CI IN PROGRESS
+
+- PR #390 merged to `main` at `1d4a347a37928f4f8661ee48fb417b8457f10929` with squash merge.
+- Pre-merge validation passed: Menu V3 Quality `37958748646`, W9 Orders QA `37958748617`.
+- Main-branch Quality run `37961255049` was still in progress at the time of this update; post-merge verification is not yet complete.
+- No production deployment was requested or performed.
+- Exact next action: verify post-merge main CI for the merge SHA, then stop. Do not automatically begin PR #386 or deployment.
