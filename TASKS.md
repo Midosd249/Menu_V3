@@ -8,6 +8,7 @@
 - ADDED: browser assertions for footer logo, login link visibility/contrast/underline in Arabic and English, and Studio mobile navigation surface/active/inactive contrast.
 - RESEARCH: W3C WCAG 2.2 SC 1.4.3 requires 4.5:1 contrast for normal text; SC 1.4.11 requires 3:1 for essential UI component/state visuals. Source: https://www.w3.org/TR/WCAG22/ and https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
 - SCOPE: no restaurant-owned public-menu theme CSS, authentication logic, business behavior, or deployment configuration changes.
+- CI diagnosis: Quality run `37934096367` passed typecheck, repository tests, lint, build, all-theme browser QA, login/homepage brand QA, and the 30-product performance fixture. Studio browser QA exposed a test-state contamination only: the pointer remained over an inactive bottom-nav item, so the hover color was read instead of the default color. The test now moves the pointer to a neutral point before sampling; no product behavior was changed for this test failure. W9 Orders QA run `37934096578` passed. Reverification on the latest head is pending.
 - VERIFICATION: pending CI/browser execution on this branch head. Local shell and manual screenshot inspection are unavailable in this GitHub-connected session; no local execution is claimed.
 - DEPLOYMENT: no production deployment requested or performed.
 - EXACT NEXT ACTION: run current-head CI/browser/performance gates, inspect failures and changed-file diff, repair only proven failures, then stop before merge/deployment.
