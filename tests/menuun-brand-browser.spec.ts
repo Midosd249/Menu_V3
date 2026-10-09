@@ -230,19 +230,22 @@ test("dark login footer text keeps accessible contrast on its light brand surfac
       return (Math.max(foreground, backdrop) + 0.05) / (Math.min(foreground, backdrop) + 0.05);
     };
 
+    const assertReadableText = async (elements: import("@playwright/test").Locator) => {
+      for (const element of await elements.all()) {
+        await expect(element).toBeVisible();
+        const color = await element.evaluate((node) => getComputedStyle(node).color);
+        expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
+      }
+    };
+
     const textLinks = footer.locator('a:not([aria-label="Menuun"])');
     await expect(textLinks).toHaveCount(7);
-    for (const link of await textLinks.all()) {
-      await expect(link).toBeVisible();
-      const color = await link.evaluate((element) => getComputedStyle(element).color);
-      expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
-    }
-
+    await assertReadableText(textLinks);
+    await assertReadableText(footer.locator("a span"));
+    await expect(footer.locator("h2")).toHaveCount(2);
+    await assertReadableText(footer.locator("h2"));
     const footerCopy = footer.locator("p");
     await expect(footerCopy).toHaveCount(2);
-    for (const paragraph of await footerCopy.all()) {
-      const color = await paragraph.evaluate((element) => getComputedStyle(element).color);
-      expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
-    }
+    await assertReadableText(footerCopy);
   }
 });
