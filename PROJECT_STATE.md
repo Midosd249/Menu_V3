@@ -1,3 +1,16 @@
+## 2026-10-09 — Studio Logo Dark-Mode Contrast — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: base `main` at task start was `5b58696ce73a52aa580c920785978b5439b6df78`; implementation branch: `fix/studio-logo-dark-mode-2026-10-09`.
+- VERIFIED root cause: both approved platform SVG wordmarks use dark `#1F2022` paths and transparent backgrounds. The Studio shell renders them directly over the platform surface, which becomes dark in dark mode. The homepage already uses a light brand plate to preserve the supplied logo without filters.
+- IMPLEMENTED: added a Studio-only `data-studio-brand-logo` hook to the desktop logo link and mobile logo wrapper, with a dark-mode-only light plate scoped under `[data-platform-chrome]`. No SVG assets, logo colors, light-mode styles, homepage/login styles, public-menu themes, or business logic were changed.
+- IMPLEMENTED: extended the W7.4 Studio browser spec to verify logo asset loading and opacity, transparent/no-border appearance in light mode, and the exact light plate/border in dark mode at 390×844 and 1280×800. The mobile wrapper is hidden at desktop widths so the visible-logo selector remains deterministic.
+- PREVIOUS-CHECK LESSON: the earlier Studio contrast assertion failed because it assumed the inactive control's default muted color even while the browser applied a white hover color. The existing fix validates actual contrast in normal and hover states. This change does not weaken or rewrite that assertion; the new logo checks do not depend on hover-sensitive colors.
+- VERIFICATION: source-level scope review completed. GitHub Actions/browser verification is pending for the current branch head; visual screenshot inspection and physical-device QA are not yet verified in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or deployment was requested or executed.
+- EXACT NEXT ACTION: inspect latest-head CI and Studio browser results; fix only failures related to this logo correction, review the final diff, then stop before merge/deployment.
+
+---
+
 ## 2026-10-09 — Dark-Mode Visual/Functional Follow-up — VERIFIED IN CI
 
 - VERIFIED: base `main` at task start was `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; implementation branch is `fix/dark-mode-contrast-audit-2026-10-09`; review PR is #389.
