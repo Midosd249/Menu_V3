@@ -2031,8 +2031,8 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - [x] Confirm current main SHA and inspect login route, platform theme CSS, shared footer, existing browser coverage, and relevant project memory.
 - [x] Fix vertical overflow behavior in `src/routes/login.tsx` only.
 - [x] Add short-mobile viewport regression coverage in `tests/menuun-brand-browser.spec.ts` for both themes and languages.
-- [ ] Open PR and verify latest CI/browser checks.
-- [ ] Review final diff; keep merge and production deployment out of scope.
+- [x] Open PR #390 and verify latest CI/browser checks.
+- [x] Review final diff; only login layout, focused browser test, and continuity docs changed. Merge and production deployment remain out of scope.
 
 - [x] Diagnose and correct the first CI failure: browser test attempted localStorage access before navigation (opaque origin).
-- [ ] Confirm latest-head CI/browser checks pass.
+- [x] Confirm latest-head CI/browser checks pass (Quality + W9 Orders QA succeeded on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`).
