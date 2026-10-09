@@ -115,6 +115,11 @@ test("dark homepage full-page screenshot preserves the embedded demo and footer 
   expect(footerColors.background).toBe("rgb(23, 27, 34)");
   expect(footerColors.link).toBe("rgb(208, 213, 221)");
 
+  const footerLogo = page.locator('.menuq-home footer:not(.menuq-live-footer) a[aria-label="Menuun"]');
+  await expect(footerLogo).toBeVisible();
+  await expect(footerLogo).toHaveCSS("background-color", "rgb(255, 253, 248)");
+  await expect(footerLogo).toHaveCSS("border-top-left-radius", "10.4px");
+
   await page.screenshot({ path: testInfo.outputPath("homepage-dark-full-page.png"), fullPage: true, animations: "disabled" });
 
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
@@ -135,4 +140,38 @@ test("dark homepage keeps the original Menuun wordmark legible on a light brand 
   await expect(logoLink).toHaveCSS("background-color", "rgb(255, 253, 248)");
   await expect(logoLink).toHaveCSS("border-top-left-radius", "10.4px");
   await expect(logoLink).toHaveCSS("padding-left", "8px");
+});
+
+
+test("dark login links remain visible, underlined, and high-contrast in Arabic and English", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+
+  for (const language of ["ar", "en"] as const) {
+    await page.goto(`${BASE_URL}/login${language === "en" ? "?lang=en" : ""}`, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+    const links = page.locator("[data-auth-page] [data-auth-link]");
+    await expect(links).toHaveCount(3);
+    for (const link of await links.all()) {
+      await expect(link).toBeVisible();
+      await expect(link).toHaveCSS("color", "rgb(208, 213, 221)");
+      await expect(link).toHaveCSS("text-decoration-line", "underline");
+      const ratio = await link.evaluate((element) => {
+        const channels = (value: string) => value.match(/\d+/g)!.slice(0, 3).map(Number);
+        const foreground = channels(getComputedStyle(element).color);
+        const background = channels(getComputedStyle(element.closest("[data-auth-page]")!).backgroundColor);
+        const luminance = (rgb: number[]) => rgb.map((value) => value / 255).map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+        const a = luminance(foreground);
+        const b = luminance(background);
+        return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      });
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(`${BASE_URL}/login?lang=en`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-auth-page] [data-auth-link]").first()).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 });

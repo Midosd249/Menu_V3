@@ -108,3 +108,44 @@ test("W7.10 Studio language switch preserves usable LTR at mobile width", async 
   const overflow = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }));
   expect(overflow.scrollWidth, `Horizontal overflow at Studio Menu LTR 390px: scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`).toBeLessThanOrEqual(overflow.clientWidth + 1);
 });
+
+
+test("W7.10 Studio dark mobile bottom navigation has accessible text contrast and a distinct active state", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+  await gotoStudioRoute(page, `${BASE_URL}/studio`);
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+  const nav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
+  await expect(nav).toBeVisible();
+  await page.mouse.move(10, 10); // Avoid sampling a prior test’s hovered navigation item.
+  const colors = await nav.evaluate((element) => {
+    const active = element.querySelector("button[aria-current='page']")!;
+    const inactive = element.querySelector("button:not([aria-current])")!;
+    return {
+      background: getComputedStyle(element).backgroundColor,
+      border: getComputedStyle(element).borderTopColor,
+      activeBackground: getComputedStyle(active).backgroundColor,
+      activeText: getComputedStyle(active).color,
+      inactiveText: getComputedStyle(inactive).color,
+      activeIndicator: getComputedStyle(active).boxShadow,
+    };
+  });
+  expect(colors.background).toBe("rgb(11, 13, 17)");
+  expect(colors.border).toBe("rgb(86, 96, 110)");
+  expect(colors.activeBackground).toBe("rgb(37, 43, 53)");
+  expect(colors.activeText).toBe("rgb(255, 247, 237)");
+  // A browser may preserve hover state across viewport/test navigation; both normal and hover colors must remain high-contrast.
+  expect(["rgb(208, 213, 221)", "rgb(255, 247, 237)"]).toContain(colors.inactiveText);
+  expect(colors.activeIndicator).toContain("rgb(31, 209, 165)");
+  for (const [foreground, background] of [[colors.activeText, colors.activeBackground], [colors.inactiveText, colors.background]]) {
+    const ratio = await page.evaluate(([fg, bg]) => {
+      const channels = (value: string) => value.match(/\d+/g)!.slice(0, 3).map(Number);
+      const luminance = (rgb: number[]) => rgb.map((value) => value / 255).map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+      const a = luminance(channels(fg));
+      const b = luminance(channels(bg));
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    }, [foreground, background] as const);
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+});

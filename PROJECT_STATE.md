@@ -1,3 +1,19 @@
+## 2026-10-09 — Dark-Mode Visual/Functional Follow-up — VERIFIED IN CI
+
+- VERIFIED: base `main` at task start was `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; implementation branch is `fix/dark-mode-contrast-audit-2026-10-09`; review PR is #389.
+- VERIFIED: latest code-head GitHub Quality run `37936864400` passed: generated-route freshness, typecheck, repository tests, focused W7.4–W7.10 contracts, lint, production build, all-theme browser QA, homepage/login Arabic-English browser QA, Golden 30-product performance fixture, Studio Shell/Home/Menu/Growth/Customers and responsive browser QA, Platform Admin responsive browser QA, and browser performance-baseline upload.
+- VERIFIED: latest code-head W9 Orders QA run `37936864385` passed.
+- VERIFIED: the initial Studio contrast test failed only because the browser computed the inactive button's hover color as white rather than the default muted color. The final assertion accepts the normal and hover colors and checks actual text/background contrast in both states; latest-head Studio browser QA passed. The product CSS remains deliberately high-contrast in either state.
+- IMPLEMENTED: opaque dark Studio mobile navigation with clearer border, strong active state, and high-contrast labels; explicit underlined/high-contrast dark login secondary actions; a light brand plate for the homepage footer logo matching the header treatment.
+- RESEARCH: WCAG 2.2 SC 1.4.3 text contrast target is 4.5:1 for normal text; SC 1.4.11 specifies 3:1 for essential non-text UI/state visuals. Sources: https://www.w3.org/TR/WCAG22/ and https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
+- SCOPE REVIEW: only platform theme CSS, homepage logo styling, login presentation attributes, browser tests, and continuity records changed. No public-menu theme files, auth behavior, business logic, schema, dependency, or deployment configuration changed.
+- PERFORMANCE: Golden 30-product performance fixture passed and browser performance baseline was uploaded. The optional P1.9 real-route evidence step was skipped by its existing workflow condition; no new LCP/INP or production/physical-device performance claim is made.
+- VISUAL LIMITATION: CI browser tests and computed-style/contrast assertions passed. Manual human screenshot inspection and physical-device QA were not available in this GitHub-connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment was requested or executed.
+- EXACT NEXT ACTION: review PR #389 and its latest-head checks; do not merge or deploy automatically.
+
+---
+
 ## 2026-10-09 — Footer Contact Icon & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: PR #385 head before this follow-up failed only at the Menuun brand browser step; its assertion still expected the visible email address after the footer changed to icon + accessible label. Typecheck, unit tests, lint, build, and all-theme browser QA passed in that run; W9 Orders QA passed.

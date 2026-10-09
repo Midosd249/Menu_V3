@@ -109,7 +109,7 @@ function Login() {
 
   const isPhoneLogin = mode === "in" && loginMethod === "phone";
   const signup = mode === "up";
-  return <main data-platform-chrome dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
+  return <main data-platform-chrome data-auth-page dir={lang === "ar" ? "rtl" : "ltr"} className="grid min-h-dvh place-items-center bg-paper px-5 py-10 text-ink">
     <div className="w-full max-w-md grid gap-6">
       <div className="flex items-center justify-between"><Link to="/" className="font-display text-xl font-semibold">{t(copy.brand, lang)}</Link><div className="flex items-center gap-2"><ThemeToggle /><LangToggle /></div></div>
       <div className="grid gap-2"><p className="text-sm font-medium text-accent">{lang === "ar" ? "ابدأ مع Menuun" : "Start with Menuun"}</p><h1 className="font-display text-2xl font-semibold">{signup ? (lang === "ar" ? "أنشئ حسابك مجانًا" : "Create your free account") : t(copy.auth.title, lang)}</h1><p className="text-sm leading-6 text-muted">{signup ? (lang === "ar" ? "أدخل بيانات حسابك، ثم أكمل بيانات المطعم في الخطوة التالية." : "Enter your account details, then complete your restaurant setup in the next step.") : (invite ? (lang === "ar" ? "سجّل الدخول بالحساب المدعو ثم أكمل قبول الدعوة." : "Sign in with the invited account, then accept the invitation.") : t(copy.auth.subtitle, lang))}</p></div>
@@ -128,10 +128,10 @@ function Login() {
           {error ? <p className="text-sm text-bad" role="alert">{error}</p> : null}
           <Button type="submit" disabled={busy}>{busy ? t(copy.state.loading, lang) : signup ? (lang === "ar" ? "إنشاء الحساب" : "Create account") : t(copy.auth.signIn, lang)}</Button>
         </form>
-        {!signup && loginMethod === "email" ? <Link to="/forgot-password" className="text-center text-sm text-ink-soft underline-offset-4 hover:underline">{lang === "ar" ? "نسيت كلمة المرور؟" : "Forgot password?"}</Link> : null}
-        <button type="button" className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{signup ? (lang === "ar" ? "لدي حساب بالفعل" : "I already have an account") : t(copy.auth.noAccount, lang)}</button>
+        {!signup && loginMethod === "email" ? <Link to="/forgot-password" data-auth-link className="text-center text-sm text-ink-soft underline-offset-4 hover:underline">{lang === "ar" ? "نسيت كلمة المرور؟" : "Forgot password?"}</Link> : null}
+        <button type="button" data-auth-link className="text-sm text-ink-soft underline-offset-4 hover:underline" disabled={busy} onClick={() => { const next = mode === "up" ? "in" : "up"; setMode(next); if (next === "up") setLoginMethod("email"); }}>{signup ? (lang === "ar" ? "لدي حساب بالفعل" : "I already have an account") : t(copy.auth.noAccount, lang)}</button>
       </> : <p className="text-sm text-muted">{t(copy.state.unavailable, lang)}</p>}
-      <Link to="/" className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>
+      <Link to="/" data-auth-link className="text-center text-sm text-muted underline-offset-4 hover:underline">{lang === "ar" ? "العودة إلى الموقع" : "Back to website"}</Link>
       <MarketingFooter />
     </div>
   </main>;
