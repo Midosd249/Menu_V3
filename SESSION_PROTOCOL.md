@@ -176,4 +176,5 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - The login footer keeps a light brand surface. Its text-bearing links and paragraphs must use dark foreground colors in dark mode; override is scoped to [data-auth-page] and the footer only.
 - Added Playwright coverage for Arabic and English that calculates contrast ratio for all text links and both footer paragraphs; target >= 4.5:1.
 - Do not alter homepage/footer appearance outside login, auth behavior, public-menu themes, or release/deployment configuration.
-- Exact next action: verify latest-head CI and final diff; do not merge/deploy automatically.
+- VERIFIED: Quality run 37957188131 and W9 Orders QA run 37957188277 passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb; the Menuun brand browser QA step succeeded.
+- Exact next action: owner review PR #390 and final diff; do not merge/deploy automatically.
