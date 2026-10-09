@@ -121,3 +121,18 @@ test("dark homepage full-page screenshot preserves the embedded demo and footer 
   await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
   await page.screenshot({ path: testInfo.outputPath("studio-dark-full-page.png"), fullPage: true, animations: "disabled" });
 });
+
+
+test("dark homepage keeps the original Menuun wordmark legible on a light brand plate", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+  const logoLink = page.locator('.menuq-home > header a[aria-label="Menuun"]');
+  const logo = logoLink.locator("img");
+  await expect(logo).toBeVisible();
+  await expect(logoLink).toHaveCSS("background-color", "rgb(255, 253, 248)");
+  await expect(logoLink).toHaveCSS("border-top-left-radius", "10.4px");
+  await expect(logoLink).toHaveCSS("padding-left", "8px");
+});
