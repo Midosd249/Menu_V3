@@ -1817,7 +1817,8 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Scope: login route layout only; do not alter homepage, shared footer design, theme colors, or auth behavior.
 - Implemented a scroll-safe flex-column shell with vertical auto margins so tall login content does not become centered beyond the viewport.
 - Added a mobile browser regression test covering the last footer link and copyright area at 390×650 across Arabic/English and light/dark themes.
-- Verification pending: GitHub Actions browser/quality checks and final diff review. No merge/deployment authorized by this task.
-- Exact next action: open a PR and evaluate the latest CI evidence; stop before release.
+- VERIFIED: latest-head GitHub Quality and W9 Orders QA passed; focused browser regression passed across Arabic/English and light/dark at 390×650.
+- Diff reviewed: only login page layout, its browser regression test, and continuity records changed. No merge/deployment authorized by this task.
+- Exact next action: owner review PR #390; stop before merge/deployment.
 
 - CI follow-up: the initial new browser test failed before asserting layout because it accessed `localStorage` on `about:blank`. Corrected test setup to establish the app origin first; latest-head CI rerun pending.
