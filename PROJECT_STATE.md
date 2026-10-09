@@ -390,5 +390,6 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - VERIFIED: the shared marketing footer retains a light cream background and uses muted text utility classes; platform dark-mode token overrides can make descendants pale against that light background inside /login.
 - IMPLEMENTED: scoped dark-theme text-color override to text links and paragraphs inside the login page's marketing footer only. Homepage/shared-footer theme behavior and public-menu themes are untouched.
 - ADDED: Playwright regression asserting contrast ratio >= 4.5:1 for every text-bearing footer link and paragraph in Arabic and English on a 390×844 viewport in dark mode.
-- UNKNOWN: CI outcome for this new change, production deployment, and physical-device QA.
-- EXACT NEXT ACTION: verify latest-head Quality/W9 CI and inspect the changed diff; do not merge or deploy automatically.
+- VERIFIED: GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 both completed successfully on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb. The Menuun brand browser QA step passed.
+- UNKNOWN: production deployment and physical-device QA remain unperformed.
+- EXACT NEXT ACTION: owner review PR #390 and the final diff; do not merge or deploy automatically.
