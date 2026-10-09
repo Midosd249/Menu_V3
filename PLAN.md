@@ -1794,3 +1794,15 @@ Review theme test correctness, open one PR, inspect its checks and diff, and sto
 
 ### Exact next task
 Verify CI on the continuity-only head, then review and merge PR #386 as previously authorized. Do not deploy in this task.
+
+
+## 2026-10-09 — Platform Light/Dark Mode — Closeout
+
+- VERIFIED: PR #386 is merged. Merge commit and verified `main` HEAD at closeout: `60f67097a3ff11a8840fd036e6c7d4d2e45910d2`.
+- VERIFIED: post-merge GitHub Quality run [37912899122](https://github.com/Midosd249/Menu_V3/actions/runs/37912899122) completed SUCCESS on that exact SHA. Typecheck, tests, lint, production build, all-theme browser QA, Menuun Arabic/English theme route QA, Studio responsive browser QA, Platform Admin browser QA, Golden 30-product performance fixture, and browser performance baseline artifact upload all passed.
+- VERIFIED: W9 Orders QA run [37909789527](https://github.com/Midosd249/Menu_V3/actions/runs/37909789527) passed on the merged feature head before merge.
+- DIAGNOSIS: the earlier PR-head Quality run [37909789652](https://github.com/Midosd249/Menu_V3/actions/runs/37909789652) failed in the W7.10 Studio responsive route matrix (navigation destroyed the locator execution context / expected visible navigation item was absent). The post-merge run on `main` passed the Studio responsive browser gate and all other listed gates; no speculative change to that unrelated test was made.
+- PERFORMANCE GUARDIAN: automated performance audit/golden fixture workflow is active and passed on merged `main`. P1.9 real-route performance evidence was skipped by workflow condition; LCP/INP are not verified by the synthetic fixture. No separate registered agent named `Performance Guardian` was found in the repository; do not claim one is installed.
+- PROTECTED: all five restaurant-owned public-menu themes remain outside the platform theme toggle scope. No production deployment was performed or claimed.
+- STATUS: MERGED; VERIFIED_IN_CI on merged main. Local commands were not run in this connector-only session.
+- EXACT NEXT TASK: P1.4 — Request Waterfall Consolidation, beginning with repository-first request mapping; do not begin automatically in this session.
