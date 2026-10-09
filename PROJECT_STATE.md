@@ -368,3 +368,14 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - PERFORMANCE GUARDIAN STATUS: the repository's existing `performance:audit` CI path and Golden fixture ran successfully. A separately registered agent named “Performance Guardian” is NOT present on `main`; PR #365 was closed unmerged. Its proposed fixed budget of fewer than 15 requests is not adopted because the current measured preview baseline is 98 requests and P1.9's budget decision remains deferred.
 - RELEASE: PR #386 remains open and draft pending latest-head verification; no deployment has been performed.
 - EXACT NEXT ACTION: verify the continuity-only commit's CI on the latest branch head, then review and complete the explicitly requested PR merge; do not start a deployment.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `main` baseline at task start was `b1f9c5fa9eee8fe899cd23b24e4948e6682cd578`; isolated branch `fix/login-dark-footer-overflow-2026-10-09` created from that commit.
+- VERIFIED: `/login` used a vertically centered grid (`min-h-dvh place-items-center`) around a tall content stack ending in the shared `MarketingFooter`; this layout can center overflowed content above/below the viewport on short screens. This is the only route being changed.
+- IMPLEMENTED: changed the login page shell to a column flex layout and gave its content wrapper vertical auto margins. This centers the content when space is available and lets it start at the top and scroll normally when content exceeds the viewport.
+- ADDED: browser regression coverage for the final privacy link and copyright area at 390×650 in Arabic/English and light/dark themes.
+- RESEARCH: WCAG 2.2 SC 1.4.10 Reflow requires content at 320 CSS px width without loss of information/functionality or two-dimensional scrolling; official source: https://www.w3.org/TR/WCAG22/.
+- UNKNOWN: latest PR CI/browser run, production deployment, and real-device verification are pending. No deployment performed.
+- EXACT NEXT ACTION: open one PR, inspect all applicable CI results and diff, then stop before merge/deployment unless the owner explicitly requests release.
