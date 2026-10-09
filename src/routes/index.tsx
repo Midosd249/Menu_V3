@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowUpLeft,
   BarChart3,
@@ -29,7 +29,38 @@ import { MarketingFooter } from "@/components/marketing-footer";
 import { MenuunLogo } from "@/components/menuun-logo";
 import "./index.css";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  head: ({ matches }) => {
+    const search = matches[matches.length - 1]?.search as Record<string, unknown> | undefined;
+    const en = search?.lang === "en";
+    const title = en
+      ? "Menuun | Digital Menu Platform for Restaurants & Cafés"
+      : "Menuun | منصة منيو رقمي للمطاعم والكافيهات";
+    const description = en
+      ? "An Arabic-first digital menu platform for restaurants and cafés in Saudi Arabia."
+      : "منصة المنيو الرقمية للمطاعم السعودية";
+    const image = "https://www.menuun.com/og.jpg";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "Menuun" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:locale", content: en ? "en_US" : "ar_SA" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: image },
+      ],
+    };
+  },
+  component: Home,
+});
 
 const FEATURES = [
   {
@@ -141,6 +172,40 @@ const FAQS = [
 function Home() {
   const { lang } = useLang();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const en = lang === "en";
+    const title = en
+      ? "Menuun | Digital Menu Platform for Restaurants & Cafés"
+      : "Menuun | منصة منيو رقمي للمطاعم والكافيهات";
+    const description = en
+      ? "An Arabic-first digital menu platform for restaurants and cafés in Saudi Arabia."
+      : "منصة المنيو الرقمية للمطاعم السعودية";
+    document.title = title;
+    const tags = [
+      ["name", "description", description],
+      ["property", "og:site_name", "Menuun"],
+      ["property", "og:title", title],
+      ["property", "og:description", description],
+      ["property", "og:image", "https://www.menuun.com/og.jpg"],
+      ["property", "og:image:width", "1200"],
+      ["property", "og:image:height", "630"],
+      ["property", "og:locale", en ? "en_US" : "ar_SA"],
+      ["name", "twitter:card", "summary_large_image"],
+      ["name", "twitter:title", title],
+      ["name", "twitter:description", description],
+      ["name", "twitter:image", "https://www.menuun.com/og.jpg"],
+    ] as const;
+    for (const [attribute, key, content] of tags) {
+      let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+      if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute(attribute, key);
+        document.head.appendChild(element);
+      }
+      element.content = content;
+    }
+  }, [lang]);
   const themeCards = useMemo(
     () => MENU_THEMES.map((theme) => ({ ...theme, preview: { ...theme.preview, image: `/homepage/themes/${theme.key}.webp` } })),
     [],

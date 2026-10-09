@@ -95,7 +95,8 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /تواصل معنا|Contact/);
   assert.ok(footer.includes("ahmed.mohamed@menuun.com"));
   assert.match(footer, /966549598318/);
-  assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
+  assert.match(footer, /to="\/terms"/);
+  assert.match(footer, /to="\/privacy"/);
 });
 
 
@@ -104,4 +105,44 @@ test("WhatsApp ordering is presented as a core capability in every commercial pl
   assert.match(catalog, /WhatsApp ordering from the menu/);
   assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*الطلب عبر واتساب/);
   assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*WhatsApp ordering/);
+});
+
+
+test("homepage exposes bilingual social metadata with the canonical 1200x630 share image", () => {
+  assert.ok(home.includes("Menuun | منصة منيو رقمي للمطاعم والكافيهات"));
+  assert.ok(home.includes("Menuun | Digital Menu Platform for Restaurants & Cafés"));
+  assert.ok(home.includes('property: "og:title"'));
+  assert.ok(home.includes('property: "og:description"'));
+  assert.ok(home.includes('name: "twitter:card", content: "summary_large_image"'));
+  assert.ok(home.includes('name: "twitter:title"'));
+  assert.ok(home.includes('name: "twitter:description"'));
+  assert.ok(home.includes("https://www.menuun.com/og.jpg"));
+  assert.ok(home.includes('og:image:width", content: "1200"'));
+  assert.ok(home.includes('og:image:height", content: "630"'));
+  assert.ok(home.includes("useEffect(() => {"));
+});
+
+test("legal pages are bilingual, linked, and describe current data/payment practices honestly", () => {
+  const terms = read("src/routes/terms.tsx");
+  const privacy = read("src/routes/privacy.tsx");
+  for (const route of [terms, privacy]) {
+    assert.ok(route.includes("useLang"));
+    assert.ok(route.includes("ahmed.mohamed@menuun.com"));
+    assert.ok(route.includes("Last updated: 9 October 2026"));
+    assert.ok(route.includes("آخر تحديث: 9 أكتوبر 2026"));
+  }
+  assert.ok(terms.includes('createFileRoute("/terms")'));
+  assert.ok(terms.includes("Terms of Service"));
+  assert.ok(terms.includes("شروط الاستخدام"));
+  assert.ok(terms.includes("does not currently process payments directly"));
+  assert.ok(terms.includes("لا تعالج Menuun المدفوعات مباشرةً"));
+  assert.ok(privacy.includes('createFileRoute("/privacy")'));
+  assert.ok(privacy.includes("Privacy Policy"));
+  assert.ok(privacy.includes("سياسة الخصوصية"));
+  assert.ok(privacy.includes("Supabase"));
+  assert.ok(privacy.includes("local storage"));
+  assert.ok(privacy.includes("Personal Data Protection Law (PDPL)"));
+  assert.ok(privacy.includes("نظام حماية البيانات الشخصية السعودي"));
+  assert.ok(privacy.includes("not a certification"));
+  assert.ok(privacy.includes("لا يُعد شهادة امتثال"));
 });

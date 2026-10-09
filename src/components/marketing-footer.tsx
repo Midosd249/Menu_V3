@@ -53,6 +53,8 @@ export function MarketingFooter() {
               <Link to="/pricing" className={linkClass}>{ar ? "الباقات والأسعار" : "Pricing"}</Link>
               <Link to="/themes/preview" className={linkClass}>{ar ? "المعاينة" : "Preview"}</Link>
               <Link to="/login" className={linkClass}>{ar ? "تسجيل الدخول" : "Sign in"}</Link>
+              <Link to="/terms" className={linkClass}>{ar ? "شروط الاستخدام" : "Terms of Service"}</Link>
+              <Link to="/privacy" className={linkClass}>{ar ? "سياسة الخصوصية" : "Privacy Policy"}</Link>
             </div>
           </nav>
         </div>
