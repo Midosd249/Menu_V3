@@ -10,28 +10,27 @@ function applyTheme(dark: boolean) {
   document.documentElement.setAttribute("data-platform-theme", dark ? "dark" : "light");
 }
 
+function readStoredPreference(): string | null {
+  if (typeof window === "undefined") return null;
+  try { return window.localStorage.getItem(STORAGE_KEY); } catch { return null; }
+}
+
 function readSystemTheme() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
+function resolveTheme(preference: string | null) {
+  return preference === "dark" || (preference !== "light" && readSystemTheme());
+}
+
 export function ThemeToggle({ className }: { className?: string }) {
   const { lang } = useLang();
-  const [dark, setDark] = useState(false);
-  const storedPreference = useRef<string | null>(null);
-  const initialized = useRef(false);
+  // Initialize synchronously from the same preference the root bootstrap script uses.
+  // This prevents the first render from advertising the wrong action before useEffect runs.
+  const [dark, setDark] = useState(() => resolveTheme(readStoredPreference()));
+  const storedPreference = useRef<string | null>(readStoredPreference());
 
   useEffect(() => {
-    try { storedPreference.current = window.localStorage.getItem(STORAGE_KEY); } catch { /* Continue with the OS preference. */ }
-    const resolveTheme = () => storedPreference.current === "dark" || (storedPreference.current !== "light" && readSystemTheme());
-    const syncInitialTheme = () => {
-      // A click can happen before passive effects run. Never let late initialization undo it.
-      if (initialized.current) return;
-      initialized.current = true;
-      const nextDark = resolveTheme();
-      setDark(nextDark);
-      applyTheme(nextDark);
-    };
-    syncInitialTheme();
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onSystemChange = () => {
       if (storedPreference.current === "dark" || storedPreference.current === "light") return;
@@ -42,7 +41,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     const onStorage = (event: StorageEvent) => {
       if (event.key !== STORAGE_KEY && event.key !== null) return;
       storedPreference.current = event.key === null ? null : event.newValue;
-      const nextDark = resolveTheme();
+      const nextDark = resolveTheme(storedPreference.current);
       setDark(nextDark);
       applyTheme(nextDark);
     };
@@ -55,15 +54,9 @@ export function ThemeToggle({ className }: { className?: string }) {
   }, []);
 
   const toggleTheme = () => {
-    // The DOM attribute is the source of truth during hydration and route transitions:
-    // React state may still reflect the previous render while the root script has already
-    // applied the stored/system preference. Derive the next value from the effective theme.
-    const effectiveTheme = document.documentElement.getAttribute("data-platform-theme");
-    const nextDark = effectiveTheme
-      ? effectiveTheme !== "dark"
-      : !(storedPreference.current === "dark" || (storedPreference.current !== "light" && readSystemTheme()));
+    // The state and root bootstrap now resolve from the same stored/system preference.
+    const nextDark = !dark;
     storedPreference.current = nextDark ? "dark" : "light";
-    initialized.current = true;
     setDark(nextDark);
     applyTheme(nextDark);
     try { window.localStorage.setItem(STORAGE_KEY, storedPreference.current); } catch { /* Current tab still changes. */ }
