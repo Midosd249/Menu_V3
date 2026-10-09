@@ -172,6 +172,6 @@ html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-au
 
 /* The login footer intentionally keeps its light brand surface in dark mode.
    Do not let platform dark-theme text tokens turn its links/copy pale on cream. */
-html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p) {
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p, h2, span) {
   color: #343A40 !important;
 }
