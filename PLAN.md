@@ -1837,4 +1837,4 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Pre-merge validation passed: Menu V3 Quality `37958748646`, W9 Orders QA `37958748617`.
 - Main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No production deployment was requested or performed.
-- Exact next action: complete required checks and merge continuity-only PR #391; then stop. Do not automatically begin PR #386 or deployment.
+- Exact next action after this continuity PR merges: verify `main` contains these records, then stop. Do not automatically begin PR #386 or deployment.

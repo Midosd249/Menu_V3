@@ -401,4 +401,4 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - VERIFIED: main-branch Menu V3 Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - INCLUDED: login-only dark-theme footer foreground override and Arabic/English Playwright contrast regression; prior login overflow/reachability fix remains included.
 - DEPLOYMENT: no deployment was requested or performed. Physical-device QA remains UNKNOWN.
-- EXACT NEXT ACTION: finish review/merge of continuity-only PR #391 after its required checks pass; then stop. Do not deploy or start another task automatically.
+- EXACT NEXT ACTION after this continuity PR merges: verify `main` contains these records, then stop. Do not deploy or start another task automatically.

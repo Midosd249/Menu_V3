@@ -186,4 +186,4 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Pre-merge CI: Menu V3 Quality `37958748646` and W9 Orders QA `37958748617` succeeded on PR head `a8507826958fea08fec3c4805aabaf314c1bcac4`.
 - VERIFIED: main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No deployment was requested or performed. Do not infer deployment from merge.
-- Exact next action: complete required checks and merge continuity-only PR #391, then stop.
+- Exact next action after this continuity PR merges: verify `main` contains these records, then stop.

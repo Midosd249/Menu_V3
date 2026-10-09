@@ -2056,4 +2056,4 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - [x] Prepare continuity closure record.
 - [x] Verify main-branch Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - No deployment was requested or performed.
-- Exact next action: complete required checks and merge continuity-only PR #391; then stop. Do not begin another task automatically.
+- Exact next action after this continuity PR merges: verify `main` contains these records, then stop. Do not begin another task automatically.
