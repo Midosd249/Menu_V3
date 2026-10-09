@@ -109,40 +109,40 @@ test("WhatsApp ordering is presented as a core capability in every commercial pl
 
 
 test("homepage exposes bilingual social metadata with the canonical 1200x630 share image", () => {
-  assert.match(home, /Menuun \\| منصة منيو رقمي للمطاعم والكافيهات/);
-  assert.match(home, /Menuun \\| Digital Menu Platform for Restaurants & Cafés/);
-  assert.match(home, /property: "og:title"/);
-  assert.match(home, /useEffect\(\(\) => \{/);
-  assert.match(home, /property: "og:description"/);
-  assert.match(home, /name: "twitter:card", content: "summary_large_image"/);
-  assert.match(home, /name: "twitter:title"/);
-  assert.match(home, /name: "twitter:description"/);
-  assert.match(home, /https:\\/\\/www\\.menuun\\.com\\/og\\.jpg/);
-  assert.match(home, /og:image:width", content: "1200"/);
-  assert.match(home, /og:image:height", content: "630"/);
+  assert.ok(home.includes("Menuun | منصة منيو رقمي للمطاعم والكافيهات"));
+  assert.ok(home.includes("Menuun | Digital Menu Platform for Restaurants & Cafés"));
+  assert.ok(home.includes('property: "og:title"'));
+  assert.ok(home.includes('property: "og:description"'));
+  assert.ok(home.includes('name: "twitter:card", content: "summary_large_image"'));
+  assert.ok(home.includes('name: "twitter:title"'));
+  assert.ok(home.includes('name: "twitter:description"'));
+  assert.ok(home.includes("https://www.menuun.com/og.jpg"));
+  assert.ok(home.includes('og:image:width", content: "1200"'));
+  assert.ok(home.includes('og:image:height", content: "630"'));
+  assert.ok(home.includes("useEffect(() => {"));
 });
 
 test("legal pages are bilingual, linked, and describe current data/payment practices honestly", () => {
   const terms = read("src/routes/terms.tsx");
   const privacy = read("src/routes/privacy.tsx");
   for (const route of [terms, privacy]) {
-    assert.match(route, /useLang/);
-    assert.match(route, /ahmed\\.mohamed@menuun\\.com/);
-    assert.match(route, /Last updated: 9 October 2026/);
-    assert.match(route, /آخر تحديث: 9 أكتوبر 2026/);
+    assert.ok(route.includes("useLang"));
+    assert.ok(route.includes("ahmed.mohamed@menuun.com"));
+    assert.ok(route.includes("Last updated: 9 October 2026"));
+    assert.ok(route.includes("آخر تحديث: 9 أكتوبر 2026"));
   }
-  assert.match(terms, /createFileRoute\\("\/terms"\\)/);
-  assert.match(terms, /Terms of Service/);
-  assert.match(terms, /شروط الاستخدام/);
-  assert.match(terms, /does not currently process payments directly/);
-  assert.match(terms, /لا تعالج Menuun المدفوعات مباشرةً/);
-  assert.match(privacy, /createFileRoute\\("\/privacy"\\)/);
-  assert.match(privacy, /Privacy Policy/);
-  assert.match(privacy, /سياسة الخصوصية/);
-  assert.match(privacy, /Supabase/);
-  assert.match(privacy, /local storage/);
-  assert.match(privacy, /Personal Data Protection Law \\(PDPL\\)/);
-  assert.match(privacy, /نظام حماية البيانات الشخصية السعودي/);
-  assert.match(privacy, /not a certification/);
-  assert.match(privacy, /لا يُعد شهادة امتثال/);
+  assert.ok(terms.includes('createFileRoute("/terms")'));
+  assert.ok(terms.includes("Terms of Service"));
+  assert.ok(terms.includes("شروط الاستخدام"));
+  assert.ok(terms.includes("does not currently process payments directly"));
+  assert.ok(terms.includes("لا تعالج Menuun المدفوعات مباشرةً"));
+  assert.ok(privacy.includes('createFileRoute("/privacy")'));
+  assert.ok(privacy.includes("Privacy Policy"));
+  assert.ok(privacy.includes("سياسة الخصوصية"));
+  assert.ok(privacy.includes("Supabase"));
+  assert.ok(privacy.includes("local storage"));
+  assert.ok(privacy.includes("Personal Data Protection Law (PDPL)"));
+  assert.ok(privacy.includes("نظام حماية البيانات الشخصية السعودي"));
+  assert.ok(privacy.includes("not a certification"));
+  assert.ok(privacy.includes("لا يُعد شهادة امتثال"));
 });
