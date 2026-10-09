@@ -112,6 +112,7 @@ test("homepage exposes bilingual social metadata with the canonical 1200x630 sha
   assert.match(home, /Menuun \\| منصة منيو رقمي للمطاعم والكافيهات/);
   assert.match(home, /Menuun \\| Digital Menu Platform for Restaurants & Cafés/);
   assert.match(home, /property: "og:title"/);
+  assert.match(home, /useEffect\(\(\) => \{/);
   assert.match(home, /property: "og:description"/);
   assert.match(home, /name: "twitter:card", content: "summary_large_image"/);
   assert.match(home, /name: "twitter:title"/);
