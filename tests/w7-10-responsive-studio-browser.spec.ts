@@ -117,6 +117,7 @@ test("W7.10 Studio dark mobile bottom navigation has accessible text contrast an
   await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
   const nav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(nav).toBeVisible();
+  await page.mouse.move(10, 10); // Avoid sampling a prior test’s hovered navigation item.
   const colors = await nav.evaluate((element) => {
     const active = element.querySelector("button[aria-current='page']")!;
     const inactive = element.querySelector("button:not([aria-current])")!;
