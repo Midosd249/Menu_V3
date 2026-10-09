@@ -2024,3 +2024,12 @@ Inspect tests, create one review PR, verify latest-head CI/browser gates, and st
 
 ### Exact next task
 Verify the continuity-only commit's latest-head CI, then complete PR #386 merge after diff review; stop before deployment.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IN PROGRESS
+
+- [x] Confirm current main SHA and inspect login route, platform theme CSS, shared footer, existing browser coverage, and relevant project memory.
+- [x] Fix vertical overflow behavior in `src/routes/login.tsx` only.
+- [x] Add short-mobile viewport regression coverage in `tests/menuun-brand-browser.spec.ts` for both themes and languages.
+- [ ] Open PR and verify latest CI/browser checks.
+- [ ] Review final diff; keep merge and production deployment out of scope.
