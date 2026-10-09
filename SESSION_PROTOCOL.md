@@ -168,3 +168,12 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Exact next action: owner review PR #390 and its diff, then stop before release.
 
 - CI follow-up: first browser run failed due to test setup accessing localStorage before navigation (`about:blank` security error), not a layout assertion. Test now initializes theme after navigating to the app origin; latest-head CI rerun pending.
+
+
+## 2026-10-09 — Login Footer Contrast Correction — IMPLEMENTATION_IN_PROGRESS
+
+- Corrected scope after owner clarification: this is a contrast/color defect in the last footer section on /login in dark mode, not primarily a scrolling/reachability issue.
+- The login footer keeps a light brand surface. Its text-bearing links and paragraphs must use dark foreground colors in dark mode; override is scoped to [data-auth-page] and the footer only.
+- Added Playwright coverage for Arabic and English that calculates contrast ratio for all text links and both footer paragraphs; target >= 4.5:1.
+- Do not alter homepage/footer appearance outside login, auth behavior, public-menu themes, or release/deployment configuration.
+- Exact next action: verify latest-head CI and final diff; do not merge/deploy automatically.
