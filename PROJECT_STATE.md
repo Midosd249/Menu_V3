@@ -1,3 +1,18 @@
+## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: base `main` HEAD is `fd3d92cbac172476c4f7507b4b0b9582ce91b821`; implementation branch is `fix/marketing-footer-structure-2026-10-09`.
+- VERIFIED: before the fix, `src/components/marketing-footer.tsx` rendered email and WhatsApp twice (once under the brand block and again under Contact), included a separate About paragraph duplicating the tagline, and placed Contact before Links.
+- IMPLEMENTED: footer order is now Brand → Links → Contact → Copyright in shared markup used by Arabic RTL and English LTR; contact actions exist only in Contact; the redundant About block and duplicate tagline are removed.
+- VERIFIED BY SOURCE: footer Links includes Pricing, Preview, Sign in, `/terms`, and `/privacy`; a regression contract checks destinations, section order, RTL/LTR direction, and single contact hrefs.
+- UNKNOWN: local typecheck/test/lint/build and browser rendering are not run in this GitHub-connected environment. GitHub Actions Quality, W9, and browser QA must complete on the PR head.
+- RELEASE: one review PR only; do not merge or deploy before owner review.
+
+## Exact next task
+
+Open one draft PR, wait for the required Quality/W9/browser checks, review the diff and check results, then stop for owner review. Do not merge or deploy.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.
