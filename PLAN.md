@@ -1828,5 +1828,5 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 
 - Correct the login-only dark-mode contrast defect in the shared marketing footer; do not change the homepage footer, login main content, auth behavior, or public-menu themes.
 - Regression criteria: all footer text links and paragraphs have computed contrast >= 4.5:1 against the footer's light background in Arabic and English at mobile width.
-- Add a focused Playwright regression and verify latest-head CI before closeout.
-- Exact next action: inspect latest-head Quality/W9 results and final diff; stop before merge/deployment.
+- VERIFIED: focused Arabic/English contrast regression passed as part of Menu V3 Quality run 37957188131; W9 Orders QA run 37957188277 also passed on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
+- Exact next action: owner review PR #390 and the final diff; stop before merge/deployment.
