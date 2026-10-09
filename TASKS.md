@@ -2044,6 +2044,6 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - [x] Identify why the bottom links can lose contrast: dark-theme text tokens are applied to descendants while the footer retains a light background.
 - [x] Add a dark-mode CSS override scoped to footer links and paragraphs inside the login route.
 - [x] Add Arabic/English browser regression coverage measuring WCAG normal-text contrast.
-- [ ] Verify latest-head GitHub Quality and W9 Orders QA.
-- [ ] Review final diff and update status based on actual CI evidence.
-- No merge or deployment is authorized by this task.
+- [x] Verify latest-head GitHub Quality run 37957188131 and W9 Orders QA run 37957188277 succeeded on code/test head 1d4f4999ad06d5156e82775ba40ef856dbdaedcb.
+- [x] Review final diff; only the login footer contrast CSS, focused browser regression, prior login reachability fix, and continuity records are changed.
+- Exact next action: owner review PR #390. No merge or deployment is authorized by this task.
