@@ -1750,3 +1750,29 @@ Map actual requests first; preserve auth/tenant/branch boundaries and avoid unre
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-09 — Platform Light/Dark Mode
+
+### Scope
+Add independent platform chrome light/dark mode for Studio and marketing/auth/legal pages. Explicitly preserve the five restaurant-owned public-menu themes. No merge or deployment.
+
+### Repository-first findings
+- Main base: `771c6a78aa8ce8c2be5028eb109e262089f1f016`.
+- Tailwind CSS v4 uses `@theme` variables in `src/styles.css`; no root Tailwind config or explicit dark strategy exists.
+- Shared aliases/internal semantic roles already exist, but internal CSS includes hard-coded light surfaces and the marketing homepage has a separate `--mq-*` palette.
+- Language persistence: `localStorage["menu-lang"]`; theme preference mirrors its defensive storage pattern using `localStorage["menu-theme"]`.
+
+### Implementation
+- Add `ThemeToggle`, early preference initialization, and a scoped `platform-theme.css` token adapter.
+- Add the control to Studio, homepage, pricing, login/signup, Terms, and Privacy.
+- Preserve `dir`/language handling; theme code does not write the document language or direction.
+- Add WCAG contrast and public-menu-scope contract tests.
+
+### Verification and release boundary
+- Palette contrast is encoded as automated tests; calculated core ratios: Cream/canvas 17.80:1, Cream/surface 16.26:1, Ember/canvas 6.06:1, Ember/surface 5.54:1, Mint/canvas 9.65:1, Mint/surface 8.82:1.
+- Pending: tests, typecheck, lint, build, RTL/LTR × light/dark browser QA and CI on the PR head.
+- Do not merge or deploy; owner review is required.
+
+### Exact next task
+Review theme test correctness, open one PR, inspect its checks and diff, and stop before merge/deployment.
