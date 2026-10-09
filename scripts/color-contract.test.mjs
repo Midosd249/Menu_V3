@@ -98,3 +98,73 @@ test("interaction safety rules are explicit", () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /::placeholder/);
 });
+
+
+const platformThemeCss = await readFile(new URL("../src/platform-theme.css", import.meta.url), "utf8");
+const themeToggleSource = await readFile(new URL("../src/components/theme-toggle.tsx", import.meta.url), "utf8");
+const rootSource = await readFile(new URL("../src/routes/__root.tsx", import.meta.url), "utf8");
+
+test("platform dark palette meets WCAG AA text contrast on all core surfaces", () => {
+  const pairs = [
+    ["#FFF7ED", "#0F1115"],
+    ["#FFF7ED", "#171B22"],
+    ["#D0D5DD", "#0F1115"],
+    ["#D0D5DD", "#171B22"],
+    ["#A7AFBA", "#0F1115"],
+    ["#A7AFBA", "#171B22"],
+    ["#FF5A1F", "#0F1115"],
+    ["#FF5A1F", "#171B22"],
+    ["#1FD1A5", "#0F1115"],
+    ["#1FD1A5", "#171B22"],
+    ["#0F1115", "#FF5A1F"],
+    ["#0F1115", "#1FD1A5"],
+  ];
+  for (const [foreground, background] of pairs) {
+    assert.ok(
+      contrast(foreground, background) >= 4.5,
+      `contrast failed for ${foreground} on ${background}: ${contrast(foreground, background).toFixed(2)}:1`,
+    );
+  }
+});
+
+test("platform theme is scoped away from restaurant-owned public menu themes", async () => {
+  assert.match(platformThemeCss, /data-platform-theme="dark"/);
+  assert.match(platformThemeCss, /:not\(:has\(\.menu-public-shell\)\)/);
+  assert.match(platformThemeCss, /:not\(\.menu-public-shell\)/);
+  for (const themeFile of [
+    "../src/theme-essential.css",
+    "../src/theme-signal-table.css",
+    "../src/theme-noir.css",
+    "../src/theme-heritage.css",
+    "../src/theme-gallery.css",
+  ]) {
+    const source = await readFile(new URL(themeFile, import.meta.url), "utf8");
+    assert.doesNotMatch(source, /data-platform-theme/, `${themeFile} must remain independent of platform mode`);
+  }
+});
+
+test("platform theme preference follows the language preference storage pattern", () => {
+  assert.match(themeToggleSource, /const STORAGE_KEY = "menu-theme"/);
+  assert.match(themeToggleSource, /localStorage\.getItem\(STORAGE_KEY\)/);
+  assert.match(themeToggleSource, /localStorage\.setItem\(STORAGE_KEY, nextDark \? "dark" : "light"\)/);
+  assert.match(themeToggleSource, /prefers-color-scheme:\s*dark/);
+  assert.match(themeToggleSource, /Switch to dark mode/);
+  assert.match(themeToggleSource, /التبديل إلى الوضع الداكن/);
+  assert.match(rootSource, /localStorage\.getItem\("menu-theme"\)/);
+  assert.match(rootSource, /data-platform-theme/);
+});
+
+test("platform chrome toggle is present on Studio, marketing, auth, pricing and legal routes", async () => {
+  for (const path of [
+    "../src/components/studio-shell.tsx",
+    "../src/routes/index.tsx",
+    "../src/routes/login.tsx",
+    "../src/routes/pricing.tsx",
+    "../src/routes/terms.tsx",
+    "../src/routes/privacy.tsx",
+  ]) {
+    const source = await readFile(new URL(path, import.meta.url), "utf8");
+    assert.match(source, /ThemeToggle/, `${path} must expose the platform theme toggle`);
+    assert.match(source, /data-platform-chrome/, `${path} must opt into platform theme tokens`);
+  }
+});
