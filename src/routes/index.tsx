@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LangToggle } from "@/components/lang-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
 import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
@@ -224,7 +225,7 @@ function Home() {
   ] as const;
 
   return (
-    <main className="menuq-home min-h-screen bg-background text-foreground">
+    <main data-platform-chrome className="menuq-home min-h-screen bg-background text-foreground">
       <header className="menuq-nav sticky top-0 z-50 border-b">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link to="/" className="inline-flex min-h-10 items-center" aria-label="Menuun">
@@ -240,6 +241,7 @@ function Home() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <LangToggle />
             <Button asChild size="sm">
               <Link to="/login">{lang === "ar" ? "دخول" : "Sign in"}</Link>
