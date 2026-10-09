@@ -1,0 +1,80 @@
+/* Homepage-only dark-mode corrections. Restaurant-owned public menu previews retain their native light palette. */
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu {
+  --mq-ivory: #f7f1e6;
+  --mq-paper: #fffdf8;
+  --mq-ink: #17211d;
+  --mq-emerald: #0b5c50;
+  --mq-deep: #063f39;
+  --mq-amber: #c58a42;
+  --mq-gold: #c58a42;
+  --mq-muted: #65716c;
+  --mq-line: #d8ddd5;
+  --mq-soft: #eef1eb;
+  color-scheme: light;
+  background: #fffdf8 !important;
+  color: #17211d !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu header {
+  background: #fffdf8 !important;
+  color: #17211d !important;
+  border-color: #e8e5dd !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu aside {
+  background: #063f39 !important;
+  color: #fff !important;
+  border-color: #1d3932 !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-intro {
+  background: linear-gradient(105deg, #f4efe3 0%, #fffdf8 62%) !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-product {
+  background: #fff !important;
+  color: #17211d !important;
+  border-color: #e8e5dd !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-product :is(h5, p, strong) {
+  color: #17211d !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-product p,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-brand span,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-meta,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-section-title small,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-footer {
+  color: #505b55 !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-kicker,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-product strong {
+  color: #0b5c50 !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-order p {
+  color: #fff !important;
+}
+
+/* Feature steps use an intentionally dark card treatment in both platform modes. */
+html[data-platform-theme="dark"] .menuq-home .menuq-step {
+  background: #171b22;
+  border-color: #3a414d;
+  color: #fff7ed;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-step > div,
+html[data-platform-theme="dark"] .menuq-home .menuq-step p {
+  color: #d0d5dd;
+}
+
+/* The shared footer has a fixed light surface by design in light mode; pair it
+   with dark-mode surface and text tokens instead of translucent light-mode ink. */
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) {
+  background: #171b22 !important;
+  color: #fff7ed !important;
+  border-color: #3a414d !important;
+}
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) :is(p, a, h2, span) {
+  color: #d0d5dd;
+}
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a:hover,
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a:focus-visible {
+  color: #fff7ed;
+}
+html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) > div > div:last-child {
+  border-color: #3a414d;
+}
