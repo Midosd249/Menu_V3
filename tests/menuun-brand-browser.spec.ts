@@ -85,3 +85,54 @@ test("platform theme preference stays independent from language across marketing
     }
   }
 });
+
+
+test("dark homepage full-page screenshot preserves the embedded demo and footer contrast", async ({ page }, testInfo) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+  await page.goto(BASE_URL, { waitUntil: "networkidle" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+  const demo = page.locator(".menuq-live-menu");
+  await expect(demo).toBeVisible();
+  await expect(demo.locator(".menuq-live-intro h3")).toBeVisible();
+  await expect(demo.locator(".menuq-live-product strong").first()).toBeVisible();
+  const demoColors = await demo.evaluate((element) => ({
+    title: getComputedStyle(element.querySelector(".menuq-live-intro h3")!).color,
+    headerBackground: getComputedStyle(element.querySelector("header")!).backgroundColor,
+    productText: getComputedStyle(element.querySelector(".menuq-live-product h5")!).color,
+    productBackground: getComputedStyle(element.querySelector(".menuq-live-product")!).backgroundColor,
+  }));
+  expect(demoColors.title).toBe("rgb(23, 33, 29)");
+  expect(demoColors.headerBackground).toBe("rgb(255, 253, 248)");
+  expect(demoColors.productText).toBe("rgb(23, 33, 29)");
+  expect(demoColors.productBackground).toBe("rgb(255, 255, 255)");
+
+  const footerColors = await page.locator(MARKETING_FOOTER).evaluate((footer) => ({
+    background: getComputedStyle(footer).backgroundColor,
+    link: getComputedStyle(footer.querySelector("a")!).color,
+  }));
+  expect(footerColors.background).toBe("rgb(23, 27, 34)");
+  expect(footerColors.link).toBe("rgb(208, 213, 221)");
+
+  await page.screenshot({ path: testInfo.outputPath("homepage-dark-full-page.png"), fullPage: true, animations: "disabled" });
+
+  await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+  await page.screenshot({ path: testInfo.outputPath("studio-dark-full-page.png"), fullPage: true, animations: "disabled" });
+});
+
+
+test("dark homepage keeps the original Menuun wordmark legible on a light brand plate", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+  const logoLink = page.locator('.menuq-home > header a[aria-label="Menuun"]');
+  const logo = logoLink.locator("img");
+  await expect(logo).toBeVisible();
+  await expect(logoLink).toHaveCSS("background-color", "rgb(255, 253, 248)");
+  await expect(logoLink).toHaveCSS("border-top-left-radius", "10.4px");
+  await expect(logoLink).toHaveCSS("padding-left", "8px");
+});
