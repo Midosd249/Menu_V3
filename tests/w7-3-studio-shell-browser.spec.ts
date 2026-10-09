@@ -7,7 +7,10 @@ const BASE_URL = process.env.STUDIO_SHELL_BASE_URL ?? "http://127.0.0.1:8082";
 
 test("studio shell mobile navigation and RTL/LTR behavior", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
+  await page.evaluate(() => localStorage.setItem("menu-theme", "light"));
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
   const desktopNav = page.locator('nav[aria-label="تنقل مساحة العمل على سطح المكتب"]');
   const mobileNav = page.locator('nav[aria-label="تنقل مساحة العمل على الهاتف"]');
   await expect(mobileNav).toBeVisible();
@@ -25,10 +28,21 @@ test("studio shell mobile navigation and RTL/LTR behavior", async ({ page }) => 
   await expect(moreSheet.locator('a[href="/admin"]')).toHaveCount(0);
   await page.keyboard.press("Escape");
   await expect(moreSheet).toBeHidden();
+  const themeToggle = page.getByRole("button", { name: "التبديل إلى الوضع الداكن" });
+  await expect(themeToggle).toBeVisible();
+  await themeToggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("dark");
   const languageGroup = page.getByRole("group", { name: "اختيار اللغة" });
   await expect(languageGroup).toBeVisible();
   await languageGroup.getByRole("button", { name: "EN" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
+  await page.getByRole("group", { name: "Language selection" }).getByRole("button", { name: "عربي" }).click();
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
   await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
   await expect(page.getByRole("button", { name: "More" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
