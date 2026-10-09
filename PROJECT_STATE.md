@@ -379,3 +379,5 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RESEARCH: WCAG 2.2 SC 1.4.10 Reflow requires content at 320 CSS px width without loss of information/functionality or two-dimensional scrolling; official source: https://www.w3.org/TR/WCAG22/.
 - UNKNOWN: latest PR CI/browser run, production deployment, and real-device verification are pending. No deployment performed.
 - EXACT NEXT ACTION: open one PR, inspect all applicable CI results and diff, then stop before merge/deployment unless the owner explicitly requests release.
+
+- CI DIAGNOSIS: first PR browser run exposed a regression-test setup error, not an application failure: the test attempted to access `localStorage` on the initial opaque `about:blank` origin. The test now navigates to `/login` first, sets the theme on the app origin, reloads, and verifies the footer. Rerun on the latest head is pending.
