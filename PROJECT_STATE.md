@@ -396,9 +396,19 @@ Start with repository-first request mapping and evidence for public menu, Studio
 
 ## 2026-10-09 — PR #390 Merged: Login Footer Dark-Mode Contrast — MERGED / POST-MERGE QUALITY VERIFIED
 
-- VERIFIED: PR #390 merged into `main` using squash merge. Merge commit / current `main` SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- VERIFIED: PR #390 merged into `main` using squash merge. PR #390 merge commit SHA: `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - VERIFIED: pre-merge head `a8507826958fea08fec3c4805aabaf314c1bcac4` passed Menu V3 Quality run `37958748646` and W9 Orders QA run `37958748617`.
 - VERIFIED: main-branch Menu V3 Quality run `37961255049` completed successfully on merge SHA `1d4a347a37928f4f8661ee48fb417b8457f10929`.
 - INCLUDED: login-only dark-theme footer foreground override and Arabic/English Playwright contrast regression; prior login overflow/reachability fix remains included.
 - DEPLOYMENT: no deployment was requested or performed. Physical-device QA remains UNKNOWN.
 - EXACT NEXT ACTION after this continuity PR merges: verify `main` contains these records, then stop. Do not deploy or start another task automatically.
+
+## 2026-10-09 — Continuity Closure After PR #391 — VERIFIED
+
+- VERIFIED: PR #390 implementation merged at `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- VERIFIED: continuity-only PR #391 merged at `ee8db7dc1fd0c83422f3100f797445d72e840559`; this is the verified `main` HEAD as of this record.
+- VERIFIED: PR #391 Menu V3 Quality run `37963664719` and W9 Orders QA run `37963664727` both completed successfully on PR head `57df76ebb2b38ff71a5aa76c3c58702bfedf5ad0`.
+- VERIFIED: post-merge Menu V3 Quality run `37961255049` succeeded on PR #390 merge commit `1d4a347a37928f4f8661ee48fb417b8457f10929`.
+- IMPLEMENTATION: login footer dark-mode contrast fix and Arabic/English Playwright regression are merged. Previous login footer reachability fix remains.
+- DEPLOYMENT: no production deployment was requested or performed. Real-device QA remains UNKNOWN.
+- EXACT NEXT ACTION: stop. No additional implementation or deployment is authorized by this task.
