@@ -14,7 +14,7 @@ html[data-platform-theme="dark"] .menuq-home .menuq-live-menu {
   background: #fffdf8 !important;
   color: #17211d !important;
 }
-html[data-platform-theme="dark"] .menuq-home .menuq-live-menu header {
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu :is(h1, h2, h3, h4, h5, strong, b, a, span, p, small, label, button) {\n  color: #17211d !important;\n}\nhtml[data-platform-theme="dark"] .menuq-home .menuq-live-menu header {
   background: #fffdf8 !important;
   color: #17211d !important;
   border-color: #e8e5dd !important;
@@ -46,7 +46,7 @@ html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-kicker
 html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-product strong {
   color: #0b5c50 !important;
 }
-html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-order p {
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu .menuq-live-order :is(p, h1, h2, h3, h4, h5, strong, span) {
   color: #fff !important;
 }
 
