@@ -29,7 +29,38 @@ import { MarketingFooter } from "@/components/marketing-footer";
 import { MenuunLogo } from "@/components/menuun-logo";
 import "./index.css";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  head: ({ matches }) => {
+    const search = matches[matches.length - 1]?.search as Record<string, unknown> | undefined;
+    const en = search?.lang === "en";
+    const title = en
+      ? "Menuun | Digital Menu Platform for Restaurants & Cafés"
+      : "Menuun | منصة منيو رقمي للمطاعم والكافيهات";
+    const description = en
+      ? "An Arabic-first digital menu platform for restaurants and cafés in Saudi Arabia."
+      : "منصة المنيو الرقمية للمطاعم السعودية";
+    const image = "https://www.menuun.com/og.jpg";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "Menuun" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:locale", content: en ? "en_US" : "ar_SA" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: image },
+      ],
+    };
+  },
+  component: Home,
+});
 
 const FEATURES = [
   {
