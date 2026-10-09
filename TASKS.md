@@ -1,3 +1,19 @@
+## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
+
+- Changed: `src/components/marketing-footer.tsx`; `tests/public-pages-themes-contract.test.mjs`.
+- Footer structure: Brand → Links → Contact → Copyright.
+- Contact email and WhatsApp are each rendered once, under Contact only.
+- Brand tagline consolidated; duplicate About paragraph removed.
+- Footer links include Pricing, Preview, Sign in, `/terms`, and `/privacy` in Arabic and English.
+- Regression contract added for structure/order, contact uniqueness, legal destinations, and RTL/LTR direction.
+- UNKNOWN: local commands and browser rendering unavailable in this connected GitHub session; required CI/browser evidence pending.
+- Deployment: NOT REQUESTED; hold merge and deployment for owner review.
+
+## Exact next task
+Open one draft PR, inspect Quality/W9/browser QA and final diff, then stop for owner review.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.
