@@ -91,7 +91,7 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /to="\/login"/);
   assert.match(footer, /to="\/themes\/preview"/);
   assert.match(footer, /<LangToggle \/>/);
-  assert.match(footer, /من نحن|About/);
+  assert.doesNotMatch(footer, /من نحن|About/);
   assert.match(footer, /تواصل معنا|Contact/);
   assert.ok(footer.includes("ahmed.mohamed@menuun.com"));
   assert.match(footer, /966549598318/);
