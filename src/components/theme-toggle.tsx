@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import { cn } from "@/lib/utils";
@@ -25,10 +25,18 @@ function resolveTheme(preference: string | null) {
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { lang } = useLang();
-  // Initialize synchronously from the same preference the root bootstrap script uses.
-  // This prevents the first render from advertising the wrong action before useEffect runs.
-  const [dark, setDark] = useState(() => resolveTheme(readStoredPreference()));
-  const storedPreference = useRef<string | null>(readStoredPreference());
+  // Keep server/client first-render markup identical, then synchronize before paint.
+  // The root bootstrap script already applies the persisted/system theme to <html>.
+  const [dark, setDark] = useState(false);
+  const storedPreference = useRef<string | null>(null);
+
+  useLayoutEffect(() => {
+    const preference = readStoredPreference();
+    storedPreference.current = preference;
+    const initialDark = resolveTheme(preference);
+    setDark(initialDark);
+    applyTheme(initialDark);
+  }, []);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
