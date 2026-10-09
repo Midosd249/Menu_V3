@@ -56,8 +56,8 @@ function PrivacyPage() {
         <section className="mt-7 grid gap-3">
           <h2 className="text-xl font-semibold">{en ? "4. Payments and sharing" : "٤. المدفوعات ومشاركة البيانات"}</h2>
           <p className="leading-8 text-ink-soft">{en
-            ? "Menuun does not currently process payments directly through the platform. Paid upgrades are arranged manually, including through WhatsApp or direct contact. We do not describe an online payment processor as part of the current service. We do not sell your personal information. We have not documented a complete list of every infrastructure provider or data-transfer location in this policy, so we do not make broader claims about all processing or transfers."
-            : "لا تعالج Menuun المدفوعات مباشرةً داخل المنصة في الوقت الحالي. تتم ترتيبات الترقية المدفوعة يدويًا، بما في ذلك عبر واتساب أو التواصل المباشر. لذلك لا نصف معالج مدفوعات إلكترونيًا على أنه جزء من الخدمة الحالية. لا نبيع معلوماتك الشخصية. ولم نوثق في هذه السياسة قائمة كاملة بجميع مزودي البنية التحتية أو مواقع نقل البيانات، لذلك لا نقدم ادعاءات أوسع بشأن جميع عمليات المعالجة أو النقل."}</p>
+            ? "Menuun does not currently process payments directly through the platform. Paid upgrades are arranged manually, including through WhatsApp or direct contact. We do not describe an online payment processor as part of the current service. We have not documented a complete list of every infrastructure provider or data-transfer location in this policy, so we do not make broader claims about all processing or transfers."
+            : "لا تعالج Menuun المدفوعات مباشرةً داخل المنصة في الوقت الحالي. تتم ترتيبات الترقية المدفوعة يدويًا، بما في ذلك عبر واتساب أو التواصل المباشر. لذلك لا نصف معالج مدفوعات إلكترونيًا على أنه جزء من الخدمة الحالية. ولم نوثق في هذه السياسة قائمة كاملة بجميع مزودي البنية التحتية أو مواقع نقل البيانات، لذلك لا نقدم ادعاءات أوسع بشأن جميع عمليات المعالجة أو النقل."}</p>
         </section>
         <section className="mt-7 grid gap-3">
           <h2 className="text-xl font-semibold">{en ? "5. Data changes and deletion requests" : "٥. طلبات تعديل البيانات وحذفها"}</h2>
