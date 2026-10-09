@@ -95,7 +95,8 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /تواصل معنا|Contact/);
   assert.ok(footer.includes("ahmed.mohamed@menuun.com"));
   assert.match(footer, /966549598318/);
-  assert.doesNotMatch(footer, /to="\/(about|contact|help|privacy|terms)"/);
+  assert.match(footer, /to="\/terms"/);
+  assert.match(footer, /to="\/privacy"/);
 });
 
 
@@ -104,4 +105,43 @@ test("WhatsApp ordering is presented as a core capability in every commercial pl
   assert.match(catalog, /WhatsApp ordering from the menu/);
   assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*الطلب عبر واتساب/);
   assert.match(catalog, /COMMERCIAL_FEATURES[\s\S]*WhatsApp ordering/);
+});
+
+
+test("homepage exposes bilingual social metadata with the canonical 1200x630 share image", () => {
+  assert.match(home, /Menuun \\| منصة منيو رقمي للمطاعم والكافيهات/);
+  assert.match(home, /Menuun \\| Digital Menu Platform for Restaurants & Cafés/);
+  assert.match(home, /property: "og:title"/);
+  assert.match(home, /property: "og:description"/);
+  assert.match(home, /name: "twitter:card", content: "summary_large_image"/);
+  assert.match(home, /name: "twitter:title"/);
+  assert.match(home, /name: "twitter:description"/);
+  assert.match(home, /https:\\/\\/www\\.menuun\\.com\\/og\\.jpg/);
+  assert.match(home, /og:image:width", content: "1200"/);
+  assert.match(home, /og:image:height", content: "630"/);
+});
+
+test("legal pages are bilingual, linked, and describe current data/payment practices honestly", () => {
+  const terms = read("src/routes/terms.tsx");
+  const privacy = read("src/routes/privacy.tsx");
+  for (const route of [terms, privacy]) {
+    assert.match(route, /useLang/);
+    assert.match(route, /ahmed\\.mohamed@menuun\\.com/);
+    assert.match(route, /Last updated: 9 October 2026/);
+    assert.match(route, /آخر تحديث: 9 أكتوبر 2026/);
+  }
+  assert.match(terms, /createFileRoute\\("\/terms"\\)/);
+  assert.match(terms, /Terms of Service/);
+  assert.match(terms, /شروط الاستخدام/);
+  assert.match(terms, /does not currently process payments directly/);
+  assert.match(terms, /لا تعالج Menuun المدفوعات مباشرةً/);
+  assert.match(privacy, /createFileRoute\\("\/privacy"\\)/);
+  assert.match(privacy, /Privacy Policy/);
+  assert.match(privacy, /سياسة الخصوصية/);
+  assert.match(privacy, /Supabase/);
+  assert.match(privacy, /local storage/);
+  assert.match(privacy, /Personal Data Protection Law \\(PDPL\\)/);
+  assert.match(privacy, /نظام حماية البيانات الشخصية السعودي/);
+  assert.match(privacy, /not a certification/);
+  assert.match(privacy, /لا يُعد شهادة امتثال/);
 });
