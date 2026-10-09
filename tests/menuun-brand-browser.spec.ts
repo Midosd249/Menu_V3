@@ -11,12 +11,19 @@ async function expectFooterContract(page: import("@playwright/test").Page, langu
 
   await expect(footer).toContainText(language === "ar" ? "تواصل معنا" : "Contact");
   for (const label of links) await expect(footer).toContainText(label);
-  await expect(footer.locator('a[href^="mailto:"]')).toHaveCount(1);
-  await expect(footer.locator('a[href^="https://wa.me/"]')).toHaveCount(1);
+  const emailLink = footer.locator('a[href="mailto:ahmed.mohamed@menuun.com"]');
+  await expect(emailLink).toHaveCount(1);
+  await expect(emailLink).toHaveAccessibleName(language === "ar" ? "إرسال بريد إلكتروني" : "Send email");
+  await expect(emailLink.locator("svg")).toBeVisible();
+  const whatsappLink = footer.locator('a[href="https://wa.me/966549598318"]');
+  await expect(whatsappLink).toHaveCount(1);
+  await expect(whatsappLink).toHaveAccessibleName(language === "ar" ? "التواصل عبر واتساب" : "Contact us on WhatsApp");
+  await expect(whatsappLink.locator("svg")).toBeVisible();
   await expect(footer.locator('a[href="/terms"]')).toHaveCount(1);
   await expect(footer.locator('a[href="/privacy"]')).toHaveCount(1);
-  await expect(footer).toContainText("ahmed.mohamed@menuun.com");
-  await expect(footer).toContainText("© 2026 Menuun");
+  await expect(footer).not.toContainText("ahmed.mohamed@menuun.com");
+  await expect(footer).not.toContainText("+966 54 959 8318");
+  await expect(footer).toContainText(/© \\d{4} Menuun/);
 }
 
 test.describe("Menuun customer-facing brand surfaces", () => {
