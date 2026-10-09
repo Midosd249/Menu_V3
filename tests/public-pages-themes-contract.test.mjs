@@ -10,6 +10,9 @@ const themes = read("src/routes/themes/index.tsx");
 const preview = read("src/routes/themes/preview.tsx");
 const catalog = read("src/lib/menu/commercial-catalog.ts");
 const registry = read("src/lib/theme/registry.ts");
+const root = read("src/routes/__root.tsx");
+const appManifest = JSON.parse(read("public/manifest.webmanifest"));
+const appIcon = read("public/menuun-app-icon.svg");
 
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
@@ -91,7 +94,7 @@ test("shared marketing footer uses only real destinations and bilingual controls
   assert.match(footer, /to="\/login"/);
   assert.match(footer, /to="\/themes\/preview"/);
   assert.match(footer, /<LangToggle \/>/);
-  assert.match(footer, /من نحن|About/);
+  assert.doesNotMatch(footer, /من نحن|About/);
   assert.match(footer, /تواصل معنا|Contact/);
   assert.ok(footer.includes("ahmed.mohamed@menuun.com"));
   assert.match(footer, /966549598318/);
@@ -145,4 +148,51 @@ test("legal pages are bilingual, linked, and describe current data/payment pract
   assert.ok(privacy.includes("نظام حماية البيانات الشخصية السعودي"));
   assert.ok(privacy.includes("not a certification"));
   assert.ok(privacy.includes("لا يُعد شهادة امتثال"));
+});
+
+
+test("marketing footer has one ordered Brand → Links → Contact → Copyright structure", () => {
+  const footer = read("src/components/marketing-footer.tsx");
+  const brandIndex = footer.indexOf('<div className="max-w-sm">');
+  const linksIndex = footer.indexOf('<nav aria-label={ar ? "روابط الموقع" : "Site links"}>');
+  const contactIndex = footer.indexOf('{ar ? "تواصل معنا" : "Contact"}');
+  const copyrightIndex = footer.indexOf('className="mt-10 flex flex-col gap-4 border-t border-line pt-5');
+
+  assert.ok(brandIndex >= 0 && brandIndex < linksIndex, "Brand must precede Links");
+  assert.ok(linksIndex < contactIndex, "Links must precede Contact");
+  assert.ok(contactIndex < copyrightIndex, "Contact must precede Copyright");
+  assert.doesNotMatch(footer, /من نحن|About/);
+  assert.doesNotMatch(footer.slice(brandIndex, linksIndex), /mailto:|wa\.me|CONTACT_EMAIL|whatsappUrl/);
+  assert.equal((footer.match(/href=\{\x60mailto:\$\{CONTACT_EMAIL\}\x60\}/g) ?? []).length, 1);
+  assert.equal((footer.match(/href=\{whatsappUrl\}/g) ?? []).length, 1);
+
+  const links = footer.slice(linksIndex, contactIndex);
+  for (const destination of ['to="/pricing"', 'to="/themes/preview"', 'to="/login"', 'to="/terms"', 'to="/privacy"']) {
+    assert.ok(links.includes(destination), `Footer Links section must include ${destination}`);
+  }
+
+  assert.match(footer, /<footer dir=\{ar \? "rtl" : "ltr"\}/);
+  assert.match(footer, /شروط الاستخدام/);
+  assert.match(footer, /Terms of Service/);
+  assert.match(footer, /سياسة الخصوصية/);
+  assert.match(footer, /Privacy Policy/);
+});
+
+
+test("application identity uses Menuun metadata, favicon, and web app manifest", () => {
+  assert.match(root, /const APP_NAME = "Menuun"/);
+  assert.match(root, /\{ title: APP_NAME \}/);
+  assert.match(root, /href: "\/favicon\.svg"/);
+  assert.match(root, /rel: "manifest", href: "\/manifest\.webmanifest"/);
+  assert.equal(appManifest.name, "Menuun");
+  assert.equal(appManifest.short_name, "Menuun");
+  assert.equal(appManifest.start_url, "/");
+  assert.equal(appManifest.display, "standalone");
+  assert.equal(appManifest.icons.length, 1);
+  assert.equal(appManifest.icons[0].src, "/menuun-app-icon.svg");
+  assert.equal(appManifest.icons[0].type, "image/svg+xml");
+  assert.equal(appManifest.icons[0].purpose, "any maskable");
+  assert.match(appIcon, /<rect width="512" height="512" fill="#344331"\/>/);
+  assert.match(appIcon, /<svg x="106" y="106" width="300" height="300"/);
+  assert.match(appIcon, /fill="#FFF7ED"/);
 });

@@ -1,3 +1,37 @@
+## 2026-10-09 — Footer Contact Icons & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- Root cause found in Quality run `37880278153`: stale browser test expected the visible email address after email contact changed to an icon with an accessible label.
+- Browser regression contract updated for mailto/WhatsApp destinations, accessible names, visible icons, unique actions, hidden raw contact details, legal links, and dynamic copyright year.
+- Added dedicated square `public/menuun-app-icon.svg` with opaque brand background and safe-zone padding; `public/manifest.webmanifest` now points to it as an `any maskable` icon.
+- Added automated contract checks for Menuun title, favicon, manifest, and app-icon metadata.
+- Previous CI evidence: typecheck/tests/lint/build/all-theme browser QA passed, but Menuun brand browser QA failed on the stale email-text assertion; W9 Orders QA passed. These results do not verify the current head.
+- Latest code/test head before continuity updates: `55e3cf4dd98c440534ed6991be858aa714f98b51`; current-head CI remains to be verified.
+- Deployment: no production deployment. Vercel PR Preview status is not production evidence.
+
+### Exact next task
+Verify all required checks on the latest PR #385 head and fix any remaining failure; do not merge with a failing or pending required check.
+
+---
+
+## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
+
+- Changed: `src/components/marketing-footer.tsx`; `tests/public-pages-themes-contract.test.mjs`; `tests/menuun-brand-browser.spec.ts`.
+- Footer structure: Brand → Links → Contact → Copyright.
+- Contact email and WhatsApp are each rendered once, under Contact only.
+- Brand tagline consolidated; duplicate About paragraph removed.
+- Footer links include Pricing, Preview, Sign in, `/terms`, and `/privacy` in Arabic and English.
+- Regression contract added for structure/order, contact uniqueness, legal destinations, and RTL/LTR direction.
+- Initial browser QA caught stale expectations for the removed About block; the Playwright browser spec now asserts the intended bilingual footer instead.
+- VERIFIED: Quality run `37878156218` passed typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English on code/test head `7056b42edca4602e9382ab523b34ee1898de2073`.
+- VERIFIED: W9 Orders QA run `37878156194` passed; Vercel PR preview status is SUCCESS.
+- UNKNOWN: local shell execution and physical-device QA remain unverified; no Production deployment was triggered.
+- Deployment: NOT REQUESTED; hold merge and deployment for owner review.
+
+## Exact next task
+PR #385 remains open as Draft for owner review. Do not merge or deploy without explicit approval.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.

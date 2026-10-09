@@ -1,3 +1,52 @@
+## 2026-10-09 — Footer Contact Icons & Menuun App Identity Follow-up
+
+### Scope
+Fix the latest-head browser regression and complete the requested Menuun app identity metadata/icon within PR #385. No deployment.
+
+### Evidence and implementation
+- CI failure root cause: `tests/menuun-brand-browser.spec.ts` still asserted that the footer visibly contains `ahmed.mohamed@menuun.com`, but the authorized UI change intentionally presents an email icon and accessible label instead.
+- Updated browser assertions to check exact `mailto:` and WhatsApp destinations, accessible names, visible icons, unique links, legal destinations, no visible contact details, and a non-hard-coded copyright year.
+- Added `public/menuun-app-icon.svg`: opaque brand background, centered supplied Menuun mark, and safe-zone padding for maskable presentation.
+- Updated `public/manifest.webmanifest` to use the dedicated app icon and `purpose: "any maskable"`; `src/routes/__root.tsx` already exposes the Menuun document title, favicon, and manifest link.
+- Added contract assertions for title/favicon/manifest/app icon.
+- Research: official MDN and W3C Web App Manifest guidance supports SVG icons and defines the maskable safe zone. SVG-only manifest compatibility and installed-app appearance remain UNKNOWN until device/browser verification.
+
+### Verification
+- VERIFIED: the previous Quality run isolated the failure to the stale browser assertion; typecheck, tests, lint, production build, all-theme browser QA passed before the final icon/test follow-up; W9 Orders QA passed on that earlier head.
+- PENDING: GitHub Actions on the current latest head; do not merge until all required checks are green and final diff is reviewed.
+- UNKNOWN: local shell and physical-device QA have not been performed; no production deployment.
+
+### Exact next task
+Verify latest-head CI for PR #385, repair any failure, review the final diff, and stop at the authorized release boundary.
+
+---
+
+## 2026-10-09 — Marketing Footer Structure Fix
+
+### Scope
+One atomic marketing-footer structure fix. Preserve all existing destinations, contact targets, bilingual behavior, and language toggle; no deployment.
+
+### Evidence and implementation
+- Base `main` HEAD: `fd3d92cbac172476c4f7507b4b0b9582ce91b821`.
+- `src/components/marketing-footer.tsx` previously showed email and WhatsApp under Brand and again under Contact; an About section repeated the tagline; section order was Brand → About → Contact → Links.
+- Updated shared markup to Brand → Links → Contact → Copyright, with the same DOM order and `dir`-driven Arabic RTL / English LTR behavior.
+- Brand now has one concise tagline. Email and WhatsApp are only rendered under Contact.
+- Links explicitly include Pricing, Preview, Sign in, `/terms`, and `/privacy`.
+- Added regression assertions to `tests/public-pages-themes-contract.test.mjs` and updated `tests/menuun-brand-browser.spec.ts` to verify section order, contact uniqueness, legal links, and Arabic/English homepage/login rendering.
+- Research preflight: U.S. Web Design System footer guidance emphasizes curated footer link groups and keyboard focus; W3C WAI semantic HTML landmark guidance supports using a labeled `nav` landmark for the site links. These sources informed structure/accessibility, not runtime claims.
+
+### Verification
+- VERIFIED: source inspection and regression-contract implementation.
+- VERIFIED: Quality run `37878156218` passed typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English on code/test head `7056b42edca4602e9382ab523b34ee1898de2073`.
+- VERIFIED: W9 Orders QA run `37878156194` passed on the same head; Vercel PR preview status is SUCCESS.
+- UNKNOWN: local shell execution and physical-device QA remain unverified; Production was not deployed.
+- Release boundary: one draft review PR; no merge or deployment.
+
+### Exact next task
+Owner review of PR #385 is the exact next action. Do not merge or deploy without explicit approval.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.

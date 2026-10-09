@@ -1,0 +1,19 @@
+{
+  "name": "Menuun",
+  "short_name": "Menuun",
+  "description": "منصة المنيو الرقمية للمطاعم والكافيهات",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF7ED",
+  "theme_color": "#344331",
+  "icons": [
+    {
+      "src": "/menuun-app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

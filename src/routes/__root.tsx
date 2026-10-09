@@ -35,7 +35,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: imageArtDirectionCss },
       { rel: "stylesheet", href: motionCss },
       { rel: "stylesheet", href: accessibilityCss },
-      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
   component: RootDocument,

@@ -1,3 +1,34 @@
+## 2026-10-09 — Footer Contact Icon & App Identity Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #385 head before this follow-up failed only at the Menuun brand browser step; its assertion still expected the visible email address after the footer changed to icon + accessible label. Typecheck, unit tests, lint, build, and all-theme browser QA passed in that run; W9 Orders QA passed.
+- FIXED: browser assertions now verify the exact mailto/WhatsApp destinations, accessible names, visible icons, one link each, no visible phone/email text, legal links, and dynamic copyright year.
+- IMPLEMENTED: added `public/menuun-app-icon.svg`, a dedicated square icon with opaque brand background and centered mark inside the maskable safe zone; manifest now references it instead of treating the transparent favicon as maskable.
+- ADDED: contract coverage for Menuun title/favicon/manifest and app-icon metadata.
+- VERIFIED: official MDN/W3C manifest guidance confirms scalable SVG icons are valid and that maskable artwork must respect a central safe zone; platform-specific icon rendering still needs real-device/browser verification.
+- UNKNOWN: latest-head GitHub Actions runs have not yet been confirmed as completed; no merge or production deployment performed. Vercel currently reports a PR Preview status only, not production.
+- Current follow-up code/test head: `55e3cf4dd98c440534ed6991be858aa714f98b51` (verify current branch HEAD again after continuity commits).
+- Exact next task: inspect latest-head CI results, fix any remaining failures, review final diff, and stop before release if a required gate is not green.
+
+---
+
+## 2026-10-09 — Marketing Footer Structure Fix — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: base `main` HEAD is `fd3d92cbac172476c4f7507b4b0b9582ce91b821`; implementation branch is `fix/marketing-footer-structure-2026-10-09`.
+- VERIFIED: before the fix, `src/components/marketing-footer.tsx` rendered email and WhatsApp twice (once under the brand block and again under Contact), included a separate About paragraph duplicating the tagline, and placed Contact before Links.
+- IMPLEMENTED: footer order is now Brand → Links → Contact → Copyright in shared markup used by Arabic RTL and English LTR; contact actions exist only in Contact; the redundant About block and duplicate tagline are removed.
+- VERIFIED BY SOURCE: footer Links includes Pricing, Preview, Sign in, `/terms`, and `/privacy`; regression coverage now spans `tests/public-pages-themes-contract.test.mjs` and `tests/menuun-brand-browser.spec.ts`, checking destinations, section order, RTL/LTR direction, and single contact hrefs.
+- VERIFIED: GitHub Quality run `37878156218` passed on implementation/test head `7056b42edca4602e9382ab523b34ee1898de2073`; typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English succeeded.
+- VERIFIED: W9 Orders QA run `37878156194` passed on the same head.
+- VERIFIED: Vercel PR status check is SUCCESS for the PR preview; no Production deployment was triggered.
+- UNKNOWN: physical-device QA and local shell execution remain unverified. The live Production footer is unchanged until the owner approves a future release.
+- RELEASE: one review PR only; do not merge or deploy before owner review.
+
+## Exact next task
+
+PR #385 is open as Draft. Owner review is the next action; do not merge or deploy without explicit approval.
+
+---
+
 ## 2026-10-09 — Public Legal Pages & Share Metadata — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: the current homepage uses the shared `MarketingFooter`; before this change its links included Pricing, Preview, and Sign in, while `/terms` and `/privacy` did not exist.
