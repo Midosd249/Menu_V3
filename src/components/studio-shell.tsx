@@ -4,6 +4,7 @@ import { BarChart3, BellRing, Building2, QrCode, Settings, LayoutDashboard, Pale
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { LangToggle } from "@/components/lang-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { MenuunLogo } from "@/components/menuun-logo";
 import { useLang } from "@/lib/lang";
 import { copy, t } from "@/lib/menu/i18n";
@@ -247,7 +248,7 @@ export function StudioShell() {
     setOrderSoundMessage(t(copy.orderSound.unmuted, lang));
   }
 
-  return <div className="min-h-dvh bg-paper lg:grid lg:grid-cols-[280px_1fr]">
+  return <div data-platform-chrome className="min-h-dvh bg-paper lg:grid lg:grid-cols-[280px_1fr]">
     <aside className="hidden border-e border-line bg-paper lg:flex lg:flex-col">
       <div className="grid gap-2 px-5 py-6"><Link to="/" aria-label="Menuun" className="inline-flex w-fit min-h-10 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MenuunLogo lang={lang} className="h-9 w-auto max-w-[9.5rem]" /></Link><p className="truncate text-sm text-muted">{lang === "ar" ? tenant.nameAr : tenant.nameEn || tenant.nameAr}</p></div>
       <WorkspaceNavigation
@@ -275,7 +276,7 @@ export function StudioShell() {
           </div> : null}
           {orderSoundMessage ? <p role="status" aria-live="polite" className="text-xs text-muted">{orderSoundMessage}</p> : null}
           {typeof window !== "undefined" && "Notification" in window && Notification.permission !== "granted" ? <button type="button" onClick={() => void enableBrowserNotifications()} className="h-10 rounded-xl border border-line text-sm text-ink-soft">{lang === "ar" ? "تفعيل تنبيهات الجهاز" : "Enable device notifications"}</button> : null}
-        </div></div> : null}</div><LangToggle /><div className="lg:hidden"><UserButton /></div></div></header>
+        </div></div> : null}</div><ThemeToggle /><LangToggle /><div className="lg:hidden"><UserButton /></div></div></header>
       {trialDaysRemaining !== null ? <div className="px-4 pt-4 lg:px-8">
         <div role="status" className="rounded-2xl border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-ink">
           <p className="font-semibold">{lang === "ar" ? "أنت الآن في التجربة المجانية" : "You are on your free trial"}</p>
