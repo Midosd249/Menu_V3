@@ -137,7 +137,7 @@ test("W7.10 Studio dark mobile bottom navigation has accessible text contrast an
   expect(colors.activeIndicator).toContain("rgb(31, 209, 165)");
   for (const [foreground, background] of [[colors.activeText, colors.activeBackground], [colors.inactiveText, colors.background]]) {
     const ratio = await page.evaluate(([fg, bg]) => {
-      const channels = (value: string) => value.match(/\\d+/g)!.slice(0, 3).map(Number);
+      const channels = (value: string) => value.match(/\d+/g)!.slice(0, 3).map(Number);
       const luminance = (rgb: number[]) => rgb.map((value) => value / 255).map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4).reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
       const a = luminance(channels(fg));
       const b = luminance(channels(bg));
