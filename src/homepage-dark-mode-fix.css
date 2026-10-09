@@ -72,11 +72,11 @@ html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) {
   border-color: #3a414d !important;
 }
 html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) :is(p, a, h2, span) {
-  color: #d0d5dd;
+  color: #d0d5dd !important;
 }
 html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a:hover,
 html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a:focus-visible {
-  color: #fff7ed;
+  color: #fff7ed !important;
 }
 html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) > div > div:last-child {
   border-color: #3a414d;
