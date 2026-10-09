@@ -14,12 +14,13 @@ One atomic marketing-footer structure fix. Preserve all existing destinations, c
 
 ### Verification
 - VERIFIED: source inspection and regression-contract implementation.
-- VERIFIED: first browser run found an obsolete `About` expectation; browser assertions were updated to the new contract.
-- UNKNOWN: corrective Quality/W9/browser run results are pending; local test/typecheck/lint/build and manual rendered browser QA were not run here.
+- VERIFIED: Quality run `37878156218` passed typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English on code/test head `7056b42edca4602e9382ab523b34ee1898de2073`.
+- VERIFIED: W9 Orders QA run `37878156194` passed on the same head; Vercel PR preview status is SUCCESS.
+- UNKNOWN: local shell execution and physical-device QA remain unverified; Production was not deployed.
 - Release boundary: one draft review PR; no merge or deployment.
 
 ### Exact next task
-Review PR #385's final diff and require Quality, W9, and applicable browser QA to pass on the latest head. Stop for owner review.
+Owner review of PR #385 is the exact next action. Do not merge or deploy without explicit approval.
 
 ---
 

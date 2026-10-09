@@ -7,12 +7,13 @@
 - Footer links include Pricing, Preview, Sign in, `/terms`, and `/privacy` in Arabic and English.
 - Regression contract added for structure/order, contact uniqueness, legal destinations, and RTL/LTR direction.
 - Initial browser QA caught stale expectations for the removed About block; the Playwright browser spec now asserts the intended bilingual footer instead.
-- VERIFIED: typecheck, tests, lint, production build, and all-theme browser QA passed on the previous PR head; the Menuun brand browser QA failed only on stale About assertions.
-- UNKNOWN: rerun Quality/W9/browser QA after the corrective browser-spec update is pending. No local commands run in this connected GitHub session.
+- VERIFIED: Quality run `37878156218` passed typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English on code/test head `7056b42edca4602e9382ab523b34ee1898de2073`.
+- VERIFIED: W9 Orders QA run `37878156194` passed; Vercel PR preview status is SUCCESS.
+- UNKNOWN: local shell execution and physical-device QA remain unverified; no Production deployment was triggered.
 - Deployment: NOT REQUESTED; hold merge and deployment for owner review.
 
 ## Exact next task
-PR #385 is open as Draft; inspect Quality/W9/browser QA on the latest head and review the final diff, then stop for owner review.
+PR #385 remains open as Draft for owner review. Do not merge or deploy without explicit approval.
 
 ---
 

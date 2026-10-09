@@ -4,13 +4,15 @@
 - VERIFIED: before the fix, `src/components/marketing-footer.tsx` rendered email and WhatsApp twice (once under the brand block and again under Contact), included a separate About paragraph duplicating the tagline, and placed Contact before Links.
 - IMPLEMENTED: footer order is now Brand → Links → Contact → Copyright in shared markup used by Arabic RTL and English LTR; contact actions exist only in Contact; the redundant About block and duplicate tagline are removed.
 - VERIFIED BY SOURCE: footer Links includes Pricing, Preview, Sign in, `/terms`, and `/privacy`; regression coverage now spans `tests/public-pages-themes-contract.test.mjs` and `tests/menuun-brand-browser.spec.ts`, checking destinations, section order, RTL/LTR direction, and single contact hrefs.
-- VERIFIED: first Quality browser run exposed stale `About` expectations in `tests/menuun-brand-browser.spec.ts`; updated the browser contract to assert the new bilingual footer and one email/WhatsApp/legal-link target each.
-- UNKNOWN: the corrective commit's Quality/W9/browser QA results are pending; local commands remain unavailable in this GitHub-connected environment.
+- VERIFIED: GitHub Quality run `37878156218` passed on implementation/test head `7056b42edca4602e9382ab523b34ee1898de2073`; typecheck, tests, lint, production build, all-theme browser QA, and Menuun homepage/login browser QA in Arabic and English succeeded.
+- VERIFIED: W9 Orders QA run `37878156194` passed on the same head.
+- VERIFIED: Vercel PR status check is SUCCESS for the PR preview; no Production deployment was triggered.
+- UNKNOWN: physical-device QA and local shell execution remain unverified. The live Production footer is unchanged until the owner approves a future release.
 - RELEASE: one review PR only; do not merge or deploy before owner review.
 
 ## Exact next task
 
-PR #385 is open as Draft. Wait for Quality/W9/browser checks on the latest head, review the final diff and results, then stop for owner review. Do not merge or deploy.
+PR #385 is open as Draft. Owner review is the next action; do not merge or deploy without explicit approval.
 
 ---
 
