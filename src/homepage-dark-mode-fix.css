@@ -14,7 +14,10 @@ html[data-platform-theme="dark"] .menuq-home .menuq-live-menu {
   background: #fffdf8 !important;
   color: #17211d !important;
 }
-html[data-platform-theme="dark"] .menuq-home .menuq-live-menu :is(h1, h2, h3, h4, h5, strong, b, a, span, p, small, label, button) {\n  color: #17211d !important;\n}\nhtml[data-platform-theme="dark"] .menuq-home .menuq-live-menu header {
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu :is(h1, h2, h3, h4, h5, strong, b, a, span, p, small, label, button) {
+  color: #17211d !important;
+}
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu header {
   background: #fffdf8 !important;
   color: #17211d !important;
   border-color: #e8e5dd !important;
