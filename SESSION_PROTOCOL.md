@@ -165,3 +165,5 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - Added a browser regression test at 390×650 for the final footer link/copyright across Arabic/English and light/dark themes.
 - CI, deployment, and physical-device verification are not yet verified. Do not merge/deploy automatically.
 - Exact next action: create a PR and inspect the latest CI result, then stop before release.
+
+- CI follow-up: first browser run failed due to test setup accessing localStorage before navigation (`about:blank` security error), not a layout assertion. Test now initializes theme after navigating to the app origin; latest-head CI rerun pending.
