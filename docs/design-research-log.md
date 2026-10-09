@@ -535,3 +535,17 @@ Research is mandatory when the design choice is material, unfamiliar, consequent
 - Transferable principle: keep platform attribution visually subordinate, short, and isolated at the natural end of the public menu; do not place it in the restaurant header or over content.
 - What must not be copied: competitor logo, exact layout, wording beyond the generic attribution concept, proprietary assets, or exact styling.
 - Confidence: HIGH.
+
+
+## 2026-10-09 — Platform Light/Dark Mode
+
+- Category: repository-first design-system audit + official framework/accessibility research
+- Sources: current `src/colors.css`, `src/styles.css`, `src/w8-internal-visual-scope-fix.css`, route/component source, Tailwind CSS official dark-mode documentation, and W3C WCAG 2.2 contrast guidance.
+- VERIFIED repository finding: Tailwind CSS v4 is installed; there is no root `tailwind.config.js` or `tailwind.config.ts`. Shared semantic aliases and internal-app roles already exist, but the homepage has a separate `--mq-*` palette and internal scopes hard-code light surfaces.
+- VERIFIED repository finding: language preference uses `localStorage` key `menu-lang` in `src/lib/lang.tsx`, with defensive storage handling. The platform theme uses the analogous key `menu-theme` and the same light/dark string values.
+- VERIFIED external finding: Tailwind supports manually controlled dark variants, and its current documentation describes synchronizing the root class/attribute with persisted preference and `prefers-color-scheme`. W3C WCAG 2.2 SC 1.4.3 requires 4.5:1 for normal text and 3:1 for large text.
+- Decision: use an explicit `data-platform-theme` attribute plus scoped CSS custom-property overrides rather than adding a Tailwind config or rewriting every component. Only marked Studio/marketing/auth/legal chrome is opted in. Public-menu roots and their descendants are excluded from the platform chrome selectors.
+- Proposed/implemented dark palette: canvas `#0F1115`, surface `#171B22`, elevated `#1F252E`, subtle `#252B35`, primary text `#FFF7ED`, secondary `#D0D5DD`, muted `#A7AFBA`, border `#3A414D`, Ember `#FF5A1F`, Digital Mint `#1FD1A5`.
+- VERIFIED by the palette test's WCAG contrast calculation: Cream on canvas 17.80:1 and surface 16.26:1; secondary text on canvas/surface and muted text on canvas/surface are required to meet 4.5:1; Ember on canvas/surface is 6.06:1 / 5.54:1; Mint on canvas/surface is 9.65:1 / 8.82:1. Dark text on Ember and Mint is also checked.
+- Limitation: source/test contracts do not prove the final rendered browser appearance. CI and four RTL/LTR × light/dark browser combinations remain required.
+- Must not copy: any platform theme attribute or palette override into the five restaurant-owned public-menu themes.
