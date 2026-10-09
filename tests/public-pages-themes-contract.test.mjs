@@ -146,3 +146,31 @@ test("legal pages are bilingual, linked, and describe current data/payment pract
   assert.ok(privacy.includes("not a certification"));
   assert.ok(privacy.includes("لا يُعد شهادة امتثال"));
 });
+
+
+test("marketing footer has one ordered Brand → Links → Contact → Copyright structure", () => {
+  const footer = read("src/components/marketing-footer.tsx");
+  const brandIndex = footer.indexOf('<div className="max-w-sm">');
+  const linksIndex = footer.indexOf('<nav aria-label={ar ? "روابط الموقع" : "Site links"}>');
+  const contactIndex = footer.indexOf('{ar ? "تواصل معنا" : "Contact"}');
+  const copyrightIndex = footer.indexOf('className="mt-10 flex flex-col gap-4 border-t border-line pt-5');
+
+  assert.ok(brandIndex >= 0 && brandIndex < linksIndex, "Brand must precede Links");
+  assert.ok(linksIndex < contactIndex, "Links must precede Contact");
+  assert.ok(contactIndex < copyrightIndex, "Contact must precede Copyright");
+  assert.doesNotMatch(footer, /من نحن|About/);
+  assert.doesNotMatch(footer.slice(brandIndex, linksIndex), /mailto:|wa\.me|CONTACT_EMAIL|whatsappUrl/);
+  assert.equal((footer.match(/href=\{\x60mailto:\$\{CONTACT_EMAIL\}\x60\}/g) ?? []).length, 1);
+  assert.equal((footer.match(/href=\{whatsappUrl\}/g) ?? []).length, 1);
+
+  const links = footer.slice(linksIndex, contactIndex);
+  for (const destination of ['to="/pricing"', 'to="/themes/preview"', 'to="/login"', 'to="/terms"', 'to="/privacy"']) {
+    assert.ok(links.includes(destination), `Footer Links section must include ${destination}`);
+  }
+
+  assert.match(footer, /<footer dir=\{ar \? "rtl" : "ltr"\}/);
+  assert.match(footer, /شروط الاستخدام/);
+  assert.match(footer, /Terms of Service/);
+  assert.match(footer, /سياسة الخصوصية/);
+  assert.match(footer, /Privacy Policy/);
+});
