@@ -30,6 +30,7 @@ test("studio shell mobile navigation and RTL/LTR behavior", async ({ page }) => 
   await expect(moreSheet).toBeHidden();
   const themeToggle = page.getByRole("button", { name: "التبديل إلى الوضع الداكن" });
   await expect(themeToggle).toBeVisible();
+  await expect(themeToggle).toHaveAttribute("data-theme-toggle-ready", "true");
   await themeToggle.click();
   await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
   await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("dark");
@@ -43,8 +44,8 @@ test("studio shell mobile navigation and RTL/LTR behavior", async ({ page }) => 
   await page.getByRole("group", { name: "Language selection" }).getByRole("button", { name: "عربي" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
-  await expect(page.getByRole("button", { name: "Overview" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "More" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "نظرة عامة" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "المزيد" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
   await page.setViewportSize({ width: 430, height: 932 });
   await page.goto(`${BASE_URL}/studio`, { waitUntil: "domcontentloaded" });
