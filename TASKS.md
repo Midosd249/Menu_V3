@@ -2033,3 +2033,6 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - [x] Add short-mobile viewport regression coverage in `tests/menuun-brand-browser.spec.ts` for both themes and languages.
 - [ ] Open PR and verify latest CI/browser checks.
 - [ ] Review final diff; keep merge and production deployment out of scope.
+
+- [x] Diagnose and correct the first CI failure: browser test attempted localStorage access before navigation (opaque origin).
+- [ ] Confirm latest-head CI/browser checks pass.
