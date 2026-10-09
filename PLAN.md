@@ -1810,3 +1810,12 @@ Review theme test correctness, open one PR, inspect its checks and diff, and sto
 
 ### Exact next task
 Verify CI on the continuity-only head, then review and merge PR #386 as previously authorized. Do not deploy in this task.
+
+
+## 2026-10-09 — Login Dark-Mode Footer Reachability — IMPLEMENTATION_IN_PROGRESS
+
+- Scope: login route layout only; do not alter homepage, shared footer design, theme colors, or auth behavior.
+- Implemented a scroll-safe flex-column shell with vertical auto margins so tall login content does not become centered beyond the viewport.
+- Added a mobile browser regression test covering the last footer link and copyright area at 390×650 across Arabic/English and light/dark themes.
+- Verification pending: GitHub Actions browser/quality checks and final diff review. No merge/deployment authorized by this task.
+- Exact next action: open a PR and evaluate the latest CI evidence; stop before release.
