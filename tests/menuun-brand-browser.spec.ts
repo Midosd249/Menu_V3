@@ -63,9 +63,9 @@ test("platform theme preference stays independent from language across marketing
 
   const routes = ["/", "/pricing", "/login", "/terms", "/privacy"];
   for (const theme of ["light", "dark"] as const) {
-    await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
     for (const language of ["ar", "en"] as const) {
       for (const route of routes) {
+        await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
         const query = language === "en" ? "?lang=en" : "";
         await page.goto(`${BASE_URL}${route}${query}`, { waitUntil: "domcontentloaded" });
         await expect(page.locator("html")).toHaveAttribute("dir", language === "ar" ? "rtl" : "ltr");
