@@ -1,17 +1,16 @@
-## 2026-10-09 — Dark-Mode Visual/Functional Follow-up — IMPLEMENTATION_IN_PROGRESS
+## 2026-10-09 — Dark-Mode Visual/Functional Follow-up — VERIFIED IN CI
 
-- VERIFIED: canonical `main` at task start was `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; this task is isolated on branch `fix/dark-mode-contrast-audit-2026-10-09`.
-- VERIFIED: PR #388 is merged and its latest-head GitHub Quality run `37929000553` and W9 Orders QA run `37929000522` both completed successfully. Existing browser coverage captured the dark homepage and Studio, but did not assert the Studio bottom-nav color/contrast or the homepage footer wordmark plate.
-- VERIFIED: `src/homepage-dark-mode-fix.css` already protects the top homepage wordmark on a light brand plate; the final homepage footer wordmark had no equivalent protection while its footer surface switches to dark.
-- VERIFIED: the login page had three visually important secondary actions without an explicit dark-mode contrast/underline contract; the shared theme tokens alone did not guarantee link discoverability.
-- IMPLEMENTED: add a consistent light brand plate to the homepage footer logo, explicit underlined/high-contrast dark login links, and an opaque high-contrast dark Studio mobile bottom navigation with a distinct active state.
-- ADDED: browser assertions for footer logo, login link visibility/contrast/underline in Arabic and English, and Studio mobile navigation surface/active/inactive contrast.
-- RESEARCH: W3C WCAG 2.2 SC 1.4.3 requires 4.5:1 contrast for normal text; SC 1.4.11 requires 3:1 for essential UI component/state visuals. Source: https://www.w3.org/TR/WCAG22/ and https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
-- SCOPE: no restaurant-owned public-menu theme CSS, authentication logic, business behavior, or deployment configuration changes.
-- CI diagnosis: Quality run `37934096367` passed typecheck, repository tests, lint, build, all-theme browser QA, login/homepage brand QA, and the 30-product performance fixture. Studio browser QA exposed a test-state contamination only: the pointer remained over an inactive bottom-nav item, so the hover color was read instead of the default color. The test now moves the pointer to a neutral point before sampling; no product behavior was changed for this test failure. W9 Orders QA run `37934096578` passed. Reverification on the latest head is pending.
-- VERIFICATION: pending CI/browser execution on this branch head. Local shell and manual screenshot inspection are unavailable in this GitHub-connected session; no local execution is claimed.
-- DEPLOYMENT: no production deployment requested or performed.
-- EXACT NEXT ACTION: run current-head CI/browser/performance gates, inspect failures and changed-file diff, repair only proven failures, then stop before merge/deployment.
+- VERIFIED: base `main` at task start was `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; implementation branch is `fix/dark-mode-contrast-audit-2026-10-09`; review PR is #389.
+- VERIFIED: latest code-head GitHub Quality run `37936864400` passed: generated-route freshness, typecheck, repository tests, focused W7.4–W7.10 contracts, lint, production build, all-theme browser QA, homepage/login Arabic-English browser QA, Golden 30-product performance fixture, Studio Shell/Home/Menu/Growth/Customers and responsive browser QA, Platform Admin responsive browser QA, and browser performance-baseline upload.
+- VERIFIED: latest code-head W9 Orders QA run `37936864385` passed.
+- VERIFIED: the initial Studio contrast test failed only because the browser computed the inactive button's hover color as white rather than the default muted color. The final assertion accepts the normal and hover colors and checks actual text/background contrast in both states; latest-head Studio browser QA passed. The product CSS remains deliberately high-contrast in either state.
+- IMPLEMENTED: opaque dark Studio mobile navigation with clearer border, strong active state, and high-contrast labels; explicit underlined/high-contrast dark login secondary actions; a light brand plate for the homepage footer logo matching the header treatment.
+- RESEARCH: WCAG 2.2 SC 1.4.3 text contrast target is 4.5:1 for normal text; SC 1.4.11 specifies 3:1 for essential non-text UI/state visuals. Sources: https://www.w3.org/TR/WCAG22/ and https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
+- SCOPE REVIEW: only platform theme CSS, homepage logo styling, login presentation attributes, browser tests, and continuity records changed. No public-menu theme files, auth behavior, business logic, schema, dependency, or deployment configuration changed.
+- PERFORMANCE: Golden 30-product performance fixture passed and browser performance baseline was uploaded. The optional P1.9 real-route evidence step was skipped by its existing workflow condition; no new LCP/INP or production/physical-device performance claim is made.
+- VISUAL LIMITATION: CI browser tests and computed-style/contrast assertions passed. Manual human screenshot inspection and physical-device QA were not available in this GitHub-connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment was requested or executed.
+- EXACT NEXT ACTION: review PR #389 and its latest-head checks; do not merge or deploy automatically.
 
 ---
 

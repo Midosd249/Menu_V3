@@ -1,12 +1,11 @@
 # SESSION_PROTOCOL
 
-## 2026-10-09 — Dark-Mode Visual Follow-up
+## 2026-10-09 — Dark-Mode Visual Follow-up — VERIFIED IN CI
 
-- Active task: verify dark-mode login links, Studio mobile bottom navigation, and the homepage footer wordmark only.
-- Base `main` SHA: `4fd65ac1dee3ed56745d6ea1aed009f058b6e4d5`; task branch: `fix/dark-mode-contrast-audit-2026-10-09`.
-- Require latest-head GitHub Quality + W9 Orders QA, responsive/browser screenshot assertions, performance audit, final diff review, and continuity reconciliation before marking verified.
-- Do not merge or deploy as part of this task; stop after evidence-backed verification and report the exact next action.
-
+- Latest code-head GitHub Quality run `37936864400` and W9 Orders QA run `37936864385` passed.
+- PR #389 remains open and unmerged. Implementation branch: `fix/dark-mode-contrast-audit-2026-10-09`.
+- Performance: Golden fixture and browser performance-baseline upload passed. P1.9 real-route evidence remained skipped by the workflow condition; LCP/INP and physical-device QA remain unknown.
+- No merge or deployment was performed. Exact next action: review PR #389; stop before merge/deployment.
 
 ## Start
 1. Read all applicable `AGENTS.md` files, then `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README/relevant documentation, task-related source, tests, and configuration.
