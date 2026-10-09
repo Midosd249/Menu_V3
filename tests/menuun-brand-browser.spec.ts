@@ -23,7 +23,7 @@ async function expectFooterContract(page: import("@playwright/test").Page, langu
   await expect(footer.locator('a[href="/privacy"]')).toHaveCount(1);
   await expect(footer).not.toContainText("ahmed.mohamed@menuun.com");
   await expect(footer).not.toContainText("+966 54 959 8318");
-  await expect(footer).toContainText(/© \\d{4} Menuun/);
+  await expect(footer).toContainText(/© \d{4} Menuun/);
 }
 
 test.describe("Menuun customer-facing brand surfaces", () => {
