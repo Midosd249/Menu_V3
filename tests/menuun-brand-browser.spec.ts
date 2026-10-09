@@ -246,3 +246,42 @@ test("dark login footer text keeps accessible contrast on its light brand surfac
     }
   }
 });
+
+
+test("dark login footer text keeps accessible contrast on its light brand surface in Arabic and English", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+
+  for (const language of ["ar", "en"] as const) {
+    await page.goto(BASE_URL + "/login" + (language === "en" ? "?lang=en" : ""), { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+    const footer = page.locator("[data-auth-page] footer:not(.menuq-live-footer)");
+    const background = await footer.evaluate((element) => getComputedStyle(element).backgroundColor);
+    const contrastRatio = (foregroundColor: string, backgroundColor: string) => {
+      const channels = (value: string) => value.match(/\d+/g)!.slice(0, 3).map(Number);
+      const luminance = (rgb: number[]) => rgb
+        .map((value) => value / 255)
+        .map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4)
+        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+      const foreground = luminance(channels(foregroundColor));
+      const backdrop = luminance(channels(backgroundColor));
+      return (Math.max(foreground, backdrop) + 0.05) / (Math.min(foreground, backdrop) + 0.05);
+    };
+
+    const textLinks = footer.locator('a:not([aria-label="Menuun"])');
+    await expect(textLinks).toHaveCount(7);
+    for (const link of await textLinks.all()) {
+      await expect(link).toBeVisible();
+      const color = await link.evaluate((element) => getComputedStyle(element).color);
+      expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
+    }
+
+    const footerCopy = footer.locator("p");
+    await expect(footerCopy).toHaveCount(2);
+    for (const paragraph of await footerCopy.all()) {
+      const color = await paragraph.evaluate((element) => getComputedStyle(element).color);
+      expect(contrastRatio(color, background)).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
