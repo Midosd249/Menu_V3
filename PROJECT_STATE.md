@@ -294,3 +294,26 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-05 — P1.9 Admin Critical Route Split — VERIFIED / MERGED
+- VERIFIED: PR #382 was reviewed against current `main` and the current TanStack Router/Vite architecture; the change isolates the heavy Platform Admin UI from the Admin route reference module and moves Admin route metadata into a dedicated lightweight module.
+- IMPLEMENTED: `src/components/admin/platform-admin-page.tsx` owns the Platform Admin UI; `src/lib/admin/routes.ts` owns route/tab metadata; `src/routes/admin.tsx` is now a lightweight route/configuration shell; `src/routes/admin/$workspace.tsx` remains the dynamic workspace adapter.
+- PROTECTED: server-side Platform Admin authorization, tenant/branch boundaries, customer/account operations, order lifecycle, client-side TanStack navigation, legacy tab compatibility, and existing public-menu/theme behavior.
+- IMPLEMENTED: P1.9 real-route five-run evidence harness remains scoped to `perf/p1-9-*` branches only.
+- VERIFIED: PR #382 head `323d548ba96d94c856578b6401a77c53f9176f95` passed GitHub Quality #2921 and W9 Orders QA #1037; Vercel Preview status for the head was SUCCESS.
+- VERIFIED: five-run evidence measured initial-request medians of 91 (`/m/nafas`), 96 (`/m/nafas?lang=en`), and 92 (`/m/nafas/olaya`); DCL medians were 496.9ms, 485.0ms, and 462.3ms; EN transition median was 10 requests / 559ms; CLS was 0 and long tasks were 0 in route samples.
+- VERIFIED: built public HTML contained 28 modulepreload links and 0 Admin-named modulepreload links on the P1.9 head.
+- DECISION: this is a proven route-graph reduction, not proof of the original <15 initial-request target. The strict request budget remains unmet.
+- RESEARCH: current TanStack Router documentation confirms exported route properties can defeat automatic code splitting and route components are non-critical/lazy configuration.
+- MERGED: PR #382 squash-merged into `main` as `a449d1f3ac81366431addd2c2b2637355f72131f`.
+- POST-MERGE: GitHub Actions for the merge commit have not yet produced a workflow run; Vercel status is PENDING. Production deployment is NOT_VERIFIED.
+- UNKNOWN: production-host performance, real-device performance, LCP/INP, authorized DB query-plan evidence, and whether further public-route preload reduction is safe remain unverified.
+
+## EXACT CURRENT STATE
+**P1.9 Admin Critical Route Split: MERGED / VERIFIED CI — PRODUCTION VERIFICATION PENDING**
+Main: `a449d1f3ac81366431addd2c2b2637355f72131f`
+PR: #382
+
+## EXACT NEXT TASK
+**P1.9-B — Production/real-device performance validation and remaining public-route preload investigation.** Re-run the established five-run protocol against production-equivalent conditions, capture LCP/INP where available, compare request/transfer composition, and only introduce another code change if a new causal inefficiency is proven. Do not claim <15 initial requests or <500ms DCL as globally passed until production-equivalent evidence supports it.

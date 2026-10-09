@@ -1701,3 +1701,17 @@ Map actual requests first; preserve auth/tenant/branch boundaries and avoid unre
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+# 2026-10-05 — P1.9 Admin Critical Route Split — VERIFIED / MERGED
+- VERIFIED: PR #382 passed Quality #2921 and W9 Orders QA #1037 before merge.
+- IMPLEMENTED: Platform Admin UI was extracted from `src/routes/admin.tsx` into `src/components/admin/platform-admin-page.tsx`; route metadata moved to `src/lib/admin/routes.ts`; the dynamic workspace adapter imports those lightweight boundaries.
+- VERIFIED: initial-request medians improved to 91 / 96 / 92 for Arabic / English / branch versus prior 107 / 112 / 108 evidence.
+- VERIFIED: DCL medians were 496.9ms / 485.0ms / 462.3ms; EN transition was 10 requests / 559ms; CLS and long-task counts were zero in route samples.
+- VERIFIED: public HTML modulepreload inventory contained 0 Admin-named assets on the P1.9 head.
+- MERGED: main now contains the optimization at `a449d1f3ac81366431addd2c2b2637355f72131f`.
+- IMPORTANT: the original <15 initial-request objective is still not met; the evidence demonstrates a meaningful reduction, not budget compliance.
+- IMPORTANT: production/real-device evidence remains pending; Vercel is currently PENDING after the merge.
+
+## EXACT NEXT TASK
+**P1.9-B — Production/real-device performance validation and remaining public-route preload investigation.**
