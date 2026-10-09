@@ -1701,3 +1701,13 @@ Map actual requests first; preserve auth/tenant/branch boundaries and avoid unre
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+# 2026-10-04 — External Product Action Retirement — MERGED / VERIFIED
+
+- VERIFIED: PR #378 merged into `main` at `6c001073084a26e0fb383664a646285123e645df`.
+- VERIFIED: the official Nafas demo and P1.4–P1.8 work were already on `main` before PR #378 and are preserved by the merge.
+- VERIFIED: external Quick Add / Choose Options presentation is retired across all five canonical themes without changing the internal product-details/options order flow.
+- PROTECTED: auth/RLS, tenant isolation, Supabase data, cart/order behavior, analytics, and performance architecture.
+- P1.9 remains deferred.
+- DEPLOYMENT STATUS: NOT_PERFORMED_BY_THIS_TASK; Vercel is owner-managed.
+- EXACT NEXT TASK: owner handles the Vercel release/production flow. Do not begin unrelated work automatically.

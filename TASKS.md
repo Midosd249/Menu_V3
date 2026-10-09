@@ -1944,3 +1944,14 @@ Do not begin database consolidation, analytics caching, or unrelated cleanup bef
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+# 2026-10-04 — External Product Action Retirement — MERGED / VERIFIED
+
+- VERIFIED: PR #378 merged directly into `main` at `6c001073084a26e0fb383664a646285123e645df`.
+- VERIFIED: official Nafas demo from PR #377 was already part of `main` and remains present after the merge.
+- VERIFIED: external product Quick Add / Choose Options controls are retired across all five canonical themes.
+- VERIFIED: existing product details/options add flow, cart/order behavior, auth/RLS, tenant isolation, and P1.4–P1.8 performance work are preserved.
+- UNKNOWN: Production/real-device verification remains outside this task because the owner is handling Vercel separately.
+- IMPLEMENTATION STATUS: MERGED / VERIFIED.
+- DEPLOYMENT STATUS: NOT_PERFORMED_BY_THIS_TASK.
+- EXACT NEXT TASK: owner handles the Vercel release/production flow; P1.9 remains deferred.
