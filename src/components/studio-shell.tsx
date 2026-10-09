@@ -276,7 +276,7 @@ export function StudioShell() {
           </div> : null}
           {orderSoundMessage ? <p role="status" aria-live="polite" className="text-xs text-muted">{orderSoundMessage}</p> : null}
           {typeof window !== "undefined" && "Notification" in window && Notification.permission !== "granted" ? <button type="button" onClick={() => void enableBrowserNotifications()} className="h-10 rounded-xl border border-line text-sm text-ink-soft">{lang === "ar" ? "تفعيل تنبيهات الجهاز" : "Enable device notifications"}</button> : null}
-        </div></div> : null}</div><ThemeToggle /><LangToggle /><div className="lg:hidden"><UserButton /></div></div></header>
+        </div></div> : null}</div><div className="flex items-center gap-2"><ThemeToggle /><LangToggle /></div><div className="lg:hidden"><UserButton /></div></div></header>
       {trialDaysRemaining !== null ? <div className="px-4 pt-4 lg:px-8">
         <div role="status" className="rounded-2xl border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-ink">
           <p className="font-semibold">{lang === "ar" ? "أنت الآن في التجربة المجانية" : "You are on your free trial"}</p>
