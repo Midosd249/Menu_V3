@@ -57,9 +57,9 @@ test("Studio brand logo keeps its original appearance in light mode and a high-c
 
     const lightStyle = await logoFrame.evaluate((element) => {
       const style = getComputedStyle(element);
-      return { background: style.backgroundColor, borderStyle: style.borderTopStyle, padding: style.paddingTop };
+      return { background: style.backgroundColor, borderStyle: style.borderTopStyle, borderWidth: style.borderTopWidth, padding: style.paddingTop };
     });
-    expect(lightStyle).toEqual({ background: "rgba(0, 0, 0, 0)", borderStyle: "none", padding: "0px" });
+    expect(lightStyle).toEqual({ background: "rgba(0, 0, 0, 0)", borderStyle: "solid", borderWidth: "0px", padding: "0px" });
 
     await page.getByRole("button", { name: "التبديل إلى الوضع الداكن" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
