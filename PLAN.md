@@ -1750,3 +1750,47 @@ Map actual requests first; preserve auth/tenant/branch boundaries and avoid unre
 - UNKNOWN: direct real-device production visual verification of the final merged state has not been performed; no deployment was requested or executed.
 - STATUS: PR #378 is open and implementation head is pushed/CI-verified. P1.9 remains deferred.
 - EXACT NEXT TASK: Review/merge PR #378 when release authorization is given; do not deploy as part of this task.
+
+
+## 2026-10-09 — Platform Light/Dark Mode
+
+### Scope
+Add independent platform chrome light/dark mode for Studio and marketing/auth/legal pages. Explicitly preserve the five restaurant-owned public-menu themes. No merge or deployment.
+
+### Repository-first findings
+- Main base: `771c6a78aa8ce8c2be5028eb109e262089f1f016`.
+- Tailwind CSS v4 uses `@theme` variables in `src/styles.css`; no root Tailwind config or explicit dark strategy exists.
+- Shared aliases/internal semantic roles already exist, but internal CSS includes hard-coded light surfaces and the marketing homepage has a separate `--mq-*` palette.
+- Language persistence: `localStorage["menu-lang"]`; theme preference mirrors its defensive storage pattern using `localStorage["menu-theme"]`.
+
+### Implementation
+- Add `ThemeToggle`, early preference initialization, and a scoped `platform-theme.css` token adapter.
+- Add the control to Studio, homepage, pricing, login/signup, Terms, and Privacy.
+- Preserve `dir`/language handling; theme code does not write the document language or direction.
+- Add WCAG contrast and public-menu-scope contract tests.
+
+### Verification and release boundary
+- Palette contrast is encoded as automated tests; calculated core ratios: Cream/canvas 17.80:1, Cream/surface 16.26:1, Ember/canvas 6.06:1, Ember/surface 5.54:1, Mint/canvas 9.65:1, Mint/surface 8.82:1.
+- Pending: tests, typecheck, lint, build, RTL/LTR × light/dark browser QA and CI on the PR head.
+- Do not merge or deploy; owner review is required.
+
+### Exact next task
+Review theme test correctness, open one PR, inspect its checks and diff, and stop before merge/deployment.
+
+
+## 2026-10-09 — Platform Light/Dark Mode — Browser Regression Resolution
+
+### Evidence-backed diagnosis
+- First failing assertion: the theme control was server-rendered and visible before React hydration attached the click handler. The test now waits for the component's explicit `data-theme-toggle-ready="true"` signal before interacting.
+- Second failing assertion: the Studio test returned the interface to Arabic and then expected English navigation labels. Updated the assertions to the current Arabic locale and retained theme readiness synchronization.
+- Source/test fix commit verified: `6a28131d8cb688ee703e8e2d7a3520febb68098b`.
+
+### Verified CI
+- Quality run `37910685922`: SUCCESS — typecheck, tests/contracts, lint, build, all-theme browser QA, Menuun Arabic/English browser QA, Golden 30-product performance fixture, Studio browser QA, Platform Admin browser QA, and performance-baseline artifact upload all succeeded.
+- W9 Orders QA run `37910686056`: SUCCESS.
+- Performance evidence on that SHA: Editorial preview HTTP 200 / `ok: true`; 98 initial requests; DCL 1223 ms; load 1662.2 ms; CLS 0; zero long tasks. Golden fixture HTTP 200 / `ok: true`; current cover 32 requests / DCL 24.2 ms / load 39.9 ms; legacy cover 31 requests / DCL 39 ms / load 40.1 ms; CLS 0 and zero long tasks in both variants.
+- Limitations: synthetic CI did not populate LCP/INP. The P1.9 real-route evidence branch was skipped by workflow conditions; no P1.9 claim is made.
+- Performance Guardian: the automated performance audit and golden fixture are operational and passed. A distinct agent registration is absent from `main`; closed PR #365's proposed <15-request budget was not imported because the measured baseline is 98 requests and P1.9 budget-setting remains deferred.
+
+### Exact next task
+Verify CI on the continuity-only head, then review and merge PR #386 as previously authorized. Do not deploy in this task.

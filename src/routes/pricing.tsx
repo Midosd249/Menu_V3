@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowUpLeft } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { useLang } from "@/lib/lang";
 import { COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
@@ -12,11 +13,11 @@ function Pricing() {
   const { lang } = useLang();
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
   return (
-    <div className="min-h-dvh bg-paper text-ink">
+    <div data-platform-chrome className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <Link to="/" className="font-display text-xl font-semibold">{lang === "ar" ? "منيو" : "Menu"}</Link>
-          <div className="flex items-center gap-2"><LangToggle /><Link to="/login" className="hidden h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper sm:inline-flex">{lang === "ar" ? "ابدأ الآن" : "Get started"}</Link></div>
+          <div className="flex items-center gap-2"><ThemeToggle /><LangToggle /><Link to="/login" className="hidden h-10 items-center rounded-xl bg-ink px-4 text-sm text-paper sm:inline-flex">{lang === "ar" ? "ابدأ الآن" : "Get started"}</Link></div>
         </div>
       </header>
 

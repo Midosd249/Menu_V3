@@ -169,3 +169,22 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Lesson: before migration repair or Supabase CLI adoption, identify the actual runner, ledger, directory, ordering rules, and live schema. Never infer the canonical ledger from the existence of `supabase_migrations.schema_migrations` alone.
 - Anti-patterns: replaying repository migrations because they are absent from `schema_migrations`; repairing history without proving which runner owns production; introducing a second migration system without an explicit canonical-ledger decision.
 - Detection checklist: inspect runner → inspect migration directory/order → compare active ledger → query Supabase history → inspect `pg_catalog` → decide canonical ledger before repair.
+
+
+## Problem: Browser tests clicked a server-rendered theme toggle before hydration was ready
+
+- Date / Context: 2026-10-09; PR #386 platform light/dark mode regression.
+- Symptom: the browser test expected a click to change `data-platform-theme` from light to dark, but the attribute remained light on the first immediate interaction after navigation.
+- Root cause: VERIFIED by the reproducible browser failure and subsequent green run — the server-rendered button could be visible before React attached the client click handler. A stale-state-only fix did not address this timing condition.
+- Fix: the toggle exposes `data-theme-toggle-ready="true"` after its initial client synchronization; browser tests wait for that signal before clicking.
+- Lesson: visibility is not proof of hydration readiness. Browser interaction tests for SSR controls must wait for an observable client-ready state rather than arbitrary timeouts or assumptions about the first-render label.
+- Verification: Quality run `37910685922` passed the theme route matrix and Studio browser suite on source/test SHA `6a28131d8cb688ee703e8e2d7a3520febb68098b`.
+
+## Problem: Browser assertions became stale after switching the language back
+
+- Date / Context: 2026-10-09; PR #386 Studio shell RTL/LTR browser regression.
+- Symptom: the Studio shell test returned the interface to Arabic and then asserted English navigation labels (`Overview`, `More`).
+- Root cause: VERIFIED — test expectations did not follow the language state set by the preceding interaction.
+- Fix: assert the Arabic labels after restoring Arabic; wait for the theme control's readiness signal before its click.
+- Lesson: after a locale transition, assertions must reflect the current locale; avoid stale expected copy when testing independent language and theme state.
+- Verification: Quality run `37910685922` passed the Studio browser suite.

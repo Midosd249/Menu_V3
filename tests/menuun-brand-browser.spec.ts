@@ -55,3 +55,33 @@ test.describe("Menuun customer-facing brand surfaces", () => {
     await expect(page.locator("body")).not.toContainText("Menu V3");
   });
 });
+
+test("platform theme preference stays independent from language across marketing, auth, pricing and legal routes", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+  const routes = ["/", "/pricing", "/login", "/terms", "/privacy"];
+  for (const theme of ["light", "dark"] as const) {
+    for (const language of ["ar", "en"] as const) {
+      for (const route of routes) {
+        await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
+        const query = language === "en" ? "?lang=en" : "";
+        await page.goto(`${BASE_URL}${route}${query}`, { waitUntil: "domcontentloaded" });
+        await expect(page.locator("html")).toHaveAttribute("dir", language === "ar" ? "rtl" : "ltr");
+        await expect(page.locator("html")).toHaveAttribute("data-platform-theme", theme);
+        const label = language === "ar"
+          ? (theme === "dark" ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن")
+          : (theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        const toggle = page.getByRole("button", { name: label });
+        await expect(toggle).toBeVisible();
+        // Do not click the server-rendered control until React has attached its handler.
+        await expect(toggle).toHaveAttribute("data-theme-toggle-ready", "true");
+        await toggle.click();
+        const nextTheme = theme === "dark" ? "light" : "dark";
+        await expect(page.locator("html")).toHaveAttribute("data-platform-theme", nextTheme);
+        await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe(nextTheme);
+      }
+    }
+  }
+});

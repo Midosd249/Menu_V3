@@ -9,6 +9,7 @@ import typographyCss from "../typography.css?url";
 import imageArtDirectionCss from "../image-art-direction.css?url";
 import motionCss from "../motion.css?url";
 import accessibilityCss from "../accessibility.css?url";
+import platformThemeCss from "../platform-theme.css?url";
 
 const APP_NAME = "Menuun";
 const env = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env;
@@ -31,6 +32,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: colorsCss },
       { rel: "stylesheet", href: w8InternalVisualScopeFixCss },
+      { rel: "stylesheet", href: platformThemeCss },
       { rel: "stylesheet", href: typographyCss },
       { rel: "stylesheet", href: imageArtDirectionCss },
       { rel: "stylesheet", href: motionCss },
@@ -46,7 +48,10 @@ function RootDocument() {
   const locale = new URLSearchParams(search).get("lang") === "en" ? "en" : "ar";
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
-      <head><HeadContent /></head>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try { var storedTheme = localStorage.getItem("menu-theme"); var darkTheme = storedTheme === "dark" || (storedTheme !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches); document.documentElement.setAttribute("data-platform-theme", darkTheme ? "dark" : "light"); } catch { document.documentElement.setAttribute("data-platform-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }` }} />
+        <HeadContent />
+      </head>
       <body>
         <PreviewHostBridge />
         <AuthProvider>

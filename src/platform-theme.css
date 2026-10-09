@@ -1,0 +1,158 @@
+/*
+ * Platform chrome theme contract. Public restaurant menu themes are excluded.
+ * Dark palette: #0F1115 canvas, #171B22 surface, #1F252E elevated,
+ * #252B35 subtle, #FFF7ED text, #D0D5DD secondary, #A7AFBA muted,
+ * #3A414D border, Ember #FF5A1F, Digital Mint #1FD1A5.
+ */
+html[data-platform-theme="dark"] body:has([data-platform-chrome]):not(:has(.menu-public-shell)) {
+  background: #0F1115;
+  color: #FFF7ED;
+  color-scheme: dark;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome]:not(:has(.menu-public-shell)),
+html[data-platform-theme="dark"] [data-platform-chrome] :not(.menu-public-shell):not(.menu-public-shell *):not(:has(.menu-public-shell)) {
+  --color-paper: #171B22;
+  --color-sand: #252B35;
+  --color-ink: #FFF7ED;
+  --color-ink-soft: #D0D5DD;
+  --color-muted: #A7AFBA;
+  --color-line: #3A414D;
+  --color-accent: #FF5A1F;
+  --color-accent-foreground: #0F1115;
+  --color-ring: #1FD1A5;
+  --color-good: #1FD1A5;
+  --color-warn: #FFB36B;
+  --color-bad: #FF8B82;
+  --background: #0F1115;
+  --foreground: #FFF7ED;
+  --card: #171B22;
+  --card-foreground: #FFF7ED;
+  --popover: #171B22;
+  --popover-foreground: #FFF7ED;
+  --muted: #252B35;
+  --muted-foreground: #A7AFBA;
+  --border: #3A414D;
+  --input: #3A414D;
+  --primary: #FF5A1F;
+  --primary-foreground: #0F1115;
+  --secondary: #252B35;
+  --secondary-foreground: #FFF7ED;
+  --accent: #1FD1A5;
+  --accent-foreground: #0F1115;
+  --ring: #1FD1A5;
+  --internal-app-background: #0F1115;
+  --internal-surface: #171B22;
+  --internal-surface-elevated: #1F252E;
+  --internal-surface-subtle: #252B35;
+  --internal-surface-inverse: #FFF7ED;
+  --internal-overlay: rgb(0 0 0 / 0.78);
+  --internal-primary: #FF5A1F;
+  --internal-primary-hover: #FF7847;
+  --internal-primary-muted: #3A241D;
+  --internal-on-primary: #0F1115;
+  --internal-secondary: #1FD1A5;
+  --internal-accent: #FF5A1F;
+  --internal-accent-muted: #3A241D;
+  --internal-on-surface: #FFF7ED;
+  --internal-on-muted: #A7AFBA;
+  --internal-on-inverse: #0F1115;
+  --internal-border: #3A414D;
+  --internal-border-strong: #56606E;
+  --internal-focus-ring: #1FD1A5;
+  --internal-success: #1FD1A5;
+  --internal-success-surface: #12352E;
+  --internal-on-success: #0F1115;
+  --internal-warning: #FFB36B;
+  --internal-warning-surface: #3A2B1B;
+  --internal-on-warning: #0F1115;
+  --internal-danger: #FF8B82;
+  --internal-danger-surface: #3B211F;
+  --internal-on-danger: #0F1115;
+  --internal-info: #8AC9F0;
+  --internal-info-surface: #172E3D;
+  --internal-on-info: #0F1115;
+  --internal-disabled: #A7AFBA;
+  --internal-disabled-surface: #252B35;
+  --internal-disabled-border: #3A414D;
+  --internal-nav: #0B0D11;
+  --internal-nav-foreground: #FFF7ED;
+  --internal-nav-muted: #D0D5DD;
+  --internal-nav-active: #252B35;
+  --internal-nav-active-indicator: #FF5A1F;
+  color: #FFF7ED;
+}
+
+html[data-platform-theme="dark"] body:has([data-platform-chrome]):not(:has(.menu-public-shell)) .min-h-dvh {
+  background-color: #0F1115;
+  color: #FFF7ED;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] header:not(:has(.menu-public-shell)) {
+  background: #171B22 !important;
+  color: #FFF7ED;
+  border-color: #3A414D !important;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] aside:not(:has(.menu-public-shell)) {
+  background: #0B0D11 !important;
+  color: #FFF7ED;
+  border-color: #3A414D !important;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] aside:not(:has(.menu-public-shell)) :where(p, a) { color: #D0D5DD; }
+
+html[data-platform-theme="dark"] [data-platform-chrome] aside:not(:has(.menu-public-shell)) :where(a, button)[aria-current="page"] {
+  background: #252B35 !important;
+  color: #FFF7ED !important;
+  box-shadow: inset 3px 0 0 #FF5A1F;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] .bg-white:not(.menu-public-shell):not(.menu-public-shell *):not(.menuq-live-menu):not(.menuq-live-menu *) {
+  background-color: #171B22;
+  color: #FFF7ED;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] :where(input, textarea, select):not(.menu-public-shell):not(.menu-public-shell *) {
+  background-color: #171B22;
+  color: #FFF7ED;
+  border-color: #3A414D;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] :where(input, textarea, select)::placeholder { color: #A7AFBA; opacity: 1; }
+
+html[data-platform-theme="dark"] [data-platform-chrome] a.bg-ink.text-paper,
+html[data-platform-theme="dark"] [data-platform-chrome] button.bg-ink.text-paper {
+  background-color: #FF5A1F;
+  color: #0F1115;
+}
+
+html[data-platform-theme="dark"] .menuq-home {
+  --mq-ivory: #171B22;
+  --mq-paper: #0F1115;
+  --mq-ink: #FFF7ED;
+  --mq-emerald: #1FD1A5;
+  --mq-deep: #0B3028;
+  --mq-amber: #FF5A1F;
+  --mq-muted: #A7AFBA;
+  --mq-line: #3A414D;
+  --mq-soft: #252B35;
+  background: #0F1115;
+  color: #FFF7ED;
+}
+
+html[data-platform-theme="dark"] .menuq-home .menuq-nav { background: rgb(15 17 21 / 0.94); border-color: #3A414D; }
+html[data-platform-theme="dark"] .menuq-home .menuq-kicker { background: #171B22; border-color: #3A414D; color: #1FD1A5; }
+html[data-platform-theme="dark"] .menuq-home .menuq-proof-row > div { border-inline-start-color: #3A414D; }
+
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu,
+html[data-platform-theme="dark"] .menuq-home .menuq-live-menu * {
+  /* The miniature menu is a product preview, not platform chrome. */
+  color-scheme: light;
+}
+
+html[data-platform-theme="dark"] [data-platform-chrome] :where(a, button, input, textarea, select):focus-visible { outline-color: #1FD1A5; }
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-platform-theme="dark"] [data-platform-chrome] :where(button, a) { transition-duration: 0.01ms; }
+}
