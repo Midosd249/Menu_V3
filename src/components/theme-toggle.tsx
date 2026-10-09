@@ -62,8 +62,10 @@ export function ThemeToggle({ className }: { className?: string }) {
   }, []);
 
   const toggleTheme = () => {
-    // The state and root bootstrap now resolve from the same stored/system preference.
-    const nextDark = !dark;
+    // React state can briefly lag the root bootstrap during navigation/hydration.
+    // Use the effective document theme as the source of truth for the click itself.
+    const currentDark = document.documentElement.getAttribute("data-platform-theme") === "dark";
+    const nextDark = !currentDark;
     storedPreference.current = nextDark ? "dark" : "light";
     setDark(nextDark);
     applyTheme(nextDark);
