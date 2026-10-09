@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { LangToggle } from "@/components/lang-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useLang } from "@/lib/lang";
 
 export const Route = createFileRoute("/terms")({
@@ -21,11 +22,11 @@ function TermsPage() {
   const { lang } = useLang();
   const en = lang === "en";
   return (
-    <div className="min-h-dvh bg-paper text-ink">
+    <div data-platform-chrome className="min-h-dvh bg-paper text-ink">
       <header className="border-b border-line/70">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
           <Link to="/" className="font-display text-xl font-semibold">Menuun</Link>
-          <LangToggle />
+          <div className="flex items-center gap-2"><ThemeToggle /><LangToggle /></div>
         </div>
       </header>
       <main dir={en ? "ltr" : "rtl"} className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
