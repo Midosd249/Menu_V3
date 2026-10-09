@@ -75,6 +75,8 @@ test("platform theme preference stays independent from language across marketing
           : (theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
         const toggle = page.getByRole("button", { name: label });
         await expect(toggle).toBeVisible();
+        // Do not click the server-rendered control until React has attached its handler.
+        await expect(toggle).toHaveAttribute("data-theme-toggle-ready", "true");
         await toggle.click();
         const nextTheme = theme === "dark" ? "light" : "dark";
         await expect(page.locator("html")).toHaveAttribute("data-platform-theme", nextTheme);

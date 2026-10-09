@@ -28,6 +28,7 @@ export function ThemeToggle({ className }: { className?: string }) {
   // Keep server/client first-render markup identical, then synchronize before paint.
   // The root bootstrap script already applies the persisted/system theme to <html>.
   const [dark, setDark] = useState(false);
+  const [ready, setReady] = useState(false);
   const storedPreference = useRef<string | null>(null);
 
   useLayoutEffect(() => {
@@ -36,6 +37,9 @@ export function ThemeToggle({ className }: { className?: string }) {
     const initialDark = resolveTheme(preference);
     setDark(initialDark);
     applyTheme(initialDark);
+    // Expose a deterministic readiness signal for browser QA. The SSR button can
+    // be visible before React attaches its click handler, especially on fast CI.
+    setReady(true);
   }, []);
 
   useEffect(() => {
@@ -75,7 +79,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     ? (lang === "ar" ? "التبديل إلى الوضع الفاتح" : "Switch to light mode")
     : (lang === "ar" ? "التبديل إلى الوضع الداكن" : "Switch to dark mode");
 
-  return <button type="button" className={cn("inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink-soft transition-colors hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", className)} onClick={toggleTheme} aria-label={label} title={label} aria-pressed={dark}>
+  return <button type="button" className={cn("inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-paper text-ink-soft transition-colors hover:bg-sand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", className)} onClick={toggleTheme} aria-label={label} title={label} aria-pressed={dark} data-theme-toggle-ready={ready ? "true" : "false"}>
     {dark ? <Sun aria-hidden="true" className="size-4" /> : <Moon aria-hidden="true" className="size-4" />}
   </button>;
 }
