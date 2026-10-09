@@ -377,7 +377,8 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - IMPLEMENTED: changed the login page shell to a column flex layout and gave its content wrapper vertical auto margins. This centers the content when space is available and lets it start at the top and scroll normally when content exceeds the viewport.
 - ADDED: browser regression coverage for the final privacy link and copyright area at 390×650 in Arabic/English and light/dark themes.
 - RESEARCH: WCAG 2.2 SC 1.4.10 Reflow requires content at 320 CSS px width without loss of information/functionality or two-dimensional scrolling; official source: https://www.w3.org/TR/WCAG22/.
-- UNKNOWN: latest PR CI/browser run, production deployment, and real-device verification are pending. No deployment performed.
-- EXACT NEXT ACTION: open one PR, inspect all applicable CI results and diff, then stop before merge/deployment unless the owner explicitly requests release.
+- VERIFIED: PR #390 latest-head checks passed on `a0641ad1ac4ebc034ea78f35db06d45676cbe72d`: Menu V3 Quality and W9 Orders QA both succeeded; browser test confirmed footer privacy link/copyright reachability at 390×650 in Arabic/English and light/dark themes.
+- UNKNOWN: production deployment and real-device verification remain pending. No deployment performed.
+- EXACT NEXT ACTION: owner review PR #390 and final diff; do not merge or deploy automatically.
 
 - CI DIAGNOSIS: first PR browser run exposed a regression-test setup error, not an application failure: the test attempted to access `localStorage` on the initial opaque `about:blank` origin. The test now navigates to `/login` first, sets the theme on the app origin, reloads, and verifies the footer. Rerun on the latest head is pending.
