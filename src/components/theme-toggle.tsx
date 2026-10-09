@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useLang } from "@/lib/lang";
 import { cn } from "@/lib/utils";
@@ -17,22 +17,34 @@ function readSystemTheme() {
 export function ThemeToggle({ className }: { className?: string }) {
   const { lang } = useLang();
   const [dark, setDark] = useState(false);
+  const storedPreference = useRef<string | null>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    let stored: string | null = null;
-    try { stored = window.localStorage.getItem(STORAGE_KEY); } catch { /* Continue with the OS preference. */ }
-    const sync = () => {
-      const nextDark = stored === "dark" || (stored !== "light" && readSystemTheme());
+    try { storedPreference.current = window.localStorage.getItem(STORAGE_KEY); } catch { /* Continue with the OS preference. */ }
+    const resolveTheme = () => storedPreference.current === "dark" || (storedPreference.current !== "light" && readSystemTheme());
+    const syncInitialTheme = () => {
+      // A click can happen before passive effects run. Never let late initialization undo it.
+      if (initialized.current) return;
+      initialized.current = true;
+      const nextDark = resolveTheme();
       setDark(nextDark);
       applyTheme(nextDark);
     };
-    sync();
+    syncInitialTheme();
     const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onSystemChange = () => { if (stored !== "dark" && stored !== "light") sync(); };
+    const onSystemChange = () => {
+      if (storedPreference.current === "dark" || storedPreference.current === "light") return;
+      const nextDark = readSystemTheme();
+      setDark(nextDark);
+      applyTheme(nextDark);
+    };
     const onStorage = (event: StorageEvent) => {
       if (event.key !== STORAGE_KEY && event.key !== null) return;
-      stored = event.key === null ? null : event.newValue;
-      sync();
+      storedPreference.current = event.key === null ? null : event.newValue;
+      const nextDark = resolveTheme();
+      setDark(nextDark);
+      applyTheme(nextDark);
     };
     media.addEventListener("change", onSystemChange);
     window.addEventListener("storage", onStorage);
@@ -44,9 +56,11 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   const toggleTheme = () => {
     const nextDark = !dark;
+    storedPreference.current = nextDark ? "dark" : "light";
+    initialized.current = true;
     setDark(nextDark);
     applyTheme(nextDark);
-    try { window.localStorage.setItem(STORAGE_KEY, nextDark ? "dark" : "light"); } catch { /* Current tab still changes. */ }
+    try { window.localStorage.setItem(STORAGE_KEY, storedPreference.current); } catch { /* Current tab still changes. */ }
   };
   const label = dark
     ? (lang === "ar" ? "التبديل إلى الوضع الفاتح" : "Switch to light mode")
