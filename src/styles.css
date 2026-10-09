@@ -189,3 +189,11 @@ html[data-menu-theme-mode="preview"] .menu-public-shell main > section > ul > li
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Studio-only logo contrast correction: preserve the supplied dark wordmark in dark mode. */
+html[data-platform-theme="dark"] [data-platform-chrome] [data-studio-brand-logo] {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #e8e5dd;
+  border-radius: 0.65rem;
+  background: #fffdf8;
+}
