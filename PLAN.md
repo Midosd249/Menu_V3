@@ -1822,3 +1822,11 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Exact next action: owner review PR #390; stop before merge/deployment.
 
 - CI follow-up: the initial new browser test failed before asserting layout because it accessed `localStorage` on `about:blank`. Corrected test setup to establish the app origin first; latest-head CI rerun pending.
+
+
+## 2026-10-09 — Login Footer Contrast Correction — IMPLEMENTATION_IN_PROGRESS
+
+- Correct the login-only dark-mode contrast defect in the shared marketing footer; do not change the homepage footer, login main content, auth behavior, or public-menu themes.
+- Regression criteria: all footer text links and paragraphs have computed contrast >= 4.5:1 against the footer's light background in Arabic and English at mobile width.
+- Add a focused Playwright regression and verify latest-head CI before closeout.
+- Exact next action: inspect latest-head Quality/W9 results and final diff; stop before merge/deployment.
