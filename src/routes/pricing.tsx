@@ -12,6 +12,12 @@ export const Route = createFileRoute("/pricing")({ component: Pricing });
 function Pricing() {
   const { lang } = useLang();
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
+  const requestUpgradeUrl = (planName: string) => {
+    const message = lang === "ar"
+      ? `مرحبًا، أود طلب الترقية إلى باقة ${planName} بالفوترة ${billingInterval === "annual" ? "السنوية" : "الشهرية"} في Menuun.`
+      : `Hello, I would like to request the ${planName} plan with ${billingInterval} billing for Menuun.`;
+    return `https://wa.me/966549598318?text=${encodeURIComponent(message)}`;
+  };
   return (
     <div data-platform-chrome className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
@@ -57,10 +63,17 @@ function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/" search={{ plan: plan.code, interval: billingInterval } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
-                  {plan.code === "free" ? (lang === "ar" ? "ابدأ مجاناً" : "Start free") : (lang === "ar" ? "اطلب الترقية" : "Request upgrade")}
-                  <ArrowUpLeft className="size-4" />
-                </Link>
+                {plan.code === "free" ? (
+                  <Link to="/login" search={{ mode: "signup" } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
+                    {lang === "ar" ? "ابدأ مجاناً" : "Start free"}
+                    <ArrowUpLeft className="size-4" />
+                  </Link>
+                ) : (
+                  <a href={requestUpgradeUrl(name)} target="_blank" rel="noopener noreferrer" className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
+                    {lang === "ar" ? "اطلب الترقية عبر واتساب" : "Request upgrade on WhatsApp"}
+                    <ArrowUpLeft className="size-4" />
+                  </a>
+                )}
               </article>
             );
           })}
