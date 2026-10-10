@@ -51,7 +51,7 @@ test("homepage keeps a stable login entrypoint for both anonymous and authentica
 
 test("homepage keeps multi-child signup CTAs compatible with the slotted Button contract", () => {
   assert.match(home, /<Button asChild size="lg">\s*\{signup\}\s*<ArrowUpLeft/);
-  assert.match(home, /<Button asChild className="mt-7 w-full">\{signup\}<\/Button>/);
+  assert.match(home, /plan\.code === "free"[\s\S]*?mode: "signup"[\s\S]*?<Link to="\/pricing">[\s\S]*?تفاصيل الباقة/);
   assert.match(button, /import \{ Slot, Slottable \} from "@radix-ui\/react-slot";/);
   assert.match(button, /Children\.toArray\(children\)/);
   assert.match(button, /<Slottable>\{firstChild\}<\/Slottable>/);
@@ -195,4 +195,31 @@ test("application identity uses Menuun metadata, favicon, and web app manifest",
   assert.match(appIcon, /<rect width="512" height="512" fill="#344331"\/>/);
   assert.match(appIcon, /<svg x="106" y="106" width="300" height="300"/);
   assert.match(appIcon, /fill="#FFF7ED"/);
+});
+
+
+test("homepage menu preview controls are interactive and clearly marked as illustrative", () => {
+  assert.match(home, /setDemoSearchOpen/);
+  assert.match(home, /onChange=\{\(event\) => setDemoSearchQuery\(event\.target\.value\)\}/);
+  assert.match(home, /DEMO_MENU\.categories\.filter/);
+  assert.match(home, /aria-pressed=\{activeDemoCategory === category\.id\}/);
+  assert.match(home, /setDemoCartCount\(\(count\) => count \+ 1\)/);
+  assert.match(home, /No real order is sent|ليست عملية طلب حقيقية/);
+  assert.doesNotMatch(home, /Open now · Al Olaya|يفتح يوميًا 07:00/);
+});
+
+test("homepage pricing can switch billing cadence and discloses the current upgrade path", () => {
+  assert.match(home, /setBillingInterval\("monthly"\)/);
+  assert.match(home, /setBillingInterval\("annual"\)/);
+  assert.match(home, /getCommercialPrice\(plan, billingInterval\)/);
+  assert.match(home, /getAnnualDiscountPercent\(plan\)/);
+  assert.match(home, /الدفع الإلكتروني غير مفعل حاليًا/);
+  assert.match(home, /<Link to="\/pricing">/);
+});
+
+test("homepage theme and analytics artwork references resolve to tracked assets", () => {
+  for (const theme of expectedThemes) {
+    assert.ok(fs.existsSync(new URL(`../public/homepage/themes/${theme}.webp`, import.meta.url)), `missing homepage artwork for ${theme}`);
+  }
+  assert.ok(fs.existsSync(new URL("../public/homepage-analytics-real.png", import.meta.url)), "missing analytics preview artwork");
 });
