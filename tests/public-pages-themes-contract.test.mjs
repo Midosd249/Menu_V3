@@ -50,8 +50,9 @@ test("homepage keeps a stable login entrypoint for both anonymous and authentica
 });
 
 test("homepage keeps multi-child signup CTAs compatible with the slotted Button contract", () => {
-  assert.match(home, /<Button asChild size="lg">\s*\{signup\}\s*<ArrowUpLeft/);
+  assert.match(home, /<Button asChild size="lg">\s*<Link to="\/login" search=\{\{ mode: "signup" \} as never\}>[\s\S]*?<ArrowUpLeft/);
   assert.match(home, /plan\.code === "free"[\s\S]*?mode: "signup"[\s\S]*?<Link to="\/pricing">[\s\S]*?تفاصيل الباقة/);
+  assert.doesNotMatch(home, /COMMERCIAL_PLAN_FEATURES\[plan\.code\]\.slice\(0, 4\)/);
   assert.match(button, /import \{ Slot, Slottable \} from "@radix-ui\/react-slot";/);
   assert.match(button, /Children\.toArray\(children\)/);
   assert.match(button, /<Slottable>\{firstChild\}<\/Slottable>/);
