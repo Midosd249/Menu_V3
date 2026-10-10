@@ -224,3 +224,14 @@ test("homepage theme and analytics artwork references resolve to tracked assets"
   }
   assert.ok(fs.existsSync(new URL("../public/homepage-analytics-real.png", import.meta.url)), "missing analytics preview artwork");
 });
+
+
+test("pricing calls to action use real signup and paid-upgrade destinations", () => {
+  const pricing = read("src/routes/pricing.tsx");
+  assert.match(pricing, /requestUpgradeUrl/);
+  assert.match(pricing, /https:\/\/wa\.me\/966549598318\?text=/);
+  assert.match(pricing, /encodeURIComponent\(message\)/);
+  assert.match(pricing, /<Link to="\/login" search=\{\{ mode: "signup" \} as never\}/);
+  assert.match(pricing, /target="_blank" rel="noopener noreferrer"/);
+  assert.doesNotMatch(pricing, /<Link to="\/" search=\{\{ plan: plan\.code, interval: billingInterval \}/);
+});
