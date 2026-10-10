@@ -23,7 +23,7 @@ import { LangToggle } from "@/components/lang-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/lang";
-import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS } from "@/lib/menu/commercial-catalog";
+import { COMMERCIAL_FEATURES, COMMERCIAL_PLAN_FEATURES, COMMERCIAL_PLANS, getAnnualDiscountPercent, getCommercialPrice, type BillingInterval } from "@/lib/menu/commercial-catalog";
 import { MENU_THEMES } from "@/lib/theme";
 import { DEMO_MENU } from "@/lib/menu/demo";
 import { MarketingFooter } from "@/components/marketing-footer";
@@ -135,7 +135,7 @@ const STEPS = [
   },
 ] as const;
 
-const DEMO_PREVIEW_PRODUCTS = DEMO_MENU.products.filter((product) => product.isFeatured).slice(0, 2);
+const DEMO_PREVIEW_PRODUCTS = DEMO_MENU.products.filter((product) => product.isFeatured).slice(0, 4);
 
 const FAQS = [
   {
@@ -173,6 +173,22 @@ const FAQS = [
 function Home() {
   const { lang } = useLang();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [demoSearchOpen, setDemoSearchOpen] = useState(false);
+  const [demoSearchQuery, setDemoSearchQuery] = useState("");
+  const [activeDemoCategory, setActiveDemoCategory] = useState("all");
+  const [demoCartCount, setDemoCartCount] = useState(0);
+  const [demoCartOpen, setDemoCartOpen] = useState(false);
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
+  const visibleDemoProducts = useMemo(() => {
+    const query = demoSearchQuery.trim().toLocaleLowerCase(lang === "ar" ? "ar-SA" : "en-US");
+    return DEMO_MENU.products
+      .filter((product) => activeDemoCategory === "all"
+        ? (!query && product.isFeatured) || Boolean(query)
+        : product.categoryId === activeDemoCategory)
+      .filter((product) => !query || [product.nameAr, product.nameEn, product.descriptionAr, product.descriptionEn]
+        .some((value) => value.toLocaleLowerCase(lang === "ar" ? "ar-SA" : "en-US").includes(query)))
+      .slice(0, 4);
+  }, [activeDemoCategory, demoSearchQuery, lang]);
 
   useEffect(() => {
     const en = lang === "en";
@@ -330,14 +346,22 @@ function Home() {
                   </div>
                 </div>
                 <div className="menuq-live-actions">
-                  <button aria-label={lang === "ar" ? "بحث" : "Search"}><Search size={16} /></button>
-                  <button aria-label={lang === "ar" ? "السلة" : "Cart"} className="menuq-cart-button"><ShoppingBag size={16} /><b>0</b></button>
+                  <button type="button" aria-label={lang === "ar" ? "البحث في أصناف المعاينة" : "Search preview menu"} aria-expanded={demoSearchOpen} onClick={() => { setDemoSearchOpen((open) => !open); setDemoSearchQuery(""); }}><Search size={16} /></button>
+                  <button type="button" aria-label={lang === "ar" ? `سلة المعاينة، ${demoCartCount} أصناف` : `Preview cart, ${demoCartCount} items`} aria-expanded={demoCartOpen} onClick={() => setDemoCartOpen((open) => !open)} className="menuq-cart-button"><ShoppingBag size={16} /><b>{demoCartCount}</b></button>
                 </div>
               </header>
 
+              {demoSearchOpen && (
+                <div className="menuq-demo-search">
+                  <Search size={16} aria-hidden="true" />
+                  <label className="sr-only" htmlFor="menuq-demo-search-input">{lang === "ar" ? "ابحث في أصناف المعاينة" : "Search preview items"}</label>
+                  <input id="menuq-demo-search-input" type="search" autoFocus value={demoSearchQuery} onChange={(event) => setDemoSearchQuery(event.target.value)} placeholder={lang === "ar" ? "ابحث عن قهوة أو طبق..." : "Search coffee or dishes..."} />
+                  <button type="button" onClick={() => { setDemoSearchQuery(""); setDemoSearchOpen(false); }} aria-label={lang === "ar" ? "إغلاق البحث" : "Close search"}><X size={16} /></button>
+                </div>
+              )}
               <div className="menuq-live-intro">
                 <div>
-                  <span className="menuq-live-kicker"><span className="menuq-live-status" /> {lang === "ar" ? "مفتوح الآن · العليا" : "Open now · Al Olaya"}</span>
+                  <span className="menuq-live-kicker"><span className="menuq-live-status" /> {lang === "ar" ? "معاينة تفاعلية · فرع العليا" : "Interactive preview · Olaya branch"}</span>
                   <h3>{lang === "ar" ? "أهلاً بك في نَفَس" : "Welcome to Nafas"}</h3>
                   <p>{lang === "ar" ? "خذ لحظتك. اختر قهوتك. واستمتع بتفاصيل صُنعت بهدوء." : "Take your moment. Choose your coffee. Enjoy the details."}</p>
                 </div>
@@ -345,27 +369,27 @@ function Home() {
               </div>
 
               <nav className="menuq-live-nav" aria-label={lang === "ar" ? "تصنيفات المنيو" : "Menu categories"}>
-                <span className="active">{lang === "ar" ? "الكل" : "All"}</span>
-                <span>{lang === "ar" ? "القهوة" : "Coffee"}</span>
-                <span>{lang === "ar" ? "التوقيع" : "Signature"}</span>
-                <span>{lang === "ar" ? "المخبوزات والحلى" : "Pastry & Dessert"}</span>
+                <button type="button" className={activeDemoCategory === "all" ? "active" : ""} aria-pressed={activeDemoCategory === "all"} onClick={() => setActiveDemoCategory("all")}>{lang === "ar" ? "اختياراتنا" : "Featured"}</button>
+                {DEMO_MENU.categories.filter((category) => category.id !== "872f4d2a-2963-44a4-bc2e-ab4528292620").map((category) => (
+                  <button key={category.id} type="button" className={activeDemoCategory === category.id ? "active" : ""} aria-pressed={activeDemoCategory === category.id} onClick={() => setActiveDemoCategory(category.id)}>{lang === "ar" ? category.nameAr : category.nameEn}</button>
+                ))}
               </nav>
 
               <div className="menuq-live-body">
                 <div className="menuq-live-products">
-                  <div className="menuq-live-section-title"><div><span>{lang === "ar" ? "اختياراتنا" : "OUR PICKS"}</span><h4>{lang === "ar" ? "أطباق تستحق التجربة" : "Worth discovering"}</h4></div><small>8 {lang === "ar" ? "أصناف" : "items"}</small></div>
+                  <div className="menuq-live-section-title"><div><span>{activeDemoCategory === "all" ? (lang === "ar" ? "اختياراتنا" : "OUR PICKS") : (lang === "ar" ? "التصنيف المحدد" : "SELECTED CATEGORY")}</span><h4>{activeDemoCategory === "all" ? (lang === "ar" ? "أطباق تستحق التجربة" : "Worth discovering") : (lang === "ar" ? DEMO_MENU.categories.find((category) => category.id === activeDemoCategory)?.nameAr : DEMO_MENU.categories.find((category) => category.id === activeDemoCategory)?.nameEn)}</h4></div><small>{visibleDemoProducts.length} {lang === "ar" ? "أصناف ظاهرة" : "shown"}</small></div>
                   <div className="menuq-live-product-grid">
-                    {DEMO_PREVIEW_PRODUCTS.map((product, index) => <article key={product.id} className="menuq-live-product"><img src={product.imageUrl || "/homepage/menu-dish.webp"} alt="" className="menuq-live-product-image" loading={index === 0 ? "eager" : "lazy"} decoding="async" fetchPriority={index === 0 ? "high" : "auto"} /><div><h5>{lang === "ar" ? product.nameAr : product.nameEn}</h5><p>{lang === "ar" ? product.descriptionAr : product.descriptionEn}</p><strong>{product.price} {lang === "ar" ? "ر.س" : "SAR"}</strong><button aria-label={lang === "ar" ? `إضافة ${product.nameAr}` : `Add ${product.nameEn}`}>+</button></div></article>)}
+                    {visibleDemoProducts.length ? visibleDemoProducts.map((product, index) => <article key={product.id} className="menuq-live-product"><img src={product.imageUrl || "/homepage/menu-dish.webp"} alt="" className="menuq-live-product-image" loading={index === 0 ? "eager" : "lazy"} decoding="async" fetchPriority={index === 0 ? "high" : "auto"} /><div><h5>{lang === "ar" ? product.nameAr : product.nameEn}</h5><p>{lang === "ar" ? product.descriptionAr : product.descriptionEn}</p><strong>{product.price} {lang === "ar" ? "ر.س" : "SAR"}</strong><button type="button" onClick={() => { setDemoCartCount((count) => count + 1); setDemoCartOpen(true); }} aria-label={lang === "ar" ? `إضافة ${product.nameAr} إلى سلة المعاينة` : `Add ${product.nameEn} to preview cart`}>+</button></div></article>) : <p className="menuq-demo-empty" role="status">{lang === "ar" ? "لا توجد أصناف مطابقة. جرّب كلمة أخرى." : "No matching items. Try another search."}</p>}
                   </div>
                 </div>
                 <aside className="menuq-live-order">
                   <span className="menuq-live-order-icon"><ShoppingBag size={17} /></span>
-                  <strong>{lang === "ar" ? "سلتك جاهزة" : "Your order starts here"}</strong>
-                  <p>{lang === "ar" ? "أضف صنفًا لتبدأ طلبك بسهولة." : "Add an item to start your order."}</p>
-                  <button>{lang === "ar" ? "اطلب الآن" : "Order now"}<ArrowUpLeft size={14} /></button>
+                  <strong>{demoCartOpen ? (lang === "ar" ? "سلة المعاينة" : "Preview cart") : (lang === "ar" ? "جرّب المنيو بنفسك" : "Try the menu yourself")}</strong>
+                  <p>{demoCartOpen ? (demoCartCount ? (lang === "ar" ? `أضفت ${demoCartCount} من الأصناف إلى معاينتك. لا يتم إرسال طلب حقيقي.` : `${demoCartCount} item(s) added to this preview. No real order is sent.`) : (lang === "ar" ? "أضف صنفًا لتجربة التفاعل." : "Add an item to try the interaction.")) : (lang === "ar" ? "اختر تصنيفًا أو ابحث أو أضف صنفًا لتجربة التفاعل." : "Browse categories, search, or add an item to try the interaction.")}</p>
+                  <button type="button" onClick={() => setDemoCartOpen((open) => !open)}>{demoCartOpen ? (lang === "ar" ? "متابعة التصفح" : "Keep browsing") : (lang === "ar" ? "جرّب الإضافة" : "Try adding an item")}<ArrowUpLeft size={14} /></button>
                 </aside>
               </div>
-              <footer className="menuq-live-footer"><span><ScanLine size={14} /> {lang === "ar" ? "منيو رقمي · تجربة بلا انتظار" : "Digital menu · no waiting"}</span><span>{lang === "ar" ? "يفتح يوميًا 07:00" : "Open daily 07:00"}</span></footer>
+              <footer className="menuq-live-footer"><span><ScanLine size={14} /> {lang === "ar" ? "بيانات توضيحية لتجربة المنيو" : "Illustrative menu preview"}</span><span>{lang === "ar" ? "ليست عملية طلب حقيقية" : "No real order is placed"}</span></footer>
             </div>
           </div>
         </div>
@@ -573,8 +597,17 @@ function Home() {
             </h2>
           </div>
 
+          <div className="menuq-billing-toggle mt-8" role="group" aria-label={lang === "ar" ? "دورة الفوترة" : "Billing interval"}>
+            <button type="button" aria-pressed={billingInterval === "monthly"} onClick={() => setBillingInterval("monthly")} className={billingInterval === "monthly" ? "active" : ""}>{lang === "ar" ? "شهري" : "Monthly"}</button>
+            <button type="button" aria-pressed={billingInterval === "annual"} onClick={() => setBillingInterval("annual")} className={billingInterval === "annual" ? "active" : ""}>{lang === "ar" ? "سنوي — شهران مجانًا" : "Annual — 2 months free"}</button>
+            <span aria-live="polite" className="sr-only">{lang === "ar" ? (billingInterval === "annual" ? "عرض الأسعار السنوية" : "عرض الأسعار الشهرية") : (billingInterval === "annual" ? "Showing annual prices" : "Showing monthly prices")}</span>
+          </div>
+
           <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {COMMERCIAL_PLANS.map((plan) => (
+            {COMMERCIAL_PLANS.map((plan) => {
+              const price = getCommercialPrice(plan, billingInterval);
+              const annualDiscount = getAnnualDiscountPercent(plan);
+              return (
               <article key={plan.code} className={`menuq-plan-card ${plan.recommended ? "menuq-plan-featured" : ""}`}>
                 <div className="flex items-center justify-between gap-3">
                   <h3>{lang === "ar" ? plan.nameAr : plan.nameEn}</h3>
@@ -585,9 +618,10 @@ function Home() {
                   )}
                 </div>
                 <div className="mt-5 text-4xl font-semibold">
-                  {plan.monthlyPriceSar}
-                  <span className="text-sm font-normal text-muted-foreground"> {lang === "ar" ? "ريال / شهر" : "SAR / month"}</span>
+                  {price === 0 ? (lang === "ar" ? "مجانًا" : "Free") : price}
+                  {price > 0 ? <span className="text-sm font-normal text-muted-foreground"> {lang === "ar" ? (billingInterval === "annual" ? "ريال / سنة" : "ريال / شهر") : (billingInterval === "annual" ? "SAR / year" : "SAR / month")}</span> : null}
                 </div>
+                {billingInterval === "annual" && annualDiscount > 0 ? <p className="mt-2 text-xs font-semibold text-accent">{lang === "ar" ? `خصم ${annualDiscount}% سنويًا` : `${annualDiscount}% annual saving`}</p> : null}
                 <ul className="mt-6 space-y-3 text-sm">
                   <li><Check size={17} />{lang === "ar" ? `${plan.maxBranches} فرع` : `${plan.maxBranches} branch${plan.maxBranches === 1 ? "" : "es"}`}</li>
                   <li><Check size={17} />{plan.code === "pro" ? (lang === "ar" ? "أصناف غير محدودة" : "Unlimited products") : (lang === "ar" ? `${plan.maxProducts.toLocaleString("ar-SA")} صنف` : `${plan.maxProducts.toLocaleString("en-US")} products`)}</li>
@@ -601,10 +635,20 @@ function Home() {
                     </div>
                   ))}
                 </div>
-                <Button asChild className="mt-7 w-full">{signup}</Button>
+                <Button asChild className="mt-7 w-full">
+                  {plan.code === "free"
+                    ? <Link to="/login" search={{ mode: "signup" } as never}>{lang === "ar" ? "ابدأ مجانًا" : "Start free"}</Link>
+                    : <Link to="/pricing">{lang === "ar" ? "تفاصيل الباقة" : "Plan details"}</Link>}
+                </Button>
               </article>
-            ))}
+              );
+            })}
           </div>
+
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-muted-foreground">
+            {lang === "ar" ? "الأسعار بالريال السعودي. الدفع الإلكتروني غير مفعل حاليًا؛ لا يوجد دفع تلقائي من هذه الصفحة، وتتم الترقية المدفوعة عبر طلب مباشر." : "Prices are in SAR. Online payment is not enabled yet; this page does not process payment, and paid upgrades are handled by direct request."}
+            {" "}<Link to="/pricing" className="font-semibold underline underline-offset-4">{lang === "ar" ? "عرض الأسعار والتفاصيل كاملة" : "View full pricing and details"}</Link>
+          </p>
 
           <div className="menuq-card mt-8">
             <p className="font-medium">{lang === "ar" ? "المميزات الأساسية في جميع الباقات" : "Core features in every plan"}</p>
