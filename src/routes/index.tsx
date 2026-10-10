@@ -167,6 +167,24 @@ const FAQS = [
     aAr: "المنتج مصمم لإدارة المنيو من واجهة Studio دون كتابة كود.",
     aEn: "The product is designed to manage menu content through Studio without writing code.",
   },
+  {
+    qAr: "ماذا تضيف باقات نمو واحترافي؟",
+    qEn: "What do Growth and Pro add?",
+    aAr: "تضيف حسب الباقة حدود تشغيل أكبر، وتحليلات أعمق، وMenu Intelligence وOwner Intelligence، وأدوات CRM وملاحظات الضيوف والحملات والاحتفاظ، والاستيراد وميزات ذكاء اصطناعي أوسع.",
+    aEn: "Depending on the plan, you get higher operating limits, deeper analytics, Menu Intelligence and Owner Intelligence, CRM, guest feedback, campaigns and retention tools, imports, and expanded AI capabilities.",
+  },
+  {
+    qAr: "هل يمكن الدفع من الموقع الآن؟",
+    qEn: "Can I pay online right now?",
+    aAr: "الدفع الإلكتروني غير مفعّل حاليًا. يمكنك البدء مجانًا، أما الترقية إلى باقة مدفوعة فتتم عبر طلب مباشر.",
+    aEn: "Online payment is not enabled yet. You can start for free; paid upgrades are currently handled by direct request.",
+  },
+  {
+    qAr: "هل يمكنني استكشاف التصاميم قبل الاختيار؟",
+    qEn: "Can I explore themes before choosing?",
+    aAr: "نعم، يمكنك فتح معاينة التصاميم الخمسة ومقارنة اتجاهاتها. صلاحية نشر التصميم تعتمد على الباقة الفعالة.",
+    aEn: "Yes. You can preview all five themes and compare their visual directions. Publishing eligibility depends on the active plan.",
+  },
 ] as const;
 
 function Home() {
@@ -225,11 +243,6 @@ function Home() {
   const themeCards = useMemo(
     () => MENU_THEMES.map((theme) => ({ ...theme, preview: { ...theme.preview, image: `/homepage/themes/${theme.key}.webp` } })),
     [],
-  );
-  const signup = (
-    <Link to="/login" search={{ mode: "signup" } as never}>
-      {lang === "ar" ? "ابدأ مجانًا" : "Start free"}
-    </Link>
   );
   const navItems = [
     ["#journey", lang === "ar" ? "تجربة الضيف" : "Guest journey"],
@@ -307,8 +320,10 @@ function Home() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
-                {signup}
-                <ArrowUpLeft className="ms-2" size={18} />
+                <Link to="/login" search={{ mode: "signup" } as never}>
+                  {lang === "ar" ? "ابدأ مجانًا" : "Start free"}
+                  <ArrowUpLeft className="ms-2" size={18} />
+                </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link to="/themes/preview">
@@ -627,7 +642,7 @@ function Home() {
                   <li><Check size={17} />{lang === "ar" ? `${plan.maxTeamMembers} أعضاء فريق` : `${plan.maxTeamMembers} team members`}</li>
                 </ul>
                 <div className="mt-5 grid gap-2 border-t pt-5">
-                  {COMMERCIAL_PLAN_FEATURES[plan.code].slice(0, 4).map((feature) => (
+                  {COMMERCIAL_PLAN_FEATURES[plan.code].map((feature) => (
                     <div key={feature.en} className="flex gap-2 text-xs leading-5 text-muted-foreground">
                       <Check size={14} className="mt-0.5 shrink-0" />
                       <span>{lang === "ar" ? feature.ar : feature.en}</span>
@@ -677,8 +692,10 @@ function Home() {
             </p>
           </div>
           <Button asChild size="lg">
-            {signup}
-            <ArrowUpLeft className="ms-2" size={18} />
+            <Link to="/login" search={{ mode: "signup" } as never}>
+              {lang === "ar" ? "ابدأ مجانًا" : "Start free"}
+              <ArrowUpLeft className="ms-2" size={18} />
+            </Link>
           </Button>
         </div>
       </section>
