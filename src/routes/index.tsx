@@ -38,8 +38,8 @@ export const Route = createFileRoute("/")({
       ? "Menuun | Digital Menu Platform for Restaurants & Cafés"
       : "Menuun | منصة منيو رقمي للمطاعم والكافيهات";
     const description = en
-      ? "An Arabic-first digital menu platform for restaurants and cafés in Saudi Arabia."
-      : "منصة المنيو الرقمية للمطاعم السعودية";
+      ? "Arabic-first digital menus for Saudi restaurants and cafés, with QR links, multi-branch management, Studio publishing, analytics, and growth tools."
+      : "منيو رقمي عربي وإنجليزي للمطاعم والكافيهات في السعودية، مع QR ورابط عام وإدارة الفروع والمحتوى والتحليلات وأدوات النمو.";
     const image = "https://www.menuun.com/og.jpg";
     return {
       meta: [
@@ -195,8 +195,8 @@ function Home() {
       ? "Menuun | Digital Menu Platform for Restaurants & Cafés"
       : "Menuun | منصة منيو رقمي للمطاعم والكافيهات";
     const description = en
-      ? "An Arabic-first digital menu platform for restaurants and cafés in Saudi Arabia."
-      : "منصة المنيو الرقمية للمطاعم السعودية";
+      ? "Arabic-first digital menus for Saudi restaurants and cafés, with QR links, multi-branch management, Studio publishing, analytics, and growth tools."
+      : "منيو رقمي عربي وإنجليزي للمطاعم والكافيهات في السعودية، مع QR ورابط عام وإدارة الفروع والمحتوى والتحليلات وأدوات النمو.";
     document.title = title;
     const tags = [
       ["name", "description", description],
