@@ -185,7 +185,7 @@ function Home() {
         ? (!query && product.isFeatured) || Boolean(query)
         : product.categoryId === activeDemoCategory)
       .filter((product) => !query || [product.nameAr, product.nameEn, product.descriptionAr, product.descriptionEn]
-        .some((value) => value.toLocaleLowerCase(lang === "ar" ? "ar-SA" : "en-US").includes(query)))
+        .some((value) => value?.toLocaleLowerCase(lang === "ar" ? "ar-SA" : "en-US").includes(query)))
       .slice(0, 4);
   }, [activeDemoCategory, demoSearchQuery, lang]);
 
