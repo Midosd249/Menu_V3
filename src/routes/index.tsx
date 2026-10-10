@@ -135,7 +135,6 @@ const STEPS = [
   },
 ] as const;
 
-const DEMO_PREVIEW_PRODUCTS = DEMO_MENU.products.filter((product) => product.isFeatured).slice(0, 4);
 
 const FAQS = [
   {
