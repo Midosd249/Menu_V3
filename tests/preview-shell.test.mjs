@@ -89,7 +89,7 @@ test("Essential keeps touch targets and readable product hierarchy", async () =>
   assert.match(styles, /font-size:\s*0\.78rem/);
 });
 
-test("SIGNAL TABLE owns dedicated semantic regions and one public action hierarchy", async () => {
+test("GATHER / لَمّة owns dedicated semantic regions and one public action hierarchy", async () => {
   const source = await readFile("src/components/templates/signal-table.tsx", "utf8");
   assert.match(source, /data-signal-root="true"/);
   assert.match(source, /className="signal-hero"/);
@@ -101,7 +101,7 @@ test("SIGNAL TABLE owns dedicated semantic regions and one public action hierarc
   assert.match(source, /isPublicMenuLocaleAvailable\(menu, "en"\)/);
 });
 
-test("SIGNAL TABLE replaces the Canvas presentation without scroll-driven animation", async () => {
+test("GATHER / لَمّة replaces the Canvas presentation without scroll-driven animation", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
   const template = await readFile("src/components/templates/signal-table.tsx", "utf8");
   assert.match(styles, /signal-brand-logo[\s\S]*object-fit:\s*contain/);
@@ -150,7 +150,7 @@ test("W16 hardening protects Arabic word boundaries, Noir hours contrast, and Ga
   assert.match(styles, /overflow:\s*visible/);
 });
 
-test("SIGNAL TABLE keeps the mobile language control visible and removes featured-selection chrome", async () => {
+test("GATHER / لَمّة keeps the mobile language control visible and removes featured-selection chrome", async () => {
   const styles = await readFile("src/theme-signal-table.css", "utf8");
   const signal = await readFile("src/components/templates/signal-table.tsx", "utf8");
   assert.doesNotMatch(styles, /signal-topbar-lang\{display:none\}/);

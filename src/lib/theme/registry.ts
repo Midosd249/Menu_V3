@@ -37,7 +37,7 @@ const definitions: readonly ThemeDefinition[] = [
     capabilities: { dark: false, imageFirst: false, compact: false, immersive: false, featuredComposition: false, decorativeSurfaces: false, motion: false }, motion: "quiet", preview: { className: "preview-essential", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1400&q=88" },
   },
   {
-    key: "editorial", family: "contemporary-restaurant", tier: "free", name: { ar: "Signal Table", en: "Signal Table" },
+    key: "editorial", family: "contemporary-restaurant", tier: "free", name: { ar: "لَمّة", en: "Gather" },
     description: { ar: "واجهة ضيافة رقمية عربية أولاً، واضحة، هادئة، ومصممة حول الطعام والطلب.", en: "An Arabic-first hospitality interface designed around food discovery and confident ordering." },
     promise: { ar: "هوية المطعم → الاختيار المميز → الفئات → تدفق الأصناف → التفاصيل → الطلب.", en: "Identity → signature selection → cuisine rail → menu stream → detail → order." },
     tags: [{ ar: "مجاني", en: "Free" }, { ar: "عربي أولاً", en: "Arabic-first" }, { ar: "بريميوم", en: "Premium" }],
