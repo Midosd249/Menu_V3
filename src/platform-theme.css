@@ -170,8 +170,13 @@ html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-au
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] [data-auth-link]:focus-visible { color: #FFF7ED !important; }
 
 
-/* The login footer intentionally keeps its light brand surface in dark mode.
-   Do not let platform dark-theme text tokens turn its links/copy pale on cream. */
+/* The shared login footer uses the deep-emerald brand surface in both platform themes.
+   Keep all footer copy light on that surface; the previous cream-surface override
+   produced near-identical foreground/background colors and failed the WCAG contrast check. */
 html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) :where(a, p, h2, span) {
-  color: #343A40 !important;
+  color: #fff7ed !important;
+}
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) a:hover,
+html[data-platform-theme="dark"] [data-platform-chrome][data-auth-page] footer:not(.menuq-live-footer) a:focus-visible {
+  color: #e0bd78 !important;
 }

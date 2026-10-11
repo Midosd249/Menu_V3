@@ -50,8 +50,9 @@ test("homepage keeps a stable login entrypoint for both anonymous and authentica
 });
 
 test("homepage keeps multi-child signup CTAs compatible with the slotted Button contract", () => {
-  assert.match(home, /<Button asChild size="lg">\s*\{signup\}\s*<ArrowUpLeft/);
-  assert.match(home, /<Button asChild className="mt-7 w-full">\{signup\}<\/Button>/);
+  assert.match(home, /<Button asChild size="lg">\s*<Link to="\/login" search=\{\{ mode: "signup" \} as never\}>[\s\S]*?<ArrowUpLeft/);
+  assert.match(home, /plan\.code === "free"[\s\S]*?mode: "signup"[\s\S]*?<Link to="\/pricing">[\s\S]*?تفاصيل الباقة/);
+  assert.doesNotMatch(home, /COMMERCIAL_PLAN_FEATURES\[plan\.code\]\.slice\(0, 4\)/);
   assert.match(button, /import \{ Slot, Slottable \} from "@radix-ui\/react-slot";/);
   assert.match(button, /Children\.toArray\(children\)/);
   assert.match(button, /<Slottable>\{firstChild\}<\/Slottable>/);
@@ -79,6 +80,7 @@ test("theme preview remains connected to the canonical public renderer", () => {
   assert.match(preview, /getTheme/);
   assert.match(preview, /isThemeKey/);
   assert.doesNotMatch(preview, /theme-preview\.html/);
+  assert.doesNotMatch(preview, /MarketingFooter/);
 });
 
 test("new-customer request flow is retired in favor of direct signup", () => {
@@ -88,7 +90,7 @@ test("new-customer request flow is retired in favor of direct signup", () => {
 });
 
 
-test("shared marketing footer uses only real destinations and bilingual controls", () => {
+test("shared marketing footer uses a high-contrast branded surface and real bilingual destinations", () => {
   const footer = read("src/components/marketing-footer.tsx");
   assert.match(footer, /to="\/pricing"/);
   assert.match(footer, /to="\/login"/);
@@ -156,7 +158,7 @@ test("marketing footer has one ordered Brand → Links → Contact → Copyright
   const brandIndex = footer.indexOf('<div className="max-w-sm">');
   const linksIndex = footer.indexOf('<nav aria-label={ar ? "روابط الموقع" : "Site links"}>');
   const contactIndex = footer.indexOf('{ar ? "تواصل معنا" : "Contact"}');
-  const copyrightIndex = footer.indexOf('className="mt-10 flex flex-col gap-4 border-t border-line pt-5');
+  const copyrightIndex = footer.indexOf('className="mt-12 flex flex-col gap-4 border-t border-[#245e53] pt-5');
 
   assert.ok(brandIndex >= 0 && brandIndex < linksIndex, "Brand must precede Links");
   assert.ok(linksIndex < contactIndex, "Links must precede Contact");
@@ -172,6 +174,8 @@ test("marketing footer has one ordered Brand → Links → Contact → Copyright
   }
 
   assert.match(footer, /<footer dir=\{ar \? "rtl" : "ltr"\}/);
+  assert.match(footer, /bg-\[#063f39\]/);
+  assert.match(footer, /text-\[#e0bd78\]/);
   assert.match(footer, /شروط الاستخدام/);
   assert.match(footer, /Terms of Service/);
   assert.match(footer, /سياسة الخصوصية/);
@@ -195,4 +199,42 @@ test("application identity uses Menuun metadata, favicon, and web app manifest",
   assert.match(appIcon, /<rect width="512" height="512" fill="#344331"\/>/);
   assert.match(appIcon, /<svg x="106" y="106" width="300" height="300"/);
   assert.match(appIcon, /fill="#FFF7ED"/);
+});
+
+
+test("homepage menu preview controls are interactive and clearly marked as illustrative", () => {
+  assert.match(home, /setDemoSearchOpen/);
+  assert.match(home, /onChange=\{\(event\) => setDemoSearchQuery\(event\.target\.value\)\}/);
+  assert.match(home, /DEMO_MENU\.categories\.filter/);
+  assert.match(home, /aria-pressed=\{activeDemoCategory === category\.id\}/);
+  assert.match(home, /setDemoCartCount\(\(count\) => count \+ 1\)/);
+  assert.match(home, /No real order is sent|ليست عملية طلب حقيقية/);
+  assert.doesNotMatch(home, /Open now · Al Olaya|يفتح يوميًا 07:00/);
+});
+
+test("homepage pricing can switch billing cadence and discloses the current upgrade path", () => {
+  assert.match(home, /setBillingInterval\("monthly"\)/);
+  assert.match(home, /setBillingInterval\("annual"\)/);
+  assert.match(home, /getCommercialPrice\(plan, billingInterval\)/);
+  assert.match(home, /getAnnualDiscountPercent\(plan\)/);
+  assert.match(home, /الدفع الإلكتروني غير مفعّل حاليًا/);
+  assert.match(home, /<Link to="\/pricing">/);
+});
+
+test("homepage theme and analytics artwork references resolve to tracked assets", () => {
+  for (const theme of expectedThemes) {
+    assert.ok(fs.existsSync(new URL(`../public/homepage/themes/${theme}.webp`, import.meta.url)), `missing homepage artwork for ${theme}`);
+  }
+  assert.ok(fs.existsSync(new URL("../public/homepage-analytics-real.png", import.meta.url)), "missing analytics preview artwork");
+});
+
+
+test("pricing uses a trial-first signup path for every plan without upfront upgrade requests", () => {
+  const pricing = read("src/routes/pricing.tsx");
+  assert.match(pricing, /14 يومًا/);
+  assert.match(pricing, /بعدها يمكنك الاستمرار في المجاني/);
+  assert.match(pricing, /<Link to="\/login" search=\{\{ mode: "signup" \} as never\}/);
+  assert.match(pricing, /Start free · Try for 14 days/);
+  assert.doesNotMatch(pricing, /requestUpgradeUrl|اطلب الترقية عبر واتساب|Request upgrade on WhatsApp/);
+  assert.doesNotMatch(pricing, /target="_blank" rel="noopener noreferrer"/);
 });

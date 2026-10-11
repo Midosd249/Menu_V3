@@ -9,7 +9,6 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getOwnerPreviewMenu } from "@/lib/menu/owner";
 import { DEMO_MENU } from "@/lib/menu/demo";
 import { getTheme, isThemeKey, type ThemeKey } from "@/lib/theme";
-import { MarketingFooter } from "@/components/marketing-footer";
 import type { PublicMenu } from "@/lib/menu/types";
 
 export const Route = createFileRoute("/themes/preview")({ component: ThemePreviewPage });
@@ -59,7 +58,6 @@ function ThemePreviewPage() {
         <MenuThemeController theme={effectiveTheme} preview />
         <ThemeRenderer menu={previewMenu} preview />
       </div>
-      <MarketingFooter />
     </>
   );
 }

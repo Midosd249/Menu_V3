@@ -47,10 +47,19 @@ test("dark homepage demo native text pairs meet WCAG AA normal-text contrast", (
   }
 });
 
+test("light homepage feature steps use visible borders, icons, and body copy", async () => {
+  const homepageCss = await readFile(new URL("src/routes/index.css", root), "utf8");
+  assert.match(homepageCss, /\.menuq-step\s*\{[^}]*border: 1px solid var\(--mq-line\)/s);
+  assert.match(homepageCss, /\.menuq-step > div svg\s*\{[^}]*color: var\(--mq-emerald\)/s);
+  assert.match(homepageCss, /\.menuq-step p\s*\{[^}]*color: var\(--mq-muted\)/s);
+  assert.match(homepageCss, /prefers-reduced-motion: reduce/);
+  assert.match(homepageFixCss, /\.menuq-step > div svg\s*\{[^}]*color: #d9b976/s);
+});
+
 test("dark homepage feature steps and shared footer use mapped dark text/surfaces", () => {
   assert.match(homepage, /STEPS\.map/);
   assert.match(homepageFixCss, /\.menuq-step p\s*\{[^}]*color: #d0d5dd/s);
   assert.match(homepageFixCss, /footer:not\(\.menuq-live-footer\)\s*\{[^}]*background: #171b22 !important/s);
   assert.match(homepageFixCss, /footer:not\(\.menuq-live-footer\) :is\(p, a, h2, span\)\s*\{[^}]*color: #d0d5dd/s);
-  assert.match(footer, /text-ink\/55/);
+  assert.match(footer, /text-\[#fff7ed\]\/55/);
 });
