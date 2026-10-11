@@ -202,6 +202,40 @@ function Home() {
   const [demoCartCount, setDemoCartCount] = useState(0);
   const [demoCartOpen, setDemoCartOpen] = useState(false);
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
+
+  useEffect(() => {
+    const root = document.querySelector<HTMLElement>(".menuq-home");
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const targets = root.querySelectorAll<HTMLElement>(
+      ".menuq-section-heading, .menuq-journey-card, .menuq-theme-card, .menuq-feature-mini, .menuq-bidi-card, .menuq-step, .menuq-plan-card, .menuq-card",
+    );
+    if (!("IntersectionObserver" in window) || targets.length === 0) return;
+
+    targets.forEach((element, index) => {
+      element.classList.add("menuq-reveal");
+      element.style.setProperty("--menuq-reveal-delay", `${(index % 4) * 75}ms`);
+    });
+    root.dataset.motionReady = "true";
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -48px 0px" });
+
+    targets.forEach((element) => observer.observe(element));
+    return () => {
+      observer.disconnect();
+      delete root.dataset.motionReady;
+      targets.forEach((element) => {
+        element.classList.remove("menuq-reveal", "is-visible");
+        element.style.removeProperty("--menuq-reveal-delay");
+      });
+    };
+  }, []);
   const visibleDemoProducts = useMemo(() => {
     const query = demoSearchQuery.trim().toLocaleLowerCase(lang === "ar" ? "ar-SA" : "en-US");
     return DEMO_MENU.products
