@@ -104,3 +104,21 @@ html[data-platform-theme="dark"] .menuq-home footer:not(.menuq-live-footer) a[ar
   border-radius: 0.65rem;
   background: #fffdf8 !important;
 }
+
+/* Auth pages reuse the marketing footer outside the homepage wrapper.
+   Keep its dark brand surface and readable text when the platform theme is dark. */
+html[data-platform-theme="dark"] [data-auth-page] footer:not(.menuq-live-footer) {
+  background: #063f39 !important;
+  color: #fff7ed !important;
+  border-color: #245e53 !important;
+}
+html[data-platform-theme="dark"] [data-auth-page] footer:not(.menuq-live-footer) :is(p, a, span) {
+  color: #fff7ed !important;
+}
+html[data-platform-theme="dark"] [data-auth-page] footer:not(.menuq-live-footer) h2 {
+  color: #e0bd78 !important;
+}
+html[data-platform-theme="dark"] [data-auth-page] footer:not(.menuq-live-footer) a[aria-label="Menuun"] {
+  background: #fffdf8 !important;
+  border-color: #e8e5dd !important;
+}
