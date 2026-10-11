@@ -947,8 +947,8 @@
 }
 
 @keyframes menuq-menu-arrive {
-  from { opacity: 0; transform: translate3d(0, 18px, -24px) rotateY(-4deg) scale(.985); }
-  to { opacity: 1; transform: translate3d(0, 0, 0) rotateY(0) scale(1); }
+  from { opacity: 0; filter: blur(5px); }
+  to { opacity: 1; filter: blur(0); }
 }
 
 @keyframes menuq-orbit-breathe {
