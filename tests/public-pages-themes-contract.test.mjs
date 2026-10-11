@@ -217,7 +217,7 @@ test("homepage pricing can switch billing cadence and discloses the current upgr
   assert.match(home, /setBillingInterval\("annual"\)/);
   assert.match(home, /getCommercialPrice\(plan, billingInterval\)/);
   assert.match(home, /getAnnualDiscountPercent\(plan\)/);
-  assert.match(home, /الدفع الإلكتروني غير مفعل حاليًا/);
+  assert.match(home, /الدفع الإلكتروني غير مفعّل حاليًا/);
   assert.match(home, /<Link to="\/pricing">/);
 });
 
