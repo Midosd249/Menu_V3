@@ -138,7 +138,13 @@ const STEPS = [
 
 const FAQS = [
   {
-    qAr: "هل Menuun مجرد QR Menu؟",
+    qAr: "كيف تعمل التجربة المجانية لمدة 14 يومًا؟",
+    qEn: "How does the 14-day free trial work?",
+    aAr: "ابدأ بإنشاء حساب مجانًا، وستحصل على مزايا الباقات المتقدمة لمدة 14 يومًا. بعد انتهاء التجربة يمكنك الاستمرار على الباقة المجانية أو اختيار الباقة المدفوعة المناسبة لك. لا تحتاج إلى طلب ترقية قبل أن تبدأ، ولا يتم تحصيل رسوم تلقائيًا.",
+    aEn: "Create your account for free and get access to advanced-plan features for 14 days. After the trial, continue on the free plan or choose the paid plan that fits your restaurant. You do not need to request an upgrade before starting, and no automatic payment is taken.",
+  },
+  {
+    qAr: "هل Menuun مجرد QR Menu؟
     qEn: "Is Menuun just a QR menu?",
     aAr: "لا. الـQR هو مدخل التجربة. المنصة تجمع الحضور العام للمنيو، إدارة المحتوى والفروع، Studio، التحليلات والذكاء والنمو ضمن منظومة واحدة.",
     aEn: "No. QR is the entry point. The platform brings together the public menu experience, content and branch management, Studio, analytics, intelligence, and growth capabilities.",
@@ -333,7 +339,13 @@ function Home() {
               </Button>
             </div>
 
-            <div className="menuq-proof-row mt-9">
+            <p className="mt-4 max-w-xl text-sm font-medium leading-7 text-muted-foreground">
+              {lang === "ar"
+                ? "14 يومًا بجميع المزايا المتقدمة مجانًا، ثم اختر الاستمرار في المجاني أو الترقية لاحقًا. لا حاجة لطلب ترقية الآن."
+                : "All advanced features are free for 14 days. Then stay on Free or upgrade later. No upgrade request is needed to get started."}
+            </p>
+
+            <div className="menuq-proof-row mt-7">
               <div>
                 <strong>5</strong>
                 <span>{lang === "ar" ? "تصاميم محمية" : "protected themes"}</span>
@@ -605,9 +617,9 @@ function Home() {
       <section id="pricing" className="px-4 py-20 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
-            <p className="menuq-eyebrow">{lang === "ar" ? "باقات واضحة" : "SIMPLE PLANS"}</p>
+            <p className="menuq-eyebrow">{lang === "ar" ? "ابدأ بلا مخاطرة" : "START WITHOUT PRESSURE"}</p>
             <h2 className="menuq-section-title mt-3">
-              {lang === "ar" ? "ابدأ بالحجم الذي يناسب مطعمك." : "Start with the plan that fits your restaurant."}
+              {lang === "ar" ? "جرّب كل المزايا أولًا، ثم اختر ما يناسبك." : "Try every feature first, then choose what fits."}
             </h2>
           </div>
 
@@ -660,7 +672,7 @@ function Home() {
           </div>
 
           <p className="mt-5 max-w-3xl text-sm leading-7 text-muted-foreground">
-            {lang === "ar" ? "الأسعار بالريال السعودي. الدفع الإلكتروني غير مفعل حاليًا؛ لا يوجد دفع تلقائي من هذه الصفحة، وتتم الترقية المدفوعة عبر طلب مباشر." : "Prices are in SAR. Online payment is not enabled yet; this page does not process payment, and paid upgrades are handled by direct request."}
+            {lang === "ar" ? "ابدأ مجانًا مع تجربة كاملة لمدة 14 يومًا. بعدها يمكنك البقاء على المجاني أو اختيار باقة مدفوعة من داخل حسابك. لا يوجد تحصيل تلقائي، والدفع الإلكتروني غير مفعّل حاليًا." : "Start free with full access for 14 days. Afterward, stay on Free or choose a paid plan from your account. There is no automatic charge, and online payments are not enabled yet."}
             {" "}<Link to="/pricing" className="font-semibold underline underline-offset-4">{lang === "ar" ? "عرض الأسعار والتفاصيل كاملة" : "View full pricing and details"}</Link>
           </p>
 
