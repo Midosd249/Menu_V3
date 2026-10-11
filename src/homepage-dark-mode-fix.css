@@ -63,6 +63,9 @@ html[data-platform-theme="dark"] .menuq-home .menuq-step > div,
 html[data-platform-theme="dark"] .menuq-home .menuq-step p {
   color: #d0d5dd;
 }
+html[data-platform-theme="dark"] .menuq-home .menuq-step > div svg {
+  color: #d9b976;
+}
 
 /* The shared footer has a fixed light surface by design in light mode; pair it
    with dark-mode surface and text tokens instead of translucent light-mode ink. */
