@@ -139,6 +139,12 @@
   border-radius: 1.35rem;
   background: #fffdf8;
   box-shadow: 0 28px 80px rgba(20, 57, 44, 0.16);
+  animation: menuq-menu-float 8s ease-in-out infinite;
+}
+
+@keyframes menuq-menu-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
 }
 
 .menuq-live-header,
@@ -590,13 +596,27 @@
 
 .menuq-step {
   min-height: 270px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--mq-line);
   border-radius: 1.4rem;
   padding: 1.4rem;
+  background: var(--mq-paper);
+  color: var(--mq-ink);
+  transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+}
+
+.menuq-step:hover {
+  transform: translateY(-4px);
+  border-color: var(--mq-amber);
+  box-shadow: 0 16px 36px rgba(23, 33, 29, 0.08);
 }
 
 .menuq-step > div {
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--mq-gold);
+}
+
+.menuq-step > div svg {
+  color: var(--mq-emerald);
+  flex: 0 0 auto;
 }
 
 .menuq-step h3 {
@@ -607,7 +627,7 @@
 
 .menuq-step p {
   margin-top: 0.55rem;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--mq-muted);
   font-size: 0.84rem;
   line-height: 1.7;
 }
@@ -782,7 +802,11 @@
 @media (prefers-reduced-motion: reduce) {
   .menuq-home a,
   .menuq-home button,
-  .menuq-theme-image img {
+  .menuq-theme-image img,
+  .menuq-step,
+  .menuq-live-menu {
     transition: none;
+    animation: none;
+    transform: none;
   }
 }
