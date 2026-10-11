@@ -25,12 +25,12 @@ function Pricing() {
         <section className="mx-auto max-w-4xl px-5 pb-10 pt-14 text-center lg:pt-20">
           <p className="text-sm font-semibold text-accent">{lang === "ar" ? "أسعار واضحة بلا تعقيد" : "Clear pricing, without the noise"}</p>
           <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">{lang === "ar" ? "اختر الباقة التي تناسب حجم مطعمك" : "Choose the plan that fits your restaurant"}</h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-ink-soft">{lang === "ar" ? "نفس تجربة المنيو والثيمات في كل الباقات. الفرق الأساسي هو حدود التشغيل والسعر حسب دورة الفوترة." : "Every plan uses the same menu experience and theme catalog. The difference is operational limits and billing cadence."}</p>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-ink-soft">{lang === "ar" ? "ابدأ مجانًا واستكشف مزايا الباقات المتقدمة كلها لمدة 14 يومًا. بعدها يمكنك الاستمرار في المجاني أو اختيار باقة مدفوعة؛ لا حاجة لطلب ترقية قبل التسجيل." : "Start free and explore all advanced-plan features for 14 days. Then continue on Free or choose a paid plan. No upgrade request is needed before signup."}</p>
           <div className="mx-auto mt-7 inline-flex rounded-2xl border border-line bg-sand/30 p-1" role="group" aria-label={lang === "ar" ? "دورة الفوترة" : "Billing interval"}>
             <button type="button" onClick={() => setBillingInterval("monthly")} className={`rounded-xl px-4 py-2 text-sm font-medium ${billingInterval === "monthly" ? "bg-ink text-paper" : "text-muted"}`}>{lang === "ar" ? "شهري" : "Monthly"}</button>
             <button type="button" onClick={() => setBillingInterval("annual")} className={`rounded-xl px-4 py-2 text-sm font-medium ${billingInterval === "annual" ? "bg-ink text-paper" : "text-muted"}`}>{lang === "ar" ? "سنوي — شهران مجاناً" : "Annual — 2 months free"}</button>
           </div>
-          <p className="mx-auto mt-4 max-w-2xl text-xs leading-6 text-muted">{lang === "ar" ? "الأسعار بالريال السعودي. الدفع الإلكتروني غير مفعل بعد؛ لا نعرض Checkout غير موجود. الترقية الحالية تتم عبر طلب مباشر." : "Prices are in SAR. Online payment is not enabled yet; there is no unsupported checkout. Upgrades are currently handled by direct request."}</p>
+          <p className="mx-auto mt-4 max-w-2xl text-xs leading-6 text-muted">{lang === "ar" ? "الأسعار بالريال السعودي. لن يتم تحصيل رسوم تلقائيًا عند انتهاء التجربة. يمكنك البقاء على المجاني أو طلب الباقة المدفوعة التي تختارها لاحقًا من حسابك." : "Prices are in SAR. You will not be charged automatically when the trial ends. Stay on Free or request your chosen paid plan later from your account."}</p>
         </section>
 
         <section className="mx-auto grid max-w-6xl gap-4 px-5 pb-16 md:grid-cols-3 lg:pb-24">
@@ -57,8 +57,8 @@ function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/" search={{ plan: plan.code, interval: billingInterval } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
-                  {plan.code === "free" ? (lang === "ar" ? "ابدأ مجاناً" : "Start free") : (lang === "ar" ? "اطلب الترقية" : "Request upgrade")}
+                <Link to="/login" search={{ mode: "signup" } as never} className={`mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium ${plan.recommended ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
+                  {lang === "ar" ? "ابدأ مجانًا · جرّب 14 يومًا" : "Start free · Try for 14 days"}
                   <ArrowUpLeft className="size-4" />
                 </Link>
               </article>
