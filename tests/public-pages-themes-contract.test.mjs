@@ -158,7 +158,7 @@ test("marketing footer has one ordered Brand → Links → Contact → Copyright
   const brandIndex = footer.indexOf('<div className="max-w-sm">');
   const linksIndex = footer.indexOf('<nav aria-label={ar ? "روابط الموقع" : "Site links"}>');
   const contactIndex = footer.indexOf('{ar ? "تواصل معنا" : "Contact"}');
-  const copyrightIndex = footer.indexOf('className="mt-10 flex flex-col gap-4 border-t border-line pt-5');
+  const copyrightIndex = footer.indexOf('className="mt-12 flex flex-col gap-4 border-t border-[#245e53] pt-5');
 
   assert.ok(brandIndex >= 0 && brandIndex < linksIndex, "Brand must precede Links");
   assert.ok(linksIndex < contactIndex, "Links must precede Contact");
