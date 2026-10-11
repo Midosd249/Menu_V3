@@ -45,7 +45,8 @@ test("homepage menu proof uses canonical bilingual demo data and stable image me
   const styles = await readFile("src/routes/index.css", "utf8");
   assert.match(home, /DEMO_MENU\.tenant\.nameAr/);
   assert.match(home, /DEMO_MENU\.tenant\.nameEn/);
-  assert.match(home, /DEMO_PREVIEW_PRODUCTS/);
+  assert.match(home, /visibleDemoProducts/);
+  assert.match(home, /DEMO_MENU\.products[\s\S]*?\.slice\(0, 4\)/);
   assert.match(styles, /\.menuq-live-product-image[\s\S]*aspect-ratio:\s*4 \/ 3[\s\S]*object-fit:\s*cover/);
   assert.doesNotMatch(home, /<strong>نَفَس<\/strong>/);
 });
