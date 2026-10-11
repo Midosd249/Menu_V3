@@ -1,3 +1,16 @@
+## 2026-10-11 — Homepage Recovery PR #398 — MERGED / VERCEL CHECK SUCCESS
+
+- VERIFIED: PR #398 was merged to `main`; merge commit is `b71b88954988303a258054236b56fff08a29f65b`.
+- VERIFIED: commit message confirms restoration of the homepage, 14-day free-trial messaging, signature motion, pricing CTA routing, marketing footer, theme-preview footer exclusion, dark-mode fixes, and regression tests.
+- VERIFIED: the commit's combined GitHub status reports Vercel `success`. The connected workflow-run lookup returned no PR-triggered workflow runs for this merge SHA, so this note does not claim additional GitHub Actions jobs beyond the verified status and the owner's report that the checks passed.
+- VERIFIED: the dark-mode login footer contrast fix is included in the merged commit. The browser regression test covers Arabic and English and requires at least 4.5:1 text contrast against the footer surface.
+- VERIFIED: the existing Gather / لَمّة theme rename commit `1f666bf022635dc0141ac427fae2583715e04e14` remains part of the main history; PR #398 restores the missing homepage work without reverting the rename.
+- SCOPE: documentation/continuity update only. No runtime source, product behavior, schema, dependencies, or deployment settings changed in this follow-up.
+- DEPLOYMENT: the Vercel status check is successful for the merged commit; this alone is not a claim that a new production deployment was performed or that production serves this exact SHA. Confirm production deployment separately in Vercel if release verification is required.
+- NEXT: keep this merge SHA as the continuity anchor; only investigate a new regression if fresh CI, browser, or production evidence identifies one.
+
+---
+
 ## 2026-10-09 — Studio Logo Dark-Mode Contrast — DONE / VERIFIED IN CI
 
 - VERIFIED: base `main` at task start was `5b58696ce73a52aa580c920785978b5439b6df78`; implementation branch: `fix/studio-logo-dark-mode-2026-10-09`.
