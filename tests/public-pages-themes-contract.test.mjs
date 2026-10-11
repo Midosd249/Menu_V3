@@ -80,6 +80,7 @@ test("theme preview remains connected to the canonical public renderer", () => {
   assert.match(preview, /getTheme/);
   assert.match(preview, /isThemeKey/);
   assert.doesNotMatch(preview, /theme-preview\.html/);
+  assert.doesNotMatch(preview, /MarketingFooter/);
 });
 
 test("new-customer request flow is retired in favor of direct signup", () => {
@@ -89,7 +90,7 @@ test("new-customer request flow is retired in favor of direct signup", () => {
 });
 
 
-test("shared marketing footer uses only real destinations and bilingual controls", () => {
+test("shared marketing footer uses a high-contrast branded surface and real bilingual destinations", () => {
   const footer = read("src/components/marketing-footer.tsx");
   assert.match(footer, /to="\/pricing"/);
   assert.match(footer, /to="\/login"/);
@@ -173,6 +174,8 @@ test("marketing footer has one ordered Brand → Links → Contact → Copyright
   }
 
   assert.match(footer, /<footer dir=\{ar \? "rtl" : "ltr"\}/);
+  assert.match(footer, /bg-\[#063f39\]/);
+  assert.match(footer, /text-\[#e0bd78\]/);
   assert.match(footer, /شروط الاستخدام/);
   assert.match(footer, /Terms of Service/);
   assert.match(footer, /سياسة الخصوصية/);
@@ -226,12 +229,12 @@ test("homepage theme and analytics artwork references resolve to tracked assets"
 });
 
 
-test("pricing calls to action use real signup and paid-upgrade destinations", () => {
+test("pricing uses a trial-first signup path for every plan without upfront upgrade requests", () => {
   const pricing = read("src/routes/pricing.tsx");
-  assert.match(pricing, /requestUpgradeUrl/);
-  assert.match(pricing, /https:\/\/wa\.me\/966549598318\?text=/);
-  assert.match(pricing, /encodeURIComponent\(message\)/);
+  assert.match(pricing, /14 يومًا/);
+  assert.match(pricing, /بعدها يمكنك الاستمرار في المجاني/);
   assert.match(pricing, /<Link to="\/login" search=\{\{ mode: "signup" \} as never\}/);
-  assert.match(pricing, /target="_blank" rel="noopener noreferrer"/);
-  assert.doesNotMatch(pricing, /<Link to="\/" search=\{\{ plan: plan\.code, interval: billingInterval \}/);
+  assert.match(pricing, /Start free · Try for 14 days/);
+  assert.doesNotMatch(pricing, /requestUpgradeUrl|اطلب الترقية عبر واتساب|Request upgrade on WhatsApp/);
+  assert.doesNotMatch(pricing, /target="_blank" rel="noopener noreferrer"/);
 });
