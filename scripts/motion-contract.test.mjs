@@ -59,7 +59,7 @@ test("homepage signature motion preserves the live menu and avoids layout animat
   const homepageRoute = fs.readFileSync(new URL("src/routes/index.tsx", root), "utf8");
   assert.match(homepageCss, /menuq-orbit-breathe/);
   assert.match(homepageCss, /menuq-sheen-pass/);
-  assert.match(homepageCss, /prefers-reduced-motion:\\s*reduce/);
+  assert.match(homepageCss, /prefers-reduced-motion:\s*reduce/);
   assert.match(homepageRoute, /IntersectionObserver/);
   assert.match(homepageRoute, /menuq-reveal/);
   assert.match(homepageRoute, /visibleDemoProducts/);
