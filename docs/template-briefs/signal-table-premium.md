@@ -1,15 +1,15 @@
-# SIGNAL TABLE — Template Brief
+# GATHER / لَمّة — Template Brief
 
 ## Status
 IMPLEMENTATION_IN_PROGRESS
 
 ## Intent
-Replace the Editorial Canvas presentation with one premium hospitality presentation called SIGNAL TABLE. Preserve the existing public-menu data, cart/order, analytics, tenant/branch, locale, QR, SEO, and configured-action contracts.
+Replace the Editorial Canvas presentation with one premium hospitality presentation called GATHER / لَمّة. Preserve the existing public-menu data, cart/order, analytics, tenant/branch, locale, QR, SEO, and configured-action contracts.
 
 ## Visual thesis
 Identity → Signature Stage → Cuisine Rail → Menu Stream → Product Detail → Order Bar → Cart / Order.
 
-SIGNAL TABLE is intentionally not a card-grid restyle. The menu reads as a calm hospitality interface with strong editorial hierarchy, restrained surfaces, food-led imagery, and compact utilities.
+GATHER / لَمّة is intentionally not a card-grid restyle. The menu reads as a calm hospitality interface with strong editorial hierarchy, restrained surfaces, food-led imagery, and compact utilities.
 
 ## Hard rules
 - Product numbers are forbidden.
