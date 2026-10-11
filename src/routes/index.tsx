@@ -144,7 +144,7 @@ const FAQS = [
     aEn: "Create your account for free and get access to advanced-plan features for 14 days. After the trial, continue on the free plan or choose the paid plan that fits your restaurant. You do not need to request an upgrade before starting, and no automatic payment is taken.",
   },
   {
-    qAr: "هل Menuun مجرد QR Menu؟
+    qAr: "هل Menuun مجرد QR Menu؟",
     qEn: "Is Menuun just a QR menu?",
     aAr: "لا. الـQR هو مدخل التجربة. المنصة تجمع الحضور العام للمنيو، إدارة المحتوى والفروع، Studio، التحليلات والذكاء والنمو ضمن منظومة واحدة.",
     aEn: "No. QR is the entry point. The platform brings together the public menu experience, content and branch management, Studio, analytics, intelligence, and growth capabilities.",
