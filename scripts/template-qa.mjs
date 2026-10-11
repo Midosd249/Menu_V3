@@ -140,14 +140,14 @@ try {
       if (theme === "editorial") {
         const cards = result.productCards;
         checks.push(
-          ["SIGNAL TABLE language toggle visible", result.languageToggleVisible, String(result.languageToggleVisible)],
-          ["SIGNAL TABLE product cards present", cards.length > 0, String(cards.length)],
-          ["SIGNAL TABLE fixed square media", cards.every((card) => card.mediaSquare), String(cards.filter((card) => !card.mediaSquare).length)],
-          ["SIGNAL TABLE protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), String(cards.filter((card) => !card.copyProtected || !card.titleReadableWidth).length)],
-          ["SIGNAL TABLE image-to-text gap", cards.every((card) => card.mediaTextGap), String(cards.filter((card) => !card.mediaTextGap).length)],
-          ["SIGNAL TABLE price below description", cards.every((card) => card.priceBelowDescription), String(cards.filter((card) => !card.priceBelowDescription).length)],
-          ["SIGNAL TABLE price no-wrap", cards.every((card) => card.priceNoWrap), String(cards.filter((card) => !card.priceNoWrap).length)],
-          ["SIGNAL TABLE action does not overlap", cards.every((card) => card.actionDoesNotOverlapCard), String(cards.filter((card) => !card.actionDoesNotOverlapCard).length)],
+          ["GATHER / لَمّة language toggle visible", result.languageToggleVisible, String(result.languageToggleVisible)],
+          ["GATHER / لَمّة product cards present", cards.length > 0, String(cards.length)],
+          ["GATHER / لَمّة fixed square media", cards.every((card) => card.mediaSquare), String(cards.filter((card) => !card.mediaSquare).length)],
+          ["GATHER / لَمّة protected text width", cards.every((card) => card.copyProtected && card.titleReadableWidth), String(cards.filter((card) => !card.copyProtected || !card.titleReadableWidth).length)],
+          ["GATHER / لَمّة image-to-text gap", cards.every((card) => card.mediaTextGap), String(cards.filter((card) => !card.mediaTextGap).length)],
+          ["GATHER / لَمّة price below description", cards.every((card) => card.priceBelowDescription), String(cards.filter((card) => !card.priceBelowDescription).length)],
+          ["GATHER / لَمّة price no-wrap", cards.every((card) => card.priceNoWrap), String(cards.filter((card) => !card.priceNoWrap).length)],
+          ["GATHER / لَمّة action does not overlap", cards.every((card) => card.actionDoesNotOverlapCard), String(cards.filter((card) => !card.actionDoesNotOverlapCard).length)],
         );
       }
 
