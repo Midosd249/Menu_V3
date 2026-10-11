@@ -73,7 +73,7 @@ html[data-menu-theme="essential"] .menu-public-shell {
 }
 
 
-/* SIGNAL TABLE semantic adapter. Visual personality lives in theme-signal-table.css. */
+/* GATHER / لَمّة semantic adapter. Visual personality lives in theme-signal-table.css. */
 html[data-menu-theme="editorial"] .menu-public-shell {
   --color-surface-canvas: #f7f5f0;
   --color-surface-primary: #ffffff;
