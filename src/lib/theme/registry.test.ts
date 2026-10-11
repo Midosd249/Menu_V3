@@ -38,3 +38,11 @@ test("all themes are selectable on the free plan", () => {
     assert.equal(canUseTheme(theme.key, null), true);
   }
 });
+
+
+test("Editorial theme exposes its polished Gather name in Arabic and English", () => {
+  const theme = getTheme("editorial");
+  assert.equal(theme.name.ar, "لَمّة");
+  assert.equal(theme.name.en, "Gather");
+  assert.equal(theme.tier, "free");
+});
