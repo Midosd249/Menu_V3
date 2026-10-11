@@ -1,9 +1,9 @@
-# SIGNAL TABLE — Mobile Product Card Structural Audit
+# GATHER / لَمّة — Mobile Product Card Structural Audit
 
 ## Status
 
 - Classification: public-menu visual regression / structural layout remediation
-- Theme identifier: `editorial` compatibility key → SIGNAL TABLE presentation
+- Theme identifier: `editorial` compatibility key → GATHER / لَمّة presentation
 - Scope: `src/components/templates/signal-table.tsx` and `src/theme-signal-table.css` only, plus targeted regression contracts and continuity documentation.
 - Implementation status: IN_PROGRESS
 - Evidence status: repository-verified; physical-device visual rendering remains UNKNOWN until directly observed.
