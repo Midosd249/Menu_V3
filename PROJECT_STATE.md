@@ -1,3 +1,14 @@
+## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38479836616` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7/8 tests passed. Typecheck, repository tests, focused contracts, lint, production build, and all-theme browser QA passed. W9 Orders QA run `38479836649` passed.
+- VERIFIED: preview server did become ready on `127.0.0.1:8081`; the earlier interpretation that server startup itself was the final failure was incorrect. The actual failure was the browser assertion waiting for `localStorage["menu-theme"]` to reflect the theme after the root `data-platform-theme` attribute changed.
+- IMPLEMENTED: `src/components/theme-toggle.tsx` now computes an explicit `nextPreference` and persists it before updating React state and the document theme attribute, so persisted state is committed before the visual state becomes observable. Commit: `bda2c94a11b5350e87d7f7d7124b25416a869c70`.
+- UNKNOWN: whether this ordering change resolves the browser failure; the CI run for the new commit has not appeared in the first query. No tests were executed locally in this GitHub-connected session.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open; no merge or production deployment.
+- EXACT NEXT ACTION: inspect Quality and W9 Orders QA on the latest branch head; if the persistence assertion still fails, use the browser error context and correct the actual persistence failure rather than increasing timeouts or weakening the test.
+
+---
+
 ## 2026-10-14 — Pricing Dark-Mode PR CI Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: Quality run `38473900942` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7 of 8 tests in that browser spec passed. W9 Orders QA run `38473900945` passed.
