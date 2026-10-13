@@ -2132,3 +2132,14 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - EXACT NEXT ACTION: retrieve latest-head Quality and W9 Orders QA; repair only any newly evidenced failure, then review diff and stop.
 
 ---
+
+## 2026-10-14 — Pricing Theme CI Contract Correction — IN_PROGRESS
+
+- VERIFIED: Quality run `38481511698` failed in `scripts/color-contract.test.mjs` because its static assertions still expected the previous inline storage expression. The failure was a stale contract test, not a demonstrated pricing-card regression.
+- IMPLEMENTED: updated the test to assert `nextPreference`, localStorage persistence, and persistence-before-DOM ordering. Corrected regex escaping in follow-up commit `4417ed43428fff18668cc481057a997ede96b6e9`.
+- VERIFIED: latest branch head is `4417ed43428fff18668cc481057a997ede96b6e9`; Quality run `38482806793` and W9 Orders QA run `38482806825` are in progress. W9 run `38481511725` passed on the previous head.
+- UNKNOWN: latest-head test outcomes; do not mark complete until Quality and W9 Orders QA finish.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: check both latest-head workflow runs; if green, review the final diff and stop for owner decision. If either fails, fix only the evidenced issue.
+
+---
