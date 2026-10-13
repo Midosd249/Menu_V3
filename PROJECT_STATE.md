@@ -475,3 +475,15 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - EXACT NEXT ACTION: inspect latest Quality and W9 Orders QA for the updated branch head; if green, review the final diff and stop for owner decision. If a failure remains, fix only that evidenced failure.
 
 ---
+
+## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #402 remains open. Branch head is `4417ed43428fff18668cc481057a997ede96b6e9`; comparison against `main` shows 23 commits ahead and 0 behind.
+- VERIFIED: Quality run `38481511698` failed at `scripts/color-contract.test.mjs` because its static contract expected an outdated inline preference expression. The implementation now persists explicit `nextPreference` before applying the DOM theme.
+- IMPLEMENTED: contract test updated to assert the current explicit preference and persistence ordering. Commit `4417ed43428fff18668cc481057a997ede96b6e9` also corrects regex escaping identified during diff review.
+- VERIFIED: latest-head Quality run `38482806793` and W9 Orders QA run `38482806825` are in progress. Previous-head W9 Orders QA run `38481511725` passed. Vercel status is pending and is not production evidence.
+- UNKNOWN: latest-head CI outcome; local test/browser execution unavailable in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment.
+- EXACT NEXT ACTION: retrieve final latest-head Quality and W9 Orders QA results; if both pass, final diff review and stop. Otherwise repair only the newly evidenced failure.
+
+---
