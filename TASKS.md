@@ -2122,3 +2122,13 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 
 ---
 
+## 2026-10-14 — Pricing Theme Persistence Contract Correction — IN_PROGRESS
+
+- VERIFIED: Quality run `38481511698` failed in `scripts/color-contract.test.mjs` because its static assertions expected the previous inline theme expression. Current `theme-toggle.tsx` derives `nextPreference`, persists that exact value, and then applies the DOM theme.
+- IMPLEMENTED: updated `scripts/color-contract.test.mjs` to assert `nextPreference`, storage of that value, and storage-before-DOM ordering. Commit: `9ef6c88e3f1f86a31a27cb7bd1774b4ede8f281a`.
+- VERIFIED: W9 Orders QA run `38481511725` passed on the previous head. Latest-head CI has not yet been returned; Vercel pending is not production evidence.
+- UNKNOWN: full CI/browser suite result on the updated head; local execution unavailable in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: retrieve latest-head Quality and W9 Orders QA; repair only any newly evidenced failure, then review diff and stop.
+
+---
