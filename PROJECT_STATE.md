@@ -463,3 +463,15 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - IMPLEMENTATION: login footer dark-mode contrast fix and Arabic/English Playwright regression are merged. Previous login footer reachability fix remains.
 - DEPLOYMENT: no production deployment was requested or performed. Real-device QA remains UNKNOWN.
 - EXACT NEXT ACTION: stop. No additional implementation or deployment is authorized by this task.
+
+## 2026-10-14 — Pricing Dark-Mode CI Contract Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #402 remains open. Before the latest test correction, branch comparison showed 18 commits ahead of `main`, 0 behind.
+- VERIFIED: Quality run `38481511698` failed in `scripts/color-contract.test.mjs`, not in the browser suite. Its assertion expected `storedPreference.current = nextDark ? "dark" : "light"`, while the implementation uses explicit `nextPreference` and persists it before `applyTheme(nextDark)`.
+- IMPLEMENTED: commit `9ef6c88e3f1f86a31a27cb7bd1774b4ede8f281a` updates the static contract to assert the explicit preference, storage call, and persistence-before-DOM ordering. This corrects a stale assertion; it does not bypass the test.
+- VERIFIED: W9 Orders QA run `38481511725` succeeded on the previous head. Latest-head workflow runs have not yet been returned; Vercel status is pending and is not production evidence.
+- UNKNOWN: whether Quality and browser tests pass on the updated head. Browser/visual QA has not been re-confirmed after the static contract failure.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains unmerged; no production deployment.
+- EXACT NEXT ACTION: inspect latest Quality and W9 Orders QA for the updated branch head; if green, review the final diff and stop for owner decision. If a failure remains, fix only that evidenced failure.
+
+---
