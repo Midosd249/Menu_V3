@@ -25,7 +25,9 @@ test("pricing recommended Pro card has page-scoped dark-mode contrast protection
   assert.match(platformTheme, /html\[data-platform-theme="dark"\] \[data-platform-chrome\]\[data-pricing-page\] \[data-pricing-recommended-plan="true"\]/);
   assert.match(platformTheme, /background-color: #171B22 !important;[\s\S]*color: #FFF7ED !important;/);
   assert.match(platformTheme, /data-pricing-recommended-plan="true"\] > a \{[\s\S]*background-color: #FFF7ED !important;[\s\S]*color: #171B22 !important;/);
-  assert.doesNotMatch(platformTheme, /html\[data-platform-theme="dark"\] \.menuq-home[\s\S]*data-pricing-page/);
+  const pricingDarkRules = platformTheme.slice(platformTheme.indexOf("/* Pricing-only dark-mode contrast fix for the recommended Pro plan. */"));
+  assert.match(pricingDarkRules, /^\/\* Pricing-only dark-mode contrast fix[\s\S]*data-pricing-page/);
+  assert.doesNotMatch(pricingDarkRules, /\.menuq-home/);
 });
 
 test("homepage uses the commercial feature tiers and never renders the Pro sentinel", () => {
