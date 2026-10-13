@@ -1899,3 +1899,14 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Post-merge Menu V3 Quality run `37961255049` succeeded for PR #390 merge commit.
 - No production deployment was requested or performed. Real-device QA remains UNKNOWN.
 - Exact next action: stop; do not automatically start another task or deploy.
+
+## 2026-10-14 — Pricing Dark-Mode Contract Test Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38481511698` failed at `scripts/color-contract.test.mjs` because static assertions expected the previous inline storage expression. Current `theme-toggle.tsx` derives `nextPreference`, stores that exact value, and then applies the DOM theme.
+- IMPLEMENTED: updated the contract test to check the explicit preference and verify storage is called before `applyTheme(nextDark)`; code/test commit `9ef6c88e3f1f86a31a27cb7bd1774b4ede8f281a`.
+- VERIFIED: W9 Orders QA run `38481511725` passed on the previous head. Latest-head Quality and W9 Orders QA have not yet been returned by the connected workflow-run query.
+- UNKNOWN: full CI/browser suite result on the updated head; local execution was not available in this connected session.
+- DEPLOYMENT: NOT_PERFORMED; PR #402 remains open.
+- Exact next action: retrieve latest-head Quality and W9 Orders QA; if green, review the final diff and stop without merge/deploy.
+
+---
