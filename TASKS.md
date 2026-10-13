@@ -1,3 +1,15 @@
+## 2026-10-14 — Active Task: Pricing Dark-Mode CI Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS.
+- PR: #402; branch: `fix/pricing-pro-dark-mode-contrast-2026-10-13`.
+- VERIFIED failing evidence: Quality run `38479836616` — 7/8 Menuun brand browser tests passed; the cross-route theme test timed out waiting for `localStorage["menu-theme"]` to match the new theme after the DOM attribute changed. W9 Orders QA `38479836649` passed.
+- IMPLEMENTED: persist `nextPreference` before exposing the new document theme state (commit `bda2c94a11b5350e87d7f7d7124b25416a869c70`).
+- UNKNOWN: whether the newest head passes CI; not locally run.
+- Do not merge or deploy until latest-head gates pass and owner authorizes release.
+- Exact next action: verify the latest Quality and W9 Orders QA runs and inspect failures.
+
+---
+
 ## 2026-10-09 — Studio Logo Dark-Mode Contrast — DONE / VERIFIED IN CI
 
 - VERIFIED: base `main` at task start was `5b58696ce73a52aa580c920785978b5439b6df78`; implementation branch: `fix/studio-logo-dark-mode-2026-10-09`.
