@@ -1,3 +1,14 @@
+## 2026-10-14 — Pricing Dark-Mode PR CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38473900942` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7 of 8 tests in that browser spec passed. W9 Orders QA run `38473900945` passed.
+- VERIFIED: failure was a theme toggle hydration readiness assertion (`data-theme-toggle-ready` remained `false` for repeated polls), not the new pricing CSS contract. The browser matrix navigated routes with `waitUntil: "domcontentloaded"`, then immediately relied on the component-ready signal.
+- IMPLEMENTED: changed this route-matrix navigation to wait for `networkidle` before asserting hydration readiness, and expanded the readiness assertion timeout to 10 seconds with route/language/theme context in the failure message. This improves synchronization and diagnosability; it does not bypass the readiness assertion.
+- UNKNOWN: whether this timing adjustment resolves the CI failure; the updated commit is `e162d520e3883482eaaca8443eb6732b4c2fae42`, and a matching workflow run has not yet appeared in the queried run list.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment.
+- EXACT NEXT ACTION: retrieve the latest Quality and W9 Orders QA runs for the updated PR head, inspect any failed-step logs, and fix the underlying issue if readiness remains false.
+
+---
+
 ## 2026-10-13 — Pricing Pro Dark-Mode Contrast — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: `/pricing` uses the recommended-plan card with `bg-ink text-paper`; shared dark-mode variables and broad platform selectors can override utility colors and cause the card's intended contrast to collapse.
