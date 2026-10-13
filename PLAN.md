@@ -1,3 +1,15 @@
+## 2026-10-14 — Current Atomic Task: Pricing Dark-Mode CI Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS; PR #402, branch `fix/pricing-pro-dark-mode-contrast-2026-10-13`.
+- Latest verified failing gate before the persistence-order change: Quality run `38479836616` failed in the cross-route theme preference browser test at the localStorage persistence assertion; 7/8 tests passed. W9 Orders QA run `38479836649` passed.
+- Corrected earlier diagnosis: preview became ready; failure was not a server-startup failure.
+- Implemented on commit `bda2c94a11b5350e87d7f7d7124b25416a869c70`: persist explicit theme preference before updating DOM theme state.
+- Acceptance: Quality and W9 Orders QA both pass on the same latest head; no weakening/skipping of browser checks; pricing fix remains scoped to `/pricing`; homepage remains unchanged.
+- UNKNOWN: latest-head CI result pending. No merge/deployment.
+- Exact next action: inspect latest-head CI and logs, then fix any remaining concrete failure.
+
+---
+
 ## 2026-10-14 — Pricing Dark-Mode PR CI Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: Quality run `38473900942` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7 of 8 tests in that browser spec passed. W9 Orders QA run `38473900945` passed.
