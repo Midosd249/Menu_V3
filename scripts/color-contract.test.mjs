@@ -146,8 +146,14 @@ test("platform theme is scoped away from restaurant-owned public menu themes", a
 test("platform theme preference follows the language preference storage pattern", () => {
   assert.match(themeToggleSource, /const STORAGE_KEY = "menu-theme"/);
   assert.match(themeToggleSource, /localStorage\.getItem\(STORAGE_KEY\)/);
-  assert.match(themeToggleSource, /storedPreference\.current = nextDark \? "dark" : "light"/);
-  assert.match(themeToggleSource, /localStorage\.setItem\(STORAGE_KEY, storedPreference\.current\)/);
+  assert.match(themeToggleSource, /const nextPreference = nextDark \\? "dark" : "light"/);
+  assert.match(themeToggleSource, /storedPreference\\.current = nextPreference/);
+  assert.match(themeToggleSource, /localStorage\\.setItem\\(STORAGE_KEY, nextPreference\\)/);
+  assert.ok(
+    themeToggleSource.indexOf("localStorage.setItem(STORAGE_KEY, nextPreference)") <
+      themeToggleSource.indexOf("applyTheme(nextDark)"),
+    "persist the explicit theme preference before applying the DOM theme",
+  );
   assert.match(themeToggleSource, /prefers-color-scheme:\s*dark/);
   assert.match(themeToggleSource, /Switch to dark mode/);
   assert.match(themeToggleSource, /التبديل إلى الوضع الداكن/);
