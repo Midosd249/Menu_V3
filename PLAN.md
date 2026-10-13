@@ -1910,3 +1910,14 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Exact next action: retrieve latest-head Quality and W9 Orders QA; if green, review the final diff and stop without merge/deploy.
 
 ---
+
+## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: run `38481511698` exposed a stale static source assertion in `scripts/color-contract.test.mjs`; it expected the previous inline preference expression rather than `nextPreference` and persistence-before-DOM ordering.
+- IMPLEMENTED: updated the contract assertions and corrected their regex escaping. Latest implementation/test head: `4417ed43428fff18668cc481057a997ede96b6e9`.
+- VERIFIED: latest-head Quality run `38482806793` and W9 Orders QA run `38482806825` are in progress. Earlier W9 run `38481511725` passed on the previous head.
+- UNKNOWN: final CI/browser result for the latest head; no local execution in this connected session.
+- DEPLOYMENT: NOT_PERFORMED; PR #402 remains open.
+- Exact next action: retrieve both latest-head workflow conclusions; if green, review the final diff and stop without merge/deploy.
+
+---
