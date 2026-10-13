@@ -1,3 +1,16 @@
+## 2026-10-13 — Pricing Pro Dark-Mode Contrast — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `/pricing` uses the recommended-plan card with `bg-ink text-paper`; shared dark-mode variables and broad platform selectors can override utility colors and cause the card's intended contrast to collapse.
+- IMPLEMENTED: added pricing-page and recommended-plan data hooks, plus dark-mode-only scoped CSS for the recommended card, its badge, divider, and CTA. Light-mode styles and homepage markup are not changed.
+- IMPLEMENTED: added a contract test asserting the page-scoped selectors and explicit contrast colors.
+- RESEARCH: W3C WCAG 2.2 SC 1.4.3 requires at least 4.5:1 contrast for normal text; official guidance: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
+- FILES: `src/routes/pricing.tsx`, `src/platform-theme.css`, `tests/public-pages-themes-contract.test.mjs`.
+- VERIFICATION: source-level review only so far; local test/build/browser execution and physical-device QA are UNKNOWN in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment.
+- EXACT NEXT ACTION: run GitHub Quality and review its results for this branch/PR; do not merge or deploy automatically.
+
+---
+
 # SESSION_PROTOCOL
 
 ## 2026-10-09 — Dark-Mode Visual Follow-up — VERIFIED IN CI
