@@ -1,3 +1,15 @@
+## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38479836616` failed at `tests/menuun-brand-browser.spec.ts:83`, waiting for persisted `menu-theme` after the document theme attribute changed; 7/8 tests passed. W9 Orders QA run `38479836649` passed.
+- CORRECTION: the preview server did become ready; the final failure was the browser persistence assertion, not preview startup.
+- IMPLEMENTED: `src/components/theme-toggle.tsx` now persists an explicit `nextPreference` before changing React/DOM theme state. Code commit: `bda2c94a11b5350e87d7f7d7124b25416a869c70`.
+- CONTINUITY: `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md` updated with the corrected diagnosis and pending verification.
+- UNKNOWN: no workflow run was returned yet for the newest branch head; combined status currently shows Vercel Preview pending, which is not a production deployment signal. Local execution is unavailable in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 is open and must not be merged/deployed automatically.
+- EXACT NEXT ACTION: retrieve the latest PR-head Quality and W9 Orders QA results; if the persistence assertion remains failing, inspect its error context and fix the actual storage failure without weakening/skipping the test.
+
+---
+
 ## 2026-10-14 — Pricing Dark-Mode PR CI Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: Quality run `38473900942` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7 of 8 tests in that browser spec passed. W9 Orders QA run `38473900945` passed.
