@@ -2167,3 +2167,14 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - EXACT NEXT ACTION: inspect latest-head Quality and W9 Orders QA; if Quality fails, inspect its exact failing step. If both pass, review final diff and stop for owner decision.
 
 ---
+
+## 2026-10-14 — Follow-up Contract Test Alignment — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38490253666` reached `Tests` after route generation and typecheck passed, then failed one test: `Phase 7 waits for preview hydration before evaluating rendered theme gates`. The assertion expected the old OR readiness predicate after `scripts/template-qa.mjs` was corrected to wait for both theme resolution and a rendered heading.
+- IMPLEMENTED: commit `78a9b39f81f235e397585a57ed496cc74a6e59a6` updates `tests/phase7-theme-regression.test.mjs` to assert both conditions and their AND relationship. This strengthens the contract instead of removing it.
+- VERIFIED: previous Quality run `38489491216` passed typecheck, npm tests, lint, build and performance audit but failed the template QA readiness race at Essential/mobile-390 with heading count 0. W9 Orders QA run `38489491178` passed.
+- UNKNOWN: full CI result after the test-contract alignment and whether template QA passes all themes across the viewport matrix on the new head.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
+
+---
