@@ -498,3 +498,16 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - EXACT NEXT ACTION: inspect Quality and W9 Orders QA for commit `eec455c196cb403bb615e561bd1ab04d9e6685ed`; if Quality fails again, inspect the new failing step and fix only that evidenced cause. If green, review the final diff and stop for owner decision.
 
 ---
+
+## 2026-10-14 — Pricing Dark-Mode CI Readiness Race — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38489491216` passed route generation, typecheck, npm tests, the W7.4–W7.10 contract suites, lint, production build, and performance audit, but failed in `Browser template QA — all themes`. Exact failed gate: `essential · mobile-390 · visible content headings · 0`.
+- ROOT CAUSE: `scripts/template-qa.mjs` used an OR readiness predicate: it stopped waiting as soon as `document.documentElement.dataset.menuTheme` existed, even if the page heading had not rendered yet. It then immediately counted headings, creating a render-timing race.
+- IMPLEMENTED: commit `6897d88dabb7083e7b67dbd9f136a551b0d59dd1` changes the readiness predicate to require both resolved theme and a rendered heading before assertions. This preserves the heading assertion and waits for the actual content; it does not skip the gate.
+- IMPLEMENTED: prior commit `eec455c196cb403bb615e561bd1ab04d9e6685ed` changes the platform-theme route matrix from `networkidle` to `domcontentloaded`; subsequent assertions still verify direction, theme, hydration readiness, toggle behavior, and persistence.
+- VERIFIED: W9 Orders QA run `38489491178` succeeded. Quality run `38489491216` failed only at the template browser QA gate; the PR-specific platform-theme browser test had not yet been reached in that run.
+- UNKNOWN: CI result for the new head, and visual confirmation of the pricing card in the actual deployed site.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect latest-head Quality and W9 Orders QA; if Quality fails, inspect its exact failing step. If both pass, review final diff and stop for owner decision.
+
+---
