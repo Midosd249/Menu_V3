@@ -487,3 +487,14 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - EXACT NEXT ACTION: retrieve final latest-head Quality and W9 Orders QA results; if both pass, final diff review and stop. Otherwise repair only the newly evidenced failure.
 
 ---
+
+## 2026-10-14 — Pricing Dark-Mode CI Browser Timeout Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: latest completed Quality run `38483406369` failed only in `Menuun brand browser QA — homepage and login in Arabic and English`; W9 Orders QA run `38483406272` succeeded. The failed Playwright case was `platform theme preference stays independent from language across marketing, auth, pricing and legal routes` and exceeded 30 seconds in `page.goto(..., { waitUntil: "networkidle" })` while navigating to the local preview. The log showed the preview eventually served, and 7 of 8 browser tests passed.
+- IMPLEMENTED: commit `eec455c196cb403bb615e561bd1ab04d9e6685ed` changes that route-matrix navigation to `domcontentloaded`. The test separately verifies `dir`, `data-platform-theme`, toggle hydration readiness, click behavior, and persisted preference, so it does not need to wait for every network connection to become idle.
+- VERIFIED: this is a browser-test synchronization fix based on the exact timeout trace, not a suppression of assertions. No production code or pricing styles changed in this follow-up.
+- UNKNOWN: CI result on the new head, and real visual confirmation of the pricing card on the deployed site.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect Quality and W9 Orders QA for commit `eec455c196cb403bb615e561bd1ab04d9e6685ed`; if Quality fails again, inspect the new failing step and fix only that evidenced cause. If green, review the final diff and stop for owner decision.
+
+---
