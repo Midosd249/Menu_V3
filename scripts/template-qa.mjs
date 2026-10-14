@@ -62,7 +62,9 @@ try {
       const status = response?.status() ?? 0;
       await page.waitForTimeout(1200);
       await page.waitForFunction(
-        () => document.documentElement.dataset.menuTheme || document.querySelector("h1, h2, h3, h4, h5, h6"),
+        () =>
+          Boolean(document.documentElement.dataset.menuTheme) &&
+          Boolean(document.querySelector("h1, h2, h3, h4, h5, h6")),
         { timeout: 10000 },
       );
 
