@@ -1,3 +1,67 @@
+## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
+
+- VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.
+- VERIFIED: Quality run `38914485354` first failed during Studio fixture setup because `20260917170000_ph06_commercial_activation.sql` altered `subscription_invoices` before the fixture created it. The Studio fixture had omitted PH-05 invoice creation and later subscription migrations.
+- IMPLEMENTED: Quality workflow now applies the missing migrations in dependency order: PH-05 invoices, PH-06 commercial activation, Platform Admin invoice issuance, and self-serve trial. This repairs only the disposable CI Studio database fixture; it does not run or modify production data.
+- VERIFIED: Quality run `38914485354` then reached W7.10 but failed while the runner reported 0 MB disk remaining. The failing route varied between attempts and the page remained on the loading shell. This is environment pressure evidence, not a confirmed Studio layout defect.
+- IMPLEMENTED: After the built preview, template QA, and golden fixture have completed, CI stops the built preview and removes build-only outputs, Vite cache, and npm download cache before running Studio/Admin browser suites; disk usage is logged before and after cleanup.
+- IMPLEMENTED: the Menuun brand browser file will run three consecutive times with `--retries=0` and `--trace=retain-on-failure` in the same CI job. Any failure stops the sequence; retries cannot mask instability.
+- VERIFIED: On prior head `2fd3c452049578c71957d5c35933287ace2ced14`, W9 passed but Quality failed due to disk pressure. On `ce8548f3ab57fb2069a103c86d5274ae901b829b`, Quality passed after the migration and cleanup changes; W9 result is tracked separately.
+- UNKNOWN: Quality/W9 results and the three-run stability result for the final continuity-updated HEAD; visual browser/device inspection of the pricing preview is unavailable in this connected session.
+- SCOPE: no homepage or pricing redesign; no app/database schema migration added; no production data changed. No merge or production deployment.
+- EXACT NEXT ACTION: wait for latest-head Quality and W9; inspect all failures, confirm the three consecutive brand-browser runs passed, review the final diff, then stop without merge/deploy.
+
+---
+
+## 2026-10-16 — PR #402: Cross-navigation theme persistence test correction
+
+- VERIFIED: Quality run `38888689177` failed in `tests/menuun-brand-browser.spec.ts:94`, specifically `theme preference survives route navigation and reload without resetting storage`. The 27 other tests in that file passed. The observed failure was `data-platform-theme=dark` after navigating to `/terms?lang=en`, while the test expected `light`.
+- ROOT CAUSE: the test used `page.addInitScript(() => localStorage.setItem("menu-theme", "dark"))`. Playwright runs this init script on every new document, including route navigation and reload, so it overwrote the user's newly selected `light` preference with `dark`. This was a test-fixture defect, not evidence of an application persistence defect.
+- IMPLEMENTED: commit `966eb67472aaf3ac7e3fbeb107d6497057164236` seeds `dark` once using the pricing page's origin storage, reloads to exercise the real root bootstrap, toggles to `light`, then checks actual theme and storage across navigation to English Terms and another reload. No assertions were removed or weakened; the 20 route/language/theme combinations remain.
+- SCOPE: test-only change; no app code, pricing CSS, homepage, workflow, dependency, or production data changed.
+- VERIFIED: the prior run's Typecheck, repository tests, contract suites, lint, production build, and all-theme template QA passed. Its browser QA failed only at the persistence-navigation test above. W9 Orders QA run `38888689121` passed on implementation parent `6b66039b2d4c1b7dc4d2b8902b7498dcf3064983`; it does not validate the newer test commit.
+- UNKNOWN: results for the corrected test on the final continuity-updated HEAD; three consecutive full-file runs with retries disabled; visual preview/device checks.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and must not be merged or deployed as part of this task.
+- EXACT NEXT ACTION: finish continuity updates, then inspect Quality and W9 on the final HEAD; run the complete browser spec three consecutive times with retries disabled in CI-equivalent conditions and inspect any failure before proceeding.
+
+---
+
+## 2026-10-14 — Current Atomic Task: Pricing Dark-Mode CI Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS; PR #402, branch `fix/pricing-pro-dark-mode-contrast-2026-10-13`.
+- Latest verified failing gate before the persistence-order change: Quality run `38479836616` failed in the cross-route theme preference browser test at the localStorage persistence assertion; 7/8 tests passed. W9 Orders QA run `38479836649` passed.
+- Corrected earlier diagnosis: preview became ready; failure was not a server-startup failure.
+- Implemented on commit `bda2c94a11b5350e87d7f7d7124b25416a869c70`: persist explicit theme preference before updating DOM theme state.
+- Acceptance: Quality and W9 Orders QA both pass on the same latest head; no weakening/skipping of browser checks; pricing fix remains scoped to `/pricing`; homepage remains unchanged.
+- UNKNOWN: latest-head CI result pending. No merge/deployment.
+- Exact next action: inspect latest-head CI and logs, then fix any remaining concrete failure.
+
+---
+
+## 2026-10-14 — Pricing Dark-Mode PR CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38473900942` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7 of 8 tests in that browser spec passed. W9 Orders QA run `38473900945` passed.
+- VERIFIED: failure was a theme toggle hydration readiness assertion (`data-theme-toggle-ready` remained `false` for repeated polls), not the new pricing CSS contract. The browser matrix navigated routes with `waitUntil: "domcontentloaded"`, then immediately relied on the component-ready signal.
+- IMPLEMENTED: changed this route-matrix navigation to wait for `networkidle` before asserting hydration readiness, and expanded the readiness assertion timeout to 10 seconds with route/language/theme context in the failure message. This improves synchronization and diagnosability; it does not bypass the readiness assertion.
+- UNKNOWN: whether this timing adjustment resolves the CI failure; the updated commit is `e162d520e3883482eaaca8443eb6732b4c2fae42`, and a matching workflow run has not yet appeared in the queried run list.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment.
+- EXACT NEXT ACTION: retrieve the latest Quality and W9 Orders QA runs for the updated PR head, inspect any failed-step logs, and fix the underlying issue if readiness remains false.
+
+---
+
+## 2026-10-13 — Pricing Pro Dark-Mode Contrast — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `/pricing` uses the recommended-plan card with `bg-ink text-paper`; shared dark-mode variables and broad platform selectors can override utility colors and cause the card's intended contrast to collapse.
+- IMPLEMENTED: added pricing-page and recommended-plan data hooks, plus dark-mode-only scoped CSS for the recommended card, its badge, divider, and CTA. Light-mode styles and homepage markup are not changed.
+- IMPLEMENTED: added a contract test asserting the page-scoped selectors and explicit contrast colors.
+- RESEARCH: W3C WCAG 2.2 SC 1.4.3 requires at least 4.5:1 contrast for normal text; official guidance: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html.
+- FILES: `src/routes/pricing.tsx`, `src/platform-theme.css`, `tests/public-pages-themes-contract.test.mjs`.
+- VERIFICATION: source-level review only so far; local test/build/browser execution and physical-device QA are UNKNOWN in this connected session.
+- DEPLOYMENT: NOT_PERFORMED. No merge or production deployment.
+- EXACT NEXT ACTION: run GitHub Quality and review its results for this branch/PR; do not merge or deploy automatically.
+
+---
+
 ## 2026-10-09 — Studio Logo Dark-Mode Contrast — DONE / VERIFIED IN CI
 
 - VERIFIED: base `main` at task start was `5b58696ce73a52aa580c920785978b5439b6df78`; implementation branch: `fix/studio-logo-dark-mode-2026-10-09`.
@@ -1863,3 +1927,71 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Post-merge Menu V3 Quality run `37961255049` succeeded for PR #390 merge commit.
 - No production deployment was requested or performed. Real-device QA remains UNKNOWN.
 - Exact next action: stop; do not automatically start another task or deploy.
+
+## 2026-10-14 — Pricing Dark-Mode Contract Test Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38481511698` failed at `scripts/color-contract.test.mjs` because static assertions expected the previous inline storage expression. Current `theme-toggle.tsx` derives `nextPreference`, stores that exact value, and then applies the DOM theme.
+- IMPLEMENTED: updated the contract test to check the explicit preference and verify storage is called before `applyTheme(nextDark)`; code/test commit `9ef6c88e3f1f86a31a27cb7bd1774b4ede8f281a`.
+- VERIFIED: W9 Orders QA run `38481511725` passed on the previous head. Latest-head Quality and W9 Orders QA have not yet been returned by the connected workflow-run query.
+- UNKNOWN: full CI/browser suite result on the updated head; local execution was not available in this connected session.
+- DEPLOYMENT: NOT_PERFORMED; PR #402 remains open.
+- Exact next action: retrieve latest-head Quality and W9 Orders QA; if green, review the final diff and stop without merge/deploy.
+
+---
+
+## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: run `38481511698` exposed a stale static source assertion in `scripts/color-contract.test.mjs`; it expected the previous inline preference expression rather than `nextPreference` and persistence-before-DOM ordering.
+- IMPLEMENTED: updated the contract assertions and corrected their regex escaping. Latest implementation/test head: `4417ed43428fff18668cc481057a997ede96b6e9`.
+- VERIFIED: latest-head Quality run `38482806793` and W9 Orders QA run `38482806825` are in progress. Earlier W9 run `38481511725` passed on the previous head.
+- UNKNOWN: final CI/browser result for the latest head; no local execution in this connected session.
+- DEPLOYMENT: NOT_PERFORMED; PR #402 remains open.
+- Exact next action: retrieve both latest-head workflow conclusions; if green, review the final diff and stop without merge/deploy.
+
+---
+
+## 2026-10-14 — Pricing Dark-Mode CI Browser Timeout Follow-up — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: latest completed Quality run `38483406369` failed only in `Menuun brand browser QA — homepage and login in Arabic and English`; W9 Orders QA run `38483406272` succeeded. The failed Playwright case was `platform theme preference stays independent from language across marketing, auth, pricing and legal routes` and exceeded 30 seconds in `page.goto(..., { waitUntil: "networkidle" })` while navigating to the local preview. The log showed the preview eventually served, and 7 of 8 browser tests passed.
+- IMPLEMENTED: commit `eec455c196cb403bb615e561bd1ab04d9e6685ed` changes that route-matrix navigation to `domcontentloaded`. The test separately verifies `dir`, `data-platform-theme`, toggle hydration readiness, click behavior, and persisted preference, so it does not need to wait for every network connection to become idle.
+- VERIFIED: this is a browser-test synchronization fix based on the exact timeout trace, not a suppression of assertions. No production code or pricing styles changed in this follow-up.
+- UNKNOWN: CI result on the new head, and real visual confirmation of the pricing card on the deployed site.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect Quality and W9 Orders QA for commit `eec455c196cb403bb615e561bd1ab04d9e6685ed`; if Quality fails again, inspect the new failing step and fix only that evidenced cause. If green, review the final diff and stop for owner decision.
+
+---
+
+## 2026-10-14 — Pricing Dark-Mode CI Readiness Race — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38489491216` passed route generation, typecheck, npm tests, the W7.4–W7.10 contract suites, lint, production build, and performance audit, but failed in `Browser template QA — all themes`. Exact failed gate: `essential · mobile-390 · visible content headings · 0`.
+- ROOT CAUSE: `scripts/template-qa.mjs` used an OR readiness predicate: it stopped waiting as soon as `document.documentElement.dataset.menuTheme` existed, even if the page heading had not rendered yet. It then immediately counted headings, creating a render-timing race.
+- IMPLEMENTED: commit `6897d88dabb7083e7b67dbd9f136a551b0d59dd1` changes the readiness predicate to require both resolved theme and a rendered heading before assertions. This preserves the heading assertion and waits for the actual content; it does not skip the gate.
+- IMPLEMENTED: prior commit `eec455c196cb403bb615e561bd1ab04d9e6685ed` changes the platform-theme route matrix from `networkidle` to `domcontentloaded`; subsequent assertions still verify direction, theme, hydration readiness, toggle behavior, and persistence.
+- VERIFIED: W9 Orders QA run `38489491178` succeeded. Quality run `38489491216` failed only at the template browser QA gate; the PR-specific platform-theme browser test had not yet been reached in that run.
+- UNKNOWN: CI result for the new head, and visual confirmation of the pricing card in the actual deployed site.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect latest-head Quality and W9 Orders QA; if Quality fails, inspect its exact failing step. If both pass, review final diff and stop for owner decision.
+
+---
+
+## 2026-10-14 — Follow-up Contract Test Alignment — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: Quality run `38490253666` reached `Tests` after route generation and typecheck passed, then failed one test: `Phase 7 waits for preview hydration before evaluating rendered theme gates`. The assertion expected the old OR readiness predicate after `scripts/template-qa.mjs` was corrected to wait for both theme resolution and a rendered heading.
+- IMPLEMENTED: commit `78a9b39f81f235e397585a57ed496cc74a6e59a6` updates `tests/phase7-theme-regression.test.mjs` to assert both conditions and their AND relationship. This strengthens the contract instead of removing it.
+- VERIFIED: previous Quality run `38489491216` passed typecheck, npm tests, lint, build and performance audit but failed the template QA readiness race at Essential/mobile-390 with heading count 0. W9 Orders QA run `38489491178` passed.
+- UNKNOWN: full CI result after the test-contract alignment and whether template QA passes all themes across the viewport matrix on the new head.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and unmerged.
+- EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
+
+---
+
+
+## 2026-10-16 — Pricing Theme Toggle Hydration / CI Gate Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS; PR #402 remains open and unmerged.
+- Root cause verified from Quality run `38490484286`: browser test looked up the dark-state accessible name before the toggle finished React hydration. The component's initial render can be light-state while the root bootstrap already applies persisted dark mode.
+- Implemented test synchronization on commit `0b7b104c9df5e9c8c599d516b1328d786ce101de`: find the button using its readiness attribute, await readiness, assert the expected accessible name, then click and retain state/storage assertions.
+- CI plumbing: W9 transient Playwright install first hit npm ERESOLVE; after allowing legacy peer resolution, it exposed missing transitive Vite at preview startup. Workflows now explicitly include Vite with Playwright and use `--legacy-peer-deps` only for the ephemeral QA-tool install. Do not weaken the browser assertions.
+- VERIFIED: W9 run `38886351310` passed on head `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`. Quality run `38886351402` passed unit tests, contract tests, lint, build and Playwright/Chromium setup; all-theme browser QA is still running.
+- Acceptance remains: Quality and W9 both pass on the same latest head, review the final diff, preserve pricing-only CSS scope, no merge/deploy without owner authorization.
+- Exact next action: inspect Quality run `38886351402` and address any remaining concrete failure before calling this task complete.

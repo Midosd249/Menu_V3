@@ -82,7 +82,7 @@ jobs:
       - name: Production build
         run: npm run build
       - name: Install Playwright test runner
-        run: npm install --no-save --no-package-lock --no-audit --no-fund @playwright/test@1.63.0
+        run: npm install --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps vite@8.3.4 @playwright/test@1.63.0
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: P1.9 real-route performance evidence — route graph branch only
@@ -204,8 +204,11 @@ jobs:
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
-              MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 npx playwright test tests/menuun-brand-browser.spec.ts --workers=1
-              exit $?
+              for stability_run in 1 2 3; do
+                echo "[menuun-brand-browser] stability run ${stability_run}/3 (retries=0)"
+                MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 npx playwright test tests/menuun-brand-browser.spec.ts --workers=1 --retries=0 --trace=retain-on-failure || exit $?
+              done
+              exit 0
             fi
             sleep 0.25
           done
@@ -232,6 +235,25 @@ jobs:
             .grok/golden-performance-legacy.json
           if-no-files-found: warn
           retention-days: 14
+      - name: Reclaim build-only disk space before Studio browser QA
+        run: |
+          echo "[disk] before cleanup"
+          df -h
+          du -xhd1 . "$HOME/.npm" "$HOME/.cache" 2>/dev/null | sort -h | tail -n 30 || true
+          npm run preview:stop
+          # The built preview and its outputs have completed their QA gates. The
+          # remaining Studio/Admin browser suites run against Vite dev servers.
+          rm -rf .output dist node_modules/.vite "$HOME/.npm/_cacache"
+          # Hosted Ubuntu images include large toolchains unrelated to this Node/Playwright
+          # workflow. The Studio browser matrix runs out of disk even after build/cache
+          # cleanup (the latest run had only 5 MB free and Vite logged ECONNRESET).
+          # Remove only unused preinstalled SDKs; preserve Node, npm, project dependencies,
+          # PostgreSQL, and Playwright/Chromium binaries required by the remaining steps.
+          sudo rm -rf /usr/local/lib/android/sdk /usr/share/dotnet /opt/ghc /usr/local/share/powershell
+          sudo apt-get clean
+          echo "[disk] after cleanup"
+          df -h
+          du -xhd1 . "$HOME/.npm" "$HOME/.cache" 2>/dev/null | sort -h | tail -n 30 || true
       - name: Prepare Customer Lifecycle browser database
         env:
           ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
@@ -353,6 +375,10 @@ jobs:
             "20260930022000_product_offer_revision_trigger.sql",
             "20260930023000_menu_ordering_offers_rls.sql",
             "20260917120000_ph04_platform_admin_subscription_controls.sql",
+            "20260917150000_ph05_invoices.sql",
+            "20260917170000_ph06_commercial_activation.sql",
+            "20260925130000_platform_admin_invoice_issuance.sql",
+            "20260927070000_self_serve_trial.sql",
           ];
           const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, options: "-c search_path=menu_v3,public", max: 1 });
           const client = await pool.connect();

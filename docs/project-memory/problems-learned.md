@@ -1,3 +1,13 @@
+## 2026-10-16 — CI Studio fixture migration completeness and disk pressure
+
+- VERIFIED: The Quality Studio fixture applied PH-06 commercial activation without first applying PH-05 invoice-table creation. The fixture then failed with `relation "menu_v3.subscription_invoices" does not exist`. Apply schema migrations in dependency order; do not infer fixture completeness from app build/typecheck.
+- VERIFIED: After the missing invoice migrations were added, Studio browser QA progressed but the hosted runner reported 0 MB free disk. The failing route varied across attempts and remained on the loading shell; this is not enough evidence to classify it as a route-specific product bug.
+- IMPLEMENTED: Complete the disposable Studio fixture migration chain and reclaim build-only outputs/npm cache only after built-preview QA has finished. Preserve installed dependencies and Playwright browser binaries.
+- PREVENTION: Record disk usage before/after cleanup. If a browser route matrix stalls again, inspect runner disk and captured browser/server diagnostics before changing route assertions or increasing timeouts.
+- BOUNDARY: This CI fixture correction does not authorize production schema changes, data edits, merging, or deployment.
+
+---
+
 # Project Memory — Problems We Learned From
 
 This file exists to prevent Menu V3 from repeating expensive engineering mistakes. It records hard problems, their root causes, the approaches that failed or consumed time, and the lessons that should shape future work. It is intended for both human developers and AI agents. Update it after major milestones, incidents, repeated debugging loops, or other work that reveals a durable engineering lesson.
@@ -188,3 +198,13 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Fix: assert the Arabic labels after restoring Arabic; wait for the theme control's readiness signal before its click.
 - Lesson: after a locale transition, assertions must reflect the current locale; avoid stale expected copy when testing independent language and theme state.
 - Verification: Quality run `37910685922` passed the Studio browser suite.
+
+
+## 2026-10-16 — Playwright addInitScript can invalidate cross-navigation storage tests
+
+- CONTEXT: PR #402 theme preference regression browser test.
+- VERIFIED ROOT CAUSE: a test-level `page.addInitScript(() => localStorage.setItem("menu-theme", "dark"))` executes for every new document. During a test that navigates or reloads, it rewrites storage and masks whether the application's own preference persisted.
+- FAILURE SIGNAL: after toggling from dark to light, navigation to another route unexpectedly returned to dark, while the test itself had installed a persistent init script that re-seeded dark on every navigation.
+- CORRECT APPROACH: seed the same-origin preference once through `page.evaluate`, reload to exercise the actual bootstrap, then navigate/reload without a recurring initializer. Assert both the effective DOM theme and stored preference after each transition.
+- SCOPE: correct the fixture; do not change application behavior or weaken persistence assertions unless separate evidence demonstrates an application defect.
+- RELATED PR/COMMIT: PR #402; test correction `966eb67472aaf3ac7e3fbeb107d6497057164236`.

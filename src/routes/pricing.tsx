@@ -13,7 +13,7 @@ function Pricing() {
   const { lang } = useLang();
   const [billingInterval, setBillingInterval] = useState<BillingInterval>("monthly");
   return (
-    <div data-platform-chrome className="min-h-dvh bg-paper text-ink">
+    <div data-platform-chrome data-pricing-page className="min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <Link to="/" className="font-display text-xl font-semibold">{lang === "ar" ? "منيو" : "Menu"}</Link>
@@ -39,7 +39,7 @@ function Pricing() {
             const price = getCommercialPrice(plan, billingInterval);
             const annualDiscount = getAnnualDiscountPercent(plan);
             return (
-              <article key={plan.code} className={`relative flex flex-col rounded-3xl border p-6 shadow-sm ${plan.recommended ? "border-ink bg-ink text-paper shadow-xl shadow-ink/10" : "border-line bg-paper"}`}>
+              <article key={plan.code} data-pricing-recommended-plan={plan.recommended ? "true" : undefined} className={`relative flex flex-col rounded-3xl border p-6 shadow-sm ${plan.recommended ? "border-ink bg-ink text-paper shadow-xl shadow-ink/10" : "border-line bg-paper"}`}>
                 {plan.recommended ? <span className="absolute -top-3 start-5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-paper">{lang === "ar" ? "الأكثر توازناً" : "Best fit"}</span> : null}
                 <div className="flex items-start justify-between gap-3"><div><h2 className="font-display text-2xl font-semibold">{name}</h2><p className={`mt-1 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{plan.code === "free" ? (lang === "ar" ? "للبداية" : "For getting started") : plan.code === "starter" ? (lang === "ar" ? "للمطاعم النامية" : "For growing restaurants") : (lang === "ar" ? "للمطاعم المتوسعة" : "For scaling restaurants")}</p></div></div>
                 <div className="mt-6"><span className="font-display text-4xl font-semibold">{price === 0 ? (lang === "ar" ? "مجاناً" : "Free") : price}</span>{price > 0 ? <span className={`ms-2 text-sm ${plan.recommended ? "text-paper/65" : "text-muted"}`}>{lang === "ar" ? `ر.س / ${billingInterval === "annual" ? "سنة" : "شهر"}` : `SAR / ${billingInterval === "annual" ? "year" : "month"}`}</span> : null}</div>

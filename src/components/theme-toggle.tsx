@@ -70,10 +70,14 @@ export function ThemeToggle({ className }: { className?: string }) {
     // Use the effective document theme as the source of truth for the click itself.
     const currentDark = document.documentElement.getAttribute("data-platform-theme") === "dark";
     const nextDark = !currentDark;
-    storedPreference.current = nextDark ? "dark" : "light";
+    const nextPreference = nextDark ? "dark" : "light";
+
+    // Persist before exposing the new DOM state so observers and browser checks
+    // cannot see a changed theme while the preference still contains the old value.
+    storedPreference.current = nextPreference;
+    try { window.localStorage.setItem(STORAGE_KEY, nextPreference); } catch { /* Current tab still changes. */ }
     setDark(nextDark);
     applyTheme(nextDark);
-    try { window.localStorage.setItem(STORAGE_KEY, storedPreference.current); } catch { /* Current tab still changes. */ }
   };
   const label = dark
     ? (lang === "ar" ? "التبديل إلى الوضع الفاتح" : "Switch to light mode")

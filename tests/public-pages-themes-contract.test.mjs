@@ -5,6 +5,8 @@ import fs from "node:fs";
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
 const home = read("src/routes/index.tsx");
+const pricing = read("src/routes/pricing.tsx");
+const platformTheme = read("src/platform-theme.css");
 const button = read("src/components/ui/button.tsx");
 const themes = read("src/routes/themes/index.tsx");
 const preview = read("src/routes/themes/preview.tsx");
@@ -16,6 +18,17 @@ const appIcon = read("public/menuun-app-icon.svg");
 
 const expectedPlans = ["free", "starter", "pro"];
 const expectedThemes = ["essential", "editorial", "noir", "heritage", "gallery"];
+
+test("pricing recommended Pro card has page-scoped dark-mode contrast protection", () => {
+  assert.match(pricing, /data-pricing-page/);
+  assert.match(pricing, /data-pricing-recommended-plan=\{plan\.recommended \? "true" : undefined\}/);
+  assert.match(platformTheme, /html\[data-platform-theme="dark"\] \[data-platform-chrome\]\[data-pricing-page\] \[data-pricing-recommended-plan="true"\]/);
+  assert.match(platformTheme, /background-color: #171B22 !important;[\s\S]*color: #FFF7ED !important;/);
+  assert.match(platformTheme, /data-pricing-recommended-plan="true"\] > a \{[\s\S]*background-color: #FFF7ED !important;[\s\S]*color: #171B22 !important;/);
+  const pricingDarkRules = platformTheme.slice(platformTheme.indexOf("/* Pricing-only dark-mode contrast fix for the recommended Pro plan. */"));
+  assert.match(pricingDarkRules, /^\/\* Pricing-only dark-mode contrast fix[\s\S]*data-pricing-page/);
+  assert.doesNotMatch(pricingDarkRules, /\.menuq-home/);
+});
 
 test("homepage uses the commercial feature tiers and never renders the Pro sentinel", () => {
   const home = read("src/routes/index.tsx");
