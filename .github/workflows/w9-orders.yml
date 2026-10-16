@@ -51,7 +51,7 @@ jobs:
           SQL
       - name: Install Playwright
         run: |
-          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.63.0
+          npm install --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps playwright@1.63.0
           npx playwright install --with-deps chromium
       - name: Run W9 Orders browser QA
         run: |
