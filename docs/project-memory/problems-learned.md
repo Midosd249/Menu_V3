@@ -1,3 +1,13 @@
+## 2026-10-16 — CI Studio fixture migration completeness and disk pressure
+
+- VERIFIED: The Quality Studio fixture applied PH-06 commercial activation without first applying PH-05 invoice-table creation. The fixture then failed with `relation "menu_v3.subscription_invoices" does not exist`. Apply schema migrations in dependency order; do not infer fixture completeness from app build/typecheck.
+- VERIFIED: After the missing invoice migrations were added, Studio browser QA progressed but the hosted runner reported 0 MB free disk. The failing route varied across attempts and remained on the loading shell; this is not enough evidence to classify it as a route-specific product bug.
+- IMPLEMENTED: Complete the disposable Studio fixture migration chain and reclaim build-only outputs/npm cache only after built-preview QA has finished. Preserve installed dependencies and Playwright browser binaries.
+- PREVENTION: Record disk usage before/after cleanup. If a browser route matrix stalls again, inspect runner disk and captured browser/server diagnostics before changing route assertions or increasing timeouts.
+- BOUNDARY: This CI fixture correction does not authorize production schema changes, data edits, merging, or deployment.
+
+---
+
 # Project Memory — Problems We Learned From
 
 This file exists to prevent Menu V3 from repeating expensive engineering mistakes. It records hard problems, their root causes, the approaches that failed or consumed time, and the lessons that should shape future work. It is intended for both human developers and AI agents. Update it after major milestones, incidents, repeated debugging loops, or other work that reveals a durable engineering lesson.

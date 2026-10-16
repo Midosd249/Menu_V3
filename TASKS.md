@@ -1,3 +1,18 @@
+## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
+
+- VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.
+- VERIFIED: Quality run `38914485354` first failed during Studio fixture setup because `20260917170000_ph06_commercial_activation.sql` altered `subscription_invoices` before the fixture created it. The Studio fixture had omitted PH-05 invoice creation and later subscription migrations.
+- IMPLEMENTED: Quality workflow now applies the missing migrations in dependency order: PH-05 invoices, PH-06 commercial activation, Platform Admin invoice issuance, and self-serve trial. This repairs only the disposable CI Studio database fixture; it does not run or modify production data.
+- VERIFIED: Quality run `38914485354` then reached W7.10 but failed while the runner reported 0 MB disk remaining. The failing route varied between attempts and the page remained on the loading shell. This is environment pressure evidence, not a confirmed Studio layout defect.
+- IMPLEMENTED: After the built preview, template QA, and golden fixture have completed, CI stops the built preview and removes build-only outputs, Vite cache, and npm download cache before running Studio/Admin browser suites; disk usage is logged before and after cleanup.
+- IMPLEMENTED: the Menuun brand browser file will run three consecutive times with `--retries=0` and `--trace=retain-on-failure` in the same CI job. Any failure stops the sequence; retries cannot mask instability.
+- VERIFIED: On prior head `2fd3c452049578c71957d5c35933287ace2ced14`, W9 passed but Quality failed due to disk pressure. On `ce8548f3ab57fb2069a103c86d5274ae901b829b`, Quality passed after the migration and cleanup changes; W9 result is tracked separately.
+- UNKNOWN: Quality/W9 results and the three-run stability result for the final continuity-updated HEAD; visual browser/device inspection of the pricing preview is unavailable in this connected session.
+- SCOPE: no homepage or pricing redesign; no app/database schema migration added; no production data changed. No merge or production deployment.
+- EXACT NEXT ACTION: wait for latest-head Quality and W9; inspect all failures, confirm the three consecutive brand-browser runs passed, review the final diff, then stop without merge/deploy.
+
+---
+
 ## 2026-10-16 — PR #402: Cross-navigation theme persistence test correction
 
 - VERIFIED: Quality run `38888689177` failed in `tests/menuun-brand-browser.spec.ts:94`, specifically `theme preference survives route navigation and reload without resetting storage`. The 27 other tests in that file passed. The observed failure was `data-platform-theme=dark` after navigating to `/terms?lang=en`, while the test expected `light`.
