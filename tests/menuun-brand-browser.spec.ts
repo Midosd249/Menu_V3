@@ -93,9 +93,15 @@ for (const route of THEME_MATRIX_ROUTES) {
 
 test("theme preference survives route navigation and reload without resetting storage", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
   await page.goto(`${BASE_URL}/pricing`, { waitUntil: "domcontentloaded" });
+
+  // Seed the persisted preference once, then reload so the real root bootstrap
+  // consumes it. Do not use addInitScript here: it runs on every navigation and
+  // would overwrite the user's changed preference on the next document load.
+  await page.evaluate(() => localStorage.setItem("menu-theme", "dark"));
+  await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("dark");
 
   const toggle = page.locator("button[data-theme-toggle-ready]");
   await expect(toggle).toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
