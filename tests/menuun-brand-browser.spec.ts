@@ -73,10 +73,14 @@ test("platform theme preference stays independent from language across marketing
         const label = language === "ar"
           ? (theme === "dark" ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن")
           : (theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-        const toggle = page.getByRole("button", { name: label });
+        // Locate the SSR control without relying on its accessible name: before hydration,
+        // its label can still reflect the default light React state even when the root
+        // bootstrap has already applied the persisted dark theme.
+        const toggle = page.locator("button[data-theme-toggle-ready]");
         await expect(toggle).toBeVisible();
-        // Do not click the server-rendered control until React has attached its handler.
         await expect(toggle, `Theme toggle hydration failed for ${route} (${language}, ${theme})`).toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
+        // After hydration, the accessible name must agree with the effective theme and language.
+        await expect(toggle).toHaveAttribute("aria-label", label);
         await toggle.click();
         const nextTheme = theme === "dark" ? "light" : "dark";
         await expect(page.locator("html")).toHaveAttribute("data-platform-theme", nextTheme);
