@@ -87,6 +87,7 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 - `docs/template-brief-template.md` — reusable template/presentation brief.
 - `docs/repository-organization-audit.md` — repository organization audit and target structure.
 - `docs/archive/` — historical plans, status reports, and completion records.
+- `docs/incidents/PR-402-pricing-contrast-and-ci-debugging.md` — detailed retrospective of PR #402 failures, root causes, final fixes, and prevention checklist.
 - `docs/development/MASTER_CONTEXT_MENU_V3.md` — historical/current architectural context retained for continuity.
 - `docs/product/DESIGN_SYSTEM.md` — product design-system reference.
 - `docs/deployment/ADMIN_SETUP.md` — platform-admin deployment setup.

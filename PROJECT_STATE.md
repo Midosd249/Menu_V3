@@ -1,3 +1,17 @@
+## 2026-10-16 — PR #402 merged: Pro pricing contrast and CI root-cause closeout
+
+- VERIFIED: PR #402 merged successfully as `a1009d0595b8e5ab39c5df0e7119e4003db72160`; final tested PR head was `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
+- VERIFIED: Quality run [38956141584](https://github.com/Midosd249/Menu_V3/actions/runs/38956141584) and W9 Orders QA run [38956141474](https://github.com/Midosd249/Menu_V3/actions/runs/38956141474) both succeeded on the same final PR head. The Quality job completed Studio and Platform Admin responsive browser QA successfully.
+- VERIFIED: the repository owner confirmed the pricing preview looked correct before requesting merge. No production deployment was performed.
+- ROOT CAUSES RECORDED: (1) persistence test's `addInitScript` reapplied dark storage on every document and overwrote the user's light preference; (2) Studio fixture omitted prerequisite invoice/subscription migrations; (3) Studio browser QA runner ran out of disk, with varying failing routes and Vite ECONNRESET; not proven to be a route-specific application defect.
+- IMPLEMENTED: corrected the persistence fixture, completed disposable CI migration ordering, added build/cache/unused-SDK cleanup before Studio browser QA, and retained the full coverage matrix with three consecutive brand-browser runs at `--retries=0`.
+- LESSON: diagnose each failing step from the current SHA and complete logs; do not infer app hydration or route defects from error labels; inspect fixture dependencies and disk pressure before changing product code.
+- RECORD: detailed retrospective in `docs/incidents/PR-402-pricing-contrast-and-ci-debugging.md` and permanent prevention rules in `docs/project-memory/problems-learned.md`.
+- RELEASE: MERGED; NOT_DEPLOYED. No homepage redesign or production data/schema change was made.
+- EXACT NEXT ACTION: stop this task; any production deployment must follow the separate release-only workflow and explicit authorization.
+
+---
+
 ## 2026-10-16 — PR #402: Studio browser QA runner disk exhaustion
 
 - VERIFIED: Quality run [38917634867](https://github.com/Midosd249/Menu_V3/actions/runs/38917634867) on head `0bc68abb9f4ca684e5678012c221474927663178` failed in the Studio browser QA job. The first W7.10 matrix attempt failed at `/studio/qr`/1024px; the second failed at `/studio/branches`/768px. Both displayed only the Studio loading state, while 11 of 12 tests passed in each attempt.

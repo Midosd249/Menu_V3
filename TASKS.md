@@ -1,3 +1,16 @@
+## 2026-10-16 — PR #402 closeout — DONE / VERIFIED
+
+- PR: [#402](https://github.com/Midosd249/Menu_V3/pull/402), merged.
+- Merge SHA: `a1009d0595b8e5ab39c5df0e7119e4003db72160`.
+- Tested head: `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
+- Quality: [run 38956141584](https://github.com/Midosd249/Menu_V3/actions/runs/38956141584) — success.
+- W9 Orders QA: [run 38956141474](https://github.com/Midosd249/Menu_V3/actions/runs/38956141474) — success.
+- Owner manually reviewed the preview and confirmed it looked good. No production deployment.
+- Failure history and preventive checklist: `docs/incidents/PR-402-pricing-contrast-and-ci-debugging.md`.
+- Scope preserved: no homepage redesign; no production data/schema changes; no test skips or weakened assertions.
+
+---
+
 ## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
 
 - VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.

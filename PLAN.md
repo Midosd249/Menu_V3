@@ -1,3 +1,12 @@
+## 2026-10-16 — PR #402 closed
+
+- VERIFIED: PR #402 is merged at `a1009d0595b8e5ab39c5df0e7119e4003db72160` after Quality and W9 passed on tested head `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
+- VERIFIED: owner reviewed the preview and confirmed the visual result was good. No production deployment was performed.
+- COMPLETED: scoped Pro pricing dark-mode contrast fix; corrected persistence test setup without reducing the 20-combination coverage; repaired CI-only Studio migration order; reclaimed runner disk safely before Studio browser suites; recorded the incident retrospective.
+- NEXT: no follow-up implementation task is authorized by this closeout. Stop. If deployment is requested later, use the release-only workflow and verify Vercel production evidence separately.
+
+---
+
 ## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
 
 - VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.

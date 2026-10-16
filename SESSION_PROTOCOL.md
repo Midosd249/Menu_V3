@@ -1,3 +1,16 @@
+## 2026-10-16 — PR #402 retrospective: mandatory multi-cause CI diagnosis
+
+- VERIFIED: PR #402 merged at `a1009d0595b8e5ab39c5df0e7119e4003db72160`; Quality [38956141584](https://github.com/Midosd249/Menu_V3/actions/runs/38956141584) and W9 [38956141474](https://github.com/Midosd249/Menu_V3/actions/runs/38956141474) passed on tested head `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
+- Before another retry, inspect the latest run's exact SHA, failed job/step, complete log, and artifacts. Do not repeat a run without a new hypothesis or a changed condition.
+- Separate test setup defects from application defects: `page.addInitScript` executes on each document, so do not use it to seed a value that must later change and persist. Verify rendered state plus storage across real navigation/reload.
+- For browser DB failures, compare fixture setup against migration dependencies in order; do not assume build/typecheck proves fixture completeness.
+- For changing browser failures accompanied by `df -h` near 0 MB and Vite `ECONNRESET`, investigate runner resource exhaustion before modifying app routes, auth, shell readiness, or assertions. Preserve request/console/pageerror/trace evidence.
+- Stability evidence requires three consecutive full-file runs with retries disabled; any failure resets the streak. Verify Quality and W9 on the same final HEAD.
+- Detailed timeline, failed approaches, final fixes, and guardrails: `docs/incidents/PR-402-pricing-contrast-and-ci-debugging.md`.
+- Release boundary: merged, not deployed. Production deployment is a separate authorized release workflow.
+
+---
+
 ## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
 
 - VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.
