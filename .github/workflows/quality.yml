@@ -244,6 +244,13 @@ jobs:
           # The built preview and its outputs have completed their QA gates. The
           # remaining Studio/Admin browser suites run against Vite dev servers.
           rm -rf .output dist node_modules/.vite "$HOME/.npm/_cacache"
+          # Hosted Ubuntu images include large toolchains unrelated to this Node/Playwright
+          # workflow. The Studio browser matrix runs out of disk even after build/cache
+          # cleanup (the latest run had only 5 MB free and Vite logged ECONNRESET).
+          # Remove only unused preinstalled SDKs; preserve Node, npm, project dependencies,
+          # PostgreSQL, and Playwright/Chromium binaries required by the remaining steps.
+          sudo rm -rf /usr/local/lib/android/sdk /usr/share/dotnet /opt/ghc /usr/local/share/powershell
+          sudo apt-get clean
           echo "[disk] after cleanup"
           df -h
           du -xhd1 . "$HOME/.npm" "$HOME/.cache" 2>/dev/null | sort -h | tail -n 30 || true
