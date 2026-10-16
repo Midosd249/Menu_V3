@@ -232,6 +232,18 @@ jobs:
             .grok/golden-performance-legacy.json
           if-no-files-found: warn
           retention-days: 14
+      - name: Reclaim build-only disk space before Studio browser QA
+        run: |
+          echo "[disk] before cleanup"
+          df -h
+          du -xhd1 . "$HOME/.npm" "$HOME/.cache" 2>/dev/null | sort -h | tail -n 30 || true
+          npm run preview:stop
+          # The built preview and its outputs have completed their QA gates. The
+          # remaining Studio/Admin browser suites run against Vite dev servers.
+          rm -rf .output dist node_modules/.vite "$HOME/.npm/_cacache"
+          echo "[disk] after cleanup"
+          df -h
+          du -xhd1 . "$HOME/.npm" "$HOME/.cache" 2>/dev/null | sort -h | tail -n 30 || true
       - name: Prepare Customer Lifecycle browser database
         env:
           ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
