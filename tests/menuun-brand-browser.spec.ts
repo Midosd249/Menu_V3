@@ -56,38 +56,62 @@ test.describe("Menuun customer-facing brand surfaces", () => {
   });
 });
 
-test("platform theme preference stays independent from language across marketing, auth, pricing and legal routes", async ({ page }) => {
-  await page.emulateMedia({ colorScheme: "dark" });
-  await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
-  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+const THEME_MATRIX_ROUTES = ["/", "/pricing", "/login", "/terms", "/privacy"] as const;
+const THEME_MATRIX_LANGUAGES = ["ar", "en"] as const;
+const THEME_MATRIX_THEMES = ["light", "dark"] as const;
 
-  const routes = ["/", "/pricing", "/login", "/terms", "/privacy"];
-  for (const theme of ["light", "dark"] as const) {
-    for (const language of ["ar", "en"] as const) {
-      for (const route of routes) {
-        await page.evaluate((value) => localStorage.setItem("menu-theme", value), theme);
+for (const route of THEME_MATRIX_ROUTES) {
+  for (const language of THEME_MATRIX_LANGUAGES) {
+    for (const theme of THEME_MATRIX_THEMES) {
+      test(`theme toggle is ready and language-independent on ${route} (${language}, ${theme})`, async ({ page }) => {
+        await page.emulateMedia({ colorScheme: "dark" });
+        await page.addInitScript((preference) => localStorage.setItem("menu-theme", preference), theme);
         const query = language === "en" ? "?lang=en" : "";
         await page.goto(`${BASE_URL}${route}${query}`, { waitUntil: "domcontentloaded" });
+
         await expect(page.locator("html")).toHaveAttribute("dir", language === "ar" ? "rtl" : "ltr");
         await expect(page.locator("html")).toHaveAttribute("data-platform-theme", theme);
+
         const label = language === "ar"
           ? (theme === "dark" ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن")
           : (theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
-        // Locate the SSR control without relying on its accessible name: before hydration,
-        // its label can still reflect the default light React state even when the root
-        // bootstrap has already applied the persisted dark theme.
+        // The SSR control may be visible before React attaches its click handler.
         const toggle = page.locator("button[data-theme-toggle-ready]");
         await expect(toggle).toBeVisible();
-        await expect(toggle, `Theme toggle hydration failed for ${route} (${language}, ${theme})`).toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
-        // After hydration, the accessible name must agree with the effective theme and language.
+        await expect(toggle, `Theme toggle readiness failed for ${route} (${language}, ${theme})`)
+          .toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
         await expect(toggle).toHaveAttribute("aria-label", label);
+
         await toggle.click();
         const nextTheme = theme === "dark" ? "light" : "dark";
         await expect(page.locator("html")).toHaveAttribute("data-platform-theme", nextTheme);
         await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe(nextTheme);
-      }
+      });
     }
   }
+}
+
+test("theme preference survives route navigation and reload without resetting storage", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("menu-theme", "dark"));
+  await page.goto(`${BASE_URL}/pricing`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "dark");
+
+  const toggle = page.locator("button[data-theme-toggle-ready]");
+  await expect(toggle).toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
+  await toggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("light");
+
+  await page.goto(`${BASE_URL}/terms?lang=en`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
+  await expect(page.locator("button[data-theme-toggle-ready]")).toHaveAttribute("data-theme-toggle-ready", "true", { timeout: 10000 });
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("light");
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-platform-theme", "light");
+  await expect.poll(() => page.evaluate(() => localStorage.getItem("menu-theme"))).toBe("light");
 });
 
 
