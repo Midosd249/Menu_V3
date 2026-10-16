@@ -1,3 +1,16 @@
+## 2026-10-16 — PR #402: Cross-navigation theme persistence test correction
+
+- VERIFIED: Quality run `38888689177` failed in `tests/menuun-brand-browser.spec.ts:94`, specifically `theme preference survives route navigation and reload without resetting storage`. The 27 other tests in that file passed. The observed failure was `data-platform-theme=dark` after navigating to `/terms?lang=en`, while the test expected `light`.
+- ROOT CAUSE: the test used `page.addInitScript(() => localStorage.setItem("menu-theme", "dark"))`. Playwright runs this init script on every new document, including route navigation and reload, so it overwrote the user's newly selected `light` preference with `dark`. This was a test-fixture defect, not evidence of an application persistence defect.
+- IMPLEMENTED: commit `966eb67472aaf3ac7e3fbeb107d6497057164236` seeds `dark` once using the pricing page's origin storage, reloads to exercise the real root bootstrap, toggles to `light`, then checks actual theme and storage across navigation to English Terms and another reload. No assertions were removed or weakened; the 20 route/language/theme combinations remain.
+- SCOPE: test-only change; no app code, pricing CSS, homepage, workflow, dependency, or production data changed.
+- VERIFIED: the prior run's Typecheck, repository tests, contract suites, lint, production build, and all-theme template QA passed. Its browser QA failed only at the persistence-navigation test above. W9 Orders QA run `38888689121` passed on implementation parent `6b66039b2d4c1b7dc4d2b8902b7498dcf3064983`; it does not validate the newer test commit.
+- UNKNOWN: results for the corrected test on the final continuity-updated HEAD; three consecutive full-file runs with retries disabled; visual preview/device checks.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and must not be merged or deployed as part of this task.
+- EXACT NEXT ACTION: finish continuity updates, then inspect Quality and W9 on the final HEAD; run the complete browser spec three consecutive times with retries disabled in CI-equivalent conditions and inspect any failure before proceeding.
+
+---
+
 ## 2026-10-14 — Pricing Dark-Mode CI Follow-up — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: Quality run `38479836616` failed only in `tests/menuun-brand-browser.spec.ts`, test `platform theme preference stays independent from language across marketing, auth, pricing and legal routes`; 7/8 tests passed. Typecheck, repository tests, focused contracts, lint, production build, and all-theme browser QA passed. W9 Orders QA run `38479836649` passed.
