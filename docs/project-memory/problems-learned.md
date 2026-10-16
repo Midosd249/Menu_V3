@@ -188,3 +188,13 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - Fix: assert the Arabic labels after restoring Arabic; wait for the theme control's readiness signal before its click.
 - Lesson: after a locale transition, assertions must reflect the current locale; avoid stale expected copy when testing independent language and theme state.
 - Verification: Quality run `37910685922` passed the Studio browser suite.
+
+
+## 2026-10-16 — Playwright addInitScript can invalidate cross-navigation storage tests
+
+- CONTEXT: PR #402 theme preference regression browser test.
+- VERIFIED ROOT CAUSE: a test-level `page.addInitScript(() => localStorage.setItem("menu-theme", "dark"))` executes for every new document. During a test that navigates or reloads, it rewrites storage and masks whether the application's own preference persisted.
+- FAILURE SIGNAL: after toggling from dark to light, navigation to another route unexpectedly returned to dark, while the test itself had installed a persistent init script that re-seeded dark on every navigation.
+- CORRECT APPROACH: seed the same-origin preference once through `page.evaluate`, reload to exercise the actual bootstrap, then navigate/reload without a recurring initializer. Assert both the effective DOM theme and stored preference after each transition.
+- SCOPE: correct the fixture; do not change application behavior or weaken persistence assertions unless separate evidence demonstrates an application defect.
+- RELATED PR/COMMIT: PR #402; test correction `966eb67472aaf3ac7e3fbeb107d6497057164236`.
