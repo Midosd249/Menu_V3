@@ -1956,3 +1956,14 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
 
 ---
+
+
+## 2026-10-16 — Pricing Theme Toggle Hydration / CI Gate Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS; PR #402 remains open and unmerged.
+- Root cause verified from Quality run `38490484286`: browser test looked up the dark-state accessible name before the toggle finished React hydration. The component's initial render can be light-state while the root bootstrap already applies persisted dark mode.
+- Implemented test synchronization on commit `0b7b104c9df5e9c8c599d516b1328d786ce101de`: find the button using its readiness attribute, await readiness, assert the expected accessible name, then click and retain state/storage assertions.
+- CI plumbing: W9 transient Playwright install first hit npm ERESOLVE; after allowing legacy peer resolution, it exposed missing transitive Vite at preview startup. Workflows now explicitly include Vite with Playwright and use `--legacy-peer-deps` only for the ephemeral QA-tool install. Do not weaken the browser assertions.
+- VERIFIED: W9 run `38886351310` passed on head `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`. Quality run `38886351402` passed unit tests, contract tests, lint, build and Playwright/Chromium setup; all-theme browser QA is still running.
+- Acceptance remains: Quality and W9 both pass on the same latest head, review the final diff, preserve pricing-only CSS scope, no merge/deploy without owner authorization.
+- Exact next action: inspect Quality run `38886351402` and address any remaining concrete failure before calling this task complete.

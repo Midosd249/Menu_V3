@@ -256,3 +256,13 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
 
 ---
+
+
+## 2026-10-16 — Pricing Theme Toggle Hydration and CI Install Follow-up
+
+- VERIFIED: Quality run `38490484286` failed in `tests/menuun-brand-browser.spec.ts:77` because `getByRole` searched for the dark-state Arabic label before React hydration updated the server-rendered button. The root theme was already dark while initial component state could still be light.
+- IMPLEMENTED: commit `0b7b104c9df5e9c8c599d516b1328d786ce101de` selects the toggle by readiness attribute, waits for hydration, asserts the expected accessible name, then clicks; no assertions were removed.
+- VERIFIED: W9 run `38885933076` failed because transient Playwright installation removed the Vite executable; W9 run `38886351310` passed after Vite was installed explicitly. The Quality transient Playwright install also hit npm ERESOLVE due optional peer dependency incompatibility; workflow now uses explicit Vite plus `--legacy-peer-deps` for that transient install.
+- VERIFIED: W9 run `38886351310` is green. Quality run `38886351402` passed typecheck, tests, contracts, lint, production build, Playwright runner and Chromium installation; all-theme browser QA remains in progress at last check.
+- DEPLOYMENT: NOT_PERFORMED. PR #402 remains open/unmerged.
+- EXACT NEXT ACTION: inspect Quality run `38886351402` to completion. If it fails, read the exact failing step and error context; if green, review the final diff and stop for owner decision.

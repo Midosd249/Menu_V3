@@ -522,3 +522,14 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
 
 ---
+
+
+## 2026-10-16 — Pricing Theme Toggle Hydration and CI Install Follow-up
+
+- VERIFIED: PR #402 head at start of this follow-up was failing Quality run `38490484286` in `tests/menuun-brand-browser.spec.ts`: on Arabic `/pricing` with persisted dark theme, the test queried the dark-theme accessible name before React hydration updated the server-rendered button label. Root `data-platform-theme="dark"` can be applied by the bootstrap while the component initially renders `dark=false`; this is a synchronization race, not proof the pricing CSS failed.
+- IMPLEMENTED: commit `0b7b104c9df5e9c8c599d516b1328d786ce101de` now locates the theme toggle by `button[data-theme-toggle-ready]`, waits for `data-theme-toggle-ready="true"`, then asserts the expected accessible name before clicking. It preserves the label, toggle, and persistence assertions.
+- VERIFIED: W9 run `38886351310` passed after the W9 workflow install adjustment. Its previous attempt failed at `spawn ./node_modules/vite/bin/vite.js ENOENT` after the temporary Playwright install pruned the transitive Vite executable.
+- IMPLEMENTED: W9 workflow now installs Vite explicitly alongside Playwright and uses `--legacy-peer-deps` only for the transient QA-tool install. Quality workflow uses the same approach to resolve the observed optional peer conflict (`better-auth` optional Vitest peer range vs installed Vitest 5). Workflow commits: `bd4ebe3edb548a7c03736745ad983927d0ca928b`, `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`.
+- VERIFIED: on head `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`, W9 Orders QA run `38886351310` succeeded. Quality run `38886351402` passed route generation, typecheck, unit tests, contract suites, lint, production build, Playwright installation and Chromium installation; all-theme browser QA is still in progress at last check.
+- UNKNOWN: final Quality result on this head; pricing visual behavior on the deployed production site is not verified. No merge or production deployment.
+- EXACT NEXT ACTION: wait for Quality run `38886351402` to finish, inspect its final result and logs. If the theme-toggle browser test fails, diagnose its new error context; if Quality passes, review the final PR diff and stop without merge/deploy.

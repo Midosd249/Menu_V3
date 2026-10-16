@@ -2178,3 +2178,14 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - EXACT NEXT ACTION: inspect Quality and W9 Orders QA for the latest branch head. Fix only failures shown by the actual logs; if both green, review final diff and stop for owner decision.
 
 ---
+
+
+## 2026-10-16 — Active Task: Pricing Dark-Mode CI Follow-up
+
+- Status: IMPLEMENTATION_IN_PROGRESS.
+- PR: #402; branch `fix/pricing-pro-dark-mode-contrast-2026-10-13`; latest documented head `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`.
+- Fixed the proven browser race by waiting for `data-theme-toggle-ready="true"` before asserting the dynamic theme-toggle accessible name (commit `0b7b104c9df5e9c8c599d516b1328d786ce101de`).
+- Fixed CI tool installation setup without skipping tests: explicitly install Vite with Playwright and use legacy peer resolution only for the temporary test-tool install.
+- VERIFIED: W9 Orders QA run `38886351310` passed on the documented head. Quality run `38886351402` is still in progress; its all-theme browser QA step has not produced a final conclusion.
+- Do not merge or deploy until Quality is green and the final diff is reviewed.
+- Exact next action: fetch the final Quality run conclusion/logs, fix only any evidenced failure, then re-verify the latest head.
