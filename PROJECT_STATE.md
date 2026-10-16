@@ -1,3 +1,15 @@
+## 2026-10-16 — PR #402: Studio browser QA runner disk exhaustion
+
+- VERIFIED: Quality run [38917634867](https://github.com/Midosd249/Menu_V3/actions/runs/38917634867) on head `0bc68abb9f4ca684e5678012c221474927663178` failed in the Studio browser QA job. The first W7.10 matrix attempt failed at `/studio/qr`/1024px; the second failed at `/studio/branches`/768px. Both displayed only the Studio loading state, while 11 of 12 tests passed in each attempt.
+- VERIFIED: The runner explicitly warned only 5 MB disk remained during the browser suite. Vite then logged repeated `Error: aborted` / `ECONNRESET`; the failing route changed between attempts. This supports runner disk exhaustion/unstable server execution as the current cause, not a route-specific responsive bug. No direct request trace was attached, so the exact pending application request remains UNKNOWN.
+- REVIEWED: StudioGate leaves the loading state only after `getMyStudio()` settles; its failure branch renders ErrorState. The browser suite's varying route failures plus near-zero disk and Vite ECONNRESET point to environment instability; do not alter auth, shell readiness, or route assertions without contrary evidence.
+- IMPLEMENTED: commit `a0d183673f68a57cf2957e3a707931ed2827dea6` adds cleanup of unused hosted-runner SDKs (Android, .NET, GHC, PowerShell) and apt cache immediately before Studio/Admin browser QA, while preserving Node, npm project dependencies, PostgreSQL, and Playwright/Chromium.
+- UNKNOWN: whether this cleanup restores enough disk and makes Quality pass; the run triggered by the updated workflow must be inspected through completion. W9 on prior head `0bc68abb9f4ca684e5678012c221474927663178` passed, but it does not certify the new HEAD.
+- SCOPE: CI runner only; no application behavior, authorization, database schema, production data, homepage, or pricing UI changed. No merge or deployment.
+- EXACT NEXT ACTION: inspect the new HEAD and latest Quality/W9 runs; verify disk space after cleanup and browser results. If W7.10 still stalls, use the newly available runner space to capture request/console/server diagnostics before any further change. Preserve the 20 theme combinations and all existing assertions.
+ 
+---
+
 ## 2026-10-16 — PR #402 CI follow-up: Studio fixture and browser stability
 
 - VERIFIED: Current PR branch is `fix/pricing-pro-dark-mode-contrast-2026-10-13`; prior head `ce8548f3ab57fb2069a103c86d5274ae901b829b`. PR #402 remains open, base `main`, and is not merged.
