@@ -25,6 +25,9 @@ test("Platform Admin responsive route matrix", async ({ page }) => {
       page.removeAllListeners("console");
       page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
       await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
+      if (await page.getByRole("heading", { name: "مركز تحكم Menu V3" }).count() === 0) {
+        console.error("[admin-browser-diagnostics]", JSON.stringify({ route, viewport, url: page.url(), body: (await page.locator("body").innerText()).slice(0, 800), consoleErrors }, null, 2));
+      }
       await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" }), `Expected Platform Admin shell for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 400)}; consoleErrors=${JSON.stringify(consoleErrors)}`).toBeVisible();
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
       await expect(page.locator('[aria-current="page"]')).toHaveCount(1);
