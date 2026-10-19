@@ -455,6 +455,10 @@ jobs:
           try { await client.query(await readFile("migrations/99999999_w7_3_studio_fixture.sql", "utf8")); }
           finally { client.release(); await pool.end(); }
           NODE
+      - name: Build auth-disabled bundle for Studio browser QA
+        env:
+          VITE_AUTH_ENABLED: "false"
+        run: npm run build
       - name: Studio Shell, Home, Menu, Growth, Customers, and W7.10 responsive browser QA — auth-disabled local mode
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/menu_v3_ci
@@ -465,14 +469,14 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$STUDIO_PID" 2>/dev/null || true; rm -f migrations/99999999_w7_3_studio_fixture.sql; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec env DATABASE_URL="$DATABASE_URL" VITE_AUTH_ENABLED="$VITE_AUTH_ENABLED" MENU_V3_AUTH_DISABLED_TEST_DATABASE="$MENU_V3_AUTH_DISABLED_TEST_DATABASE" PLATFORM_ADMIN_USER_IDS="$PLATFORM_ADMIN_USER_IDS" node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
           STUDIO_PID=$!
           echo "[resources] before Studio browser tests"
           df -h
           free -m
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio >/dev/null; then
-              echo "[studio-browser] serving http://127.0.0.1:8082/studio"
+              echo "[studio-browser] serving built preview http://127.0.0.1:8082/studio"
               # Warm each route once to surface route-module/server errors before Playwright's
               # full viewport matrix; this does not replace or weaken browser assertions.
               for route in /studio /studio/menu /studio/growth /studio/guests /studio/orders /studio/settings /studio/options /studio/import /studio/branches /studio/team /studio/brand /studio/design /studio/qr /studio/preview; do
