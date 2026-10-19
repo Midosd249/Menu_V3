@@ -25,7 +25,7 @@ test("Platform Admin responsive route matrix", async ({ page }) => {
       page.removeAllListeners("console");
       page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
       await page.goto(`${BASE_URL}${route}`, { waitUntil: "domcontentloaded" });
-      await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "مركز تحكم Menu V3" }), `Expected Platform Admin shell for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 400)}; consoleErrors=${JSON.stringify(consoleErrors)}`).toBeVisible();
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
       await expect(page.locator('[aria-current="page"]')).toHaveCount(1);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
