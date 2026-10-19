@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Languages, MapPin, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { EmptyState } from "@/components/state-panel";
 import { OrderReceiptButton } from "@/components/order-receipt";
@@ -14,6 +14,7 @@ import { getActiveOfferProductIds, OFFERS_FILTER_ID } from "@/lib/menu/offers";
 import { isPublicMenuLocaleAvailable } from "@/lib/menu/seo";
 import type { Lang, Product, ProductOptions, PublicMenu } from "@/lib/menu/types";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
+import { listenForPublicMenuProductDetails } from "@/lib/menu/public-menu-events";
 
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 type CartItem = { key: string; product: Product; options: ProductOptions; variantId: string; modifierOptionIds: string[]; unitPrice: number; quantity: number };
@@ -57,7 +58,7 @@ function CartDialog({ lang, items, setItems, close, submit, submitting, error }:
 export function SignalTableTemplate({ menu, preview = false }: Props) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products, experimentVariant } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState<{ id: string; number: number; total: number } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
+  const visible = useMemo(() => preview ? products : products.filter((p) => p.isAvailable), [preview, products]); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
   const activeOfferProductIds = getActiveOfferProductIds(visible.map((p) => p.id), menu.productOffers);
   const hasActiveOffers = activeOfferProductIds.size > 0;
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || (categoryId === OFFERS_FILTER_ID ? activeOfferProductIds.has(p.id) : p.categoryId === categoryId)) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId, activeOfferProductIds]);
@@ -69,7 +70,8 @@ export function SignalTableTemplate({ menu, preview = false }: Props) {
     searchTrackedRef.current = true;
     void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
-  const selectProduct = (product: Product) => { setSelectedId(product.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang } }); };
+  const selectProduct = useCallback((product: Product) => { setSelectedId(product.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang } }); }, [branch.slug, lang, preview, tenant.slug]);
+  useEffect(() => listenForPublicMenuProductDetails((productId) => { const product = visible.find((p) => p.id === productId); if (product) selectProduct(product); }), [selectProduct, visible]);
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all" && nextCategoryId !== OFFERS_FILTER_ID) {
