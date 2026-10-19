@@ -27,21 +27,24 @@ test("each canonical public-menu details owner resolves requested IDs against cu
   assert.match(publicMenu, /group\.minSelect/);
 });
 
-test("the product-details event carries the selected product ID once and supports listener cleanup", async () => {
+test("the product-details event preserves an early click and cleans up listeners", async () => {
   const originalWindow = globalThis.window;
   const target = new EventTarget();
   Object.defineProperty(globalThis, "window", { configurable: true, value: target });
   try {
     const { requestPublicMenuProductDetails, listenForPublicMenuProductDetails } = await import("../src/lib/menu/public-menu-events.ts");
     const received = [];
+
+    requestPublicMenuProductDetails("product-clicked-before-template-ready");
     const stop = listenForPublicMenuProductDetails((productId) => received.push(productId));
+    assert.deepEqual(received, ["product-clicked-before-template-ready"]);
 
     requestPublicMenuProductDetails("product-recommended-1");
-    assert.deepEqual(received, ["product-recommended-1"]);
+    assert.deepEqual(received, ["product-clicked-before-template-ready", "product-recommended-1"]);
 
     stop();
-    requestPublicMenuProductDetails("product-recommended-2");
-    assert.deepEqual(received, ["product-recommended-1"]);
+    requestPublicMenuProductDetails("product-after-cleanup");
+    assert.deepEqual(received, ["product-clicked-before-template-ready", "product-recommended-1"]);
   } finally {
     if (originalWindow === undefined) delete globalThis.window;
     else Object.defineProperty(globalThis, "window", { configurable: true, value: originalWindow });
