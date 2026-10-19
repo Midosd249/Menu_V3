@@ -588,10 +588,14 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$ADMIN_PID" 2>/dev/null || true; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec env DATABASE_URL="$DATABASE_URL" VITE_AUTH_ENABLED="$VITE_AUTH_ENABLED" MENU_V3_AUTH_DISABLED_TEST_DATABASE="$MENU_V3_AUTH_DISABLED_TEST_DATABASE" PLATFORM_ADMIN_USER_IDS="$PLATFORM_ADMIN_USER_IDS" node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
           ADMIN_PID=$!
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
+              echo "[admin-browser] serving built preview http://127.0.0.1:8083/admin"
+              for route in /admin /admin/restaurants /admin/clients /admin/branches /admin/orders /admin/subscriptions /admin/projects /admin/analytics /admin/activity /admin/system; do
+                curl --silent --show-error --fail "http://127.0.0.1:8083$route" >/dev/null || { echo "[admin-browser] warm-up failed for $route"; tail -n 200 .grok/platform-admin-browser.log; exit 1; }
+              done
               set +e
               ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
               STATUS=$?
