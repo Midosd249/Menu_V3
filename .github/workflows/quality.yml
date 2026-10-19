@@ -571,6 +571,10 @@ jobs:
               } }
               catch (error) { await client.query("rollback"); throw error; }
             }
+            await client.query(`
+              alter table orders
+                add column if not exists archived_at timestamptz;
+            `);
             await client.query("insert into platform_admins (user_id) values ($1) on conflict (user_id) do nothing", ["dev-user"]);
           } finally { client.release(); await pool.end(); }
           NODE
