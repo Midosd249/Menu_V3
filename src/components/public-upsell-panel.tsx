@@ -18,13 +18,15 @@ export function PublicUpsellPanel({ menu, lang, className }: { menu: PublicMenu;
     let cancelled = false;
     getPublicUpsells({ data: { slug: menu.tenant.slug, branchSlug: menu.branch.slug } }).then((result) => {
       if (cancelled || !result.ok) return;
-      setItems(result.data);
-      for (const item of result.data) {
+      const availableProductIds = new Set(menu.products.filter((product) => product.isAvailable).map((product) => product.id));
+      const visibleItems = result.data.filter((item) => availableProductIds.has(item.recommendedProductId));
+      setItems(visibleItems);
+      for (const item of visibleItems) {
         void recordUpsellEvent({ data: { slug: menu.tenant.slug, branchSlug: menu.branch.slug, productId: item.recommendedProductId, eventType: "upsell_impression", sessionId } });
       }
     });
     return () => { cancelled = true; };
-  }, [menu.branch.slug, menu.tenant.slug, sessionId]);
+  }, [menu.branch.slug, menu.products, menu.tenant.slug, sessionId]);
 
   if (!items.length) return null;
 
