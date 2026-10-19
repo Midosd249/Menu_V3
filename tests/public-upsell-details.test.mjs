@@ -30,7 +30,7 @@ test("the product-details event carries the selected product ID once and support
   Object.defineProperty(globalThis, "window", { configurable: true, value: target });
   try {
     const { requestPublicMenuProductDetails, listenForPublicMenuProductDetails } = await import("../src/lib/menu/public-menu-events.ts");
-    const received: string[] = [];
+    const received = [];
     const stop = listenForPublicMenuProductDetails((productId) => received.push(productId));
 
     requestPublicMenuProductDetails("product-recommended-1");
