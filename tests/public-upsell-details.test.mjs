@@ -12,6 +12,8 @@ test("public upsell requests the existing product-details flow instead of scroll
   assert.match(upsellPanel, /requestPublicMenuProductDetails\(item\.recommendedProductId\)/);
   assert.doesNotMatch(upsellPanel, /window\.scrollTo/);
   assert.match(upsellPanel, /eventType: "upsell_click"/);
+  assert.match(upsellPanel, /availableProductIds = new Set\(menu\.products\.filter\(\(product\) => product\.isAvailable\)/);
+  assert.match(upsellPanel, /const visibleItems = result\.data\.filter/);
 });
 
 test("each canonical public-menu details owner resolves requested IDs against currently visible products", () => {
