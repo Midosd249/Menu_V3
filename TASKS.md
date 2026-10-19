@@ -1,3 +1,13 @@
+## 2026-10-19 — P1 public upsell product-details navigation
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS; branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
+- VERIFIED: `PublicUpsellPanel` previously recorded `upsell_click` and scrolled to page top, without opening the recommended product.
+- IMPLEMENTED ON BRANCH: introduced a small typed browser event bridge; the upsell action now requests product details by recommended product ID. The existing shared public renderer, Editorial renderer, and Heritage renderer resolve the ID only against currently visible products and call their existing product-open handlers, preserving `product_view` tracking, current options/offers, and the existing required-option validation. Noir and Gallery reuse the shared renderer; Essential uses it directly.
+- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`. It covers event payload/cleanup, absence of scroll-only behavior, canonical renderer wiring, and preservation of existing options/offer path.
+- LIMITATION: no repository checkout or terminal execution tool is available in this session, so local RED/GREEN, TypeScript, lint, and build have not run. No browser/visual QA has run. GitHub Actions verification is still required before merge.
+- RELEASE: no merge, production deployment, or production data/schema change.
+- EXACT NEXT ACTION: open a draft PR to trigger repository Quality gates, inspect the resulting checks and diff, fix any failures, then stop for owner review. Do not merge or deploy.
+
 ## 2026-10-16 — PR #402 closeout — DONE / VERIFIED
 
 - PR: [#402](https://github.com/Midosd249/Menu_V3/pull/402), merged.
