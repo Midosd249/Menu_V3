@@ -1,12 +1,13 @@
 ## 2026-10-19 — P1 public upsell product-details navigation
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS; branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
+- STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
 - VERIFIED: `PublicUpsellPanel` previously recorded `upsell_click` and scrolled to page top, without opening the recommended product.
-- IMPLEMENTED ON BRANCH: introduced a small typed browser event bridge; the upsell action now requests product details by recommended product ID. The existing shared public renderer, Editorial renderer, and Heritage renderer resolve the ID only against currently visible products and call their existing product-open handlers, preserving `product_view` tracking, current options/offers, and the existing required-option validation. Noir and Gallery reuse the shared renderer; Essential uses it directly.
-- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`. It covers event payload/cleanup, absence of scroll-only behavior, canonical renderer wiring, and preservation of existing options/offer path.
-- LIMITATION: no repository checkout or terminal execution tool is available in this session, so local RED/GREEN, TypeScript, lint, and build have not run. No browser/visual QA has run. GitHub Actions verification is still required before merge.
-- RELEASE: no merge, production deployment, or production data/schema change.
-- EXACT NEXT ACTION: open a draft PR to trigger repository Quality gates, inspect the resulting checks and diff, fix any failures, then stop for owner review. Do not merge or deploy.
+- IMPLEMENTED ON BRANCH: added a typed browser event bridge with a one-item pending request to handle clicks before a lazy-loaded template registers its listener. The upsell action now requests product details by recommended product ID and preserves the existing single `upsell_click` call. Shared public, Editorial, and Heritage details owners resolve IDs against currently visible products and call existing product-open handlers, preserving `product_view`, options/offers, and required-option validation. Noir/Gallery reuse the shared renderer; Essential uses it directly.
+- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`; covers event payload, early click delivery, listener cleanup, scroll-only regression, renderer wiring, and existing options/offer path.
+- VERIFIED ON INITIAL PR HEAD `1f93485034926084605b8c18b51192d0a390df50`: Quality passed route-tree generation, typecheck, repository tests, contract tests, lint, and production build. Browser QA could not start because npm returned `ETARGET` for `@typescript-eslint/type-utils@8.72.0`; W9 Orders QA similarly failed installing Playwright due `@typescript-eslint/parser@8.72.0` not being available. These failures occurred during dependency installation, before browser tests.
+- UNKNOWN: latest branch head `d0c3d267687d2694c3814ae9bc4c6761ca566533` has not received its own GitHub Actions run; the final early-click queue change is therefore not yet verified by CI. Local tests, TypeScript, lint, build, and browser QA cannot run because no repository checkout/terminal tool is available. Vercel status is a pending preview check only; production deployment was not performed.
+- RELEASE: PR #403 is draft/open; not merged. No production deployment or production data/schema change.
+- EXACT NEXT ACTION: after the npm registry can resolve the missing package versions, trigger and inspect Quality and W9 on the latest PR head; then review the final diff and stop for owner approval. Do not merge or deploy.
 
 ## Problem: PR #402 consumed repeated attempts because multiple test/CI failures were conflated
 
