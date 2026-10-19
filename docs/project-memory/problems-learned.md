@@ -233,3 +233,12 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - CORRECT APPROACH: seed the same-origin preference once through `page.evaluate`, reload to exercise the actual bootstrap, then navigate/reload without a recurring initializer. Assert both the effective DOM theme and stored preference after each transition.
 - SCOPE: correct the fixture; do not change application behavior or weaken persistence assertions unless separate evidence demonstrates an application defect.
 - RELATED PR/COMMIT: PR #402; test correction `966eb67472aaf3ac7e3fbeb107d6497057164236`.
+
+
+## 2026-10-19 — npm ETARGET from transient Playwright install
+
+- VERIFIED ROOT CAUSE: CI runs `npm install --no-save --no-package-lock` to add Playwright/Vite after the locked dependency install. That second install re-resolves the entire dependency graph; the broad `typescript-eslint: ^8.56.1` range selected a package set requesting `@typescript-eslint/type-utils@8.72.0`, which npm reported as unavailable. The committed lockfile and main both use the consistent `8.69.0` package set.
+- FIX: pin the existing `typescript-eslint` devDependency to `8.69.0` in `package.json` and root lockfile metadata. No new library and no upsell behavior change.
+- ANTI-PATTERN: do not upgrade the full ESLint stack or regenerate the entire lockfile to address a transient installer resolving beyond the repository's existing known-good package set.
+- VERIFICATION LIMIT: commit `65cdd340f3926eab1603265fe6ccb44e15aaf2cb` was pushed through GitHub Git-data APIs, but no Actions run was created for that SHA. Keep CI status UNKNOWN until a run on the current head reports its result.
+- DETECTION CHECKLIST: inspect the failing workflow step; compare package.json ranges to the committed lockfile; inspect any `--no-package-lock` supplemental installs; verify exact versions against the npm registry; make the smallest pin; rerun Quality and W9 on the latest SHA.

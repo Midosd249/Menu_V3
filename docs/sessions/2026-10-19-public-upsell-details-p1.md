@@ -27,3 +27,8 @@ Fix the public upsell button so it opens the recommended product in the existing
 - No database/schema changes, secrets, deployment settings, or production data touched.
 - No merge or production deployment authorized.
 - Exact next action: once npm can resolve the missing package versions, trigger and inspect Quality and W9 on the latest PR head, review the final diff, update continuity with actual evidence, then stop for owner review. Do not merge or deploy.
+
+
+## Dependency follow-up — 2026-10-19
+
+The CI dependency failure was traced to the supplemental Playwright installation resolving the broad `typescript-eslint` range outside the committed lockfile. A dedicated commit pins the existing toolchain to the lockfile's `8.69.0` package set. GitHub confirmed the commit is on the PR branch, but the connected GitHub API workflow-run listing returned no run for that SHA; do not infer a pass. See the current continuity records for the required owner-side trigger and next verification step.
