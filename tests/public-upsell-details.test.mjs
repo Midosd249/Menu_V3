@@ -17,11 +17,14 @@ test("public upsell requests the existing product-details flow instead of scroll
 test("each canonical public-menu details owner resolves requested IDs against currently visible products", () => {
   for (const source of [publicMenu, signalTable, taste]) {
     assert.match(source, /listenForPublicMenuProductDetails/);
-    assert.match(source, /visible\.find\([^)]*productId/);
+    assert.match(source, /visible\.find[\s\S]{0,100}productId/);
   }
   assert.match(publicMenu, /trackProduct\(product\)/);
   assert.match(signalTable, /selectProduct\(product\)/);
   assert.match(taste, /openProduct\(product\)/);
+  assert.match(publicMenu, /options=\{menu\.productOptions\?\.\[selected\.id\]\}/);
+  assert.match(publicMenu, /offer=\{menu\.productOffers\?\.\[selected\.id\]\}/);
+  assert.match(publicMenu, /group\.minSelect/);
 });
 
 test("the product-details event carries the selected product ID once and supports listener cleanup", async () => {
