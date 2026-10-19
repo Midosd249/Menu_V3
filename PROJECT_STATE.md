@@ -608,3 +608,12 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
 - UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
 - EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+
+## 2026-10-19 — PR #403 CI resource diagnostics
+
+- VERIFIED: CI-only commit `8c30dafac81d935446ddc5670301cb06635ba7bc` adds early runner disk cleanup, `df -h`/`free -m` snapshots, Studio route warm-up, failure log tails, and always-uploaded diagnostics to Quality. Commit `d2049b4bc1fefcc6b7f80f9901b0750f1602f1f9` applies cleanup/resource snapshots, W9 route warm-up, failure log tails, and preserves its always-uploaded artifact.
+- EVIDENCE: the recorded PR #402 incident had 5 MB free and Vite ECONNRESET/aborted errors with different failing routes. This supports runner disk pressure or unstable Vite execution, but does not prove the exact pending StudioGate/getMyStudio request.
+- SCOPE: workflow-only; no product/auth/database/order/pricing behavior, dependencies, PR #400/#402, or assertions changed. Vite dev remains in use; warm-up is supplemental and does not replace Playwright assertions.
+- UNKNOWN: CI results for these changes are pending; no merge/deployment is claimed. PR #403 remains draft/open pending all required gates on one final SHA.
+- EXACT NEXT ACTION: inspect Quality and W9 results on the final branch SHA; use captured resource data and the last 200 server-log lines for any next fix, then require three consecutive successful runs of each workflow.
