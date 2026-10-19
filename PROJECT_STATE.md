@@ -1,3 +1,14 @@
+## 2026-10-19 — P1 public upsell product-details navigation
+
+- STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
+- VERIFIED: `PublicUpsellPanel` previously recorded `upsell_click` and scrolled to page top, without opening the recommended product.
+- IMPLEMENTED ON BRANCH: added a typed browser event bridge with a one-item pending request to handle clicks before a lazy-loaded template registers its listener. The upsell action now requests product details by recommended product ID and preserves the existing single `upsell_click` call. Shared public, Editorial, and Heritage details owners resolve IDs against currently visible products and call existing product-open handlers, preserving `product_view`, options/offers, and required-option validation. Noir/Gallery reuse the shared renderer; Essential uses it directly.
+- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`; covers event payload, early click delivery, listener cleanup, scroll-only regression, renderer wiring, and existing options/offer path.
+- VERIFIED ON INITIAL PR HEAD `1f93485034926084605b8c18b51192d0a390df50`: Quality passed route-tree generation, typecheck, repository tests, contract tests, lint, and production build. Browser QA could not start because npm returned `ETARGET` for `@typescript-eslint/type-utils@8.72.0`; W9 Orders QA similarly failed installing Playwright due `@typescript-eslint/parser@8.72.0` not being available. These failures occurred during dependency installation, before browser tests.
+- UNKNOWN: latest branch head `d0c3d267687d2694c3814ae9bc4c6761ca566533` has not received its own GitHub Actions run; the final early-click queue change is therefore not yet verified by CI. Local tests, TypeScript, lint, build, and browser QA cannot run because no repository checkout/terminal tool is available. Vercel status is a pending preview check only; production deployment was not performed.
+- RELEASE: PR #403 is draft/open; not merged. No production deployment or production data/schema change.
+- EXACT NEXT ACTION: after the npm registry can resolve the missing package versions, trigger and inspect Quality and W9 on the latest PR head; then review the final diff and stop for owner approval. Do not merge or deploy.
+
 ## 2026-10-16 — PR #402 merged: Pro pricing contrast and CI root-cause closeout
 
 - VERIFIED: PR #402 merged successfully as `a1009d0595b8e5ab39c5df0e7119e4003db72160`; final tested PR head was `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
@@ -587,3 +598,22 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - VERIFIED: on head `d6b23b4c967119b6b89236a567015dcdcaa8a4b7`, W9 Orders QA run `38886351310` succeeded. Quality run `38886351402` passed route generation, typecheck, unit tests, contract suites, lint, production build, Playwright installation and Chromium installation; all-theme browser QA is still in progress at last check.
 - UNKNOWN: final Quality result on this head; pricing visual behavior on the deployed production site is not verified. No merge or production deployment.
 - EXACT NEXT ACTION: wait for Quality run `38886351402` to finish, inspect its final result and logs. If the theme-toggle browser test fails, diagnose its new error context; if Quality passes, review the final PR diff and stop without merge/deploy.
+
+
+## 2026-10-19 — PR #403 CI dependency resolution follow-up
+
+- VERIFIED: dependency-fix commit is `65cdd340f3926eab1603265fe6ccb44e15aaf2cb` (`fix(ci): pin typescript-eslint to locked version`). It changes only `package.json` and the root devDependency metadata in `package-lock.json`, pinning `typescript-eslint` to `8.69.0`; lockfile-resolved `typescript-eslint`, `@typescript-eslint/parser`, and `@typescript-eslint/type-utils` are all already `8.69.0` on `main` and the PR branch.
+- ROOT CAUSE: the workflow's supplemental Playwright install uses `npm install --no-save --no-package-lock`, which re-resolves the dependency graph outside the committed lockfile. The root range `^8.56.1` allowed npm to select a newer `typescript-eslint` release that requested unpublished `@typescript-eslint/type-utils@8.72.0`. Official npm registry search found parser `8.71.2` as the latest published version, and no published `8.72.0`.
+- VERIFIED: previous Quality run `39292009756` and W9 Orders QA run `39292009701` both failed at their supplemental Playwright install steps with `ETARGET No matching version found for @typescript-eslint/type-utils@8.72.0`; application tests/build were not shown to fail at that step.
+- VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
+- UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
+- EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+
+## 2026-10-19 — PR #403 CI resource diagnostics
+
+- VERIFIED: CI-only commit `8c30dafac81d935446ddc5670301cb06635ba7bc` adds early runner disk cleanup, `df -h`/`free -m` snapshots, Studio route warm-up, failure log tails, and always-uploaded diagnostics to Quality. Commit `d2049b4bc1fefcc6b7f80f9901b0750f1602f1f9` applies cleanup/resource snapshots, W9 route warm-up, failure log tails, and preserves its always-uploaded artifact.
+- EVIDENCE: the recorded PR #402 incident had 5 MB free and Vite ECONNRESET/aborted errors with different failing routes. This supports runner disk pressure or unstable Vite execution, but does not prove the exact pending StudioGate/getMyStudio request.
+- SCOPE: workflow-only; no product/auth/database/order/pricing behavior, dependencies, PR #400/#402, or assertions changed. Vite dev remains in use; warm-up is supplemental and does not replace Playwright assertions.
+- UNKNOWN: CI results for these changes are pending; no merge/deployment is claimed. PR #403 remains draft/open pending all required gates on one final SHA.
+- EXACT NEXT ACTION: inspect Quality and W9 results on the final branch SHA; use captured resource data and the last 200 server-log lines for any next fix, then require three consecutive successful runs of each workflow.

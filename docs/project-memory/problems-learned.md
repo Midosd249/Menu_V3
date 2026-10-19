@@ -1,3 +1,14 @@
+## 2026-10-19 — P1 public upsell product-details navigation
+
+- STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
+- VERIFIED: `PublicUpsellPanel` previously recorded `upsell_click` and scrolled to page top, without opening the recommended product.
+- IMPLEMENTED ON BRANCH: added a typed browser event bridge with a one-item pending request to handle clicks before a lazy-loaded template registers its listener. The upsell action now requests product details by recommended product ID and preserves the existing single `upsell_click` call. Shared public, Editorial, and Heritage details owners resolve IDs against currently visible products and call existing product-open handlers, preserving `product_view`, options/offers, and required-option validation. Noir/Gallery reuse the shared renderer; Essential uses it directly.
+- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`; covers event payload, early click delivery, listener cleanup, scroll-only regression, renderer wiring, and existing options/offer path.
+- VERIFIED ON INITIAL PR HEAD `1f93485034926084605b8c18b51192d0a390df50`: Quality passed route-tree generation, typecheck, repository tests, contract tests, lint, and production build. Browser QA could not start because npm returned `ETARGET` for `@typescript-eslint/type-utils@8.72.0`; W9 Orders QA similarly failed installing Playwright due `@typescript-eslint/parser@8.72.0` not being available. These failures occurred during dependency installation, before browser tests.
+- UNKNOWN: latest branch head `d0c3d267687d2694c3814ae9bc4c6761ca566533` has not received its own GitHub Actions run; the final early-click queue change is therefore not yet verified by CI. Local tests, TypeScript, lint, build, and browser QA cannot run because no repository checkout/terminal tool is available. Vercel status is a pending preview check only; production deployment was not performed.
+- RELEASE: PR #403 is draft/open; not merged. No production deployment or production data/schema change.
+- EXACT NEXT ACTION: after the npm registry can resolve the missing package versions, trigger and inspect Quality and W9 on the latest PR head; then review the final diff and stop for owner approval. Do not merge or deploy.
+
 ## Problem: PR #402 consumed repeated attempts because multiple test/CI failures were conflated
 
 - Date / Context: 2026-10-13 to 2026-10-16; PR #402, Pro pricing card dark-mode contrast and browser QA.
@@ -222,3 +233,12 @@ When a new incident consumes significant time, causes repeated retries, exposes 
 - CORRECT APPROACH: seed the same-origin preference once through `page.evaluate`, reload to exercise the actual bootstrap, then navigate/reload without a recurring initializer. Assert both the effective DOM theme and stored preference after each transition.
 - SCOPE: correct the fixture; do not change application behavior or weaken persistence assertions unless separate evidence demonstrates an application defect.
 - RELATED PR/COMMIT: PR #402; test correction `966eb67472aaf3ac7e3fbeb107d6497057164236`.
+
+
+## 2026-10-19 — npm ETARGET from transient Playwright install
+
+- VERIFIED ROOT CAUSE: CI runs `npm install --no-save --no-package-lock` to add Playwright/Vite after the locked dependency install. That second install re-resolves the entire dependency graph; the broad `typescript-eslint: ^8.56.1` range selected a package set requesting `@typescript-eslint/type-utils@8.72.0`, which npm reported as unavailable. The committed lockfile and main both use the consistent `8.69.0` package set.
+- FIX: pin the existing `typescript-eslint` devDependency to `8.69.0` in `package.json` and root lockfile metadata. No new library and no upsell behavior change.
+- ANTI-PATTERN: do not upgrade the full ESLint stack or regenerate the entire lockfile to address a transient installer resolving beyond the repository's existing known-good package set.
+- VERIFICATION LIMIT: commit `65cdd340f3926eab1603265fe6ccb44e15aaf2cb` was pushed through GitHub Git-data APIs, but no Actions run was created for that SHA. Keep CI status UNKNOWN until a run on the current head reports its result.
+- DETECTION CHECKLIST: inspect the failing workflow step; compare package.json ranges to the committed lockfile; inspect any `--no-package-lock` supplemental installs; verify exact versions against the npm registry; make the smallest pin; rerun Quality and W9 on the latest SHA.

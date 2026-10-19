@@ -1,3 +1,14 @@
+## 2026-10-19 — P1 public upsell product-details navigation
+
+- STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
+- VERIFIED: `PublicUpsellPanel` previously recorded `upsell_click` and scrolled to page top, without opening the recommended product.
+- IMPLEMENTED ON BRANCH: added a typed browser event bridge with a one-item pending request to handle clicks before a lazy-loaded template registers its listener. The upsell action now requests product details by recommended product ID and preserves the existing single `upsell_click` call. Shared public, Editorial, and Heritage details owners resolve IDs against currently visible products and call existing product-open handlers, preserving `product_view`, options/offers, and required-option validation. Noir/Gallery reuse the shared renderer; Essential uses it directly.
+- TEST ADDED: `tests/public-upsell-details.test.mjs`, registered in `npm test`; covers event payload, early click delivery, listener cleanup, scroll-only regression, renderer wiring, and existing options/offer path.
+- VERIFIED ON INITIAL PR HEAD `1f93485034926084605b8c18b51192d0a390df50`: Quality passed route-tree generation, typecheck, repository tests, contract tests, lint, and production build. Browser QA could not start because npm returned `ETARGET` for `@typescript-eslint/type-utils@8.72.0`; W9 Orders QA similarly failed installing Playwright due `@typescript-eslint/parser@8.72.0` not being available. These failures occurred during dependency installation, before browser tests.
+- UNKNOWN: latest branch head `d0c3d267687d2694c3814ae9bc4c6761ca566533` has not received its own GitHub Actions run; the final early-click queue change is therefore not yet verified by CI. Local tests, TypeScript, lint, build, and browser QA cannot run because no repository checkout/terminal tool is available. Vercel status is a pending preview check only; production deployment was not performed.
+- RELEASE: PR #403 is draft/open; not merged. No production deployment or production data/schema change.
+- EXACT NEXT ACTION: after the npm registry can resolve the missing package versions, trigger and inspect Quality and W9 on the latest PR head; then review the final diff and stop for owner approval. Do not merge or deploy.
+
 ## 2026-10-16 — PR #402 retrospective: mandatory multi-cause CI diagnosis
 
 - VERIFIED: PR #402 merged at `a1009d0595b8e5ab39c5df0e7119e4003db72160`; Quality [38956141584](https://github.com/Midosd249/Menu_V3/actions/runs/38956141584) and W9 [38956141474](https://github.com/Midosd249/Menu_V3/actions/runs/38956141474) passed on tested head `ae3d00f8c264671bf6e28440ad2316e6338d98cd`.
@@ -307,3 +318,13 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - VERIFIED: W9 run `38886351310` is green. Quality run `38886351402` passed typecheck, tests, contracts, lint, production build, Playwright runner and Chromium installation; all-theme browser QA remains in progress at last check.
 - DEPLOYMENT: NOT_PERFORMED. PR #402 remains open/unmerged.
 - EXACT NEXT ACTION: inspect Quality run `38886351402` to completion. If it fails, read the exact failing step and error context; if green, review the final diff and stop for owner decision.
+
+
+## 2026-10-19 — PR #403 CI dependency resolution follow-up
+
+- VERIFIED: dependency-fix commit is `65cdd340f3926eab1603265fe6ccb44e15aaf2cb` (`fix(ci): pin typescript-eslint to locked version`). It changes only `package.json` and the root devDependency metadata in `package-lock.json`, pinning `typescript-eslint` to `8.69.0`; lockfile-resolved `typescript-eslint`, `@typescript-eslint/parser`, and `@typescript-eslint/type-utils` are all already `8.69.0` on `main` and the PR branch.
+- ROOT CAUSE: the workflow's supplemental Playwright install uses `npm install --no-save --no-package-lock`, which re-resolves the dependency graph outside the committed lockfile. The root range `^8.56.1` allowed npm to select a newer `typescript-eslint` release that requested unpublished `@typescript-eslint/type-utils@8.72.0`. Official npm registry search found parser `8.71.2` as the latest published version, and no published `8.72.0`.
+- VERIFIED: previous Quality run `39292009756` and W9 Orders QA run `39292009701` both failed at their supplemental Playwright install steps with `ETARGET No matching version found for @typescript-eslint/type-utils@8.72.0`; application tests/build were not shown to fail at that step.
+- VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
+- UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
+- EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.

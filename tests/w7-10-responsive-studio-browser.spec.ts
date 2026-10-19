@@ -42,6 +42,26 @@ async function gotoStudioRoute(page: PlaywrightPage, url: string) {
 
 test("W7.10 Studio responsive route matrix", async ({ page }) => {
   test.setTimeout(240_000);
+  const pendingRequests = new Map<import("@playwright/test").Request, string>();
+  const recentNetwork: string[] = [];
+  const pageErrors: string[] = [];
+  const rememberNetwork = (entry: string) => {
+    recentNetwork.push(entry);
+    if (recentNetwork.length > 40) recentNetwork.shift();
+  };
+  page.on("request", (request) => {
+    pendingRequests.set(request, `${request.method()} ${request.url()}`);
+    rememberNetwork(`REQUEST ${request.method()} ${request.url()}`);
+  });
+  page.on("response", (response) => {
+    pendingRequests.delete(response.request());
+    rememberNetwork(`RESPONSE ${response.status()} ${response.url()}`);
+  });
+  page.on("requestfailed", (request) => {
+    pendingRequests.delete(request);
+    rememberNetwork(`FAILED ${request.failure()?.errorText ?? "unknown"} ${request.url()}`);
+  });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
   for (const viewport of VIEWPORTS) {
     await page.setViewportSize(viewport);
     for (const route of ROUTES) {
@@ -50,9 +70,25 @@ test("W7.10 Studio responsive route matrix", async ({ page }) => {
       page.on("console", (message) => {
         if (message.type() === "error") consoleErrors.push(message.text());
       });
+      pendingRequests.clear();
+      recentNetwork.length = 0;
+      pageErrors.length = 0;
       await gotoStudioRoute(page, `${BASE_URL}${route}`);
       const shellBanner = page.getByRole("banner").first();
-      await expect(shellBanner, `Expected the Studio shell banner for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 30_000 });
+      try {
+        await expect(shellBanner, `Expected the Studio shell banner for ${route} at ${viewport.name}px; URL=${page.url()}; body=${(await page.locator("body").innerText()).slice(0, 240)}`).toBeVisible({ timeout: 30_000 });
+      } catch (error) {
+        console.error("[studio-browser-diagnostics]", JSON.stringify({
+          route,
+          viewport,
+          url: page.url(),
+          pendingRequests: [...pendingRequests.values()],
+          recentNetwork,
+          pageErrors,
+          consoleErrors,
+        }, null, 2));
+        throw error;
+      }
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,

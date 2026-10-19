@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Clock, Instagram, MapPin, Minus, Phone, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { OrderReceiptButton } from "@/components/order-receipt";
@@ -15,6 +15,7 @@ import { hasHighSalt, type Lang, type Product, type ProductOffer, type ProductOp
 import { calculateOffer, isOfferCurrentlyActive } from "@/lib/menu/offers";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
 import { getResponsiveImageSources } from "@/lib/menu/image";
+import { listenForPublicMenuProductDetails } from "@/lib/menu/public-menu-events";
 
 const label = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar : en;
 const publicPricing = (menu: PublicMenu, product: Product) => { const offer = menu.productOffers?.[product.id]; if (!offer || !isOfferCurrentlyActive(offer)) return { price: product.price, original: null as number | null, offer: null as ProductOffer | null }; const calculation = calculateOffer(product.price, 0, 1, offer); return { price: calculation.discountedBaseUnitPrice, original: product.price, offer }; };
@@ -187,7 +188,7 @@ function openNow(hours: PublicMenu["hours"]) {
 export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; preview?: boolean }) {
   const { lang } = useLang(); const { tenant, branch, branches, hours, categories, products } = menu;
   const [query, setQuery] = useState(""); const [categoryId, setCategoryId] = useState("all"); const [selectedId, setSelectedId] = useState<string | null>(null); const [cart, setCart] = useState<CartItem[]>([]); const [cartOpen, setCartOpen] = useState(false); const [submitting, setSubmitting] = useState(false); const [orderError, setOrderError] = useState(""); const [successOrder, setSuccessOrder] = useState<{ id: string; number: number; total: number; currency: string } | null>(null); const searchTrackedRef = useRef(false);
-  const visible = preview ? products : products.filter((p) => p.isAvailable); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
+  const visible = useMemo(() => preview ? products : products.filter((p) => p.isAvailable), [preview, products]); const selected = visible.find((p) => p.id === selectedId); const featured = getFeaturedProducts(visible);
   const activeOfferProductIds = getActiveOfferProductIds(visible.map((p) => p.id), menu.productOffers);
   const hasActiveOffers = activeOfferProductIds.size > 0;
   const filtered = useMemo(() => { const q = query.trim().toLowerCase(); return visible.filter((p) => (categoryId === "all" || (categoryId === OFFERS_FILTER_ID ? activeOfferProductIds.has(p.id) : p.categoryId === categoryId)) && (!q || [p.nameAr, p.nameEn, p.descriptionAr, p.descriptionEn, ...p.tags, ...p.dietaryLabels].some((x) => x.toLowerCase().includes(q)))); }, [visible, query, categoryId, activeOfferProductIds]);
@@ -198,7 +199,8 @@ export function PublicMenuView({ menu, preview = false }: { menu: PublicMenu; pr
     searchTrackedRef.current = true;
     void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
-  const trackProduct = (p: Product) => { setSelectedId(p.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: p.id, eventType: "product_view", lang } }); };
+  const trackProduct = useCallback((p: Product) => { setSelectedId(p.id); if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: p.id, eventType: "product_view", lang } }); }, [branch.slug, lang, preview, tenant.slug]);
+  useEffect(() => listenForPublicMenuProductDetails((productId) => { const product = visible.find((p) => p.id === productId); if (product) trackProduct(product); }), [trackProduct, visible]);
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all" && nextCategoryId !== OFFERS_FILTER_ID) {

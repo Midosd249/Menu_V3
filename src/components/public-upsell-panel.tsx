@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowUpLeft, Sparkles } from "lucide-react";
 import { getPublicUpsells, recordUpsellEvent, type ApprovedUpsell } from "@/lib/menu/upsell";
 import { getGuestSessionId } from "@/lib/menu/session";
+import { requestPublicMenuProductDetails } from "@/lib/menu/public-menu-events";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import { cn } from "@/lib/utils";
 
@@ -17,13 +18,15 @@ export function PublicUpsellPanel({ menu, lang, className }: { menu: PublicMenu;
     let cancelled = false;
     getPublicUpsells({ data: { slug: menu.tenant.slug, branchSlug: menu.branch.slug } }).then((result) => {
       if (cancelled || !result.ok) return;
-      setItems(result.data);
-      for (const item of result.data) {
+      const availableProductIds = new Set(menu.products.filter((product) => product.isAvailable).map((product) => product.id));
+      const visibleItems = result.data.filter((item) => availableProductIds.has(item.recommendedProductId));
+      setItems(visibleItems);
+      for (const item of visibleItems) {
         void recordUpsellEvent({ data: { slug: menu.tenant.slug, branchSlug: menu.branch.slug, productId: item.recommendedProductId, eventType: "upsell_impression", sessionId } });
       }
     });
     return () => { cancelled = true; };
-  }, [menu.branch.slug, menu.tenant.slug, sessionId]);
+  }, [menu.branch.slug, menu.products, menu.tenant.slug, sessionId]);
 
   if (!items.length) return null;
 
@@ -46,7 +49,7 @@ export function PublicUpsellPanel({ menu, lang, className }: { menu: PublicMenu;
               className="group flex min-h-20 items-center justify-between gap-4 rounded-2xl border border-line bg-paper p-4 text-start transition hover:border-accent hover:bg-sand/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               onClick={() => {
                 void recordUpsellEvent({ data: { slug: menu.tenant.slug, branchSlug: menu.branch.slug, productId: item.recommendedProductId, eventType: "upsell_click", sessionId } });
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                requestPublicMenuProductDetails(item.recommendedProductId);
               }}
               aria-label={text(lang, `استكشف ${item.recommendedNameAr}`, `Explore ${item.recommendedNameEn}`)}
             >

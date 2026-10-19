@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Clock3, MapPin, Minus, Plus, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { OrderReceiptButton } from "@/components/order-receipt";
@@ -13,6 +13,7 @@ import { submitPublicOrder } from "@/lib/menu/order-public";
 import type { Lang, Product, ProductOffer, ProductOptions, PublicMenu } from "@/lib/menu/types";
 import { calculateOffer, getActiveOfferProductIds, isOfferCurrentlyActive, OFFERS_FILTER_ID } from "@/lib/menu/offers";
 import { cn, formatSar, weekdayLabel } from "@/lib/utils";
+import { listenForPublicMenuProductDetails } from "@/lib/menu/public-menu-events";
 
 const text = (lang: Lang, ar: string, en: string) => lang === "ar" ? ar || en : en || ar;
 
@@ -108,7 +109,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [success, setSuccess] = useState<{ id: string; number: number } | null>(null);
-  const visible = preview ? products : products.filter((product) => product.isAvailable);
+  const visible = useMemo(() => preview ? products : products.filter((product) => product.isAvailable), [preview, products]);
   const selected = visible.find((product) => product.id === selectedId);
   const activeOfferProductIds = getActiveOfferProductIds(visible.map((product) => product.id), menu.productOffers);
   const hasActiveOffers = activeOfferProductIds.size > 0;
@@ -129,10 +130,14 @@ export function TasteTemplate({ menu, preview = false }: Props) {
     searchTrackedRef.current = true;
     void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, eventType: "search", lang } });
   }, [branch.slug, lang, preview, query, tenant.slug]);
-  const openProduct = (product: Product) => {
+  const openProduct = useCallback((product: Product) => {
     setSelectedId(product.id);
     if (!preview) void recordPublicEvent({ data: { slug: tenant.slug, branchSlug: branch.slug, productId: product.id, eventType: "product_view", lang } });
-  };
+  }, [branch.slug, lang, preview, tenant.slug]);
+  useEffect(() => listenForPublicMenuProductDetails((productId) => {
+    const product = visible.find((item) => item.id === productId);
+    if (product) openProduct(product);
+  }), [openProduct, visible]);
   const trackCategory = (nextCategoryId: string) => {
     setCategoryId(nextCategoryId);
     if (!preview && nextCategoryId !== "all" && nextCategoryId !== OFFERS_FILTER_ID) {
