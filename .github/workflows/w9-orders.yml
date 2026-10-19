@@ -12,6 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Reclaim unused hosted-runner disk space
+        run: |
+          echo "[resources] before initial cleanup"
+          df -h
+          free -m
+          # This workflow needs Node, npm, PostgreSQL/PGLite and Playwright only.
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo apt-get clean
+          if command -v docker >/dev/null 2>&1; then
+            docker image prune -af || true
+          fi
+          echo "[resources] after initial cleanup"
+          df -h
+          free -m
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Node
@@ -55,17 +69,35 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Run W9 Orders browser QA
         run: |
+          echo "[resources] before W9 browser tests"
+          df -h
+          free -m
           setsid bash -c 'exec env VITE_AUTH_ENABLED=false node scripts/with-app-env.mjs ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 8082' > w9-orders-browser.log 2>&1 < /dev/null &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true; rm -f migrations/99999999_w9_orders_fixture.sql' EXIT
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8082/studio/orders >/dev/null; then
+              # Warm the tested route before browser execution without replacing assertions.
+              curl --silent --show-error --fail http://127.0.0.1:8082/studio/orders >/dev/null || { tail -n 200 w9-orders-browser.log; exit 1; }
+              set +e
               STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w9-orders-browser.spec.ts --workers=1
-              exit $?
+              STATUS=$?
+              set -e
+              echo "[resources] after W9 browser tests"
+              df -h
+              free -m
+              if [ "$STATUS" -ne 0 ]; then
+                echo "[w9-browser] failed; last 200 server-log lines follow"
+                tail -n 200 w9-orders-browser.log
+              fi
+              exit "$STATUS"
             fi
             sleep 0.25
           done
-          cat w9-orders-browser.log
+          echo "[w9-browser] server failed to become ready; last 200 log lines follow"
+          df -h
+          free -m
+          tail -n 200 w9-orders-browser.log
           exit 1
       - name: Upload W9 browser diagnostics
         if: always()
