@@ -69,7 +69,7 @@ test("signup preserves invitation context through email verification before onbo
   assert.match(signupBlock, /phoneNumber: validationResult\.data\.phone/);
   assert.match(signupBlock, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
   assert.match(signupBlock, /callbackURL: "\/login\?verified=1" \+ \(invite \? "&invite=" \+ encodeURIComponent\(invite\) : ""\)/);
-  assert.match(signupBlock, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
+  assert.match(signupBlock, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
   assert.doesNotMatch(signupBlock, /authClient\.signIn\.email\(\{ email, password \}\)/);
   assert.match(contract, /We couldn't create the account/);
   assert.match(contract, /تعذر إنشاء الحساب/);
@@ -94,7 +94,7 @@ test("successful registration persists phone before verification; workspace hand
   assert.match(login, /phoneNumber: validationResult\.data\.phone/);
   assert.match(login, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
   assert.match(login, /authClient\.sendVerificationEmail/);
-  assert.match(login, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
+  assert.match(login, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
   assert.doesNotMatch(login, /saveCustomerRegistrationPhone/);
   assert.match(login, /await navigate\(\{ to: "\/studio", replace: true \}\)/);
   assert.doesNotMatch(login, /createRestaurant\(/);
