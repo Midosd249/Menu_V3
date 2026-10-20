@@ -86,7 +86,7 @@ test("invalid order traffic has a separate throttle", () => {
 });
 
 test("invalid-order rate-limit storage is server-only and protected by RLS", () => {
-  assert.match(correctiveRlsMigration, /alter table menu_v3\\.public_order_invalid_rate_limits\\s+enable row level security/i);
-  assert.match(correctiveRlsMigration, /revoke all on table menu_v3\\.public_order_invalid_rate_limits\\s+from public, anon, authenticated/i);
-  assert.doesNotMatch(correctiveRlsMigration, /\\bgrant\\b/i);
+  assert.match(correctiveRlsMigration, /alter table menu_v3\.public_order_invalid_rate_limits\s+enable row level security/i);
+  assert.match(correctiveRlsMigration, /revoke all on table menu_v3\.public_order_invalid_rate_limits\s+from public, anon, authenticated/i);
+  assert.doesNotMatch(correctiveRlsMigration, /\bgrant\b/i);
 });
