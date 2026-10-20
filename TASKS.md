@@ -2284,5 +2284,7 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - Root cause from source: invitation token was lost in email signup -> verify-email navigation and in verification/resend callback URLs; OAuth callback already preserves it.
 - Changes prepared on branch: `src/routes/login.tsx`, `src/routes/verify-email.tsx`, `src/routes/invite.$token.tsx`, `src/lib/menu/team-invitations.ts`, `src/routes/studio/team.tsx`, and `tests/team-invitations.test.mjs`.
 - Security decision: retain hashed tokens; use server session identity and database email verification; lock invitation row and atomically insert membership/consume invitation; expire old invitations by revoking them transactionally before reissue; rely on existing uniqueness constraint for concurrent creation attempts.
-- NOT VERIFIED: no local tests, typecheck, lint, build, database integration, Playwright, or visual tests have run. No CI result yet. No migration or production DB change. No merge/deploy.
-- EXACT NEXT ACTION: open a draft PR and inspect actual CI plus final diff; no merge or deployment.
+- NOT VERIFIED: no local tests, typecheck, lint, build, database integration, Playwright, or visual tests have run. CI runs on earlier heads are not evidence for the current head. No migration or production DB change. No merge/deploy.
+- The post-acceptance selected tenant is persisted in sessionStorage and revalidated server-side by `getMyStudio`; this needs current-head typecheck and browser verification.
+- Better Auth's verification column is case-sensitive `"emailVerified"` and the acceptance query now matches the migration.
+- EXACT NEXT ACTION: inspect Quality/W9 on the latest PR #405 head and the final diff; no merge or deployment.

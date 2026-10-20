@@ -2057,5 +2057,6 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - VERIFIED root cause: signup callback and verify-email resend callback omit `invite`; signup navigation to `/verify-email` also drops it. OAuth callback already includes the invitation path.
 - Implemented on `fix/complete-team-invitation-journey` from `main` SHA `fbefe5a7263e600acb166bfbd002eacbf63a463a`: invitation query persistence; server-side token-hash preview; bilingual invitation page; verified-email check; transaction + `FOR UPDATE` acceptance; transactional expiration/reissue handling against the current partial unique index; clearer owner UI; focused regression test file.
 - Verification: source inspected via GitHub API only. No local tests/typecheck/lint/build/browser tests have run. CI pending. Do not treat implementation as verified or deployed.
-- Risk/UNKNOWN: actual end-to-end email link callback behavior and OAuth/browser session continuity still require CI and real-browser verification. Post-acceptance active tenant selection requires verification.
-- EXACT NEXT ACTION: create a draft PR, inspect CI and final diff, and stop without merging/deploying.
+- Risk/UNKNOWN: actual end-to-end email link callback behavior and OAuth/browser session continuity still require CI and real-browser verification. The selected-tenant handoff is implemented using sessionStorage plus a server-validated tenantId selector, but remains unverified.
+- VERIFIED schema detail: Better Auth's user table uses quoted `"emailVerified"`; acceptance reads it using the exact case-sensitive column name.
+- EXACT NEXT ACTION: inspect Quality/W9 on the latest PR #405 head and review the final diff; stop without merging/deploying.
