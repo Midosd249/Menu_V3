@@ -2063,3 +2063,16 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 
 - CI evidence update: earlier-head Quality and W9 failed TypeScript due to missing state declarations in the invitation UI (`setLastCreated`/`setCopied`); fixed in `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Latest-head CI is still in progress and must be inspected before claiming verification.
 - Current known head: `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Vercel check pending; no production deployment claim.
+
+
+## 2026-10-20 — PR #405 invitation link and CI follow-up
+
+- VERIFIED: Quality run 39471424785 and W9 Orders QA run 39471425235 failed at TypeScript, before tests/browser checks. Exact error: `src/routes/studio/team.tsx(82,82): TS2322 Role is not assignable to "admin" | "editor"; "owner" is not assignable`.
+- ROOT CAUSE: the invitation result's public role type is the broader `Role` union even though creation accepts only `admin | editor`; UI copied that broad type into the invitation summary state.
+- IMPLEMENTED: invitation summary now uses the already validated selected `inviteRole`, removing the invalid broad-union assignment without widening privileges or casting unsafely.
+- IMPLEMENTED: owner-generated links now open `/invite/:token` directly instead of landing first on `/login?invite=...`. The invitation page now displays four explicit bilingual steps: review details, sign in/create an account using the invited email, verify email and return to the same link if prompted, then explicitly accept.
+- TEST ADDED/UPDATED: invitation contract assertions cover direct invitation links and the bilingual step guidance.
+- SECURITY: no role/tenant authority was moved to the client; acceptance remains server-side and token possession does not accept the invitation.
+- UNKNOWN: latest-head CI and full browser journey have not yet been verified. Do not claim success until Quality and W9 complete on the final head and the independent-browser signup/verification journey is exercised.
+- DEPLOYMENT: no merge, database mutation, or production deployment performed.
+- EXACT NEXT ACTION: inspect current PR #405 head and its latest Quality/W9 checks; repair only any evidenced failures, then stop without merge/deployment.
