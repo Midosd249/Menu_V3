@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { signOut } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ export const Route = createFileRoute("/invite/$token")({ component: InvitePage }
 function InvitePage() {
   const { token } = Route.useParams();
   const { lang } = useLang();
-  const navigate = useNavigate();
   const { user, isPending } = useCurrentUserState();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -46,7 +45,8 @@ function InvitePage() {
     try {
       const result = await acceptTeamInvitation({ data: { token } });
       if (result.ok) {
-        await navigate({ to: "/studio", replace: true });
+        try { window.sessionStorage.setItem("menuun.active-tenant-id", result.data.tenantId); } catch { /* URL fallback preserves the selected tenant for this navigation */ }
+        window.location.assign("/studio?tenantId=" + encodeURIComponent(result.data.tenantId));
         return;
       }
       setError(lang === "ar" ? result.error : result.code === "unavailable" ? "We could not accept the invitation right now. Please try again." : "This invitation is invalid, expired, already used, or does not match the signed-in account.");

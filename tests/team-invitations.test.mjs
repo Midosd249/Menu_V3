@@ -7,6 +7,8 @@ const inviteRoute = readFileSync("src/routes/invite.$token.tsx", "utf8");
 const login = readFileSync("src/routes/login.tsx", "utf8");
 const verify = readFileSync("src/routes/verify-email.tsx", "utf8");
 const team = readFileSync("src/routes/studio/team.tsx", "utf8");
+const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
+const owner = readFileSync("src/lib/menu/owner.ts", "utf8");
 
 test("invitation token survives email signup, verification, and resend", () => {
   assert.ok(login.includes('callbackURL: "/login?verified=1" + (invite ? "&invite=" + encodeURIComponent(invite)'));
@@ -32,6 +34,13 @@ test("acceptance requires a verified session email and is atomic/serialized", ()
   assert.ok(invitations.includes('getTeamInvitationPreview = createServerFn({ method: "POST" })'));
   assert.ok(invitations.includes("insert into tenant_members"));
   assert.ok(invitations.includes("update team_invitations set accepted_at = now()"));
+});
+
+test("accepted invitation selects the invited tenant only after server-side membership validation", () => {
+  assert.ok(inviteRoute.includes('sessionStorage.setItem("menuun.active-tenant-id", result.data.tenantId)'));
+  assert.ok(studio.includes('getMyStudio({ data: { tenantId: selectedTenantId } })'));
+  assert.ok(owner.includes('membershipOf(sql, context.userId, data.tenantId)'));
+  assert.ok(owner.includes('if (data.tenantId && !member)'));
 });
 
 test("expired invitations are revoked before replacement under the existing unique index", () => {
