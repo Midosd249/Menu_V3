@@ -28,6 +28,7 @@ test("acceptance requires a verified session email and is atomic/serialized", ()
   assert.ok(invitations.includes("user.email_verified !== true"));
   assert.ok(invitations.includes("sql.transaction(async (tx) => {"));
   assert.ok(invitations.includes("limit 1 for update"));
+  assert.ok(invitations.includes('getTeamInvitationPreview = createServerFn({ method: "POST" })'));
   assert.ok(invitations.includes("insert into tenant_members"));
   assert.ok(invitations.includes("update team_invitations set accepted_at = now()"));
 });
