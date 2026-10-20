@@ -5,6 +5,7 @@ import test from "node:test";
 const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
 const layeredAbuseMigration = await readFile("migrations/20261002090000_layered_public_order_abuse_controls.sql", "utf8");
+const correctiveRlsMigration = await readFile("migrations/20261020080000_reconcile_public_order_invalid_rate_limits_rls.sql", "utf8");
 const rpcMigration = await readFile("migrations/20260909002000_reconcile_legacy_security_definer_rpc_grants.sql", "utf8");
 const attributionMigration = await readFile("migrations/20260918020000_anonymous_session_order_attribution.sql", "utf8");
 
@@ -82,4 +83,10 @@ test("invalid order traffic has a separate throttle", () => {
   assert.match(orderSource, /public_order_invalid_rate_limits/);
   assert.match(orderSource, /recordInvalidAttempt/);
   assert.match(layeredAbuseMigration, /create table if not exists menu_v3\.public_order_invalid_rate_limits/);
+});
+
+test("invalid-order rate-limit storage is server-only and protected by RLS", () => {
+  assert.match(correctiveRlsMigration, /alter table menu_v3\.public_order_invalid_rate_limits\s+enable row level security/i);
+  assert.match(correctiveRlsMigration, /revoke all on table menu_v3\.public_order_invalid_rate_limits\s+from public, anon, authenticated/i);
+  assert.doesNotMatch(correctiveRlsMigration, /\bgrant\b/i);
 });

@@ -1,3 +1,14 @@
+## 2026-10-20 — Invalid-order rate-limit RLS drift correction — IMPLEMENTATION_IN_PROGRESS
+
+- BASE: `main` SHA `1869bef93c44080123f836ca26fbc5b9332f0187`; branch `fix/public-order-invalid-rate-limits-rls-drift`; draft PR #404.
+- VERIFIED: Supabase project `ublxptcqefujkbeepylc` has `menu_v3.public_order_invalid_rate_limits`; live catalog reports RLS disabled and table owner `postgres`. `anon` and `authenticated` have no direct table privileges and lack `USAGE` on schema `menu_v3`. The application migration ledger records the original migration, so the live schema and recorded migration state disagree.
+- IMPLEMENTED ON BRANCH: added `migrations/20261020080000_reconcile_public_order_invalid_rate_limits_rls.sql`, which enables RLS and revokes all privileges from `PUBLIC`, `anon`, and `authenticated`, without granting client access or forcing RLS on the table owner. Added a contract assertion in `tests/public-order-hardening.test.mjs`.
+- UNKNOWN: the exact historical cause of the drift; the SQL connector's `current_user=postgres` does not independently establish the production application connection role. No direct production DDL was applied.
+- VERIFICATION: latest-head GitHub Quality/W9 results pending. Local tests/typecheck/lint/build were not run in this connected session. No merge or deployment.
+- EXACT NEXT ACTION: inspect Quality and W9 on the latest PR #404 head, then review the final diff and stop for owner decision. After the correction is merged/released through the controlled process, the next owner-requested task is a read-only backup/restore-readiness audit.
+
+---
+
 ## 2026-10-19 — P1 public upsell product-details navigation
 
 - STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
