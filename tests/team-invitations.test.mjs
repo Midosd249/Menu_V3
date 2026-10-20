@@ -21,7 +21,7 @@ test("invitation page previews details without automatically accepting", () => {
   assert.ok(inviteRoute.includes("getTeamInvitationPreview"));
   assert.ok(inviteRoute.includes("tenantNameAr"));
   assert.ok(inviteRoute.includes("Invited email"));
-  assert.ok(inviteRoute.includes("Create an account"));
+  assert.ok(inviteRoute.includes("Create an account"));\n  assert.ok(inviteRoute.includes("Invitation steps"));\n  assert.ok(inviteRoute.includes("return to this same invitation link"));
   assert.ok(inviteRoute.includes("onClick={() => void accept()}"));
   assert.ok(!inviteRoute.includes('window.location.assign(`/login?invite='));
 });
@@ -51,6 +51,6 @@ test("expired invitations are revoked before replacement under the existing uniq
 test("owner invitation UI clearly communicates manual link sharing and copy feedback", () => {
   assert.ok(team.includes("No email was sent automatically"));
   assert.ok(team.includes("لم يتم إرسال بريد تلقائي"));
-  assert.ok(team.includes("Invitation link copied"));
+  assert.ok(team.includes("/invite/${encodeURIComponent(result.data.token)}"));\n  assert.ok(team.includes("role: inviteRole"));\n  assert.ok(team.includes("Invitation link copied"));
   assert.ok(team.includes("تم نسخ رابط الدعوة"));
 });
