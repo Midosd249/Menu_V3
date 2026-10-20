@@ -78,8 +78,8 @@ function TeamPage() {
     setBusyId("invite"); setError(""); setOk(false); setInviteLink("");
     const result = await createTeamInvitation({ data: { email: inviteEmail, role: inviteRole } });
     if (result.ok) {
-      const link = `${window.location.origin}/login?invite=${encodeURIComponent(result.data.token)}`;
-      setInviteLink(link); setLastCreated({ email: result.data.invitation.email, role: result.data.invitation.role, expiresAt: result.data.invitation.expiresAt }); setCopied(false); setInviteEmail(""); setInvitations((current) => [result.data.invitation, ...current]); setOk(true);
+      const link = `${window.location.origin}/invite/${encodeURIComponent(result.data.token)}`;
+      setInviteLink(link); setLastCreated({ email: result.data.invitation.email, role: inviteRole, expiresAt: result.data.invitation.expiresAt }); setCopied(false); setInviteEmail(""); setInvitations((current) => [result.data.invitation, ...current]); setOk(true);
     } else setError(result.error);
     setBusyId("");
   }
