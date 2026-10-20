@@ -2050,3 +2050,12 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
 - UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
 - EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+## 2026-10-20 — Team invitation journey repair — IMPLEMENTATION_IN_PROGRESS
+
+- Scope: preserve invitation context across registration/verification, show validated invitation metadata, and make acceptance atomic. No auth-system rewrite, production configuration change, database mutation, merge, or deployment.
+- VERIFIED root cause: signup callback and verify-email resend callback omit `invite`; signup navigation to `/verify-email` also drops it. OAuth callback already includes the invitation path.
+- Implemented on `fix/complete-team-invitation-journey` from `main` SHA `fbefe5a7263e600acb166bfbd002eacbf63a463a`: invitation query persistence; server-side token-hash preview; bilingual invitation page; verified-email check; transaction + `FOR UPDATE` acceptance; transactional expiration/reissue handling against the current partial unique index; clearer owner UI; focused regression test file.
+- Verification: source inspected via GitHub API only. No local tests/typecheck/lint/build/browser tests have run. CI pending. Do not treat implementation as verified or deployed.
+- Risk/UNKNOWN: actual end-to-end email link callback behavior and OAuth/browser session continuity still require CI and real-browser verification. Post-acceptance active tenant selection requires verification.
+- EXACT NEXT ACTION: create a draft PR, inspect CI and final diff, and stop without merging/deploying.

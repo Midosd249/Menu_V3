@@ -2277,3 +2277,12 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
 - UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
 - EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+## 2026-10-20 — Team invitation journey repair — IMPLEMENTATION_IN_PROGRESS
+
+- Branch: `fix/complete-team-invitation-journey`, created from `main` SHA `fbefe5a7263e600acb166bfbd002eacbf63a463a`.
+- Root cause from source: invitation token was lost in email signup -> verify-email navigation and in verification/resend callback URLs; OAuth callback already preserves it.
+- Changes prepared on branch: `src/routes/login.tsx`, `src/routes/verify-email.tsx`, `src/routes/invite.$token.tsx`, `src/lib/menu/team-invitations.ts`, `src/routes/studio/team.tsx`, and `tests/team-invitations.test.mjs`.
+- Security decision: retain hashed tokens; use server session identity and database email verification; lock invitation row and atomically insert membership/consume invitation; expire old invitations by revoking them transactionally before reissue; rely on existing uniqueness constraint for concurrent creation attempts.
+- NOT VERIFIED: no local tests, typecheck, lint, build, database integration, Playwright, or visual tests have run. No CI result yet. No migration or production DB change. No merge/deploy.
+- EXACT NEXT ACTION: open a draft PR and inspect actual CI plus final diff; no merge or deployment.
