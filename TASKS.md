@@ -1,3 +1,15 @@
+## 2026-10-20 — Active: reconcile invalid-order rate-limit RLS drift
+
+- STATUS: `IMPLEMENTATION_IN_PROGRESS`; draft PR #404.
+- Branch: `fix/public-order-invalid-rate-limits-rls-drift`; base SHA `1869bef93c44080123f836ca26fbc5b9332f0187`.
+- Changed scope: `migrations/20261020080000_reconcile_public_order_invalid_rate_limits_rls.sql`; `tests/public-order-hardening.test.mjs`.
+- VERIFIED: production catalog inspection found RLS disabled on the invalid-order throttle table while the original migration is recorded; no direct public-client table privileges or schema usage were found.
+- UNKNOWN: root cause of drift and exact runtime application connection role.
+- NOT DONE: no production DDL, merge, deployment, or local test execution. Latest-head CI is pending.
+- EXACT NEXT ACTION: verify Quality and W9 on the latest PR #404 head, review the final diff, and stop for owner decision. Next queued task after this is the owner-requested read-only backup/restore-readiness audit.
+
+---
+
 ## 2026-10-19 — P1 public upsell product-details navigation
 
 - STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
