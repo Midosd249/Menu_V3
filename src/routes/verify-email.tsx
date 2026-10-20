@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth/client";
+import { getPendingInvitationToken } from "@/lib/auth/invitation-context";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { LangToggle } from "@/components/lang-toggle";
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/verify-email")({ component: VerifyEmail }
 
 function VerifyEmail() {
   const { lang } = useLang();
-  const invite = typeof window === "undefined" ? "" : (() => { const value = new URLSearchParams(window.location.search).get("invite")?.trim() ?? ""; return value.length >= 40 && value.length <= 200 ? value : ""; })();
+  const invite = getPendingInvitationToken();
   const [email, setEmail] = useState(() => {
     if (typeof window === "undefined") return "";
     try { return window.sessionStorage.getItem("menuun.pending-registration-email") ?? ""; } catch { return ""; }
@@ -26,7 +27,7 @@ function VerifyEmail() {
     try {
       const result = await authClient.sendVerificationEmail({
         email: email.trim().toLowerCase(),
-        callbackURL: "/login?verified=1" + (invite ? "&invite=" + encodeURIComponent(invite) : ""),
+        callbackURL: invite ? "/invite/" + encodeURIComponent(invite) : "/login?verified=1",
       });
       if (result.error) throw new Error(result.error.message ?? "Unable to send verification email.");
       setMessage(lang === "ar" ? "تم إرسال رسالة تحقق جديدة. تحقق من بريدك الوارد أو مجلد الرسائل غير المرغوب فيها." : "A new verification email was sent. Check your inbox or spam folder.");
