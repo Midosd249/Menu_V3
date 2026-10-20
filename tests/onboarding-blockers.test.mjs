@@ -10,7 +10,7 @@ test("signup preserves registration details before the verification handoff", ()
   assert.match(login, /authClient\.signUp\.email\(\{ email, password, name, phoneNumber: validationResult\.data\.phone \}\)/);
   assert.match(login, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
   assert.match(login, /authClient\.sendVerificationEmail/);
-  assert.match(login, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
+  assert.match(login, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
 });
 
 test("onboarding exposes recovery and exit paths when phone eligibility is missing", () => {
