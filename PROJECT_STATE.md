@@ -653,3 +653,6 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RELEASE: no merge or deployment. Production status is unchanged/UNKNOWN.
 - Additional verified schema detail: Better Auth stores verification state in the quoted, case-sensitive `"emailVerified"` column; acceptance queries that column explicitly.
 - EXACT NEXT ACTION: inspect Quality/W9 CI and the final diff for the latest PR #405 head, address only evidence-backed failures, and stop without merge/deployment.
+
+- CI FOLLOW-UP: Quality and W9 on earlier head `26d4e135ef90ad663dd46241e99292cf7ee21187` failed TypeScript checks because `setLastCreated`, `setCopied`, `lastCreated`, and `copied` were referenced without state declarations in `src/routes/studio/team.tsx`. The missing state declarations were added in commit `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. The latest-head Quality/W9 runs are still in progress; this is not yet verified.
+- CURRENT HEAD at this note: `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Vercel status is pending; no production deployment evidence exists.

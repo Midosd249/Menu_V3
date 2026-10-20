@@ -2060,3 +2060,6 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Risk/UNKNOWN: actual end-to-end email link callback behavior and OAuth/browser session continuity still require CI and real-browser verification. The selected-tenant handoff is implemented using sessionStorage plus a server-validated tenantId selector, but remains unverified.
 - VERIFIED schema detail: Better Auth's user table uses quoted `"emailVerified"`; acceptance reads it using the exact case-sensitive column name.
 - EXACT NEXT ACTION: inspect Quality/W9 on the latest PR #405 head and review the final diff; stop without merging/deploying.
+
+- CI evidence update: earlier-head Quality and W9 failed TypeScript due to missing state declarations in the invitation UI (`setLastCreated`/`setCopied`); fixed in `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Latest-head CI is still in progress and must be inspected before claiming verification.
+- Current known head: `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Vercel check pending; no production deployment claim.

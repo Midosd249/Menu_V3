@@ -2288,3 +2288,6 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - The post-acceptance selected tenant is persisted in sessionStorage and revalidated server-side by `getMyStudio`; this needs current-head typecheck and browser verification.
 - Better Auth's verification column is case-sensitive `"emailVerified"` and the acceptance query now matches the migration.
 - EXACT NEXT ACTION: inspect Quality/W9 on the latest PR #405 head and the final diff; no merge or deployment.
+
+- CI failure/fix evidence: Quality and W9 on prior head `26d4e135ef90ad663dd46241e99292cf7ee21187` failed TypeScript because the invitation UI referenced missing React state declarations. Added the missing `copied` and `lastCreated` state in `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`.
+- Latest-head Quality/W9 are still in progress; no successful verification is claimed. Vercel status pending, no production deployment evidence.
