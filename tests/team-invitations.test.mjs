@@ -10,11 +10,23 @@ const team = readFileSync("src/routes/studio/team.tsx", "utf8");
 const studio = readFileSync("src/lib/menu/studio.tsx", "utf8");
 const owner = readFileSync("src/lib/menu/owner.ts", "utf8");
 
-test("invitation token survives email signup, verification, and resend", () => {
-  assert.ok(login.includes('callbackURL: "/login?verified=1" + (invite ? "&invite=" + encodeURIComponent(invite)'));
+test("invitation context survives verification redirects and browser navigation", () => {
+  assert.ok(login.includes('callbackURL: invite ? "/invite/" + encodeURIComponent(invite) : "/login?verified=1"'));
+  assert.ok(login.includes("getPendingInvitationToken()"));
   assert.ok(login.includes('window.location.assign("/verify-email" + (invite ? "?invite=" + encodeURIComponent(invite)'));
-  assert.ok(verify.includes('callbackURL: "/login?verified=1" + (invite ? "&invite=" + encodeURIComponent(invite)'));
-  assert.ok(verify.includes('new URLSearchParams(window.location.search).get("invite")'));
+  assert.ok(verify.includes('callbackURL: invite ? "/invite/" + encodeURIComponent(invite) : "/login?verified=1"'));
+  assert.ok(verify.includes("getPendingInvitationToken()"));
+  const context = readFileSync("src/lib/auth/invitation-context.ts", "utf8");
+  assert.ok(context.includes('localStorage.setItem(PENDING_INVITATION_KEY, value)'));
+  assert.ok(context.includes("getItem(PENDING_INVITATION_KEY)"));
+  assert.ok(inviteRoute.includes("persistPendingInvitationToken(token)"));
+  assert.ok(inviteRoute.includes("clearPendingInvitationToken(token)"));
+});
+
+test("onboarding cannot create a separate workspace while an invitation is pending", () => {
+  const onboarding = readFileSync("src/routes/onboarding.tsx", "utf8");
+  assert.ok(onboarding.includes("getPendingInvitationToken()"));
+  assert.ok(onboarding.includes("window.location.replace"));
 });
 
 test("invitation page previews details without automatically accepting", () => {
