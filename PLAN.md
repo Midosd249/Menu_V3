@@ -1,3 +1,16 @@
+## 2026-10-20 — PR #405 CI failure root-cause repair — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #405 remains open/draft on `fix/complete-team-invitation-journey`; code changes remain scoped to the team-invitation journey and its contracts. No merge, database mutation, or deployment occurred.
+- VERIFIED: Quality run `39474163001` passed route generation and TypeScript typecheck, then failed in `npm test` with 4 contract assertions; 505 tests passed. Lint, production build, and later browser checks were skipped because the test step failed.
+- ROOT CAUSES: (1) `tests/onboarding-blockers.test.mjs` prohibited all `sessionStorage` use despite intentional pending-registration email persistence. (2) Two `tests/registration-contract.test.mjs` assertions pinned the old navigation implementation and did not account for the invitation token being carried into verification. (3) `tests/p1-4-request-waterfall.test.mjs` required `getMyStudio()` with no input, while StudioGate now selects the accepted invitation tenant and only falls back after a server-side forbidden result.
+- IMPLEMENTED: Updated contracts to assert pending email persistence, invitation-token preservation, explicit selected-tenant loading, and safe forbidden-selection fallback. No runtime code was altered merely to silence tests; invitation acceptance/security contracts remain.
+- RESEARCH: Exa review of Node.js test-writing guidance and test-quality guidance supported preserving behavior contracts rather than pinning stale implementation details.
+- VERIFICATION: Route generation and TypeScript typecheck passed on the previous head; tests failed as above. Latest-head Quality run `39475956609` and W9 Orders QA run `39475956866` were in progress at last observation; final results are unknown.
+- UNKNOWN/BLOCKED: Updated tests, lint, build, and downstream browser checks are not yet verified. No local terminal or interactive browser QA was available in this connected session.
+- EXACT NEXT ACTION: Inspect latest-head Quality/W9 outcomes after this documentation update, repair only evidence-backed failures, then review the final diff and stop without merge/deployment.
+
+---
+
 ## 2026-10-20 — PR #404 merged: invalid-order rate-limit RLS drift correction — MERGED / PRE-MERGE CI VERIFIED
 
 - VERIFIED: PR #404 merged by squash as `ed567e00090436b7999956bb638daa30c236d060`; PR: https://github.com/Midosd249/Menu_V3/pull/404.
