@@ -1,3 +1,16 @@
+## 2026-10-20 — PR #405 CI failure root-cause repair — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #405 remains open/draft on `fix/complete-team-invitation-journey`; latest code/test head before this continuity update was `be22866e143a869a166384ea52f45dea28c8e651`. No merge, database mutation, or deployment occurred.
+- VERIFIED: Quality run `39474163001` passed route generation and TypeScript typecheck, then failed in `npm test` with 4 contract assertions; 505 tests passed. Lint, production build, and later browser checks were skipped because the test step failed.
+- ROOT CAUSES: (1) `tests/onboarding-blockers.test.mjs` incorrectly prohibited all `sessionStorage` use, although signup intentionally stores the pending registration email so verification/resend can recover it. (2) Two `tests/registration-contract.test.mjs` assertions pinned the old `navigate('/verify-email')` implementation and rejected the current hard navigation that preserves the invitation token. (3) `tests/p1-4-request-waterfall.test.mjs` pinned `getMyStudio()` without arguments, but StudioGate now explicitly selects the invitation-accepted tenant and safely falls back only if membership validation returns forbidden.
+- IMPLEMENTED: Updated those contracts to assert the intended behavior rather than obsolete implementation details: pending email persistence, invitation token preservation through verification, selected-tenant loading, and forbidden-selection fallback. Invitation-specific acceptance/security assertions remain intact; no application runtime code was changed to silence tests.
+- RESEARCH: Reviewed Node.js test-writing guidance and test-quality guidance via Exa; conclusions align with updating assertions to preserve behavior contracts rather than weakening them.
+- VERIFICATION: On the previous code head, route generation and TypeScript typecheck passed; repository tests failed as above. New-head Quality run `39475956609` and W9 Orders QA run `39475956866` were observed in progress, with hosted-runner setup/install taking longer than usual. Their final outcomes are not yet verified. No local checkout, terminal, or interactive browser QA was available in this connected session.
+- RISK/UNKNOWN: Until the latest-head Quality job completes, the updated test assertions, lint, build, and downstream browser checks remain unverified. A successful W9 run alone does not establish the full invitation journey.
+- EXACT NEXT ACTION: Inspect the latest-head Quality and W9 runs after the continuity commit; read every failed step/log, fix only evidence-backed regressions within the invitation journey, then review the final diff and stop without merge/deployment.
+
+---
+
 ## 2026-10-20 — PR #404 merged: invalid-order rate-limit RLS drift correction — MERGED / PRE-MERGE CI VERIFIED
 
 - VERIFIED: PR #404 merged by squash as `ed567e00090436b7999956bb638daa30c236d060`; PR: https://github.com/Midosd249/Menu_V3/pull/404.
