@@ -1,3 +1,17 @@
+## 2026-10-20 — PR #404 merged: invalid-order rate-limit RLS drift correction — MERGED / PRE-MERGE CI VERIFIED
+
+- VERIFIED: PR #404 merged by squash as `ed567e00090436b7999956bb638daa30c236d060`; PR: https://github.com/Midosd249/Menu_V3/pull/404.
+- VERIFIED: tested PR head `4f5359ec4c00aa2ed6073cdcf8dd170ebbed2c78`. GitHub Actions Quality run `39371689056` and W9 Orders QA run `39371689058` both completed successfully on that head.
+- VERIFIED (owner-reported): owner manually tested the Vercel Preview, the restaurant journey worked, and creating a new account succeeded.
+- VERIFIED (Supabase evidence recorded in PR): migration `20261020080000_reconcile_public_order_invalid_rate_limits_rls.sql` is recorded; `menu_v3.public_order_invalid_rate_limits` has RLS enabled, FORCE RLS disabled, and no direct table grants to PUBLIC/anon/authenticated.
+- IMPLEMENTED: migration enables RLS and revokes privileges from PUBLIC, anon, and authenticated. Regression contract added in `tests/public-order-hardening.test.mjs`. Historical migration retained; no order-flow logic or tenant/branch isolation changes.
+- ACCEPTED/DEFERRED BY OWNER: Preview builds may run `db:migrate` against the shared Supabase database. Owner states Preview is currently used privately for testing and asks to defer this risk. Revisit before exposing Preview to other people or treating it as an untrusted environment.
+- UNKNOWN: root cause of the original schema drift; exact production application runtime role; post-merge main-branch CI run and production deployment status are not established by the evidence collected here. Pre-merge CI and owner Preview testing do not prove deployment.
+- RELEASE STATUS: PR merged; do not label production DEPLOYED without direct Vercel production evidence.
+- EXACT NEXT TASK: read-only backup and restore readiness audit for Supabase/PostgreSQL and the Menu V3 production data path. Do not change backup settings or run a restore without explicit authorization.
+
+---
+
 ## 2026-10-20 — Active: reconcile invalid-order rate-limit RLS drift
 
 - STATUS: `IMPLEMENTATION_IN_PROGRESS`; draft PR #404.
