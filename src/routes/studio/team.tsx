@@ -34,6 +34,8 @@ function TeamPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<"admin" | "editor">("editor");
   const [inviteLink, setInviteLink] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [lastCreated, setLastCreated] = useState<{ email: string; role: "admin" | "editor"; expiresAt: string } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
