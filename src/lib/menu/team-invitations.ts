@@ -190,7 +190,7 @@ export type TeamInvitationPreview = {
 };
 
 /** Token possession reveals only the invitation summary; this read never consumes it. */
-export const getTeamInvitationPreview = createServerFn({ method: "GET" })
+export const getTeamInvitationPreview = createServerFn({ method: "POST" })
   .validator(z.object({ token: tokenSchema }))
   .handler(async ({ data }): Promise<FnResult<{ invitation: TeamInvitationPreview }>> => {
     try {
