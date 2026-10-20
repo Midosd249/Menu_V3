@@ -1,3 +1,14 @@
+## 2026-10-20 — Active task: reconcile invalid-order rate-limit RLS drift
+
+- STATUS: `IMPLEMENTATION_IN_PROGRESS`; draft PR #404 on `fix/public-order-invalid-rate-limits-rls-drift`, based on main SHA `1869bef93c44080123f836ca26fbc5b9332f0187`.
+- VERIFIED: live Supabase table `menu_v3.public_order_invalid_rate_limits` has RLS disabled despite the original migration being recorded in `menu_v3._migrations`. No direct `anon`/`authenticated` table privileges or schema `USAGE` were found.
+- IMPLEMENTED: new idempotent corrective migration enables RLS and revokes client/public grants; existing historical migration remains unchanged. A focused contract test asserts both statements and rejects any GRANT in the corrective migration.
+- RISK: do not apply SQL directly to production from this session. Root cause of schema/ledger mismatch is UNKNOWN; actual production app runtime role is not independently verified from the admin SQL session.
+- ACCEPTANCE: latest-head Quality and W9 pass on the same SHA; review migration/test diff; verify no client grants were added; no change to ordering code, tenant isolation, branch isolation, or app behavior.
+- EXACT NEXT ACTION: inspect the latest PR #404 Quality and W9 results and resolve only evidenced failures; do not merge/deploy as part of verification.
+
+---
+
 ## 2026-10-19 — P1 public upsell product-details navigation
 
 - STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
