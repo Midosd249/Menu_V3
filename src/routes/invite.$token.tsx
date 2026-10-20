@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { signOut } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
@@ -26,7 +27,7 @@ function InvitePage() {
     void getTeamInvitationPreview({ data: { token } }).then((result) => {
       if (!active) return;
       if (result.ok) setPreview(result.data.invitation);
-      else setPreviewError(result.error);
+      else setPreviewError(lang === "ar" ? result.error : result.code === "not_found" ? "This invitation link is invalid." : "We could not load this invitation. Please try again.");
     }).catch(() => {
       if (active) setPreviewError(lang === "ar" ? "تعذر الاتصال بالخادم. حاول مرة أخرى." : "Could not reach the server. Please try again.");
     }).finally(() => {
@@ -45,7 +46,7 @@ function InvitePage() {
     if (result.ok) {
       await navigate({ to: "/studio", replace: true });
     } else {
-      setError(result.error);
+      setError(lang === "ar" ? result.error : result.code === "unavailable" ? "We could not accept the invitation right now. Please try again." : "This invitation is invalid, expired, already used, or does not match the signed-in account.");
       setBusy(false);
     }
   }
@@ -72,7 +73,7 @@ function InvitePage() {
           <div><dt className="text-muted">{lang === "ar" ? "تنتهي في" : "Expires"}</dt><dd className="mt-1">{new Date(preview.expiresAt).toLocaleString(lang === "ar" ? "ar-SA" : "en")}</dd></div>
         </dl>
         {preview.status !== "pending" ? <p className="mt-4 rounded-xl border border-bad/30 bg-bad/5 p-3 text-sm text-bad" role="alert">{statusLabel}</p> : null}
-        {user && !emailMatches ? <p className="mt-4 rounded-xl border border-bad/30 bg-bad/5 p-3 text-sm text-bad" role="alert">{lang === "ar" ? "البريد الحالي لا يطابق الدعوة. سجّل الخروج ثم استخدم الحساب المرتبط بالبريد المدعو." : "The signed-in email does not match this invitation. Sign out and use the account associated with the invited email."}</p> : null}
+        {user && !emailMatches ? <div className="mt-4 grid gap-2"><p className="rounded-xl border border-bad/30 bg-bad/5 p-3 text-sm text-bad" role="alert">{lang === "ar" ? "البريد الحالي لا يطابق الدعوة. سجّل الخروج ثم استخدم الحساب المرتبط بالبريد المدعو." : "The signed-in email does not match this invitation. Sign out and use the account associated with the invited email."}</p><Button type="button" variant="outline" onClick={() => void signOut("/login?invite=" + encodeURIComponent(token))}>{lang === "ar" ? "تبديل الحساب" : "Switch account"}</Button></div> : null}
         {error ? <p className="mt-4 rounded-xl border border-bad/30 bg-bad/5 p-3 text-sm text-bad" role="alert">{error}</p> : null}
         {!user ? <div className="mt-5 grid gap-2"><a className="inline-flex min-h-11 items-center justify-center rounded-lg bg-ink px-4 py-2 text-sm font-medium text-paper" href={"/login?invite=" + encodeURIComponent(token)}>{lang === "ar" ? "تسجيل الدخول" : "Sign in"}</a><a className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line px-4 py-2 text-sm font-medium" href={"/login?mode=signup&invite=" + encodeURIComponent(token)}>{lang === "ar" ? "إنشاء حساب جديد" : "Create an account"}</a></div> : null}
         {canAccept ? <div className="mt-5 flex gap-2"><Button type="button" disabled={busy} onClick={() => void accept()}>{busy ? (lang === "ar" ? "جارٍ القبول…" : "Accepting…") : (lang === "ar" ? "قبول الدعوة والانضمام" : "Accept and join")}</Button><Button type="button" variant="outline" disabled={busy} onClick={() => window.location.assign("/studio")}>{lang === "ar" ? "ليس الآن" : "Not now"}</Button></div> : null}
