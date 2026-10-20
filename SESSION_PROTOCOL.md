@@ -1,3 +1,16 @@
+## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `main` at task start was `74a4f6c87f3cdf5b5e0dbbdabf9459a5f3537998`. The owner reproduced a new invitee landing in self-service onboarding after signup, email verification, and login.
+- VERIFIED FROM CODE: invitation context was read from the current query only, verification callbacks targeted generic login, and onboarding could provision a workspace with no membership.
+- IMPLEMENTING: browser-local recovery for the validated invitation token, verification callback directly to `/invite/:token`, and an onboarding guard. Server-side acceptance, verified-email matching, and tenant authorization remain unchanged.
+- RESEARCH: Better Auth documents `callbackURL` as the post-verification redirect destination: https://better-auth.com/docs/concepts/email.
+- CI BASELINE: main Quality run `39480542146` failed immediately without runner steps exposed; root cause UNKNOWN.
+- UNKNOWN: no local terminal or interactive browser available; real email-client E2E remains unverified.
+- RELEASE: no database change, Supabase mutation, merge, or deployment performed.
+- EXACT NEXT ACTION: verify focused regression tests and PR CI on the final head; then stop for owner-side browser/email verification.
+
+---
+
 ## 2026-10-19 — P1 public upsell product-details navigation
 
 - STATUS: IMPLEMENTATION_BLOCKED for final-head verification; code is implemented on branch `fix/public-upsell-opens-product-details`, based on `main` at `310495dcef34a6629dfee4bdd8d190c7a3b9e292`.
