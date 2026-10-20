@@ -133,7 +133,7 @@ export const acceptTeamInvitation = createServerFn({ method: "POST" })
       const sql = await getSql();
       const tokenHash = hashToken(data.token);
       const userRows = await sql.query<{ email: string; email_verified: boolean }>(
-        'select email, email_verified from "user" where id = $1 limit 1',
+        'select email, "emailVerified" as email_verified from "user" where id = $1 limit 1',
         [context.userId],
       );
       const user = userRows[0];

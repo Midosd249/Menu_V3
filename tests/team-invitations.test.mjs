@@ -26,6 +26,7 @@ test("invitation page previews details without automatically accepting", () => {
 
 test("acceptance requires a verified session email and is atomic/serialized", () => {
   assert.ok(invitations.includes("user.email_verified !== true"));
+  assert.ok(invitations.includes('select email, "emailVerified" as email_verified from "user"'));
   assert.ok(invitations.includes("sql.transaction(async (tx) => {"));
   assert.ok(invitations.includes("limit 1 for update"));
   assert.ok(invitations.includes('getTeamInvitationPreview = createServerFn({ method: "POST" })'));
