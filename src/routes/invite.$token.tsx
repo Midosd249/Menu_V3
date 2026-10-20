@@ -71,6 +71,12 @@ function InvitePage() {
         <p className="text-sm font-medium text-accent">Menuun</p>
         <h1 className="mt-2 font-display text-2xl font-semibold">{lang === "ar" ? "دعوة للانضمام إلى فريق نشاط" : "Invitation to join a business team"}</h1>
         <p className="mt-2 text-sm leading-6 text-muted">{lang === "ar" ? "أنت مدعو للانضمام إلى النشاط التالي. لن تنضم إلا بعد تسجيل الدخول وقبول الدعوة." : "You have been invited to join the business below. You will join only after signing in and explicitly accepting."}</p>
+        <ol aria-label={lang === "ar" ? "خطوات قبول الدعوة" : "Invitation steps"} className="mt-4 grid gap-2 rounded-xl border border-accent/25 bg-accent/5 p-4 text-sm leading-6">
+          <li className="flex gap-2"><span className="font-semibold">1.</span><span>{lang === "ar" ? "راجع اسم النشاط والبريد والدور قبل المتابعة." : "Review the business name, invited email, and role before continuing."}</span></li>
+          <li className="flex gap-2"><span className="font-semibold">2.</span><span>{lang === "ar" ? "سجّل الدخول أو أنشئ حسابًا باستخدام البريد المدعو نفسه." : "Sign in or create an account using the invited email address."}</span></li>
+          <li className="flex gap-2"><span className="font-semibold">3.</span><span>{lang === "ar" ? "إذا طُلب منك التحقق من البريد، افتح رسالة التحقق ثم ارجع إلى رابط الدعوة نفسه." : "If asked to verify your email, open the verification message, then return to this same invitation link."}</span></li>
+          <li className="flex gap-2"><span className="font-semibold">4.</span><span>{lang === "ar" ? "بعد تسجيل الدخول بالبريد الصحيح، اضغط «قبول الدعوة والانضمام» لإكمال الانضمام." : "After signing in with the matching email, select “Accept and join” to finish joining."}</span></li>
+        </ol>
         <dl className="mt-5 grid gap-3 rounded-xl border border-line bg-sand/20 p-4 text-sm">
           <div><dt className="text-muted">{lang === "ar" ? "النشاط" : "Business"}</dt><dd className="mt-1 font-semibold">{tenantName}</dd></div>
           <div><dt className="text-muted">{lang === "ar" ? "البريد المدعو" : "Invited email"}</dt><dd className="mt-1 break-all font-medium">{preview.email}</dd></div>
