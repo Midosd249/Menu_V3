@@ -4,10 +4,10 @@
 - VERIFIED FROM CODE: invitation context was read from the current query only, verification callbacks targeted generic login, and onboarding could provision a workspace with no membership.
 - IMPLEMENTING: browser-local recovery for the validated invitation token, verification callback directly to `/invite/:token`, and an onboarding guard. Server-side acceptance, verified-email matching, and tenant authorization remain unchanged.
 - RESEARCH: Better Auth documents `callbackURL` as the post-verification redirect destination: https://better-auth.com/docs/concepts/email.
-- CI BASELINE: main Quality run `39480542146` failed immediately without runner steps exposed; root cause UNKNOWN.
+- CI: main Quality run `39480542146` and PR #406 Quality `39484797065` / W9 `39484796977` failed before any steps ran. The PR runs were retried once; both attempts still exposed no steps (`runner_id: 0`) and log retrieval returned `BlobNotFound`. Root cause is UNKNOWN; no tests are verified.
 - UNKNOWN: no local terminal or interactive browser available; real email-client E2E remains unverified.
 - RELEASE: no database change, Supabase mutation, merge, or deployment performed.
-- EXACT NEXT ACTION: verify focused regression tests and PR CI on the final head; then stop for owner-side browser/email verification.
+- EXACT NEXT ACTION: resolve or obtain evidence for the GitHub Actions pre-step failure, then run Quality and W9 on the same final PR head; do not merge or deploy until those checks pass and the owner retests the real email/browser journey.
 
 ---
 
