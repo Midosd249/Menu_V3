@@ -34,6 +34,8 @@ function TeamPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<"admin" | "editor">("editor");
   const [inviteLink, setInviteLink] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [lastCreated, setLastCreated] = useState<{ email: string; role: "admin" | "editor"; expiresAt: string } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -76,8 +78,8 @@ function TeamPage() {
     setBusyId("invite"); setError(""); setOk(false); setInviteLink("");
     const result = await createTeamInvitation({ data: { email: inviteEmail, role: inviteRole } });
     if (result.ok) {
-      const link = `${window.location.origin}/login?invite=${encodeURIComponent(result.data.token)}`;
-      setInviteLink(link); setInviteEmail(""); setInvitations((current) => [result.data.invitation, ...current]); setOk(true);
+      const link = `${window.location.origin}/invite/${encodeURIComponent(result.data.token)}`;
+      setInviteLink(link); setLastCreated({ email: result.data.invitation.email, role: inviteRole, expiresAt: result.data.invitation.expiresAt }); setCopied(false); setInviteEmail(""); setInvitations((current) => [result.data.invitation, ...current]); setOk(true);
     } else setError(result.error);
     setBusyId("");
   }
@@ -115,7 +117,7 @@ function TeamPage() {
           <Field label={lang === "ar" ? "الدور" : "Role"}><select className="h-10 w-full rounded-md border border-line bg-paper px-2 text-sm" value={inviteRole} onChange={(e) => setInviteRole(e.target.value as "admin" | "editor")}><option value="editor">{ROLE_LABELS.editor[lang]}</option><option value="admin">{ROLE_LABELS.admin[lang]}</option></select></Field>
           <div className="flex items-end"><Button type="button" disabled={busyId === "invite" || !inviteEmail.trim()} onClick={() => void invite()}>{busyId === "invite" ? <Loader2 className="size-4 animate-spin" /> : lang === "ar" ? "إنشاء الدعوة" : "Create invite"}</Button></div>
         </div>
-        {inviteLink ? <div className="flex gap-2 rounded-xl border border-line bg-sand/30 p-3"><Input readOnly value={inviteLink} className="text-xs" /><Button type="button" variant="outline" size="icon" onClick={() => void copyLink()} aria-label={lang === "ar" ? "نسخ رابط الدعوة" : "Copy invitation link"}><Copy className="size-4" /></Button></div> : null}
+        {inviteLink && lastCreated ? <div className="grid gap-2 rounded-xl border border-line bg-sand/30 p-3"><p className="text-sm font-medium" role="status">{lang === "ar" ? `تم إنشاء دعوة ${ROLE_LABELS[lastCreated.role][lang]} إلى ${lastCreated.email}. تنتهي في ${new Date(lastCreated.expiresAt).toLocaleDateString("ar-SA")}. لم يتم إرسال بريد تلقائي؛ شارك الرابط مع المدعو.` : `Created a ${ROLE_LABELS[lastCreated.role][lang]} invitation for ${lastCreated.email}. Expires ${new Date(lastCreated.expiresAt).toLocaleDateString("en")}. No email was sent automatically; share the link with the invitee.`}</p><div className="flex gap-2"><Input readOnly value={inviteLink} className="text-xs" /><Button type="button" variant="outline" onClick={() => void copyLink()} aria-label={lang === "ar" ? "نسخ رابط الدعوة" : "Copy invitation link"}><Copy className="size-4" />{lang === "ar" ? "نسخ الرابط" : "Copy link"}</Button></div>{copied ? <p className="text-sm text-ink-soft" role="status">{lang === "ar" ? "تم نسخ رابط الدعوة." : "Invitation link copied."}</p> : null}</div> : null}
         {invitations.length ? <div className="space-y-2"><p className="text-xs font-medium text-muted">{lang === "ar" ? "الدعوات النشطة" : "Active invitations"}</p>{invitations.map((item) => <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line px-3 py-2 text-sm"><span>{item.email}</span><span className="text-xs text-muted">{ROLE_LABELS[item.role][lang]}</span><Button type="button" variant="outline" size="sm" disabled={busyId === item.id} onClick={() => void revoke(item.id)}>{lang === "ar" ? "إلغاء" : "Revoke"}</Button></div>)}</div> : null}
       </section>
 

@@ -1,3 +1,16 @@
+## 2026-10-20 — PR #405 CI failure root-cause repair — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: PR #405 remains open/draft on `fix/complete-team-invitation-journey`; latest code/test head before this continuity update was `be22866e143a869a166384ea52f45dea28c8e651`. No merge, database mutation, or deployment occurred.
+- VERIFIED: Quality run `39474163001` passed route generation and TypeScript typecheck, then failed in `npm test` with 4 contract assertions; 505 tests passed. Lint, production build, and later browser checks were skipped because the test step failed.
+- ROOT CAUSES: (1) `tests/onboarding-blockers.test.mjs` incorrectly prohibited all `sessionStorage` use, although signup intentionally stores the pending registration email so verification/resend can recover it. (2) Two `tests/registration-contract.test.mjs` assertions pinned the old `navigate('/verify-email')` implementation and rejected the current hard navigation that preserves the invitation token. (3) `tests/p1-4-request-waterfall.test.mjs` pinned `getMyStudio()` without arguments, but StudioGate now explicitly selects the invitation-accepted tenant and safely falls back only if membership validation returns forbidden.
+- IMPLEMENTED: Updated those contracts to assert the intended behavior rather than obsolete implementation details: pending email persistence, invitation token preservation through verification, selected-tenant loading, and forbidden-selection fallback. Invitation-specific acceptance/security assertions remain intact; no application runtime code was changed to silence tests.
+- RESEARCH: Reviewed Node.js test-writing guidance and test-quality guidance via Exa; conclusions align with updating assertions to preserve behavior contracts rather than weakening them.
+- VERIFICATION: On the previous code head, route generation and TypeScript typecheck passed; repository tests failed as above. New-head Quality run `39475956609` and W9 Orders QA run `39475956866` were observed in progress, with hosted-runner setup/install taking longer than usual. Their final outcomes are not yet verified. No local checkout, terminal, or interactive browser QA was available in this connected session.
+- RISK/UNKNOWN: Until the latest-head Quality job completes, the updated test assertions, lint, build, and downstream browser checks remain unverified. A successful W9 run alone does not establish the full invitation journey.
+- EXACT NEXT ACTION: Inspect the latest-head Quality and W9 runs after the continuity commit; read every failed step/log, fix only evidence-backed regressions within the invitation journey, then review the final diff and stop without merge/deployment.
+
+---
+
 ## 2026-10-20 — PR #404 merged: invalid-order rate-limit RLS drift correction — MERGED / PRE-MERGE CI VERIFIED
 
 - VERIFIED: PR #404 merged by squash as `ed567e00090436b7999956bb638daa30c236d060`; PR: https://github.com/Midosd249/Menu_V3/pull/404.
@@ -642,3 +655,30 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - SCOPE: workflow-only; no product/auth/database/order/pricing behavior, dependencies, PR #400/#402, or assertions changed. Vite dev remains in use; warm-up is supplemental and does not replace Playwright assertions.
 - UNKNOWN: CI results for these changes are pending; no merge/deployment is claimed. PR #403 remains draft/open pending all required gates on one final SHA.
 - EXACT NEXT ACTION: inspect Quality and W9 results on the final branch SHA; use captured resource data and the last 200 server-log lines for any next fix, then require three consecutive successful runs of each workflow.
+
+## 2026-10-20 — Team invitation journey repair — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: `main` was at `fbefe5a7263e600acb166bfbd002eacbf63a463a` when this task began. A separate branch `fix/complete-team-invitation-journey` was created from that SHA; no merge, deployment, production setting change, or database mutation was performed.
+- ROOT CAUSE VERIFIED IN SOURCE: email signup sent verification callbacks to `/login?verified=1` without carrying the `invite` token, and then navigated to `/verify-email` without invitation context. The resend-verification callback also discarded the token. OAuth sign-in already passed a same-origin invitation callback.
+- IMPLEMENTED ON BRANCH: preserve a validated invitation token across signup, email verification, and verification resend; add invitation preview metadata and a bilingual invitation summary with explicit sign-in/sign-up/accept actions; require the database user's email to be verified before acceptance; perform membership insertion and invitation consumption in one database transaction with a row lock; revoke expired pending invitations before reissue to comply with the existing partial unique index; clarify manual link sharing and copy confirmation in the team UI.
+- TEST ADDED: `tests/team-invitations.test.mjs` is referenced by the existing `npm test` script but was absent from the current repository tree; a focused regression contract was added. It has not yet been executed in this session.
+- UNKNOWN/BLOCKED: no local checkout/terminal/browser runner is available through the connected tools, so local typecheck, unit tests, integration tests, Playwright, visual/accessibility checks, and build have not run. CI has not yet been observed for this branch. After acceptance, the accepted tenant ID is saved in sessionStorage and passed to `getMyStudio`; the server validates active membership before loading that tenant snapshot. This selection path remains unverified by CI/browser.
+- RELEASE: no merge or deployment. Production status is unchanged/UNKNOWN.
+- Additional verified schema detail: Better Auth stores verification state in the quoted, case-sensitive `"emailVerified"` column; acceptance queries that column explicitly.
+- EXACT NEXT ACTION: inspect Quality/W9 CI and the final diff for the latest PR #405 head, address only evidence-backed failures, and stop without merge/deployment.
+
+- CI FOLLOW-UP: Quality and W9 on earlier head `26d4e135ef90ad663dd46241e99292cf7ee21187` failed TypeScript checks because `setLastCreated`, `setCopied`, `lastCreated`, and `copied` were referenced without state declarations in `src/routes/studio/team.tsx`. The missing state declarations were added in commit `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. The latest-head Quality/W9 runs are still in progress; this is not yet verified.
+- CURRENT HEAD at this note: `271f1bac1b0f57fd3c303378c3cb0b6c03e20dfa`. Vercel status is pending; no production deployment evidence exists.
+
+
+## 2026-10-20 — PR #405 invitation link and CI follow-up
+
+- VERIFIED: Quality run 39471424785 and W9 Orders QA run 39471425235 failed at TypeScript, before tests/browser checks. Exact error: `src/routes/studio/team.tsx(82,82): TS2322 Role is not assignable to "admin" | "editor"; "owner" is not assignable`.
+- ROOT CAUSE: the invitation result's public role type is the broader `Role` union even though creation accepts only `admin | editor`; UI copied that broad type into the invitation summary state.
+- IMPLEMENTED: invitation summary now uses the already validated selected `inviteRole`, removing the invalid broad-union assignment without widening privileges or casting unsafely.
+- IMPLEMENTED: owner-generated links now open `/invite/:token` directly instead of landing first on `/login?invite=...`. The invitation page now displays four explicit bilingual steps: review details, sign in/create an account using the invited email, verify email and return to the same link if prompted, then explicitly accept.
+- TEST ADDED/UPDATED: invitation contract assertions cover direct invitation links and the bilingual step guidance.
+- SECURITY: no role/tenant authority was moved to the client; acceptance remains server-side and token possession does not accept the invitation.
+- UNKNOWN: latest-head CI and full browser journey have not yet been verified. Do not claim success until Quality and W9 complete on the final head and the independent-browser signup/verification journey is exercised.
+- DEPLOYMENT: no merge, database mutation, or production deployment performed.
+- EXACT NEXT ACTION: inspect current PR #405 head and its latest Quality/W9 checks; repair only any evidenced failures, then stop without merge/deployment.

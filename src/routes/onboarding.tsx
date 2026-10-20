@@ -34,7 +34,7 @@ function Onboarding() {
     setChecking(true);
     setCheckError("");
     try {
-      const studio = await getMyStudio();
+      const studio = await getMyStudio({ data: {} });
       if (!studio.ok) { setCheckError(studio.error); return; }
       if ("tenant" in studio.data && studio.data.tenant) { setHasTenant(true); return; }
       const result = await getSelfServeWorkspaceEligibility();

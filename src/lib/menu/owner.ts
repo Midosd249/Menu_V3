@@ -79,10 +79,12 @@ async function loadSnapshot(sql: Sql, tenantId: string, role: Role): Promise<Stu
 
 export const getMyStudio = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
-  .handler(async ({ context }): Promise<FnResult<StudioSnapshot | { tenant: null }>> => {
+  .validator(z.object({ tenantId: z.string().min(1).max(80).optional() }).default({}))
+  .handler(async ({ context, data }): Promise<FnResult<StudioSnapshot | { tenant: null }>> => {
     try {
       const sql = await getSql();
-      const member = await membershipOf(sql, context.userId);
+      const member = await membershipOf(sql, context.userId, data.tenantId);
+      if (data.tenantId && !member) return { ok: false, code: "forbidden", error: "ليس لديك عضوية نشطة في هذا النشاط" };
       if (!member) return { ok: true, data: { tenant: null } };
       const snapshot = await loadSnapshot(sql, member.tenant_id, member.role);
       return { ok: true, data: snapshot };

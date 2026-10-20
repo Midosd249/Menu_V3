@@ -59,15 +59,18 @@ test("duplicate phone errors do not disclose account ownership", () => {
   assert.doesNotMatch(registration, /select "id" from "user" where "phoneNumber" = \$\{phone\} limit 1/);
 });
 
-test("signup enters email verification before onboarding", () => {
-  const signupBlock = login.match(/const result = await authClient\.signUp\.email\([\s\S]*?await navigate\(\{ to: "\/verify-email"[^;]*\}\)/);
-  assert.ok(signupBlock, "signup should route through verification before onboarding");
-  assert.match(signupBlock[0], /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
-  assert.match(signupBlock[0], /authClient\.sendVerificationEmail/);
-  assert.match(signupBlock[0], /phoneNumber: validationResult\.data\.phone/);
-  assert.doesNotMatch(signupBlock[0], /sessionStorage|savePendingRegistration/);
-  assert.match(signupBlock[0], /await navigate\(\{ to: "\/verify-email", replace: true \}\)/);
-  assert.doesNotMatch(signupBlock[0], /authClient\.signIn\.email\(\{ email, password \}\)/);
+test("signup preserves invitation context through email verification before onboarding", () => {
+  const signupStart = login.indexOf("const result = await authClient.signUp.email(");
+  const signupEnd = login.indexOf("return;", signupStart);
+  assert.ok(signupStart >= 0 && signupEnd > signupStart, "signup should route through verification before onboarding");
+  const signupBlock = login.slice(signupStart, signupEnd);
+  assert.match(signupBlock, /if \(result\.error\) throw new Error\(GENERIC_REGISTRATION_ERROR\[lang\]\)/);
+  assert.match(signupBlock, /authClient\.sendVerificationEmail/);
+  assert.match(signupBlock, /phoneNumber: validationResult\.data\.phone/);
+  assert.match(signupBlock, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
+  assert.match(signupBlock, /callbackURL: "\/login\?verified=1" \+ \(invite \? "&invite=" \+ encodeURIComponent\(invite\) : ""\)/);
+  assert.match(signupBlock, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
+  assert.doesNotMatch(signupBlock, /authClient\.signIn\.email\(\{ email, password \}\)/);
   assert.match(contract, /We couldn't create the account/);
   assert.match(contract, /تعذر إنشاء الحساب/);
 });
@@ -89,9 +92,9 @@ test("successful registration persists phone before verification; workspace hand
   assert.match(login, /validateCustomerRegistrationContract/);
   assert.match(login, /authClient\.signUp\.email/);
   assert.match(login, /phoneNumber: validationResult\.data\.phone/);
-  assert.doesNotMatch(login, /sessionStorage|savePendingRegistration|readPendingRegistrationPhone/);
+  assert.match(login, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
   assert.match(login, /authClient\.sendVerificationEmail/);
-  assert.match(login, /await navigate\(\{ to: "\/verify-email", replace: true \}\)/);
+  assert.match(login, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
   assert.doesNotMatch(login, /saveCustomerRegistrationPhone/);
   assert.match(login, /await navigate\(\{ to: "\/studio", replace: true \}\)/);
   assert.doesNotMatch(login, /createRestaurant\(/);

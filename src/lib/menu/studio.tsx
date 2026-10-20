@@ -8,6 +8,16 @@ import type { FnErr, FnResult, StudioSnapshot } from "./types";
 import { LoadingState, ErrorState } from "@/components/state-panel";
 
 type StudioCtx = { snapshot: StudioSnapshot; reload: () => Promise<void>; setSnapshot: (next: StudioSnapshot) => void };
+
+function selectedStudioTenantId(): string | undefined {
+  if (typeof window === "undefined") return undefined;
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get("tenantId");
+    return fromUrl || window.sessionStorage.getItem("menuun.active-tenant-id") || undefined;
+  } catch {
+    return new URLSearchParams(window.location.search).get("tenantId") || undefined;
+  }
+}
 const Ctx = createContext<StudioCtx | null>(null);
 
 export function useStudio() {
@@ -56,7 +66,12 @@ export function StudioGate({ children }: { children: ReactNode }) {
   const load = useCallback(async () => {
     setState({ status: "loading" });
     try {
-      const result = await getMyStudio();
+      const selectedTenantId = selectedStudioTenantId();
+      let result = await getMyStudio({ data: { tenantId: selectedTenantId } });
+      if (!result.ok && selectedTenantId && result.code === "forbidden") {
+        try { window.sessionStorage.removeItem("menuun.active-tenant-id"); } catch { /* storage may be unavailable */ }
+        result = await getMyStudio({ data: {} });
+      }
       if (!result.ok) { setState({ status: "error", error: result }); return; }
       if (!("tenant" in result.data) || result.data.tenant == null) {
         const adminAccess = await getPlatformAdminAccess();

@@ -63,7 +63,7 @@ export const provisionCustomerWorkspace = createServerFn({ method: "POST" })
         )
       `;
       if (!result[0]) return { ok: false, code: "unavailable", error: "PROVISIONING_UNAVAILABLE" };
-      const studio = await getMyStudio();
+      const studio = await getMyStudio({ data: {} });
       if (!studio.ok) return studio;
       if (!("tenant" in studio.data) || !studio.data.tenant) return { ok: false, code: "unavailable", error: "PROVISIONING_UNAVAILABLE" };
       return { ok: true, data: studio.data as StudioSnapshot };
