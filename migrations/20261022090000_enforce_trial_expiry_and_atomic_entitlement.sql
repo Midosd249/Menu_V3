@@ -2,6 +2,22 @@
 -- Preserve Pro's unlimited-product behavior after the expiry check; this migration changes no rows.
 SET search_path = menu_v3, pg_catalog;
 
+-- Keep the billing-interval audit event valid so the mutation and audit can commit atomically.
+ALTER TABLE menu_v3.platform_admin_subscription_audit
+  DROP CONSTRAINT IF EXISTS platform_admin_subscription_audit_action_check;
+
+ALTER TABLE menu_v3.platform_admin_subscription_audit
+  ADD CONSTRAINT platform_admin_subscription_audit_action_check
+  CHECK (action IN (
+    'plan_changed',
+    'trial_extended',
+    'trial_ended',
+    'billing_interval_changed',
+    'subscription_status_changed',
+    'account_frozen',
+    'account_unfrozen'
+  ));
+
 CREATE OR REPLACE FUNCTION menu_v3.enforce_subscription_entitlement()
 RETURNS trigger
 LANGUAGE plpgsql

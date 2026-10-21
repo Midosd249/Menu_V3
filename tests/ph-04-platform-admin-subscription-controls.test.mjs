@@ -75,6 +75,8 @@ test("expired trials are downgraded before the database checks write entitlement
   assert.match(expiryMigration, /Pro is the only plan with unlimited products/);
   assert.match(expiryMigration, /REVOKE ALL ON FUNCTION menu_v3\.enforce_subscription_entitlement\(\) FROM PUBLIC, anon, authenticated/);
   assert.match(expiryMigration, /GRANT EXECUTE ON FUNCTION menu_v3\.enforce_subscription_entitlement\(\) TO postgres/);
+  assert.match(expiryMigration, /DROP CONSTRAINT IF EXISTS platform_admin_subscription_audit_action_check/);
+  assert.match(expiryMigration, /'billing_interval_changed'/);
 });
 
 test("Platform Owner mutations commit the state change and audit event atomically", () => {
