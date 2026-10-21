@@ -1,15 +1,16 @@
-## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
+## 2026-10-21 — PR #406 merged: invitation context recovery — MERGED / CI VERIFIED
 
-- VERIFIED: `main` is `74a4f6c87f3cdf5b5e0dbbdabf9459a5f3537998` (PR #405 merge). Owner reproduced: new invitee signs up, verifies email, signs in, then lands in self-service onboarding and can create a separate restaurant instead of returning to the inviter's workspace.
-- VERIFIED FROM CODE: `/login` derived the invitation only from the current URL query; the verification callback targeted the generic login page, and onboarding could provision a workspace when the account had no membership. The previous tests checked string wiring, not context recovery after the URL changed.
-- IMPLEMENTED ON PR #406: persist the validated invitation token in browser-local recovery state, return verification callbacks directly to the invitation route, recover context at login, and redirect out of onboarding before workspace provisioning when an invitation is pending. Acceptance remains explicit and server-verified; no role/tenant trust moved client-side.
-- RESEARCH: Better Auth official email docs state that verification redirects to the supplied `callbackURL`. Official reference: https://better-auth.com/docs/concepts/email. Repository evidence shows the application had no durable fallback if the callback URL/query was lost.
-- CI: post-merge Quality run `39480542146` and PR #406 Quality `39484797065` / W9 `39484796977` failed before any steps ran. The PR runs were retried once; both attempts still exposed no steps (`runner_id: 0`) and log retrieval returned `BlobNotFound`. Root cause is UNKNOWN; this is not evidence of an application test failure, and it does not establish test success.
-- UNKNOWN: no local checkout, terminal, or interactive browser is available in this session; actual email-client/browser end-to-end behavior remains unverified until CI and owner-side manual testing.
-- RELEASE: no database schema changes, no Supabase mutation, no merge, and no deployment authorized/performed.
-- EXACT NEXT ACTION: resolve or obtain evidence for the GitHub Actions pre-step failure, then run Quality and W9 on the same final PR head; do not merge or deploy until those checks pass and the owner retests the real email/browser journey.
+- VERIFIED: PR #406 is merged into `main` by squash. Merge commit: `624764b789c7ad2bb228871f8c1fe908bfa28db5`. PR: https://github.com/Midosd249/Menu_V3/pull/406.
+- VERIFIED: GitHub Actions Quality run `39485143639` and W9 Orders QA run `39485143855` both completed successfully on the exact final PR head `76b678f2434aeed06a5377ee14f22dbdddd58456`. These existing successful results were inspected; no checks were rerun for this request.
+- VERIFIED: the Vercel status reported success for the PR head, but this is not evidence of a production deployment. No deployment was requested or performed.
+- IMPLEMENTED: invitation context recovery persists the validated token only as browser navigation state, routes email-verification callbacks back to the invitation, restores context on login/resend, guards onboarding against provisioning a separate workspace while an invitation is pending, and clears terminal/accepted recovery state. Server-side invitation acceptance, verified-email matching, expiry/status validation, atomic membership creation, and tenant authorization remain authoritative.
+- SECURITY / DATA: no database schema change or Supabase mutation was included.
+- UNKNOWN: live email-client and owner-side browser end-to-end journey has not been independently confirmed in this session. Passing CI does not prove that real email links work in every client.
+- QUOTA: no additional GitHub Actions runs were triggered. Do not rerun CI for this merged PR unless a concrete defect or new evidence justifies it.
+- PLAN: PR #406 is closed successfully. Keep the next work item limited to owner-side browser/email end-to-end verification of signup → email verification → login → invitation acceptance → Studio. Do not deploy or begin unrelated work.
 
 ---
+
 ## 2026-10-20 — PR #405 CI failure root-cause repair — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: PR #405 remains open/draft on `fix/complete-team-invitation-journey`; code changes remain scoped to the team-invitation journey and its contracts. No merge, database mutation, or deployment occurred.

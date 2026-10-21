@@ -1,11 +1,13 @@
-## 2026-10-20 — Invitation continuation after verification
+## 2026-10-21 — PR #406 research and verification closeout
 
-- Decision: make invitation continuation resilient to query-string loss without changing server-side authorization or automatically accepting an invitation.
-- Repository evidence: `src/routes/login.tsx` read the invite token only from `window.location.search`; `src/routes/onboarding.tsx` could offer self-service workspace creation when membership lookup returned empty.
-- External primary source: Better Auth's email guide documents `callbackURL` as the post-verification redirect destination: https://better-auth.com/docs/concepts/email.
-- Correction under verification: direct verification callbacks to `/invite/:token`; persist the opaque invitation token as browser-local navigation recovery; clear it when invalid/terminal or accepted; redirect out of onboarding before provisioning when a pending token is available.
-- Security boundary: browser storage is navigation recovery only. Server-side verified-email matching, invitation status/expiry checks, atomic membership creation, and server-side tenant membership validation remain authoritative.
-- Verification status: PR #406 Quality (`39484797065`) and W9 (`39484796977`) failed before executing steps; one retry produced the same no-step result, with `runner_id: 0` and `BlobNotFound` when retrieving logs. Root cause UNKNOWN. No interactive browser/email-client run is available in this session.
+- VERIFIED: PR #406 is merged into `main` by squash. Merge commit: `624764b789c7ad2bb228871f8c1fe908bfa28db5`. PR: https://github.com/Midosd249/Menu_V3/pull/406.
+- VERIFIED: GitHub Actions Quality run `39485143639` and W9 Orders QA run `39485143855` both completed successfully on the exact final PR head `76b678f2434aeed06a5377ee14f22dbdddd58456`. These existing successful results were inspected; no checks were rerun for this request.
+- VERIFIED: the Vercel status reported success for the PR head, but this is not evidence of a production deployment. No deployment was requested or performed.
+- IMPLEMENTED: invitation context recovery persists the validated token only as browser navigation state, routes email-verification callbacks back to the invitation, restores context on login/resend, guards onboarding against provisioning a separate workspace while an invitation is pending, and clears terminal/accepted recovery state. Server-side invitation acceptance, verified-email matching, expiry/status validation, atomic membership creation, and tenant authorization remain authoritative.
+- SECURITY / DATA: no database schema change or Supabase mutation was included.
+- UNKNOWN: live email-client and owner-side browser end-to-end journey has not been independently confirmed in this session. Passing CI does not prove that real email links work in every client.
+- QUOTA: no additional GitHub Actions runs were triggered. Do not rerun CI for this merged PR unless a concrete defect or new evidence justifies it.
+- EXACT NEXT TASK: owner-side browser/email end-to-end verification of signup → email verification → login → invitation acceptance → Studio. Do not start that test automatically or deploy as part of this closure.
 
 ---
 
