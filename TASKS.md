@@ -1,3 +1,16 @@
+## 2026-10-22 — P1/P2 subscription lifecycle remediation — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.
+- VERIFIED from the live PostgreSQL function definition: `menu_v3.enforce_subscription_entitlement()` checks subscription status but does not expire `trialing` rows by `trial_ends_at`; it does preserve unlimited Pro products. The expiry guard must precede the status/limit decision.
+- IMPLEMENTED IN THIS CHANGESET: a corrective migration downgrades expired trials to active Free, clears `trial_ends_at`, resets billing interval to monthly, then evaluates the requested write against Free limits in the same transaction. Missing active Free plan fails closed. Existing trigger definitions and client grants are not broadened.
+- IMPLEMENTED IN THIS CHANGESET: Platform Owner plan, billing interval, trial, subscription-status, and account-freeze mutations now place the state change and audit insert in one `sql.transaction`. Subscription rows are locked before state is read/mutated; an audit failure rolls the mutation back.
+- TESTS ADDED: the existing PH-04 test file (already registered in `npm test`) now checks expiry ordering, downgrade fields, preserved Pro unlimited-product behavior, function grants, and transactional audit wiring. Tests have not yet run in this remote-only session.
+- RESEARCH: current repository code/tests, live Supabase function definition, Supabase documentation search, and official PostgreSQL trigger/row-lock documentation via Exa. No production migration was applied.
+- UNKNOWN/BLOCKED: no local checkout or terminal/browser runner is available in this session. GitHub Actions verification on the final PR SHA is pending. No Supabase mutation, merge, or deployment.
+- EXACT NEXT ACTION: inspect Quality/W9 on the final PR head; fix only failures demonstrated by logs, then review the diff and stop. Do not merge or deploy.
+
+---
+
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: `main` is `74a4f6c87f3cdf5b5e0dbbdabf9459a5f3537998` (PR #405 merge). Owner reproduced: new invitee signs up, verifies email, signs in, then lands in self-service onboarding and can create a separate restaurant instead of returning to the inviter's workspace.

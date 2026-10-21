@@ -123,6 +123,11 @@ async function loadSubscription(sql: Awaited<ReturnType<typeof getSql>>, tenantI
   return rows[0] ? mapSubscription(rows[0]) : null;
 }
 
+async function lockSubscription(sql: Awaited<ReturnType<typeof getSql>>, tenantId: string): Promise<boolean> {
+  const rows = await sql<{ tenant_id: string }>`select tenant_id from tenant_subscriptions where tenant_id = ${tenantId} for update`;
+  return rows.length > 0;
+}
+
 async function writeAudit(
   sql: Awaited<ReturnType<typeof getSql>>,
   input: {
@@ -207,33 +212,38 @@ export const changePlatformSubscriptionPlan = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const before = await loadSubscription(sql, data.tenantId);
-      if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
-      const planRows = await sql<Record<string, unknown>>`
-        select id, code, max_branches, max_products, max_team_members
-        from subscription_plans
-        where code = ${data.planCode} and is_active = true
-        limit 1
-      `;
-      const plan = planRows[0];
-      if (!plan) return { ok: false, code: "invalid", error: "الخطة غير متاحة" };
-      const planCode = String(plan.code);
-      if (before.branchCount > Number(plan.max_branches) || (planCode !== "pro" && before.productCount > Number(plan.max_products)) || before.teamMemberCount > Number(plan.max_team_members)) {
-        return { ok: false, code: "conflict", error: "لا يمكن خفض الخطة لأن الاستخدام الحالي يتجاوز حدودها" };
-      }
-      const isFree = planCode === "free";
-      const nextStatus = isFree ? "active" : (before.status === "trialing" ? "trialing" : "active");
-      const nextTrial = isFree ? null : before.trialEndsAt;
-      const nextInterval = isFree ? "monthly" : before.billingInterval;
-      await sql`
-        update tenant_subscriptions
-        set plan_id = ${String(plan.id)}, status = ${nextStatus}, trial_ends_at = ${nextTrial}, billing_interval = ${nextInterval}, updated_at = now()
-        where tenant_id = ${data.tenantId}
-      `;
-      const after = await loadSubscription(sql, data.tenantId);
-      if (!after) return { ok: false, code: "unavailable", error: "تعذر قراءة الحالة الجديدة" };
-      await writeAudit(sql, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "plan_changed", reason: data.reason, beforeState: before, afterState: after });
-      return { ok: true, data: after };
+      return await sql.transaction(async (tx) => {
+        if (!(await lockSubscription(tx, data.tenantId))) {
+          return { ok: false, code: "unavailable", error: "تعذر العثور على سجل الاشتراك" };
+        }
+        const before = await loadSubscription(tx, data.tenantId);
+        if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
+        const planRows = await tx<Record<string, unknown>>`
+          select id, code, max_branches, max_products, max_team_members
+          from subscription_plans
+          where code = ${data.planCode} and is_active = true
+          limit 1
+        `;
+        const plan = planRows[0];
+        if (!plan) return { ok: false, code: "invalid", error: "الخطة غير متاحة" };
+        const planCode = String(plan.code);
+        if (before.branchCount > Number(plan.max_branches) || (planCode !== "pro" && before.productCount > Number(plan.max_products)) || before.teamMemberCount > Number(plan.max_team_members)) {
+          return { ok: false, code: "conflict", error: "لا يمكن خفض الخطة لأن الاستخدام الحالي يتجاوز حدودها" };
+        }
+        const isFree = planCode === "free";
+        const nextStatus = isFree ? "active" : (before.status === "trialing" ? "trialing" : "active");
+        const nextTrial = isFree ? null : before.trialEndsAt;
+        const nextInterval = isFree ? "monthly" : before.billingInterval;
+        await tx`
+          update tenant_subscriptions
+          set plan_id = ${String(plan.id)}, status = ${nextStatus}, trial_ends_at = ${nextTrial}, billing_interval = ${nextInterval}, updated_at = now()
+          where tenant_id = ${data.tenantId}
+        `;
+        const after = await loadSubscription(tx, data.tenantId);
+        if (!after) throw new Error("SUBSCRIPTION_STATE_UNAVAILABLE");
+        await writeAudit(tx, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "plan_changed", reason: data.reason, beforeState: before, afterState: after });
+        return { ok: true, data: after };
+      });
     } catch (error) {
       console.error("changePlatformSubscriptionPlan failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تغيير الخطة" };
@@ -248,14 +258,21 @@ export const setPlatformBillingInterval = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const before = await loadSubscription(sql, data.tenantId);
-      if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
-      if (before.planCode === "free" && data.billingInterval !== "monthly") return { ok: false, code: "conflict", error: "الخطة المجانية لا تدعم الفوترة السنوية" };
-      await sql`update tenant_subscriptions set billing_interval = ${data.billingInterval}, updated_at = now() where tenant_id = ${data.tenantId}`;
-      const after = await loadSubscription(sql, data.tenantId);
-      if (!after) return { ok: false, code: "unavailable", error: "تعذر قراءة الحالة الجديدة" };
-      await writeAudit(sql, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "billing_interval_changed", reason: data.reason, beforeState: before, afterState: after });
-      return { ok: true, data: after };
+      return await sql.transaction(async (tx) => {
+        if (!(await lockSubscription(tx, data.tenantId))) {
+          return { ok: false, code: "unavailable", error: "تعذر العثور على سجل الاشتراك" };
+        }
+        const before = await loadSubscription(tx, data.tenantId);
+        if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
+        if (before.planCode === "free" && data.billingInterval !== "monthly") {
+          return { ok: false, code: "conflict", error: "الخطة المجانية لا تدعم الفوترة السنوية" };
+        }
+        await tx`update tenant_subscriptions set billing_interval = ${data.billingInterval}, updated_at = now() where tenant_id = ${data.tenantId}`;
+        const after = await loadSubscription(tx, data.tenantId);
+        if (!after) throw new Error("SUBSCRIPTION_STATE_UNAVAILABLE");
+        await writeAudit(tx, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "billing_interval_changed", reason: data.reason, beforeState: before, afterState: after });
+        return { ok: true, data: after };
+      });
     } catch (error) {
       console.error("setPlatformBillingInterval failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تحديث دورة الفوترة" };
@@ -270,21 +287,26 @@ export const managePlatformTrial = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const before = await loadSubscription(sql, data.tenantId);
-      if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
-      if (before.planCode === "free") return { ok: false, code: "conflict", error: "الخطة المجانية لا تحتوي على تجربة" };
-      if (data.action === "extend") {
-        if (!data.trialEndsAt) return { ok: false, code: "invalid", error: "تاريخ نهاية التجربة مطلوب" };
-        const end = new Date(data.trialEndsAt);
-        if (Number.isNaN(end.getTime()) || end.getTime() <= Date.now()) return { ok: false, code: "invalid", error: "تاريخ نهاية التجربة يجب أن يكون في المستقبل" };
-        await sql`update tenant_subscriptions set status = 'trialing', trial_ends_at = ${end.toISOString()}, updated_at = now() where tenant_id = ${data.tenantId}`;
-      } else {
-        await sql`update tenant_subscriptions set status = 'past_due', trial_ends_at = now(), updated_at = now() where tenant_id = ${data.tenantId}`;
-      }
-      const after = await loadSubscription(sql, data.tenantId);
-      if (!after) return { ok: false, code: "unavailable", error: "تعذر قراءة الحالة الجديدة" };
-      await writeAudit(sql, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: data.action === "extend" ? "trial_extended" : "trial_ended", reason: data.reason, beforeState: before, afterState: after });
-      return { ok: true, data: after };
+      return await sql.transaction(async (tx) => {
+        if (!(await lockSubscription(tx, data.tenantId))) {
+          return { ok: false, code: "unavailable", error: "تعذر العثور على سجل الاشتراك" };
+        }
+        const before = await loadSubscription(tx, data.tenantId);
+        if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
+        if (before.planCode === "free") return { ok: false, code: "conflict", error: "الخطة المجانية لا تحتوي على تجربة" };
+        if (data.action === "extend") {
+          if (!data.trialEndsAt) return { ok: false, code: "invalid", error: "تاريخ نهاية التجربة مطلوب" };
+          const end = new Date(data.trialEndsAt);
+          if (Number.isNaN(end.getTime()) || end.getTime() <= Date.now()) return { ok: false, code: "invalid", error: "تاريخ نهاية التجربة يجب أن يكون في المستقبل" };
+          await tx`update tenant_subscriptions set status = 'trialing', trial_ends_at = ${end.toISOString()}, updated_at = now() where tenant_id = ${data.tenantId}`;
+        } else {
+          await tx`update tenant_subscriptions set status = 'past_due', trial_ends_at = now(), updated_at = now() where tenant_id = ${data.tenantId}`;
+        }
+        const after = await loadSubscription(tx, data.tenantId);
+        if (!after) throw new Error("SUBSCRIPTION_STATE_UNAVAILABLE");
+        await writeAudit(tx, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: data.action === "extend" ? "trial_extended" : "trial_ended", reason: data.reason, beforeState: before, afterState: after });
+        return { ok: true, data: after };
+      });
     } catch (error) {
       console.error("managePlatformTrial failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تحديث التجربة" };
@@ -299,18 +321,23 @@ export const setPlatformSubscriptionStatus = createServerFn({ method: "POST" })
     if (!permission.ok) return permission;
     try {
       const sql = await getSql();
-      const before = await loadSubscription(sql, data.tenantId);
-      if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
-      if (data.status === "trialing") {
-        if (before.planCode === "free" || !before.trialEndsAt || new Date(before.trialEndsAt).getTime() <= Date.now()) {
-          return { ok: false, code: "invalid", error: "لا يمكن تفعيل حالة التجربة لهذه الخطة أو بهذا التاريخ" };
+      return await sql.transaction(async (tx) => {
+        if (!(await lockSubscription(tx, data.tenantId))) {
+          return { ok: false, code: "unavailable", error: "تعذر العثور على سجل الاشتراك" };
         }
-      }
-      await sql`update tenant_subscriptions set status = ${data.status}, updated_at = now() where tenant_id = ${data.tenantId}`;
-      const after = await loadSubscription(sql, data.tenantId);
-      if (!after) return { ok: false, code: "unavailable", error: "تعذر قراءة الحالة الجديدة" };
-      await writeAudit(sql, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "subscription_status_changed", reason: data.reason, beforeState: before, afterState: after });
-      return { ok: true, data: after };
+        const before = await loadSubscription(tx, data.tenantId);
+        if (!before) return { ok: false, code: "not_found", error: "مساحة العمل غير موجودة" };
+        if (data.status === "trialing") {
+          if (before.planCode === "free" || !before.trialEndsAt || new Date(before.trialEndsAt).getTime() <= Date.now()) {
+            return { ok: false, code: "invalid", error: "لا يمكن تفعيل حالة التجربة لهذه الخطة أو بهذا التاريخ" };
+          }
+        }
+        await tx`update tenant_subscriptions set status = ${data.status}, updated_at = now() where tenant_id = ${data.tenantId}`;
+        const after = await loadSubscription(tx, data.tenantId);
+        if (!after) throw new Error("SUBSCRIPTION_STATE_UNAVAILABLE");
+        await writeAudit(tx, { adminUserId: context.userId, targetUserId: after.ownerUserId, tenantId: data.tenantId, action: "subscription_status_changed", reason: data.reason, beforeState: before, afterState: after });
+        return { ok: true, data: after };
+      });
     } catch (error) {
       console.error("setPlatformSubscriptionStatus failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تحديث حالة الاشتراك" };
@@ -326,14 +353,23 @@ export const setPlatformAccountFrozen = createServerFn({ method: "POST" })
     if (data.userId === context.userId) return { ok: false, code: "forbidden", error: "لا يمكن لمالك المنصة تجميد حسابه الحالي" };
     try {
       const sql = await getSql();
-      const target = await sql<{ is_admin: boolean; banned: boolean }>`select menu_v3.is_platform_admin(${data.userId}) as is_admin, coalesce("banned", false) as banned from "user" where id = ${data.userId} limit 1`;
-      if (!target[0]) return { ok: false, code: "not_found", error: "الحساب غير موجود" };
-      if (target[0].is_admin) return { ok: false, code: "forbidden", error: "لا يمكن تجميد حساب مالك منصة آخر" };
-      await sql`update "user" set "banned" = ${data.frozen}, "banReason" = ${data.frozen ? (data.reason || "Platform Owner action") : null}, "banExpires" = null, "updatedAt" = now() where id = ${data.userId}`;
-      if (data.frozen) await sql`delete from "session" where "userId" = ${data.userId}`;
-      const after = await sql<{ banned: boolean }>`select coalesce("banned", false) as banned from "user" where id = ${data.userId}`;
-      await writeAudit(sql, { adminUserId: context.userId, targetUserId: data.userId, action: data.frozen ? "account_frozen" : "account_unfrozen", reason: data.reason, beforeState: { frozen: target[0].banned }, afterState: { frozen: Boolean(after[0]?.banned) } });
-      return { ok: true, data: { userId: data.userId, frozen: Boolean(after[0]?.banned) } };
+      return await sql.transaction(async (tx) => {
+        const target = await tx<{ is_admin: boolean; banned: boolean }>`
+          select menu_v3.is_platform_admin(u.id) as is_admin, coalesce(u."banned", false) as banned
+          from "user" u
+          where u.id = ${data.userId}
+          limit 1
+          for update of u
+        `;
+        if (!target[0]) return { ok: false, code: "not_found", error: "الحساب غير موجود" };
+        if (target[0].is_admin) return { ok: false, code: "forbidden", error: "لا يمكن تجميد حساب مالك منصة آخر" };
+        await tx`update "user" set "banned" = ${data.frozen}, "banReason" = ${data.frozen ? (data.reason || "Platform Owner action") : null}, "banExpires" = null, "updatedAt" = now() where id = ${data.userId}`;
+        if (data.frozen) await tx`delete from "session" where "userId" = ${data.userId}`;
+        const after = await tx<{ banned: boolean }>`select coalesce("banned", false) as banned from "user" where id = ${data.userId}`;
+        if (!after[0]) throw new Error("ACCOUNT_STATE_UNAVAILABLE");
+        await writeAudit(tx, { adminUserId: context.userId, targetUserId: data.userId, action: data.frozen ? "account_frozen" : "account_unfrozen", reason: data.reason, beforeState: { frozen: target[0].banned }, afterState: { frozen: Boolean(after[0].banned) } });
+        return { ok: true, data: { userId: data.userId, frozen: Boolean(after[0].banned) } };
+      });
     } catch (error) {
       console.error("setPlatformAccountFrozen failed", error);
       return { ok: false, code: "unavailable", error: "تعذر تحديث حالة الحساب" };
