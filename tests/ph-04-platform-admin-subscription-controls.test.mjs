@@ -88,9 +88,9 @@ test("Platform Owner mutations commit the state change and audit event atomicall
     "setPlatformSubscriptionStatus",
     "setPlatformAccountFrozen",
   ]) {
-    const start = server.indexOf(\`export const \${fn} =\`);
-    assert.ok(start >= 0, \`missing \${fn}\`);
-    const next = server.indexOf("\\nexport const ", start + 1);
+    const start = server.indexOf("export const " + fn + " =");
+    assert.ok(start >= 0, "missing " + fn);
+    const next = server.indexOf("\nexport const ", start + 1);
     const body = server.slice(start, next < 0 ? server.length : next);
     assert.match(body, /sql\.transaction\(async \(tx\) =>/);
     assert.match(body, /writeAudit\(tx,/);
