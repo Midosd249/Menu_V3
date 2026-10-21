@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { signOut } from "@/lib/auth/client";
+import { getPendingInvitationToken } from "@/lib/auth/invitation-context";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getMyStudio } from "@/lib/menu/owner";
 import { saveCustomerRegistrationPhone } from "@/lib/auth/customer-registration";
@@ -33,6 +34,11 @@ function Onboarding() {
     if (!user) { setChecking(false); return; }
     setChecking(true);
     setCheckError("");
+    const pendingInvitation = getPendingInvitationToken();
+    if (pendingInvitation) {
+      window.location.replace(`/invite/${encodeURIComponent(pendingInvitation)}`);
+      return;
+    }
     try {
       const studio = await getMyStudio({ data: {} });
       if (!studio.ok) { setCheckError(studio.error); return; }

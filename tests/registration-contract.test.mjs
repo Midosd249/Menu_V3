@@ -68,7 +68,7 @@ test("signup preserves invitation context through email verification before onbo
   assert.match(signupBlock, /authClient\.sendVerificationEmail/);
   assert.match(signupBlock, /phoneNumber: validationResult\.data\.phone/);
   assert.match(signupBlock, /sessionStorage\.setItem\("menuun\.pending-registration-email", email\)/);
-  assert.match(signupBlock, /callbackURL: "\/login\?verified=1" \+ \(invite \? "&invite=" \+ encodeURIComponent\(invite\) : ""\)/);
+  assert.match(signupBlock, /callbackURL: invite \? "\/invite\/" \+ encodeURIComponent\(invite\) : "\/login\?verified=1"/);
   assert.match(signupBlock, /window\.location\.assign\("\/verify-email" \+ \(invite \? "\?invite=" \+ encodeURIComponent\(invite\) : ""\)\)/);
   assert.doesNotMatch(signupBlock, /authClient\.signIn\.email\(\{ email, password \}\)/);
   assert.match(contract, /We couldn't create the account/);

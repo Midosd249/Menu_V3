@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
+import { getPendingInvitationToken } from "@/lib/auth/invitation-context";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { validateCustomerRegistrationContract } from "@/lib/auth/customer-registration";
 import { customerRegistrationSchema, GENERIC_REGISTRATION_ERROR } from "@/lib/auth/customer-registration-contract";
@@ -15,7 +16,6 @@ import { MarketingFooter } from "@/components/marketing-footer";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
-function invitationToken() { if (typeof window === "undefined") return ""; const token = new URLSearchParams(window.location.search).get("invite")?.trim() || ""; return token.length >= 40 && token.length <= 200 ? token : ""; }
 function initialMode(): "in" | "up" { if (typeof window === "undefined") return "in"; return new URLSearchParams(window.location.search).get("mode") === "signup" ? "up" : "in"; }
 function verifiedNotice(): boolean { if (typeof window === "undefined") return false; return new URLSearchParams(window.location.search).get("verified") === "1"; }
 function Login() {
@@ -27,7 +27,7 @@ function Login() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [verified, setVerified] = useState(verifiedNotice);
-  const invite = invitationToken();
+  const invite = getPendingInvitationToken();
 
   if (isPending) return <LoadingState label="جارٍ التحقق…" />;
   if (user && invite) return <Navigate to="/invite/$token" params={{ token: invite }} />;
@@ -85,7 +85,7 @@ function Login() {
         try { window.sessionStorage.setItem("menuun.pending-registration-email", email); } catch { /* storage may be unavailable */ }
         const verification = await authClient.sendVerificationEmail({
           email,
-          callbackURL: "/login?verified=1" + (invite ? "&invite=" + encodeURIComponent(invite) : ""),
+          callbackURL: invite ? "/invite/" + encodeURIComponent(invite) : "/login?verified=1",
         });
         if (verification.error) {
           throw new Error(lang === "ar" ? "تم إنشاء الحساب، لكن تعذر إرسال رسالة التحقق. افتح صفحة التحقق لإعادة الإرسال." : "Your account was created, but the verification email could not be sent. Open the verification page to resend it.");

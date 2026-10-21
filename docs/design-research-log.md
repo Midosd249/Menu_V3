@@ -1,3 +1,14 @@
+## 2026-10-20 — Invitation continuation after verification
+
+- Decision: make invitation continuation resilient to query-string loss without changing server-side authorization or automatically accepting an invitation.
+- Repository evidence: `src/routes/login.tsx` read the invite token only from `window.location.search`; `src/routes/onboarding.tsx` could offer self-service workspace creation when membership lookup returned empty.
+- External primary source: Better Auth's email guide documents `callbackURL` as the post-verification redirect destination: https://better-auth.com/docs/concepts/email.
+- Correction under verification: direct verification callbacks to `/invite/:token`; persist the opaque invitation token as browser-local navigation recovery; clear it when invalid/terminal or accepted; redirect out of onboarding before provisioning when a pending token is available.
+- Security boundary: browser storage is navigation recovery only. Server-side verified-email matching, invitation status/expiry checks, atomic membership creation, and server-side tenant membership validation remain authoritative.
+- Verification status: PR #406 Quality (`39484797065`) and W9 (`39484796977`) failed before executing steps; one retry produced the same no-step result, with `runner_id: 0` and `BlobNotFound` when retrieving logs. Root cause UNKNOWN. No interactive browser/email-client run is available in this session.
+
+---
+
 ## 2026-10-04 — Official Nafas Studio media/data sync
 
 - Category: repository + Supabase source verification + primary storage research

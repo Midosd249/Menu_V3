@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { signOut } from "@/lib/auth/client";
+import { clearPendingInvitationToken, persistPendingInvitationToken } from "@/lib/auth/invitation-context";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/state-panel";
 import { useLang } from "@/lib/lang";
@@ -21,13 +22,19 @@ function InvitePage() {
 
   useEffect(() => {
     let active = true;
+    persistPendingInvitationToken(token);
     setPreviewLoading(true);
     setPreviewError("");
     setPreview(null);
     void getTeamInvitationPreview({ data: { token } }).then((result) => {
       if (!active) return;
-      if (result.ok) setPreview(result.data.invitation);
-      else setPreviewError(lang === "ar" ? result.error : result.code === "not_found" ? "This invitation link is invalid." : "We could not load this invitation. Please try again.");
+      if (result.ok) {
+        setPreview(result.data.invitation);
+        if (result.data.invitation.status !== "pending") clearPendingInvitationToken(token);
+      } else {
+        if (result.code !== "unavailable") clearPendingInvitationToken(token);
+        setPreviewError(lang === "ar" ? result.error : result.code === "not_found" ? "This invitation link is invalid." : "We could not load this invitation. Please try again.");
+      }
     }).catch(() => {
       if (active) setPreviewError(lang === "ar" ? "تعذر الاتصال بالخادم. حاول مرة أخرى." : "Could not reach the server. Please try again.");
     }).finally(() => {
@@ -45,6 +52,7 @@ function InvitePage() {
     try {
       const result = await acceptTeamInvitation({ data: { token } });
       if (result.ok) {
+        clearPendingInvitationToken(token);
         try { window.sessionStorage.setItem("menuun.active-tenant-id", result.data.tenantId); } catch { /* URL fallback preserves the selected tenant for this navigation */ }
         window.location.assign("/studio?tenantId=" + encodeURIComponent(result.data.tenantId));
         return;
