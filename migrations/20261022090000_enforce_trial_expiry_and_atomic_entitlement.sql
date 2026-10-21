@@ -50,8 +50,7 @@ BEGIN
   -- Expired trials are downgraded before checking the write against Free limits.
   -- An admin extension must expire once its replacement end date passes too.
   IF subscription_status = 'trialing'
-     AND trial_ends_at IS NOT NULL
-     AND trial_ends_at <= now() THEN
+     AND (trial_ends_at IS NULL OR trial_ends_at <= now()) THEN
     SELECT id
       INTO free_plan_id
     FROM menu_v3.subscription_plans

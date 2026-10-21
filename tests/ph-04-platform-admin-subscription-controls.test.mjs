@@ -71,6 +71,7 @@ test("expired trials are downgraded before the database checks write entitlement
   const statusGuard = expiryMigration.indexOf("IF subscription_status IS NULL OR subscription_status NOT IN ('trialing', 'active')");
   assert.ok(expiryGuard >= 0 && statusGuard > expiryGuard, "trial expiry must run before the generic status check");
   assert.match(expiryMigration, /trial_ends_at <= now\(\)/);
+  assert.ok(expiryMigration.includes("trial_ends_at IS NULL OR trial_ends_at <= now()"));
   assert.match(expiryMigration, /SET plan_id = free_plan_id,[\s\S]*status = 'active',[\s\S]*trial_ends_at = NULL,[\s\S]*billing_interval = 'monthly'/);
   assert.match(expiryMigration, /Pro is the only plan with unlimited products/);
   assert.match(expiryMigration, /REVOKE ALL ON FUNCTION menu_v3\.enforce_subscription_entitlement\(\) FROM PUBLIC, anon, authenticated/);

@@ -2,6 +2,7 @@
 
 - VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.
 - VERIFIED from the live PostgreSQL function definition: `menu_v3.enforce_subscription_entitlement()` checks subscription status but does not expire `trialing` rows by `trial_ends_at`; it does preserve unlimited Pro products. The expiry guard must precede the status/limit decision.
+- IMPLEMENTED: application-side lazy expiry no longer suppresses reversion because of prior audit history; the database guard also treats a `trialing` row with a missing end timestamp as expired.
 - IMPLEMENTED IN THIS CHANGESET: a corrective migration downgrades expired trials to active Free, clears `trial_ends_at`, resets billing interval to monthly, then evaluates the requested write against Free limits in the same transaction. Missing active Free plan fails closed. Existing trigger definitions and client grants are not broadened.
 - VERIFIED from the live audit-table constraint: `billing_interval_changed` was missing from the allowed action list even though the application emits that event. The corrective migration adds it before the atomic billing-interval path can rely on audit success.
 - IMPLEMENTED IN THIS CHANGESET: Platform Owner plan, billing interval, trial, subscription-status, and account-freeze mutations now place the state change and audit insert in one `sql.transaction`. Subscription rows are locked before state is read/mutated; an audit failure rolls the mutation back.

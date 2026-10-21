@@ -29,13 +29,13 @@ test("paid-plan trial trigger remains UPDATE-only and cannot double-trigger on i
   assert.doesNotMatch(ph06Migration, /BEFORE INSERT.*trg_ph06_paid_plan_trial/s);
 });
 
-test("expired trial lazy enforcement reverts only untouched trialing subscriptions", () => {
+test("expired trial lazy enforcement reverts trials after any prior extension has expired", () => {
   assert.match(subscriptions, /status = 'trialing'/);
   assert.match(subscriptions, /trial_ends_at <= now\(\)/);
   assert.match(subscriptions, /set plan_id =/);
   assert.match(subscriptions, /status = 'active'/);
   assert.match(subscriptions, /trial_ends_at = NULL/);
-  assert.match(subscriptions, /action in \('trial_extended', 'trial_ended', 'plan_changed'\)/);
+  assert.doesNotMatch(subscriptions, /not exists\s*\(\s*select 1\s*from menu_v3\.platform_admin_subscription_audit/);
 });
 
 test("subscription reads expose whether this request performed an automatic expiry reversion", () => {
