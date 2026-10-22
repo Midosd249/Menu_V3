@@ -1,16 +1,17 @@
-## 2026-10-22 — P1/P2 subscription lifecycle remediation — IMPLEMENTATION_IN_PROGRESS
+## 2026-10-22 — PR #407 merged: P1/P2 subscription lifecycle remediation — MERGED / PRE-MERGE CI VERIFIED
 
-- VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.
-- VERIFIED from the live PostgreSQL function definition: `menu_v3.enforce_subscription_entitlement()` checks subscription status but does not expire `trialing` rows by `trial_ends_at`; it does preserve unlimited Pro products. The expiry guard must precede the status/limit decision.
-- IMPLEMENTED: application-side lazy expiry no longer suppresses reversion because of prior audit history; the database guard also treats a `trialing` row with a missing end timestamp as expired.
-- IMPLEMENTED IN THIS CHANGESET: a corrective migration downgrades expired trials to active Free, clears `trial_ends_at`, resets billing interval to monthly, then evaluates the requested write against Free limits in the same transaction. Missing active Free plan fails closed. Existing trigger definitions and client grants are not broadened.
-- VERIFIED from the live audit-table constraint: `billing_interval_changed` was missing from the allowed action list even though the application emits that event. The corrective migration adds it before the atomic billing-interval path can rely on audit success.
-- IMPLEMENTED IN THIS CHANGESET: Platform Owner plan, billing interval, trial, subscription-status, and account-freeze mutations now place the state change and audit insert in one `sql.transaction`. Subscription rows are locked before state is read/mutated; an audit failure rolls the mutation back.
-- TESTS ADDED: the existing PH-04 test file (already registered in `npm test`) now checks expiry ordering, downgrade fields, preserved Pro unlimited-product behavior, function grants, and transactional audit wiring. Tests have not yet run in this remote-only session.
-- RESEARCH: current repository code/tests, live Supabase function definition, Supabase documentation search, and official PostgreSQL trigger/row-lock documentation via Exa. No production migration was applied.
-- UNKNOWN/BLOCKED: no local checkout or terminal/browser runner is available in this session. GitHub Actions verification on the final PR SHA is pending. No Supabase mutation, merge, or deployment.
-- EXACT NEXT ACTION: inspect Quality/W9 on the final PR head; fix only failures demonstrated by logs, then review the diff and stop. Do not merge or deploy.
+- VERIFIED: PR #407 `fix(subscriptions): expire trials and atomically audit admin changes` was squash-merged into `main`.
+- VERIFIED: merge commit SHA is `9c575927be4d3ef08fa37dca0e0d89ce8e9beae9`; PR head tested was `c0df154b1c1110d79e4c3f7002a0bc2f3a2a081e`.
+- VERIFIED: final-head GitHub Actions Quality run `39694773698` completed successfully; W9 Orders QA run `39694773655` completed successfully. Vercel status on the PR head was `success`, but this is not proof of a production deployment.
+- MERGED P1: trial-expiry enforcement now treats expired `trialing` subscriptions, including missing expiry timestamps, as expired before checking the requested write against Free limits. It switches to active Free, clears `trial_ends_at`, resets billing interval to monthly, and fails closed if no active Free plan exists. Application-side lazy expiry no longer lets prior audit history suppress expiry. Pro's unlimited-product behavior remains for non-expired Pro subscriptions.
+- MERGED P2: Platform Owner subscription plan, billing interval, trial, status, and account-freeze mutations and their audit records are wrapped in a single `sql.transaction`; subscription/user rows are locked before mutation. Audit failure rolls back the associated change. The audit constraint now allows `billing_interval_changed`.
+- FILES: `migrations/20261022090000_enforce_trial_expiry_and_atomic_entitlement.sql`, `src/lib/menu/platform-subscriptions.ts`, `src/lib/menu/subscriptions.ts`, `tests/ph-04-platform-admin-subscription-controls.test.mjs`, `tests/self-serve-trial.test.mjs`, plus this continuity record in `PROJECT_STATE.md`, `PLAN.md`, and `TASKS.md`.
+- LIVE DATA NOTE: the read-only Supabase snapshot taken before merge showed five expired subscriptions still marked `trialing`, one unexpired trial, and no `trialing` rows missing an expiry date. This was a snapshot, not a post-merge recheck. No production migration or SQL mutation was executed as part of this task.
+- LIMITATIONS: local tests/typecheck/lint/build and live migration execution were not run in this connected session because repository cloning failed on DNS resolution. GitHub Actions final-head Quality and W9 passed, but the database migration still needs controlled application and verification under the release process. Production deployment is not established.
+- RELEASE STATUS: `PUSHED` / merged to `main`; `DEPLOYED` is NOT VERIFIED. Merge does not by itself prove that the database migration or application release is live.
+- EXACT NEXT ACTION: use the controlled release workflow to review and apply the new Supabase migration in the appropriate target environment, then verify trial expiry and audit behavior with read-only queries and owner-side functional tests. Do not perform production DDL or deployment without the separate release authorization.
 
+---
 ---
 
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
