@@ -38,14 +38,7 @@ export async function revertExpiredTrialIfEligible(sql: Sql, tenantId: string): 
       and ts.status = 'trialing'
       and ts.trial_ends_at is not null
       and ts.trial_ends_at <= now()
-      and not exists (
-        select 1
-        from menu_v3.platform_admin_subscription_audit audit
-        where audit.tenant_id = ts.tenant_id
-          and audit.action in ('trial_extended', 'trial_ended', 'plan_changed')
-          and audit.after_state ->> 'status' = 'trialing'
-          and (audit.after_state ->> 'trialEndsAt')::timestamptz = ts.trial_ends_at
-      )
+
     returning ts.tenant_id
   `;
   return reverted.length > 0;
