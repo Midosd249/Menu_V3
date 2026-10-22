@@ -71,7 +71,7 @@ BEGIN
         updated_at = now()
     WHERE tenant_id = NEW.tenant_id
       AND status = 'trialing'
-      AND trial_ends_at <= now();
+      AND (trial_ends_at IS NULL OR trial_ends_at <= now());
 
     -- Reload authoritative Free limits while retaining the row lock.
     SELECT ts.status,
