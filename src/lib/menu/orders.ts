@@ -18,7 +18,7 @@ export type { OrderStatus };
 
 export type SelectedOrderOption = { type: "variant" | "modifier" | "note"; id: string; groupId?: string; nameAr: string; nameEn: string; priceDelta: number };
 export type OrderItemDetail = { id: string; productId: string; productNameAr: string; productNameEn: string; quantity: number; unitPrice: number; lineTotal: number; selectedOptions: SelectedOrderOption[] };
-export type AdminOrder = { id: string; orderNumber: number; tenantId: string; branchId: string | null; restaurantName: string; branchName: string; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; preparationDurationMinutes: number | null; estimatedReadyAt: string | null; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
+export type AdminOrder = { id: string; orderNumber: number; tenantId: string; branchId: string | null; restaurantName: string; branchName: string; tableLabel: string | null; status: OrderStatus; source: string; customerName: string; customerPhone: string; customerEmail: string; notes: string; currency: string; subtotal: number; total: number; preparationDurationMinutes: number | null; estimatedReadyAt: string | null; itemCount: number; items: OrderItemDetail[]; createdAt: string; updatedAt: string };
 export type OrdersDashboard = { total: number; newCount: number; activeCount: number; completedCount: number; cancelledCount: number; orders: AdminOrder[] };
 
 export { PREPARATION_DURATION_PRESETS, CUSTOM_PREPARATION_DURATION_MINUTES, validatePreparationDurationMinutes, type PreparationDurationPreset } from "./order-preparation";
@@ -80,7 +80,7 @@ function mapItem(row: Record<string, unknown>): OrderItemDetail {
 
 function mapOrder(row: Record<string, unknown>): AdminOrder {
   const rawItems = Array.isArray(row.items) ? row.items : [];
-  return { id: String(row.id), orderNumber: Number(row.order_number ?? 0), tenantId: String(row.tenant_id), branchId: row.branch_id == null ? null : String(row.branch_id), restaurantName: String(row.restaurant_name ?? ""), branchName: String(row.branch_name ?? ""), status: row.status as OrderStatus, source: String(row.source ?? "web"), customerName: String(row.customer_name ?? ""), customerPhone: String(row.customer_phone ?? ""), customerEmail: String(row.customer_email ?? ""), notes: String(row.notes ?? ""), currency: String(row.currency ?? "SAR"), subtotal: Number(row.subtotal ?? 0), total: Number(row.total ?? 0), preparationDurationMinutes: row.preparation_duration_minutes == null ? null : Number(row.preparation_duration_minutes), estimatedReadyAt: row.estimated_ready_at == null ? null : new Date(String(row.estimated_ready_at)).toISOString(), itemCount: Number(row.item_count ?? rawItems.length), items: rawItems.map((item) => mapItem(item as Record<string, unknown>)), createdAt: new Date(String(row.created_at)).toISOString(), updatedAt: new Date(String(row.updated_at ?? row.created_at)).toISOString() };
+  return { id: String(row.id), orderNumber: Number(row.order_number ?? 0), tenantId: String(row.tenant_id), branchId: row.branch_id == null ? null : String(row.branch_id), restaurantName: String(row.restaurant_name ?? ""), branchName: String(row.branch_name ?? ""), tableLabel: row.table_label == null ? null : String(row.table_label), status: row.status as OrderStatus, source: String(row.source ?? "web"), customerName: String(row.customer_name ?? ""), customerPhone: String(row.customer_phone ?? ""), customerEmail: String(row.customer_email ?? ""), notes: String(row.notes ?? ""), currency: String(row.currency ?? "SAR"), subtotal: Number(row.subtotal ?? 0), total: Number(row.total ?? 0), preparationDurationMinutes: row.preparation_duration_minutes == null ? null : Number(row.preparation_duration_minutes), estimatedReadyAt: row.estimated_ready_at == null ? null : new Date(String(row.estimated_ready_at)).toISOString(), itemCount: Number(row.item_count ?? rawItems.length), items: rawItems.map((item) => mapItem(item as Record<string, unknown>)), createdAt: new Date(String(row.created_at)).toISOString(), updatedAt: new Date(String(row.updated_at ?? row.created_at)).toISOString() };
 }
 
 export const getOrdersDashboard = createServerFn({ method: "GET" })
@@ -95,11 +95,12 @@ export const getOrdersDashboard = createServerFn({ method: "GET" })
       const rows = await sql<Record<string, unknown>>`
         with scope as (select unnest(${tenantIds}::text[]) as tenant_id),
         filtered as (
-          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name
+          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name, rt.label as table_label
           from orders o
           join scope s on s.tenant_id = o.tenant_id
           join tenants t on t.id = o.tenant_id
           left join branches b on b.id = o.branch_id
+          left join restaurant_tables rt on rt.id = o.table_id and rt.tenant_id = o.tenant_id and rt.branch_id = o.branch_id
           where o.archived_at is null
             and (${data.status ?? null}::text is null or o.status = ${data.status ?? null})
             and (${q}::text is null or lower(t.name_ar) like ${q} or lower(coalesce(t.name_en,'')) like ${q} or lower(coalesce(b.name_ar,'')) like ${q} or o.customer_phone like ${q} or lower(o.customer_name) like ${q})
@@ -244,10 +245,11 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       `;
       if (!rows[0]) return { ok: false, code: "conflict", error: "تغيّر الطلب أثناء التحديث. أعد المحاولة." };
       const detail = await sql<Record<string, unknown>>`
-        select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name,
+        select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name, rt.label as table_label,
           (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
           coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
         from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
+        left join restaurant_tables rt on rt.id = o.table_id and rt.tenant_id = o.tenant_id and rt.branch_id = o.branch_id
         where o.id = ${data.id} and o.archived_at is null limit 1
       `;
       return detail[0] ? { ok: true, data: mapOrder(detail[0]) } : { ok: false, code: "not_found", error: "The order does not exist." };

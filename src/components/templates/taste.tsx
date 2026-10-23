@@ -163,7 +163,7 @@ export function TasteTemplate({ menu, preview = false }: Props) {
   };
   const submit = async (customer: { name: string; phone: string; email: string; notes: string }) => {
     setSubmitting(true); setOrderError("");
-    const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds, note: item.note || undefined } })) } });
+    const result = await submitPublicOrder({ data: { slug: tenant.slug, branchSlug: branch.slug, source: new URLSearchParams(window.location.search).get("table") || new URLSearchParams(window.location.search).get("src") === "qr" ? "qr" : "web", tableQrToken: new URLSearchParams(window.location.search).get("table") || undefined, customerName: customer.name, customerPhone: customer.phone, customerEmail: customer.email, notes: customer.notes, items: cart.map((item) => ({ productId: item.product.id, quantity: item.quantity, selected: { variantId: item.variantId || null, modifierOptionIds: item.modifierOptionIds, note: item.note || undefined } })) } });
     setSubmitting(false);
     if (!result.ok) { setOrderError(result.error); return; }
     setCart([]); setCartOpen(false); setSuccess({ id: result.data.orderId, number: result.data.orderNumber });

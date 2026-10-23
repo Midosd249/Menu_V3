@@ -362,3 +362,10 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - VERIFICATION: pending CI on the new commit. No local terminal/browser was available in this connected session; no typecheck, tests, lint, build or browser QA is claimed yet.
 - RELEASE: PR #411 remains unmerged; no production deployment authorized. Existing connected-Supabase migration side effect remains as documented above; no rollback attempted.
 - EXACT NEXT ACTION: verify the new commit with Quality and W9, fix evidenced failures, then complete public theme token forwarding and Studio table-label visibility in the next atomic increment. Do not merge or deploy.
+
+
+## 2026-10-23 — QR customer and Studio order context
+
+- IMPLEMENTED ON BRANCH: public menu route loaders pass the verified table label into the shared menu renderer; the renderer displays it only when a valid server-resolved token is present. Taste and Signal Table now forward `tableQrToken` during order submission. Studio order data includes table labels through joins constrained to the order's tenant and branch, and the details UI conditionally shows the table.
+- VERIFICATION: pending CI on the current commit; no local test/browser run is claimed.
+- EXACT NEXT ACTION: inspect diff and Quality/W9 on the latest head; repair only demonstrated failures, then record outcomes in continuity docs. No merge or production deployment.
