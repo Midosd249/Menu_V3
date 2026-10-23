@@ -1,3 +1,14 @@
+## 2026-10-23 — QR table ordering public-flow integration
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS; branch feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
+- DONE ON BRANCH: token-based public route resolution; server-side tenant/branch validation during order submission; trusted table_id persistence; table-aware idempotency; referrer policy; focused token primitive test and public-order regression contracts.
+- NOT DONE: final-head CI verification; browser/E2E validation; owner QR provisioning UI; staff table display; merge/release/deployment.
+- VERIFIED BASE: main SHA 74ddc7af44e0472e132416496579b523c847f6a0. No production migration has been applied.
+- CI SNAPSHOT: Quality run 39889042231 and W9 run 39889042206 were in progress on prior head 4f1807e9d7688730c3b4333fc8bb9b795670dcf3. Inspect actual run/head before recording a result.
+- EXACT NEXT ACTION: inspect Quality/W9 on the latest PR head and review the complete diff; fix only evidenced failures, then update this record with actual results and stop.
+
+---
+
 ## 2026-10-22 — P1/P2 subscription lifecycle remediation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.

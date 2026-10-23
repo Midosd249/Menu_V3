@@ -1,3 +1,15 @@
+## 2026-10-23 — QR table ordering continuation handoff
+
+- CLASSIFICATION: security-sensitive public ordering integration; focused/deep research and Backend/Data, Auth/Security, QA, Code Audit, Continuity workflows.
+- VERIFIED: main base SHA 74ddc7af44e0472e132416496579b523c847f6a0; branch feat/qr-table-ordering; draft PR #411 open and not merged.
+- IMPLEMENTED ON BRANCH: token resolution on both public menu route shapes; submit handler resolves again and validates tenant/branch ownership; only server-resolved table ID is persisted; idempotency includes table identity; token primitives split for native Node testing; test script and regression contracts updated; no-referrer policy added.
+- RESEARCH: current repository evidence plus official Supabase RLS/security guidance via Exa. No production database changes.
+- VERIFICATION LIMITS: Quality 39889042231 and W9 39889042206 were in progress on a prior head; inspect current PR checks before stating results. No local terminal or browser runner was available. Do not claim tests/typecheck/lint/build passed.
+- RELEASE: no merge, production migration, or deployment. Owner QR management and staff UI remain out of scope.
+- EXACT NEXT ACTION: inspect Quality and W9 on the latest PR #411 head, repair only evidenced failures, review the final diff, update continuity with actual check outcomes, and stop.
+
+---
+
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: `main` at task start was `74a4f6c87f3cdf5b5e0dbbdabf9459a5f3537998`. The owner reproduced a new invitee landing in self-service onboarding after signup, email verification, and login.

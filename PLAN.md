@@ -1,3 +1,15 @@
+## 2026-10-23 — Active implementation: QR table public-flow integration
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS on feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
+- SCOPE: validate opaque QR tokens in both public menu route shapes and again in submitPublicOrder; bind orders.table_id only from server-resolved table context; enforce tenant/branch match; include table identity in idempotency; preserve ordinary web and non-table QR behavior.
+- IMPLEMENTED: public menu route validation, order payload integration, server-side token resolution, isolated token primitives, and regression contracts. Referrer-Policy: no-referrer is set on the public menu routes.
+- SECURITY: no client-supplied table ID is trusted; invalid/revoked/expired/inactive tokens are rejected by resolver; no public DB grants or RLS policies added.
+- VERIFICATION: Quality 39889042231 and W9 39889042206 were in progress on prior head 4f1807e9d7688730c3b4333fc8bb9b795670dcf3. Recheck latest head. No local terminal available; tests/typecheck/lint/build/browser are not claimed as passed.
+- RELEASE: no merge, production migration, or deployment.
+- EXACT NEXT ACTION: inspect final-head Quality/W9 evidence, repair only demonstrated failures, review the diff and record the actual verification outcome. Do not start owner QR UI/staff display in this increment.
+
+---
+
 ## 2026-10-22 — P1/P2 subscription lifecycle remediation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.

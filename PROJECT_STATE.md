@@ -1,3 +1,16 @@
+## 2026-10-23 — QR table ordering public-flow integration — IMPLEMENTATION_IN_PROGRESS
+
+- VERIFIED: main base SHA is 74ddc7af44e0472e132416496579b523c847f6a0; work remains isolated on feat/qr-table-ordering. Draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
+- IMPLEMENTED ON BRANCH: server-side opaque token resolution is wired into both public menu route shapes; public order submission resolves the token again, validates tenant and branch ownership, and writes only the server-derived table_id. Idempotency now distinguishes tables. src=qr alone does not prove table identity.
+- IMPLEMENTED: isolated SHA-256/random token primitives into src/lib/menu/table-qr-primitives.ts so the focused Node test does not import server aliases. Added the token test to npm test and public-order security regression contracts. Public menu routes set Referrer-Policy: no-referrer.
+- RESEARCH: repository source/CI configuration and official Supabase RLS/security documentation via Exa. Client grants and RLS policies were not broadened.
+- VERIFICATION: PR #411 Quality run 39889042231 and W9 Orders QA run 39889042206 were in progress on head 4f1807e9d7688730c3b4333fc8bb9b795670dcf3 when recorded. These results are not final and must be checked against the latest head after this continuity commit. Local terminal/test execution is unavailable in this connected session.
+- UNKNOWN/BLOCKED: runtime behavior, typecheck/lint/build, browser QA, and final-head CI are not yet verified. The owner QR management UI and staff table display are outside this increment.
+- RELEASE: no merge, production migration, production data mutation, or deployment performed. Vercel preview status is not production evidence.
+- EXACT NEXT ACTION: inspect Quality and W9 results on the latest PR #411 head; fix only evidence-backed failures, review the final diff, update continuity with final verification, then stop. Do not merge or deploy.
+
+---
+
 ## 2026-10-22 — P1/P2 subscription lifecycle remediation — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: latest `main` base is `624764b789c7ad2bb228871f8c1fe908bfa28db5`; changes are isolated on `fix/subscription-trial-expiry-atomic-audit-2026-10-22`.
