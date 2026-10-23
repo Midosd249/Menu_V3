@@ -353,3 +353,12 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
 - UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
 - EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+
+## 2026-10-23 — QR table management increment
+
+- IMPLEMENTED ON BRANCH: added authenticated, tenant/branch-scoped table listing, creation and QR-token rotation server functions; added a bilingual table QR manager to the existing Studio QR page. The server checks `settings.read`/`settings.write` and active branch membership; tokens are returned only on creation/rotation and stored as hashes by the existing helper. Rotation warns that previous printed codes stop working.
+- UX: Arabic/English copy, responsive form/list, visible errors, copy/download actions and explicit rotation confirmation.
+- VERIFICATION: pending CI on the new commit. No local terminal/browser was available in this connected session; no typecheck, tests, lint, build or browser QA is claimed yet.
+- RELEASE: PR #411 remains unmerged; no production deployment authorized. Existing connected-Supabase migration side effect remains as documented above; no rollback attempted.
+- EXACT NEXT ACTION: verify the new commit with Quality and W9, fix evidenced failures, then complete public theme token forwarding and Studio table-label visibility in the next atomic increment. Do not merge or deploy.

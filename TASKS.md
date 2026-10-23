@@ -2355,3 +2355,12 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - UNKNOWN: latest-head CI and full browser journey have not yet been verified. Do not claim success until Quality and W9 complete on the final head and the independent-browser signup/verification journey is exercised.
 - DEPLOYMENT: no merge, database mutation, or production deployment performed.
 - EXACT NEXT ACTION: inspect current PR #405 head and its latest Quality/W9 checks; repair only any evidenced failures, then stop without merge/deployment.
+
+
+## 2026-10-23 — QR table management increment
+
+- IMPLEMENTED ON BRANCH: added authenticated, tenant/branch-scoped table listing, creation and QR-token rotation server functions; added a bilingual table QR manager to the existing Studio QR page. The server checks `settings.read`/`settings.write` and active branch membership; tokens are returned only on creation/rotation and stored as hashes by the existing helper. Rotation warns that previous printed codes stop working.
+- UX: Arabic/English copy, responsive form/list, visible errors, copy/download actions and explicit rotation confirmation.
+- VERIFICATION: pending CI on the new commit. No local terminal/browser was available in this connected session; no typecheck, tests, lint, build or browser QA is claimed yet.
+- RELEASE: PR #411 remains unmerged; no production deployment authorized. Existing connected-Supabase migration side effect remains as documented above; no rollback attempted.
+- EXACT NEXT ACTION: verify the new commit with Quality and W9, fix evidenced failures, then complete public theme token forwarding and Studio table-label visibility in the next atomic increment. Do not merge or deploy.

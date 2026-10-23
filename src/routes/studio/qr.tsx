@@ -6,6 +6,7 @@ import { copy, t } from "@/lib/menu/i18n";
 import { useStudio } from "@/lib/menu/studio";
 import { MENU_THEMES } from "@/lib/theme";
 import { getPublicOrigin } from "@/lib/menu/seo-discovery";
+import { StudioTableQrManager } from "@/components/studio-table-qr-manager";
 
 export const Route = createFileRoute("/studio/qr")({ component: QrPage });
 
@@ -44,6 +45,7 @@ function QrPage() {
         <h1 className="font-display text-2xl font-semibold">{t(copy.qr.title, lang)}</h1>
         <p className="text-sm text-muted">{t(copy.qr.hint, lang)}</p>
       </div>
+      <StudioTableQrManager />
       {snapshot.branches.length === 0 ? (
         <p className="rounded-xl border border-line px-4 py-6 text-sm text-muted">
           {lang === "ar" ? "أضف فرعاً أولاً حتى يتولد رمز QR." : "Add a branch first so a QR destination exists."}

@@ -107,3 +107,11 @@ test("invalid-order rate-limit storage is server-only and protected by RLS", () 
   assert.match(correctiveRlsMigration, /revoke all on table menu_v3\.public_order_invalid_rate_limits\s+from public, anon, authenticated/i);
   assert.doesNotMatch(correctiveRlsMigration, /\bgrant\b/i);
 });
+
+test("QR table management has authenticated server functions and branch-scoped queries", async () => {
+  const source = await readFile("src/lib/menu/table-qr-management.ts", "utf8");
+  assert.match(source, /\.middleware\(\[authMiddleware\]\)/);
+  assert.match(source, /authorizeMutation\(userId, permission, \{ tenantId, branchId \}\)/);
+  assert.match(source, /branch_id = \$\{data\.branchId\}/);
+  assert.match(source, /settings\.write/);
+});
