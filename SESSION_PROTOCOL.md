@@ -380,3 +380,12 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - RELEASE: PR #411 remains Draft/open/unmerged. No production deployment or merge performed. Preview is not production evidence.
 - UNKNOWN/BLOCKED: final CI conclusions and Preview result for the latest head. The owner decision about retaining versus rolling back the already-applied additive schema is still unresolved; do not roll back without confirming the target environment and explicit authorization.
 - EXACT NEXT ACTION: verify final-head Quality/W9 and Vercel Preview status, fix only evidence-backed failures, then stop. Do not merge or deploy.
+
+
+## 2026-10-23 — QR ordering CI repair checkpoint
+
+- VERIFIED: Vercel Preview deployment `dpl_3Kinn1u3toJh4NucnsKZ8ckt8a6M` for code commit `147f6721c3b676a661a4cc8627f3e9003b229518` is READY. This is a Preview deployment, not Production.
+- VERIFIED: Quality and W9 typecheck passed after the route-header inference and QR option typing fixes. Quality test suite then exposed one stale contract that incorrectly prohibited `private, no-store` on every public menu response. The intended behavior is conditional: table-token menu responses are private/no-store; ordinary public menus retain shared caching.
+- FIXED IN THIS COMMIT: updated the cache contract test to assert the conditional policy rather than prohibit it globally. The new head's full Quality and W9 results remain pending.
+- RELEASE: PR #411 remains Draft/open/unmerged. No production deployment. The previously applied additive Supabase migration remains untouched; no rollback attempted.
+- EXACT NEXT ACTION: verify Quality and W9 on this latest head; repair only any remaining evidence-backed failure, then stop. Do not merge or deploy.
