@@ -6,6 +6,7 @@ import { newId } from "@/lib/utils";
 import type { FnResult, ProductOffer } from "./types";
 import { calculateOffer, isOfferCurrentlyActive } from "./offers";
 import { ANONYMOUS_SESSION_COOKIE, resolveAnonymousSession } from "./session.server";
+import { resolveTableQrToken } from "./table-qr";
 import type { OrderReceiptData } from "./order-receipt";
 
 const slugSchema = z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/);
@@ -19,6 +20,7 @@ const submitOrderSchema = z.object({
   slug: slugSchema,
   branchSlug: z.string().min(1).max(63).optional(),
   source: z.enum(["web", "qr"]).default("web"),
+  tableQrToken: z.string().trim().min(16).max(128).optional(),
   customerName: z.string().trim().min(2).max(100),
   customerPhone: z.string().trim().min(8).max(30),
   customerEmail: z.string().trim().email().max(160).optional().or(z.literal("")),
@@ -68,10 +70,11 @@ const orderRateKey = (tenantId: string, branchId: string, anonymousSessionId: st
 const orderIpRateKey = (tenantId: string, branchId: string, clientIp: string) =>
   `ip:${stableDigest(tenantId + ":" + branchId + ":ip:" + clientIp)}`;
 
-const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string) =>
+const orderFingerprint = (data: z.infer<typeof submitOrderSchema>, tenantId: string, branchId: string, tableId: string | null = null) =>
   stableDigest(JSON.stringify({
     tenantId,
     branchId,
+    tableId,
     slug: data.slug,
     source: data.source,
     customerName: data.customerName,
@@ -141,14 +144,24 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
       const tenant = tenantRows[0];
       if (!tenant) return { ok: false, code: "not_found", error: "المنيو غير موجود" };
 
+      const tableContext = data.tableQrToken ? await resolveTableQrToken(sql, data.tableQrToken) : null;
+      if (data.tableQrToken && (!tableContext || tableContext.tenantSlug !== data.slug || tableContext.tenantId !== String(tenant.id))) {
+        return fail("رمز الطاولة غير صالح أو لم يعد متاحاً");
+      }
+      if (tableContext && data.source !== "qr") return fail("يجب إرسال طلب الطاولة من مسار QR صالح");
+      if (tableContext && data.branchSlug && data.branchSlug !== tableContext.branchSlug) {
+        return fail("رمز الطاولة لا يطابق الفرع المحدد");
+      }
+      const requestedBranchSlug = tableContext?.branchSlug ?? data.branchSlug;
       const branchRows = await sql<{ id: string }>`
         select id from branches
         where tenant_id = ${tenant.id} and is_active = true
-          and (${data.branchSlug ?? null}::text is null or slug = ${data.branchSlug ?? null})
+          and (${requestedBranchSlug ?? null}::text is null or slug = ${requestedBranchSlug ?? null})
         order by created_at limit 1
       `;
       const branchId = branchRows[0]?.id;
       if (!branchId) return { ok: false, code: "not_found", error: "الفرع غير متاح" };
+      if (tableContext && tableContext.branchId !== String(branchId)) return fail("رمز الطاولة لا يطابق الفرع المحدد");
 
       const anonymousSession = await resolveAnonymousSession(sql, String(tenant.id));
       const anonymousSessionId = anonymousSession.id;
@@ -174,7 +187,7 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
         return fail(error);
       };
 
-      const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId));
+      const idempotencyKey = orderFingerprint(data, String(tenant.id), String(branchId), tableContext?.tableId ?? null);
       const existing = await sql<{ order_id: string | null; order_number: number | null; total: number | null; currency: string | null; created_at: string }>`
         select order_id, order_number, total, currency, created_at
         from public_order_idempotency
@@ -319,8 +332,8 @@ export const submitPublicOrder = createServerFn({ method: "POST" })
 
         const created = await tx<{ id: string; order_number: number }>`
           with new_order as (
-            insert into orders (id, tenant_id, branch_id, anonymous_session_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
-            values (${orderId}, ${tenant.id}, ${branchId}, ${anonymousSessionId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
+            insert into orders (id, tenant_id, branch_id, table_id, anonymous_session_id, status, source, customer_name, customer_phone, customer_email, notes, currency, subtotal, total)
+            values (${orderId}, ${tenant.id}, ${branchId}, ${tableContext?.tableId ?? null}, ${anonymousSessionId}, 'new', ${data.source}, ${data.customerName}, ${data.customerPhone}, ${data.customerEmail || ""}, ${data.notes ?? null}, ${tenant.currency || "SAR"}, ${subtotal}, ${subtotal})
             returning id, order_number
           ),
           inserted_items as (
