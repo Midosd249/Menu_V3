@@ -16,8 +16,9 @@ import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr";
 
-const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional() });
+const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
 type PublicMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
 
 export function createThemeBootstrapScript(theme: ThemeKey, preview = false): string {
@@ -27,11 +28,17 @@ export function createThemeBootstrapScript(theme: ThemeKey, preview = false): st
 
 export const Route = createFileRoute("/m/$slug")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
+  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" }),
   validateSearch: publicMenuSearchSchema,
-  loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme }),
+  loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
-    const result = await getPublicMenu({ data: { slug: params.slug, branch: deps.branch } });
+    let branchSlug = deps.branch;
+    if (deps.table) {
+      const tableContext = await resolvePublicTableQrContext({ data: { slug: params.slug, token: deps.table, branchSlug: deps.branch } });
+      if (!tableContext) throw notFound();
+      branchSlug = tableContext.branchSlug;
+    }
+    const result = await getPublicMenu({ data: { slug: params.slug, branch: branchSlug } });
     if (!result.ok) {
       if (result.code === "not_found") throw notFound();
       return result;
