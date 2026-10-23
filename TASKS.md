@@ -1,11 +1,11 @@
 ## 2026-10-23 — QR table ordering public-flow integration
 
 - STATUS: IMPLEMENTATION_IN_PROGRESS; branch feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
-- DONE ON BRANCH: token-based public route resolution; server-side tenant/branch validation during order submission; trusted table_id persistence; table-aware idempotency; referrer policy; focused token primitive test and public-order regression contracts.
-- NOT DONE: final-head CI verification; browser/E2E validation; owner QR provisioning UI; staff table display; merge/release/deployment.
-- VERIFIED BASE: main SHA 74ddc7af44e0472e132416496579b523c847f6a0. No production migration has been applied.
-- CI SNAPSHOT: Quality run 39889042231 and W9 run 39889042206 were in progress on prior head 4f1807e9d7688730c3b4333fc8bb9b795670dcf3. Inspect actual run/head before recording a result.
-- EXACT NEXT ACTION: inspect Quality/W9 on the latest PR head and review the complete diff; fix only evidenced failures, then update this record with actual results and stop.
+- DONE ON BRANCH: token-based public route resolution; server-side tenant/branch validation during order submission; trusted table_id persistence; table-aware idempotency; referrer policy; focused token primitive test and public-order regression contracts; SQL transaction API fix; local-fixture-compatible conditional role revokes; cache contract test updated for the new header.
+- CI HISTORY: prior failures were diagnosed and addressed: route import protection, sql.begin type errors, exact cache-header contract, and missing anon role in local PostgreSQL. Final-head Quality and W9 are still to be checked.
+- VERIFIED DATABASE SIDE EFFECT: initial Vercel Preview build applied 20261023120000_restaurant_tables_and_qr_tokens.sql to the connected Supabase project. Migration ledger confirms it; new tables have zero rows; RLS enabled, no policies, no direct client grants. No rollback attempted.
+- NOT DONE: final-head Quality/W9 conclusion; owner QR provisioning UI; staff table display; merge/release/deployment; owner decision on retaining versus rolling back the schema.
+- EXACT NEXT ACTION: verify final-head CI, then request owner decision on retaining or rolling back the additive database schema; no merge/deployment until that decision.
 
 ---
 

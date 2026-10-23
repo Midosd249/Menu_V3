@@ -2,11 +2,11 @@
 
 - STATUS: IMPLEMENTATION_IN_PROGRESS on feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
 - SCOPE: validate opaque QR tokens in both public menu route shapes and again in submitPublicOrder; bind orders.table_id only from server-resolved table context; enforce tenant/branch match; include table identity in idempotency; preserve ordinary web and non-table QR behavior.
-- IMPLEMENTED: public menu route validation, order payload integration, server-side token resolution, isolated token primitives, and regression contracts. Referrer-Policy: no-referrer is set on the public menu routes.
-- SECURITY: no client-supplied table ID is trusted; invalid/revoked/expired/inactive tokens are rejected by resolver; no public DB grants or RLS policies added.
-- VERIFICATION: Quality 39889042231 and W9 39889042206 were in progress on prior head 4f1807e9d7688730c3b4333fc8bb9b795670dcf3. Recheck latest head. No local terminal available; tests/typecheck/lint/build/browser are not claimed as passed.
-- RELEASE: no merge, production migration, or deployment.
-- EXACT NEXT ACTION: inspect final-head Quality/W9 evidence, repair only demonstrated failures, review the diff and record the actual verification outcome. Do not start owner QR UI/staff display in this increment.
+- IMPLEMENTED: route validation, order payload integration, server-side token resolution, isolated token primitives, regression contracts, no-referrer header, supported transaction API, and conditional role revokes for local fixtures.
+- VERIFIED DATABASE SIDE EFFECT: the initial Vercel Preview build automatically ran the new migration on the connected Supabase project. Vercel logs confirm application; read-only checks confirm migration ledger entry, tables/column present, zero rows in the new tables, RLS enabled, no policies and no direct anon/authenticated grants. No rollback attempted; owner decision required.
+- VERIFICATION: Vercel Preview on code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f is READY. Typecheck and PGLite migration fixture passed on that head; Quality/W9 final conclusions are not yet verified and must be rechecked after this docs commit. No local terminal/browser session was available.
+- RELEASE: PR #411 remains draft; no merge or production deployment. The connected database schema did change via automatic Preview build, so do not claim it is unchanged.
+- EXACT NEXT ACTION: check final-head Quality/W9, then pause for the owner's explicit keep/rollback decision on the additive schema; no merge/deploy before that decision.
 
 ---
 
