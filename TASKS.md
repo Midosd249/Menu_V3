@@ -2412,3 +2412,12 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - Implemented: scoped Essential selector color states, focus styling, regression test registered in `npm test`, and theme audit document.
 - NOT VERIFIED: tests/typecheck/lint/build/CI have not produced evidence in this session; no rendered browser/device QA. Do not merge or deploy until checks and visual review are complete.
 - NEXT: inspect PR checks and run/collect browser QA across all five themes.
+
+## 2026-10-23 — Essential selector state-rule correction
+
+- CLOSED: PR #412 merged as `5ea83557946ed4b73ba8552175b9c795bfd5b813`; Quality and W9 succeeded on PR head `4d5a5203b4f1c2b10633b0a34326e5e0154feb17`.
+- FOLLOW-UP DEFECT: the active/focus CSS selectors duplicated the Essential/header prefix and could not match their intended buttons. The old contract test did not anchor selector starts, allowing a suffix match to pass.
+- IMPLEMENTED: PR #413 fixes those selectors and strengthens regression assertions, including hover state and selector-order checks.
+- VERIFICATION: CI for the current final PR #413 head is pending; local tests and browser rendering were not run in this session.
+- RELEASE: PR #413 remains open/unmerged; no Production deployment.
+- EXACT NEXT ACTION: verify Quality and W9 on the final PR #413 head after continuity updates; use logs for any repair. Do not merge or deploy.
