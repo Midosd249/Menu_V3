@@ -115,7 +115,7 @@ revoke all on table restaurant_tables from public;
 revoke all on table table_qr_tokens from public;
 
 -- Supabase provides anon/authenticated roles; local PostgreSQL fixtures may not.
-do $
+do $roles$
 begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
     execute 'revoke all on table menu_v3.restaurant_tables from anon';
@@ -126,4 +126,4 @@ begin
     execute 'revoke all on table menu_v3.table_qr_tokens from authenticated';
   end if;
 end
-$;
+$roles$;
