@@ -1,5 +1,7 @@
-import { createHash, randomBytes } from "node:crypto";
+import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
+export { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
@@ -13,17 +15,6 @@ export type ResolvedTableContext = {
   branchSlug: string;
   tokenId: string;
 };
-
-const TOKEN_BYTES = 32;
-
-export function hashTableQrToken(plainToken: string): string {
-  return createHash("sha256").update(plainToken, "utf8").digest("hex");
-}
-
-export function generateTableQrToken(): { plain: string; hash: string } {
-  const plain = randomBytes(TOKEN_BYTES).toString("base64url");
-  return { plain, hash: hashTableQrToken(plain) };
-}
 
 /**
  * Resolve an opaque table QR token to trusted tenant/branch/table context.
@@ -134,6 +125,20 @@ export async function createRestaurantTableWithToken(
     return { ok: false, code: "unavailable", error: "تعذر إنشاء الطاولة" };
   }
 }
+
+export const resolvePublicTableQrContext = createServerFn({ method: "POST" })
+  .validator(z.object({
+    slug: z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/),
+    token: z.string().trim().min(16).max(128),
+    branchSlug: z.string().min(1).max(63).optional(),
+  }))
+  .handler(async ({ data }): Promise<{ branchSlug: string; tableLabel: string } | null> => {
+    const sql = await getSql();
+    const context = await resolveTableQrToken(sql, data.token);
+    if (!context || context.tenantSlug !== data.slug) return null;
+    if (data.branchSlug && context.branchSlug !== data.branchSlug) return null;
+    return { branchSlug: context.branchSlug, tableLabel: context.tableLabel };
+  });
 
 export async function rotateTableQrToken(
   sql: Awaited<ReturnType<typeof getSql>>,
