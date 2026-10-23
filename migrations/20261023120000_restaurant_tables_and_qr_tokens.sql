@@ -111,5 +111,19 @@ alter table restaurant_tables enable row level security;
 alter table table_qr_tokens enable row level security;
 
 -- Revoke any accidental public grants (defense in depth)
-revoke all on table restaurant_tables from public, anon, authenticated;
-revoke all on table table_qr_tokens from public, anon, authenticated;
+revoke all on table restaurant_tables from public;
+revoke all on table table_qr_tokens from public;
+
+-- Supabase provides anon/authenticated roles; local PostgreSQL fixtures may not.
+do $
+begin
+  if exists (select 1 from pg_roles where rolname = 'anon') then
+    execute 'revoke all on table menu_v3.restaurant_tables from anon';
+    execute 'revoke all on table menu_v3.table_qr_tokens from anon';
+  end if;
+  if exists (select 1 from pg_roles where rolname = 'authenticated') then
+    execute 'revoke all on table menu_v3.restaurant_tables from authenticated';
+    execute 'revoke all on table menu_v3.table_qr_tokens from authenticated';
+  end if;
+end
+$;
