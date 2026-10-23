@@ -2177,3 +2177,11 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
 - UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
 - EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.
+
+
+## 2026-10-23 — Essential language selector contrast
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS on `fix/essential-language-switcher-contrast`; PR #412 open and unmerged.
+- Scope completed in code: Essential-only language selector surface, inactive/active foregrounds, focus outline, regression contract, and five-theme audit record.
+- Evidence: source review ties shared `LangToggle` to Essential header; generic header button rule sets white foreground and competes with child-state utility classes. No browser-computed style evidence is available.
+- Remaining verification: focused test, full tests, typecheck, lint, build, CI, and visual browser QA for Essential, Signal Table/Gather, Noir, Heritage, Gallery in Arabic/English and responsive states.
