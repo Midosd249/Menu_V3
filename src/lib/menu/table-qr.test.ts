@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { generateTableQrToken, hashTableQrToken } from "./table-qr.ts";
+import { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives.ts";
 
 describe("table-qr token primitives", () => {
   it("generates high-entropy tokens and stable hashes", () => {
