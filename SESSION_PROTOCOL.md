@@ -389,3 +389,12 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - FIXED IN THIS COMMIT: updated the cache contract test to assert the conditional policy rather than prohibit it globally. The new head's full Quality and W9 results remain pending.
 - RELEASE: PR #411 remains Draft/open/unmerged. No production deployment. The previously applied additive Supabase migration remains untouched; no rollback attempted.
 - EXACT NEXT ACTION: verify Quality and W9 on this latest head; repair only any remaining evidence-backed failure, then stop. Do not merge or deploy.
+
+
+## 2026-10-23 — W9 fixture correction
+
+- VERIFIED: latest code commit `d5436acefa117c6bd898850a695fa4d06e287c22` passed TypeScript typecheck, the full npm test suite, lint and production build. Quality browser QA was still running at the last check.
+- VERIFIED FAILURE: W9 Orders browser QA failed because its isolated fixture omitted `restaurant_tables`, while the new tenant/branch-scoped order query correctly joins that relation to show table labels. The failure was a fixture-schema gap, not a production query failure.
+- FIXED IN THIS COMMIT: W9 workflow now creates a minimal isolated `restaurant_tables` fixture relation before starting the Studio app. It does not write to the connected Supabase database.
+- RELEASE: PR #411 remains Draft/open/unmerged. Vercel Preview for code head `d5436acefa117c6bd898850a695fa4d06e287c22` is READY; Production remains untouched.
+- EXACT NEXT ACTION: verify the new W9 and Quality workflow runs, then update this continuity record with actual conclusions. No merge or production deployment.
