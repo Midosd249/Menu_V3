@@ -21,8 +21,9 @@ test("public menu content is cache-safe and attribution is a separate side-effec
 
 test("public HTML routes are safe for shared caching because session attribution is no longer in SSR", () => {
   for (const route of [PUBLIC_ROUTE, BRANCH_ROUTE]) {
-    assert.match(route, /headers: \(\) => \(\{ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" \}\)/);
-    assert.doesNotMatch(route, /private, no-store/);
+    assert.match(route, /"Referrer-Policy": "no-referrer"/);
+    assert.match(route, /tableLabel \? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30"/);
+    assert.match(route, /tableLabel \? "private, no-store"/);
   }
 });
 

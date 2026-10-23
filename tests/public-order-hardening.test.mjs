@@ -3,6 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const orderSource = await readFile("src/lib/menu/order-public.ts", "utf8");
+const tableQrSource = await readFile("src/lib/menu/table-qr.ts", "utf8");
+const publicMenuRouteSource = await readFile("src/routes/m.$slug.tsx", "utf8");
+const publicBranchRouteSource = await readFile("src/routes/m.$slug.$branch.tsx", "utf8");
 const abuseMigration = await readFile("migrations/20260909001000_public_order_abuse_controls.sql", "utf8");
 const layeredAbuseMigration = await readFile("migrations/20261002090000_layered_public_order_abuse_controls.sql", "utf8");
 const correctiveRlsMigration = await readFile("migrations/20261020080000_reconcile_public_order_invalid_rate_limits_rls.sql", "utf8");
@@ -41,6 +44,20 @@ test("legacy security-definer RPCs are not executable by public client roles", (
   assert.match(rpcMigration, /set search_path = public, pg_temp/);
 });
 
+
+test("table QR ordering resolves opaque tokens server-side and associates only trusted table IDs", () => {
+  assert.ok(tableQrSource.includes("t.revoked_at is null"));
+  assert.ok(tableQrSource.includes("t.expires_at is null or t.expires_at > now()"));
+  assert.ok(orderSource.includes("resolveTableQrToken(sql, data.tableQrToken)"));
+  assert.ok(orderSource.includes("tableContext.tenantId !== String(tenant.id)"));
+  assert.ok(orderSource.includes("tableContext.branchId !== String(branchId)"));
+  assert.ok(/insert into orders \([^\n]*table_id/.test(orderSource));
+  assert.doesNotMatch(orderSource, /tableId:\s*data\./);
+  assert.match(publicMenuRouteSource, /resolvePublicTableQrContext/);
+  assert.match(publicBranchRouteSource, /resolvePublicTableQrContext/);
+  assert.match(publicMenuRouteSource, /Referrer-Policy/);
+  assert.match(publicBranchRouteSource, /Referrer-Policy/);
+});
 
 test("public orders attach only a valid server-controlled tenant session", () => {
   assert.match(orderSource, /resolveAnonymousSession\(sql, String\(tenant\.id\)\)/);
@@ -89,4 +106,19 @@ test("invalid-order rate-limit storage is server-only and protected by RLS", () 
   assert.match(correctiveRlsMigration, /alter table menu_v3\.public_order_invalid_rate_limits\s+enable row level security/i);
   assert.match(correctiveRlsMigration, /revoke all on table menu_v3\.public_order_invalid_rate_limits\s+from public, anon, authenticated/i);
   assert.doesNotMatch(correctiveRlsMigration, /\bgrant\b/i);
+});
+
+test("QR table management has authenticated server functions and branch-scoped queries", async () => {
+  const source = await readFile("src/lib/menu/table-qr-management.ts", "utf8");
+  assert.match(source, /\.middleware\(\[authMiddleware\]\)/);
+  assert.match(source, /authorizeMutation\(userId, permission, \{ tenantId, branchId \}\)/);
+  assert.match(source, /branch_id = \$\{data\.branchId\}/);
+  assert.match(source, /settings\.write/);
+});
+
+
+test("W9 isolated Orders fixture includes the table relationship queried by Studio", async () => {
+  const workflow = await readFile(".github/workflows/w9-orders.yml", "utf8");
+  assert.match(workflow, /alter table orders add column if not exists table_id text/);
+  assert.match(workflow, /create table if not exists restaurant_tables/);
 });

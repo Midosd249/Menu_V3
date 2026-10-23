@@ -1,3 +1,15 @@
+## 2026-10-23 — QR table ordering continuation handoff
+
+- CLASSIFICATION: security-sensitive public ordering integration; Research/Connected Tools, Backend/Data, Auth/Security, QA, Code Audit and Continuity workflows.
+- VERIFIED: main base SHA 74ddc7af44e0472e132416496579b523c847f6a0; branch feat/qr-table-ordering; draft PR #411 open and not merged.
+- IMPLEMENTED ON BRANCH: token resolution on both public menu route shapes; submit handler resolves again and validates tenant/branch ownership; only server-resolved table ID is persisted; idempotency includes table identity; token primitives split for native Node testing; test script and regression contracts updated; no-referrer policy added; SQL transaction API corrected; migration role revokes conditional for local fixtures.
+- VERIFIED DATABASE SIDE EFFECT: Vercel Preview build at initial feature commit applied migration 20261023120000_restaurant_tables_and_qr_tokens.sql to connected Supabase project. Read-only evidence: menu_v3._migrations entry at 2026-10-23 02:05:57 UTC, tables and orders.table_id exist, new tables contain zero rows, RLS enabled, no policies and no direct client grants. Do not claim no migration was applied. No rollback attempted; owner decision needed.
+- VERIFICATION LIMITS: Vercel Preview on code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f is READY. Typecheck and PGLite fixture passed on that head; Quality/W9 final results must be checked on the final head. No local terminal or manual device QA was performed.
+- RELEASE: no merge or production deployment. Owner QR management and staff UI remain out of scope.
+- EXACT NEXT ACTION: check final-head Quality/W9, then obtain explicit owner decision to keep or roll back the additive schema; do not merge or deploy before that decision.
+
+---
+
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
 
 - VERIFIED: `main` at task start was `74a4f6c87f3cdf5b5e0dbbdabf9459a5f3537998`. The owner reproduced a new invitee landing in self-service onboarding after signup, email verification, and login.
@@ -341,3 +353,59 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - VERIFIED: branch head was advanced to `65cdd340f3926eab1603265fe6ccb44e15aaf2cb`; the GitHub API reports no Actions runs associated with that SHA. Updating the branch ref through the connected GitHub tool did not create new workflow runs, and the available GitHub connector exposes no workflow-dispatch action. The PR remains draft/open and unmerged; no production deployment was performed.
 - UNKNOWN: Quality, W9 Orders QA, `npm test`, and Build on the dependency-fix commit have not yet been rerun. No claim of success is permitted.
 - EXACT NEXT ACTION: create and push an empty commit from the owner’s authenticated local checkout on `fix/public-upsell-opens-product-details` to trigger GitHub Actions on the current branch head; then inspect the actual Quality and W9 run results and their npm-test/build steps before considering merge.
+
+
+## 2026-10-23 — QR table management increment
+
+- IMPLEMENTED ON BRANCH: added authenticated, tenant/branch-scoped table listing, creation and QR-token rotation server functions; added a bilingual table QR manager to the existing Studio QR page. The server checks `settings.read`/`settings.write` and active branch membership; tokens are returned only on creation/rotation and stored as hashes by the existing helper. Rotation warns that previous printed codes stop working.
+- UX: Arabic/English copy, responsive form/list, visible errors, copy/download actions and explicit rotation confirmation.
+- VERIFICATION: pending CI on the new commit. No local terminal/browser was available in this connected session; no typecheck, tests, lint, build or browser QA is claimed yet.
+- RELEASE: PR #411 remains unmerged; no production deployment authorized. Existing connected-Supabase migration side effect remains as documented above; no rollback attempted.
+- EXACT NEXT ACTION: verify the new commit with Quality and W9, fix evidenced failures, then complete public theme token forwarding and Studio table-label visibility in the next atomic increment. Do not merge or deploy.
+
+
+## 2026-10-23 — QR customer and Studio order context
+
+- IMPLEMENTED ON BRANCH: public menu route loaders pass the verified table label into the shared menu renderer; the renderer displays it only when a valid server-resolved token is present. Taste and Signal Table now forward `tableQrToken` during order submission. Studio order data includes table labels through joins constrained to the order's tenant and branch, and the details UI conditionally shows the table.
+- VERIFICATION: pending CI on the current commit; no local test/browser run is claimed.
+- EXACT NEXT ACTION: inspect diff and Quality/W9 on the latest head; repair only demonstrated failures, then record outcomes in continuity docs. No merge or production deployment.
+
+
+## 2026-10-23 — QR table ordering completion checkpoint
+
+- IMPLEMENTED ON BRANCH: Studio QR now includes table listing, creation, QR generation/download, and confirmed token rotation; management endpoints require authenticated membership and `settings.read`/`settings.write` with active branch scope. Public QR routes carry only a server-verified table label into the shared renderer and use `private, no-store` for table-bound pages; normal public menus retain the existing shared-cache policy. Taste and Signal Table forward the opaque token. Studio order data joins the table label only within the order's tenant and branch.
+- SECURITY: token hashes remain the stored representation; plaintext tokens are returned only at create/rotate time. `Referrer-Policy: no-referrer` remains enabled. The existing additive migration was applied by an earlier Vercel Preview build to the connected Supabase project; no rollback was attempted.
+- UX: Arabic/English, mobile-responsive table controls, rotation confirmation, QR download/copy, and visible errors. QR generation/rotation failures should remain recoverable.
+- VERIFICATION: Quality run 39899063412 and W9 Orders QA run 39899063447 were still in progress at last check, on code head 4b534345975299c3ab51f076b8caa97d1fcdfd9d. Vercel combined status for that head was pending. No local terminal or real-device QA was available; no tests/build/browser checks are claimed passed for these changes yet.
+- RELEASE: PR #411 remains Draft/open/unmerged. No production deployment or merge performed. Preview is not production evidence.
+- UNKNOWN/BLOCKED: final CI conclusions and Preview result for the latest head. The owner decision about retaining versus rolling back the already-applied additive schema is still unresolved; do not roll back without confirming the target environment and explicit authorization.
+- EXACT NEXT ACTION: verify final-head Quality/W9 and Vercel Preview status, fix only evidence-backed failures, then stop. Do not merge or deploy.
+
+
+## 2026-10-23 — QR ordering CI repair checkpoint
+
+- VERIFIED: Vercel Preview deployment `dpl_3Kinn1u3toJh4NucnsKZ8ckt8a6M` for code commit `147f6721c3b676a661a4cc8627f3e9003b229518` is READY. This is a Preview deployment, not Production.
+- VERIFIED: Quality and W9 typecheck passed after the route-header inference and QR option typing fixes. Quality test suite then exposed one stale contract that incorrectly prohibited `private, no-store` on every public menu response. The intended behavior is conditional: table-token menu responses are private/no-store; ordinary public menus retain shared caching.
+- FIXED IN THIS COMMIT: updated the cache contract test to assert the conditional policy rather than prohibit it globally. The new head's full Quality and W9 results remain pending.
+- RELEASE: PR #411 remains Draft/open/unmerged. No production deployment. The previously applied additive Supabase migration remains untouched; no rollback attempted.
+- EXACT NEXT ACTION: verify Quality and W9 on this latest head; repair only any remaining evidence-backed failure, then stop. Do not merge or deploy.
+
+
+## 2026-10-23 — W9 fixture correction
+
+- VERIFIED: latest code commit `d5436acefa117c6bd898850a695fa4d06e287c22` passed TypeScript typecheck, the full npm test suite, lint and production build. Quality browser QA was still running at the last check.
+- VERIFIED FAILURE: W9 Orders browser QA failed because its isolated fixture omitted `restaurant_tables`, while the new tenant/branch-scoped order query correctly joins that relation to show table labels. The failure was a fixture-schema gap, not a production query failure.
+- FIXED IN THIS COMMIT: W9 workflow now creates a minimal isolated `restaurant_tables` fixture relation before starting the Studio app. It does not write to the connected Supabase database.
+- RELEASE: PR #411 remains Draft/open/unmerged. Vercel Preview for code head `d5436acefa117c6bd898850a695fa4d06e287c22` is READY; Production remains untouched.
+- EXACT NEXT ACTION: verify the new W9 and Quality workflow runs, then update this continuity record with actual conclusions. No merge or production deployment.
+
+
+## 2026-10-23 — W9 Orders fixture schema follow-up
+
+- VERIFIED FAILURE on merge commit `1e896030d9f455e9487ec51918e594a9994f51eb` (PR head `babeb00b0672f23276693d7927d770230d898196`): W9 browser QA failed because `getOrdersDashboard` selects `orders.table_id`, but the isolated PGLite fixture only added `restaurant_tables` and did not add `orders.table_id`. The database error was `column o.table_id does not exist`; the missing order row then caused three downstream Playwright locator timeouts. This is a test-fixture schema gap, not evidence of a production query defect.
+- FIXED: W9 fixture now adds `alter table orders add column if not exists table_id text;` before the Studio browser app starts. This is isolated test setup only; it does not touch Supabase or alter the production migration.
+- REGRESSION GUARD: add a focused contract assertion that the W9 fixture defines both `orders.table_id` and `restaurant_tables`.
+- CURRENT CHANGESET: W9 fixture correction commit `62fc389e7b786ef46e9bdee91820738824bd58bf`; final follow-up commit and CI results must be refreshed after the regression test and continuity update.
+- RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
+- UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
+- EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.

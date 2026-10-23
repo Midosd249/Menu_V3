@@ -7,16 +7,27 @@ import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
 import { z } from "zod";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public";
 
-type BranchMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
-const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional() });
+type BranchMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey; tableLabel?: string };
+const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
 
 export const Route = createFileRoute("/m/$slug/$branch")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
+  headers: (context: { loaderData?: unknown }) => {
+    const routeData = context.loaderData as { ok?: boolean; data?: BranchMenuRouteData } | undefined;
+    const tableLabel = routeData?.ok ? routeData.data?.tableLabel : undefined;
+    return { "Cache-Control": tableLabel ? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" };
+  },
   validateSearch: branchMenuSearchSchema,
-  loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme }),
+  loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
+    let tableLabel: string | undefined;
+    if (deps.table) {
+      const tableContext = await resolvePublicTableQrContext({ data: { slug: params.slug, token: deps.table, branchSlug: params.branch } });
+      if (!tableContext) throw notFound();
+      tableLabel = tableContext.tableLabel;
+    }
     const result = await getPublicMenu({ data: { slug: params.slug, branch: params.branch } });
     if (!result.ok) {
       if (result.code === "not_found") throw notFound();
@@ -25,7 +36,7 @@ export const Route = createFileRoute("/m/$slug/$branch")({
     const requestedLocale = deps.lang ?? "ar";
     const locale = resolvePublicMenuLocale(result.data, requestedLocale);
     const previewTheme = deps.theme ? normalizeThemeKey(deps.theme) ?? undefined : undefined;
-    return { ok: true as const, data: { menu: result.data, locale, localeAvailable: locale === requestedLocale, previewTheme } };
+    return { ok: true as const, data: { menu: result.data, locale, localeAvailable: locale === requestedLocale, previewTheme, ...(tableLabel ? { tableLabel } : {}) } };
   },
   head: ({ loaderData, params }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}/${encodeURIComponent(params.branch)}`;
@@ -58,5 +69,5 @@ function BranchMenuPage() {
   const { lang, theme } = Route.useSearch();
   const loaderData = Route.useLoaderData();
   const menuData = loaderData?.ok ? loaderData.data as BranchMenuRouteData : undefined;
-  return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} />;
+  return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} tableLabel={menuData?.tableLabel} />;
 }

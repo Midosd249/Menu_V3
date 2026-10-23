@@ -16,9 +16,10 @@ import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public";
 
-const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional() });
-type PublicMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
+const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
+type PublicMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey; tableLabel?: string };
 
 export function createThemeBootstrapScript(theme: ThemeKey, preview = false): string {
   const colors = getTheme(theme).tokens.colors;
@@ -27,11 +28,23 @@ export function createThemeBootstrapScript(theme: ThemeKey, preview = false): st
 
 export const Route = createFileRoute("/m/$slug")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
+  headers: (context: { loaderData?: unknown }) => {
+    const routeData = context.loaderData as { ok?: boolean; data?: PublicMenuRouteData } | undefined;
+    const tableLabel = routeData?.ok ? routeData.data?.tableLabel : undefined;
+    return { "Cache-Control": tableLabel ? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" };
+  },
   validateSearch: publicMenuSearchSchema,
-  loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme }),
+  loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
-    const result = await getPublicMenu({ data: { slug: params.slug, branch: deps.branch } });
+    let branchSlug = deps.branch;
+    let tableLabel: string | undefined;
+    if (deps.table) {
+      const tableContext = await resolvePublicTableQrContext({ data: { slug: params.slug, token: deps.table, branchSlug: deps.branch } });
+      if (!tableContext) throw notFound();
+      branchSlug = tableContext.branchSlug;
+      tableLabel = tableContext.tableLabel;
+    }
+    const result = await getPublicMenu({ data: { slug: params.slug, branch: branchSlug } });
     if (!result.ok) {
       if (result.code === "not_found") throw notFound();
       return result;
@@ -39,7 +52,7 @@ export const Route = createFileRoute("/m/$slug")({
     const requestedLocale = deps.lang ?? "ar";
     const locale = resolvePublicMenuLocale(result.data, requestedLocale);
     const previewTheme = deps.theme ? normalizeThemeKey(deps.theme) ?? undefined : undefined;
-    return { ok: true as const, data: { menu: result.data, locale, localeAvailable: locale === requestedLocale, previewTheme } };
+    return { ok: true as const, data: { menu: result.data, locale, localeAvailable: locale === requestedLocale, previewTheme, ...(tableLabel ? { tableLabel } : {}) } };
   },
   head: ({ loaderData, params }) => {
     const pathname = `/m/${encodeURIComponent(params.slug)}`;
@@ -100,8 +113,8 @@ async function loadMenuWithRetry(slug: string, branch: string | undefined, local
   }
   return { ok: false as const, code: "unavailable" as const, error: failureMessage(locale, lastKind) };
 }
-function PublicMenuPage() { const { slug } = Route.useParams(); const { branch, lang, theme } = Route.useSearch(); const loaderData = Route.useLoaderData(); const menuData = loaderData?.ok ? loaderData.data as PublicMenuRouteData : undefined; return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} />; }
-export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu; previewTheme?: ThemeKey }) {
+function PublicMenuPage() { const { slug } = Route.useParams(); const { branch, lang, theme } = Route.useSearch(); const loaderData = Route.useLoaderData(); const menuData = loaderData?.ok ? loaderData.data as PublicMenuRouteData : undefined; return <MenuLoader slug={slug} branch={branch} locale={menuData?.locale ?? lang ?? "ar"} initialMenu={menuData?.menu} previewTheme={menuData?.previewTheme ?? (theme ? normalizeThemeKey(theme) ?? undefined : undefined)} tableLabel={menuData?.tableLabel} />; }
+export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme, tableLabel }: { slug: string; branch?: string; locale: Lang; initialMenu?: PublicMenu; previewTheme?: ThemeKey; tableLabel?: string }) {
   const cacheKey = `${slug}:${branch ?? "default"}`; const cached = readCachedMenu(cacheKey); const [state, setState] = useState<{ status: "loading" } | { status: "error"; message: string; retry: () => void } | { status: "ok"; menu: PublicMenu }>(initialMenu ? { status: "ok", menu: initialMenu } : cached ? { status: "ok", menu: cached } : { status: "loading" }); const [experimentVariant, setExperimentVariant] = useState<"control" | "prominent">(initialMenu?.experimentVariant ?? "control"); const { setLang } = useLang();
   useEffect(() => { setLang(locale); }, [locale, setLang]);
   function load() { const instant = readCachedMenu(cacheKey); if (instant) setState({ status: "ok", menu: instant }); else setState((previous) => previous.status === "ok" ? previous : { status: "loading" }); loadMenuWithRetry(slug, branch, locale).then((result) => { if (!result.ok) { if (!instant) setState({ status: "error", message: result.error, retry: load }); return; } writeCachedMenu(cacheKey, result.data); setState({ status: "ok", menu: result.data }); }).catch(() => { if (!instant) setState({ status: "error", message: failureMessage(locale, "unknown"), retry: load }); }); }
@@ -124,5 +137,5 @@ export function MenuLoader({ slug, branch, locale, initialMenu, previewTheme }: 
   const hasInlineActions = activeTheme === "heritage" || family === "contemporary-restaurant";
   const socialTone = activeTheme === "noir" ? "bg-black/20 text-paper" : activeTheme === "heritage" ? "bg-[var(--menu-surface)] text-[var(--menu-foreground)]" : "bg-[var(--menu-surface)] text-[var(--menu-foreground)]";
   const ThemeTemplate = getLazyThemeTemplate(activeTheme);
-  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} /><Suspense fallback={<LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />}><ThemeTemplate menu={themedMenu} preview={Boolean(previewTheme)} /></Suspense>{!hasInlineActions ? <footer className={"mx-auto grid max-w-3xl gap-3 border-t px-4 py-8 " + socialTone} data-menu-social-footer><p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">{locale === "ar" ? "تابع وتواصل" : "Connect with us"}</p><PublicActionLinks tenant={themedMenu.tenant} branch={themedMenu.branch} lang={locale} preview={Boolean(previewTheme)} experimentVariant={themedMenu.experimentVariant} /></footer> : null}<MenuunPoweredBy lang={locale} /><MenuNutritionOverlay products={themedMenu.products} lang={locale} /><PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;
+  return <><MenuThemeController theme={activeTheme} preview={Boolean(previewTheme)} /><Suspense fallback={<LoadingState label={locale === "en" ? "Loading menu…" : "جارٍ تحميل المنيو…"} />}><>{tableLabel ? <div className="mx-auto flex max-w-3xl justify-center px-4 pt-3"><span data-table-context="verified" className="rounded-full border border-line bg-paper px-4 py-2 text-sm font-semibold text-ink">{locale === "ar" ? "الطاولة" : "Table"}: <bdi dir="auto">{tableLabel}</bdi></span></div> : null}<ThemeTemplate menu={themedMenu} preview={Boolean(previewTheme)} /></></Suspense>{!hasInlineActions ? <footer className={"mx-auto grid max-w-3xl gap-3 border-t px-4 py-8 " + socialTone} data-menu-social-footer><p className="text-xs font-semibold uppercase tracking-[0.16em] opacity-70">{locale === "ar" ? "تابع وتواصل" : "Connect with us"}</p><PublicActionLinks tenant={themedMenu.tenant} branch={themedMenu.branch} lang={locale} preview={Boolean(previewTheme)} experimentVariant={themedMenu.experimentVariant} /></footer> : null}<MenuunPoweredBy lang={locale} /><MenuNutritionOverlay products={themedMenu.products} lang={locale} /><PublicUpsellPanel menu={themedMenu} lang={locale} /><GuestMenuAssistant menu={themedMenu} /></>;
 }
