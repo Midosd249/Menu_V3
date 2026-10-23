@@ -732,3 +732,14 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - VERIFICATION: pending CI on the new commit. No local terminal/browser was available in this connected session; no typecheck, tests, lint, build or browser QA is claimed yet.
 - RELEASE: PR #411 remains unmerged; no production deployment authorized. Existing connected-Supabase migration side effect remains as documented above; no rollback attempted.
 - EXACT NEXT ACTION: verify the new commit with Quality and W9, fix evidenced failures, then complete public theme token forwarding and Studio table-label visibility in the next atomic increment. Do not merge or deploy.
+
+
+## 2026-10-23 — QR table ordering completion checkpoint
+
+- IMPLEMENTED ON BRANCH: Studio QR now includes table listing, creation, QR generation/download, and confirmed token rotation; management endpoints require authenticated membership and `settings.read`/`settings.write` with active branch scope. Public QR routes carry only a server-verified table label into the shared renderer and use `private, no-store` for table-bound pages; normal public menus retain the existing shared-cache policy. Taste and Signal Table forward the opaque token. Studio order data joins the table label only within the order's tenant and branch.
+- SECURITY: token hashes remain the stored representation; plaintext tokens are returned only at create/rotate time. `Referrer-Policy: no-referrer` remains enabled. The existing additive migration was applied by an earlier Vercel Preview build to the connected Supabase project; no rollback was attempted.
+- UX: Arabic/English, mobile-responsive table controls, rotation confirmation, QR download/copy, and visible errors. QR generation/rotation failures should remain recoverable.
+- VERIFICATION: Quality run 39899063412 and W9 Orders QA run 39899063447 were still in progress at last check, on code head 4b534345975299c3ab51f076b8caa97d1fcdfd9d. Vercel combined status for that head was pending. No local terminal or real-device QA was available; no tests/build/browser checks are claimed passed for these changes yet.
+- RELEASE: PR #411 remains Draft/open/unmerged. No production deployment or merge performed. Preview is not production evidence.
+- UNKNOWN/BLOCKED: final CI conclusions and Preview result for the latest head. The owner decision about retaining versus rolling back the already-applied additive schema is still unresolved; do not roll back without confirming the target environment and explicit authorization.
+- EXACT NEXT ACTION: verify final-head Quality/W9 and Vercel Preview status, fix only evidence-backed failures, then stop. Do not merge or deploy.
