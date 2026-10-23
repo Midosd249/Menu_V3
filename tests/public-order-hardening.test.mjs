@@ -46,13 +46,13 @@ test("legacy security-definer RPCs are not executable by public client roles", (
 
 
 test("table QR ordering resolves opaque tokens server-side and associates only trusted table IDs", () => {
-  assert.match(tableQrSource, /t\\.revoked_at is null/);
-  assert.match(tableQrSource, /t\\.expires_at is null or t\\.expires_at > now\\(\\)/);
-  assert.match(orderSource, /resolveTableQrToken\\(sql, data\\.tableQrToken\\)/);
-  assert.match(orderSource, /tableContext\\.tenantId !== String\\(tenant\\.id\\)/);
-  assert.match(orderSource, /tableContext\\.branchId !== String\\(branchId\\)/);
-  assert.match(orderSource, /insert into orders \\([^\\n]*table_id/);
-  assert.doesNotMatch(orderSource, /tableId:\\s*data\\./);
+  assert.ok(tableQrSource.includes("t.revoked_at is null"));
+  assert.ok(tableQrSource.includes("t.expires_at is null or t.expires_at > now()"));
+  assert.ok(orderSource.includes("resolveTableQrToken(sql, data.tableQrToken)"));
+  assert.ok(orderSource.includes("tableContext.tenantId !== String(tenant.id)"));
+  assert.ok(orderSource.includes("tableContext.branchId !== String(branchId)"));
+  assert.ok(/insert into orders \([^\n]*table_id/.test(orderSource));
+  assert.doesNotMatch(orderSource, /tableId:\s*data\./);
   assert.match(publicMenuRouteSource, /resolvePublicTableQrContext/);
   assert.match(publicBranchRouteSource, /resolvePublicTableQrContext/);
   assert.match(publicMenuRouteSource, /Referrer-Policy/);
