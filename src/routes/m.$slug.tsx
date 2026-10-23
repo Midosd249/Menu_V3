@@ -28,7 +28,7 @@ export function createThemeBootstrapScript(theme: ThemeKey, preview = false): st
 
 export const Route = createFileRoute("/m/$slug")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" }),
+  headers: ({ loaderData }) => ({ "Cache-Control": loaderData?.ok && (loaderData.data as PublicMenuRouteData).tableLabel ? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" }),
   validateSearch: publicMenuSearchSchema,
   loaderDeps: ({ search }) => ({ branch: search.branch, lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
