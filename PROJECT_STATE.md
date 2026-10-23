@@ -772,3 +772,12 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
 - UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
 - EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.
+
+
+## 2026-10-23 — Essential language selector contrast fix
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS on `fix/essential-language-switcher-contrast`; PR #412 open, not merged.
+- VERIFIED: branch base `main` SHA `f6e888ded688ba682b3c5862719b76adb96a5f21`. Essential shared `LangToggle` is rendered in the public header; generic Essential header-button rules override its intended child text colors due to selector specificity.
+- IMPLEMENTED: Essential-scoped selector surface/state/focus CSS, focused regression test registered in `npm test`, and five-theme source audit at `docs/template-audits/essential-language-switcher-contrast-2026-10-23.md`.
+- UNKNOWN/BLOCKED: no local execution or browser screenshots available in this session; full CI checks and rendered visual audit remain pending. Shared `LangToggle` source contains text-only Arabic/EN buttons, not a language icon; any separate icon rendering must be confirmed in browser/source paths before claiming it fixed.
+- NEXT: obtain PR CI results and run browser QA for all five themes before requesting merge.
