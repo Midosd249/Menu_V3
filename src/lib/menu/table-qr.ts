@@ -1,5 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
 export { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
 import { getSql } from "@/lib/db";
@@ -56,7 +54,7 @@ export async function resolveTableQrToken(
       ten.is_published as tenant_published
     from table_qr_tokens t
     join restaurant_tables rt on rt.id = t.table_id
-    join branches b on b.id = rt.branch_id
+    join branches b on b.id = rt.branch_id and b.tenant_id = rt.tenant_id
     join tenants ten on ten.id = rt.tenant_id
     where t.token_hash = ${tokenHash}
       and t.revoked_at is null
@@ -126,19 +124,6 @@ export async function createRestaurantTableWithToken(
   }
 }
 
-export const resolvePublicTableQrContext = createServerFn({ method: "POST" })
-  .validator(z.object({
-    slug: z.string().min(1).max(63).regex(/^[a-z0-9][a-z0-9-]*$/),
-    token: z.string().trim().min(16).max(128),
-    branchSlug: z.string().min(1).max(63).optional(),
-  }))
-  .handler(async ({ data }): Promise<{ branchSlug: string; tableLabel: string } | null> => {
-    const sql = await getSql();
-    const context = await resolveTableQrToken(sql, data.token);
-    if (!context || context.tenantSlug !== data.slug) return null;
-    if (data.branchSlug && context.branchSlug !== data.branchSlug) return null;
-    return { branchSlug: context.branchSlug, tableLabel: context.tableLabel };
-  });
 
 export async function rotateTableQrToken(
   sql: Awaited<ReturnType<typeof getSql>>,
