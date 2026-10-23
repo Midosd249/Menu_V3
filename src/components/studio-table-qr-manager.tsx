@@ -44,7 +44,7 @@ export function StudioTableQrManager() {
     const url = new URL(`/m/${snapshot.tenant.slug}/${branch.slug}`, window.location.origin);
     url.searchParams.set("table", token);
     const qr = await import("qrcode");
-    const image = await qr.toDataURL(url.toString(), { width: 480, margin: 2, errorCorrectionLevel: "M" });
+    const image = await qr.toDataURL(url.toString(), { width: 480, margin: 2 });
     setIssued({ id, label: tableLabel, url: url.toString(), image });
   };
   const create = async () => {

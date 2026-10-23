@@ -14,7 +14,11 @@ const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(),
 
 export const Route = createFileRoute("/m/$slug/$branch")({
   staleTime: 0,
-  headers: ({ loaderData }) => ({ "Cache-Control": loaderData?.ok && (loaderData.data as BranchMenuRouteData).tableLabel ? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" }),
+  headers: (context: { loaderData?: unknown }) => {
+    const routeData = context.loaderData as { ok?: boolean; data?: BranchMenuRouteData } | undefined;
+    const tableLabel = routeData?.ok ? routeData.data?.tableLabel : undefined;
+    return { "Cache-Control": tableLabel ? "private, no-store" : "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" };
+  },
   validateSearch: branchMenuSearchSchema,
   loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
