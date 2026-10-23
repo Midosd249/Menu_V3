@@ -16,7 +16,7 @@ import { getTheme, getThemeFamily, normalizeThemeKey } from "@/lib/theme";
 import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
-import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public.server";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public";
 
 const publicMenuSearchSchema = z.object({ branch: z.string().max(63).optional(), lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
 type PublicMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
