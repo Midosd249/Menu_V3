@@ -2393,3 +2393,14 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - FIXED IN THIS COMMIT: W9 workflow now creates a minimal isolated `restaurant_tables` fixture relation before starting the Studio app. It does not write to the connected Supabase database.
 - RELEASE: PR #411 remains Draft/open/unmerged. Vercel Preview for code head `d5436acefa117c6bd898850a695fa4d06e287c22` is READY; Production remains untouched.
 - EXACT NEXT ACTION: verify the new W9 and Quality workflow runs, then update this continuity record with actual conclusions. No merge or production deployment.
+
+
+## 2026-10-23 — W9 Orders fixture schema follow-up
+
+- VERIFIED FAILURE on merge commit `1e896030d9f455e9487ec51918e594a9994f51eb` (PR head `babeb00b0672f23276693d7927d770230d898196`): W9 browser QA failed because `getOrdersDashboard` selects `orders.table_id`, but the isolated PGLite fixture only added `restaurant_tables` and did not add `orders.table_id`. The database error was `column o.table_id does not exist`; the missing order row then caused three downstream Playwright locator timeouts. This is a test-fixture schema gap, not evidence of a production query defect.
+- FIXED: W9 fixture now adds `alter table orders add column if not exists table_id text;` before the Studio browser app starts. This is isolated test setup only; it does not touch Supabase or alter the production migration.
+- REGRESSION GUARD: add a focused contract assertion that the W9 fixture defines both `orders.table_id` and `restaurant_tables`.
+- CURRENT CHANGESET: W9 fixture correction commit `62fc389e7b786ef46e9bdee91820738824bd58bf`; final follow-up commit and CI results must be refreshed after the regression test and continuity update.
+- RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
+- UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
+- EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.

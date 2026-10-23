@@ -115,3 +115,10 @@ test("QR table management has authenticated server functions and branch-scoped q
   assert.match(source, /branch_id = \$\{data\.branchId\}/);
   assert.match(source, /settings\.write/);
 });
+
+
+test("W9 isolated Orders fixture includes the table relationship queried by Studio", async () => {
+  const workflow = await readFile(".github/workflows/w9-orders.yml", "utf8");
+  assert.match(workflow, /alter table orders add column if not exists table_id text/);
+  assert.match(workflow, /create table if not exists restaurant_tables/);
+});
