@@ -7,16 +7,21 @@ import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
 import { z } from "zod";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr";
 
 type BranchMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
-const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional() });
+const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
 
 export const Route = createFileRoute("/m/$slug/$branch")({
   staleTime: 0,
-  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30" }),
+  headers: () => ({ "Cache-Control": "public, max-age=0, s-maxage=15, stale-while-revalidate=30", "Referrer-Policy": "no-referrer" }),
   validateSearch: branchMenuSearchSchema,
-  loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme }),
+  loaderDeps: ({ search }) => ({ lang: search.lang, theme: search.theme, table: search.table }),
   loader: async ({ params, deps }) => {
+    if (deps.table) {
+      const tableContext = await resolvePublicTableQrContext({ data: { slug: params.slug, token: deps.table, branchSlug: params.branch } });
+      if (!tableContext) throw notFound();
+    }
     const result = await getPublicMenu({ data: { slug: params.slug, branch: params.branch } });
     if (!result.ok) {
       if (result.code === "not_found") throw notFound();
