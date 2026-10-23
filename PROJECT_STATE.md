@@ -791,3 +791,13 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RELEASE: PR #413 is open/unmerged. No merge or production deployment was performed.
 - VERIFIED on code head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) both succeeded. Quality passed typecheck, npm tests, lint, production build, all-theme browser template QA, Menuun brand browser QA, Studio browser QA, and Platform Admin browser QA. Vercel status is Preview success only, not Production evidence.
 - This follow-up adds continuity-only changes after the verified code head; refresh Quality/W9 on the final docs-updated head before treating PR #413 as fully verified. Actual language-switcher computed colors/device screenshots remain UNKNOWN.
+
+
+## 2026-10-23 — Essential language selector follow-up merged
+
+- VERIFIED: PR #413 merged to `main` as `5a84d31282383e191472bcd3fc7d5b62417e90ca`; final PR head `fe531ebc20020b3beb338867ce934bfa5d4a5516`.
+- VERIFIED: Quality #3198 (`39942602740`) and W9 Orders QA #1289 (`39942602587`) completed successfully on the final PR head. Vercel reported Preview success only; no Production deployment is established.
+- IMPLEMENTED: corrected Essential language-selector active/focus selector ancestry and ordering, explicit hover states, and anchored regression checks rejecting malformed selectors.
+- UNKNOWN: direct rendered visual/computed-color confirmation and physical-device QA for the language selector and five-theme matrix remain outstanding; source/CI success is not visual proof.
+- RELEASE: merged to main; no Production deployment performed or requested.
+- EXACT NEXT ACTION: when a browser session is available, visually verify Essential selector inactive/active/hover/focus in Arabic/English, then smoke-check all five public themes at responsive widths. Do not trigger a Production deployment solely for this check.

@@ -2194,3 +2194,13 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - STATUS: IMPLEMENTATION_IN_PROGRESS; PR #413 open/unmerged. No Production deployment.
 - VERIFIED on implementation head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 and W9 Orders QA run #1288 both succeeded. Quality included typecheck, tests, lint, build, all-theme browser template QA, brand, Studio and Platform Admin browser QA. Vercel is Preview success only.
 - Continuity-only changes follow that tested implementation head, so the exact next action is to refresh Quality and W9 on the final docs-updated PR #413 head; fix only evidenced failures. Do not merge or deploy.
+
+
+## 2026-10-23 — Essential selector correction closed
+
+- VERIFIED: PR #413 merged to `main` at `5a84d31282383e191472bcd3fc7d5b62417e90ca` (head `fe531ebc20020b3beb338867ce934bfa5d4a5516`).
+- VERIFIED: Quality #3198 (`39942602740`) and W9 Orders QA #1289 (`39942602587`) succeeded on the final PR head. Vercel status was Preview success, not Production evidence.
+- IMPLEMENTED: fixed malformed Essential language-selector active/focus selectors and strengthened selector regression coverage.
+- UNKNOWN: direct rendered visual/computed-color confirmation and physical-device evidence remain incomplete.
+- STATUS: implementation merged to main; deployment not performed.
+- EXACT NEXT ACTION: obtain browser evidence for Essential selector states and a five-theme responsive smoke audit when browser access is available; avoid Production deployment solely for this check.

@@ -2422,3 +2422,12 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - RELEASE: PR #413 remains open/unmerged; no Production deployment.
 - VERIFIED on implementation head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) succeeded; Quality passed tests, typecheck, lint, build, all-theme browser template QA, brand browser QA, Studio browser QA and Platform Admin browser QA.
 - Vercel status is Preview success, not Production. A continuity-only commit follows the tested code head; verify Quality/W9 on the final docs-updated head. No merge/deployment.
+
+
+## 2026-10-23 — PR #413 completion checkpoint
+
+- CLOSED: PR #413 merged to `main` as `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- VERIFIED: Quality #3198 (`39942602740`) and W9 Orders QA #1289 (`39942602587`) succeeded on PR head `fe531ebc20020b3beb338867ce934bfa5d4a5516`.
+- VERIFIED: Vercel Preview status succeeded; Production deployment is not verified and was not requested.
+- UNKNOWN: browser-computed contrast and physical-device QA for Essential selector and all five themes are still not evidenced.
+- EXACT NEXT ACTION: perform browser-based visual verification of Essential inactive/active/hover/focus states in Arabic/English and smoke-check Essential, Signal Table, Noir, Heritage, Gallery at responsive widths when browser access is available. Stop after recording evidence; no automatic deployment.
