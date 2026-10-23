@@ -1,8 +1,9 @@
 import { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
-export { generateTableQrToken, hashTableQrToken } from "./table-qr-primitives";
 import { getSql } from "@/lib/db";
 import { newId } from "@/lib/utils";
 import type { FnResult } from "./types";
+
+export { generateTableQrToken, hashTableQrToken };
 
 export type ResolvedTableContext = {
   tableId: string;
