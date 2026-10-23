@@ -2185,3 +2185,12 @@ Verify CI on the continuity-only head, then review and merge PR #386 as previous
 - Scope completed in code: Essential-only language selector surface, inactive/active foregrounds, focus outline, regression contract, and five-theme audit record.
 - Evidence: source review ties shared `LangToggle` to Essential header; generic header button rule sets white foreground and competes with child-state utility classes. No browser-computed style evidence is available.
 - Remaining verification: focused test, full tests, typecheck, lint, build, CI, and visual browser QA for Essential, Signal Table/Gather, Noir, Heritage, Gallery in Arabic/English and responsive states.
+
+## 2026-10-23 — Essential selector regression follow-up
+
+- VERIFIED: PR #412 is merged; both Quality and W9 Orders QA succeeded on its final PR head. Post-merge source review then found duplicated ancestor selectors in the active/focus rules, which invalidated those two rules despite the green CI.
+- IMPLEMENTED: PR #413 corrects selector ancestry and rule ordering, preserves hover contrast, and hardens the regression test so a later matching substring cannot hide a malformed selector.
+- UNKNOWN: local execution and actual rendered browser QA are not available through the current connected-tool session.
+- STATUS: IMPLEMENTATION_IN_PROGRESS; PR #413 open/unmerged. No Production deployment.
+- VERIFIED on implementation head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 and W9 Orders QA run #1288 both succeeded. Quality included typecheck, tests, lint, build, all-theme browser template QA, brand, Studio and Platform Admin browser QA. Vercel is Preview success only.
+- Continuity-only changes follow that tested implementation head, so the exact next action is to refresh Quality and W9 on the final docs-updated PR #413 head; fix only evidenced failures. Do not merge or deploy.

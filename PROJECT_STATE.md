@@ -781,3 +781,13 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - IMPLEMENTED: Essential-scoped selector surface/state/focus CSS, focused regression test registered in `npm test`, and five-theme source audit at `docs/template-audits/essential-language-switcher-contrast-2026-10-23.md`.
 - UNKNOWN/BLOCKED: no local execution or browser screenshots available in this session; full CI checks and rendered visual audit remain pending. Shared `LangToggle` source contains text-only Arabic/EN buttons, not a language icon; any separate icon rendering must be confirmed in browser/source paths before claiming it fixed.
 - NEXT: obtain PR CI results and run browser QA for all five themes before requesting merge.
+
+## 2026-10-23 — Essential language selector post-merge correction
+
+- VERIFIED: PR #412 merged to `main` as `5ea83557946ed4b73ba8552175b9c795bfd5b813`; Quality run #3192 (`39936851000`) and W9 Orders QA run #1284 (`39936850910`) both completed successfully on the PR head `4d5a5203b4f1c2b10633b0a34326e5e0154feb17`. Vercel reported a successful Preview status; this is not Production deployment evidence.
+- VERIFIED defect found after merge: the active and focus selectors in `src/theme-essential.css` repeated the full Essential/header ancestor prefix after `header`, so they could not match the language-toggle buttons. The earlier regex test could match the valid-looking suffix and did not detect the malformed full selector.
+- IMPLEMENTED on `fix/essential-language-selector-state-specificity`, PR #413: corrected selector ancestry/order and hover states; strengthened `tests/essential-language-switcher.test.mjs` with anchored rule checks and malformed-selector rejection.
+- VERIFIED: all referenced `--essential-*` tokens exist in the Essential stylesheet. UNKNOWN: local test execution and rendered browser/device QA remain unavailable in this session.
+- RELEASE: PR #413 is open/unmerged. No merge or production deployment was performed.
+- VERIFIED on code head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) both succeeded. Quality passed typecheck, npm tests, lint, production build, all-theme browser template QA, Menuun brand browser QA, Studio browser QA, and Platform Admin browser QA. Vercel status is Preview success only, not Production evidence.
+- This follow-up adds continuity-only changes after the verified code head; refresh Quality/W9 on the final docs-updated head before treating PR #413 as fully verified. Actual language-switcher computed colors/device screenshots remain UNKNOWN.
