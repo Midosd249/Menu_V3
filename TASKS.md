@@ -2404,3 +2404,11 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
 - UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
 - EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.
+
+
+## 2026-10-23 — Essential language selector contrast
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS; branch `fix/essential-language-switcher-contrast`; PR #412 open, not merged.
+- Implemented: scoped Essential selector color states, focus styling, regression test registered in `npm test`, and theme audit document.
+- NOT VERIFIED: tests/typecheck/lint/build/CI have not produced evidence in this session; no rendered browser/device QA. Do not merge or deploy until checks and visual review are complete.
+- NEXT: inspect PR checks and run/collect browser QA across all five themes.
