@@ -105,7 +105,7 @@ export async function createRestaurantTableWithToken(
   const tokenId = newId();
 
   try {
-    await sql.begin(async (tx) => {
+    await sql.transaction(async (tx) => {
       await tx`
         insert into restaurant_tables (id, tenant_id, branch_id, label, sort_order, is_active)
         values (${tableId}, ${input.tenantId}, ${input.branchId}, ${label}, ${input.sortOrder ?? 0}, true)
@@ -142,7 +142,7 @@ export async function rotateTableQrToken(
     const table = tableRows[0];
     if (!table) return { ok: false, code: "not_found", error: "الطاولة غير موجودة" };
 
-    await sql.begin(async (tx) => {
+    await sql.transaction(async (tx) => {
       await tx`
         update table_qr_tokens
         set revoked_at = now()
