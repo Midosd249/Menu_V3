@@ -129,9 +129,15 @@ html[data-menu-theme="essential"] .menu-public-shell header button {
   box-shadow: none;
 }
 
-/* Keep the shared language selector readable inside Essential's dark hero. The generic
-   hero-button rule below intentionally uses white foregrounds; the selector itself is
-   a light surface and needs its own scoped state colors to prevent inheritance leakage. */
+html[data-menu-theme="essential"] .menu-public-shell header button:hover,
+html[data-menu-theme="essential"] .menu-public-shell header button:focus-visible {
+  background: rgb(255 255 255 / 0.14);
+  transform: none;
+}
+
+
+/* Keep the shared language selector readable inside Essential's dark hero. These
+   state rules intentionally follow the generic hero-button hover/focus styling. */
 html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle {
   border-color: var(--essential-border-strong);
   background: var(--essential-surface);
@@ -144,20 +150,24 @@ html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle bu
   color: var(--essential-muted);
 }
 
-html[data-menu-theme="essential"] .menu-public-shell header html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button[aria-pressed="true"] {
+html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button[aria-pressed="true"] {
   background: var(--essential-ink);
   color: var(--essential-surface);
 }
 
-html[data-menu-theme="essential"] .menu-public-shell header html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button:focus-visible {
+html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button:focus-visible {
   outline: 2px solid var(--essential-accent);
   outline-offset: 2px;
 }
 
-html[data-menu-theme="essential"] .menu-public-shell header button:hover,
-html[data-menu-theme="essential"] .menu-public-shell header button:focus-visible {
-  background: rgb(255 255 255 / 0.14);
-  transform: none;
+html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button:hover:not([aria-pressed="true"]) {
+  background: var(--essential-surface-muted);
+  color: var(--essential-ink);
+}
+
+html[data-menu-theme="essential"] .menu-public-shell header .menu-lang-toggle button[aria-pressed="true"]:hover {
+  background: var(--essential-ink);
+  color: var(--essential-surface);
 }
 
 html[data-menu-theme="essential"] .menu-public-shell header > div.relative > p {
