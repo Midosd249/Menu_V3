@@ -7,7 +7,7 @@ import type { Lang, PublicMenu } from "@/lib/menu/types";
 import type { ThemeKey } from "@/lib/theme";
 import { getThemeStylesheets } from "@/lib/theme/runtime-styles";
 import { z } from "zod";
-import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public.server";
+import { resolvePublicTableQrContext } from "@/lib/menu/table-qr-public";
 
 type BranchMenuRouteData = { menu: PublicMenu; locale: Lang; localeAvailable: boolean; previewTheme?: ThemeKey };
 const branchMenuSearchSchema = z.object({ lang: z.enum(["ar", "en"]).optional(), theme: z.string().max(40).optional(), table: z.string().min(16).max(128).optional() });
