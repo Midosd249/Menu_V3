@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AlertTriangle, Copy, QrCode, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,12 +33,12 @@ export function StudioTableQrManager() {
     copy: ar ? "نسخ الرابط" : "Copy link", copied: ar ? "تم نسخ الرابط." : "Link copied.",
     noBranch: ar ? "أضف فرعاً نشطاً أولاً." : "Add an active branch first.",
   };
-  const refresh = async (id = branchId) => {
+  const refresh = useCallback(async (id = branchId) => {
     if (!id) { setTables([]); return; }
     const result = await listRestaurantTables({ data: { tenantId: snapshot.tenant.id, branchId: id } });
     if (result.ok) setTables(result.data.tables); else setError(result.error);
-  };
-  useEffect(() => { void refresh(); }, [branchId, snapshot.tenant.id]);
+  }, [branchId, snapshot.tenant.id]);
+  useEffect(() => { void refresh(); }, [refresh]);
   const issueQr = async (id: string, tableLabel: string, token: string) => {
     if (!branch) return;
     const url = new URL(`/m/${snapshot.tenant.slug}/${branch.slug}`, window.location.origin);
@@ -51,18 +51,26 @@ export function StudioTableQrManager() {
     if (!branchId || !label.trim()) return;
     const tableLabel = label.trim();
     setBusy(true); setError(""); setNotice(""); setIssued(null);
-    const result = await createRestaurantTable({ data: { tenantId: snapshot.tenant.id, branchId, label: tableLabel } });
-    if (!result.ok) setError(result.error);
-    else { setLabel(""); await refresh(); await issueQr(result.data.tableId, tableLabel, result.data.plainToken); }
-    setBusy(false);
+    try {
+      const result = await createRestaurantTable({ data: { tenantId: snapshot.tenant.id, branchId, label: tableLabel } });
+      if (!result.ok) setError(result.error);
+      else { setLabel(""); await refresh(); await issueQr(result.data.tableId, tableLabel, result.data.plainToken); }
+    } catch {
+      setError(ar ? "تعذر إنشاء رمز QR. حدّث الصفحة وحاول مجدداً." : "Could not generate the QR code. Refresh and try again.");
+    } finally { setBusy(false); }
   };
   const rotate = async (table: TableItem) => {
     if (!branchId || !window.confirm(copy.confirm)) return;
     setBusy(true); setError(""); setNotice(""); setIssued(null);
-    const result = await rotateRestaurantTableQr({ data: { tenantId: snapshot.tenant.id, branchId, tableId: table.id } });
-    if (!result.ok) setError(result.error);
-    else await issueQr(table.id, table.label, result.data.plainToken);
-    await refresh(); setBusy(false);
+    try {
+      const result = await rotateRestaurantTableQr({ data: { tenantId: snapshot.tenant.id, branchId, tableId: table.id } });
+      if (!result.ok) setError(result.error);
+      else await issueQr(table.id, table.label, result.data.plainToken);
+      await refresh();
+    } catch {
+      setError(ar ? "تعذر تحديث رمز QR. تحقق من الاتصال ثم حاول مجدداً." : "Could not rotate the QR code. Check the connection and try again.");
+      await refresh();
+    } finally { setBusy(false); }
   };
   return <section className="grid gap-4 rounded-2xl border border-line bg-paper p-4 sm:p-6" aria-labelledby="table-qr-manager-title">
     <div className="flex items-start gap-3"><QrCode className="mt-1 size-5 shrink-0 text-muted" aria-hidden="true"/><div><h2 id="table-qr-manager-title" className="text-lg font-semibold">{copy.title}</h2><p className="mt-1 text-sm text-muted">{copy.intro}</p></div></div>
