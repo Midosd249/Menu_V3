@@ -4,7 +4,7 @@
 
 - STATUS: IMPLEMENTATION_IN_PROGRESS — documentation-only work on branch `docs/f0-architecture-operations-roadmap`.
 - VERIFIED: repository `Midosd249/Menu_V3`; default branch `main`; baseline main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c871?`. Canonical full merge SHA: `f6e888ded688ba682b3c871?` (see PR #411 record; do not rely on this shortened transcription).
+- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c5862719b76adb96a5f21`. Canonical full merge SHA: `f6e888ded688ba682b3c5862719b76adb96a5f21` (see PR #411 record; do not rely on this shortened transcription).
 - VERIFIED: latest inspected main commit repairs Essential language-selector state rules.
 - VERIFIED: package build invokes db:migrate; scripts/migrate.mjs uses migrations/ and menu_v3._migrations. Prior Preview build migration side effect is recorded in PR #411.
 - VERIFIED: docs/release-only-vercel-workflow.md already defines local-first QA, one coherent release batch, separate deployment evidence, quota handling, and rollback boundaries.
