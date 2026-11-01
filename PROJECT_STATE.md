@@ -1,14 +1,17 @@
-## 2026-10-23 — QR table ordering public-flow integration — IMPLEMENTATION_IN_PROGRESS
+# Current Project State — F-Series Documentation Baseline
 
-- VERIFIED: main base SHA is 74ddc7af44e0472e132416496579b523c847f6a0; work is isolated on feat/qr-table-ordering. Draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
-- IMPLEMENTED ON BRANCH: both public menu route shapes resolve opaque QR tokens through a server function; public order submission resolves the token again, validates tenant and branch ownership, and persists only the server-derived table_id. Idempotency distinguishes tables. src=qr alone does not prove table identity.
-- IMPLEMENTED: dependency-light SHA-256/random token primitives, focused token test in npm test, public-order security regression contract, Referrer-Policy: no-referrer on public menu routes, supported sql.transaction usage, and conditional role revokes so local PostgreSQL fixtures without Supabase roles can apply the migration.
-- VERIFIED CI HISTORY: an earlier Quality run failed because a cache contract expected the previous exact header object; updated the test to account for Referrer-Policy. An earlier W9 run failed because local PostgreSQL lacks the Supabase anon role; migration revokes are now conditional. Typecheck and PGLite fixture passed on the latest checked code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f, but full Quality/W9 outcomes must be checked on the final head after this documentation commit.
-- VERIFIED DATABASE SIDE EFFECT: Vercel Preview build dpl_6kq3jL2GzMRCjeyHAiFtKasgaG9P at commit 0a0fb8e8f1dc064be77587bc85e2896a1fc84435 ran npm run build, which invokes npm run db:migrate, and its logs explicitly report applying 20261023120000_restaurant_tables_and_qr_tokens.sql. Read-only checks confirmed the row in menu_v3._migrations (2026-10-23 02:05:57 UTC), both new tables exist, orders.table_id exists, both new tables have zero rows, RLS is enabled, no policies exist, and direct grants are only to postgres. The migration was applied by the automated Preview build, not by a direct SQL action in this session. No rollback was attempted.
-- VERIFICATION: Vercel Preview for code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f is READY; this is not a production deployment. No local terminal/manual real-device test was performed.
-- UNKNOWN/BLOCKED: final-head Quality/W9 checks; owner confirmation whether the linked Supabase schema change should be retained or rolled back. Owner QR management UI and staff table display remain outside this increment.
-- RELEASE: PR #411 remains draft and unmerged. No production deployment was performed; do not describe the connected database as unchanged.
-- EXACT NEXT ACTION: after checking final-head Quality/W9, obtain the owner's decision to retain the additive schema or authorize a rollback; do not merge or deploy until the database-state decision is explicit.
+## 2026-11-02 — F0 continuity, architecture and production-safety documentation
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS — documentation-only work on branch `docs/f0-architecture-operations-roadmap`.
+- VERIFIED: repository `Midosd249/Menu_V3`; default branch `main`; baseline main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c871?`. Canonical full merge SHA: `f6e888ded688ba682b3c871?` (see PR #411 record; do not rely on this shortened transcription).
+- VERIFIED: latest inspected main commit repairs Essential language-selector state rules.
+- VERIFIED: package build invokes db:migrate; scripts/migrate.mjs uses migrations/ and menu_v3._migrations. Prior Preview build migration side effect is recorded in PR #411.
+- VERIFIED: docs/release-only-vercel-workflow.md already defines local-first QA, one coherent release batch, separate deployment evidence, quota handling, and rollback boundaries.
+- IMPLEMENTED ON THIS BRANCH: F0 roadmap, architecture index/system overview, production-safe operations baseline, development history register, and ADR-0001.
+- SCOPE: documentation only. No application source, migrations, database, secrets, CI workflows, Vercel settings, merge, or deployment changed/performed.
+- UNKNOWN: full C4 architecture; current live production deployment SHA/state; backup retention/PITR and successful restore evidence; approved RPO/RTO; exact production database target mapping; isolated staging readiness.
+- EXACT NEXT ACTION: finish F0 continuity/index updates, verify every new document and final diff, then open/review a documentation-only PR. After F0 is merged, begin F1 read-only architecture discovery. Do not start F2 code changes until F1 maps all migration/build call sites and F2 is separately authorized.
 
 ---
 
