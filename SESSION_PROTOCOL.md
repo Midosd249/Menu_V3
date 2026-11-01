@@ -1,12 +1,46 @@
-## 2026-10-23 — QR table ordering continuation handoff
+# Menuun Session Protocol — F-Series Handoff
 
-- CLASSIFICATION: security-sensitive public ordering integration; Research/Connected Tools, Backend/Data, Auth/Security, QA, Code Audit and Continuity workflows.
-- VERIFIED: main base SHA 74ddc7af44e0472e132416496579b523c847f6a0; branch feat/qr-table-ordering; draft PR #411 open and not merged.
-- IMPLEMENTED ON BRANCH: token resolution on both public menu route shapes; submit handler resolves again and validates tenant/branch ownership; only server-resolved table ID is persisted; idempotency includes table identity; token primitives split for native Node testing; test script and regression contracts updated; no-referrer policy added; SQL transaction API corrected; migration role revokes conditional for local fixtures.
-- VERIFIED DATABASE SIDE EFFECT: Vercel Preview build at initial feature commit applied migration 20261023120000_restaurant_tables_and_qr_tokens.sql to connected Supabase project. Read-only evidence: menu_v3._migrations entry at 2026-10-23 02:05:57 UTC, tables and orders.table_id exist, new tables contain zero rows, RLS enabled, no policies and no direct client grants. Do not claim no migration was applied. No rollback attempted; owner decision needed.
-- VERIFICATION LIMITS: Vercel Preview on code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f is READY. Typecheck and PGLite fixture passed on that head; Quality/W9 final results must be checked on the final head. No local terminal or manual device QA was performed.
-- RELEASE: no merge or production deployment. Owner QR management and staff UI remain out of scope.
-- EXACT NEXT ACTION: check final-head Quality/W9, then obtain explicit owner decision to keep or roll back the additive schema; do not merge or deploy before that decision.
+## Current session checkpoint — 2026-11-02
+
+- PHASE: F0 — Continuity & Program Charter.
+- STATUS: IMPLEMENTATION_IN_PROGRESS; documentation-only branch `docs/f0-architecture-operations-roadmap`.
+- BASE MAIN SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c871?` (the full canonical SHA is `f6e888ded688ba682b3c871?`; see GitHub PR #411 metadata).
+- IMPORTANT: older entries below that describe PR #411 as open/draft are historical snapshots and must not be used as current state.
+- F0 documents created: `docs/FINALIZATION_ROADMAP.md`, `docs/architecture/README.md`, `docs/architecture/SYSTEM_OVERVIEW.md`, `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`, `docs/history/DEVELOPMENT_HISTORY.md`, `docs/decisions/ADR-0001-custom-migration-ledger.md`.
+- No application, database, migration, CI, Vercel configuration, production data, or deployment changes.
+- EXACT NEXT ACTION: finish continuity/README updates, read back all new docs, review the complete diff, and create a documentation-only PR. After merge, start F1 read-only architecture discovery only.
+
+## Permanent handoff rules
+
+1. Treat the current repository and Git state as authoritative; chat memory is not the source of truth.
+2. At session start, verify main SHA, current branch, recent commits, relevant open PRs, and diffs.
+3. Read AGENTS.md, docs/FINALIZATION_ROADMAP.md, PROJECT_STATE.md, PLAN.md, TASKS.md, SESSION_PROTOCOL.md, README, and relevant architecture/operations/ADR/history documents.
+4. Check whether the requested capability/document already exists before creating another.
+5. Use VERIFIED / INFERRED / PROPOSED / UNKNOWN / BLOCKED precisely.
+6. Run Research & Connected-Tools preflight at the appropriate depth.
+7. State classification, workflows, research level, scope, risks, acceptance criteria, and verification before editing.
+8. Keep one atomic task in progress.
+9. Do not perform deployment, migration, restore, or production mutation without explicit authorization and the relevant runbook gate.
+10. At closeout, review diff, update continuity, report evidence and blockers, name exactly one next action, and stop.
+
+## F-Series source of truth
+
+- Master plan: `docs/FINALIZATION_ROADMAP.md`.
+- Architecture index: `docs/architecture/README.md`.
+- System overview: `docs/architecture/SYSTEM_OVERVIEW.md`.
+- Operations baseline: `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`.
+- Development history: `docs/history/DEVELOPMENT_HISTORY.md`.
+- ADRs: `docs/decisions/`.
+- Release-only Vercel policy: `docs/release-only-vercel-workflow.md`.
+
+## Evidence limitations
+
+- Current live production deployment SHA/state: UNKNOWN for this task.
+- Successful isolated database restore: UNKNOWN.
+- RPO/RTO: UNKNOWN and require owner approval.
+- Full C4 component/deployment architecture: not yet completed; F1.
+- Build/migration coupling: VERIFIED in package.json and scripts/migrate.mjs; F2 is high priority after F1 source tracing.
 
 ---
 
