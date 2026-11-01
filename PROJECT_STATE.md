@@ -4,14 +4,15 @@
 
 - STATUS: IMPLEMENTATION_IN_PROGRESS — documentation-only work on branch `docs/f0-architecture-operations-roadmap`.
 - VERIFIED: repository `Midosd249/Menu_V3`; default branch `main`; baseline main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c5862719b76adb96a5f21`. Canonical full merge SHA: `f6e888ded688ba682b3c5862719b76adb96a5f21` (see PR #411 record; do not rely on this shortened transcription).
+- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c5862719b76adb96a5f21`.
 - VERIFIED: latest inspected main commit repairs Essential language-selector state rules.
 - VERIFIED: package build invokes db:migrate; scripts/migrate.mjs uses migrations/ and menu_v3._migrations. Prior Preview build migration side effect is recorded in PR #411.
 - VERIFIED: docs/release-only-vercel-workflow.md already defines local-first QA, one coherent release batch, separate deployment evidence, quota handling, and rollback boundaries.
 - IMPLEMENTED ON THIS BRANCH: F0 roadmap, architecture index/system overview, production-safe operations baseline, development history register, and ADR-0001.
 - SCOPE: documentation only. No application source, migrations, database, secrets, CI workflows, Vercel settings, merge, or deployment changed/performed.
 - UNKNOWN: full C4 architecture; current live production deployment SHA/state; backup retention/PITR and successful restore evidence; approved RPO/RTO; exact production database target mapping; isolated staging readiness.
-- EXACT NEXT ACTION: finish F0 continuity/index updates, verify every new document and final diff, then open/review a documentation-only PR. After F0 is merged, begin F1 read-only architecture discovery. Do not start F2 code changes until F1 maps all migration/build call sites and F2 is separately authorized.
+- VERIFIED: documentation-only PR #414 is open as Draft, based on main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`, head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; GitHub reports mergeable=true at last check.
+- EXACT NEXT ACTION: owner review of PR #414. After it is merged, begin F1 read-only architecture discovery. Do not start F2 code changes until F1 maps all build/migration call sites and F2 is separately authorized.
 
 ---
 
