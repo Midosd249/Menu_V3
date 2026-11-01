@@ -1,12 +1,29 @@
-## 2026-10-23 — Active implementation: QR table public-flow integration
+# Active Plan — Menuun F-Series
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS on feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
-- SCOPE: validate opaque QR tokens in both public menu route shapes and again in submitPublicOrder; bind orders.table_id only from server-resolved table context; enforce tenant/branch match; include table identity in idempotency; preserve ordinary web and non-table QR behavior.
-- IMPLEMENTED: route validation, order payload integration, server-side token resolution, isolated token primitives, regression contracts, no-referrer header, supported transaction API, and conditional role revokes for local fixtures.
-- VERIFIED DATABASE SIDE EFFECT: the initial Vercel Preview build automatically ran the new migration on the connected Supabase project. Vercel logs confirm application; read-only checks confirm migration ledger entry, tables/column present, zero rows in the new tables, RLS enabled, no policies and no direct anon/authenticated grants. No rollback attempted; owner decision required.
-- VERIFICATION: Vercel Preview on code head 5e0401e58ba5f0530f6217b11d3bc3a1e93ec74f is READY. Typecheck and PGLite migration fixture passed on that head; Quality/W9 final conclusions are not yet verified and must be rechecked after this docs commit. No local terminal/browser session was available.
-- RELEASE: PR #411 remains draft; no merge or production deployment. The connected database schema did change via automatic Preview build, so do not claim it is unchanged.
-- EXACT NEXT ACTION: check final-head Quality/W9, then pause for the owner's explicit keep/rollback decision on the additive schema; no merge/deploy before that decision.
+## Current active phase: F0 — Continuity & Program Charter
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS on `docs/f0-architecture-operations-roadmap`.
+- BASELINE main SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- AUTHORITATIVE ROADMAP: `docs/FINALIZATION_ROADMAP.md`.
+- ARCHITECTURE INDEX: `docs/architecture/README.md`.
+- OPERATIONS BASELINE: `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`.
+- HISTORY REGISTER: `docs/history/DEVELOPMENT_HISTORY.md`.
+- ADR: `docs/decisions/ADR-0001-custom-migration-ledger.md`.
+
+| ID | Phase | Status | Gate |
+|---|---|---|---|
+| F0 | Continuity & Program Charter | IN_PROGRESS | Docs reviewed, continuity reconciled, docs-only PR |
+| F1 | Verified Architecture Baseline | PLANNED | Read-only C4/source/data/auth/integration/deployment mapping |
+| F2 | Production-Safe Build & Migration Boundary | PLANNED — HIGH PRIORITY | F1 complete; explicit authorization for code/config change |
+| F3 | Backup, Restore & Disaster Recovery | PLANNED | Backup inventory and successful isolated restore |
+| F4 | Release, Monitoring & Incident Operations | PLANNED | Operational controls and evidence verified |
+| F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
+| F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
+| F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
+
+F2 is high priority because the current build script invokes db:migrate and a prior Preview build is recorded as having applied a migration to the connected Supabase project. This does not authorize immediate code changes. F1 must first map all build/migration call sites and local PGlite assumptions.
+
+**EXACT NEXT ACTION:** Complete and verify F0 on the current documentation branch. Do not begin F1 implementation, F2 code changes, database operations, or deployment automatically.
 
 ---
 
