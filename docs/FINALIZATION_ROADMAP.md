@@ -1,5 +1,6 @@
 # Menuun — F-Series Architecture, Operations & Continuity Roadmap
 
+**Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
 **Status:** ACTIVE — documentation baseline  
 **Product:** Menuun / Menu V3  
