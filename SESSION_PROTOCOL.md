@@ -5,7 +5,7 @@
 - PHASE: F0 — Continuity & Program Charter.
 - STATUS: IMPLEMENTATION_IN_PROGRESS; documentation-only branch `docs/f0-architecture-operations-roadmap`.
 - BASE MAIN SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c871?` (the full canonical SHA is `f6e888ded688ba682b3c871?`; see GitHub PR #411 metadata).
+- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c5862719b76adb96a5f21` (the full canonical SHA is `f6e888ded688ba682b3c5862719b76adb96a5f21`; see GitHub PR #411 metadata).
 - IMPORTANT: older entries below that describe PR #411 as open/draft are historical snapshots and must not be used as current state.
 - F0 documents created: `docs/FINALIZATION_ROADMAP.md`, `docs/architecture/README.md`, `docs/architecture/SYSTEM_OVERVIEW.md`, `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`, `docs/history/DEVELOPMENT_HISTORY.md`, `docs/decisions/ADR-0001-custom-migration-ledger.md`.
 - No application, database, migration, CI, Vercel configuration, production data, or deployment changes.
