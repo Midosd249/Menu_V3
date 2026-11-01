@@ -5,11 +5,12 @@
 - PHASE: F0 — Continuity & Program Charter.
 - STATUS: IMPLEMENTATION_IN_PROGRESS; documentation-only branch `docs/f0-architecture-operations-roadmap`.
 - BASE MAIN SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c5862719b76adb96a5f21` (the full canonical SHA is `f6e888ded688ba682b3c5862719b76adb96a5f21`; see GitHub PR #411 metadata).
+- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c5862719b76adb96a5f21`.
 - IMPORTANT: older entries below that describe PR #411 as open/draft are historical snapshots and must not be used as current state.
 - F0 documents created: `docs/FINALIZATION_ROADMAP.md`, `docs/architecture/README.md`, `docs/architecture/SYSTEM_OVERVIEW.md`, `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`, `docs/history/DEVELOPMENT_HISTORY.md`, `docs/decisions/ADR-0001-custom-migration-ledger.md`.
 - No application, database, migration, CI, Vercel configuration, production data, or deployment changes.
-- EXACT NEXT ACTION: finish continuity/README updates, read back all new docs, review the complete diff, and create a documentation-only PR. After merge, start F1 read-only architecture discovery only.
+- VERIFIED: Draft PR #414 is open; head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; base main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- EXACT NEXT ACTION: owner review of PR #414. After merge, start F1 read-only architecture discovery only.
 
 ## Permanent handoff rules
 
@@ -105,7 +106,8 @@
 - VERIFIED: the prior run's Typecheck, repository tests, contract suites, lint, production build, and all-theme template QA passed. Its browser QA failed only at the persistence-navigation test above. W9 Orders QA run `38888689121` passed on implementation parent `6b66039b2d4c1b7dc4d2b8902b7498dcf3064983`; it does not validate the newer test commit.
 - UNKNOWN: results for the corrected test on the final continuity-updated HEAD; three consecutive full-file runs with retries disabled; visual preview/device checks.
 - DEPLOYMENT: NOT_PERFORMED. PR #402 remains open and must not be merged or deployed as part of this task.
-- EXACT NEXT ACTION: finish continuity updates, then inspect Quality and W9 on the final HEAD; run the complete browser spec three consecutive times with retries disabled in CI-equivalent conditions and inspect any failure before proceeding.
+- VERIFIED: Draft PR #414 is open; head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; base main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- EXACT NEXT ACTION: owner review of PR #414. After merge, start F1 read-only architecture discovery only.
 
 ---
 
