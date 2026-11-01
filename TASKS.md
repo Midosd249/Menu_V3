@@ -13,7 +13,7 @@
   4. Migration runner/ledger and build-time migration hazard are recorded accurately.
   5. Existing release-only Vercel policy is linked, not duplicated as a competing policy.
   6. No runtime, database, CI, deployment, or secret changes.
-  7. New docs are read back, final diff reviewed, and a docs-only PR prepared for review.
+  7. New docs were read back; final diff compared against main; documentation-only Draft PR #414 opened for owner review.
 - VERIFICATION: GitHub content readback, changed-file/diff review, and continuity consistency check. No local tests/build are claimed.
 - EXACT NEXT TASK AFTER F0: F1 read-only architecture discovery. F2 code changes wait until F1 maps migration/build call sites and PGlite behavior.
 
