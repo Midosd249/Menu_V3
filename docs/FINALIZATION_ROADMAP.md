@@ -468,3 +468,11 @@ The F-Series is complete only when:
 
 ### Explicit caution
 This baseline does not assert that all proposed architecture documents or runbooks existed previously. It records the current verified starting point and the next evidence-gathering tasks.
+
+## 2026-11-02 — F4.3 validation and simulated rehearsal closeout
+
+F4.3's documentation and fictional owner rehearsal have been completed on branch `docs/f4-3-incident-rehearsal-2026-11-02`, based on main `41e5c36e434051f9668887974739870354706bd6`. The runbook now distinguishes confirmed/suspected incidents, isolated diagnostic errors, expected 4xx responses, and UNABLE TO ASSESS states; maps top-level `severity_text` separately from nested source-specific fields; and defines a conditional rollback gate. The tabletop covers detection, classification, triage, evidence, escalation, containment, rollback decision, recovery verification, closure, and post-incident records.
+
+**Evidence limits:** Supabase's current query returned 267 events from eight sources and one PostgreSQL SQLSTATE 42803 ERROR whose origin/impact remain UNKNOWN; no Edge 5xx matches were returned. Vercel returned no grouped runtime error clusters in 24 hours and the latest Production deployment is READY on main SHA `41e5c36e434051f9668887974739870354706bd6`. These observations do not establish full application health. Exact Vercel quota and Auth/Function log coverage remain UNKNOWN.
+
+**Status:** documentation/rehearsal complete with explicit limitations; final PR checks pending. No production operation occurred. F3 remains deferred/not done. Do not begin another phase until owner instruction.
