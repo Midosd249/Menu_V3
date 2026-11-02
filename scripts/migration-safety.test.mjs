@@ -101,7 +101,7 @@ test("production migrations require the exact operator confirmation", () => {
 
 test("Vercel Git deployments are opt-in for preview/* and production main only", () => {
   assert.deepEqual(VERCEL.git.deploymentEnabled, {
-    "*": false,
+    "**": false,
     main: true,
     "preview/*": true,
   });
