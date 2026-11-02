@@ -10,9 +10,9 @@ const POSTGRES_SCHEMA = "menu_v3";
 const ADVISORY_LOCK_NAMESPACE = 7312026;
 const ADVISORY_LOCK_ID = 1;
 
-const { databaseUrl, target, identity } = validateMigrationEnvironment(process.env);
+const { databaseUrl, target, connectionMode, identity } = validateMigrationEnvironment(process.env);
 console.log(
-  `[migrate] target=${target} host=${identity.host} database=${identity.database} user=${identity.user}`,
+  `[migrate] target=${target} mode=${connectionMode} host=${identity.host} port=${identity.port} database=${identity.database} user=${identity.user}`,
 );
 
 const migrationsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "migrations");
