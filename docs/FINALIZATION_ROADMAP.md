@@ -16,12 +16,12 @@ F5 UPDATE — 2026-11-03
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — F4 release, monitoring & incident operations  
+**Status:** ACTIVE — F5 commercial customer operations  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
 **Language:** Arabic-first product; repository engineering documentation is maintained in English.  
-**Last repository verification for this baseline:** 2026-11-02  
+**Last repository verification for this baseline:** 2026-11-03  
 **Verified main SHA at F4.3 start (2026-11-02):** `41e5c36e434051f9668887974739870354706bd6`
 
 > This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
@@ -118,7 +118,7 @@ CI success does not prove production deployment. Preview READY does not prove pr
 
 The F identifiers are permanent phase IDs. They are not sprint numbers, release versions, or proof of completion.
 
-| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-02) |
+| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-03) |
 |---|---|---|---|---|
 | **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | DONE |
 | **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | DONE — merged in PR #415 |
