@@ -269,11 +269,14 @@ This procedure is a companion to the F4 operational evidence record. It does not
 ### Rollback decision gate — conditional, never automatic
 
 1. Confirm a real Production regression and its impact; do not roll back solely because a warning, one-off query error, expected 4xx, or empty log query exists.
-2. Identify the exact current Production deployment and exact proposed previous deployment. Re-check current state and rollback eligibility at decision time; a historical candidate flag is not a standing guarantee.
+2. Identify the exact current Production deployment and exact proposed previous deployment. Re-check current state and rollback eligibility at decision time; a historical candidate flag is not a standing guarantee. The connected team is Hobby, where official Vercel guidance limits Instant Rollback to the immediately previous Production deployment; do not assume an older deployment is eligible.
 3. Correlate the regression with the release SHA and establish whether application rollback can plausibly remove the failure.
 4. Verify database/schema compatibility and whether any migration or irreversible data change occurred. Vercel rollback does not reverse SQL migrations or restore database/storage data.
 5. **GO** only when the owner has evidence of a release-caused regression, an eligible healthy previous Production target, and verified compatibility. Record target, reason, expected effect, and verification plan.
 6. **NO-GO / BLOCKED** when cause, target eligibility, or DB compatibility is unknown; preserve evidence, stop further risky releases/retries, and prefer a verified forward fix or safe containment.
-7. After an authorized rollback, verify the same failed critical path and source-native signals. READY alone is not recovery proof.
+7. After an authorized rollback, verify the same failed critical path and source-native signals. READY alone is not recovery proof. Confirm environment variables and external database/API state separately; Instant Rollback does not revert external systems or database mutations. Review Vercel's rollback behavior for domain aliases and production auto-assignment before confirming the action.
 
 Thresholds in the F4 record are PROPOSED triage candidates, not SLAs or platform guarantees. Missing telemetry is UNABLE TO ASSESS, not CLEAR. The F4.3 tabletop is fictional; no real incident or production action is implied.
+
+
+Official Vercel Instant Rollback reference: https://vercel.com/docs/instant-rollback. On Hobby, only the immediately previous Production deployment is eligible; re-check eligibility at incident time. Rollback does not reverse database or external API state.
