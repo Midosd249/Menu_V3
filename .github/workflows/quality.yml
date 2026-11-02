@@ -116,7 +116,7 @@ jobs:
           PERFORMANCE_AUDIT_VIEWPORT_HEIGHT: 844
         run: |
           mkdir -p .grok/p1-9-real-route
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/p1-9-real-route/preview.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8081' > .grok/p1-9-real-route/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -194,7 +194,7 @@ jobs:
       - name: Browser template QA — all themes
         run: |
           mkdir -p .grok
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -222,7 +222,7 @@ jobs:
       - name: Menuun brand browser QA — homepage and login in Arabic and English
         run: |
           mkdir -p .grok
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/menuun-brand-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8081' > .grok/menuun-brand-browser.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -478,7 +478,7 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$STUDIO_PID" 2>/dev/null || true; rm -f migrations/99999999_w7_3_studio_fixture.sql; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
           STUDIO_PID=$!
           echo "[resources] before Studio browser tests"
           df -h
@@ -597,7 +597,7 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$ADMIN_PID" 2>/dev/null || true; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
           ADMIN_PID=$!
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then

@@ -81,7 +81,7 @@ jobs:
           echo "[resources] before W9 browser tests"
           df -h
           free -m
-          setsid bash -c 'exec env VITE_AUTH_ENABLED=false node scripts/with-app-env.mjs "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" --host 127.0.0.1 --port 8082' > w9-orders-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'exec env VITE_AUTH_ENABLED=false node scripts/with-app-env.mjs "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts" --host 127.0.0.1 --port 8082' > w9-orders-browser.log 2>&1 < /dev/null &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true; rm -f migrations/99999999_w9_orders_fixture.sql' EXIT
           for attempt in $(seq 1 120); do
