@@ -449,3 +449,15 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - RELEASE: PR #411 remains Draft/open/unmerged. No merge, production deployment, or database rollback was performed. The previously applied additive migration remains untouched.
 - UNKNOWN: final-head Quality and W9 Orders browser results after the fixture correction.
 - EXACT NEXT ACTION: verify Quality and W9 on the final updated PR head, repair only any new failure supported by logs, then stop without merge or production deployment.
+
+
+## 2026-11-02 — F4.2 closeout
+
+- Verified PR #416 head `8d945e30fdf9b6cda44f27eb5d298f6374916210` has Quality run `41477117064` SUCCESS and W9 Orders QA run `41477117274` SUCCESS; both are pre-F4.2-update checks.
+- Completed read-only Supabase log source/field validation. PostgreSQL severity/SQLSTATE, Edge HTTP status, Storage/Realtime level are verified; other sampled sources lack a common severity key.
+- One PostgreSQL ERROR (`42803`, SELECT, GROUP BY projection error) observed; application origin/impact UNKNOWN, not a confirmed customer incident.
+- F4.2 evidence is recorded in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- Leaked Password Protection warning remains owner-closed / do not reopen.
+- F3 remains deferred by owner and not done.
+- Exactly one next task: F4.3 non-destructive incident-runbook validation and tabletop rehearsal.
+- No database mutation, deployment, rollback, paid service, backup/restore, or manual CI rerun.
