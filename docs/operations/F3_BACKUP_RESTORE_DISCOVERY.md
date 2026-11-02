@@ -4,7 +4,7 @@
 **Repository main:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`  
 **Supabase project:** `ublxptcqefujkbeepylc`  
 **Classification:** F3.1 — Backup Inventory (read-only)  
-**Status:** IN_PROGRESS — initial evidence captured; account-specific backup inventory remains open.
+**Status:** IN_PROGRESS — initial evidence captured; owner reports Free plan; account-specific backup inventory remains open.
 
 ## 1. Scope and safety
 
@@ -20,7 +20,7 @@ This document records the first evidence pass only. No backup was restored, no P
 | Region | `ap-northeast-2` |
 | Main application release | Vercel Production READY on main SHA `848d4acdd3b184c24142d1e77fc0c9af55f20eab` |
 
-**UNKNOWN:** Supabase billing plan and add-ons. The connected `get_project` metadata response does not include the plan, PITR activation, or backup inventory.
+**USER-REPORTED:** owner states the Supabase subscription is Free. **UNKNOWN:** the connected `get_project` metadata response does not independently expose the billing plan, PITR activation, or backup inventory.
 
 ## 3. Backup inventory
 
@@ -38,6 +38,29 @@ Official sources:
 - Supabase Database Backups: https://supabase.com/docs/guides/platform/backups
 - Supabase Pricing: https://supabase.com/pricing
 - Supabase Restore to a New Project: https://supabase.com/docs/guides/platform/clone-project
+
+
+
+### 3.1 Free-plan, no-upgrade manual database export
+
+Supabase's official Free-plan FAQ confirms there are no automatic daily backups on Free; manual CLI exports are supported. The documented CLI path is to authenticate/link the project from a trusted private machine, then export roles, schema, and data separately. Example commands after linking:
+
+```powershell
+npx supabase login
+npx supabase link --project-ref ublxptcqefujkbeepylc
+npx supabase db dump --linked -f roles.sql --role-only
+npx supabase db dump --linked -f schema.sql
+npx supabase db dump --linked -f data.sql --use-copy --data-only
+```
+
+Run from a private working directory, not this public repository. The CLI's documented dump excludes Supabase-managed schemas (including Auth and Storage); these files do not back up Storage object bytes, Auth users/configuration, Edge Functions, project settings, or secrets. Do not treat these three files as a complete disaster-recovery package. Verify each output exists, record SHA-256 checksums, encrypt the files, and keep copies in at least one private off-site location. Never upload dumps to this public GitHub repository or its Actions artifacts.
+
+**Execution boundary:** these commands were researched but not run from this connected session. The available Supabase connector does not provide pg_dump, Docker, CLI execution, or downloadable backup artifacts. No database credentials were read or requested.
+
+Official references:
+- https://supabase.com/kb/faqs/platform/free-plan-backups
+- https://supabase.com/docs/reference/cli/supabase-db-dump
+- https://supabase.com/docs/guides/deployment/ci/backups
 
 ## 4. Storage and media coverage
 
@@ -99,4 +122,4 @@ F3 remains **NOT DONE** until backup mechanisms and retention are evidenced; rec
 
 ## 9. Exact next action
 
-Obtain owner-authorized, read-only evidence from Supabase Dashboard or the Management API for the project's actual plan, available backup timestamps/retention and PITR status. Do not enable PITR, create a paid project, clone, or restore as part of this step.
+Owner performs the documented manual CLI export on a trusted private machine (no plan upgrade); verify checksums and private/off-site custody. Separately plan Auth/config and Storage object recovery because the CLI dump does not cover them. Do not upload dumps to public GitHub or change Production.
