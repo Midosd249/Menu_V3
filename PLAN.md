@@ -1,3 +1,7 @@
+
+
+> F1 update — 2026-11-02. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch, based on main e5d7c89a73718f35e7accbae7933af36c366bbc1. Documentation-only: no runtime, SQL, auth, CI, Vercel, environment, or production data changes. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
+
 # Active Plan — Menuun F-Series
 
 ## Current active phase: F0 — Continuity & Program Charter

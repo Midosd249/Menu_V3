@@ -1,0 +1,22 @@
+%% Authenticated mutation sequence
+%% Evidence date: 2026-11-02
+%% Baseline: e5d7c89a73718f35e7accbae7933af36c366bbc1
+sequenceDiagram
+  participant Browser
+  participant Middleware as authMiddleware
+  participant Verify as verify.server
+  participant Handler as Domain server function
+  participant Authz as authorization.server
+  participant DB as PostgreSQL
+  Browser->>Middleware: Server function request
+  Middleware->>Middleware: assertSameSiteRequest()
+  Middleware->>Verify: requireUserId(session/bearer)
+  Verify-->>Middleware: verified userId
+  Middleware->>Handler: context.userId
+  Handler->>Authz: authorizeMutation(userId, permission, tenant/branch?)
+  Authz->>DB: active membership + role + branch scope
+  DB-->>Authz: membership/access result
+  Authz-->>Handler: authorized context or error
+  Handler->>DB: tenant/branch-scoped query or mutation
+  DB-->>Handler: result
+  Handler-->>Browser: typed response

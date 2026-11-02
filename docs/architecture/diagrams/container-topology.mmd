@@ -1,0 +1,18 @@
+%% Menuun container/runtime topology
+%% Evidence date: 2026-11-02
+%% Baseline: e5d7c89a73718f35e7accbae7933af36c366bbc1
+%% UNKNOWN: exact Vercel instance topology and deployed PostgreSQL login role.
+flowchart TB
+  Browser["Browser / React 19 UI"]
+  Start["TanStack Start + Nitro server"]
+  Auth["Better Auth + auth middleware"]
+  Domain["Server-side domain modules"]
+  Pool["pg.Pool / search_path menu_v3,public"]
+  Supabase[("Supabase PostgreSQL 17.11")]
+  PGlite[("PGlite local/test fallback")]
+  Browser -->|"HTTPS + server-function calls"| Start
+  Start --> Auth
+  Start --> Domain
+  Domain --> Pool
+  Pool --> Supabase
+  Domain -. "when no DB URL configured" .-> PGlite

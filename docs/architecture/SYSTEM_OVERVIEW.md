@@ -1,9 +1,24 @@
+# F1 Current Evidence Addendum — 2026-11-02
+
+This addendum supersedes earlier F0 statements where newer source or live catalog evidence is available. The original F0 baseline is retained below as historical context.
+
+**VERIFIED:** F1 source inspection and live Supabase catalog inspection are recorded in the linked architecture documents. See [DATABASE](./DATABASE.md), [AUTH](./AUTH_AND_AUTHORIZATION.md), [TENANT ISOLATION](./TENANT_AND_BRANCH_ISOLATION.md), and [DEPLOYMENT](./DEPLOYMENT.md).
+
+**VERIFIED:** Live catalog snapshot: 47 `menu_v3` tables, 16 `public` tables; all 47 `menu_v3` tables have RLS enabled; seven restrictive deny policies were observed; zero FORCE RLS tables; zero direct table grants for API roles and no schema USAGE for those roles; 72 entries in `menu_v3._migrations`.
+
+**CORRECTION:** Any earlier F0 summary claiming zero policies in `menu_v3` is superseded: seven policies were observed on the seven tables listed in `DATABASE.md`. The 40-table no-policy count remains correct for the snapshot.
+
+**UNKNOWN:** Effective login role of the application's deployed PostgreSQL pool, current Production deployment SHA, exact Preview/Production database target mapping, and exhaustive server-function authorization coverage.
+
+---
+
 # Menuun System Overview — Verified Baseline
 
 **Program:** F-Series / F1 input  
 **Baseline date:** 2026-11-02  
 **Repository:** `Midosd249/Menu_V3`  
-**Baseline main SHA:** `5a84d31282383e191472bcd3fc7d5b62417e90ca`  
+**Original F0 baseline main SHA:** `5a84d31282383e191472bcd3fc7d5b62417e90ca`  
+**F1 evidence snapshot SHA:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`  
 **Confidence:** Partial baseline. This is not yet a complete C4 architecture audit.
 
 ## 1. Product boundary

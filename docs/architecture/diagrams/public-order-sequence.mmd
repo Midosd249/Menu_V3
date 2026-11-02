@@ -1,0 +1,21 @@
+%% Public menu order sequence (simplified; verify details in order-public.ts)
+%% Evidence date: 2026-11-02
+%% Baseline: e5d7c89a73718f35e7accbae7933af36c366bbc1
+sequenceDiagram
+  participant Guest as Guest browser
+  participant Route as Public menu route
+  participant QR as QR resolver
+  participant Order as submitPublicOrder
+  participant DB as PostgreSQL
+  Guest->>Route: GET /m/{slug}[/{branch}]?table=token
+  Route->>QR: resolve token when present
+  QR->>DB: hash token and resolve active table/branch/tenant
+  DB-->>QR: trusted table context or null
+  QR-->>Route: validated table label/context
+  Guest->>Order: Submit validated cart and customer fields
+  Order->>Order: Zod input validation
+  Order->>DB: Load active tenant/branch/products/options/offers
+  Order->>Order: Recalculate prices and verify selections
+  Order->>DB: Check rate/idempotency + persist order transaction
+  DB-->>Order: persisted order
+  Order-->>Guest: confirmation result
