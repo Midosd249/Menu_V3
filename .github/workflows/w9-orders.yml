@@ -34,7 +34,7 @@ jobs:
           node-version: 24
           cache: npm
       - name: Install
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --no-save --legacy-peer-deps vite@8.3.4 playwright@1.63.0
       - name: Generate route tree and typecheck
         run: |
           npx vite build --mode development
@@ -65,10 +65,8 @@ jobs:
           values ('w9-item-no-phone','w9-order-no-phone','demo-p-flatwhite','فلات وايت','Flat White',1,18,18,'[]'::jsonb)
           on conflict (id) do nothing;
           SQL
-      - name: Install Playwright
-        run: |
-          npm install --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps vite@8.3.4 playwright@1.63.0
-          npx playwright install --with-deps chromium
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
       - name: Run W9 Orders browser QA
         run: |
           echo "[resources] before W9 browser tests"
