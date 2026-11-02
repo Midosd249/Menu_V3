@@ -12,7 +12,9 @@ const MIGRATOR = readFileSync(join(ROOT, "scripts/migrate.mjs"), "utf8");
 
 const validEnv = (overrides = {}) => ({
   MIGRATION_TARGET: "staging",
+  MIGRATION_CONNECTION_MODE: "direct",
   MIGRATION_EXPECTED_HOST: "db.project-ref.supabase.co",
+  MIGRATION_EXPECTED_PORT: "5432",
   MIGRATION_EXPECTED_DATABASE: "postgres",
   MIGRATION_EXPECTED_USER: "postgres",
   DATABASE_URL:
@@ -39,6 +41,10 @@ test("migration target and expected database identity are mandatory", () => {
     /MIGRATION_EXPECTED_USER/,
   );
   assert.throws(
+    () => validateMigrationEnvironment(validEnv({ MIGRATION_EXPECTED_PORT: "" })),
+    /MIGRATION_EXPECTED_PORT/,
+  );
+  assert.throws(
     () => validateMigrationEnvironment(validEnv({ DATABASE_URL: "" })),
     /connection URL is required/,
   );
@@ -48,7 +54,34 @@ test("migration target and expected database identity are mandatory", () => {
   );
 });
 
-test("migration target identity must match host, database, and user", () => {
+test("migration connection must preserve PostgreSQL session state", () => {
+  assert.throws(
+    () => validateMigrationEnvironment(validEnv({ MIGRATION_CONNECTION_MODE: "" })),
+    /MIGRATION_CONNECTION_MODE/,
+  );
+  assert.throws(
+    () => validateMigrationEnvironment(validEnv({ MIGRATION_CONNECTION_MODE: "transaction" })),
+    /must be direct or session/,
+  );
+  assert.throws(
+    () =>
+      validateMigrationEnvironment(
+        validEnv({
+          DATABASE_URL:
+            "postgresql://postgres:secret-password@aws.pooler.supabase.com:6543/postgres",
+          MIGRATION_EXPECTED_HOST: "aws.pooler.supabase.com",
+          MIGRATION_EXPECTED_PORT: "6543",
+        }),
+      ),
+    /transaction-mode pooler port 6543 is not supported/,
+  );
+  assert.throws(
+    () => validateMigrationEnvironment(validEnv({ MIGRATION_EXPECTED_PORT: "5433" })),
+    /port does not match/,
+  );
+});
+
+test("migration target identity must match host, port, database, and user", () => {
   assert.throws(
     () => validateMigrationEnvironment(validEnv({ MIGRATION_EXPECTED_HOST: "other.supabase.co" })),
     /host does not match/,
@@ -74,11 +107,13 @@ test("migration runner refuses all Vercel build and deployment contexts", () => 
   );
 });
 
-test("staging migrations require explicit target identity but no production confirmation", () => {
+test("staging migrations require explicit target identity and session-preserving mode", () => {
   const result = validateMigrationEnvironment(validEnv());
   assert.equal(result.target, "staging");
+  assert.equal(result.connectionMode, "direct");
   assert.deepEqual(result.identity, {
     host: "db.project-ref.supabase.co",
+    port: 5432,
     database: "postgres",
     user: "postgres",
   });
