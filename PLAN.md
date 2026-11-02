@@ -1,26 +1,26 @@
 # Active Plan — Menuun F-Series
 
-## Current active phase: F3 — Backup, Restore & Disaster Recovery
+## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** IN_PROGRESS — F3.1 read-only backup inventory/discovery.
-- **VERIFIED MAIN:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
-- **COMPLETED:** F0 Continuity & Program Charter; F1 Verified Architecture Baseline; F2 Production-Safe Build & Migration Boundary (PR #415).
-- **F3 OBJECTIVE:** establish evidence-backed backup coverage and prove safe recovery through an isolated restore before marking the phase DONE.
-- **F3 GUARDRAIL:** never restore over Production; do not enable PITR, create a paid project, or initiate any restore without explicit owner approval after cost, target, and side-effect review.
-- **DISCOVERY RECORD:** `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
+- **STATUS:** IN_PROGRESS — F4.1 read-only operational baseline.
+- **VERIFIED MAIN BASE:** 848d4acdd3b184c24142d1e77fc0c9af55f20eab (PR #415 merge).
+- **COMPLETED:** F0, F1, F2.
+- **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation is a mandatory pre-commercial gate: before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
+- **F3 DISCOVERY:** docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md; prior research preserved. No backup, PITR, restore, paid project, or export execution authorized now.
+- **F4 RECORD:** docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
 | F0 | Continuity & Program Charter | DONE | Charter and continuity contract recorded |
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged and exact-head CI passed |
-| F3 | Backup, Restore & Disaster Recovery | IN_PROGRESS | Evidenced backups, retention, recovery dependencies, successful isolated restore, integrity validation, runbooks and classified RPO/RTO |
-| F4 | Release, Monitoring & Incident Operations | PLANNED | Operational controls and evidence verified |
+| F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed backups, retention, dependencies, isolated restore, integrity/media validation, runbooks and owner-approved RPO/RTO before commercial boundary |
+| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | Affordable monitoring, deployment identity, incident triage, rollback evidence and operational runbooks verified |
 | F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**EXACT NEXT ACTION:** verify actual backup availability, retention and PITR configuration for project `ublxptcqefujkbeepylc` using an owner-authorized read-only Dashboard/Management API path. Do not initiate a restore or enable PITR.
+**EXACT NEXT ACTION:** complete F4.1 read-only Vercel production deployment/usage evidence inspection, then define the smallest repeatable free-tier health/error check. No deployment, paid service, settings change, or automation.
 
 ---
 
