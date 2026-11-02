@@ -141,3 +141,17 @@ Future entries should link to:
 - **Current evidence:** Supabase ACTIVE_HEALTHY; 267 events in eight sources; top-level severity_text populated in the sample; one PostgreSQL ERROR SQLSTATE 42803 remains uncorrelated; no Edge 5xx matches. Vercel runtime error query returned no clusters for 24h; latest Production deployment READY on main SHA 41e5c36e.
 - **Safety:** no production fault injection, deployment, rollback, DB mutation, migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
 - **Status:** documentation/rehearsal complete; final PR checks pending. No F4.4/F5/F6 work started.
+
+
+---
+
+## 2026-11-03 — F5.1 actual sales-to-activation journey
+
+- **VERIFIED baseline:** main `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`; work isolated on `docs/f5-1-sales-activation-journey-2026-11-03`.
+- **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md` maps the current hybrid owner-assisted discovery / self-serve activation path from repository source and migrations.
+- **VERIFIED product boundaries:** no in-product CRM/lead pipeline, demo booking, support ticketing/SLA, online checkout, automatic payment collection, or payment-success state is claimed. New workspace provisioning, menu publication, QR sharing, team invitations, and owner-operated billing are separately documented.
+- **CONTINUITY CORRECTION:** `docs/CUSTOMER_LIFECYCLE_ACCESS_POLICY.md` marked as a historical 2026-09-16 snapshot because the later self-serve lifecycle retirement record and current source supersede its manual-approval flow.
+- **F4 closeout:** PR #417 CLOSED / MERGED at main SHA `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`; exact PR-head Quality `41526431191` and W9 `41526431206` succeeded on `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`. Post-merge main CI remains UNKNOWN.
+- **SAFETY:** no application code, DB/schema/migration, customer data, production settings, secrets, billing, deployment, or manual CI rerun changed/performed.
+- **F3:** remains DEFERRED BY OWNER — NOT DONE; no real-customer onboarding or commercial launch.
+- **STATUS:** F5.1 COMPLETE WITH EXPLICIT LIMITATIONS. Exact next task: F5.2 owner-led operating procedure. No F5.2 work started.
