@@ -1,0 +1,24 @@
+%% Menuun C4 System Context
+%% Evidence date: 2026-11-02
+%% Baseline: e5d7c89a73718f35e7accbae7933af36c366bbc1
+%% Scope: actors and directly evidenced external systems; provider activation is not implied.
+flowchart LR
+  Owner["Restaurant owner"]
+  Staff["Restaurant staff"]
+  Guest["Restaurant guest"]
+  Admin["Platform administrator"]
+  App["Menuun SaaS"]
+  Auth["Better Auth"]
+  DB[("Supabase PostgreSQL")]
+  Email["Configured email transport"]
+  AI["Eligible AI provider APIs"]
+  Vercel["Vercel hosting"]
+  Owner --> App
+  Staff --> App
+  Guest --> App
+  Admin --> App
+  App --> Auth
+  App --> DB
+  App --> Email
+  App --> AI
+  Vercel -. hosts .-> App

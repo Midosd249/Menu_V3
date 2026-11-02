@@ -1,29 +1,39 @@
 # Active Plan — Menuun F-Series
 
-## Current active phase: F0 — Continuity & Program Charter
+## Current active phase: F2 — Production-Safe Build & Migration Boundary
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS on `docs/f0-architecture-operations-roadmap`.
-- BASELINE main SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- AUTHORITATIVE ROADMAP: `docs/FINALIZATION_ROADMAP.md`.
-- ARCHITECTURE INDEX: `docs/architecture/README.md`.
-- OPERATIONS BASELINE: `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`.
-- HISTORY REGISTER: `docs/history/DEVELOPMENT_HISTORY.md`.
-- ADR: `docs/decisions/ADR-0001-custom-migration-ledger.md`.
+- **STATUS:** IMPLEMENTATION_IN_PROGRESS on `feat/f2-production-safe-migrations`.
+- **MAIN BASE:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
+- **F1 PARENT:** `b42229bcab316f1d85d2ff189754ec56ad434c15` (`docs/f1-verified-architecture-baseline`).
+- **F2 SCOPE:** side-effect-free application build, explicit target-verified migration command, Vercel execution guard, production confirmation, PostgreSQL advisory lock, opt-in Git deployments, tests, and runbook.
+- **AUTHORITATIVE ROADMAP:** `docs/FINALIZATION_ROADMAP.md`.
+- **ARCHITECTURE INDEX:** `docs/architecture/README.md`.
+- **MIGRATION RUNBOOK:** `docs/operations/MIGRATION_RUNBOOK.md`.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
-| F0 | Continuity & Program Charter | IN_PROGRESS | Docs reviewed, continuity reconciled, docs-only PR |
-| F1 | Verified Architecture Baseline | PLANNED | Read-only C4/source/data/auth/integration/deployment mapping |
-| F2 | Production-Safe Build & Migration Boundary | PLANNED — HIGH PRIORITY | F1 complete; explicit authorization for code/config change |
+| F0 | Continuity & Program Charter | VERIFIED on main | F0 baseline and operating charter recorded |
+| F1 | Verified Architecture Baseline | IMPLEMENTED — NOT MERGED | Architecture docs/diagrams committed on F1 parent branch; preserve in F2 PR |
+| F2 | Production-Safe Build & Migration Boundary | IN_PROGRESS | Exact PR head passes Quality/W9; migration safety contracts verified; no Preview DB side effects |
 | F3 | Backup, Restore & Disaster Recovery | PLANNED | Backup inventory and successful isolated restore |
 | F4 | Release, Monitoring & Incident Operations | PLANNED | Operational controls and evidence verified |
 | F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-F2 is high priority because the current build script invokes db:migrate and a prior Preview build is recorded as having applied a migration to the connected Supabase project. This does not authorize immediate code changes. F1 must first map all build/migration call sites and local PGlite assumptions.
+## F2 acceptance gate
 
-**EXACT NEXT ACTION:** Complete and verify F0 on the current documentation branch. Do not begin F1 implementation, F2 code changes, database operations, or deployment automatically.
+1. `npm run build` does not invoke `db:migrate`.
+2. The explicit migration runner requires `MIGRATION_TARGET`, `MIGRATION_EXPECTED_HOST`, `MIGRATION_EXPECTED_DATABASE`, and `MIGRATION_EXPECTED_USER`.
+3. The runner rejects Vercel build/deployment contexts and mismatched target identity.
+4. Production requires `MIGRATION_CONFIRM_PRODUCTION=APPLY_PRODUCTION_MIGRATIONS`.
+5. Concurrent invocations are serialized with a PostgreSQL advisory lock.
+6. PGlite runtime migrations and the canonical custom ledger remain unchanged.
+7. Vercel Git deployment policy permits `main` and explicit `preview/*` only.
+8. Focused regression tests pass; Quality/W9 pass on the same PR head.
+9. No production migration, merge, or deployment is performed as part of implementation verification.
+
+**EXACT NEXT ACTION:** inspect exact-head Quality/W9 and Vercel events for the F2 PR, then close out without merge or deployment. Do not begin F3 automatically.
 
 ---
 

@@ -1,8 +1,14 @@
-# Menuun — F-Series Architecture, Operations & Continuity Roadmap
+F2 UPDATE — 2026-11-02
+
+VERIFIED: main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`. F1 architecture artifacts are committed at `b42229bcab316f1d85d2ff189754ec56ad434c15` on the parent branch. F2 implementation is in progress on `feat/f2-production-safe-migrations`. The branch removes PostgreSQL migrations from application build, adds explicit target identity and Vercel guards, requires production confirmation, serializes runner execution, configures Vercel Git deployments as opt-in for `main` and `preview/*`, and adds tests/runbook/ADR. No Supabase migration, merge, or Production deployment has been performed. Exact next action: verify F2 on one PR head and close it before F3.
+
+---
+
+ — F-Series Architecture, Operations & Continuity Roadmap
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — documentation baseline  
+**Status:** ACTIVE — F2 implementation in progress  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
@@ -108,7 +114,7 @@ The F identifiers are permanent phase IDs. They are not sprint numbers, release 
 |---|---|---|---|---|
 | **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | ACTIVE — this documentation task |
 | **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | PLANNED |
-| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | PLANNED — HIGH PRIORITY |
+| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | IMPLEMENTATION_IN_PROGRESS — branch feat/f2-production-safe-migrations |
 | **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | PLANNED |
 | **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2, F3 | PLANNED |
 | **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | PLANNED |
@@ -208,6 +214,8 @@ Ensure ordinary application builds do not silently mutate a live database, and e
 
 ### Baseline fact
 **VERIFIED:** At the baseline SHA, `package.json` defines `build` as a command that runs the Vite build, PGlite asset handling, and then `npm run db:migrate`. `scripts/migrate.mjs` selects the first configured database URL from its supported environment-variable list and applies pending SQL files through the repository runner. A prior Vercel Preview build is documented in repository history as having applied a migration to the connected Supabase project. This is a demonstrated production-safety hazard, not merely a theoretical concern.
+
+**IMPLEMENTED ON F2 BRANCH — CI PENDING:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and an operator runbook. No database migration was executed. F2 is not DONE until final-head CI and deployment-event checks are complete.
 
 ### Work packages
 - F2.1 Map every build/deploy path and identify where `build`, `db:migrate`, and database environment variables are invoked.

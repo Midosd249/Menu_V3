@@ -1,18 +1,19 @@
-# Current Project State — F-Series Documentation Baseline
+# Current Project State — F-Series
 
-## 2026-11-02 — F0 continuity, architecture and production-safety documentation
+## 2026-11-02 — F2 build and migration safety boundary
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS — documentation-only work on branch `docs/f0-architecture-operations-roadmap`.
-- VERIFIED: repository `Midosd249/Menu_V3`; default branch `main`; baseline main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c5862719b76adb96a5f21`.
-- VERIFIED: latest inspected main commit repairs Essential language-selector state rules.
-- VERIFIED: package build invokes db:migrate; scripts/migrate.mjs uses migrations/ and menu_v3._migrations. Prior Preview build migration side effect is recorded in PR #411.
-- VERIFIED: docs/release-only-vercel-workflow.md already defines local-first QA, one coherent release batch, separate deployment evidence, quota handling, and rollback boundaries.
-- IMPLEMENTED ON THIS BRANCH: F0 roadmap, architecture index/system overview, production-safe operations baseline, development history register, and ADR-0001.
-- SCOPE: documentation only. No application source, migrations, database, secrets, CI workflows, Vercel settings, merge, or deployment changed/performed.
-- UNKNOWN: full C4 architecture; current live production deployment SHA/state; backup retention/PITR and successful restore evidence; approved RPO/RTO; exact production database target mapping; isolated staging readiness.
-- VERIFIED: documentation-only PR #414 is open as Draft, based on main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`, head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; GitHub reports mergeable=true at last check.
-- EXACT NEXT ACTION: owner review of PR #414. After it is merged, begin F1 read-only architecture discovery. Do not start F2 code changes until F1 maps all build/migration call sites and F2 is separately authorized.
+- **CLASSIFICATION:** F2 — Production-Safe Build & Migration Boundary.
+- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
+- **BRANCH:** `feat/f2-production-safe-migrations`; it contains F1 architecture artifacts plus F2 implementation. Git history is authoritative for its latest HEAD.
+- **IMPLEMENTED:** build/migration separation; explicit target and host/database/user matching; Vercel execution rejection; production confirmation; non-blocking PostgreSQL advisory lock; opt-in Vercel Git deployment rules; regression tests; ADR-0002; migration runbook.
+- **PRESERVED:** PGlite runtime migration behavior, custom runner, `menu_v3._migrations`, and per-migration transaction semantics. No SQL migration/schema changed.
+- **VERCEL PREVIEW EVIDENCE:** one automatic Preview deployment was created for the first F2 code commit `5ce4a7108c9adb383931af0557375be78caf5884`: deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj`, target `null`, state `READY`. Its build log shows the artifact-only build command and no migration-runner output. The initial `*` branch pattern did not match the slash-containing `feat/f2-production-safe-migrations` branch; the config was corrected to `**: false`. No additional deployment was observed for the corrected commit. PR-triggered behavior still needs verification.
+- **VERIFICATION:** no local/sandbox test execution is evidenced; sandbox creation was rejected by Vercel and the container could not resolve GitHub. GitHub Quality/W9 remain pending exact-head verification.
+- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no merge or Production deployment occurred, and no customer data was touched.
+- **UNKNOWN:** isolated staging Supabase target/protected migration environment; Preview/Production DB URL mapping; backup/restore readiness; PR-triggered Vercel behavior.
+- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel events on the single F2 PR's exact head, then close out without merging or deploying.
+
+---
 
 ---
 

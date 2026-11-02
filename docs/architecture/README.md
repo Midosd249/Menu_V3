@@ -13,7 +13,7 @@ This directory describes the architecture that is actually implemented in Menuun
 - [System overview](./SYSTEM_OVERVIEW.md) — current verified product/system boundary, runtime facts, trust boundaries, and open architecture questions.
 - [F-Series roadmap](../FINALIZATION_ROADMAP.md) — authoritative phase sequence and completion criteria.
 
-## Planned F1 architecture artifacts
+## F1 architecture artifacts — committed on branch docs/f1-verified-architecture-baseline
 
 Create or extend these only after inspecting the corresponding current code/configuration. Do not create duplicate documents if an equivalent maintained document already exists.
 
@@ -59,3 +59,29 @@ Create or extend these only after inspecting the corresponding current code/conf
 - copy secrets, connection strings, customer data, or sensitive logs into diagrams.
 - Treat RLS enabled as proof that every access path is safe; inspect policies, grants, and server access together.
 - Treat a high-level diagram as a complete security review.
+
+## F1 verified architecture artifacts (2026-11-02)
+
+- [C4 System Context](./CONTEXT.md)
+- [Container and Runtime Topology](./CONTAINERS.md)
+- [Application Components](./COMPONENTS.md)
+- [Database and Live Catalog](./DATABASE.md)
+- [Authentication and Authorization](./AUTH_AND_AUTHORIZATION.md)
+- [Tenant and Branch Isolation](./TENANT_AND_BRANCH_ISOLATION.md)
+- [API and Server Functions](./API_AND_SERVER_FUNCTIONS.md)
+- [Critical Data Flows](./DATA_FLOWS.md)
+- [External Integrations](./INTEGRATIONS.md)
+- [Deployment and Release Topology](./DEPLOYMENT.md)
+
+### Mermaid diagrams
+- [System context](./diagrams/system-context.mmd)
+- [Container topology](./diagrams/container-topology.mmd)
+- [Authenticated mutation](./diagrams/auth-mutation-sequence.mmd)
+- [Public order](./diagrams/public-order-sequence.mmd)
+
+All facts are bounded by each document's evidence date and SHA. Unknowns remain explicit; this index is not a security certification.
+
+## F2 migration and deployment safety
+
+- [Migration Runbook](../operations/MIGRATION_RUNBOOK.md) — explicit target-verified operator procedure; no build-time migrations.
+- [ADR-0002](../decisions/ADR-0002-build-migration-separation.md) — build/migration separation and Vercel Git deployment policy.
