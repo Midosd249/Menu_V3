@@ -1,23 +1,24 @@
-F3 UPDATE — 2026-11-02
+F4 UPDATE — 2026-11-02
 
-**VERIFIED:** `main` is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`. PR #415 merged F1 and F2. Exact feature-head Quality `41381209308` and W9 `41381209270` succeeded. Vercel Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY on the same SHA. F0/F1/F2 are DONE; F3 is the active phase.
-**F3.1 discovery:** Supabase project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY, PostgreSQL 17, region `ap-northeast-2`. The connector did not expose plan, backup inventory or PITR configuration. Storage bucket `menu-assets` exists and is public. Supabase database backups exclude Storage object bytes. See `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
-**UNKNOWN:** project plan, actual daily backup availability/retention, PITR status, independent Storage object backup, manual/off-site exports, isolated restore readiness, approved RPO/RTO.
-**EXACT NEXT ACTION:** obtain owner-authorized read-only account-specific backup inventory and PITR evidence. No restore, PITR activation, project clone, Production mutation or deployment is authorized by this discovery task.
-
----
+**VERIFIED MAIN AT F4.3 START:** `41e5c36e434051f9668887974739870354706bd6`; PR #416 merged F4.1/F4.2 operational baseline. F4.1 and F4.2 remain complete with explicit limitations.
+**F3 DECISION:** DEFERRED BY OWNER — NOT DONE. Preserve the existing discovery record; F3 remains mandatory before the first real customer, customer-owned data, or commercial launch. Do not run backup/restore/PITR work in F4.3.
+**F4.3:** incident-response runbook validation and fictional owner rehearsal documented; final-head Quality `41523483447` and W9 `41523483512` both SUCCESS on `102e24e343e6add57e53d49a0908b78c7bfa974e`; PR #417 remains OPEN / NOT MERGED.
+**CURRENT READ-ONLY SNAPSHOT:** Supabase project ACTIVE_HEALTHY; 267 events across eight returned sources, top-level `severity_text` populated in sampled rows, one isolated PostgreSQL SQLSTATE 42803 ERROR with origin/impact UNKNOWN, no Edge 5xx matches. Vercel returned no grouped runtime-error clusters for 24 hours; latest Production deployment `dpl_2E7MXn3PbeiHAj34hvQ2gCG978TT` is READY on main SHA `41e5c36e434051f9668887974739870354706bd6`. These observations do not prove full application health. Exact Vercel quota and Auth/Function source coverage remain UNKNOWN.
+**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+**SAFETY:** no production fault injection, deployment, rollback, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
+**EXACT NEXT ACTION:** await explicit owner decision on PR #417; do not merge/deploy or start another phase automatically.
 
  — F-Series Architecture, Operations & Continuity Roadmap
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — F3 backup/restore discovery in progress  
+**Status:** ACTIVE — F4 release, monitoring & incident operations  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
 **Language:** Arabic-first product; repository engineering documentation is maintained in English.  
 **Last repository verification for this baseline:** 2026-11-02  
-**Verified main SHA (2026-11-02):** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`
+**Verified main SHA at F4.3 start (2026-11-02):** `41e5c36e434051f9668887974739870354706bd6`
 
 > This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
 
@@ -118,8 +119,8 @@ The F identifiers are permanent phase IDs. They are not sprint numbers, release 
 | **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | DONE |
 | **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | DONE — merged in PR #415 |
 | **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
-| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | IN_PROGRESS — F3.1 read-only inventory |
-| **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2, F3 | PLANNED |
+| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate |
+| **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2; F3 remains a pre-commercial gate | IN_PROGRESS — F4.1/F4.2 complete; F4.3 documented, PR checks pending |
 | **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | PLANNED |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
 | **F7** | Architecture Evolution & Governance | ADR lifecycle, technical debt decisions, architecture drift checks, and recurring continuity maintenance | F1–F6 | PLANNED |
@@ -252,7 +253,7 @@ Never assume an application rollback reverses a database migration. Never edit a
 - Preview and production database targets cannot be confused silently.
 - The change is verified locally and through applicable CI before release.
 
-## 8. F3 — Backup, Restore & Disaster Recovery (ACTIVE)
+## 8. F3 — Backup, Restore & Disaster Recovery (DEFERRED BY OWNER — NOT DONE)
 
 ### Objective
 Know what can be recovered, from which point in time, by whom, and how long recovery takes.
@@ -468,3 +469,11 @@ The F-Series is complete only when:
 
 ### Explicit caution
 This baseline does not assert that all proposed architecture documents or runbooks existed previously. It records the current verified starting point and the next evidence-gathering tasks.
+
+## 2026-11-02 — F4.3 validation and simulated rehearsal closeout
+
+F4.3's documentation and fictional owner rehearsal have been completed on branch `docs/f4-3-incident-rehearsal-2026-11-02`, based on main `41e5c36e434051f9668887974739870354706bd6`. The runbook now distinguishes confirmed/suspected incidents, isolated diagnostic errors, expected 4xx responses, and UNABLE TO ASSESS states; maps top-level `severity_text` separately from nested source-specific fields; and defines a conditional rollback gate. The tabletop covers detection, classification, triage, evidence, escalation, containment, rollback decision, recovery verification, closure, and post-incident records.
+
+**Evidence limits:** Supabase's current query returned 267 events from eight sources and one PostgreSQL SQLSTATE 42803 ERROR whose origin/impact remain UNKNOWN; no Edge 5xx matches were returned. Vercel returned no grouped runtime error clusters in 24 hours and the latest Production deployment is READY on main SHA `41e5c36e434051f9668887974739870354706bd6`. These observations do not establish full application health. Exact Vercel quota and Auth/Function log coverage remain UNKNOWN.
+
+**Status:** documentation/rehearsal complete with explicit limitations; final PR checks pending. No production operation occurred. F3 remains deferred/not done. Do not begin another phase until owner instruction.

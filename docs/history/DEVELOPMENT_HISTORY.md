@@ -9,6 +9,15 @@ F2 UPDATE — 2026-11-02
 - **VERIFICATION:** local/sandbox execution is blocked; GitHub Quality/W9 remain pending exact-head verification; do not claim success until both run on the final PR head. No production migration, merge, or Production deployment occurred.
 
 ---
+## 2026-11-03 — F4.3 incident runbook and simulated rehearsal closeout
+
+- **VERIFIED:** PR #417 branch `docs/f4-3-incident-rehearsal-2026-11-02`, final head `102e24e343e6add57e53d49a0908b78c7bfa974e`; base `main` `41e5c36e434051f9668887974739870354706bd6`; 12 commits ahead / 0 behind.
+- **VERIFIED CI ON EXACT HEAD:** Quality run `41523483447` SUCCESS; W9 Orders QA run `41523483512` SUCCESS. Quality job passed typecheck, tests, lint, production build and applicable browser QA; conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
+- **VERIFIED DIFF:** eight documentation files only, 225 additions / 38 deletions; no runtime code/config/schema changes. Remote compare reviewed.
+- **STATUS:** F4.3 documentation and fictional tabletop complete with explicit operational limitations. PR #417 remains OPEN / NOT MERGED; no merge or deployment was performed.
+- **SAFETY:** no manual CI reruns, production fault injection, database/platform mutation, backup/restore, deployment or rollback.
+- **NEXT:** await explicit owner decision on PR #417; no subsequent phase starts automatically.
+
 # Menuun Development History — Evidence Register
 
 **Program:** F-Series  
@@ -124,3 +133,11 @@ Future entries should link to:
 - Production deployment evidence where relevant.
 - Incident/ADR/architecture docs.
 - Owner-side verification, clearly separated from automated checks.
+
+### 2026-11-02 — F4.3 incident runbook validation and simulated rehearsal
+
+- **VERIFIED base:** main `41e5c36e434051f9668887974739870354706bd6`; work isolated on `docs/f4-3-incident-rehearsal-2026-11-02`.
+- **Scope:** documentation-only F4.3. Added incident classification, source/field reconciliation, missing-telemetry rules, proposed-threshold discipline, conditional rollback decision gate, and fictional owner tabletop.
+- **Current evidence:** Supabase ACTIVE_HEALTHY; 267 events in eight sources; top-level severity_text populated in the sample; one PostgreSQL ERROR SQLSTATE 42803 remains uncorrelated; no Edge 5xx matches. Vercel runtime error query returned no clusters for 24h; latest Production deployment READY on main SHA 41e5c36e.
+- **Safety:** no production fault injection, deployment, rollback, DB mutation, migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
+- **Status:** documentation/rehearsal complete; final PR checks pending. No F4.4/F5/F6 work started.

@@ -1,3 +1,20 @@
+## 2026-11-02 — F4.3 runbook validation and simulated rehearsal
+
+- **CLASSIFICATION:** F4.3 documentation-only incident-response runbook validation and fictional tabletop rehearsal.
+- **VERIFIED MAIN AT START:** `41e5c36e434051f9668887974739870354706bd6`; F4.1/F4.2 are present in the current F4 record; no pre-existing F4.3 rehearsal section was found.
+- **VERIFIED CURRENT SUPABASE:** project `ublxptcqefujkbeepylc` ACTIVE_HEALTHY, PostgreSQL 17.11, region `ap-northeast-2`. The default last-24-hour Logs query returned eight sources and 267 events. Top-level `severity_text` was populated in all sampled rows; one PostgreSQL ERROR remained SQLSTATE 42803 / SELECT at 2026-11-01T23:20:38.823Z. Origin and impact UNKNOWN. No Edge 5xx rows matched the query.
+- **VERIFIED CURRENT VERCEL:** latest Production deployment `dpl_2E7MXn3PbeiHAj34hvQ2gCG978TT` READY on main SHA `41e5c36e434051f9668887974739870354706bd6`; no grouped runtime error clusters returned in the last 24 hours. These observations do not prove full application health. Hobby plan confirmed; exact quota UNKNOWN.
+- **RESEARCH:** official Supabase Logs, field reference, SQL filtering, configure logging and debugging docs; official Vercel rollback/runtime-log docs. Key correction: `severity_text` is top-level in Logs, distinct from nested source-specific attributes; earlier F4.2 statement is preserved as a historical nested-map observation.
+- **IMPLEMENTED IN DOCS:** source/field matrix, incident categories, telemetry confidence rules, proposed thresholds, conditional rollback gate, full fictional owner tabletop from detection to post-incident documentation.
+- **SAFETY:** no fault injection, deployment, rollback, database write/migration, settings change, secrets modification, backup/restore, paid upgrade, or manual CI rerun.
+- **UNKNOWN:** auth/function sources not returned in the current source query; exact Vercel quota; live browser/real-device journey health; no persistent alert destination verified.
+- **VERIFIED FINAL-HEAD CI:** Quality run `41523483447` and W9 Orders QA run `41523483512` both completed with `success` on exact PR head `102e24e343e6add57e53d49a0908b78c7bfa974e`. Quality job `quality` passed typecheck, tests, lint, production build, all-theme browser QA, Arabic/English brand browser QA, golden performance fixture, and Studio/Platform Admin browser QA. Two P1.9 route-graph-only steps were intentionally skipped by workflow conditions. W9 job `orders-browser` passed its isolated PGLite Orders browser QA.
+- **VERIFIED PR / DIFF:** PR #417 remains OPEN / NOT MERGED. Branch head `102e24e343e6add57e53d49a0908b78c7bfa974e` is 12 commits ahead and 0 behind `main` `41e5c36e434051f9668887974739870354706bd6`; final compare contains eight documentation files only (225 additions, 38 deletions). No runtime code/config/schema changes.
+- **STATUS:** F4.3 documentation, fictional rehearsal, final-head CI and remote diff review COMPLETE WITH EXPLICIT LIMITATIONS. Changes are pushed; PR #417 remains open and unmerged. No F4.4/F5/F6 work started.
+- **EXACT NEXT ACTION:** await the owner's explicit decision on PR #417; do not merge, deploy, or start another phase automatically.
+
+---
+
 # Current Project State — F-Series
 
 ## 2026-11-02 — F4.2 Supabase log classification completed

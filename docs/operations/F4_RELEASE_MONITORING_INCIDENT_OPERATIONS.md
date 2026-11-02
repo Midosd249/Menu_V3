@@ -1,8 +1,8 @@
 # F4 — Release, Monitoring & Incident Operations
 
 **Date:** 2026-11-02  
-**Status:** IN_PROGRESS — F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 is next  
-**Repository base:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`  
+**Status:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 final-head Quality/W9 CI SUCCESS; PR #417 OPEN / NOT MERGED  
+**Repository base at F4.3 start:** main `41e5c36e434051f9668887974739870354706bd6`  
 **Scope:** read-only platform inspection and operational documentation. No application code, database schema, platform settings, secrets, deployments, alerts, or customer data were changed.
 
 ## 1. Phase boundary
@@ -150,6 +150,7 @@ Severity and escalation thresholds that require application-specific baselines r
 - Vercel Observability: https://vercel.com/docs/observability
 - Vercel runtime logs: https://vercel.com/docs/logs/runtime
 - Vercel alerts: https://vercel.com/docs/alerts
+- Vercel Instant Rollback and plan eligibility: https://vercel.com/docs/instant-rollback
 - Vercel production rollback: https://vercel.com/docs/deployments/rollback-production-deployment
 
 ## 10. Exact next task
@@ -274,3 +275,115 @@ No SQL writes, schema/RLS/index changes, migrations, advisor changes, secret acc
 ## 11. Exact next task
 
 **F4.3 — Incident response runbook validation and owner-operated rehearsal (non-destructive).** Reconcile the existing runbook with the verified source-specific signals and proposed thresholds; rehearse classification and rollback decision-making using a simulated incident only. Do not trigger production faults, rollback, deployment, or database mutation.
+
+
+---
+
+# F4.3 — Incident Response Runbook Validation & Simulated Owner Rehearsal
+
+**Validated at:** 2026-11-02T20:45:00Z (UTC)  
+**Repository main at start:** `41e5c36e434051f9668887974739870354706bd6`  
+**Method:** repository/runbook review, read-only Supabase and Vercel queries, official documentation review, and a fictional tabletop exercise.  
+**Status:** COMPLETE WITH EXPLICIT LIMITATIONS — documentation and simulated decision rehearsal only.
+
+## 1. Current operational snapshot — VERIFIED, read-only
+
+| Signal | Current evidence | Classification | Limitation |
+|---|---|---|---|
+| Supabase project | `ACTIVE_HEALTHY`, PostgreSQL 17.11, region `ap-northeast-2` | Platform status CLEAR at query time | Project metadata does not prove route/customer-journey health or expose the billing plan in this response. |
+| Supabase source inventory | 8 sources returned in the default last-24-hour query: edge 9, PgBouncer 86, Postgres 32, PostgREST 22, Realtime 3, Storage 7, Supavisor 78, workflow-run 30 | Activity observed | Counts are not request volume, success rates, uptime, or a statistically valid baseline. |
+| Common severity | Top-level `severity_text` was populated for all 267 sampled events across those 8 sources; values were INFO except Postgres LOG/ERROR | VERIFIED for this sample | This is distinct from source-specific keys inside `log_attributes`; do not assume every source/event always populates every field. |
+| PostgreSQL error | One ERROR: SQLSTATE `42803`, command `SELECT`, timestamp `2026-11-01T23:20:38.823Z`; message is a GROUP BY projection error | FINDING — isolated query error | Origin, route correlation, and application/customer impact remain UNKNOWN; not a confirmed customer-facing incident. |
+| Edge 5xx | No matching `edge_logs` rows with `response.status_code >= 500` in the queried window | No matching recorded event found | Only the selected source/window/field/filter; not proof of complete health. |
+| Vercel runtime errors | No grouped runtime error clusters returned for the last 24 hours | No matching cluster found | Does not prove no user-visible defect or cover all telemetry gaps. |
+| Vercel Production | Latest listed Production deployment `dpl_2E7MXn3PbeiHAj34hvQ2gCG978TT` is READY and serves main SHA `41e5c36e434051f9668887974739870354706bd6`; created `2026-11-02T20:41:41.984Z` | Deployment identity CLEAR | READY and SHA match do not prove application journeys are healthy. This deployment was already present; F4.3 did not deploy it. |
+| Vercel plan | Team context reports Hobby | VERIFIED | Exact remaining quota is UNKNOWN; inspect Usage/Billing manually before any deployment decision. |
+
+The 267-event total is the sum of the eight source counts above. The query did not return `auth_logs`, `function_edge_logs`, or `function_logs`; their absence from this result is NOT evidence that those sources had no events. The current snapshot does not establish whether every relevant source was enabled or captured.
+
+## 2. Corrected source and field map
+
+The earlier F4.2 observation that no common normalized severity key was found referred to the sampled nested `log_attributes` maps. The current official field reference and live query distinguish the top-level `severity_text` column from nested source-specific attributes:
+
+| Source | Common field observed | Source-specific field / context | Triage rule |
+|---|---|---|---|
+| `postgres_logs` | `severity_text` | `parsed.error_severity`, `parsed.sql_state_code`, `parsed.command_tag` where populated; inspect `event_message` | Use severity + SQLSTATE + command + timestamp + safe message fingerprint. |
+| `edge_logs` | `severity_text` | `response.status_code`, request path/ID when present | Treat 5xx as a finding; interpret 4xx in request/auth/validation context. |
+| `storage_logs` | `severity_text` | `level` where populated | Correlate explicit error with media/object capability impact. |
+| `realtime_logs` | `severity_text` | `level` where populated | Remember new WebSocket connections/channel joins are not logged by default unless client logging is enabled. |
+| `pgbouncer_logs` | `severity_text` | Event message and pooler context; no nested normalized level was established in the earlier sample | Inspect message, time, recurrence, and connection impact. |
+| `supavisor_logs` | `severity_text` | Event message and pooler context; no nested normalized level was established in the earlier sample | Inspect timeout/pool pressure and correlate with Postgres/API symptoms. |
+| `postgrest_logs` | `severity_text` | `identifier`, `host`, `event_message` where present | Correlate with Edge/Postgres; a low-signal message alone is not impact proof. |
+| `workflow_run_logs` | `severity_text` | Event message/source-specific fields | Identify the emitting workflow and correlate with application symptoms. |
+| `auth_logs`, `function_edge_logs`, `function_logs` | Not observed in this snapshot | Official source catalog lists these distinct sources | Query explicitly when investigating auth or Edge Function behavior; current absence is UNKNOWN. |
+
+**Important:** Supabase documents top-level `severity_text`, `source`, `timestamp`, and `event_message`; source-specific values are in `log_attributes` and may not be populated on every row. Keep the original F4.2 field names as historical evidence, but use the corrected distinction above in future triage. Do not infer that a top-level INFO value means the request was semantically successful.
+
+## 3. Incident classification contract
+
+Use exactly one primary classification at initial triage; upgrade/downgrade only when new evidence supports it:
+
+1. **CONFIRMED INCIDENT:** direct evidence demonstrates an impaired critical application path, security/privacy boundary, or data integrity, with reproducible or correlated impact. Record affected route/function, time window, deployment SHA, and evidence. A single high-confidence critical-path outage may qualify without waiting for a recurrence threshold.
+2. **SUSPECTED INCIDENT:** a credible signal exists (for example 5xx, database error, runtime cluster, or connection failure), but user impact, route correlation, or cause is not yet confirmed. Investigate and preserve evidence; do not label it resolved or healthy.
+3. **ISOLATED DIAGNOSTIC / QUERY ERROR:** one-off SQL or operator query error without evidence of application-route correlation or customer impact. Preserve and fingerprint it; do not silently discard it or promote it to a customer incident without evidence. The observed SQLSTATE 42803 remains in this category unless new correlation appears.
+4. **EXPECTED 4xx:** expected authentication, authorization, validation, rate-limit, or unavailable-resource response consistent with the endpoint contract. Not an incident by itself. Unexpected authorization success, cross-tenant access, or a broken critical journey is a security/functional finding regardless of the numeric status.
+5. **UNABLE TO ASSESS:** source not captured, severity/field missing, retention/window uncertain, query failed, or no independent evidence supports a healthy conclusion. Missing telemetry is never CLEAR.
+
+### Severity and escalation
+
+The F4.2 thresholds remain **PROPOSED triage thresholds, not SLAs or platform guarantees**:
+
+- PostgreSQL FATAL/PANIC: immediate P1 candidate and owner escalation.
+- Unexpected PostgreSQL ERROR: investigate every occurrence; 3+ identical safe fingerprints within 5 minutes, a critical-path correlation, or blocked data operations is a P2 candidate.
+- HTTP 5xx: investigate every occurrence; 3+ same-route 5xx within 5 minutes is a P2 candidate; one confirmed critical-path outage is immediate escalation candidate.
+- Storage/Realtime errors: investigate each explicit error; escalate when a required capability is impaired.
+- Pooler/PostgREST/workflow events: manual source-specific review; do not infer severity from message keywords alone.
+- Empty results: CLEAR only when source coverage, time range, retention, filters, and field mapping are validated; otherwise UNABLE TO ASSESS.
+
+## 4. Fictional tabletop rehearsal — SIMULATED ONLY
+
+**Scenario:** a hypothetical new application release is followed by three 5xx responses on the public order-submission route within five minutes. A fictional owner test reports that the order confirmation does not appear. No real event was generated, no production request was made, and no customer data was used.
+
+| Stage | Simulated evidence / decision | Owner action and stop condition |
+|---|---|---|
+| 1. Detect | Fictional Edge 5xx cluster + fictional Vercel runtime error cluster on one critical route | Record UTC times, route, request IDs, deployment ID/SHA, source, status, and recurrence. Do not include PII, tokens, or full query strings. |
+| 2. Classify | Initially SUSPECTED INCIDENT; 3 same-route 5xx in 5 minutes meets the proposed P2 candidate threshold. If the order path failure is independently reproduced, classify CONFIRMED INCIDENT; if it is a confirmed critical-path outage, escalate immediately as P1 candidate. | Keep severity provisional until impact is established. Do not infer impact from event count alone. |
+| 3. Initial triage | Compare current Production deployment SHA with main; inspect matching Edge, Vercel, Postgres, Auth and function sources as applicable; compare first/last seen and safe fingerprints. | Check whether the failure began after the hypothetical release; distinguish expected 4xx from 5xx and auth/authorization defects. |
+| 4. Evidence collection | Preserve deployment ID/SHA, route, status, UTC range, request/correlation IDs, sanitized error fingerprint, relevant log source and query filters. | Avoid secret values, customer payloads, personal data, and broad unfiltered exports. Stop if evidence would expose sensitive data. |
+| 5. Escalation | P2 candidate for the repeated route-specific 5xx; P1 candidate only if the critical order path is confirmed unavailable or security/data integrity is at immediate risk. | Owner records decision and impact scope. No automated escalation/alerting is claimed to exist. |
+| 6. Containment | Freeze the hypothetical release and stop repeated deploy/build/migration retries. Do not make exploratory production database changes. | Preserve the last known-good deployment and current evidence. No production action is taken in this exercise. |
+| 7. Rollback decision | **Conditional GO in the fictional scenario only** if evidence ties the regression to the release, an eligible previous Production-serving deployment is re-verified at decision time, and database/schema compatibility is confirmed. The connected team is Hobby: official Vercel guidance limits Instant Rollback to the immediately previous Production deployment; do not assume an older deployment is eligible. **NO-GO** if target eligibility, cause, or DB compatibility is unknown, or if rollback could worsen data integrity. | Rollback is not automatic. If no safe rollback target exists, keep the release contained and choose a verified forward fix or mark BLOCKED. A Vercel rollback does not reverse SQL migrations or restore data. |
+| 8. Recovery verification | After the hypothetical containment, repeat the exact failing request/critical journey using an owner-controlled test fixture; verify expected response and state, inspect same-source error signals, and check no new recurrence during a documented observation window. | Deployment READY alone is insufficient. Never create a real customer order for rehearsal. Do not declare recovery from a green deployment badge alone. |
+| 9. Incident closure | Close only after impact is understood, the critical path passes, the original signal stops or is explained, and no unresolved security/data-integrity risk remains. | Record final severity, timeline, decision, recovery evidence, residual risk, and owner. If cause remains unknown, keep incident open or close as unresolved with explicit reason—not “fixed.” |
+| 10. Post-incident | Create a sanitized incident record under `docs/incidents/` for a material real incident; capture root cause, contributing factors, prevention, detection gaps, and follow-up owner action. | Update continuity and relevant runbook/ADR. Do not create a real incident report for this fictional rehearsal; this F4.3 section is the simulation record. |
+
+**Rehearsal outcome:** the runbook supports a safe owner-led decision path. Rollback is a conditional containment option, not a reflex; unknown DB compatibility or target eligibility blocks rollback. No production operation occurred.
+
+## 5. F4.3 acceptance and limitations
+
+- [x] Existing F4 and Production-Safe Operations runbooks reviewed.
+- [x] Current read-only Supabase project/log and Vercel deployment/runtime-error evidence checked.
+- [x] Top-level `severity_text` distinction reconciled with prior nested-field observations.
+- [x] Incident categories and missing-telemetry behavior made explicit.
+- [x] Fictional rehearsal covers detection through post-incident documentation.
+- [x] Rollback decision is conditional and separated from database recovery.
+- [x] F3 deferral and Leaked Password Protection owner disposition preserved.
+- [x] No production fault injection, deployment, rollback, database mutation, migration, settings change, secrets modification, backup, restore, or manual CI rerun performed.
+
+**Limitations:** no real incident was created; no customer-facing journey or real-device test was performed as part of this task; Vercel remaining quota is UNKNOWN; the live source inventory did not return Auth/Function log sources; log counts and zero-match queries do not prove full application health. No automated alert destination or scheduled monitoring was verified.
+
+**F4.3 STATUS: COMPLETE WITH EXPLICIT LIMITATIONS.** Final-head Quality run `41523483447` and W9 Orders QA run `41523483512` both completed `success` on exact PR head `102e24e343e6add57e53d49a0908b78c7bfa974e`. Quality passed typecheck, tests, lint, production build and applicable browser QA; two conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed. PR #417 remains OPEN / NOT MERGED. No F4.4/F5/F6 work is started.
+
+## 6. Official references reviewed
+
+- Supabase Logs in Studio: https://supabase.com/docs/guides/observability/logs
+- Supabase Logs field reference: https://supabase.com/docs/guides/observability/log-field-reference
+- Supabase Logs Explorer SQL: https://supabase.com/docs/guides/observability/advanced-log-filtering
+- Supabase Configure logging: https://supabase.com/docs/guides/observability/configure-logging
+- Supabase debugging request stack: https://supabase.com/docs/guides/monitoring-and-debugging/debugging
+- Vercel production rollback: https://vercel.com/docs/deployments/rollback-production-deployment
+- Vercel runtime logs: https://vercel.com/docs/logs/runtime
+
+## 7. Exact next action
+
+**Final remote diff reviewed:** eight documentation files only; 225 additions / 38 deletions; no runtime code/config/schema changes. **Stop here and await explicit owner decision on PR #417.** Do not merge, deploy, begin F4.4, F5, F6, or any other task automatically.

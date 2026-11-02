@@ -1,17 +1,19 @@
 # Menuun Session Protocol — F-Series Handoff
 
-## Current session checkpoint — 2026-11-02
+## Current session checkpoint — 2026-11-03
 
-- **PHASE:** F3 — Backup, Restore & Disaster Recovery.
-- **STATUS:** IN_PROGRESS — F3.1 read-only backup inventory.
-- **MAIN:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
-- **PR #415:** CLOSED / MERGED at the main SHA. F1 and F2 are DONE.
-- **CI:** exact F2 feature-head Quality `41381209308` SUCCESS; W9 `41381209270` SUCCESS.
-- **PRODUCTION:** Vercel deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` READY on the main SHA; aliases `www.menuun.com`, `menuun.com`.
-- **F3 DISCOVERY:** Supabase project `ublxptcqefujkbeepylc`, region `ap-northeast-2`, PostgreSQL 17, ACTIVE_HEALTHY. Project plan, enabled backup configuration, available backups and PITR state remain UNKNOWN.
-- **SAFETY:** no migrations, production writes, restore, PITR activation, project clone or deployment.
-- **DISCOVERY DOC:** `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
-- **EXACT NEXT ACTION:** obtain owner-authorized read-only backup inventory and PITR status from Supabase Dashboard/Management API; do not initiate restore.
+- **PHASE:** F4 — Release, Monitoring & Incident Operations.
+- **CURRENT TASK:** F4.3 Incident Response Runbook Validation & Simulated Owner Rehearsal — documentation and fictional tabletop complete; final-head CI verified.
+- **MAIN:** `41e5c36e434051f9668887974739870354706bd6`.
+- **PR #417:** OPEN / NOT MERGED; branch `docs/f4-3-incident-rehearsal-2026-11-02`; head `102e24e343e6add57e53d49a0908b78c7bfa974e`; 12 commits ahead / 0 behind main.
+- **CI ON EXACT PR HEAD:** Quality run `41523483447` SUCCESS; W9 Orders QA run `41523483512` SUCCESS. Quality passed typecheck, tests, lint, production build, all-theme browser QA, Arabic/English brand browser QA, performance fixture and Studio/Platform Admin browser QA. Conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
+- **DIFF:** eight documentation files only; 225 additions / 38 deletions; no runtime code/config/schema changes. Final remote compare reviewed.
+- **PRODUCTION:** no deployment from F4.3 branch; existing Production deployment remains independently recorded on main SHA. No deployment or rollback was performed for F4.3.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **SAFETY:** no fault injection, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
+- **UNKNOWN:** no local checkout/terminal or local test execution in this remote-only session; Auth/Function log coverage, exact Vercel quota, real-device rehearsal and real customer impact remain unverified.
+- **EXACT NEXT ACTION:** await explicit owner decision on PR #417. Do not merge, deploy, or start F4.4/F5/F6 automatically.
 
 ## Permanent handoff rules
 
@@ -461,3 +463,15 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - F3 remains deferred by owner and not done.
 - Exactly one next task: F4.3 non-destructive incident-runbook validation and tabletop rehearsal.
 - No database mutation, deployment, rollback, paid service, backup/restore, or manual CI rerun.
+
+
+## 2026-11-02 — F4.3 continuity closeout (pending PR gates)
+
+- Verified main at task start: `41e5c36e434051f9668887974739870354706bd6`.
+- F4.1/F4.2 remain documented; F4.3 had no existing completed rehearsal section before this task.
+- F4.3 adds a source/field map, explicit incident classes, UNABLE TO ASSESS safeguards, a fictional end-to-end tabletop, and conditional rollback criteria.
+- Current read-only platform evidence: Supabase project ACTIVE_HEALTHY; 267 events across eight returned sources; top-level severity_text populated in sample; one historical PostgreSQL 42803 ERROR remains isolated with impact UNKNOWN; no Edge 5xx matches; Vercel runtime error query returned no clusters in 24h; latest Production deployment READY on main SHA 41e5c36e.
+- No production fault injection, deployment, rollback, DB write/migration, settings change, secrets modification, backup/restore, or manual CI rerun.
+- F3 remains deferred/not done; Leaked Password Protection warning remains closed/do not reopen.
+- Current work is documentation-only; local tests/browser QA are not available through the remote-only GitHub connector. PR CI is pending.
+- Exactly one next action: inspect final PR-head Quality/W9 and final diff, then stop.
