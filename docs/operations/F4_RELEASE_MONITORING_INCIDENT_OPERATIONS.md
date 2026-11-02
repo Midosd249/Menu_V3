@@ -1,8 +1,8 @@
 # F4 — Release, Monitoring & Incident Operations
 
 **Date:** 2026-11-02  
-**Status:** IN_PROGRESS — F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 is next  
-**Repository base:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`  
+**Status:** IN_PROGRESS — F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 documentation and simulated rehearsal complete, final PR checks pending  
+**Repository base at F4.3 start:** main `41e5c36e434051f9668887974739870354706bd6`  
 **Scope:** read-only platform inspection and operational documentation. No application code, database schema, platform settings, secrets, deployments, alerts, or customer data were changed.
 
 ## 1. Phase boundary
