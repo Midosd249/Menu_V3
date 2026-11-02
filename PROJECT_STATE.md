@@ -1,6 +1,22 @@
 # Current Project State — F-Series
 
-## 2026-11-02 — F1/F2 closeout and F3 discovery checkpoint
+## 2026-11-02 — F4.1 operational baseline completed
+
+- **CLASSIFICATION:** F4.1 read-only platform operations baseline; documentation-only repository update.
+- **VERIFIED BRANCH:** `docs/f3-backup-restore-discovery`; pre-update head `627b4dc59d41aa0d83304bfe5115e680994e3b35`; PR #416 remains open/draft pending final-head checks. No merge or deployment.
+- **VERIFIED CI ON PRE-UPDATE HEAD:** Quality run `41473198067` SUCCESS; W9 Orders QA run `41473198145` SUCCESS on `627b4dc59d41aa0d83304bfe5115e680994e3b35`. These results are for the pre-update head; do not imply checks ran on documentation commits added afterward.
+- **VERIFIED VERCEL:** team Hobby; project `menu-v3`; Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` READY on main SHA `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; aliases include `www.menuun.com` and `menuun.com`.
+- **VERIFIED VERCEL OBSERVATION:** no grouped runtime error clusters in the queried 24h; no warning/error/fatal runtime logs in the queried 50m window. These bounded queries are not proof of total application health.
+- **VERIFIED ROLLBACK CANDIDATE:** prior Production deployment `dpl_9zAvoGqWWNcQAAHdX8shg9TwcbYn`, READY, commit `e5d7c89a73718f35e7accbae7933af36c366bbc1`, marked eligible by Vercel. No rollback executed.
+- **UNKNOWN:** exact consumed/remaining Vercel quota is not exposed by connected read-only actions; check Usage dashboard manually before deployment. Supabase log severity mapping remains unvalidated from the aggregate counts.
+- **OWNER DECISION:** permanently exclude Leaked Password Protection Disabled from active F4/F6 queues because it is unavailable on current Supabase Free plan; disposition CLOSED / DO NOT REOPEN unless owner changes plan/decision. No paid upgrade.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, real customer-owned data, or commercial launch.
+- **NEXT:** F4.2 — validate Supabase log severity/error classification and define evidence-backed incident thresholds. Read-only only.
+- **NO SIDE EFFECTS:** no app/schema/settings/secret changes, no backup/restore/PITR, no deployment/rollback, no paid service.
+
+---
+
+## Historical checkpoint — F1/F2 closeout and F3 discovery (superseded by current state above)
 
 - **CLASSIFICATION:** F1/F2 closeout; F3.1 Backup Inventory and Recovery Discovery.
 - **VERIFIED — MAIN:** `main` HEAD is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
@@ -825,3 +841,12 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - **UNKNOWN:** Vercel plan, usage/quota, log retention, alert entitlements, and eligible rollback target were not inspected. No persistent monitoring or alerts are verified.
 - **NO SIDE EFFECTS:** no deployment, Vercel setting change, Supabase mutation, backup, restore, PITR, or paid service.
 - **EXACT NEXT ACTION:** complete F4.1 read-only Vercel production deployment/usage evidence inspection, then define the smallest repeatable free-tier health/error check.
+
+
+## 2026-11-02 — F4.1 closeout session log
+
+- F4.1 read-only operational baseline documented in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- Pre-update branch head `627b4dc59d41aa0d83304bfe5115e680994e3b35` had successful Quality and W9 Orders QA runs. Any CI triggered by subsequent documentation commits must be checked on the final head; no manual rerun requested.
+- Vercel Hobby plan, current Production deployment, bounded runtime observations, and previous rollback candidate were directly inspected. Exact quota remains UNKNOWN.
+- Owner-accepted Leaked Password Protection plan limitation is closed and excluded from active work.
+- Exact next task: F4.2 read-only Supabase log severity/error classification and incident threshold validation.
