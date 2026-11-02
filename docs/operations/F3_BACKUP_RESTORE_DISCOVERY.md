@@ -120,6 +120,14 @@ These are planning targets, not existing guarantees. Owner approval and a real i
 
 F3 remains **NOT DONE** until backup mechanisms and retention are evidenced; recovery dependencies are understood; an isolated restore succeeds; restored database integrity and tenant/branch boundaries are validated; media recovery is tested; practical incident runbooks are complete; RPO/RTO are explicitly classified and owner-approved; and continuity files are updated.
 
-## 9. Exact next action
+## 9. Owner decision — deferred
 
-Owner performs the documented manual CLI export on a trusted private machine (no plan upgrade); verify checksums and private/off-site custody. Separately plan Auth/config and Storage object recovery because the CLI dump does not cover them. Do not upload dumps to public GitHub or change Production.
+As of 2026-11-02, the owner confirms all current accounts/restaurants are private test fixtures and there are no real customers or customer-owned production datasets. F3 execution is therefore **DEFERRED BY OWNER — NOT DONE**.
+
+Deferred until the pre-commercial gate: manual database exports, backup automation, Storage/Auth recovery implementation, paid plan/PITR upgrades, paid recovery infrastructure, and isolated restore drills. No cost, project, backup, restore, or production mutation is authorized now.
+
+F3 must be resumed and completed before the first real customer, before storing real customer-owned data, or before commercial launch, whichever occurs first. The existing F3 completion gate in Section 8 remains unchanged and mandatory. Prior discovery remains research evidence only; it does not establish an actual backup or successful restore. The menu-v3-full.backup artifact remains unverified.
+
+## 10. Next phase
+
+F4 Release, Monitoring & Incident Operations is active. F4 must use existing/free capabilities and does not remove or weaken the F3 pre-commercial gate.
