@@ -99,7 +99,7 @@ jobs:
         run: |
           TOOLS_DIR="$RUNNER_TEMP/menuun-browser-tools"
           mkdir -p "$TOOLS_DIR"
-          printf '{"name":"menuun-ci-browser-tools","private":true}\\n' > "$TOOLS_DIR/package.json"
+          printf '{"name":"menuun-ci-browser-tools","private":true}\n' > "$TOOLS_DIR/package.json"
           npm install --prefix "$TOOLS_DIR" --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps vite@8.3.4 @playwright/test@1.63.0
           mkdir -p node_modules/@playwright
           cp -a "$TOOLS_DIR/node_modules/@playwright/test" node_modules/@playwright/test
