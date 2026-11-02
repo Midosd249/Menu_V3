@@ -1,34 +1,38 @@
 # Active Task Queue — F-Series
 
-## Only active task: F2 — Production-Safe Build & Migration Boundary
+## Only active task: F4.3 — Incident response runbook validation and simulated rehearsal
 
-- **STATUS:** IMPLEMENTATION_IN_PROGRESS.
-- **BRANCH:** `feat/f2-production-safe-migrations`.
-- **BASE:** F1 commit `b42229bcab316f1d85d2ff189754ec56ad434c15`; canonical main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
-- **SCOPE:** build/migration separation, explicit DB target identity guard, Vercel execution guard, production confirmation, advisory-lock serialization, Vercel Git deployment opt-in, regression tests, and migration runbook.
-- **ACCEPTANCE:**
-  1. Build is free of database migration side effects.
-  2. Explicit migration requires a declared target and exact host/database/user identity.
-  3. Migration runner fails closed inside Vercel and on any missing/mismatched target value.
-  4. Production execution requires a second explicit confirmation.
-  5. Concurrent migration invocations cannot apply files simultaneously through this runner.
-  6. PGlite and custom migration-ledger semantics remain unchanged.
-  7. Feature/docs branches do not trigger Vercel Git deployments; `main` is Production and `preview/*` is opt-in.
-  8. Focused tests and final-head Quality/W9 pass.
-  9. No real database migration, merge, or Production deployment occurs during this task.
-- **VERIFICATION:** pending local/sandbox execution and GitHub CI on the exact PR head. Do not claim checks passed until results are directly observed.
-- **RELEASE:** not authorized/performed. Any Vercel event caused by the PR must be inspected and reported.
-- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel event evidence on the exact PR head, then stop without merge or deployment.
+- **STATUS:** READY — F4.1 and F4.2 are complete with explicit limitations.
+- **BASELINE:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; F4.2 evidence is recorded in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- **SCOPE:** compare `docs/operations/PRODUCTION_SAFE_OPERATIONS.md` with verified Supabase source-specific signals, proposed incident thresholds, deployment identity/rollback guardrails; produce a non-destructive tabletop scenario and owner-ready decision record.
+- **OWNER DECISION:** Leaked Password Protection Disabled is CLOSED / DO NOT REOPEN as a Free-plan limitation; never reopen unless owner changes plan/decision.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
+- **PROHIBITIONS:** no production fault injection, deployment, rollback, CI rerun, paid upgrade, alert service, scheduled automation, secrets access, Supabase mutation, migration, backup, PITR, or restore.
+- **ACCEPTANCE:** runbook matches current source-specific log evidence; severity/escalation labels distinguish verified from proposed; simulated scenario exercises detect/classify/contain/recover/close without real side effects; continuity updated; final-head CI inspected without manual retries.
+- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
 
-## Guardrails
+---
 
-- Exactly one task may be IN_PROGRESS.
-- Preserve F1 architecture documents already present in the parent commit.
-- Do not run `npm run db:migrate` against any real database.
-- Do not read, expose, or modify Supabase/Vercel secrets.
-- Do not run Supabase CLI migration push/repair.
-- Do not merge or deploy as part of this task.
-- Do not begin F3–F7 until F2 is closed out.
+## Historical task record — F3.1 (superseded by owner's F3 deferral)
+
+
+
+- **STATUS:** IN_PROGRESS — read-only discovery.
+- **BASE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- **COMPLETED PHASES:** F0, F1, F2 (PR #415 merged; Production deployment verified).
+- **SCOPE:** verify actual Supabase backup entitlement/configuration, backup inventory and timestamps, retention, PITR state, Storage object backup coverage, existing manual/off-site exports, and ownership/access boundaries.
+- **ACCEPTANCE FOR F3.1:** each backup claim is tied to account-specific evidence or explicitly UNKNOWN; plan-level documentation is not treated as proof that this project has backups; no restore or setting change occurs.
+- **F3 OVERALL ACCEPTANCE:** successful isolated restore, integrity and compatibility validation, practical recovery runbooks, documented retention/dependencies, and explicit proposed/approved RPO/RTO classifications.
+- **DISCOVERY RECORD:** `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
+- **VERIFICATION:** GitHub main/PR/CI and Vercel Production were directly checked; Supabase project metadata, live catalog and Storage bucket metadata were read-only inspected; official Supabase backup/restore documentation was researched.
+- **EXACT NEXT ACTION:** obtain owner-authorized read-only evidence from Supabase Dashboard or Management API for backup plan, latest available backups/retention and PITR status.
+
+
+## Historical guardrails (superseded by current F-series policy)
+
+- Current active scope and owner decisions are defined at the top of this file and in AGENTS.md.
+- F3 is deferred by owner, not active. Its pre-commercial re-entry gate remains mandatory.
+- No historical queue entry below this point may override the current active task.
 
 ---
 

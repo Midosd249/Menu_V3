@@ -1,17 +1,41 @@
 # Current Project State — F-Series
 
-## 2026-11-02 — F2 build and migration safety boundary
+## 2026-11-02 — F4.2 Supabase log classification completed
 
-- **CLASSIFICATION:** F2 — Production-Safe Build & Migration Boundary.
-- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
-- **BRANCH:** `feat/f2-production-safe-migrations`; it contains F1 architecture artifacts plus F2 implementation. Git history is authoritative for its latest HEAD.
-- **IMPLEMENTED:** build/migration separation; explicit target and host/database/user matching; Vercel execution rejection; production confirmation; non-blocking PostgreSQL advisory lock; opt-in Vercel Git deployment rules; regression tests; ADR-0002; migration runbook.
-- **PRESERVED:** PGlite runtime migration behavior, custom runner, `menu_v3._migrations`, and per-migration transaction semantics. No SQL migration/schema changed.
-- **VERCEL PREVIEW EVIDENCE:** one automatic Preview deployment was created for the first F2 code commit `5ce4a7108c9adb383931af0557375be78caf5884`: deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj`, target `null`, state `READY`. Its build log shows the artifact-only build command and no migration-runner output. The initial `*` branch pattern did not match the slash-containing `feat/f2-production-safe-migrations` branch; the config was corrected to `**: false`. No additional deployment was observed for the corrected commit. PR-triggered behavior still needs verification.
-- **VERIFICATION:** no local/sandbox test execution is evidenced; sandbox creation was rejected by Vercel and the container could not resolve GitHub. GitHub Quality/W9 remain pending exact-head verification.
-- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no merge or Production deployment occurred, and no customer data was touched.
-- **UNKNOWN:** isolated staging Supabase target/protected migration environment; Preview/Production DB URL mapping; backup/restore readiness; PR-triggered Vercel behavior.
-- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel events on the single F2 PR's exact head, then close out without merging or deploying.
+- **CLASSIFICATION:** F4.2 read-only Supabase unified-log schema/field validation and incident-threshold design.
+- **VERIFIED REPOSITORY:** PR #416 branch `docs/f3-backup-restore-discovery`; pre-F4.2 base head `8d945e30fdf9b6cda44f27eb5d298f6374916210`. F4.2 documentation update is being added to the same PR; final-head CI must be checked before merge.
+- **VERIFIED CI ON PRE-F4.2 HEAD:** Quality run `41477117064` SUCCESS and W9 Orders QA run `41477117274` SUCCESS on exact SHA `8d945e30fdf9b6cda44f27eb5d298f6374916210`. These results confirm the owner's reported successful check and are not evidence for later documentation commits.
+- **VERIFIED SUPABASE LOG QUERY:** project `ublxptcqefujkbeepylc`; discovered eight sources: edge (6), pgbouncer (82), postgres (30), postgrest (7), realtime (2), storage (4), supavisor (78), workflow_run (20) within the query window.
+- **VERIFIED FIELD MAP:** PostgreSQL `parsed.error_severity` / `parsed.sql_state_code`; Edge `response.status_code`; Storage/Realtime `level`. No normalized severity field was found in sampled PgBouncer, Supavisor, PostgREST, or workflow-run rows.
+- **VERIFIED FINDING:** one PostgreSQL `ERROR` at `2026-11-01T23:20:38.823Z`, SQLSTATE `42803`, command `SELECT`, message excerpt indicates a GROUP BY projection error. Source/route/customer impact are UNKNOWN; this is not classified as a confirmed application incident.
+- **OWNER-REPORTED:** owner states the application check completed successfully. This is retained separately from platform log evidence; exact route/device/test artifact was not supplied in this message.
+- **DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN as an unavailable Free-plan feature, per owner instruction. It is not an active task or blocker.
+- **F3:** DEFERRED BY OWNER — NOT DONE; pre-commercial gate unchanged.
+- **NEXT:** F4.3 — non-destructive incident-response runbook validation and simulated owner-operated rehearsal.
+- **NO SIDE EFFECTS:** read-only log queries only; no database writes/settings, secrets, billing, backup/restore/PITR, deployment, rollback, or manual CI rerun.
+
+---
+
+## Historical checkpoint — F1/F2 closeout and F3 discovery (superseded by current state above)
+
+- **CLASSIFICATION:** F1/F2 closeout; F3.1 Backup Inventory and Recovery Discovery.
+- **VERIFIED — MAIN:** `main` HEAD is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- **VERIFIED — PR:** PR #415 is CLOSED / MERGED; merge commit is the current main HEAD. Feature head: `9b077e5f4f3177b4f7f537e8b4e66b203960533b`.
+- **VERIFIED — CI on exact feature head:** Quality run `41381209308` SUCCESS; W9 Orders QA run `41381209270` SUCCESS.
+- **VERIFIED — PRODUCTION:** Vercel deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY, target `production`, commit `848d4acdd3b184c24142d1e77fc0c9af55f20eab`, aliases `www.menuun.com` and `menuun.com`.
+- **VERIFIED:** F0, F1, and F2 are complete. F1 architecture baseline and F2 production-safe build/migration boundary were delivered in PR #415. No repeat of F1/F2 is authorized.
+- **F3 STATUS:** ACTIVE — read-only discovery/inventory only. No backup restoration, PITR activation, project clone, schema migration, production mutation, or deployment has been performed.
+- **VERIFIED — SUPABASE PROJECT:** project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY, PostgreSQL 17, region `ap-northeast-2`. The Supabase project metadata endpoint did not expose the billing plan or backup configuration.
+- **VERIFIED — LIVE STORAGE METADATA:** one Storage bucket named `menu-assets` exists and is public. Supabase database metadata includes `storage.buckets` and `storage.objects`; actual object bytes are stored outside PostgreSQL.
+- **VERIFIED — OFFICIAL PLATFORM DOCUMENTATION:** Supabase daily database backups are plan-dependent (Pro 7 days, Team 14 days, Enterprise up to 30 days); Free has no automatic daily backups. PITR is a paid add-on and requires at least Small compute. The documented worst-case PITR RPO is two minutes. If PITR is enabled, daily backups are no longer taken.
+- **VERIFIED — STORAGE LIMITATION:** Supabase database backups do not include Storage API object bytes. The database backup contains metadata only; deleted object bytes are not restored by restoring an older database backup.
+- **VERIFIED — RESTORE-TO-NEW-PROJECT LIMITS:** requires a paid plan and physical backups. It copies database content and Auth records but does not copy Storage objects/settings, Edge Functions, Auth settings/API keys, Realtime settings, extensions/settings, or read replicas. Binary restore may start external extensions/jobs immediately.
+- **UNKNOWN:** actual Supabase billing tier; whether daily backups are enabled and available for this project; current backup timestamps/retention; PITR activation/retention; backup inventory API response; actual Storage object count and independent object backup; existing off-site/manual backup artifacts; isolated restore target; approved RPO/RTO.
+- **BLOCKED:** the connected Supabase tools expose project metadata, SQL/catalog inspection and docs, but no backup-list/restore-status action. The Management API backup inventory requires an authorized access token; no token or secret was read. The dashboard backup page has not been inspected in this session.
+- **SAFETY:** all database access in this discovery was read-only. No SQL DDL/DML, migration, credential inspection, restore, PITR setting change, project clone, or customer-data modification.
+- **EXACT NEXT ACTION:** obtain owner-authorized, read-only evidence of the source project's backup plan, available backup timestamps/retention and PITR status from Supabase Dashboard or the Management API, without initiating restore or changing billing.
+
+---
 
 ---
 
@@ -796,3 +820,33 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RELEASE: PR #413 is open/unmerged. No merge or production deployment was performed.
 - VERIFIED on code head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) both succeeded. Quality passed typecheck, npm tests, lint, production build, all-theme browser template QA, Menuun brand browser QA, Studio browser QA, and Platform Admin browser QA. Vercel status is Preview success only, not Production evidence.
 - This follow-up adds continuity-only changes after the verified code head; refresh Quality/W9 on the final docs-updated head before treating PR #413 as fully verified. Actual language-switcher computed colors/device screenshots remain UNKNOWN.
+
+
+## 2026-11-02 — Owner decision: defer F3 execution; begin F4
+
+- **VERIFIED (owner decision):** all current restaurants/accounts are private test fixtures controlled by the owner; there are no real customers or customer-owned production datasets at this stage.
+- **STATUS:** F3 is **DEFERRED BY OWNER — NOT DONE**. This is a scheduling decision, not evidence of backup coverage or recoverability.
+- **DEFERRED ACTIONS:** manual database exports, backup automation, Storage/Auth recovery implementation, paid plan/PITR upgrades, paid recovery infrastructure, and isolated restore drills.
+- **COST / SAFETY:** no plan upgrade, paid project/branch, PITR activation, backup job, restore, production migration, or data mutation is authorized by this decision.
+- **MANDATORY RE-ENTRY GATE:** resume and complete F3 before the first real customer, before storing real customer-owned data, or before commercial launch—whichever occurs first. F3 must pass its existing isolated-restore and integrity acceptance gate before that boundary.
+- **PRESERVED:** prior read-only F3 research and discovery remain useful evidence, but do not constitute a backup or a successful restore. The menu-v3-full.backup file remains an unverified artifact lead.
+- **NEXT PHASE:** F4 Release, Monitoring & Incident Operations is now active. F4 must remain within currently available/free capabilities unless the owner separately approves cost.
+
+## 2026-11-02 — F4.1 read-only operational baseline
+
+- **VERIFIED:** Supabase project ublxptcqefujkbeepylc is ACTIVE_HEALTHY, PostgreSQL 17.11, region ap-northeast-2; connected organization plan is Free.
+- **VERIFIED:** last-24-hour log aggregation returned 6 edge, 30 Postgres, 7 PostgREST, and 4 Storage events. Counts do not establish success/error rates.
+- **VERIFIED:** Supabase security advisor reports Leaked Password Protection Disabled (WARN), 40 RLS-enabled/no-policy INFO findings; performance advisor reports 19 unindexed FK and 13 multiple permissive policy warnings. No settings/schema/indexes were changed; these require separate contextual review.
+- **VERIFIED:** existing PRODUCTION_SAFE_OPERATIONS.md already contains baseline monitoring/incident/rollback procedures. F4 extends rather than duplicates it.
+- **UNKNOWN:** Vercel plan, usage/quota, log retention, alert entitlements, and eligible rollback target were not inspected. No persistent monitoring or alerts are verified.
+- **NO SIDE EFFECTS:** no deployment, Vercel setting change, Supabase mutation, backup, restore, PITR, or paid service.
+- **EXACT NEXT ACTION:** complete F4.1 read-only Vercel production deployment/usage evidence inspection, then define the smallest repeatable free-tier health/error check.
+
+
+## 2026-11-02 — F4.1 closeout session log
+
+- F4.1 read-only operational baseline documented in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- Pre-update branch head `627b4dc59d41aa0d83304bfe5115e680994e3b35` had successful Quality and W9 Orders QA runs. Any CI triggered by subsequent documentation commits must be checked on the final head; no manual rerun requested.
+- Vercel Hobby plan, current Production deployment, bounded runtime observations, and previous rollback candidate were directly inspected. Exact quota remains UNKNOWN.
+- Owner-accepted Leaked Password Protection plan limitation is closed and excluded from active work.
+- Exact next task: F4.2 read-only Supabase log severity/error classification and incident threshold validation.

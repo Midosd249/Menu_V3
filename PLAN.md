@@ -1,27 +1,36 @@
 # Active Plan — Menuun F-Series
 
-## Current active phase: F2 — Production-Safe Build & Migration Boundary
+## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** IMPLEMENTATION_IN_PROGRESS on `feat/f2-production-safe-migrations`.
-- **MAIN BASE:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
-- **F1 PARENT:** `b42229bcab316f1d85d2ff189754ec56ad434c15` (`docs/f1-verified-architecture-baseline`).
-- **F2 SCOPE:** side-effect-free application build, explicit target-verified migration command, Vercel execution guard, production confirmation, PostgreSQL advisory lock, opt-in Git deployments, tests, and runbook.
-- **AUTHORITATIVE ROADMAP:** `docs/FINALIZATION_ROADMAP.md`.
-- **ARCHITECTURE INDEX:** `docs/architecture/README.md`.
-- **MIGRATION RUNBOOK:** `docs/operations/MIGRATION_RUNBOOK.md`.
+- **STATUS:** IN_PROGRESS — F4.1 and F4.2 complete with explicit limitations; F4.3 next.
+- **VERIFIED MAIN BASE:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab` (PR #415 merge).
+- **COMPLETED:** F0, F1, F2.
+- **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation remains a mandatory pre-commercial gate before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
+- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- **F4.2 EVIDENCE:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md` — source-specific Supabase log fields and a single isolated PostgreSQL ERROR documented with unknown impact.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
-| F0 | Continuity & Program Charter | VERIFIED on main | F0 baseline and operating charter recorded |
-| F1 | Verified Architecture Baseline | IMPLEMENTED — NOT MERGED | Architecture docs/diagrams committed on F1 parent branch; preserve in F2 PR |
-| F2 | Production-Safe Build & Migration Boundary | IN_PROGRESS | Exact PR head passes Quality/W9; migration safety contracts verified; no Preview DB side effects |
-| F3 | Backup, Restore & Disaster Recovery | PLANNED | Backup inventory and successful isolated restore |
-| F4 | Release, Monitoring & Incident Operations | PLANNED | Operational controls and evidence verified |
+| F0 | Continuity & Program Charter | DONE | Charter and continuity contract recorded |
+| F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
+| F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged and exact-head CI passed |
+| F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed backups, retention, dependencies, isolated restore, integrity/media validation, runbooks and owner-approved RPO/RTO before commercial boundary |
+| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | Free-tier source-specific monitoring, incident thresholds, runbook validation and release operations |
 | F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-## F2 acceptance gate
+**F4.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Vercel Hobby, Production identity/SHA, bounded runtime observations, rollback candidate, and free-tier check documented. Exact Vercel quota remains UNKNOWN and must be checked before deployment decisions.
+
+**F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual Supabase log sources and source-native fields were queried read-only. PostgreSQL severity/SQLSTATE, Edge HTTP status, and Storage/Realtime level were verified. A single SQLSTATE 42803 PostgreSQL ERROR was observed; application origin and impact remain UNKNOWN. No universal severity field exists across sampled sources.
+
+**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN due to current Supabase Free-plan limitation. No paid upgrade.
+
+**EXACT NEXT ACTION:** F4.3 — validate incident-response runbook and rehearse a simulated incident without production side effects.
+
+---
+
+## F2 acceptance gate — COMPLETED / HISTORICAL
 
 1. `npm run build` does not invoke `db:migrate`.
 2. The explicit migration runner requires `MIGRATION_TARGET`, `MIGRATION_EXPECTED_HOST`, `MIGRATION_EXPECTED_DATABASE`, and `MIGRATION_EXPECTED_USER`.
@@ -33,7 +42,7 @@
 8. Focused regression tests pass; Quality/W9 pass on the same PR head.
 9. No production migration, merge, or deployment is performed as part of implementation verification.
 
-**EXACT NEXT ACTION:** inspect exact-head Quality/W9 and Vercel events for the F2 PR, then close out without merge or deployment. Do not begin F3 automatically.
+**CLOSEOUT:** superseded by the verified PR #415 merge and Production deployment recorded above. Retained as historical acceptance evidence.
 
 ---
 

@@ -1,6 +1,9 @@
-F2 UPDATE — 2026-11-02
+F3 UPDATE — 2026-11-02
 
-VERIFIED: main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`. F1 architecture artifacts are committed at `b42229bcab316f1d85d2ff189754ec56ad434c15` on the parent branch. F2 implementation is in progress on `feat/f2-production-safe-migrations`. The branch removes PostgreSQL migrations from application build, adds explicit target identity and Vercel guards, requires production confirmation, serializes runner execution, configures Vercel Git deployments as opt-in for `main` and `preview/*`, and adds tests/runbook/ADR. No Supabase migration, merge, or Production deployment has been performed. Exact next action: verify F2 on one PR head and close it before F3.
+**VERIFIED:** `main` is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`. PR #415 merged F1 and F2. Exact feature-head Quality `41381209308` and W9 `41381209270` succeeded. Vercel Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY on the same SHA. F0/F1/F2 are DONE; F3 is the active phase.
+**F3.1 discovery:** Supabase project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY, PostgreSQL 17, region `ap-northeast-2`. The connector did not expose plan, backup inventory or PITR configuration. Storage bucket `menu-assets` exists and is public. Supabase database backups exclude Storage object bytes. See `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
+**UNKNOWN:** project plan, actual daily backup availability/retention, PITR status, independent Storage object backup, manual/off-site exports, isolated restore readiness, approved RPO/RTO.
+**EXACT NEXT ACTION:** obtain owner-authorized read-only account-specific backup inventory and PITR evidence. No restore, PITR activation, project clone, Production mutation or deployment is authorized by this discovery task.
 
 ---
 
@@ -8,13 +11,13 @@ VERIFIED: main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`. F1 architectu
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — F2 implementation in progress  
+**Status:** ACTIVE — F3 backup/restore discovery in progress  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
 **Language:** Arabic-first product; repository engineering documentation is maintained in English.  
 **Last repository verification for this baseline:** 2026-11-02  
-**Baseline main SHA:** `5a84d31282383e191472bcd3fc7d5b62417e90ca`
+**Verified main SHA (2026-11-02):** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`
 
 > This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
 
@@ -110,12 +113,12 @@ CI success does not prove production deployment. Preview READY does not prove pr
 
 The F identifiers are permanent phase IDs. They are not sprint numbers, release versions, or proof of completion.
 
-| Phase | Name | Primary outcome | Depends on | Status at baseline |
+| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-02) |
 |---|---|---|---|---|
-| **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | ACTIVE — this documentation task |
-| **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | PLANNED |
-| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | IMPLEMENTATION_IN_PROGRESS — branch feat/f2-production-safe-migrations |
-| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | PLANNED |
+| **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | DONE |
+| **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | DONE — merged in PR #415 |
+| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
+| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | IN_PROGRESS — F3.1 read-only inventory |
 | **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2, F3 | PLANNED |
 | **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | PLANNED |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
@@ -207,15 +210,15 @@ Describe what exists today, not what a generic SaaS architecture ought to contai
 - All important unknowns are listed with the evidence needed to resolve them.
 - Architecture documentation matches current code and tests.
 
-## 7. F2 — Production-Safe Build & Migration Boundary
+## 7. F2 — Production-Safe Build & Migration Boundary (DONE)
 
 ### Objective
 Ensure ordinary application builds do not silently mutate a live database, and ensure database changes are explicit, reviewed, and compatible with active application versions.
 
 ### Baseline fact
-**VERIFIED:** At the baseline SHA, `package.json` defines `build` as a command that runs the Vite build, PGlite asset handling, and then `npm run db:migrate`. `scripts/migrate.mjs` selects the first configured database URL from its supported environment-variable list and applies pending SQL files through the repository runner. A prior Vercel Preview build is documented in repository history as having applied a migration to the connected Supabase project. This is a demonstrated production-safety hazard, not merely a theoretical concern.
+**HISTORICAL F1 BASELINE, superseded by F2:** `package.json` originally coupled `build` to `npm run db:migrate`; repository history records a prior Preview migration side effect. PR #415 removed build-time migration execution. The current explicit migration boundary is defined by the merged F2 implementation and `docs/operations/MIGRATION_RUNBOOK.md`.
 
-**IMPLEMENTED ON F2 BRANCH — CI PENDING:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and an operator runbook. No database migration was executed. F2 is not DONE until final-head CI and deployment-event checks are complete.
+**VERIFIED COMPLETE — PR #415:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and operator runbook were merged. Exact feature-head Quality/W9 succeeded; Production is READY on the merge SHA. No production SQL migration was executed as part of F2.
 
 ### Work packages
 - F2.1 Map every build/deploy path and identify where `build`, `db:migrate`, and database environment variables are invoked.
@@ -249,7 +252,7 @@ Never assume an application rollback reverses a database migration. Never edit a
 - Preview and production database targets cannot be confused silently.
 - The change is verified locally and through applicable CI before release.
 
-## 8. F3 — Backup, Restore & Disaster Recovery
+## 8. F3 — Backup, Restore & Disaster Recovery (ACTIVE)
 
 ### Objective
 Know what can be recovered, from which point in time, by whom, and how long recovery takes.

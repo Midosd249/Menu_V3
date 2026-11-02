@@ -13,7 +13,7 @@ This directory describes the architecture that is actually implemented in Menuun
 - [System overview](./SYSTEM_OVERVIEW.md) — current verified product/system boundary, runtime facts, trust boundaries, and open architecture questions.
 - [F-Series roadmap](../FINALIZATION_ROADMAP.md) — authoritative phase sequence and completion criteria.
 
-## F1 architecture artifacts — committed on branch docs/f1-verified-architecture-baseline
+## F1 architecture artifacts — merged in PR #415
 
 Create or extend these only after inspecting the corresponding current code/configuration. Do not create duplicate documents if an equivalent maintained document already exists.
 
@@ -79,7 +79,7 @@ Create or extend these only after inspecting the corresponding current code/conf
 - [Authenticated mutation](./diagrams/auth-mutation-sequence.mmd)
 - [Public order](./diagrams/public-order-sequence.mmd)
 
-All facts are bounded by each document's evidence date and SHA. Unknowns remain explicit; this index is not a security certification.
+All facts are bounded by each document's evidence date and SHA. F1 artifacts are merged on main through PR #415. Unknowns remain explicit; this index is not a security certification.
 
 ## F2 migration and deployment safety
 
