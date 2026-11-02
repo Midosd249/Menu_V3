@@ -74,7 +74,8 @@ jobs:
           cp -a "$TOOLS_DIR/node_modules/playwright" node_modules/playwright
           cp -a "$TOOLS_DIR/node_modules/playwright-core" node_modules/playwright-core
       - name: Install Playwright Chromium
-        run: "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" install --with-deps chromium
+        run: |
+          "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" install --with-deps chromium
       - name: Run W9 Orders browser QA
         run: |
           echo "[resources] before W9 browser tests"
