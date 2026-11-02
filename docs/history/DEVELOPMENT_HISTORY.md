@@ -16,6 +16,16 @@ F2 UPDATE — 2026-11-02
 **Baseline:** 2026-11-02  
 **Rule:** This is a curated milestone register, not a claim to reproduce every commit. Git history remains authoritative.
 
+## 2026-11-02 — F1/F2 merged and Production deployment verified; F3 opened
+
+- **VERIFIED:** PR #415 merged F1 architecture baseline and F2 production-safe build/migration boundary.
+- **Feature head:** `9b077e5f4f3177b4f7f537e8b4e66b203960533b`.
+- **Merge/main SHA:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- **CI:** Quality `41381209308` SUCCESS and W9 Orders QA `41381209270` SUCCESS on the exact feature head.
+- **Production:** Vercel deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3`, READY, target production, deployed commit equals main SHA; aliases `www.menuun.com` and `menuun.com`.
+- **F3 discovery:** Supabase project metadata and Storage catalog inspected read-only; account-specific backup/PITR status not exposed by connected tools. Details and official platform limitations are in `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
+- **Safety:** no SQL migration, production data mutation, PITR activation, restore, project clone, or deployment was performed in F3 discovery.
+
 ## 1. How to maintain this history
 
 For each material milestone, record:
@@ -67,13 +77,14 @@ Never infer merge from an open PR, deployment from a green Vercel check, or real
 - **Purpose:** detailed retrospective of multiple CI/browser causes, fixes, and prevention rules.
 - **Rule:** read this incident report before changing the same test/runner/browser infrastructure.
 
-## 3. Current repository checkpoint
+## 3. Current repository checkpoint — verified 2026-11-02
 
-- **VERIFIED:** inspected main SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- **VERIFIED:** default branch is `main`.
-- **VERIFIED:** PR #411 is merged; older continuity documents at the top of `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, and `SESSION_PROTOCOL.md` still described it as open/in progress. F0 reconciles the current checkpoint while preserving historical entries below.
-- **UNKNOWN:** current production deployment SHA/state was not re-queried for this F0 documentation task.
-- **UNKNOWN:** current live backup/restore evidence was not collected as part of F0.
+- **VERIFIED:** `main` HEAD `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- **VERIFIED:** PR #415 is merged at that SHA; F0, F1 and F2 are DONE.
+- **VERIFIED:** exact F2 feature-head Quality/W9 runs succeeded (IDs above).
+- **VERIFIED:** Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY on the same SHA.
+- **ACTIVE:** F3.1 read-only backup inventory.
+- **UNKNOWN:** account-specific backup schedule/retention, PITR, Storage object backups, manual exports, isolated restore readiness, approved RPO/RTO.
 
 ## 4. Architecture and operational evolution
 

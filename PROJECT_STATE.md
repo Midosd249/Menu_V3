@@ -1,17 +1,25 @@
 # Current Project State — F-Series
 
-## 2026-11-02 — F2 build and migration safety boundary
+## 2026-11-02 — F1/F2 closeout and F3 discovery checkpoint
 
-- **CLASSIFICATION:** F2 — Production-Safe Build & Migration Boundary.
-- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
-- **BRANCH:** `feat/f2-production-safe-migrations`; it contains F1 architecture artifacts plus F2 implementation. Git history is authoritative for its latest HEAD.
-- **IMPLEMENTED:** build/migration separation; explicit target and host/database/user matching; Vercel execution rejection; production confirmation; non-blocking PostgreSQL advisory lock; opt-in Vercel Git deployment rules; regression tests; ADR-0002; migration runbook.
-- **PRESERVED:** PGlite runtime migration behavior, custom runner, `menu_v3._migrations`, and per-migration transaction semantics. No SQL migration/schema changed.
-- **VERCEL PREVIEW EVIDENCE:** one automatic Preview deployment was created for the first F2 code commit `5ce4a7108c9adb383931af0557375be78caf5884`: deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj`, target `null`, state `READY`. Its build log shows the artifact-only build command and no migration-runner output. The initial `*` branch pattern did not match the slash-containing `feat/f2-production-safe-migrations` branch; the config was corrected to `**: false`. No additional deployment was observed for the corrected commit. PR-triggered behavior still needs verification.
-- **VERIFICATION:** no local/sandbox test execution is evidenced; sandbox creation was rejected by Vercel and the container could not resolve GitHub. GitHub Quality/W9 remain pending exact-head verification.
-- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no merge or Production deployment occurred, and no customer data was touched.
-- **UNKNOWN:** isolated staging Supabase target/protected migration environment; Preview/Production DB URL mapping; backup/restore readiness; PR-triggered Vercel behavior.
-- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel events on the single F2 PR's exact head, then close out without merging or deploying.
+- **CLASSIFICATION:** F1/F2 closeout; F3.1 Backup Inventory and Recovery Discovery.
+- **VERIFIED — MAIN:** `main` HEAD is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- **VERIFIED — PR:** PR #415 is CLOSED / MERGED; merge commit is the current main HEAD. Feature head: `9b077e5f4f3177b4f7f537e8b4e66b203960533b`.
+- **VERIFIED — CI on exact feature head:** Quality run `41381209308` SUCCESS; W9 Orders QA run `41381209270` SUCCESS.
+- **VERIFIED — PRODUCTION:** Vercel deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY, target `production`, commit `848d4acdd3b184c24142d1e77fc0c9af55f20eab`, aliases `www.menuun.com` and `menuun.com`.
+- **VERIFIED:** F0, F1, and F2 are complete. F1 architecture baseline and F2 production-safe build/migration boundary were delivered in PR #415. No repeat of F1/F2 is authorized.
+- **F3 STATUS:** ACTIVE — read-only discovery/inventory only. No backup restoration, PITR activation, project clone, schema migration, production mutation, or deployment has been performed.
+- **VERIFIED — SUPABASE PROJECT:** project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY, PostgreSQL 17, region `ap-northeast-2`. The Supabase project metadata endpoint did not expose the billing plan or backup configuration.
+- **VERIFIED — LIVE STORAGE METADATA:** one Storage bucket named `menu-assets` exists and is public. Supabase database metadata includes `storage.buckets` and `storage.objects`; actual object bytes are stored outside PostgreSQL.
+- **VERIFIED — OFFICIAL PLATFORM DOCUMENTATION:** Supabase daily database backups are plan-dependent (Pro 7 days, Team 14 days, Enterprise up to 30 days); Free has no automatic daily backups. PITR is a paid add-on and requires at least Small compute. The documented worst-case PITR RPO is two minutes. If PITR is enabled, daily backups are no longer taken.
+- **VERIFIED — STORAGE LIMITATION:** Supabase database backups do not include Storage API object bytes. The database backup contains metadata only; deleted object bytes are not restored by restoring an older database backup.
+- **VERIFIED — RESTORE-TO-NEW-PROJECT LIMITS:** requires a paid plan and physical backups. It copies database content and Auth records but does not copy Storage objects/settings, Edge Functions, Auth settings/API keys, Realtime settings, extensions/settings, or read replicas. Binary restore may start external extensions/jobs immediately.
+- **UNKNOWN:** actual Supabase billing tier; whether daily backups are enabled and available for this project; current backup timestamps/retention; PITR activation/retention; backup inventory API response; actual Storage object count and independent object backup; existing off-site/manual backup artifacts; isolated restore target; approved RPO/RTO.
+- **BLOCKED:** the connected Supabase tools expose project metadata, SQL/catalog inspection and docs, but no backup-list/restore-status action. The Management API backup inventory requires an authorized access token; no token or secret was read. The dashboard backup page has not been inspected in this session.
+- **SAFETY:** all database access in this discovery was read-only. No SQL DDL/DML, migration, credential inspection, restore, PITR setting change, project clone, or customer-data modification.
+- **EXACT NEXT ACTION:** obtain owner-authorized, read-only evidence of the source project's backup plan, available backup timestamps/retention and PITR status from Supabase Dashboard or the Management API, without initiating restore or changing billing.
+
+---
 
 ---
 

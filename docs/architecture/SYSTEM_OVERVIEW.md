@@ -2,7 +2,7 @@
 
 This addendum supersedes earlier F0/F1 statements where newer source, Git, or live catalog evidence is available. The original baseline is retained below as historical context.
 
-**F2 branch status:** The F2 working branch separates application build from PostgreSQL migration execution and adds target/Vercel/production guards. These changes are not yet merged to `main`; final-head CI and Vercel deployment-event verification remain pending.
+**F2 status — VERIFIED COMPLETE:** PR #415 merged the build/migration boundary at main SHA `848d4acdd3b184c24142d1e77fc0c9af55f20eab`. Exact feature-head Quality/W9 succeeded and Vercel Production is READY on that SHA. This addendum supersedes earlier statements below that F2 was unmerged or CI/deployment were pending.
 
 **VERIFIED:** F1 source inspection and live Supabase catalog inspection are recorded in the linked architecture documents. See [DATABASE](./DATABASE.md), [AUTH](./AUTH_AND_AUTHORIZATION.md), [TENANT ISOLATION](./TENANT_AND_BRANCH_ISOLATION.md), and [DEPLOYMENT](./DEPLOYMENT.md).
 

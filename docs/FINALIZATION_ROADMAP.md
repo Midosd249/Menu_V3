@@ -1,6 +1,9 @@
-F2 UPDATE — 2026-11-02
+F3 UPDATE — 2026-11-02
 
-VERIFIED: main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`. F1 architecture artifacts are committed at `b42229bcab316f1d85d2ff189754ec56ad434c15` on the parent branch. F2 implementation is in progress on `feat/f2-production-safe-migrations`. The branch removes PostgreSQL migrations from application build, adds explicit target identity and Vercel guards, requires production confirmation, serializes runner execution, configures Vercel Git deployments as opt-in for `main` and `preview/*`, and adds tests/runbook/ADR. No Supabase migration, merge, or Production deployment has been performed. Exact next action: verify F2 on one PR head and close it before F3.
+**VERIFIED:** `main` is `848d4acdd3b184c24142d1e77fc0c9af55f20eab`. PR #415 merged F1 and F2. Exact feature-head Quality `41381209308` and W9 `41381209270` succeeded. Vercel Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` is READY on the same SHA. F0/F1/F2 are DONE; F3 is the active phase.
+**F3.1 discovery:** Supabase project `ublxptcqefujkbeepylc` is ACTIVE_HEALTHY, PostgreSQL 17, region `ap-northeast-2`. The connector did not expose plan, backup inventory or PITR configuration. Storage bucket `menu-assets` exists and is public. Supabase database backups exclude Storage object bytes. See `docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md`.
+**UNKNOWN:** project plan, actual daily backup availability/retention, PITR status, independent Storage object backup, manual/off-site exports, isolated restore readiness, approved RPO/RTO.
+**EXACT NEXT ACTION:** obtain owner-authorized read-only account-specific backup inventory and PITR evidence. No restore, PITR activation, project clone, Production mutation or deployment is authorized by this discovery task.
 
 ---
 
@@ -8,13 +11,13 @@ VERIFIED: main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`. F1 architectu
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — F2 implementation in progress  
+**Status:** ACTIVE — F3 backup/restore discovery in progress  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
 **Language:** Arabic-first product; repository engineering documentation is maintained in English.  
 **Last repository verification for this baseline:** 2026-11-02  
-**Baseline main SHA:** `5a84d31282383e191472bcd3fc7d5b62417e90ca`
+**Verified main SHA (2026-11-02):** `848d4acdd3b184c24142d1e77fc0c9af55f20eab`
 
 > This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
 

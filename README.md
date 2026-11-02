@@ -1,7 +1,3 @@
-
-
-> F1 update — 2026-11-02. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch, based on main e5d7c89a73718f35e7accbae7933af36c366bbc1. Documentation-only: no runtime, SQL, auth, CI, Vercel, environment, or production data changes. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
-
 # Menu V3
 
 Arabic-first, bilingual, mobile-first, multi-tenant digital-menu SaaS for restaurants and cafes.
@@ -60,7 +56,7 @@ npm run build
 npm run check:auth
 ```
 
-`npm run build` also runs the repository migration runner. Do not run production migrations against an unintended database.
+`npm run build` is artifact-only and does not execute database migrations. Database migrations are a separate, explicit operator action governed by `docs/operations/MIGRATION_RUNBOOK.md`.
 
 ### Environment
 
@@ -84,6 +80,7 @@ Authentication and authorization are server-side. Tenant and branch isolation mu
 - [Architecture documentation index](docs/architecture/README.md) — architecture evidence policy and F1 artifacts.
 - [Verified system overview](docs/architecture/SYSTEM_OVERVIEW.md) — partial baseline; unresolved details remain explicitly UNKNOWN.
 - [Production-safe operations baseline](docs/operations/PRODUCTION_SAFE_OPERATIONS.md) — migration, release, rollback, backup/restore, monitoring, and incident controls.
+- [F3 backup/restore discovery](docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md) — current evidence, UNKNOWN items, and recovery safety constraints.
 - [Development history](docs/history/DEVELOPMENT_HISTORY.md) — evidence-backed milestone register.
 - [Architecture decisions](docs/decisions/) — accepted and superseded ADRs.
 
