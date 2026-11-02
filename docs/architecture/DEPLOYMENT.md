@@ -32,9 +32,10 @@
 - `vercel.json` configures Git deployments as opt-in.
 - `main` is enabled for the Production branch.
 - `preview/*` is the explicit opt-in namespace for Preview deployments.
-- All other branches are disabled by the wildcard default.
-- This policy applies to Git-triggered deployments; manual Vercel deployments remain a separate authorized action.
-- The actual effect on the next PR must be confirmed from Vercel events. Configuration source alone is not proof that Vercel skipped a deployment.
+- `**: false` is the minimatch wildcard default; `main: true` and `preview/*: true` are explicit exceptions.
+- **VERIFIED:** the initial `*` wildcard did not match the slash-containing feature branch and one Preview was created. The corrected `**: false` rule produced no additional deployment for the corrected branch HEAD.
+- **VERIFIED PREVIEW:** deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj` for commit `5ce4a7108c9adb383931af0557375be78caf5884` reached READY; build logs show the artifact-only build command and no migration-runner output.
+- PR-triggered behavior remains to be verified. This policy applies to Git-triggered deployments; manual Vercel deployments remain a separate authorized action.
 
 ## Environment separation and limitations
 - Exact Preview vs Production database target remains UNKNOWN; secret values were not inspected.

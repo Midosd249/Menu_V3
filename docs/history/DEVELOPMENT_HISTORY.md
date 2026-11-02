@@ -1,16 +1,14 @@
 F2 UPDATE — 2026-11-02
 
-- **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, based on F1 architecture commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
+- **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, current HEAD `65bcaa8533bc73ff2b56d33d2de4bfb8b043df07`, based on F1 architecture commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
 - **CHANGE:** application build no longer invokes the custom PostgreSQL migration runner.
 - **SAFETY:** explicit migration target plus exact host/database/user match; Vercel execution is rejected; Production requires a confirmation phrase; concurrent runner invocations are serialized by PostgreSQL advisory lock.
-- **DEPLOYMENT CONTROL:** Vercel Git deployments are opt-in for `main` and `preview/*`; other branches default to disabled. Actual Vercel event behavior remains to be checked on the PR.
+- **DEPLOYMENT CONTROL:** `vercel.json` uses `**: false` as the minimatch default, with `main: true` and `preview/*: true` exceptions.
+- **VERCEL EVIDENCE:** the initial `*` wildcard did not match the slash-containing feature branch and created Preview `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj` (READY) for commit `5ce4a7108c9adb383931af0557375be78caf5884`. Build logs show the artifact-only build command and no migration-runner output. The wildcard was corrected; no additional deployment was observed for the corrected HEAD. PR-triggered behavior remains pending.
 - **PRESERVED:** PGlite runtime migrations, `menu_v3._migrations`, and per-file transactions. No SQL migration or database was changed.
-- **VERIFICATION:** local/sandbox execution and final-head GitHub Quality/W9 are pending. No production migration, merge, or deployment occurred.
+- **VERIFICATION:** local/sandbox execution is blocked; GitHub Quality/W9 are pending PR creation. No production migration, merge, or Production deployment occurred.
 
 ---
-
----
-
 # Menuun Development History — Evidence Register
 
 **Program:** F-Series  
