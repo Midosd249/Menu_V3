@@ -1,16 +1,19 @@
 # Active Task Queue — F-Series
 
-## Current task: F4.3 — Incident response runbook validation and simulated rehearsal
+## Current task: F5.1 — Actual sales-to-activation journey
 
-- **STATUS:** DOCUMENTATION COMPLETE; final-head Quality/W9 SUCCESS; remote diff reviewed; PR #417 OPEN / NOT MERGED.
-- **BASE:** main `41e5c36e434051f9668887974739870354706bd6`; working branch `docs/f4-3-incident-rehearsal-2026-11-02`.
-- **SCOPE COMPLETED:** source/field validation, incident classification, missing-telemetry safeguards, conditional rollback gate, fictional tabletop rehearsal, continuity reconciliation.
-- **F3:** DEFERRED BY OWNER — NOT DONE; preserve mandatory pre-commercial gate.
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS — repository-evidence mapping only.
+- **BASE:** `main` `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
+- **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
+- **SCOPE COMPLETED:** discovery/contact, public preview, account registration, self-serve workspace provisioning, brand/branch setup, menu creation/import, preview, publish, branch/table QR, staff invitations, support contacts, and manual commercial/billing boundaries mapped to current source/migrations.
+- **CONTINUITY CORRECTION:** `docs/CUSTOMER_LIFECYCLE_ACCESS_POLICY.md` marked as a historical 2026-09-16 snapshot; current code and later lifecycle retirement record establish self-serve provisioning without a manual approval gate.
+- **F4:** PR #417 CLOSED / MERGED at main SHA `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
+- **F3:** DEFERRED BY OWNER — NOT DONE; preserve mandatory pre-commercial gate. No real-customer data or onboarding was performed.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **PROHIBITIONS PRESERVED:** no production fault injection, deployment, rollback, DB mutation, migration, settings change, secret modification, backup/restore/PITR, paid upgrade, or manual CI rerun.
-- **VERIFIED FINAL-HEAD CI:** Quality `41523483447` SUCCESS and W9 Orders QA `41523483512` SUCCESS on exact SHA `102e24e343e6add57e53d49a0908b78c7bfa974e`. Quality passed typecheck, tests, lint, production build and browser QA; two conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
-- **DIFF:** eight documentation files only; 225 additions / 38 deletions. Branch is 12 ahead / 0 behind `main`; no runtime code/config/schema changes.
-- **EXACT NEXT ACTION:** await explicit owner decision on PR #417. Do not merge/deploy or begin another task.
+- **PROHIBITIONS PRESERVED:** no product implementation, DB/Supabase mutation, migration, customer creation, production deployment, secrets/settings change, payment action, or CI rerun.
+- **UNKNOWN:** post-merge main CI, current Vercel deployment, production application of the latest trial migration, real-customer outcomes, and real-device QA were not verified in this task.
+- **EXACT NEXT ACTION:** F5.2 — owner-led operating procedure using the verified journey. Do not start automatically.
+
 
 ---
 
