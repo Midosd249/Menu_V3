@@ -1,18 +1,18 @@
 # Current Project State — F-Series
 
-## 2026-11-02 — F4.1 operational baseline completed
+## 2026-11-02 — F4.2 Supabase log classification completed
 
-- **CLASSIFICATION:** F4.1 read-only platform operations baseline; documentation-only repository update.
-- **VERIFIED BRANCH:** `docs/f3-backup-restore-discovery`; pre-update head `627b4dc59d41aa0d83304bfe5115e680994e3b35`; PR #416 remains open/draft pending final-head checks. No merge or deployment.
-- **VERIFIED CI ON PRE-UPDATE HEAD:** Quality run `41473198067` SUCCESS; W9 Orders QA run `41473198145` SUCCESS on `627b4dc59d41aa0d83304bfe5115e680994e3b35`. These results are for the pre-update head; do not imply checks ran on documentation commits added afterward.
-- **VERIFIED VERCEL:** team Hobby; project `menu-v3`; Production deployment `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3` READY on main SHA `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; aliases include `www.menuun.com` and `menuun.com`.
-- **VERIFIED VERCEL OBSERVATION:** no grouped runtime error clusters in the queried 24h; no warning/error/fatal runtime logs in the queried 50m window. These bounded queries are not proof of total application health.
-- **VERIFIED ROLLBACK CANDIDATE:** prior Production deployment `dpl_9zAvoGqWWNcQAAHdX8shg9TwcbYn`, READY, commit `e5d7c89a73718f35e7accbae7933af36c366bbc1`, marked eligible by Vercel. No rollback executed.
-- **UNKNOWN:** exact consumed/remaining Vercel quota is not exposed by connected read-only actions; check Usage dashboard manually before deployment. Supabase log severity mapping remains unvalidated from the aggregate counts.
-- **OWNER DECISION:** permanently exclude Leaked Password Protection Disabled from active F4/F6 queues because it is unavailable on current Supabase Free plan; disposition CLOSED / DO NOT REOPEN unless owner changes plan/decision. No paid upgrade.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, real customer-owned data, or commercial launch.
-- **NEXT:** F4.2 — validate Supabase log severity/error classification and define evidence-backed incident thresholds. Read-only only.
-- **NO SIDE EFFECTS:** no app/schema/settings/secret changes, no backup/restore/PITR, no deployment/rollback, no paid service.
+- **CLASSIFICATION:** F4.2 read-only Supabase unified-log schema/field validation and incident-threshold design.
+- **VERIFIED REPOSITORY:** PR #416 branch `docs/f3-backup-restore-discovery`; pre-F4.2 base head `8d945e30fdf9b6cda44f27eb5d298f6374916210`. F4.2 documentation update is being added to the same PR; final-head CI must be checked before merge.
+- **VERIFIED CI ON PRE-F4.2 HEAD:** Quality run `41477117064` SUCCESS and W9 Orders QA run `41477117274` SUCCESS on exact SHA `8d945e30fdf9b6cda44f27eb5d298f6374916210`. These results confirm the owner's reported successful check and are not evidence for later documentation commits.
+- **VERIFIED SUPABASE LOG QUERY:** project `ublxptcqefujkbeepylc`; discovered eight sources: edge (6), pgbouncer (82), postgres (30), postgrest (7), realtime (2), storage (4), supavisor (78), workflow_run (20) within the query window.
+- **VERIFIED FIELD MAP:** PostgreSQL `parsed.error_severity` / `parsed.sql_state_code`; Edge `response.status_code`; Storage/Realtime `level`. No normalized severity field was found in sampled PgBouncer, Supavisor, PostgREST, or workflow-run rows.
+- **VERIFIED FINDING:** one PostgreSQL `ERROR` at `2026-11-01T23:20:38.823Z`, SQLSTATE `42803`, command `SELECT`, message excerpt indicates a GROUP BY projection error. Source/route/customer impact are UNKNOWN; this is not classified as a confirmed application incident.
+- **OWNER-REPORTED:** owner states the application check completed successfully. This is retained separately from platform log evidence; exact route/device/test artifact was not supplied in this message.
+- **DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN as an unavailable Free-plan feature, per owner instruction. It is not an active task or blocker.
+- **F3:** DEFERRED BY OWNER — NOT DONE; pre-commercial gate unchanged.
+- **NEXT:** F4.3 — non-destructive incident-response runbook validation and simulated owner-operated rehearsal.
+- **NO SIDE EFFECTS:** read-only log queries only; no database writes/settings, secrets, billing, backup/restore/PITR, deployment, rollback, or manual CI rerun.
 
 ---
 
