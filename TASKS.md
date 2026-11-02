@@ -1,5 +1,19 @@
 # Active Task Queue — F-Series
 
+## Only active task: F4.1 — Read-only Vercel operational evidence and free-tier monitoring design
+
+- **STATUS:** IN_PROGRESS — read-only discovery/design.
+- **BASE:** main 848d4acdd3b184c24142d1e77fc0c9af55f20eab.
+- **COMPLETED PHASES:** F0, F1, F2.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, real customer-owned data, or commercial launch. No backup/restore work now.
+- **SCOPE:** inspect actual Vercel project/team deployment identity, usage/quota and plan-visible observability/rollback evidence; design a small read-only operational check using existing free capabilities.
+- **PROHIBITIONS:** no deployment, CI rerun, paid upgrade, alert service, scheduled automation, Vercel setting change, Supabase mutation, migration, backup, PITR, or restore.
+- **ACCEPTANCE:** direct evidence with timestamps; distinguish deployment state from application health; identify actual plan/retention/rollback constraints; define privacy-safe checks and explicit unable-to-assess outcomes; update F4 documentation and verify the final documentation diff.
+- **F4 RECORD:** docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md.
+
+---
+
+
 ## Only active task: F3.1 — Evidence-backed Backup Inventory
 
 - **STATUS:** IN_PROGRESS — read-only discovery.
