@@ -461,3 +461,15 @@ If production is broken after a release, use Vercel Instant Rollback only when a
 - F3 remains deferred by owner and not done.
 - Exactly one next task: F4.3 non-destructive incident-runbook validation and tabletop rehearsal.
 - No database mutation, deployment, rollback, paid service, backup/restore, or manual CI rerun.
+
+
+## 2026-11-02 — F4.3 continuity closeout (pending PR gates)
+
+- Verified main at task start: `41e5c36e434051f9668887974739870354706bd6`.
+- F4.1/F4.2 remain documented; F4.3 had no existing completed rehearsal section before this task.
+- F4.3 adds a source/field map, explicit incident classes, UNABLE TO ASSESS safeguards, a fictional end-to-end tabletop, and conditional rollback criteria.
+- Current read-only platform evidence: Supabase project ACTIVE_HEALTHY; 267 events across eight returned sources; top-level severity_text populated in sample; one historical PostgreSQL 42803 ERROR remains isolated with impact UNKNOWN; no Edge 5xx matches; Vercel runtime error query returned no clusters in 24h; latest Production deployment READY on main SHA 41e5c36e.
+- No production fault injection, deployment, rollback, DB write/migration, settings change, secrets modification, backup/restore, or manual CI rerun.
+- F3 remains deferred/not done; Leaked Password Protection warning remains closed/do not reopen.
+- Current work is documentation-only; local tests/browser QA are not available through the remote-only GitHub connector. PR CI is pending.
+- Exactly one next action: inspect final PR-head Quality/W9 and final diff, then stop.
