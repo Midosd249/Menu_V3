@@ -46,7 +46,7 @@ This addendum supersedes earlier F0/F1 statements where newer source, Git, or li
 | Migration runner | Custom Node runner at `scripts/migrate.mjs` | VERIFIED — source inspected |
 | Migration folder | `migrations/` | VERIFIED — source runner |
 | Migration ledger | `menu_v3._migrations` | VERIFIED — source runner |
-| Build/migration coupling | `build` runs `db:migrate` | VERIFIED — `package.json` |
+| Build/migration boundary | Build is artifact-only; migrations are explicit operator actions | VERIFIED — PR #415; earlier F1 statement below is historical |
 
 ## 3. Known repository structure
 
@@ -95,10 +95,10 @@ flowchart LR
 **VERIFIED migration boundary:**
 - The custom migration runner selects a configured PostgreSQL connection string from supported environment variables.
 - It creates/uses schema `menu_v3`, creates `menu_v3._migrations`, checks applied migration names, and executes pending SQL files transactionally one file at a time.
-- The application `build` script invokes this runner via `npm run db:migrate`.
+- **HISTORICAL F1 baseline, superseded by F2:** the application `build` script invoked this runner via `npm run db:migrate`. PR #415 removed that build-time migration coupling.
 - Repository continuity records a Preview build applying migration `20261023120000_restaurant_tables_and_qr_tokens.sql` to the connected Supabase project. This is evidence that Preview build and database mutation were coupled in at least one real run.
 
-**INFERRED risk:** If a Preview or ordinary build receives production database credentials, build execution can mutate production schema. F2 must remove this implicit coupling and test the absence of build-time database side effects.
+**HISTORICAL risk, remediated by F2:** a Preview or ordinary build with production database credentials could mutate production schema. PR #415 removed the implicit build-time migration execution path; explicit migration safeguards are documented in the migration runbook.
 
 ## 6. Migration-ledger distinction
 
@@ -121,7 +121,7 @@ See [ADR-0001](../decisions/ADR-0001-custom-migration-ledger.md).
 
 **UNKNOWN:** Current live production deployment SHA/state was not re-queried as part of this documentation task. Do not use this baseline SHA as a claim about what Production currently serves.
 
-## 8. F1 work still required
+## 8. F1 residual evidence limitations (not blockers to F1 completion)
 
 The following are intentionally not asserted as complete:
 
@@ -149,4 +149,4 @@ The following are intentionally not asserted as complete:
 - GitHub main history through `5a84d31282383e191472bcd3fc7d5b62417e90ca`
 - PR #411 merged record and final-head Quality/W9 evidence
 
-This overview must be revised during F1 after deeper source tracing.
+F1 artifacts are complete and merged. Residual details above remain UNKNOWN where evidence is incomplete; they do not reopen F1.

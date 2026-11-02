@@ -32,7 +32,7 @@ This document records the first evidence pass only. No backup was restored, no P
 | Actual latest backup timestamps | Not returned by connected Supabase project metadata/tools | UNKNOWN / BLOCKED |
 | Backup-list Management API | Official docs expose a project database-backups endpoint; no matching connected connector action was available and no access token was read | BLOCKED pending owner-authorized read-only access |
 | Existing manual/off-site exports | No current artifact or external backup inventory verified in this pass | UNKNOWN |
-| Existing database backup artifact in repo | No claim made; repository file inventory was not exhaustively searched for binary/off-repository artifacts | UNKNOWN |
+| Previously mentioned manual backup artifact | `menu-v3-full.backup` was referenced in prior project context; its current bytes, date, source project, integrity, encryption, completeness, and restorability were not verified in this session | UNKNOWN |
 
 Official sources:
 - Supabase Database Backups: https://supabase.com/docs/guides/platform/backups
@@ -87,7 +87,7 @@ These are planning targets, not existing guarantees. Owner approval and a real i
 2. Retrieve actual daily backup list, timestamps, and retention without invoking restore.
 3. Verify whether PITR is enabled, its configured retention, and its billing impact.
 4. Inventory Storage object count/size and choose an independent object backup/export strategy.
-5. Locate existing manual/off-site database and media backup artifacts and document custody/access.
+5. Locate and validate the previously mentioned `menu-v3-full.backup` artifact (if still available), plus any other manual/off-site database and media backups; record date, source identity, checksums, encryption, custody and restore compatibility.
 6. Inspect extensions, cron jobs, webhooks and external-effect triggers before selecting a binary clone path.
 7. Identify a separately isolated recovery project and confirm cost, region, access boundaries and no Production aliases/credentials.
 8. Execute one authorized isolated restore and validate schema, custom migration ledger, critical relationships, representative queries, tenant/branch isolation, Auth, and media references.

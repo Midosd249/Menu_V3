@@ -113,12 +113,12 @@ CI success does not prove production deployment. Preview READY does not prove pr
 
 The F identifiers are permanent phase IDs. They are not sprint numbers, release versions, or proof of completion.
 
-| Phase | Name | Primary outcome | Depends on | Status at baseline |
+| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-02) |
 |---|---|---|---|---|
-| **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | ACTIVE — this documentation task |
-| **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | PLANNED |
-| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | IMPLEMENTATION_IN_PROGRESS — branch feat/f2-production-safe-migrations |
-| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | PLANNED |
+| **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | DONE |
+| **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | DONE — merged in PR #415 |
+| **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
+| **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | IN_PROGRESS — F3.1 read-only inventory |
 | **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2, F3 | PLANNED |
 | **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | PLANNED |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
@@ -218,7 +218,7 @@ Ensure ordinary application builds do not silently mutate a live database, and e
 ### Baseline fact
 **VERIFIED:** At the baseline SHA, `package.json` defines `build` as a command that runs the Vite build, PGlite asset handling, and then `npm run db:migrate`. `scripts/migrate.mjs` selects the first configured database URL from its supported environment-variable list and applies pending SQL files through the repository runner. A prior Vercel Preview build is documented in repository history as having applied a migration to the connected Supabase project. This is a demonstrated production-safety hazard, not merely a theoretical concern.
 
-**IMPLEMENTED ON F2 BRANCH — CI PENDING:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and an operator runbook. No database migration was executed. F2 is not DONE until final-head CI and deployment-event checks are complete.
+**VERIFIED COMPLETE — PR #415:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and operator runbook were merged. Exact feature-head Quality/W9 succeeded; Production is READY on the merge SHA. No production SQL migration was executed as part of F2.
 
 ### Work packages
 - F2.1 Map every build/deploy path and identify where `build`, `db:migrate`, and database environment variables are invoked.

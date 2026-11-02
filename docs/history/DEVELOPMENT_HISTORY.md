@@ -92,9 +92,9 @@ This section is a living register. Add an entry when an architectural decision o
 
 | Date | Decision/change | Evidence | Status |
 |---|---|---|---|
-| 2026-11-02 | Establish F-Series roadmap and phase IDs | F0 documentation branch | In progress until reviewed/merged |
+| 2026-11-02 | Establish F-Series roadmap and phase IDs | F0 documentation branch; reconciled in F3 continuity PR | DONE |
 | Historical | Release-only Vercel policy | `docs/release-only-vercel-workflow.md`, `AGENTS.md` | Existing repository policy |
-| Historical | Custom migration runner and ledger | `scripts/migrate.mjs`, continuity decision | Existing implementation/decision; F2 safety work pending |
+| Historical | Custom migration runner and ledger | `scripts/migrate.mjs`, PR #415, ADR-0002 | Existing custom runner retained; F2 safety boundary DONE |
 
 ## 5. Do not repeat without evidence
 
