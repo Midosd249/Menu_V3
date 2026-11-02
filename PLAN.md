@@ -2,7 +2,7 @@
 
 ## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 documentation/rehearsal completed on branch `docs/f4-3-incident-rehearsal-2026-11-02`; final PR quality gates pending.
+- **STATUS:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 exact-head Quality/W9 CI SUCCESS; PR #417 OPEN / NOT MERGED.
 - **VERIFIED MAIN AT TASK START:** `41e5c36e434051f9668887974739870354706bd6`.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
@@ -16,7 +16,7 @@
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
-| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | F4.1/F4.2 complete; F4.3 pending final PR checks; later F4 work not started |
+| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | F4.1/F4.2/F4.3 complete with limitations; PR #417 remains open/unmerged; later F4 work not started |
 | F5 | Commercial Customer Operations | PLANNED | Owner-led customer operations |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
@@ -25,9 +25,9 @@
 
 **F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Source-specific log fields and one isolated PostgreSQL ERROR documented. F4.3 clarifies the top-level `severity_text` field without erasing the earlier nested-map observation.
 
-**F4.3:** DOCUMENTATION AND FICTIONAL REHEARSAL COMPLETE; final PR Quality/W9 evidence pending. No production operation was performed.
+**F4.3:** DOCUMENTATION AND FICTIONAL REHEARSAL COMPLETE; exact-head Quality `41523483447` and W9 `41523483512` both SUCCESS on `102e24e343e6add57e53d49a0908b78c7bfa974e`. PR #417 remains OPEN / NOT MERGED. No production operation was performed.
 
-**EXACT NEXT ACTION:** inspect final PR-head Quality/W9 and diff, then stop; await explicit owner instruction before starting any other task.
+**EXACT NEXT ACTION:** await explicit owner decision on PR #417; do not merge, deploy, or start another phase automatically.
 
 ---
 
