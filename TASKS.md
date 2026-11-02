@@ -2,13 +2,15 @@
 
 ## Current task: F4.3 — Incident response runbook validation and simulated rehearsal
 
-- **STATUS:** IMPLEMENTED IN DOCUMENTATION; final PR Quality/W9 checks and final diff review pending.
+- **STATUS:** DOCUMENTATION COMPLETE; final-head Quality/W9 SUCCESS; remote diff reviewed; PR #417 OPEN / NOT MERGED.
 - **BASE:** main `41e5c36e434051f9668887974739870354706bd6`; working branch `docs/f4-3-incident-rehearsal-2026-11-02`.
 - **SCOPE COMPLETED:** source/field validation, incident classification, missing-telemetry safeguards, conditional rollback gate, fictional tabletop rehearsal, continuity reconciliation.
 - **F3:** DEFERRED BY OWNER — NOT DONE; preserve mandatory pre-commercial gate.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
 - **PROHIBITIONS PRESERVED:** no production fault injection, deployment, rollback, DB mutation, migration, settings change, secret modification, backup/restore/PITR, paid upgrade, or manual CI rerun.
-- **EXACT NEXT ACTION:** inspect final PR-head checks and final diff; stop afterward and await owner instruction.
+- **VERIFIED FINAL-HEAD CI:** Quality `41523483447` SUCCESS and W9 Orders QA `41523483512` SUCCESS on exact SHA `102e24e343e6add57e53d49a0908b78c7bfa974e`. Quality passed typecheck, tests, lint, production build and browser QA; two conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
+- **DIFF:** eight documentation files only; 225 additions / 38 deletions. Branch is 12 ahead / 0 behind `main`; no runtime code/config/schema changes.
+- **EXACT NEXT ACTION:** await explicit owner decision on PR #417. Do not merge/deploy or begin another task.
 
 ---
 
