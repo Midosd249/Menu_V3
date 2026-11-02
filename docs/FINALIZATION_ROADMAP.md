@@ -210,13 +210,13 @@ Describe what exists today, not what a generic SaaS architecture ought to contai
 - All important unknowns are listed with the evidence needed to resolve them.
 - Architecture documentation matches current code and tests.
 
-## 7. F2 — Production-Safe Build & Migration Boundary
+## 7. F2 — Production-Safe Build & Migration Boundary (DONE)
 
 ### Objective
 Ensure ordinary application builds do not silently mutate a live database, and ensure database changes are explicit, reviewed, and compatible with active application versions.
 
 ### Baseline fact
-**VERIFIED:** At the baseline SHA, `package.json` defines `build` as a command that runs the Vite build, PGlite asset handling, and then `npm run db:migrate`. `scripts/migrate.mjs` selects the first configured database URL from its supported environment-variable list and applies pending SQL files through the repository runner. A prior Vercel Preview build is documented in repository history as having applied a migration to the connected Supabase project. This is a demonstrated production-safety hazard, not merely a theoretical concern.
+**HISTORICAL F1 BASELINE, superseded by F2:** `package.json` originally coupled `build` to `npm run db:migrate`; repository history records a prior Preview migration side effect. PR #415 removed build-time migration execution. The current explicit migration boundary is defined by the merged F2 implementation and `docs/operations/MIGRATION_RUNBOOK.md`.
 
 **VERIFIED COMPLETE — PR #415:** build/migration separation, explicit target identity guard, Vercel-context rejection, production confirmation, non-blocking advisory-lock serialization, opt-in Vercel Git deployment configuration, regression tests, and operator runbook were merged. Exact feature-head Quality/W9 succeeded; Production is READY on the merge SHA. No production SQL migration was executed as part of F2.
 
@@ -252,7 +252,7 @@ Never assume an application rollback reverses a database migration. Never edit a
 - Preview and production database targets cannot be confused silently.
 - The change is verified locally and through applicable CI before release.
 
-## 8. F3 — Backup, Restore & Disaster Recovery
+## 8. F3 — Backup, Restore & Disaster Recovery (ACTIVE)
 
 ### Objective
 Know what can be recovered, from which point in time, by whom, and how long recovery takes.
