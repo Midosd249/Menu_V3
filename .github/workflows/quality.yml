@@ -49,7 +49,7 @@ jobs:
           node-version: 24
           cache: npm
       - name: Install
-        run: npm install --no-audit --no-fund --no-save --legacy-peer-deps vite@8.3.4 @playwright/test@1.63.0
+        run: npm install --no-audit --no-fund
       - name: Generate route tree
         run: npx vite build --mode development
       - name: Verify generated route tree is committed
@@ -95,8 +95,18 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+      - name: Install isolated Playwright tooling
+        run: |
+          TOOLS_DIR="$RUNNER_TEMP/menuun-browser-tools"
+          mkdir -p "$TOOLS_DIR"
+          printf '{"name":"menuun-ci-browser-tools","private":true}\\n' > "$TOOLS_DIR/package.json"
+          npm install --prefix "$TOOLS_DIR" --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps vite@8.3.4 @playwright/test@1.63.0
+          mkdir -p node_modules/@playwright
+          cp -a "$TOOLS_DIR/node_modules/@playwright/test" node_modules/@playwright/test
+          cp -a "$TOOLS_DIR/node_modules/playwright" node_modules/playwright
+          cp -a "$TOOLS_DIR/node_modules/playwright-core" node_modules/playwright-core
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" install --with-deps chromium
       - name: P1.9 real-route performance evidence — route graph branch only
         if: startsWith(github.head_ref, 'perf/p1-9-')
         env:
@@ -105,7 +115,7 @@ jobs:
           PERFORMANCE_AUDIT_VIEWPORT_HEIGHT: 844
         run: |
           mkdir -p .grok/p1-9-real-route
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/p1-9-real-route/preview.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/p1-9-real-route/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -183,7 +193,7 @@ jobs:
       - name: Browser template QA — all themes
         run: |
           mkdir -p .grok
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/preview.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
@@ -211,14 +221,14 @@ jobs:
       - name: Menuun brand browser QA — homepage and login in Arabic and English
         run: |
           mkdir -p .grok
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8081' > .grok/menuun-brand-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8081' > .grok/menuun-brand-browser.log 2>&1 < /dev/null &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
               for stability_run in 1 2 3; do
                 echo "[menuun-brand-browser] stability run ${stability_run}/3 (retries=0)"
-                MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 npx playwright test tests/menuun-brand-browser.spec.ts --workers=1 --retries=0 --trace=retain-on-failure || exit $?
+                MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/menuun-brand-browser.spec.ts --workers=1 --retries=0 --trace=retain-on-failure || exit $?
               done
               exit 0
             fi
@@ -467,7 +477,7 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$STUDIO_PID" 2>/dev/null || true; rm -f migrations/99999999_w7_3_studio_fixture.sql; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8082' > .grok/studio-shell-browser.log 2>&1 < /dev/null &
           STUDIO_PID=$!
           echo "[resources] before Studio browser tests"
           df -h
@@ -484,7 +494,7 @@ jobs:
               for attempt in 1 2; do
                 echo "[studio-browser] Playwright attempt $attempt/2"
                 set +e
-                STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
+                STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
                 STATUS=$?
                 set -e
                 if [ "$STATUS" -eq 0 ]; then
@@ -586,7 +596,7 @@ jobs:
           mkdir -p .grok
           cleanup() { kill "$ADMIN_PID" 2>/dev/null || true; }
           trap cleanup EXIT
-          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
+          setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview --host 127.0.0.1 --port 8083' > .grok/platform-admin-browser.log 2>&1 < /dev/null &
           ADMIN_PID=$!
           for attempt in $(seq 1 120); do
             if curl --silent --show-error --fail http://127.0.0.1:8083/admin >/dev/null; then
@@ -595,7 +605,7 @@ jobs:
                 curl --silent --show-error --fail "http://127.0.0.1:8083$route" >/dev/null || { echo "[admin-browser] warm-up failed for $route"; tail -n 200 .grok/platform-admin-browser.log; exit 1; }
               done
               set +e
-              ADMIN_BASE_URL=http://127.0.0.1:8083 npx playwright test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
+              ADMIN_BASE_URL=http://127.0.0.1:8083 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then cat .grok/platform-admin-browser.log; fi
