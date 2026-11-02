@@ -3,15 +3,15 @@
 ## 2026-11-02 — F2 build and migration safety boundary
 
 - **CLASSIFICATION:** F2 — Production-Safe Build & Migration Boundary.
-- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is committed at `b42229bcab316f1d85d2ff189754ec56ad434c15` on `docs/f1-verified-architecture-baseline`.
-- **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, based on the F1 documentation commit. This branch carries the F1 architecture documents plus the F2 implementation.
-- **F2 SCOPE:** remove database migrations from the application build; require explicit migration target and exact expected database host/database/user; block migration execution in Vercel; require a separate production confirmation; serialize migration runners with a PostgreSQL advisory lock; make Vercel Git deployments opt-in for `main` and `preview/*`; add focused regression tests and an operator runbook.
-- **PRESERVED:** PGlite's existing runtime migration behavior, the custom migration runner, `menu_v3._migrations`, and per-migration transaction semantics. No migration SQL or schema was changed.
-- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no production deployment was requested, and no customer data was touched.
-- **VERIFICATION:** source-level changes and tests are prepared. Local/sandbox test execution is not yet evidenced. GitHub Quality/W9 results are pending until a PR is opened. Do not claim F2 verified until the exact PR head passes applicable CI.
-- **DEPLOYMENT:** no Production deployment. Git-triggered deployments are configured in `vercel.json` to allow `main` and explicit `preview/*` only; actual Vercel behavior must be checked after the PR event.
-- **UNKNOWN:** no isolated staging Supabase target or protected migration environment has been verified; Preview/Production DB URLs remain uninspected; backup/restore readiness is not yet verified.
-- **EXACT NEXT ACTION:** finish F2 diff review, open one PR, and inspect Quality/W9 plus Vercel deployment events on the exact final head. Do not merge, run migrations, or deploy.
+- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
+- **BRANCH:** `feat/f2-production-safe-migrations`; it contains F1 architecture artifacts plus F2 implementation. Git history is authoritative for its latest HEAD.
+- **IMPLEMENTED:** build/migration separation; explicit target and host/database/user matching; Vercel execution rejection; production confirmation; non-blocking PostgreSQL advisory lock; opt-in Vercel Git deployment rules; regression tests; ADR-0002; migration runbook.
+- **PRESERVED:** PGlite runtime migration behavior, custom runner, `menu_v3._migrations`, and per-migration transaction semantics. No SQL migration/schema changed.
+- **VERCEL PREVIEW EVIDENCE:** one automatic Preview deployment was created for the first F2 code commit `5ce4a7108c9adb383931af0557375be78caf5884`: deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj`, target `null`, state `READY`. Its build log shows the artifact-only build command and no migration-runner output. The initial `*` branch pattern did not match the slash-containing `feat/f2-production-safe-migrations` branch; the config was corrected to `**: false`. No additional deployment was observed for the corrected commit. PR-triggered behavior still needs verification.
+- **VERIFICATION:** no local/sandbox test execution is evidenced; sandbox creation was rejected by Vercel and the container could not resolve GitHub. GitHub Quality/W9 remain pending exact-head verification.
+- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no merge or Production deployment occurred, and no customer data was touched.
+- **UNKNOWN:** isolated staging Supabase target/protected migration environment; Preview/Production DB URL mapping; backup/restore readiness; PR-triggered Vercel behavior.
+- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel events on the single F2 PR's exact head, then close out without merging or deploying.
 
 ---
 

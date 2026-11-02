@@ -9,8 +9,9 @@
 - **F2 DESIGN:** builds are artifact-only; migrations are explicit, target-identified operator actions; Vercel contexts are rejected; Production needs a confirmation phrase; PostgreSQL advisory locking serializes this runner.
 - **DEPLOYMENT POLICY:** Git-triggered Vercel deployments are opt-in for `main` and `preview/*`; actual Vercel response to the PR must be verified.
 - **NO SIDE EFFECTS:** no Supabase migration, no production DB mutation, no secret access/change, no merge, and no Production deployment.
-- **VERIFICATION:** implementation/tests prepared; local/sandbox execution and final-head GitHub Quality/W9 remain pending.
-- **EXACT NEXT ACTION:** finish diff review, open one PR, inspect exact-head CI and Vercel deployment events, then stop.
+- **VERCEL PREVIEW:** deployment `dpl_CMdCq6E2gEz3UR2bjJN782UMDHUj` for the first F2 commit reached READY; build logs show the artifact-only build and no migration output. The initial `*` wildcard missed the slash-containing branch and was corrected to `**: false`; no additional deployment was observed for the corrected commit.
+- **VERIFICATION:** local/sandbox execution is blocked; GitHub Quality/W9 remain pending exact-head verification.
+- **EXACT NEXT ACTION:** inspect the F2 PR's exact-head CI and Vercel deployment events, then stop.
 
 ## Permanent handoff rules
 

@@ -33,9 +33,7 @@
 8. Focused regression tests pass; Quality/W9 pass on the same PR head.
 9. No production migration, merge, or deployment is performed as part of implementation verification.
 
-**EXACT NEXT ACTION:** complete F2 implementation review, open one PR, then inspect exact-head CI and Vercel events. Do not begin F3 automatically.
-
----
+**EXACT NEXT ACTION:** inspect exact-head Quality/W9 and Vercel events for the F2 PR, then close out without merge or deployment. Do not begin F3 automatically.
 
 ---
 

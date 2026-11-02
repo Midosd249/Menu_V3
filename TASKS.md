@@ -18,7 +18,7 @@
   9. No real database migration, merge, or Production deployment occurs during this task.
 - **VERIFICATION:** pending local/sandbox execution and GitHub CI on the exact PR head. Do not claim checks passed until results are directly observed.
 - **RELEASE:** not authorized/performed. Any Vercel event caused by the PR must be inspected and reported.
-- **EXACT NEXT ACTION:** complete F2 final diff review, open one PR, and inspect Quality/W9 and Vercel event evidence on the exact head.
+- **EXACT NEXT ACTION:** inspect Quality/W9 and Vercel event evidence on the exact PR head, then stop without merge or deployment.
 
 ## Guardrails
 
@@ -29,8 +29,6 @@
 - Do not run Supabase CLI migration push/repair.
 - Do not merge or deploy as part of this task.
 - Do not begin F3–F7 until F2 is closed out.
-
----
 
 ---
 
