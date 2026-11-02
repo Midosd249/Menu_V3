@@ -240,3 +240,15 @@ Classification may be raised when blast radius or uncertainty is higher. Never l
 - PostgreSQL documentation: https://www.postgresql.org/docs/current/
 
 Vendor documentation describes vendor-managed workflows. It does not authorize replacing the repository's current custom migration runner or ledger.
+
+## 2026-11-02 — Owner decision: defer F3 execution; begin F4
+
+- **VERIFIED (owner decision):** all current restaurants/accounts are private test fixtures controlled by the owner; there are no real customers or customer-owned production datasets at this stage.
+- **STATUS:** F3 is **DEFERRED BY OWNER — NOT DONE**. This is a scheduling decision, not evidence of backup coverage or recoverability.
+- **DEFERRED ACTIONS:** manual database exports, backup automation, Storage/Auth recovery implementation, paid plan/PITR upgrades, paid recovery infrastructure, and isolated restore drills.
+- **COST / SAFETY:** no plan upgrade, paid project/branch, PITR activation, backup job, restore, production migration, or data mutation is authorized by this decision.
+- **MANDATORY RE-ENTRY GATE:** resume and complete F3 before the first real customer, before storing real customer-owned data, or before commercial launch—whichever occurs first. F3 must pass its existing isolated-restore and integrity acceptance gate before that boundary.
+- **PRESERVED:** prior read-only F3 research and discovery remain useful evidence, but do not constitute a backup or a successful restore. The menu-v3-full.backup file remains an unverified artifact lead.
+- **NEXT PHASE:** F4 Release, Monitoring & Incident Operations is now active. F4 must remain within currently available/free capabilities unless the owner separately approves cost.
+
+See docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md for the current read-only operational baseline and F4 acceptance gate.
