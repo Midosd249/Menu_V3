@@ -1,37 +1,35 @@
 # F4 — Release, Monitoring & Incident Operations
 
 **Date:** 2026-11-02  
-**Status:** IN_PROGRESS — F4.1 read-only operational baseline  
-**Repository base:** main 848d4acdd3b184c24142d1e77fc0c9af55f20eab  
-**Scope:** operational evidence and documentation only. No application code, database schema, settings, secrets, deployments, alerts, or customer data were changed.
+**Status:** IN_PROGRESS — F4.1 operational baseline CLOSED; F4.2 is the next task  
+**Repository base:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`  
+**Scope:** read-only platform inspection and operational documentation. No application code, database schema, platform settings, secrets, deployments, alerts, or customer data were changed.
 
 ## 1. Phase boundary
 
-F4 establishes an affordable, repeatable way to detect service degradation, identify the affected release/dependency, contain incidents, recover safely, and record evidence. It must use existing capabilities first and avoid paid upgrades or noisy CI/deployment activity.
+F4 establishes an affordable, repeatable way to detect service degradation, identify the affected release/dependency, contain incidents, recover safely, and record evidence. It uses existing/free capabilities first and avoids paid upgrades or unnecessary CI/deployment activity.
 
 F3 remains **DEFERRED BY OWNER — NOT DONE**. F4 does not waive F3. F3 must be completed before the first real customer, real customer-owned data, or commercial launch, whichever occurs first. No backup, restore, PITR, or paid recovery action is included here.
 
 ## 2. Repository baseline — VERIFIED
 
-- docs/operations/PRODUCTION_SAFE_OPERATIONS.md already defines environment separation, release checklist, application rollback vs database recovery, monitoring signal classes, incident record fields, and risk classes.
-- docs/release-only-vercel-workflow.md is the canonical release policy. Do not duplicate or weaken it.
-- F2 has separated application build from explicit database migration execution. F4 must preserve that boundary.
-- Historical runtime observations in the operations runbook are explicitly not current incidents; do not relabel them without fresh evidence.
+- `docs/operations/PRODUCTION_SAFE_OPERATIONS.md` already defines environment separation, release checklist, application rollback vs database recovery, monitoring signal classes, incident record fields, and risk classes.
+- `docs/release-only-vercel-workflow.md` is the canonical release policy. Do not duplicate or weaken it.
+- F2 separates application build from explicit database migration execution. F4 preserves that boundary.
+- Historical runtime observations in the operations runbook are not current incidents; do not relabel them without fresh evidence.
 
 ## 3. Connected platform snapshot — VERIFIED, read-only, 2026-11-02
 
-### Supabase project
+### Supabase
 
-- Project ref: ublxptcqefujkbeepylc.
-- Region: ap-northeast-2.
-- Project status at inspection: ACTIVE_HEALTHY.
-- PostgreSQL: 17.11.
-- Organization plan returned by the connected account: free.
-- The project status is a platform snapshot, not proof that every application route or customer journey is healthy.
+- Project ref: `ublxptcqefujkbeepylc`.
+- Region: `ap-northeast-2`.
+- Project status: `ACTIVE_HEALTHY`.
+- PostgreSQL: `17.11`.
+- Connected organization plan: **Free**.
+- The platform status is not proof that every application route or customer journey is healthy.
 
-### Recent log-source activity
-
-A read-only aggregation over the available last-24-hour log window returned:
+A read-only aggregation over the inspected last-24-hour window returned:
 
 | Source | Events | Latest event (UTC) |
 |---|---:|---|
@@ -40,63 +38,120 @@ A read-only aggregation over the available last-24-hour log window returned:
 | postgrest_logs | 7 | 2026-11-02 00:01:12 |
 | storage_logs | 4 | 2026-11-02 03:41:30 |
 
-The query establishes that these sources returned events, not that requests succeeded or failed. It did not include full messages or customer identifiers. No auth_logs or function_edge_logs rows were returned in the focused result; this is not proof of no Auth/function activity or health.
+These are activity counts only. They do not establish success/error rates. The focused result did not return `auth_logs` or `function_edge_logs`; that is not proof of no activity or health.
 
-### Supabase advisor snapshot
+### Supabase advisor disposition
 
-- Security advisor returned one warning: **Leaked Password Protection Disabled**. This is a verified advisor finding; no setting was changed. Route to a separate F6 security decision after checking current Auth configuration, impact, and compatibility.
-- Security advisor also returned 40 informational rls_enabled_no_policy findings across menu_v3 tables. These findings require context: a custom schema with no client-facing grants may intentionally have no policies. Do not add policies or disable RLS based on the lint label alone.
-- Performance advisor returned 19 unindexed-FK findings and 13 multiple-permissive-policy warnings, alongside unused-index notices. These are review candidates, not authorization for schema/index changes. Workload, query plans, schema ownership, and current code paths must be checked before any remediation.
+- The owner explicitly directed that the **Leaked Password Protection Disabled** advisor warning be permanently excluded from active F4/F6 work because the feature is unavailable on the current Free plan and no paid upgrade is authorized. **Disposition: OWNER-ACCEPTED PLAN LIMITATION — CLOSED / DO NOT REOPEN** unless the owner changes the plan/decision. Do not repeatedly surface it as an open task or blocker. This disposition does not claim the feature is enabled.
+- The advisor's 40 informational `rls_enabled_no_policy` findings remain contextual review items; do not add policies or disable RLS based on the lint label alone.
+- Performance advisor findings (19 unindexed-FK, 13 multiple-permissive-policy warnings, and unused-index notices) remain review candidates, not authorization for schema/index changes.
 
-## 4. Vercel observability constraints — VERIFIED from official documentation
+## 4. Vercel account, deployment and observability — VERIFIED
 
-- Basic Vercel Observability is documented as available on all plans; Observability Plus provides additional metrics, limits, and retention.
-- Vercel runtime-log retention is plan-dependent; the official runtime-log page currently lists Hobby retention as one hour. Confirm the actual Vercel team/project plan before relying on this value operationally.
-- Vercel Alerts are documented for Pro and Enterprise with Observability Plus. Do not design F4 around paid alerts or assume email/webhook alerting is available on the current account.
-- Official production rollback guidance requires confirming the issue, rolling back to an eligible prior deployment, verifying recovery, and then investigating. Hobby rollback eligibility is more limited than Pro/Enterprise; check the actual available deployment before acting.
-- No Vercel Usage/Billing page was inspected in this task. Exact current Vercel plan, remaining quota, alert entitlement, and production log retention for this project remain UNKNOWN.
+### Account and project
 
-## 5. Proposed low-cost operating model
+- Team: `midosd2s-projects` (`team_4qTUNnhDhAW00uQId6JvETf4`).
+- Team plan: **Hobby (Free)**, verified through connected Vercel team/deployment context.
+- Project: `menu-v3` (`prj_ydfrFBE7ZJVmuNnCOTv3WjWkhuH1`), linked to `Midosd249/Menu_V3`.
+- Official Hobby documentation lists **one hour** of runtime-log retention. This is the plan-level documented limit, not a claim that older logs can be retrieved.
 
-1. **Release identity:** record intended main SHA, production deployment ID, deployment state, and observed production alias after each authorized release.
-2. **Daily lightweight check:** inspect Supabase project status and a small, fixed window of aggregated error/connection signals; inspect Vercel production deployment state and recent runtime errors when available. Record observation time and exact window.
-3. **On-demand incident check:** correlate timestamp, route/service, deployment ID/SHA, error class, and dependency. Avoid collecting request bodies, tokens, full URLs with query strings, or customer PII.
-4. **Capacity watch:** inspect Supabase Database Reports (CPU, memory, disk, database size, connections) where available. Capture values and timestamps; do not infer exhaustion without confirmed limits and comparable history.
-5. **Rollback:** use only an eligible, known-good production deployment after confirming blast radius and database compatibility. A Vercel rollback does not reverse SQL migrations or restore data.
-6. **Incident record:** create docs/incidents/<incident-id>.md only for material incidents; use the template in PRODUCTION_SAFE_OPERATIONS.md.
-7. **Cost guard:** no new vendor, paid plan, observability upgrade, external log drain, or always-on automation without an explicit cost/benefit decision from the owner.
+### Current Production identity
 
-These are **PROPOSED** operating steps, not automated monitoring or configured alerts.
+- Deployment: `dpl_6RFG7Ycb4XLxnWTwwYhmGQUhmas3`.
+- State/target: `READY` / `production`.
+- Git ref/SHA: `main` / `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
+- Production aliases include `www.menuun.com` and `menuun.com`.
+- The deployment SHA matches the verified main SHA recorded for PR #415 closeout.
 
-## 6. F4 acceptance criteria
+### Runtime observation
 
-- [ ] Inventory current Vercel production deployment identity and actual plan/observability entitlements using direct account evidence.
-- [ ] Establish a minimal repeatable Supabase health/log check with exact UTC windows, thresholds, and explicit clear / finding / unable to assess outcomes.
-- [ ] Establish a minimal Vercel production log/deployment check compatible with actual plan retention and usage limits.
-- [ ] Define severity, detection, triage, containment, owner decision, recovery, verification, and incident closure steps.
-- [ ] Verify rollback eligibility and document the application-vs-database recovery boundary without executing a rollback.
-- [ ] Define privacy-safe evidence retention and avoid PII/secrets in logs and incident records.
-- [ ] Update continuity docs and verify the final documentation diff.
-- [ ] No paid dependency, production mutation, deployment, or backup/restore action is introduced without separate explicit approval.
+- Vercel grouped runtime-error query: no runtime error clusters returned for the selected last-24-hour window.
+- Vercel production runtime-log query: no `error`, `fatal`, or `warning` records returned in the selected 50-minute window (`2026-11-02T15:07:54Z` to `2026-11-02T15:57:54Z`).
+- These are bounded query results, not proof of zero user-facing defects, successful journeys, or complete observability.
 
-## 7. Current UNKNOWN / BLOCKED
+### Rollback candidate
 
-- Vercel team plan, production log retention, current usage/quota, alert entitlements, and eligible rollback target were not inspected.
-- Supabase event counts alone do not classify errors; status/level field mapping and useful alert thresholds need an evidence-backed focused check.
-- No persistent monitoring schedule or alert destination is configured or verified by this task.
-- No browser, customer-journey, or real-device health check was run.
-- No active production incident is established by this snapshot.
+- A previous Production deployment was directly inspected: `dpl_9zAvoGqWWNcQAAHdX8shg9TwcbYn`, state `READY`, commit `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
+- Vercel marked it as a rollback candidate in the Production deployment list. No rollback was executed.
+- Before any real rollback, re-check candidate eligibility, intended target, current incident, and database/migration compatibility. A Vercel rollback does not reverse SQL migrations or restore data.
 
-## 8. Sources
+### Plan and quota limits
 
+- Hobby is confirmed. The official Vercel plan documentation describes its included resource limits and pause behavior when limits are exceeded.
+- Exact current consumed/remaining quota for this team/project was **not available through the connected read-only actions used in this task**. Do not infer remaining quota from plan tier or deployment count. Inspect the Vercel Usage dashboard manually before any release/deployment decision, as required by `AGENTS.md`.
+- No paid Alerts/Observability Plus or persistent alert destination is configured or verified. Do not rely on paid alerting.
+
+## 5. Minimal free-tier operational check — PROPOSED, repeatable
+
+Run manually when reviewing operations and immediately after an authorized release. Record UTC observation time, exact windows, project/team identifiers, deployment ID/SHA, and the outcome. Do not retain tokens, request bodies, full query-string URLs, or customer PII.
+
+| Check | Clear | Finding | Unable to assess |
+|---|---|---|---|
+| Supabase project status | API reports `ACTIVE_HEALTHY` | Any explicit non-healthy/paused/error state | API unavailable, stale, or ambiguous |
+| Supabase logs | Sources queried and no explicit error signal found using a validated severity filter | Explicit database/API/storage/auth error signal with timestamp and source | Only aggregate activity counts are available, severity mapping is unverified, or query failed |
+| Vercel Production identity | Latest Production deployment is `READY` and its Git SHA matches intended `main` release SHA | Deployment failed/blocked or SHA/alias differs unexpectedly | Deployment metadata unavailable or intended release SHA not established |
+| Vercel runtime errors | No error clusters returned in the selected window | One or more error clusters returned; inspect recurrence, route, deployment, and impact | Query unavailable, outside retention, or time window unclear |
+| Vercel runtime logs | No warning/error/fatal records returned in the selected window | Relevant warning/error/fatal records returned and correlated | No logs returned but source/time/retention filters are uncertain |
+
+**Threshold discipline:** do not turn event counts into failure rates. Do not classify a zero-row log query as healthy if the query's source, severity mapping, or retention window is unknown. For every row, report exactly one of CLEAR / FINDING / UNABLE TO ASSESS.
+
+### Snapshot result for this inspection
+
+- Supabase project status: **CLEAR** at inspection time (`ACTIVE_HEALTHY`).
+- Supabase log severity/error classification: **UNABLE TO ASSESS** from the preserved aggregate counts alone.
+- Vercel Production identity: **CLEAR** — READY and SHA matched `main`.
+- Vercel grouped runtime errors: **CLEAR for the queried 24-hour window** — no clusters returned.
+- Vercel warning/error/fatal logs: **CLEAR for the queried 50-minute window** — no records returned.
+- Remaining Vercel quota: **UNABLE TO ASSESS** — exact Usage dashboard values were not returned by connected tools.
+
+## 6. Incident handling — existing runbook retained
+
+Use `docs/operations/PRODUCTION_SAFE_OPERATIONS.md` as the canonical incident and release procedure. Minimum sequence:
+
+1. **Detect and classify:** record UTC time, affected service/route, severity, first/last seen, and evidence source. Avoid PII and secrets.
+2. **Scope impact:** correlate the deployment ID/SHA, route, Supabase source, recurrence, and customer-visible symptoms. Distinguish expected authorization denials from actual access-control defects.
+3. **Contain:** stop risky release/migration retries; do not mutate production data as an exploratory step.
+4. **Owner decision:** choose rollback only when the target is currently eligible and database compatibility is verified; otherwise prefer a safe forward fix or explicitly mark blocked.
+5. **Recover and verify:** verify the same failing signal and critical path after containment. Deployment READY alone is not application-health proof.
+6. **Close:** create an incident record under `docs/incidents/` for material incidents, capture root cause/prevention, and update continuity.
+
+Severity and escalation thresholds that require application-specific baselines remain part of F4.2; do not invent numeric thresholds from the current sparse log sample.
+
+## 7. F4.1 completion and acceptance
+
+- [x] Direct Vercel team plan and project identity inspected.
+- [x] Current Production deployment ID/state/SHA/aliases verified.
+- [x] Previous Production rollback candidate identified and inspected without executing rollback.
+- [x] Vercel runtime-error and filtered runtime-log windows inspected.
+- [x] Free-tier observability constraints researched against official documentation.
+- [x] Repeatable free-tier check and CLEAR / FINDING / UNABLE TO ASSESS outcomes documented.
+- [x] Owner's Leaked Password Protection disposition recorded as closed and excluded from active work.
+- [x] No paid dependency, production mutation, deployment, backup, restore, or PITR action introduced.
+
+**F4.1 STATUS: COMPLETE WITH EXPLICIT LIMITATIONS.** Exact remaining Vercel quota is unavailable through the connected read-only actions and remains UNKNOWN; this does not block the read-only operational baseline. Usage must be inspected manually before any deployment decision.
+
+## 8. Current UNKNOWN / NOT CLAIMED
+
+- Exact consumed/remaining Vercel resource quota.
+- Supabase log severity mapping and error-rate classification from the aggregate query.
+- Persistent monitoring schedule or alert destination; none is configured/verified.
+- Real browser, customer-journey, or real-device health. No such check was run in F4.1.
+- No active Production incident is established by this snapshot.
+
+## 9. Official sources
+
+- Supabase password security / plan availability: https://supabase.com/docs/guides/auth/password-security
+- Supabase pricing and feature matrix: https://supabase.com/pricing
+- Supabase Observability and Logs Explorer: https://supabase.com/docs/guides/observability
+- Supabase Reports: https://supabase.com/docs/guides/observability/reports
+- Supabase detection checks: https://supabase.com/docs/guides/observability/detecting
+- Vercel Hobby plan and limits: https://vercel.com/docs/plans/hobby
+- Vercel account plans: https://vercel.com/docs/plans
 - Vercel Observability: https://vercel.com/docs/observability
 - Vercel runtime logs: https://vercel.com/docs/logs/runtime
 - Vercel alerts: https://vercel.com/docs/alerts
 - Vercel production rollback: https://vercel.com/docs/deployments/rollback-production-deployment
-- Supabase Observability: https://supabase.com/docs/guides/observability
-- Supabase Reports: https://supabase.com/docs/guides/observability/reports
-- Supabase detection checks: https://supabase.com/docs/guides/observability/detecting
 
-## 9. Exact next task
+## 10. Exact next task
 
-Complete F4.1: inspect Vercel account/project deployment and usage evidence read-only, then design and document the smallest repeatable free-tier health/error check. Do not deploy, change settings, add paid services, or start scheduled automation.
+**F4.2 — Validate Supabase log severity/error classification and define evidence-backed incident thresholds.** Keep this read-only; use actual log fields and existing plan limits, preserve the owner's closed warning disposition, and do not add paid services, scheduled automation, deployments, settings changes, or database mutations.
