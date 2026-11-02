@@ -74,6 +74,15 @@ Deployment health must be verified from Vercel evidence separately from GitHub C
 
 Authentication and authorization are server-side. Tenant and branch isolation must not depend on client-supplied identity or scope. Database migrations are durable production history. Never commit credentials, tokens, private keys, or `.env` files.
 
+## F-Series engineering documentation
+
+- [F-Series architecture and operations roadmap](docs/FINALIZATION_ROADMAP.md) — authoritative F0–F7 phase plan and completion gates.
+- [Architecture documentation index](docs/architecture/README.md) — architecture evidence policy and F1 artifacts.
+- [Verified system overview](docs/architecture/SYSTEM_OVERVIEW.md) — partial baseline; unresolved details remain explicitly UNKNOWN.
+- [Production-safe operations baseline](docs/operations/PRODUCTION_SAFE_OPERATIONS.md) — migration, release, rollback, backup/restore, monitoring, and incident controls.
+- [Development history](docs/history/DEVELOPMENT_HISTORY.md) — evidence-backed milestone register.
+- [Architecture decisions](docs/decisions/) — accepted and superseded ADRs.
+
 ## Documentation
 
 - `AGENTS.md` — repository operating contract for agents and developers.

@@ -1,11 +1,28 @@
-## 2026-10-23 — QR table ordering public-flow integration
+# Active Task Queue — F-Series
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS; branch feat/qr-table-ordering; draft PR #411: https://github.com/Midosd249/Menu_V3/pull/411.
-- DONE ON BRANCH: token-based public route resolution; server-side tenant/branch validation during order submission; trusted table_id persistence; table-aware idempotency; referrer policy; focused token primitive test and public-order regression contracts; SQL transaction API fix; local-fixture-compatible conditional role revokes; cache contract test updated for the new header.
-- CI HISTORY: prior failures were diagnosed and addressed: route import protection, sql.begin type errors, exact cache-header contract, and missing anon role in local PostgreSQL. Final-head Quality and W9 are still to be checked.
-- VERIFIED DATABASE SIDE EFFECT: initial Vercel Preview build applied 20261023120000_restaurant_tables_and_qr_tokens.sql to the connected Supabase project. Migration ledger confirms it; new tables have zero rows; RLS enabled, no policies, no direct client grants. No rollback attempted.
-- NOT DONE: final-head Quality/W9 conclusion; owner QR provisioning UI; staff table display; merge/release/deployment; owner decision on retaining versus rolling back the schema.
-- EXACT NEXT ACTION: verify final-head CI, then request owner decision on retaining or rolling back the additive database schema; no merge/deployment until that decision.
+## Only active task: F0 — Continuity & Program Charter
+
+- STATUS: IMPLEMENTATION_IN_PROGRESS.
+- BRANCH: `docs/f0-architecture-operations-roadmap`.
+- BASE: main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
+- SCOPE: documentation-only architecture/operations roadmap, evidence model, history, ADR, README index, and continuity reconciliation.
+- ACCEPTANCE:
+  1. F0–F7 are defined with objectives, work packages, dependencies, gates, and acceptance criteria.
+  2. Verified facts are separated from inferred/proposed/unknown facts.
+  3. Merged QR-ordering state is reconciled; stale current-state claims are removed while historical entries are preserved.
+  4. Migration runner/ledger and build-time migration hazard are recorded accurately.
+  5. Existing release-only Vercel policy is linked, not duplicated as a competing policy.
+  6. No runtime, database, CI, deployment, or secret changes.
+  7. New docs were read back; final diff compared against main; documentation-only Draft PR #414 opened for owner review.
+- VERIFICATION: GitHub content readback, changed-file/diff review, and continuity consistency check. No local tests/build are claimed.
+- EXACT NEXT TASK AFTER F0: F1 read-only architecture discovery. F2 code changes wait until F1 maps migration/build call sites and PGlite behavior.
+
+## Guardrails
+- Exactly one task may be IN_PROGRESS.
+- Do not reopen PR #411 QR ordering; it is merged.
+- Do not run production migrations, Supabase CLI repair/push, restore, Vercel deploy, or deployment retries during F0.
+- Do not claim current Production SHA/state or tested backup/restore from this documentation baseline.
+- Preserve historical task records below this active section.
 
 ---
 
