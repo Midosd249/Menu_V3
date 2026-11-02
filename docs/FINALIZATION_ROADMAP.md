@@ -1,23 +1,27 @@
-F4 UPDATE — 2026-11-02
+F5 UPDATE — 2026-11-03
 
-**VERIFIED MAIN AT F4.3 START:** `41e5c36e434051f9668887974739870354706bd6`; PR #416 merged F4.1/F4.2 operational baseline. F4.1 and F4.2 remain complete with explicit limitations.
-**F3 DECISION:** DEFERRED BY OWNER — NOT DONE. Preserve the existing discovery record; F3 remains mandatory before the first real customer, customer-owned data, or commercial launch. Do not run backup/restore/PITR work in F4.3.
-**F4.3:** incident-response runbook validation and fictional owner rehearsal documented; final-head Quality `41523483447` and W9 `41523483512` both SUCCESS on `102e24e343e6add57e53d49a0908b78c7bfa974e`; PR #417 remains OPEN / NOT MERGED.
-**CURRENT READ-ONLY SNAPSHOT:** Supabase project ACTIVE_HEALTHY; 267 events across eight returned sources, top-level `severity_text` populated in sampled rows, one isolated PostgreSQL SQLSTATE 42803 ERROR with origin/impact UNKNOWN, no Edge 5xx matches. Vercel returned no grouped runtime-error clusters for 24 hours; latest Production deployment `dpl_2E7MXn3PbeiHAj34hvQ2gCG978TT` is READY on main SHA `41e5c36e434051f9668887974739870354706bd6`. These observations do not prove full application health. Exact Vercel quota and Auth/Function source coverage remain UNKNOWN.
+**VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`; PR #417 CLOSED / MERGED at this SHA.
+**F4 STATUS:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`. Post-merge main CI and current Vercel deployment were not established in this task.
+**F4.4:** no F4.4 work package is defined in this roadmap. F4.3 is the final defined F4 package.
+**F3 DECISION:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
+**F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual sales-to-activation journey mapped from current code/migrations and capability boundaries documented in `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
+**LIFECYCLE RECONCILIATION:** current code supports self-serve account/workspace provisioning. The 2026-09-16 manual-approval policy is historical and marked superseded; the later retirement record and current source take precedence.
 **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-**SAFETY:** no production fault injection, deployment, rollback, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
-**EXACT NEXT ACTION:** await explicit owner decision on PR #417; do not merge/deploy or start another phase automatically.
+**SAFETY:** no customer onboarding, production fault, deployment, rollback, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
+**EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff.
 
- — F-Series Architecture, Operations & Continuity Roadmap
+— F-Series Architecture, Operations & Continuity Roadmap
+
+
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
-**Status:** ACTIVE — F4 release, monitoring & incident operations  
+**Status:** ACTIVE — F5 commercial customer operations  
 **Product:** Menuun / Menu V3  
 **Repository:** `Midosd249/Menu_V3`  
 **Canonical branch:** `main`  
 **Language:** Arabic-first product; repository engineering documentation is maintained in English.  
-**Last repository verification for this baseline:** 2026-11-02  
+**Last repository verification for this baseline:** 2026-11-03  
 **Verified main SHA at F4.3 start (2026-11-02):** `41e5c36e434051f9668887974739870354706bd6`
 
 > This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
@@ -114,14 +118,14 @@ CI success does not prove production deployment. Preview READY does not prove pr
 
 The F identifiers are permanent phase IDs. They are not sprint numbers, release versions, or proof of completion.
 
-| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-02) |
+| Phase | Name | Primary outcome | Depends on | Current status (verified 2026-11-03) |
 |---|---|---|---|---|
 | **F0** | Continuity & Program Charter | One authoritative roadmap, phase rules, evidence model, and cross-chat handoff | Current Git/repository evidence | DONE |
 | **F1** | Verified Architecture Baseline | Accurate C4-style system/container/component views, data flows, integrations, trust boundaries, and code map | F0 | DONE — merged in PR #415 |
 | **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
 | **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate |
-| **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2; F3 remains a pre-commercial gate | IN_PROGRESS — F4.1/F4.2 complete; F4.3 documented, PR checks pending |
-| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | PLANNED |
+| **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2; F3 remains a pre-commercial gate | DONE WITH EXPLICIT LIMITATIONS — F4.1/F4.2/F4.3 complete; PR #417 merged |
+| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | IN_PROGRESS — F5.1 complete; F5.2 next |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
 | **F7** | Architecture Evolution & Governance | ADR lifecycle, technical debt decisions, architecture drift checks, and recurring continuity maintenance | F1–F6 | PLANNED |
 
@@ -164,6 +168,10 @@ Make the F-Series self-describing and resumable independently of ChatGPT memory.
 
 ### Objective
 Describe what exists today, not what a generic SaaS architecture ought to contain.
+
+### F5.1 result — COMPLETE WITH EXPLICIT LIMITATIONS
+
+The current discovery/contact → signup → self-serve workspace → brand/branch → menu → preview → publish → QR → staff access → support/billing journey is documented in `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`. The map is based on current repository code/migrations, not on real customer interviews or observed production conversions. No CRM, online payment, support ticketing, automated handoff, or dedicated demo workflow is claimed. The legacy manual-approval lifecycle document is marked historical/superseded.
 
 ### Work packages
 
@@ -341,7 +349,7 @@ Enable the owner to onboard and support real restaurants while minimizing operat
 - F5.1 Document the actual sales-to-activation journey using existing product capabilities only.
 - F5.2 Define owner-led discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff.
 - F5.3 Document tenant/branch creation and ownership verification.
-- F5.4 Document plan assignment, trial expiry, manual subscription approval, freeze/unfreeze, and audit trail using verified current controls.
+- F5.4 Document plan assignment, trial expiry, manual plan/status changes, freeze/unfreeze, invoice issuance, and audit trail using verified current controls.
 - F5.5 Define safe customer communication for planned maintenance and incidents.
 - F5.6 Define support intake, severity, response ownership, and evidence capture.
 - F5.7 Establish a launch checklist that validates only configured capabilities and does not promise unsupported payments, booking, integrations, or automation.

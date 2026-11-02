@@ -16,7 +16,7 @@ const ROOT_ROUTE = readFileSync(join(ROOT, "src/routes/__root.tsx"), "utf8");
 const PERFORMANCE_AUDIT = readFileSync(join(ROOT, "scripts/performance-audit.mjs"), "utf8");
 
 test("Browser template QA isolates the preview from runner process cleanup and covers all themes", () => {
-  assert.ok(WORKFLOW.includes("setsid bash -c 'unset RUNNER_TRACKING_ID; exec node ./node_modules/vite/bin/vite.js preview"));
+  assert.ok(WORKFLOW.includes(`setsid bash -c 'unset RUNNER_TRACKING_ID; exec node "$RUNNER_TEMP/menuun-browser-tools/node_modules/vite/bin/vite.js" preview "$GITHUB_WORKSPACE" --config "$GITHUB_WORKSPACE/vite.config.ts"`));
   assert.ok(WORKFLOW.includes("npm run performance:audit -- http://127.0.0.1:8081/themes/preview?theme=editorial"));
   assert.ok(WORKFLOW.includes("npm run qa:template http://127.0.0.1:8081/themes/preview?theme=editorial -- --all-themes"));
   assert.ok(WORKFLOW.includes("echo \"[preview] Browser QA failed — preview log follows\""));

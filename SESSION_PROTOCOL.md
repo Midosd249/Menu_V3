@@ -2,18 +2,19 @@
 
 ## Current session checkpoint — 2026-11-03
 
-- **PHASE:** F4 — Release, Monitoring & Incident Operations.
-- **CURRENT TASK:** F4.3 Incident Response Runbook Validation & Simulated Owner Rehearsal — documentation and fictional tabletop complete; final-head CI verified.
-- **MAIN:** `41e5c36e434051f9668887974739870354706bd6`.
-- **PR #417:** OPEN / NOT MERGED; branch `docs/f4-3-incident-rehearsal-2026-11-02`; head `102e24e343e6add57e53d49a0908b78c7bfa974e`; 12 commits ahead / 0 behind main.
-- **CI ON EXACT PR HEAD:** Quality run `41523483447` SUCCESS; W9 Orders QA run `41523483512` SUCCESS. Quality passed typecheck, tests, lint, production build, all-theme browser QA, Arabic/English brand browser QA, performance fixture and Studio/Platform Admin browser QA. Conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
-- **DIFF:** eight documentation files only; 225 additions / 38 deletions; no runtime code/config/schema changes. Final remote compare reviewed.
-- **PRODUCTION:** no deployment from F4.3 branch; existing Production deployment remains independently recorded on main SHA. No deployment or rollback was performed for F4.3.
+- **PHASE:** F5 — Commercial Customer Operations.
+- **CURRENT TASK:** F5.1 Actual Sales-to-Activation Journey — COMPLETE WITH EXPLICIT LIMITATIONS; documentation-only.
+- **MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
+- **PR #417:** CLOSED / MERGED; merge commit equals current main SHA. PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
+- **F4.3 CI:** exact PR-head Quality run `41526431191` SUCCESS; W9 Orders QA run `41526431206` SUCCESS. These are pre-merge PR-head results, not a post-merge main CI claim.
+- **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`; current source-backed sales-to-activation map and capability boundaries.
+- **LIFECYCLE CORRECTION:** current source uses self-serve signup/workspace provisioning; old manual-approval policy doc marked historical/superseded. No CRM, online payment, support ticketing, or demo booking is claimed.
+- **F4.4:** no such work package is defined in `docs/FINALIZATION_ROADMAP.md`.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **SAFETY:** no fault injection, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
-- **UNKNOWN:** no local checkout/terminal or local test execution in this remote-only session; Auth/Function log coverage, exact Vercel quota, real-device rehearsal and real customer impact remain unverified.
-- **EXACT NEXT ACTION:** await explicit owner decision on PR #417. Do not merge, deploy, or start F4.4/F5/F6 automatically.
+- **SAFETY:** no code, schema, DB, migration, production/customer action, secrets/settings, payment, deployment, or manual CI rerun.
+- **UNKNOWN:** post-merge main CI, current Vercel deployment, production application of the latest trial migration, actual customer outcomes, and physical-device QA remain unverified.
+- **EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure from the verified journey. Stop before starting it.
 
 ## Permanent handoff rules
 

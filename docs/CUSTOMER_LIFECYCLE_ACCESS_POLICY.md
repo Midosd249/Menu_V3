@@ -1,6 +1,8 @@
 # Customer Lifecycle & Access Policy
 
-Status: `VERIFIED` unified activation implementation — 2026-09-16
+Status: `HISTORICAL / SUPERSEDED` — snapshot of the 2026-09-16 account-linked manual-approval lifecycle. The active manual-approval/request workflow was retired by the later self-serve lifecycle work. Current source of truth: `src/routes/login.tsx`, `src/routes/onboarding.tsx`, `src/lib/menu/self-serve-provisioning.ts`, `migrations/20260917100000_self_serve_workspace_provisioning.sql`, and `docs/PH_SELF_SERVE_CUSTOMER_LIFECYCLE_PLAN.md`.
+
+**Do not use the lifecycle below as the current onboarding path.** Preserve it only as historical implementation/decision evidence. Current F5.1 mapping: `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
 
 ## Canonical lifecycle
 

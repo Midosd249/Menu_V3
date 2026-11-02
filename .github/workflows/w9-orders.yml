@@ -65,10 +65,17 @@ jobs:
           values ('w9-item-no-phone','w9-order-no-phone','demo-p-flatwhite','فلات وايت','Flat White',1,18,18,'[]'::jsonb)
           on conflict (id) do nothing;
           SQL
-      - name: Install Playwright
+      - name: Install isolated Playwright tooling
         run: |
-          npm install --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps vite@8.3.4 playwright@1.63.0
-          npx playwright install --with-deps chromium
+          TOOLS_DIR="$RUNNER_TEMP/menuun-browser-tools"
+          mkdir -p "$TOOLS_DIR"
+          printf '{"name":"menuun-ci-browser-tools","private":true}\n' > "$TOOLS_DIR/package.json"
+          npm install --prefix "$TOOLS_DIR" --no-save --no-package-lock --no-audit --no-fund --legacy-peer-deps playwright@1.63.0
+          cp -a "$TOOLS_DIR/node_modules/playwright" node_modules/playwright
+          cp -a "$TOOLS_DIR/node_modules/playwright-core" node_modules/playwright-core
+      - name: Install Playwright Chromium
+        run: |
+          node ./node_modules/playwright/cli.js install --with-deps chromium
       - name: Run W9 Orders browser QA
         run: |
           echo "[resources] before W9 browser tests"
@@ -82,7 +89,7 @@ jobs:
               # Warm the tested route before browser execution without replacing assertions.
               curl --silent --show-error --fail http://127.0.0.1:8082/studio/orders >/dev/null || { tail -n 200 w9-orders-browser.log; exit 1; }
               set +e
-              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 npx playwright test tests/w9-orders-browser.spec.ts --workers=1
+              STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 node ./node_modules/playwright/cli.js test tests/w9-orders-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               echo "[resources] after W9 browser tests"

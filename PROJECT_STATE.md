@@ -1,3 +1,20 @@
+# Current verified state — 2026-11-03 (supersedes stale historical entries below)
+
+- **PHASE:** F5 — Commercial Customer Operations.
+- **CURRENT TASK:** F5.1 Actual Sales-to-Activation Journey — COMPLETE WITH EXPLICIT LIMITATIONS; evidence-backed documentation only.
+- **VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations. PR #417 is CLOSED / MERGED; merge commit is the current main SHA above. F4.3 exact-head Quality run `41526431191` and W9 Orders QA run `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
+- **F4.4:** no F4.4 work package is defined in the current roadmap. Do not invent one.
+- **F5.1 DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`; maps actual discovery/contact, signup, workspace provisioning, brand/branch, menu, preview, publication, QR, staff access, support, and manual billing boundaries.
+- **F5.1 FINDING:** actual active path is self-serve account/workspace provisioning. `docs/CUSTOMER_LIFECYCLE_ACCESS_POLICY.md` described an earlier manual-approval lifecycle and is now explicitly marked historical/superseded.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains. No real-customer onboarding or customer-owned data work was performed.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **CI / DEPLOYMENT:** the GitHub workflow lookup for merge SHA returned no PR-triggered runs; post-merge main CI is UNKNOWN. No Vercel deployment lookup was performed for this task; current deployment status is UNKNOWN.
+- **SAFETY:** documentation-only; no application code, schema, migration, Supabase, secrets, billing, customer records, or production state changed.
+- **EXACT NEXT TASK:** F5.2 — define the owner-led operating procedure using the verified journey. Do not start it automatically.
+
+---
+
 ## 2026-11-02 — F4.3 runbook validation and simulated rehearsal
 
 - **CLASSIFICATION:** F4.3 documentation-only incident-response runbook validation and fictional tabletop rehearsal.
