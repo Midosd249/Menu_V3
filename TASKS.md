@@ -1,14 +1,14 @@
 # Active Task Queue — F-Series
 
-## Only active task: F4.2 — Supabase log severity and incident-threshold validation
+## Only active task: F4.3 — Incident response runbook validation and simulated rehearsal
 
-- **STATUS:** READY — F4.1 is complete with explicit limitations.
-- **BASELINE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; F4.1 documentation is on `docs/f3-backup-restore-discovery` / PR #416 and must be reconciled before starting F4.2.
-- **SCOPE:** inspect available Supabase log fields and source semantics read-only; establish which error/severity signals can be classified reliably on the Free plan; define evidence-backed thresholds and CLEAR / FINDING / UNABLE TO ASSESS outcomes.
-- **OWNER DECISION:** Leaked Password Protection Disabled is CLOSED / DO NOT REOPEN as a Free-plan limitation; exclude it from this and future active work unless the owner changes the plan/decision.
+- **STATUS:** READY — F4.1 and F4.2 are complete with explicit limitations.
+- **BASELINE:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; F4.2 evidence is recorded in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- **SCOPE:** compare `docs/operations/PRODUCTION_SAFE_OPERATIONS.md` with verified Supabase source-specific signals, proposed incident thresholds, deployment identity/rollback guardrails; produce a non-destructive tabletop scenario and owner-ready decision record.
+- **OWNER DECISION:** Leaked Password Protection Disabled is CLOSED / DO NOT REOPEN as a Free-plan limitation; never reopen unless owner changes plan/decision.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
-- **PROHIBITIONS:** no paid upgrade, alerts add-on, scheduled automation, secrets access, Supabase mutation, schema/index/RLS change, migration, backup, PITR, restore, Vercel deployment, rollback, or manual CI rerun.
-- **ACCEPTANCE:** exact source/field evidence; thresholds not inferred from aggregate counts; explicit unknown outcomes; update F4 operations documentation and continuity; inspect final diff and CI on final docs head without manual retries.
+- **PROHIBITIONS:** no production fault injection, deployment, rollback, CI rerun, paid upgrade, alert service, scheduled automation, secrets access, Supabase mutation, migration, backup, PITR, or restore.
+- **ACCEPTANCE:** runbook matches current source-specific log evidence; severity/escalation labels distinguish verified from proposed; simulated scenario exercises detect/classify/contain/recover/close without real side effects; continuity updated; final-head CI inspected without manual retries.
 - **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
 
 ---
