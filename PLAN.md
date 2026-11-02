@@ -2,31 +2,32 @@
 
 ## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** IN_PROGRESS — F4.1 and F4.2 complete with explicit limitations; F4.3 next.
-- **VERIFIED MAIN BASE:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab` (PR #415 merge).
-- **COMPLETED:** F0, F1, F2.
-- **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation remains a mandatory pre-commercial gate before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
+- **STATUS:** F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 documentation/rehearsal completed on branch `docs/f4-3-incident-rehearsal-2026-11-02`; final PR quality gates pending.
+- **VERIFIED MAIN AT TASK START:** `41e5c36e434051f9668887974739870354706bd6`.
+- **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
 - **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
-- **F4.2 EVIDENCE:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md` — source-specific Supabase log fields and a single isolated PostgreSQL ERROR documented with unknown impact.
+- **F4.3 RESULT:** runbook classification, source-specific signal mapping, top-level severity reconciliation, fictional owner rehearsal, and conditional rollback gate documented. No production action performed.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN. Do not re-surface or recommend upgrade.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
 | F0 | Continuity & Program Charter | DONE | Charter and continuity contract recorded |
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
-| F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged and exact-head CI passed |
-| F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed backups, retention, dependencies, isolated restore, integrity/media validation, runbooks and owner-approved RPO/RTO before commercial boundary |
-| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | Free-tier source-specific monitoring, incident thresholds, runbook validation and release operations |
-| F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
+| F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
+| F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
+| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | F4.1/F4.2 complete; F4.3 pending final PR checks; later F4 work not started |
+| F5 | Commercial Customer Operations | PLANNED | Owner-led customer operations |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**F4.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Vercel Hobby, Production identity/SHA, bounded runtime observations, rollback candidate, and free-tier check documented. Exact Vercel quota remains UNKNOWN and must be checked before deployment decisions.
+**F4.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Free-tier release/monitoring baseline documented; exact Vercel quota remains UNKNOWN.
 
-**F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual Supabase log sources and source-native fields were queried read-only. PostgreSQL severity/SQLSTATE, Edge HTTP status, and Storage/Realtime level were verified. A single SQLSTATE 42803 PostgreSQL ERROR was observed; application origin and impact remain UNKNOWN. No universal severity field exists across sampled sources.
+**F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Source-specific log fields and one isolated PostgreSQL ERROR documented. F4.3 clarifies the top-level `severity_text` field without erasing the earlier nested-map observation.
 
-**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN due to current Supabase Free-plan limitation. No paid upgrade.
+**F4.3:** DOCUMENTATION AND FICTIONAL REHEARSAL COMPLETE; final PR Quality/W9 evidence pending. No production operation was performed.
 
-**EXACT NEXT ACTION:** F4.3 — validate incident-response runbook and rehearse a simulated incident without production side effects.
+**EXACT NEXT ACTION:** inspect final PR-head Quality/W9 and diff, then stop; await explicit owner instruction before starting any other task.
 
 ---
 
