@@ -107,7 +107,7 @@ jobs:
           cp -a "$TOOLS_DIR/node_modules/playwright-core" node_modules/playwright-core
       - name: Install Playwright Chromium
         run: |
-          "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" install --with-deps chromium
+          node ./node_modules/playwright/cli.js install --with-deps chromium
       - name: P1.9 real-route performance evidence — route graph branch only
         if: startsWith(github.head_ref, 'perf/p1-9-')
         env:
@@ -229,7 +229,7 @@ jobs:
             if curl --silent --show-error --fail http://127.0.0.1:8081/ >/dev/null; then
               for stability_run in 1 2 3; do
                 echo "[menuun-brand-browser] stability run ${stability_run}/3 (retries=0)"
-                MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/menuun-brand-browser.spec.ts --workers=1 --retries=0 --trace=retain-on-failure || exit $?
+                MENUUN_BRAND_BASE_URL=http://127.0.0.1:8081 node ./node_modules/playwright/cli.js test tests/menuun-brand-browser.spec.ts --workers=1 --retries=0 --trace=retain-on-failure || exit $?
               done
               exit 0
             fi
@@ -495,7 +495,7 @@ jobs:
               for attempt in 1 2; do
                 echo "[studio-browser] Playwright attempt $attempt/2"
                 set +e
-                STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
+                STUDIO_SHELL_BASE_URL=http://127.0.0.1:8082 node ./node_modules/playwright/cli.js test tests/w7-3-studio-shell-browser.spec.ts tests/w7-4-studio-home-browser.spec.ts tests/w7-5-menu-workspace-browser.spec.ts tests/w7-6-growth-workspace-browser.spec.ts tests/w7-7-customers-workspace-browser.spec.ts tests/w7-10-responsive-studio-browser.spec.ts --workers=1
                 STATUS=$?
                 set -e
                 if [ "$STATUS" -eq 0 ]; then
@@ -606,7 +606,7 @@ jobs:
                 curl --silent --show-error --fail "http://127.0.0.1:8083$route" >/dev/null || { echo "[admin-browser] warm-up failed for $route"; tail -n 200 .grok/platform-admin-browser.log; exit 1; }
               done
               set +e
-              ADMIN_BASE_URL=http://127.0.0.1:8083 "$RUNNER_TEMP/menuun-browser-tools/node_modules/.bin/playwright" test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
+              ADMIN_BASE_URL=http://127.0.0.1:8083 node ./node_modules/playwright/cli.js test tests/w7-8-admin-shell-browser.spec.ts tests/w7-9-admin-routes-browser.spec.ts tests/w7-10-responsive-admin-browser.spec.ts --workers=1
               STATUS=$?
               set -e
               if [ "$STATUS" -ne 0 ]; then cat .grok/platform-admin-browser.log; fi
