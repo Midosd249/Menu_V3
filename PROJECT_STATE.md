@@ -804,3 +804,24 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - RELEASE: PR #413 is open/unmerged. No merge or production deployment was performed.
 - VERIFIED on code head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) both succeeded. Quality passed typecheck, npm tests, lint, production build, all-theme browser template QA, Menuun brand browser QA, Studio browser QA, and Platform Admin browser QA. Vercel status is Preview success only, not Production evidence.
 - This follow-up adds continuity-only changes after the verified code head; refresh Quality/W9 on the final docs-updated head before treating PR #413 as fully verified. Actual language-switcher computed colors/device screenshots remain UNKNOWN.
+
+
+## 2026-11-02 — Owner decision: defer F3 execution; begin F4
+
+- **VERIFIED (owner decision):** all current restaurants/accounts are private test fixtures controlled by the owner; there are no real customers or customer-owned production datasets at this stage.
+- **STATUS:** F3 is **DEFERRED BY OWNER — NOT DONE**. This is a scheduling decision, not evidence of backup coverage or recoverability.
+- **DEFERRED ACTIONS:** manual database exports, backup automation, Storage/Auth recovery implementation, paid plan/PITR upgrades, paid recovery infrastructure, and isolated restore drills.
+- **COST / SAFETY:** no plan upgrade, paid project/branch, PITR activation, backup job, restore, production migration, or data mutation is authorized by this decision.
+- **MANDATORY RE-ENTRY GATE:** resume and complete F3 before the first real customer, before storing real customer-owned data, or before commercial launch—whichever occurs first. F3 must pass its existing isolated-restore and integrity acceptance gate before that boundary.
+- **PRESERVED:** prior read-only F3 research and discovery remain useful evidence, but do not constitute a backup or a successful restore. The menu-v3-full.backup file remains an unverified artifact lead.
+- **NEXT PHASE:** F4 Release, Monitoring & Incident Operations is now active. F4 must remain within currently available/free capabilities unless the owner separately approves cost.
+
+## 2026-11-02 — F4.1 read-only operational baseline
+
+- **VERIFIED:** Supabase project ublxptcqefujkbeepylc is ACTIVE_HEALTHY, PostgreSQL 17.11, region ap-northeast-2; connected organization plan is Free.
+- **VERIFIED:** last-24-hour log aggregation returned 6 edge, 30 Postgres, 7 PostgREST, and 4 Storage events. Counts do not establish success/error rates.
+- **VERIFIED:** Supabase security advisor reports Leaked Password Protection Disabled (WARN), 40 RLS-enabled/no-policy INFO findings; performance advisor reports 19 unindexed FK and 13 multiple permissive policy warnings. No settings/schema/indexes were changed; these require separate contextual review.
+- **VERIFIED:** existing PRODUCTION_SAFE_OPERATIONS.md already contains baseline monitoring/incident/rollback procedures. F4 extends rather than duplicates it.
+- **UNKNOWN:** Vercel plan, usage/quota, log retention, alert entitlements, and eligible rollback target were not inspected. No persistent monitoring or alerts are verified.
+- **NO SIDE EFFECTS:** no deployment, Vercel setting change, Supabase mutation, backup, restore, PITR, or paid service.
+- **EXACT NEXT ACTION:** complete F4.1 read-only Vercel production deployment/usage evidence inspection, then define the smallest repeatable free-tier health/error check.
