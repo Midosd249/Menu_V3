@@ -2,12 +2,12 @@
 
 ## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** IN_PROGRESS — F4.1 COMPLETE WITH EXPLICIT LIMITATIONS; F4.2 NEXT.
-- **VERIFIED MAIN BASE:** 848d4acdd3b184c24142d1e77fc0c9af55f20eab (PR #415 merge).
+- **STATUS:** IN_PROGRESS — F4.1 and F4.2 complete with explicit limitations; F4.3 next.
+- **VERIFIED MAIN BASE:** `848d4acdd3b184c24142d1e77fc0c9af55f20eab` (PR #415 merge).
 - **COMPLETED:** F0, F1, F2.
-- **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation is a mandatory pre-commercial gate: before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
-- **F3 DISCOVERY:** docs/operations/F3_BACKUP_RESTORE_DISCOVERY.md; prior research preserved. No backup, PITR, restore, paid project, or export execution authorized now.
-- **F4 RECORD:** docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md.
+- **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation remains a mandatory pre-commercial gate before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
+- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- **F4.2 EVIDENCE:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md` — source-specific Supabase log fields and a single isolated PostgreSQL ERROR documented with unknown impact.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -15,14 +15,18 @@
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged and exact-head CI passed |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed backups, retention, dependencies, isolated restore, integrity/media validation, runbooks and owner-approved RPO/RTO before commercial boundary |
-| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | Affordable monitoring, deployment identity, incident triage, rollback evidence and operational runbooks verified |
+| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | Free-tier source-specific monitoring, incident thresholds, runbook validation and release operations |
 | F5 | Commercial Customer Operations | PLANNED | Repeatable owner-led customer journey using existing capabilities |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**F4.1 CLOSEOUT:** Vercel Hobby, current Production identity/SHA, bounded runtime queries, previous rollback candidate, and repeatable free-tier check are documented. Exact remaining quota is UNKNOWN and must be inspected manually before any deployment decision. The owner's Leaked Password Protection limitation is CLOSED / DO NOT REOPEN.
+**F4.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Vercel Hobby, Production identity/SHA, bounded runtime observations, rollback candidate, and free-tier check documented. Exact Vercel quota remains UNKNOWN and must be checked before deployment decisions.
 
-**EXACT NEXT ACTION:** F4.2 — validate Supabase log severity/error classification and define evidence-backed incident thresholds, read-only only.
+**F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual Supabase log sources and source-native fields were queried read-only. PostgreSQL severity/SQLSTATE, Edge HTTP status, and Storage/Realtime level were verified. A single SQLSTATE 42803 PostgreSQL ERROR was observed; application origin and impact remain UNKNOWN. No universal severity field exists across sampled sources.
+
+**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN due to current Supabase Free-plan limitation. No paid upgrade.
+
+**EXACT NEXT ACTION:** F4.3 — validate incident-response runbook and rehearse a simulated incident without production side effects.
 
 ---
 
