@@ -252,3 +252,28 @@ Vendor documentation describes vendor-managed workflows. It does not authorize r
 - **NEXT PHASE:** F4 Release, Monitoring & Incident Operations is now active. F4 must remain within currently available/free capabilities unless the owner separately approves cost.
 
 See docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md for the current read-only operational baseline and F4 acceptance gate.
+
+
+## F4.3 — Owner-operated incident response decision procedure
+
+This procedure is a companion to the F4 operational evidence record. It does not authorize production actions. Use it only after recording the exact incident evidence and owner decision.
+
+### Classification before action
+
+- **CONFIRMED INCIDENT:** demonstrated critical-path, security/privacy, or data-integrity impact.
+- **SUSPECTED INCIDENT:** credible telemetry signal but impact/correlation not yet established.
+- **ISOLATED DIAGNOSTIC / QUERY ERROR:** isolated operator/query failure without application correlation; preserve and investigate, but do not call it a customer incident.
+- **EXPECTED 4xx:** contract-consistent authentication, authorization, validation, rate-limit, or unavailable-resource response; not an incident by itself.
+- **UNABLE TO ASSESS:** missing source/field, uncertain retention/window, failed query, or incomplete coverage. Never convert this to CLEAR.
+
+### Rollback decision gate — conditional, never automatic
+
+1. Confirm a real Production regression and its impact; do not roll back solely because a warning, one-off query error, expected 4xx, or empty log query exists.
+2. Identify the exact current Production deployment and exact proposed previous deployment. Re-check current state and rollback eligibility at decision time; a historical candidate flag is not a standing guarantee.
+3. Correlate the regression with the release SHA and establish whether application rollback can plausibly remove the failure.
+4. Verify database/schema compatibility and whether any migration or irreversible data change occurred. Vercel rollback does not reverse SQL migrations or restore database/storage data.
+5. **GO** only when the owner has evidence of a release-caused regression, an eligible healthy previous Production target, and verified compatibility. Record target, reason, expected effect, and verification plan.
+6. **NO-GO / BLOCKED** when cause, target eligibility, or DB compatibility is unknown; preserve evidence, stop further risky releases/retries, and prefer a verified forward fix or safe containment.
+7. After an authorized rollback, verify the same failed critical path and source-native signals. READY alone is not recovery proof.
+
+Thresholds in the F4 record are PROPOSED triage candidates, not SLAs or platform guarantees. Missing telemetry is UNABLE TO ASSESS, not CLEAR. The F4.3 tabletop is fictional; no real incident or production action is implied.
