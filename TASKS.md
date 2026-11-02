@@ -1,20 +1,21 @@
 # Active Task Queue — F-Series
 
-## Only active task: F4.1 — Read-only Vercel operational evidence and free-tier monitoring design
+## Only active task: F4.2 — Supabase log severity and incident-threshold validation
 
-- **STATUS:** IN_PROGRESS — read-only discovery/design.
-- **BASE:** main 848d4acdd3b184c24142d1e77fc0c9af55f20eab.
-- **COMPLETED PHASES:** F0, F1, F2.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, real customer-owned data, or commercial launch. No backup/restore work now.
-- **SCOPE:** inspect actual Vercel project/team deployment identity, usage/quota and plan-visible observability/rollback evidence; design a small read-only operational check using existing free capabilities.
-- **PROHIBITIONS:** no deployment, CI rerun, paid upgrade, alert service, scheduled automation, Vercel setting change, Supabase mutation, migration, backup, PITR, or restore.
-- **ACCEPTANCE:** direct evidence with timestamps; distinguish deployment state from application health; identify actual plan/retention/rollback constraints; define privacy-safe checks and explicit unable-to-assess outcomes; update F4 documentation and verify the final documentation diff.
-- **F4 RECORD:** docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md.
+- **STATUS:** READY — F4.1 is complete with explicit limitations.
+- **BASELINE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; F4.1 documentation is on `docs/f3-backup-restore-discovery` / PR #416 and must be reconciled before starting F4.2.
+- **SCOPE:** inspect available Supabase log fields and source semantics read-only; establish which error/severity signals can be classified reliably on the Free plan; define evidence-backed thresholds and CLEAR / FINDING / UNABLE TO ASSESS outcomes.
+- **OWNER DECISION:** Leaked Password Protection Disabled is CLOSED / DO NOT REOPEN as a Free-plan limitation; exclude it from this and future active work unless the owner changes the plan/decision.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
+- **PROHIBITIONS:** no paid upgrade, alerts add-on, scheduled automation, secrets access, Supabase mutation, schema/index/RLS change, migration, backup, PITR, restore, Vercel deployment, rollback, or manual CI rerun.
+- **ACCEPTANCE:** exact source/field evidence; thresholds not inferred from aggregate counts; explicit unknown outcomes; update F4 operations documentation and continuity; inspect final diff and CI on final docs head without manual retries.
+- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
 
 ---
 
+## Historical task record — F3.1 (superseded by owner's F3 deferral)
 
-## Only active task: F3.1 — Evidence-backed Backup Inventory
+
 
 - **STATUS:** IN_PROGRESS — read-only discovery.
 - **BASE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
@@ -26,15 +27,12 @@
 - **VERIFICATION:** GitHub main/PR/CI and Vercel Production were directly checked; Supabase project metadata, live catalog and Storage bucket metadata were read-only inspected; official Supabase backup/restore documentation was researched.
 - **EXACT NEXT ACTION:** obtain owner-authorized read-only evidence from Supabase Dashboard or Management API for backup plan, latest available backups/retention and PITR status.
 
-## Guardrails
 
-- Exactly one task may be IN_PROGRESS.
-- Preserve F1 architecture documents already present in the parent commit.
-- Do not run `npm run db:migrate` against any real database.
-- Do not read, expose, or modify Supabase/Vercel secrets.
-- Do not run Supabase CLI migration push/repair.
-- Do not merge or deploy as part of this task.
-- Do not begin F3–F7 until F2 is closed out.
+## Historical guardrails (superseded by current F-series policy)
+
+- Current active scope and owner decisions are defined at the top of this file and in AGENTS.md.
+- F3 is deferred by owner, not active. Its pre-commercial re-entry gate remains mandatory.
+- No historical queue entry below this point may override the current active task.
 
 ---
 
