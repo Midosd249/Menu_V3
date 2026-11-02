@@ -2,7 +2,7 @@
 
 ## Current active phase: F4 — Release, Monitoring & Incident Operations
 
-- **STATUS:** IN_PROGRESS — F4.1 read-only operational baseline.
+- **STATUS:** IN_PROGRESS — F4.1 COMPLETE WITH EXPLICIT LIMITATIONS; F4.2 NEXT.
 - **VERIFIED MAIN BASE:** 848d4acdd3b184c24142d1e77fc0c9af55f20eab (PR #415 merge).
 - **COMPLETED:** F0, F1, F2.
 - **F3:** DEFERRED BY OWNER — NOT DONE. Backup/restore implementation is a mandatory pre-commercial gate: before the first real customer, real customer-owned data, or commercial launch, whichever occurs first.
@@ -20,7 +20,9 @@
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**EXACT NEXT ACTION:** complete F4.1 read-only Vercel production deployment/usage evidence inspection, then define the smallest repeatable free-tier health/error check. No deployment, paid service, settings change, or automation.
+**F4.1 CLOSEOUT:** Vercel Hobby, current Production identity/SHA, bounded runtime queries, previous rollback candidate, and repeatable free-tier check are documented. Exact remaining quota is UNKNOWN and must be inspected manually before any deployment decision. The owner's Leaked Password Protection limitation is CLOSED / DO NOT REOPEN.
+
+**EXACT NEXT ACTION:** F4.2 — validate Supabase log severity/error classification and define evidence-backed incident thresholds, read-only only.
 
 ---
 
