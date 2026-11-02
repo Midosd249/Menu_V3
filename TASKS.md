@@ -1,17 +1,18 @@
 # Active Task Queue — F-Series
 
-## Only active task: F4.3 — Incident response runbook validation and simulated rehearsal
+## Current task: F4.3 — Incident response runbook validation and simulated rehearsal
 
-- **STATUS:** READY — F4.1 and F4.2 are complete with explicit limitations.
-- **BASELINE:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`; F4.2 evidence is recorded in `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
-- **SCOPE:** compare `docs/operations/PRODUCTION_SAFE_OPERATIONS.md` with verified Supabase source-specific signals, proposed incident thresholds, deployment identity/rollback guardrails; produce a non-destructive tabletop scenario and owner-ready decision record.
-- **OWNER DECISION:** Leaked Password Protection Disabled is CLOSED / DO NOT REOPEN as a Free-plan limitation; never reopen unless owner changes plan/decision.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
-- **PROHIBITIONS:** no production fault injection, deployment, rollback, CI rerun, paid upgrade, alert service, scheduled automation, secrets access, Supabase mutation, migration, backup, PITR, or restore.
-- **ACCEPTANCE:** runbook matches current source-specific log evidence; severity/escalation labels distinguish verified from proposed; simulated scenario exercises detect/classify/contain/recover/close without real side effects; continuity updated; final-head CI inspected without manual retries.
-- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
+- **STATUS:** IMPLEMENTED IN DOCUMENTATION; final PR Quality/W9 checks and final diff review pending.
+- **BASE:** main `41e5c36e434051f9668887974739870354706bd6`; working branch `docs/f4-3-incident-rehearsal-2026-11-02`.
+- **SCOPE COMPLETED:** source/field validation, incident classification, missing-telemetry safeguards, conditional rollback gate, fictional tabletop rehearsal, continuity reconciliation.
+- **F3:** DEFERRED BY OWNER — NOT DONE; preserve mandatory pre-commercial gate.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **PROHIBITIONS PRESERVED:** no production fault injection, deployment, rollback, DB mutation, migration, settings change, secret modification, backup/restore/PITR, paid upgrade, or manual CI rerun.
+- **EXACT NEXT ACTION:** inspect final PR-head checks and final diff; stop afterward and await owner instruction.
 
 ---
+
+
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)
 
