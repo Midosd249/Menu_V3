@@ -16,6 +16,16 @@ F2 UPDATE — 2026-11-02
 **Baseline:** 2026-11-02  
 **Rule:** This is a curated milestone register, not a claim to reproduce every commit. Git history remains authoritative.
 
+## 2026-11-02 — F4.2 Supabase log classification
+
+- **VERIFIED:** Connected read-only Logs Explorer query returned eight sources and their event counts; source-native keys were mapped in the F4 operations record.
+- **VERIFIED:** PostgreSQL `parsed.error_severity` / `parsed.sql_state_code`, Edge `response.status_code`, and Storage/Realtime `level` were present in sampled records.
+- **FINDING:** one PostgreSQL ERROR, SQLSTATE `42803`, command `SELECT`, at `2026-11-01T23:20:38.823Z`; message excerpt indicates GROUP BY projection issue. Application origin/impact UNKNOWN; not a confirmed customer incident.
+- **VERIFIED CI on pre-F4.2 head:** Quality `41477117064` SUCCESS and W9 Orders QA `41477117274` SUCCESS on `8d945e30fdf9b6cda44f27eb5d298f6374916210`.
+- **OWNER-REPORTED:** application check completed successfully; separate from platform log evidence.
+- **NEXT:** F4.3 non-destructive incident-response tabletop validation.
+
+
 ## 2026-11-02 — F1/F2 merged and Production deployment verified; F3 opened
 
 - **VERIFIED:** PR #415 merged F1 architecture baseline and F2 production-safe build/migration boundary.
