@@ -1,14 +1,16 @@
 # Active Plan — Menuun F-Series
 
-## Current active phase: F4 — Release, Monitoring & Incident Operations
+## Current active phase: F5 — Commercial Customer Operations
 
-- **STATUS:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 exact-head Quality/W9 CI SUCCESS; PR #417 OPEN / NOT MERGED.
-- **VERIFIED MAIN AT TASK START:** `41e5c36e434051f9668887974739870354706bd6`.
+- **STATUS:** F5.1 COMPLETE WITH EXPLICIT LIMITATIONS; F5.2 is the only next task.
+- **VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
-- **F4 RECORD:** `docs/operations/F4_RELEASE_MONITORING_INCIDENT_OPERATIONS.md`.
-- **F4.3 RESULT:** runbook classification, source-specific signal mapping, top-level severity reconciliation, fictional owner rehearsal, and conditional rollback gate documented. No production action performed.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN. Do not re-surface or recommend upgrade.
+- **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. PR #417 CLOSED / MERGED at current main SHA. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
+- **F4.4:** no F4.4 work package exists in the authoritative roadmap.
+- **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
+- **F5.1 RESULT:** current hybrid owner-assisted discovery / self-serve activation path mapped from code, migrations, and current docs. Legacy manual-approval lifecycle record marked historical. No product behavior changed.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -16,18 +18,16 @@
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
-| F4 | Release, Monitoring & Incident Operations | IN_PROGRESS | F4.1/F4.2/F4.3 complete with limitations; PR #417 remains open/unmerged; later F4 work not started |
-| F5 | Commercial Customer Operations | PLANNED | Owner-led customer operations |
+| F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; PR #417 merged |
+| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1 complete; F5.2–F5.7 remain |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**F4.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Free-tier release/monitoring baseline documented; exact Vercel quota remains UNKNOWN.
+**F4.1/F4.2/F4.3:** complete with explicit limitations. Preserve existing runbooks and F3 deferral. No additional F4 work package is defined.
 
-**F4.2:** COMPLETE WITH EXPLICIT LIMITATIONS. Source-specific log fields and one isolated PostgreSQL ERROR documented. F4.3 clarifies the top-level `severity_text` field without erasing the earlier nested-map observation.
+**F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Current sales-to-activation path documented. Product capabilities and unsupported claims separated. Production deployment, post-merge CI, real customer outcomes, and migration application status were not re-verified in this task.
 
-**F4.3:** DOCUMENTATION AND FICTIONAL REHEARSAL COMPLETE; exact-head Quality `41523483447` and W9 `41523483512` both SUCCESS on `102e24e343e6add57e53d49a0908b78c7bfa974e`. PR #417 remains OPEN / NOT MERGED. No production operation was performed.
-
-**EXACT NEXT ACTION:** await explicit owner decision on PR #417; do not merge, deploy, or start another phase automatically.
+**EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff. Do not start F5.2 automatically.
 
 ---
 
