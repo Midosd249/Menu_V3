@@ -1,7 +1,7 @@
 # F4 — Release, Monitoring & Incident Operations
 
 **Date:** 2026-11-02  
-**Status:** IN_PROGRESS — F4.1 operational baseline CLOSED; F4.2 is the next task  
+**Status:** IN_PROGRESS — F4.1 and F4.2 COMPLETE WITH EXPLICIT LIMITATIONS; F4.3 is next  
 **Repository base:** main `848d4acdd3b184c24142d1e77fc0c9af55f20eab`  
 **Scope:** read-only platform inspection and operational documentation. No application code, database schema, platform settings, secrets, deployments, alerts, or customer data were changed.
 
@@ -155,3 +155,122 @@ Severity and escalation thresholds that require application-specific baselines r
 ## 10. Exact next task
 
 **F4.2 — Validate Supabase log severity/error classification and define evidence-backed incident thresholds.** Keep this read-only; use actual log fields and existing plan limits, preserve the owner's closed warning disposition, and do not add paid services, scheduled automation, deployments, settings changes, or database mutations.
+
+
+---
+
+# F4.2 — Supabase Log Severity & Incident Threshold Validation
+
+**Observed at:** 2026-11-02T20:11:00Z (UTC)  
+**Project:** `ublxptcqefujkbeepylc` — Supabase Free, region `ap-northeast-2`  
+**Method:** Connected Supabase unified Logs / ClickHouse; read-only queries only; default maximum observation window 24 hours.  
+**Status:** COMPLETE WITH EXPLICIT SOURCE LIMITATIONS.
+
+## 1. Verified log inventory
+
+The live `SELECT source, count(), max(timestamp) ... GROUP BY source` query returned:
+
+| Source | Events | Latest timestamp (UTC) |
+|---|---:|---|
+| `edge_logs` | 6 | 2026-11-02 03:41:30 |
+| `pgbouncer_logs` | 82 | 2026-11-02 19:41:59 |
+| `postgres_logs` | 30 | 2026-11-02 01:41:46 |
+| `postgrest_logs` | 7 | 2026-11-02 00:01:12 |
+| `realtime_logs` | 2 | 2026-11-02 03:41:30 |
+| `storage_logs` | 4 | 2026-11-02 03:41:30 |
+| `supavisor_logs` | 78 | 2026-11-02 01:58:27 |
+| `workflow_run_logs` | 20 | 2026-11-02 03:41:33 |
+
+Counts are activity, not request volume, success rate, or uptime. The source timestamps are not uniformly fresh; do not infer that an old latest event means the source is broken.
+
+## 2. Verified source-specific fields
+
+A read-only inventory of `mapKeys(log_attributes)` and grouped field values established:
+
+| Source | Observed classification field | What can be classified | Limitation |
+|---|---|---|---|
+| `postgres_logs` | `parsed.error_severity`, `parsed.sql_state_code`, `parsed.command_tag` | PostgreSQL severity and SQLSTATE | Reliable for rows where these parsed fields are populated; do not generalize to other sources. |
+| `edge_logs` | `response.status_code` | HTTP response status | No normalized severity field was present in sampled rows. |
+| `storage_logs` | `level` | Service level | Four observed rows had `info`; sample is small. |
+| `realtime_logs` | `level` | Service level | Two observed rows had `info`; sample is small. |
+| `supavisor_logs` | no normalized severity key in sampled rows | Inspect event text and context manually | Do not treat missing level as INFO or CLEAR. |
+| `pgbouncer_logs` | no normalized severity key in sampled rows | Inspect event text and context manually | Routine TLS/new-connection/server-lifetime messages appeared; not a complete health proof. |
+| `postgrest_logs` | no normalized severity key in sampled rows | Source/message-specific investigation | No severity field was identified in the sample. |
+| `workflow_run_logs` | no normalized severity key in sampled rows | Source/message-specific investigation | No severity field was identified in the sample. |
+
+Supabase Logs Explorer documents source-specific log tables and filtering by Level (success/warning/error), Status (HTTP status or PostgreSQL SQLSTATE), and Log Type. The unified Logs API query exposed the concrete keys above for this project. The UI's generic filter labels must not be assumed to map to one universal `log_attributes['level']` field across every source.
+
+## 3. Verified error observation
+
+The PostgreSQL severity query found:
+
+- 29 rows with `parsed.error_severity = LOG`.
+- 1 row with `parsed.error_severity = ERROR`.
+- No `FATAL` or `PANIC` row in the inspected result.
+- The single ERROR was at `2026-11-01T23:20:38.823Z`, SQLSTATE `42803`, command tag `SELECT`.
+- Its message excerpt: `column "c.oid" must appear in the GROUP BY clause or be used in an aggregate function`.
+
+**Disposition: FINDING — isolated SQL query error; production application impact UNKNOWN.** SQLSTATE 42803 indicates a grouping error in a SELECT. The available log evidence does not establish whether this came from an operator/diagnostic query or an application path. No matching application request or customer impact was established. Do not call this a confirmed customer-facing incident, and do not silently discard it. If repeated or correlated with an application route, investigate the query origin and fingerprint.
+
+Edge rows observed in the sample all had HTTP status `200`. Storage and Realtime rows sampled had `level=info`. These observations do not establish full-stack health or cover all time periods.
+
+## 4. Evidence-backed classification rules
+
+Use source-native fields, not guessed universal severity:
+
+1. PostgreSQL: classify using `parsed.error_severity`; capture `parsed.sql_state_code`, timestamp, command tag, and a privacy-safe message fingerprint. Treat `ERROR`, `FATAL`, and `PANIC` as findings requiring triage; `FATAL`/`PANIC` are immediate high-priority escalation candidates.
+2. Edge: classify `response.status_code`; 5xx is a server-side finding. 4xx is not automatically an incident: distinguish expected authentication/authorization, validation, rate-limit, and unavailable-resource outcomes from unexpected defects.
+3. Storage/Realtime: use their observed `level` field when present. Missing level means `UNABLE TO ASSESS`, not healthy.
+4. PgBouncer/Supavisor/PostgREST/workflow logs: no common severity field was verified in this sample. Use source-specific message review and correlation; absent severity is not a clear result.
+5. Empty query results: only `CLEAR` when source coverage, time range, retention, and the relevant source-native classification field are all verified. Otherwise return `UNABLE TO ASSESS`.
+
+## 5. Proposed incident thresholds — NOT historical guarantees
+
+These are operational proposals for a low-volume, owner-operated test environment; no SLA or automated alert is claimed:
+
+| Signal | Triage | Incident escalation |
+|---|---|---|
+| PostgreSQL `PANIC` or `FATAL` | Immediate | P1 candidate immediately; verify recurrence/service impact. |
+| Unexpected PostgreSQL `ERROR` | Investigate every occurrence and SQLSTATE/fingerprint | P2 candidate if repeated (3+ same fingerprint within 5 minutes), affects a critical application path, or blocks data operations. |
+| HTTP 5xx from Edge/API | Investigate each occurrence and correlate route/deployment | P2 candidate for 3+ same-route 5xx within 5 minutes, or one confirmed critical-path outage. |
+| Storage/Realtime explicit error level | Investigate every occurrence | Escalate when repeated or a required public-menu/media/order capability is impaired. |
+| PgBouncer/Supavisor/PostgREST/workflow message without normalized severity | Manual source-specific triage | Escalate only after confirming connection/API/function impact; do not infer severity from a keyword alone. |
+| No events / missing logs | Check source, time window and retention | `UNABLE TO ASSESS` unless independent health evidence exists. |
+
+These thresholds are proposed, not calibrated from a statistically representative baseline. The project currently has owner-created test data and low/uneven event volume; do not calculate error percentages from these samples.
+
+## 6. Free-plan constraints and operating cadence
+
+- Supabase Free documentation currently lists 1 day of API/database log retention and 1 GB included log ingestion. Confirm actual usage in the dashboard; do not infer remaining quota from this limit.
+- Log query usage has a separate included allowance and is not billed by query volume according to the official usage guide; query overuse may cause rate limiting/shorter retention when enforcement applies.
+- Supabase Log Drains are Pro/Team/Enterprise only; do not design the Free-tier process around Log Drains.
+- Use the connected Logs Explorer manually during an investigation and immediately after an authorized release. Do not add scheduled polling, paid destinations, or persistent alert infrastructure in this phase.
+- Vercel Hobby runtime logs have a documented 1-hour retention window. Correlate Vercel deployment ID/SHA and request evidence while still within retention.
+
+## 7. Current snapshot outcome
+
+| Area | Result |
+|---|---|
+| Supabase project status | Previously verified `ACTIVE_HEALTHY`; platform status alone is not app health. |
+| PostgreSQL severity mapping | **VERIFIED** for `parsed.error_severity` and SQLSTATE in sampled rows. One isolated ERROR found; impact UNKNOWN. |
+| Edge HTTP status | **VERIFIED** for `response.status_code`; six sampled responses were 200. |
+| Storage/Realtime level | **VERIFIED** for `level`; sampled events were INFO. |
+| PgBouncer/Supavisor/PostgREST/workflow severity | **UNABLE TO ASSESS** from a common normalized field; source-specific manual review required. |
+| Overall application health | **UNABLE TO ASSESS** from logs alone; owner reports a separate successful application check, recorded separately from platform evidence. |
+
+## 8. Safety and non-actions
+
+No SQL writes, schema/RLS/index changes, migrations, advisor changes, secret access, backup/restore, PITR, billing changes, alert configuration, deployment, rollback, or CI rerun was performed for F4.2.
+
+## 9. Official references
+
+- Supabase Logs in Studio: https://supabase.com/docs/guides/observability/logs
+- Supabase Logs Explorer: https://supabase.com/docs/guides/telemetry/logs
+- Supabase Manage Logs Usage: https://supabase.com/docs/guides/platform/manage-your-usage/logs
+- Supabase Log Drains: https://supabase.com/docs/guides/observability/log-drains
+- Vercel Runtime Logs: https://vercel.com/docs/logs/runtime
+
+
+## 11. Exact next task
+
+**F4.3 — Incident response runbook validation and owner-operated rehearsal (non-destructive).** Reconcile the existing runbook with the verified source-specific signals and proposed thresholds; rehearse classification and rollback decision-making using a simulated incident only. Do not trigger production faults, rollback, deployment, or database mutation.
