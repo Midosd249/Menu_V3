@@ -1,7 +1,8 @@
 # C4 Container and Runtime Topology — Menuun
 
-**Status:** F1 baseline — 2026-11-02  
-**Baseline SHA:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`
+**Status:** F2 implementation baseline — 2026-11-02  
+**Main baseline SHA:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`  
+**F2 branch:** `feat/f2-production-safe-migrations`
 
 ## Verified containers
 | Container | Technology / responsibility | Evidence |

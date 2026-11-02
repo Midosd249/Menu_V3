@@ -80,3 +80,8 @@ Create or extend these only after inspecting the corresponding current code/conf
 - [Public order](./diagrams/public-order-sequence.mmd)
 
 All facts are bounded by each document's evidence date and SHA. Unknowns remain explicit; this index is not a security certification.
+
+## F2 migration and deployment safety
+
+- [Migration Runbook](../operations/MIGRATION_RUNBOOK.md) — explicit target-verified operator procedure; no build-time migrations.
+- [ADR-0002](../decisions/ADR-0002-build-migration-separation.md) — build/migration separation and Vercel Git deployment policy.

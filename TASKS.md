@@ -1,34 +1,36 @@
-F1 UPDATE — 2026-11-02
-
-VERIFIED baseline: main = e5d7c89a73718f35e7accbae7933af36c366bbc1. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch. Documentation-only: no application code, SQL, migration, Supabase mutation, secret, CI, Vercel setting, or deployment change is included. Live catalog: 47 menu_v3 tables, 16 public tables, 47/47 RLS enabled, seven restrictive deny policies, zero FORCE RLS, 72 custom-ledger entries. The deployed application DB login role and exhaustive server-function authorization coverage remain UNKNOWN. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
-
----
-
 # Active Task Queue — F-Series
 
-## Only active task: F0 — Continuity & Program Charter
+## Only active task: F2 — Production-Safe Build & Migration Boundary
 
-- STATUS: IMPLEMENTATION_IN_PROGRESS.
-- BRANCH: `docs/f0-architecture-operations-roadmap`.
-- BASE: main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- SCOPE: documentation-only architecture/operations roadmap, evidence model, history, ADR, README index, and continuity reconciliation.
-- ACCEPTANCE:
-  1. F0–F7 are defined with objectives, work packages, dependencies, gates, and acceptance criteria.
-  2. Verified facts are separated from inferred/proposed/unknown facts.
-  3. Merged QR-ordering state is reconciled; stale current-state claims are removed while historical entries are preserved.
-  4. Migration runner/ledger and build-time migration hazard are recorded accurately.
-  5. Existing release-only Vercel policy is linked, not duplicated as a competing policy.
-  6. No runtime, database, CI, deployment, or secret changes.
-  7. New docs were read back; final diff compared against main; documentation-only Draft PR #414 opened for owner review.
-- VERIFICATION: GitHub content readback, changed-file/diff review, and continuity consistency check. No local tests/build are claimed.
-- EXACT NEXT TASK AFTER F0: F1 read-only architecture discovery. F2 code changes wait until F1 maps migration/build call sites and PGlite behavior.
+- **STATUS:** IMPLEMENTATION_IN_PROGRESS.
+- **BRANCH:** `feat/f2-production-safe-migrations`.
+- **BASE:** F1 commit `b42229bcab316f1d85d2ff189754ec56ad434c15`; canonical main remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
+- **SCOPE:** build/migration separation, explicit DB target identity guard, Vercel execution guard, production confirmation, advisory-lock serialization, Vercel Git deployment opt-in, regression tests, and migration runbook.
+- **ACCEPTANCE:**
+  1. Build is free of database migration side effects.
+  2. Explicit migration requires a declared target and exact host/database/user identity.
+  3. Migration runner fails closed inside Vercel and on any missing/mismatched target value.
+  4. Production execution requires a second explicit confirmation.
+  5. Concurrent migration invocations cannot apply files simultaneously through this runner.
+  6. PGlite and custom migration-ledger semantics remain unchanged.
+  7. Feature/docs branches do not trigger Vercel Git deployments; `main` is Production and `preview/*` is opt-in.
+  8. Focused tests and final-head Quality/W9 pass.
+  9. No real database migration, merge, or Production deployment occurs during this task.
+- **VERIFICATION:** pending local/sandbox execution and GitHub CI on the exact PR head. Do not claim checks passed until results are directly observed.
+- **RELEASE:** not authorized/performed. Any Vercel event caused by the PR must be inspected and reported.
+- **EXACT NEXT ACTION:** complete F2 final diff review, open one PR, and inspect Quality/W9 and Vercel event evidence on the exact head.
 
 ## Guardrails
+
 - Exactly one task may be IN_PROGRESS.
-- Do not reopen PR #411 QR ordering; it is merged.
-- Do not run production migrations, Supabase CLI repair/push, restore, Vercel deploy, or deployment retries during F0.
-- Do not claim current Production SHA/state or tested backup/restore from this documentation baseline.
-- Preserve historical task records below this active section.
+- Preserve F1 architecture documents already present in the parent commit.
+- Do not run `npm run db:migrate` against any real database.
+- Do not read, expose, or modify Supabase/Vercel secrets.
+- Do not run Supabase CLI migration push/repair.
+- Do not merge or deploy as part of this task.
+- Do not begin F3–F7 until F2 is closed out.
+
+---
 
 ---
 

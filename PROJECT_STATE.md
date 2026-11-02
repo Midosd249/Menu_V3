@@ -1,22 +1,19 @@
+# Current Project State — F-Series
 
+## 2026-11-02 — F2 build and migration safety boundary
 
-> F1 update — 2026-11-02. This block is the current status; following F0 entries are retained as historical records and are not current. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch, based on main e5d7c89a73718f35e7accbae7933af36c366bbc1. Documentation-only: no runtime, SQL, auth, CI, Vercel, environment, or production data changes. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
+- **CLASSIFICATION:** F2 — Production-Safe Build & Migration Boundary.
+- **VERIFIED:** `main` remains `e5d7c89a73718f35e7accbae7933af36c366bbc1`; F1 architecture baseline is committed at `b42229bcab316f1d85d2ff189754ec56ad434c15` on `docs/f1-verified-architecture-baseline`.
+- **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, based on the F1 documentation commit. This branch carries the F1 architecture documents plus the F2 implementation.
+- **F2 SCOPE:** remove database migrations from the application build; require explicit migration target and exact expected database host/database/user; block migration execution in Vercel; require a separate production confirmation; serialize migration runners with a PostgreSQL advisory lock; make Vercel Git deployments opt-in for `main` and `preview/*`; add focused regression tests and an operator runbook.
+- **PRESERVED:** PGlite's existing runtime migration behavior, the custom migration runner, `menu_v3._migrations`, and per-migration transaction semantics. No migration SQL or schema was changed.
+- **SAFETY:** no Supabase SQL/migration was executed, no credentials were read or written, no production deployment was requested, and no customer data was touched.
+- **VERIFICATION:** source-level changes and tests are prepared. Local/sandbox test execution is not yet evidenced. GitHub Quality/W9 results are pending until a PR is opened. Do not claim F2 verified until the exact PR head passes applicable CI.
+- **DEPLOYMENT:** no Production deployment. Git-triggered deployments are configured in `vercel.json` to allow `main` and explicit `preview/*` only; actual Vercel behavior must be checked after the PR event.
+- **UNKNOWN:** no isolated staging Supabase target or protected migration environment has been verified; Preview/Production DB URLs remain uninspected; backup/restore readiness is not yet verified.
+- **EXACT NEXT ACTION:** finish F2 diff review, open one PR, and inspect Quality/W9 plus Vercel deployment events on the exact final head. Do not merge, run migrations, or deploy.
 
-# Current Project State — F-Series Documentation Baseline
-
-## 2026-11-02 — F0 continuity, architecture and production-safety documentation
-
-- STATUS: IMPLEMENTATION_IN_PROGRESS — documentation-only work on branch `docs/f0-architecture-operations-roadmap`.
-- VERIFIED: repository `Midosd249/Menu_V3`; default branch `main`; baseline main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: QR table-ordering PR #411 is MERGED at `f6e888ded688ba682b3c5862719b76adb96a5f21`.
-- VERIFIED: latest inspected main commit repairs Essential language-selector state rules.
-- VERIFIED: package build invokes db:migrate; scripts/migrate.mjs uses migrations/ and menu_v3._migrations. Prior Preview build migration side effect is recorded in PR #411.
-- VERIFIED: docs/release-only-vercel-workflow.md already defines local-first QA, one coherent release batch, separate deployment evidence, quota handling, and rollback boundaries.
-- IMPLEMENTED ON THIS BRANCH: F0 roadmap, architecture index/system overview, production-safe operations baseline, development history register, and ADR-0001.
-- SCOPE: documentation only. No application source, migrations, database, secrets, CI workflows, Vercel settings, merge, or deployment changed/performed.
-- UNKNOWN: full C4 architecture; current live production deployment SHA/state; backup retention/PITR and successful restore evidence; approved RPO/RTO; exact production database target mapping; isolated staging readiness.
-- VERIFIED: documentation-only PR #414 is open as Draft, based on main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`, head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; GitHub reports mergeable=true at last check.
-- EXACT NEXT ACTION: owner review of PR #414. After it is merged, begin F1 read-only architecture discovery. Do not start F2 code changes until F1 maps all build/migration call sites and F2 is separately authorized.
+---
 
 ---
 

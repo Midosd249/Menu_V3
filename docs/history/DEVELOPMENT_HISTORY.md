@@ -1,6 +1,13 @@
-F1 UPDATE — 2026-11-02
+F2 UPDATE — 2026-11-02
 
-VERIFIED baseline: main = e5d7c89a73718f35e7accbae7933af36c366bbc1. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch. Documentation-only: no application code, SQL, migration, Supabase mutation, secret, CI, Vercel setting, or deployment change is included. Live catalog: 47 menu_v3 tables, 16 public tables, 47/47 RLS enabled, seven restrictive deny policies, zero FORCE RLS, 72 custom-ledger entries. The deployed application DB login role and exhaustive server-function authorization coverage remain UNKNOWN. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
+- **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, based on F1 architecture commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.
+- **CHANGE:** application build no longer invokes the custom PostgreSQL migration runner.
+- **SAFETY:** explicit migration target plus exact host/database/user match; Vercel execution is rejected; Production requires a confirmation phrase; concurrent runner invocations are serialized by PostgreSQL advisory lock.
+- **DEPLOYMENT CONTROL:** Vercel Git deployments are opt-in for `main` and `preview/*`; other branches default to disabled. Actual Vercel event behavior remains to be checked on the PR.
+- **PRESERVED:** PGlite runtime migrations, `menu_v3._migrations`, and per-file transactions. No SQL migration or database was changed.
+- **VERIFICATION:** local/sandbox execution and final-head GitHub Quality/W9 are pending. No production migration, merge, or deployment occurred.
+
+---
 
 ---
 

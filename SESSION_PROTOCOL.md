@@ -1,35 +1,29 @@
-F1 UPDATE — 2026-11-02
-
-VERIFIED baseline: main = e5d7c89a73718f35e7accbae7933af36c366bbc1. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch. Documentation-only: no application code, SQL, migration, Supabase mutation, secret, CI, Vercel setting, or deployment change is included. Live catalog: 47 menu_v3 tables, 16 public tables, 47/47 RLS enabled, seven restrictive deny policies, zero FORCE RLS, 72 custom-ledger entries. The deployed application DB login role and exhaustive server-function authorization coverage remain UNKNOWN. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
-
----
-
 # Menuun Session Protocol — F-Series Handoff
 
 ## Current session checkpoint — 2026-11-02
 
-- PHASE: F0 — Continuity & Program Charter.
-- STATUS: IMPLEMENTATION_IN_PROGRESS; documentation-only branch `docs/f0-architecture-operations-roadmap`.
-- BASE MAIN SHA: `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- VERIFIED: PR #411 is closed and merged at `f6e888ded688ba682b3c5862719b76adb96a5f21`.
-- IMPORTANT: older entries below that describe PR #411 as open/draft are historical snapshots and must not be used as current state.
-- F0 documents created: `docs/FINALIZATION_ROADMAP.md`, `docs/architecture/README.md`, `docs/architecture/SYSTEM_OVERVIEW.md`, `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`, `docs/history/DEVELOPMENT_HISTORY.md`, `docs/decisions/ADR-0001-custom-migration-ledger.md`.
-- No application, database, migration, CI, Vercel configuration, production data, or deployment changes.
-- VERIFIED: Draft PR #414 is open; head SHA `cd551ff8263943d72360c38c0b93fc443328e9bb`; base main SHA `5a84d31282383e191472bcd3fc7d5b62417e90ca`.
-- EXACT NEXT ACTION: owner review of PR #414. After merge, start F1 read-only architecture discovery only.
+- **PHASE:** F2 — Production-Safe Build & Migration Boundary.
+- **STATUS:** IMPLEMENTATION_IN_PROGRESS on `feat/f2-production-safe-migrations`.
+- **MAIN SHA:** `e5d7c89a73718f35e7accbae7933af36c366bbc1`.
+- **F1 PARENT SHA:** `b42229bcab316f1d85d2ff189754ec56ad434c15`; F1 docs remain part of this branch and are not yet merged.
+- **F2 DESIGN:** builds are artifact-only; migrations are explicit, target-identified operator actions; Vercel contexts are rejected; Production needs a confirmation phrase; PostgreSQL advisory locking serializes this runner.
+- **DEPLOYMENT POLICY:** Git-triggered Vercel deployments are opt-in for `main` and `preview/*`; actual Vercel response to the PR must be verified.
+- **NO SIDE EFFECTS:** no Supabase migration, no production DB mutation, no secret access/change, no merge, and no Production deployment.
+- **VERIFICATION:** implementation/tests prepared; local/sandbox execution and final-head GitHub Quality/W9 remain pending.
+- **EXACT NEXT ACTION:** finish diff review, open one PR, inspect exact-head CI and Vercel deployment events, then stop.
 
 ## Permanent handoff rules
 
-1. Treat the current repository and Git state as authoritative; chat memory is not the source of truth.
-2. At session start, verify main SHA, current branch, recent commits, relevant open PRs, and diffs.
-3. Read AGENTS.md, docs/FINALIZATION_ROADMAP.md, PROJECT_STATE.md, PLAN.md, TASKS.md, SESSION_PROTOCOL.md, README, and relevant architecture/operations/ADR/history documents.
-4. Check whether the requested capability/document already exists before creating another.
+1. Treat current repository code/configuration and Git/runtime evidence as authoritative; chat memory is not the source of truth.
+2. At session start, verify main SHA, relevant branch heads, recent commits, open PRs, diffs, CI, and deployment evidence.
+3. Read `AGENTS.md`, `docs/FINALIZATION_ROADMAP.md`, `PROJECT_STATE.md`, `PLAN.md`, `TASKS.md`, `SESSION_PROTOCOL.md`, README, and relevant architecture/operations/decision/history docs.
+4. Prove whether the requested capability already exists before adding it.
 5. Use VERIFIED / INFERRED / PROPOSED / UNKNOWN / BLOCKED precisely.
 6. Run Research & Connected-Tools preflight at the appropriate depth.
-7. State classification, workflows, research level, scope, risks, acceptance criteria, and verification before editing.
+7. State classification, workflows, research level, scope, risks, acceptance criteria, and verification plan before editing.
 8. Keep one atomic task in progress.
-9. Do not perform deployment, migration, restore, or production mutation without explicit authorization and the relevant runbook gate.
-10. At closeout, review diff, update continuity, report evidence and blockers, name exactly one next action, and stop.
+9. Do not perform deployment, migration, restore, or production mutation without the required authorization and runbook gates.
+10. At closeout, review the final diff, update continuity, report evidence and blockers, name exactly one next action, and stop.
 
 ## F-Series source of truth
 
@@ -37,17 +31,20 @@ VERIFIED baseline: main = e5d7c89a73718f35e7accbae7933af36c366bbc1. Ten architec
 - Architecture index: `docs/architecture/README.md`.
 - System overview: `docs/architecture/SYSTEM_OVERVIEW.md`.
 - Operations baseline: `docs/operations/PRODUCTION_SAFE_OPERATIONS.md`.
+- Migration runbook: `docs/operations/MIGRATION_RUNBOOK.md`.
 - Development history: `docs/history/DEVELOPMENT_HISTORY.md`.
 - ADRs: `docs/decisions/`.
 - Release-only Vercel policy: `docs/release-only-vercel-workflow.md`.
 
 ## Evidence limitations
 
-- Current live production deployment SHA/state: UNKNOWN for this task.
-- Successful isolated database restore: UNKNOWN.
-- RPO/RTO: UNKNOWN and require owner approval.
-- Full C4 component/deployment architecture: not yet completed; F1.
-- Build/migration coupling: VERIFIED in package.json and scripts/migrate.mjs; F2 is high priority after F1 source tracing.
+- Current Production deployment SHA/state remains UNKNOWN for this task.
+- Preview and Production DB connection targets remain UNKNOWN; no secret values were inspected.
+- A separate isolated staging database and protected migration environment remain UNKNOWN.
+- Successful isolated database restore and approved RPO/RTO remain UNKNOWN.
+- No real database migration or deployment has been run in F2.
+
+---
 
 ---
 

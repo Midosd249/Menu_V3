@@ -4,19 +4,16 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import pg from "pg";
 import { pendingMigrations } from "./migration-plan.mjs";
+import { validateMigrationEnvironment } from "./migration-safety.mjs";
 
 const POSTGRES_SCHEMA = "menu_v3";
-const databaseUrl =
-  process.env.DATABASE_URL?.trim() ||
-  process.env.POSTGRES_URL?.trim() ||
-  process.env.POSTGRES_PRISMA_URL?.trim() ||
-  process.env.SUPABASE_DB_URL?.trim() ||
-  process.env.POSTGRES_URL_NON_POOLING?.trim();
+const ADVISORY_LOCK_NAMESPACE = 7312026;
+const ADVISORY_LOCK_ID = 1;
 
-if (!databaseUrl) {
-  console.log("[migrate] no Postgres connection string configured — skipping (PGlite fallback migrates itself).");
-  process.exit(0);
-}
+const { databaseUrl, target, identity } = validateMigrationEnvironment(process.env);
+console.log(
+  `[migrate] target=${target} host=${identity.host} database=${identity.database} user=${identity.user}`,
+);
 
 const migrationsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "migrations");
 
@@ -24,10 +21,14 @@ async function main() {
   let entries;
   try {
     entries = await readdir(migrationsDir);
-  } catch {
-    console.log("[migrate] no migrations/ directory — nothing to do.");
-    return;
+  } catch (err) {
+    if (err?.code === "ENOENT") {
+      console.log("[migrate] no migrations/ directory — nothing to do.");
+      return;
+    }
+    throw err;
   }
+
   if (pendingMigrations(entries, []).length === 0) {
     console.log("[migrate] no migrations — nothing to do.");
     return;
@@ -39,8 +40,19 @@ async function main() {
     max: 1,
     connectionTimeoutMillis: 15000,
   });
-  const client = await pool.connect();
+  let client;
+  let lockAcquired = false;
   try {
+    client = await pool.connect();
+    const lock = await client.query(
+      "SELECT pg_try_advisory_lock($1, $2) AS locked",
+      [ADVISORY_LOCK_NAMESPACE, ADVISORY_LOCK_ID],
+    );
+    if (!lock.rows[0]?.locked) {
+      throw new Error("Another migration runner currently holds the database migration lock.");
+    }
+    lockAcquired = true;
+
     await client.query(`CREATE SCHEMA IF NOT EXISTS ${POSTGRES_SCHEMA}`);
     await client.query(`SET search_path TO ${POSTGRES_SCHEMA}, public`);
     await client.query(
@@ -50,15 +62,19 @@ async function main() {
 
     let count = 0;
     for (const { name } of pendingMigrations(entries, applied)) {
-      const text = await readFile(join(migrationsDir, name), "utf8");
+      const sql = await readFile(join(migrationsDir, name), "utf8");
       try {
         await client.query("BEGIN");
-        await client.query(text);
+        await client.query(sql);
         await client.query("INSERT INTO _migrations (name) VALUES ($1)", [name]);
         await client.query("COMMIT");
       } catch (err) {
         console.error(`[migrate] error applying ${name}`);
-        try { await client.query("ROLLBACK"); } catch { /* preserve original error */ }
+        try {
+          await client.query("ROLLBACK");
+        } catch {
+          // Preserve the original migration error.
+        }
         throw err;
       }
       console.log(`[migrate] applied ${name}`);
@@ -66,7 +82,19 @@ async function main() {
     }
     console.log(count ? `[migrate] done — ${count} migration(s) applied.` : "[migrate] up to date.");
   } finally {
-    client.release();
+    if (client) {
+      if (lockAcquired) {
+        try {
+          await client.query("SELECT pg_advisory_unlock($1, $2)", [
+            ADVISORY_LOCK_NAMESPACE,
+            ADVISORY_LOCK_ID,
+          ]);
+        } catch {
+          console.error("[migrate] advisory lock release failed; closing the database session.");
+        }
+      }
+      client.release();
+    }
     await pool.end();
   }
 }

@@ -1,6 +1,6 @@
-F1 UPDATE — 2026-11-02
+F2 UPDATE — 2026-11-02
 
-VERIFIED baseline: main = e5d7c89a73718f35e7accbae7933af36c366bbc1. Ten architecture documents and four Mermaid diagrams are committed on branch docs/f1-verified-architecture-baseline on the remote branch. Documentation-only: no application code, SQL, migration, Supabase mutation, secret, CI, Vercel setting, or deployment change is included. Live catalog: 47 menu_v3 tables, 16 public tables, 47/47 RLS enabled, seven restrictive deny policies, zero FORCE RLS, 72 custom-ledger entries. The deployed application DB login role and exhaustive server-function authorization coverage remain UNKNOWN. No PR was opened because a PR Preview would execute the currently coupled build-time db:migrate path; F2 must remove that risk before normal Preview-based validation. Exact next phase: F2 — Production-Safe Build & Migration Boundary.
+F2 implementation is in progress on `feat/f2-production-safe-migrations`. The build command is now artifact-only on this branch; explicit PostgreSQL migrations require target identity, are blocked inside Vercel, require an extra production confirmation, and use a non-blocking advisory lock. Git-triggered Vercel deployments are opt-in for `main` and `preview/*`. No production migration, merge, or deployment has been performed. See `docs/operations/MIGRATION_RUNBOOK.md`. CI and actual Vercel behavior remain pending.
 
 ---
 
@@ -27,29 +27,23 @@ The operational model should distinguish:
 
 **VERIFIED policy:** Local-first QA and release-only Vercel workflow are already documented in `docs/release-only-vercel-workflow.md`.
 
-**UNKNOWN:** Whether a separate, production-like staging Supabase project is provisioned and safe to use. Do not assume Preview automatically receives an isolated database.
+**UNKNOWN:** Whether a separate, production-like staging Supabase project is provisioned and safe to use. The F2 runner supports an explicit staging target, but this does not prove a staging project exists. Do not assume Preview automatically receives an isolated database.
 
 **PROPOSED control:** Treat every database URL as production-sensitive. Preview must not receive production database credentials unless a narrowly approved, documented reason exists. The safer default is no database migration capability in application build jobs.
 
 ## 3. Build is not a migration command
 
-### Current behavior — VERIFIED
-At baseline:
-- `package.json` defines `build` as Vite production build, PGlite asset preparation, then `npm run db:migrate`.
-- `db:migrate` runs `node scripts/migrate.mjs`.
-- `scripts/migrate.mjs` selects a PostgreSQL connection string from supported environment variables, creates/uses `menu_v3`, reads `migrations/`, and applies pending SQL files into `menu_v3._migrations`.
-- A prior Vercel Preview build is recorded as having applied a production-connected migration.
+### F2 implementation — branch evidence, CI pending
+- The F1 baseline build invoked `npm run db:migrate`; this historical behavior and the prior Preview migration side effect remain recorded above.
+- On the F2 branch, `build` generates artifacts only and no longer invokes the PostgreSQL runner.
+- `db:migrate` is a separate operator command. It requires `MIGRATION_TARGET`, `MIGRATION_EXPECTED_HOST`, `MIGRATION_EXPECTED_DATABASE`, and `MIGRATION_EXPECTED_USER`, all matched against the parsed URL before a connection is opened.
+- The runner rejects Vercel build/deployment contexts; Production additionally requires `MIGRATION_CONFIRM_PRODUCTION=APPLY_PRODUCTION_MIGRATIONS`.
+- A non-blocking PostgreSQL advisory lock prevents two invocations of this runner from applying concurrently. Each SQL file and ledger insert remain transactional.
+- Existing PGlite runtime migration behavior is unchanged.
+- Focused regression tests assert build separation, missing/mismatched target rejection, Vercel rejection, production confirmation, Vercel Git deployment policy, and advisory-lock wiring.
+- Final-head local/sandbox and GitHub CI verification remain pending. No real migration was run.
 
-### Required target behavior — PROPOSED, F2
-- `build` must build artifacts only; it must not connect to or mutate a database.
-- Migration execution must be a separate explicit operation.
-- The migration operation must identify its target environment/project before applying anything.
-- Missing, ambiguous, or unexpected target identity must fail closed.
-- Preview build jobs must not inherit production database credentials.
-- CI tests must assert that build does not invoke the migration runner.
-- Migration logs must record environment identity, migration filenames, start/end, and outcome without logging connection strings or secrets.
-
-**Do not implement this by simply deleting the migration command without checking local/PGlite assumptions, deployment scripts, tests, and runtime initialization.** Map every invocation first and preserve the supported local development experience.
+For the operator procedure and environment requirements, see [MIGRATION_RUNBOOK.md](./MIGRATION_RUNBOOK.md). The expected identity values must be obtained independently from the authorized environment configuration; do not derive them by blindly copying the same connection URL being checked.
 
 ## 4. Migration operating procedure
 
