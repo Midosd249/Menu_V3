@@ -124,3 +124,11 @@ Future entries should link to:
 - Production deployment evidence where relevant.
 - Incident/ADR/architecture docs.
 - Owner-side verification, clearly separated from automated checks.
+
+### 2026-11-02 — F4.3 incident runbook validation and simulated rehearsal
+
+- **VERIFIED base:** main `41e5c36e434051f9668887974739870354706bd6`; work isolated on `docs/f4-3-incident-rehearsal-2026-11-02`.
+- **Scope:** documentation-only F4.3. Added incident classification, source/field reconciliation, missing-telemetry rules, proposed-threshold discipline, conditional rollback decision gate, and fictional owner tabletop.
+- **Current evidence:** Supabase ACTIVE_HEALTHY; 267 events in eight sources; top-level severity_text populated in the sample; one PostgreSQL ERROR SQLSTATE 42803 remains uncorrelated; no Edge 5xx matches. Vercel runtime error query returned no clusters for 24h; latest Production deployment READY on main SHA 41e5c36e.
+- **Safety:** no production fault injection, deployment, rollback, DB mutation, migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
+- **Status:** documentation/rehearsal complete; final PR checks pending. No F4.4/F5/F6 work started.
