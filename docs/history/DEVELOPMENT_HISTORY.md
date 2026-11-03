@@ -1,3 +1,16 @@
+## 2026-11-03 — F5.3 owner deferral and F5.4 subscription operations SOP in progress
+
+- **OWNER DECISION:** defer F5.3 for now and continue with the next independent F5 work package. F5.3 is recorded as DEFERRED BY OWNER — OPEN RISK, NOT COMPLETE. The potential `saveBranch` cross-tenant side-effect path remains unremediated; runtime exploitability is not established. This decision is not security acceptance or proof of safety.
+- **VERIFIED REPOSITORY BASIS:** `platform-subscriptions.ts` exposes Platform Owner-only plan, billing interval, trial, status, account-freeze and audit functions; `platform-billing.ts` exposes Platform Owner-only invoice issue/list; `commercial-catalog.ts` defines Free/Starter/Pro limits and prices; PH-04 tests cover the principal authorization, validation and audit contracts.
+- **IMPLEMENTED ON BRANCH:** `docs/f5-4-platform-subscription-operations-2026-11-03` adds `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md` and updates continuity records. Documentation only.
+- **IMPORTANT LIMIT:** invoices are issued records, not payment collection or proof of payment. The repository has no payment provider/automatic charge/webhook/payment-status behavior in the invoice migration. No invoice void workflow was found in the inspected Platform Owner invoice endpoints.
+- **F3:** remains DEFERRED BY OWNER — NOT DONE and continues to block real-customer onboarding/customer-owned data/commercial launch.
+- **RESEARCH:** repository-first review of current code, migrations, UI and tests; Exa reviewed OWASP multi-tenant guidance for the still-open F5.3 risk context. No live customer or production operation.
+- **VERIFICATION:** source and test contracts inspected remotely; no local checkout/terminal execution, browser run, live subscription operation, invoice issuance, database query, CI run on this branch, merge or deployment.
+- **EXACT NEXT ACTION:** review the complete branch diff, create/inspect the PR, then verify Quality and W9 on its exact final PR head. Do not merge or deploy automatically.
+
+---
+
 ## 2026-11-03 — F5.2 final closure
 
 - **VERIFIED:** PR #419 merged; exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`; merge/main SHA `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
