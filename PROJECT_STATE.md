@@ -4,16 +4,18 @@
 
 - **PHASE:** F5 — Commercial Customer Operations.
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. Deliverable: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality run `41564124218` SUCCESS and W9 Orders QA run `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3 DISCOVERY BLOCKER:** Read-only code review identified a high-priority cross-tenant side-effect risk in `src/lib/menu/owner.ts` `saveBranch`: after a tenant-scoped branch update that may affect zero rows, the path can continue to delete/reinsert `branch_hours` by `branch_id` without confirming ownership/affected-row count. Exploitability has not been runtime-tested; no exploit or data change is claimed. F5.3 is NOT COMPLETE.
-- **EXACT NEXT TASK:** separately scoped, test-first remediation of the `saveBranch` cross-tenant side-effect risk; keep F5.3 blocked until the fix and adversarial regression verification are complete. Do not perform production mutations or deployment.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK. Read-only review identified a potential cross-tenant side-effect path in `src/lib/menu/owner.ts` `saveBranch`: a tenant-scoped branch update may affect zero rows, after which branch-hours mutations may continue by `branch_id` without a confirmed ownership/affected-row guard. Runtime exploitability is not established; no exploit or data change is claimed. This is not a security acceptance or remediation.
+- **F5.4:** IMPLEMENTED ON BRANCH — documentation-only SOP; PR #421 is OPEN, READY FOR REVIEW, and NOT MERGED. No real subscription/account/invoice operation has been performed.
+- **F5.4 DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
-- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch. Do not reopen without owner direction.
+- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
 - **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview checks.
-- **SAFETY:** F5.2 was documentation-only; no real customer or customer-owned data, application code, database/schema/migration, settings/secrets, billing action, deployment, or rollback.
-- **REPOSITORY NOTE:** `AGENTS.md` exists. `docs/automatic-specialist-routing.md` exists. The previously referenced `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at the inspected branch paths; do not assume they exist.
+- **SAFETY:** F5.4 is documentation-only. No customer data, application code, database/schema/migration, settings/secrets, subscription, account, invoice, billing collection, deployment, or rollback was changed.
+- **REPOSITORY NOTE:** `AGENTS.md` and `docs/automatic-specialist-routing.md` exist. The previously referenced `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at inspected paths; do not assume they exist.
 
 ---
 

@@ -1,16 +1,15 @@
 # Active Task Queue — F-Series
 
-## Current task: F5.3 — Tenant/Branch Creation and Ownership Verification
+## Current task: F5.4 — Platform Subscription, Account & Invoice Operations
 
-- **STATUS:** NEXT — NOT STARTED.
-- **CLASSIFICATION:** documentation-first, read-only discovery; implementation only if the roadmap explicitly requires and evidence proves a missing capability, which is not presumed.
-- **OBJECTIVE:** document how a restaurant tenant/workspace and its branches are created, how ownership/authorization is established and verified, and what safeguards prevent cross-tenant or cross-branch mistakes.
-- **REQUIRED DISCOVERY:** current account/signup/onboarding/workspace provisioning code; branch creation/edit flows; database schema and relevant migrations; server-side authorization and tenant/branch context derivation; platform-admin controls; tests and audit records; existing SOPs and ADRs.
-- **SAFETY:** do not create real tenants/branches, mutate production/customer data, change RLS/auth/grants, run migrations, modify subscriptions, or deploy. Use source/tests and safe isolated fixtures only.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real-customer onboarding, customer-owned data, or commercial launch.
-- **F5.1:** COMPLETE; `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged. `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **EXACT NEXT ACTION:** perform F5.3 read-only repository discovery and prove existing behavior before drafting any new procedure.
+- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
+- **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **OBJECTIVE:** document the actual Platform Owner controls for plan assignment, billing interval, trial extension/end, subscription status, owner-account freeze/unfreeze, invoice issuance/listing, and administrative audit review.
+- **EVIDENCE:** `src/lib/menu/platform-subscriptions.ts`, `src/lib/menu/platform-billing.ts`, `src/lib/menu/commercial-catalog.ts`, `src/routes/admin/users.tsx`, relevant migrations and registered PH-04 tests.
+- **SAFETY:** no live subscription/account/invoice operation, customer data, production mutation, migration, merge, or deployment. Invoice issuance is not payment collection or proof of payment.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real-customer onboarding/customer-owned data/commercial launch.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and not runtime-tested. This deferral is not acceptance or closure.
+- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 
 ## Completed F5 tasks
 
@@ -25,14 +24,19 @@
 - **SCOPE:** process-only SOP; no customer data or product changes. F3 gate preserved.
 
 ### F5.3 — Tenant/branch creation and ownership verification
-- **STATUS:** BLOCKED — read-only discovery identified a high-priority potential cross-tenant side effect in `src/lib/menu/owner.ts` `saveBranch`; no runtime exploit test or remediation has been performed.
-- **NEXT:** separate test-first security remediation and adversarial cross-tenant regression coverage before resuming F5.3 documentation. No production data or deployment.
+- **STATUS:** DEFERRED BY OWNER — OPEN RISK; NOT COMPLETE.
+- **FINDING:** read-only discovery identified a potential cross-tenant side-effect path in `src/lib/menu/owner.ts` `saveBranch`. Runtime exploitability is unverified; no exploit or data change is claimed.
+- **DECISION:** owner explicitly deferred this item to continue with the next independent F5 work package. This is not a security acceptance, remediation, or declaration that the path is safe.
+- **RESUME CONDITION:** separately authorized, test-first remediation and adversarial cross-tenant regression verification.
+
+### F5.4 — Platform subscription, account & invoice operations
+- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
+- **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail.
 
 ---
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)
-
-
 
 - **STATUS:** IN_PROGRESS — read-only discovery.
 - **BASE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
