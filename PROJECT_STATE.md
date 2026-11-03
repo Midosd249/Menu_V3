@@ -19,8 +19,6 @@
 
 ---
 
----
-
 ## 2026-11-02 — F4.3 runbook validation and simulated rehearsal
 
 - **CLASSIFICATION:** F4.3 documentation-only incident-response runbook validation and fictional tabletop rehearsal.
