@@ -2,22 +2,20 @@
 
 ## Current session checkpoint — 2026-11-03
 
-- **PHASE:** F5 — Commercial Customer Operations.
-- **VERIFIED MAIN:** `0593f3f21a8fcf7ed1836a1b5ee87731b7454408` (PR #422 merge commit).
-- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified. Not accepted or closed.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; SOP `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **F5.4 EXACT-HEAD CI:** Quality `41577752976` SUCCESS and W9 Orders QA `41577752967` SUCCESS on `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact head `61e6b1db277753902a562d6ed4152d90172c5a62`.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
+- **PHASE:** F5 complete with explicit limitations; F6.1 is the next atomic task.
+- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425 merge).
+- **F5.1/F5.2:** complete with explicit limitations.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
+- **F5.6:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch decision BLOCKED.
+- **PR #425 exact-head CI:** Quality `41709298338` and W9 `41709298244` SUCCESS on `5a536c91c0ac1bca59bf00251f52fa0b520ce4e9`; merge SHA `4eed82ffddebf7d37f8818413672d465a37af9f2`.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains.
+- **PRODUCTION:** current Production SHA/health UNKNOWN; no deployment for PR #425/F5.7.
+- **POST-MERGE CI:** UNKNOWN for PR #425 merge SHA; do not infer from PR-head CI.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **POST-MERGE CI:** no PR-triggered runs were returned for F5.5 merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI UNKNOWN.
-- **DEPLOYMENT:** NOT PERFORMED. Production status not inferred from CI.
-- **SAFETY:** F5.5 documentation-only; no customer messages, customer data, application/runtime, database, billing, or production changes.
-- **EXACT NEXT ACTION:** F5.6 — define support intake, severity, response ownership, and evidence capture. This is the next task only; do not begin automatically.
+- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. Do not launch or deploy.
 
 ## Permanent handoff rules
 
