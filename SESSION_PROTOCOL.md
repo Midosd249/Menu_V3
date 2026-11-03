@@ -3,17 +3,20 @@
 ## Current session checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
+- **VERIFIED MAIN:** `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc` (PR #421 merge commit).
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`; SOP at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified. This is not a security acceptance or closure.
-- **F5.4:** IMPLEMENTED ON BRANCH — documentation-only SOP in PR #421, OPEN / READY FOR REVIEW / NOT MERGED; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **EXACT NEXT TASK:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified. Not accepted or closed.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; SOP `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **F5.4 EXACT-HEAD CI:** Quality `41577752976` SUCCESS and W9 Orders QA `41577752967` SUCCESS on `bb1881b21fb34944ae82e93434ec805ef625221e`.
+- **F5.5:** IMPLEMENTED ON BRANCH `docs/f5-5-customer-communications-2026-11-03`; documentation-only SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`; exact-head CI pending.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** UNKNOWN; CI is not Production deployment evidence.
-- **SAFETY:** F5.4 documentation only; no customer data, runtime changes, DB/schema/migration, billing/account/invoice operation, or deployment.
+- **POST-MERGE CI:** no PR-triggered runs were returned for F5.4 merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN.
+- **DEPLOYMENT:** NOT PERFORMED. Production status not inferred from CI.
+- **SAFETY:** F5.5 documentation-only; no customer messages, customer data, application/runtime, database, billing, or production changes.
+- **EXACT NEXT ACTION:** verify exact-head Quality/W9 for F5.5, review the complete diff, and create the F5.5 PR only after successful checks.
 
 ## Permanent handoff rules
 
