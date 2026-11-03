@@ -43,6 +43,9 @@
 
 **EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff. Do not start F5.2 automatically.
 
+
+# Active Plan — Menuun F-Series
+
 ---
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL

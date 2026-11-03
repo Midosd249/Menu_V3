@@ -27,6 +27,9 @@
 - **SAFETY:** documentation-only; no application code, schema, migration, Supabase, secrets, billing, customer records, or production state changed.
 - **EXACT NEXT TASK:** F5.2 — define the owner-led operating procedure using the verified journey. Do not start it automatically.
 
+
+# Current verified state — 2026-11-03 (supersedes stale historical entries below)
+
 ---
 
 ## 2026-11-02 — F4.3 runbook validation and simulated rehearsal

@@ -62,6 +62,9 @@
 - Successful isolated database restore and approved RPO/RTO remain UNKNOWN.
 - No real database migration or deployment has been run in F2.
 
+
+# Menuun Session Protocol — F-Series Handoff
+
 ---
 
 ---
