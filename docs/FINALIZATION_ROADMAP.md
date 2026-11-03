@@ -1,17 +1,23 @@
 # F-Series Architecture, Operations & Continuity Roadmap
 
-## Current verified checkpoint — 2026-11-03
+## Current verified checkpoint — 2026-11-04
 
-- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425 merge).
-- **F5.1/F5.2:** complete with explicit limitations.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
-- **F5.4:** complete with explicit limitations; PR #421 merged.
-- **F5.5:** complete with explicit limitations; PR #422 merged.
-- **F5.6:** complete with explicit limitations; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
-- **F5.7:** complete with explicit blockers; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness BLOCKED.
+- **VERIFIED MAIN BASELINE FOR F6.1:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (PR #426 F5.7 squash merge).
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; no F4.4 package exists.
-- **F6:** next phase; start with F6.1 auth/session/authorization review. No launch/deployment.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
+- **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
+- **F6.1 VERIFIED FINDING:** `src/lib/menu/orders.ts` applies `authorizeMutation(..., "orders.write")` only to `new → confirmed`; the shared dashboard/order-access predicates omit `tenant_members.is_active`. A separately scoped test-first remediation is required.
+- **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
+- **REVIEW BRANCH:** `docs/f6-1-auth-session-authorization-assurance`.
+- **PR / EXACT-HEAD CI:** pending; do not claim Quality/W9 passed until exact-head runs are returned.
+- **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
+- **POST-MERGE CI:** UNKNOWN until directly queried for the actual merge SHA.
+- **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
+- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 (order status authorization and inactive-membership enforcement). Not started in F6.1; do not begin automatically.
+
+---
+
 
 ## 1. Mission and outcome
 
