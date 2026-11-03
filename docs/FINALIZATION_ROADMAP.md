@@ -2,16 +2,17 @@
 
 ## Current verified checkpoint — 2026-11-03
 
-- **VERIFIED MAIN BEFORE F5.2 MERGE:** `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **VERIFIED MAIN AFTER F5.2 MERGE:** `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
+- **LAST VERIFIED MERGE CHECKPOINT:** PR #420 merge commit `216810951925b338e63da0b3415a9ba15f022551`. The GitHub connector confirmed the merge commit and branch existence; it did not expose a direct current `main` ref SHA during this session.
 - **F5.1:** COMPLETE; PR #418 merged.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK. Potential cross-tenant side-effect path in `saveBranch` remains unremediated and runtime exploitability unverified; this is not accepted as safe or closed.
+- **F5.4:** documentation-only SOP implementation in progress on `docs/f5-4-platform-subscription-operations-2026-11-03`; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **SAFETY:** no real customer or customer-owned data; no application/database mutation, migration, settings/secrets change, billing action, deployment, or rollback.
+- **SAFETY:** F5.4 documentation only; no customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
 - **DEPLOYMENT:** UNKNOWN unless directly verified through Vercel.
-- **EXACT NEXT ACTION:** F5.3 — read-only discovery and documentation of tenant/branch creation and ownership verification. Prove current behavior before proposing changes.
+- **EXACT NEXT ACTION:** review the F5.4 documentation diff and verify Quality/W9 on the exact final PR head; do not merge or deploy without owner decision.
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
@@ -124,7 +125,7 @@ The F identifiers are permanent phase IDs. They are not sprint numbers, release 
 | **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
 | **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate |
 | **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2; F3 remains a pre-commercial gate | DONE WITH EXPLICIT LIMITATIONS — F4.1/F4.2/F4.3 complete; PR #417 merged |
-| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | IN_PROGRESS — F5.1/F5.2 complete; F5.3 blocked pending tenant-isolation remediation |
+| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | IN_PROGRESS — F5.1/F5.2 complete; F5.3 deferred by owner as an open risk; F5.4 in progress |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
 | **F7** | Architecture Evolution & Governance | ADR lifecycle, technical debt decisions, architecture drift checks, and recurring continuity maintenance | F1–F6 | PLANNED |
 
@@ -352,6 +353,12 @@ Enable the owner to onboard and support real restaurants while minimizing operat
 - F5.5 Define safe customer communication for planned maintenance and incidents.
 - F5.6 Define support intake, severity, response ownership, and evidence capture.
 - F5.7 Establish a launch checklist that validates only configured capabilities and does not promise unsupported payments, booking, integrations, or automation.
+
+### F5.3 owner deferral and F5.4 execution note
+
+F5.3 is currently **DEFERRED BY OWNER — OPEN RISK**, not complete. The potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability is unverified. The owner has directed that work continue with the next independent F5 package; this is not security acceptance or proof of safety.
+
+F5.4 — Platform Subscription, Account & Invoice Operations — is being documented from existing Platform Owner controls. It does not authorize live customer operations while F3 remains deferred, and it does not resolve F5.3.
 
 ### F5 acceptance criteria
 - A restaurant can be onboarded using a repeatable documented process.
