@@ -24,13 +24,13 @@ The review does not certify Production security or claim exhaustive coverage of 
 
 ## 2. Executive result
 
-**F6.1 result: SECURITY ASSURANCE INCOMPLETE — a concrete authorization defect candidate is verified in source and requires a separate test-first remediation task.**
+**F6.1 result: SECURITY ASSURANCE INCOMPLETE — inconsistent active-membership predicates are verified in several critical handlers; actual reachability of inactive rows through current in-product flows is UNKNOWN. A separate test-first remediation is recommended.**
 
 ### Findings summary
 
 | ID | Severity | Status | Finding |
 |---|---|---|---|
-| F6.1-AUTH-01 | HIGH | VERIFIED source defect candidate | Order status transitions after the initial `new → confirmed` path do not call `authorizeMutation`; the shared order-access predicate also omits `tenant_members.is_active`. |
+| F6.1-AUTH-01 | MEDIUM / CONDITIONAL | VERIFIED predicate inconsistency; runtime reachability UNKNOWN | Order and product option/metadata handlers omit `tenant_members.is_active` in some membership lookups. Order status transitions also call `authorizeMutation` only for the initial `new → confirmed` path. |
 | F6.1-AUTH-02 | MEDIUM | VERIFIED configuration / INFERRED impact | Better Auth cookie cache is enabled for 300 seconds. This creates a potential stale-session/revocation window for operations that rely on cached session resolution; exact runtime behavior was not exercised. |
 | F6.1-AUTH-03 | HIGH | UNKNOWN | Effective PostgreSQL login role used by the application is not established. RLS-enabled tables and catalog policies cannot be treated as proven runtime tenant isolation without that principal. |
 | F6.1-AUTH-04 | HIGH | DEFERRED / OPEN — existing F5.3 | `saveBranch` may continue branch-hours writes after a tenant-scoped branch update affects zero rows. F6.1 reconfirms the source shape; it does not close or remediate F5.3. |
@@ -243,6 +243,8 @@ This is a source-traced representative matrix, not an exhaustive generated inven
 | Branch delete/read hours | `authMiddleware` | Active membership and tenant-bound branch lookup for read; delete predicate includes tenant ID. | **VERIFIED** representative path; no exhaustive branch operation audit. |
 | Category/product mutations | `authMiddleware` | Active membership, menu-write role, and tenant predicates on resource reads/writes. | **VERIFIED** representative paths in `owner.ts`. |
 | Branch menu ordering | `authMiddleware` | Active membership, menu-write role, branch tenant predicate and explicit assignment for non-owner/admin. | **VERIFIED** representative path in `owner.ts`. |
+| Product variants, modifier options and product metadata | `authMiddleware` | Product/resource queries are tenant-bound, but `options.ts` and `product-metadata.ts` resolve membership without `is_active = true`. | **MEDIUM / CONDITIONAL:** inactive membership rows would still pass these handlers; current in-product deactivation path UNKNOWN. |
+| Modifier group listing | `authMiddleware` | First membership row is selected without `is_active = true`; result is tenant-scoped. | **MEDIUM / CONDITIONAL:** inactive membership row can still read group metadata. |
 | Team member role/branch management | `authMiddleware` | `authorizeMutation(team.write)`, owner-only guard, target member bound to resolved tenant, branch IDs checked against same tenant. | **VERIFIED** representative paths in `team.ts`; tenant is selected by earliest membership when not passed. |
 | Team invitation create/revoke/list | `authMiddleware` | `authorizeMutation(team.write)`, owner-only guard, tenant-bound invitation query; token is hashed. | **VERIFIED** source. |
 | Team invitation acceptance | `authMiddleware` | Verified session email must match; invitation is locked and consumed in a transaction; membership is created for invitation tenant. | **VERIFIED** source and source-contract tests. |
@@ -265,12 +267,12 @@ This is a source-traced representative matrix, not an exhaustive generated inven
 
 **Impact**
 
-An authenticated user whose owner/admin membership has been deactivated may still satisfy the order dashboard and `assertOrderAccess` predicates because those predicates do not require `is_active = true`. For transitions other than the initial `new → confirmed` path, the handler does not run the shared active-membership/permission check. This creates a credible path for a formerly authorized owner/admin account to continue reading order/customer details and changing order status after membership deactivation.
+The order predicates and the product option/metadata membership helpers can authorize a user based on a retained membership row even when `is_active = false`. In the order handler, the shared `orders.write` authorization helper is called only for the initial `new → confirmed` transition. In `options.ts`, the same membership helper is used by product-variant and modifier-group/option operations; `product-metadata.ts` also resolves membership without checking `is_active`; `option-groups.ts` does so for modifier-group reads. These are source-level inconsistencies. However, the current team-removal handler deletes the membership row rather than setting `is_active = false`, and no in-product write that deactivates a tenant membership was found in the inspected source. Therefore, whether an inactive row is currently reachable through a supported product workflow is UNKNOWN. If such a row exists (for example through an external administrative/data operation or a future soft-deactivation path), these handlers do not enforce its inactive state.
 
 The tenant-owner identity path is separate: `tenants.owner_user_id = userId` intentionally grants owner access in the current code and requires a separately reviewed ownership-transfer/deactivation policy if that identity is expected to be revocable through membership state.
 
-**Status:** HIGH — verified source gap; runtime exploitability and any actual unauthorized access are UNKNOWN.  
-**Required next work:** a separately scoped, test-first authorization remediation. Require active membership and `orders.write` for every status transition, derive tenant/branch from the order row, preserve row locking and audit events, and add regression coverage for inactive/revoked owner/admin memberships and unauthorized roles. Do not implement that remediation inside this documentation task.
+**Status:** MEDIUM / CONDITIONAL — verified source inconsistency; current in-product reachability of inactive membership rows and any actual unauthorized access are UNKNOWN.  
+**Required next work:** a separately scoped, test-first authorization remediation. Require active membership in every affected order/options/metadata membership lookup; apply `orders.write` consistently to every status transition; derive tenant/branch from the order row; preserve row locking and audit events; and add regression coverage for inactive rows, deleted memberships, unauthorized roles and cross-tenant selectors. Do not implement that remediation inside this documentation task.
 
 ## 8. F5.3 relationship — branch-hours side-effect path
 
@@ -337,14 +339,15 @@ No migration was executed.
 **VERIFIED gaps in the inspected tests**
 
 1. No test was found that proves every order status transition requires active membership and `orders.write`.
-2. No regression case was found for a deactivated/revoked owner/admin attempting to read the orders dashboard or update an order.
-3. The authorization helper tests do not integration-test SQL membership lookup, tenant mismatch, branch mismatch, or actual `member_branch_access` lookup.
-4. The Platform Admin test covers environment allowlist normalization, not the database-backed predicate or full server-function denial behavior.
-5. The static auth-middleware scan explicitly samples `owner.ts` and `admin.ts`; it is not a complete generated inventory of every server function in every module.
-6. The architecture docs themselves identify the exhaustive AST/call-site inventory as UNKNOWN.
-7. No test found in this pass captures actual Production `Set-Cookie` headers or proves Secure/HttpOnly/SameSite/path behavior across Production and Preview.
-8. No end-to-end test found in this pass proves that a revoked session is rejected immediately when cookie caching is enabled.
-9. No test found in this pass proves the effective PostgreSQL connection principal and its actual RLS/BYPASSRLS behavior.
+2. No regression case was found for a retained inactive membership row attempting to access orders, product options, modifier groups or product metadata.
+3. The current team-removal flow deletes membership rows; no in-product `is_active = false` transition was found. Tests should nevertheless protect the invariant if soft deactivation is introduced or inactive rows are restored administratively.
+4. The authorization helper tests do not integration-test SQL membership lookup, tenant mismatch, branch mismatch, or actual `member_branch_access` lookup.
+5. The Platform Admin test covers environment allowlist normalization, not the database-backed predicate or full server-function denial behavior.
+6. The static auth-middleware scan explicitly samples `owner.ts` and `admin.ts`; it is not a complete generated inventory of every server function in every module.
+7. The architecture docs themselves identify the exhaustive AST/call-site inventory as UNKNOWN.
+8. No test found in this pass captures actual Production `Set-Cookie` headers or proves Secure/HttpOnly/SameSite/path behavior across Production and Preview.
+9. No end-to-end test found in this pass proves that a revoked session is rejected immediately when cookie caching is enabled.
+10. No test found in this pass proves the effective PostgreSQL connection principal and its actual RLS/BYPASSRLS behavior.
 
 These are coverage gaps, not evidence that no related tests exist anywhere beyond the inspected/registered files. The current source inventory remains non-exhaustive.
 
@@ -366,11 +369,11 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 
 **PROPOSED / NEXT TASK**
 
-- Enforce active membership and `orders.write` on every order status transition, not only initial confirmation.
+- Enforce active membership in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`; enforce `orders.write` on every order status transition, not only initial confirmation.
 - Decide and explicitly encode whether the tenant owner identity remains authoritative after membership deactivation; do not leave that policy implicit.
 - Keep tenant/branch identity derived from the selected order row.
 - Preserve the existing row lock, compare-and-set behavior, status transition rules and audit event insertion.
-- Add adversarial tests for inactive/revoked owner/admin membership, editor/staff, cross-tenant order IDs and all allowed transition paths.
+- Add adversarial tests for retained inactive membership rows across orders/options/metadata, deleted membership rows, editor/staff, cross-tenant order IDs and all allowed transition paths.
 - Run focused tests, full test suite, typecheck, lint, build, W9 and relevant security/browser checks on the final code head.
 
 ### P1 — session freshness and cookie verification
@@ -415,7 +418,7 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - [ ] Exact-head Quality and W9 CI on the documentation PR.
 - [ ] Final PR diff review and merge verification.
 
-**F6.1 STATUS:** documentation implementation prepared; CI and merge verification pending.  
+**F6.1 STATUS:** source-traced documentation implementation prepared; exact-head CI and merge verification pending.  
 **IMPLEMENTATION STATUS:** documentation-only; no application code or database changes.  
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED.  
 **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate.  
