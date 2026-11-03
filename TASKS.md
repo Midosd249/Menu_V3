@@ -38,8 +38,6 @@
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)
 
-
-
 - **STATUS:** IN_PROGRESS — read-only discovery.
 - **BASE:** `main` `848d4acdd3b184c24142d1e77fc0c9af55f20eab`.
 - **COMPLETED PHASES:** F0, F1, F2 (PR #415 merged; Production deployment verified).
