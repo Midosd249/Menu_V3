@@ -2,7 +2,7 @@
 
 ## Current task: F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture
 
-- **STATUS:** IMPLEMENTATION IN PROGRESS — SOP drafted on `docs/f5-6-support-intake-severity-evidence-2026-11-03`; pending exact-head CI, review, and merge.
+- **STATUS:** SOP CONTENT COMPLETE WITH EXPLICIT LIMITATIONS; implementation head `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8` passed Quality `41678652745` and W9 `41678652739`; continuity update added and fresh exact-head CI required before merge.
 - **BASE:** `main` `5232e99cc5382a02d5b0322641403d9c528f1513`.
 - **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
 - **VERIFIED:** published email/WhatsApp links; restaurant guest workspace is not support CRM; Platform Admin is not a support queue; historical customer-request intake was retired.
@@ -10,7 +10,7 @@
 - **RESEARCH:** official NIST SP 800-61 Rev.3 and CISA NCISS/notification guidance via Exa.
 - **BOUNDARIES:** documentation only; no customer contact, app/database/migration/production change, deployment, or data write. Do not claim ticketing, CRM, automated intake, SLA, 24/7, or backup responder.
 - **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE; F5.3 remains DEFERRED BY OWNER — OPEN RISK.
-- **EXACT NEXT ACTION:** verify Quality and W9 on the final F5.6 PR head, inspect the full diff, and merge only if both pass.
+- **EXACT NEXT ACTION:** verify Quality and W9 on the continuity-updated final PR head, review the full diff, then merge only if both pass.
 
 ## Completed F5 tasks
 
@@ -2478,3 +2478,12 @@ Verify the continuity-only commit's latest-head CI, then complete PR #386 merge 
 - RELEASE: PR #413 remains open/unmerged; no Production deployment.
 - VERIFIED on implementation head `88456acac2c88c7186078dcc3e9cf323cee97a68`: Quality run #3197 (`39940685197`) and W9 Orders QA run #1288 (`39940685036`) succeeded; Quality passed tests, typecheck, lint, build, all-theme browser template QA, brand browser QA, Studio browser QA and Platform Admin browser QA.
 - Vercel status is Preview success, not Production. A continuity-only commit follows the tested code head; verify Quality/W9 on the final docs-updated head. No merge/deployment.
+
+
+### F5.6 — Support intake, severity, response ownership, and evidence capture
+- **STATUS:** SOP CONTENT COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 open pending continuity-updated exact-head CI and merge.
+- **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
+- **EXACT-HEAD CI BEFORE CONTINUITY UPDATE:** Quality `41678652745` SUCCESS; W9 `41678652739` SUCCESS on `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8`.
+- **LIMITS:** proposed manual intake/P1–P4 only; ticketing, CRM, automated intake, SLA, 24/7 coverage, backup responder and approved private-register storage not established.
+- **SAFETY:** no customer, runtime, database, migration, billing, production or deployment operation. F3 and F5.3 gates unchanged.
+- **EXACT NEXT TASK:** F5.7 launch checklist; no unsupported payment, booking, integration or automation claims.

@@ -905,3 +905,17 @@ Start with repository-first request mapping and evidence for public menu, Studio
 - Vercel Hobby plan, current Production deployment, bounded runtime observations, and previous rollback candidate were directly inspected. Exact quota remains UNKNOWN.
 - Owner-accepted Leaked Password Protection plan limitation is closed and excluded from active work.
 - Exact next task: F4.2 read-only Supabase log severity/error classification and incident threshold validation.
+
+
+## 2026-11-03 — F5.6 support intake SOP closeout
+
+- **VERIFIED BASE:** `5232e99cc5382a02d5b0322641403d9c528f1513`; branch `docs/f5-6-support-intake-severity-evidence-2026-11-03`; implementation head before continuity reconciliation `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8`.
+- **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
+- **VERIFIED EXACT-HEAD CI:** Quality run `41678652745` SUCCESS and W9 Orders QA run `41678652739` SUCCESS on exact implementation head `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8`. Quality passed typecheck, tests, lint, production build, all-theme browser QA, Arabic/English brand browser QA, golden performance fixture, Studio and Platform Admin browser QA. Conditional P1.9 route-graph-only steps were skipped. W9 isolated PGLite Orders browser QA passed.
+- **VERIFIED CAPABILITY BOUNDARIES:** published email/WhatsApp links exist; restaurant guest workspace and Platform Admin are not support-ticket systems; legacy customer-request intake was retired. Ticketing, support CRM, automated intake, SLA, 24/7 coverage, backup responder, monitoring frequency and private-register storage remain UNKNOWN / NOT ESTABLISHED.
+- **PROPOSED:** owner-operated manual intake register, P1–P4 internal triage, single-owner accountability, evidence fields, privacy safeguards and bilingual templates. These are not product capabilities or SLA.
+- **RESEARCH:** official NIST SP 800-61 Rev.3 and CISA NCISS/Federal Incident Notification guidance reviewed via Exa; process context only, not legal advice or proof of Menuun capabilities.
+- **SAFETY:** documentation-only. No customer contact/case/data, runtime, database, migration, billing, production operation or deployment.
+- **F3:** DEFERRED BY OWNER — NOT DONE. **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
+- **DEPLOYMENT:** NOT PERFORMED.
+- **EXACT NEXT TASK:** F5.7 — establish a launch checklist validating only configured capabilities and excluding unsupported payments, booking, integrations and automation. Do not start automatically.
