@@ -3,10 +3,11 @@
 ## Current verified checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.3 — Tenant/Branch Creation and Ownership Verification (documentation-only discovery and procedure).
+- **CURRENT TASK:** F5.3 — BLOCKED pending separately scoped, test-first remediation of the `saveBranch` cross-tenant side-effect risk identified during read-only discovery.
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality run `41564124218` SUCCESS and W9 Orders QA run `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
+- **F5.3 BLOCKER:** `src/lib/menu/owner.ts` `saveBranch` may continue branch-hours mutations after a tenant-scoped branch update affects zero rows. Runtime exploitability remains unverified; no remediation or data mutation has occurred.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
