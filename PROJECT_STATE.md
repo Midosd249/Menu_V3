@@ -1,16 +1,16 @@
 ## Current verified checkpoint — 2026-11-04
 
-- **VERIFIED MAIN BASELINE FOR F6.1:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (PR #426 F5.7 squash merge).
+- **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
 - **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
 - **F6.1 VERIFIED FINDING:** active-membership predicates are inconsistent in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`. Inactive-row reachability through current product flows is UNKNOWN because team removal currently deletes rows and no in-product soft-deactivation write was found. A separately scoped test-first remediation is proposed.
 - **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
-- **REVIEW BRANCH:** `docs/f6-1-auth-session-authorization-assurance`.
-- **PR / EXACT-HEAD CI:** pending; do not claim Quality/W9 passed until exact-head runs are returned.
+- **F6.1 PR:** #427 MERGED; final PR head `3330ae5391fcadf3eed81494c04738ecfb3a7c87`; merge SHA `1f0933c6f5008114a7019c70f8742038e544da71`.
+- **PR #427 EXACT-HEAD CI:** Quality `41729637458` SUCCESS and W9 Orders QA `41729637474` SUCCESS on exact head `3330ae5391fcadf3eed81494c04738ecfb3a7c87`. PR #427 merged at `1f0933c6f5008114a7019c70f8742038e544da71`.
 - **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
-- **POST-MERGE CI:** UNKNOWN until directly queried for the actual merge SHA.
+- **POST-MERGE CI:** queried for merge SHA `1f0933c6f5008114a7019c70f8742038e544da71`; no PR-triggered workflow runs were returned. Post-merge CI remains UNKNOWN.
 - **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
 - **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Not started; do not begin automatically.
 

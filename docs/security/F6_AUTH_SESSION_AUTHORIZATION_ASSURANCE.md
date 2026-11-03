@@ -415,13 +415,15 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - [x] Research official Better Auth, PostgreSQL, Supabase and OWASP guidance.
 - [x] Record source-level findings, evidence gaps and separately scoped remediation priorities.
 - [x] Preserve F3 and F5.3 status without reopening or modifying them.
-- [ ] Exact-head Quality and W9 CI on the documentation PR.
-- [ ] Final PR diff review and merge verification.
+- [x] Exact-head Quality `41729637458` SUCCESS and W9 `41729637474` SUCCESS on `3330ae5391fcadf3eed81494c04738ecfb3a7c87`.
+- [x] Final PR diff reviewed; PR #427 merged at `1f0933c6f5008114a7019c70f8742038e544da71`.
 
-**F6.1 STATUS:** source-traced documentation implementation prepared; exact-head CI and merge verification pending.  
+**F6.1 STATUS:** DOCUMENTATION COMPLETE AND MERGED — PR #427; merge SHA `1f0933c6f5008114a7019c70f8742038e544da71`.  
 **IMPLEMENTATION STATUS:** documentation-only; no application code or database changes.  
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED.  
 **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate.  
 **F5.3:** DEFERRED BY OWNER — OPEN RISK; not remediated or accepted as safe.
 
-**EXACT NEXT ACTION:** complete the separately scoped, test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
+**POST-MERGE EVIDENCE:** no PR-triggered workflow runs were returned for the merge SHA; post-merge CI remains UNKNOWN. GitHub combined status showed a pending Vercel context; this is not deployment evidence. No Production deployment was authorized or performed.
+
+**EXACT NEXT ACTION:** separately authorize and execute the test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
