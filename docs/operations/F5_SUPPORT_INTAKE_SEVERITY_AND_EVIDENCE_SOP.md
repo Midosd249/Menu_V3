@@ -1,6 +1,6 @@
 # F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture
 
-**Status:** SOP CONTENT COMPLETE WITH EXPLICIT LIMITATIONS — exact implementation head passed Quality and W9; continuity-updated PR head requires fresh exact-head CI before merge.  
+**Status:** COMPLETE WITH EXPLICIT LIMITATIONS — PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`. Exact PR-head Quality `41704014621` and W9 `41704014491` SUCCESS on `60c5300b04407edc1e62334f343f7ad051c8774c`.  
 **Baseline:** `main` at `5232e99cc5382a02d5b0322641403d9c528f1513`.  
 **Date:** 2026-11-03  
 **Owner model:** one human Platform Owner/operator. Internal AI workflows are not human responders, support agents, or customer-facing spokespeople.

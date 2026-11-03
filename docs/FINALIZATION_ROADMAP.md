@@ -2,36 +2,16 @@
 
 ## Current verified checkpoint — 2026-11-03
 
-- **VERIFIED MAIN AFTER F5.5 MERGE:** PR #422 merge commit `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
-- **F5.1:** COMPLETE; PR #418 merged.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK. Potential cross-tenant side-effect path in `saveBranch` remains unremediated and runtime exploitability unverified; this is not accepted as safe or closed.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; deliverable `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
+- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425 merge).
+- **F5.1/F5.2:** complete with explicit limitations.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
+- **F5.4:** complete with explicit limitations; PR #421 merged.
+- **F5.5:** complete with explicit limitations; PR #422 merged.
+- **F5.6:** complete with explicit limitations; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
+- **F5.7:** complete with explicit blockers; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness BLOCKED.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **SAFETY:** F5.4 and F5.5 documentation only; no customer communication, customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
-- **DEPLOYMENT:** NOT PERFORMED for F5.5; no Vercel deployment was requested or verified.
-- **F5.4 POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN.
-- **POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI UNKNOWN.
-- **EXACT NEXT ACTION:** F5.6 — define support intake, severity, response ownership, and evidence capture. No deployment.
-
-**Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
-**Document ID:** F0  
-**Status:** ACTIVE — F5 commercial customer operations  
-**Product:** Menuun / Menu V3  
-**Repository:** `Midosd249/Menu_V3`  
-**Canonical branch:** `main`  
-**Language:** Arabic-first product; repository engineering documentation is maintained in English.  
-**Last repository verification for this baseline:** 2026-11-03  
-**Verified main SHA at F4.3 start (2026-11-02):** `41e5c36e434051f9668887974739870354706bd6`
-
-> This roadmap is the durable execution contract for the F-Series. It is not evidence that every phase is complete. A phase becomes complete only when its acceptance criteria, evidence, continuity updates, and review are recorded.
-
----
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; no F4.4 package exists.
+- **F6:** next phase; start with F6.1 auth/session/authorization review. No launch/deployment.
 
 ## 1. Mission and outcome
 
@@ -356,8 +336,8 @@ Enable the owner to onboard and support real restaurants while minimizing operat
 - F5.3 Document tenant/branch creation and ownership verification.
 - F5.4 Document plan assignment, trial expiry, manual plan/status changes, freeze/unfreeze, invoice issuance, and audit trail using verified current controls.
 - F5.5 Define safe customer communication for planned maintenance and incidents.
-- F5.6 Define support intake, severity, response ownership, and evidence capture.
-- F5.7 Establish a launch checklist that validates only configured capabilities and does not promise unsupported payments, booking, integrations, or automation.
+- F5.6 Define support intake, severity, response ownership, and evidence capture. **COMPLETE WITH EXPLICIT LIMITATIONS** — PR #424 merged.
+- F5.7 Establish a launch checklist that validates only configured capabilities and does not promise unsupported payments, booking, integrations, or automation. **COMPLETE WITH EXPLICIT BLOCKERS** — launch decision BLOCKED; checklist in `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`.
 
 ### F5.3 owner deferral and F5.4 execution note
 
@@ -366,6 +346,10 @@ F5.3 is currently **DEFERRED BY OWNER — OPEN RISK**, not complete. The potenti
 F5.4 — Platform Subscription, Account & Invoice Operations — is complete with explicit limitations and merged in PR #421 at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`. It documents existing Platform Owner controls only; it does not authorize live customer operations while F3 remains deferred, and it does not resolve F5.3.
 
 F5.5 — Safe Customer Communication for Planned Maintenance and Incidents — is complete with explicit limitations and merged in PR #422 at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`. Exact-head Quality and W9 Orders QA both succeeded. The SOP documents verified manual email/WhatsApp channels, maintenance notices, incident updates/resolution, privacy safeguards, and Arabic/English templates. It does not add a status page, SLA, CRM, ticketing, or automated notifications.
+
+F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture — is complete with explicit limitations and merged in PR #424 at `5941b8e9b13583760150ccc94f005061c552ce0f`. The SOP proposes a manual owner-operated intake/triage process; it does not create ticketing, CRM, automated intake, an SLA, or staffed coverage.
+
+F5.7 — Launch Readiness Checklist — is complete with explicit blockers. The checklist records only repository-backed capabilities, preserves unsupported-feature exclusions, and marks launch **BLOCKED** because F3 remains deferred/not done and F5.3 remains an open tenant/branch risk. Current Production deployment/health and other controls remain UNKNOWN.
 
 ### F5 acceptance criteria
 - A restaurant can be onboarded using a repeatable documented process.
