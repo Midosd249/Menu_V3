@@ -1,6 +1,6 @@
 # F5.4 — Platform Subscription, Account & Invoice Operations
 
-**Status:** IMPLEMENTED ON BRANCH — PENDING REVIEW AND CI  
+**Status:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED. Exact-head Quality and W9 checks are required before merge.  
 **Date:** 2026-11-03  
 **Scope:** Evidence-backed operating procedure for existing Platform Owner controls. Documentation only; no subscription, account, invoice, customer, database, or production operation was executed.  
 **Repository baseline:** `main` immediately before this branch was created; last independently verified merge checkpoint: `216810951925b338e63da0b3415a9ba15f022551` (PR #420).  
