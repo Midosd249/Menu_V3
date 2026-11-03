@@ -498,3 +498,10 @@ F4.3's documentation and fictional owner rehearsal have been completed on branch
 **Evidence limits:** Supabase's current query returned 267 events from eight sources and one PostgreSQL SQLSTATE 42803 ERROR whose origin/impact remain UNKNOWN; no Edge 5xx matches were returned. Vercel returned no grouped runtime error clusters in 24 hours and the latest Production deployment is READY on main SHA `41e5c36e434051f9668887974739870354706bd6`. These observations do not establish full application health. Exact Vercel quota and Auth/Function log coverage remain UNKNOWN.
 
 **Status:** documentation/rehearsal complete with explicit limitations; final PR checks pending. No production operation occurred. F3 remains deferred/not done. Do not begin another phase until owner instruction.
+
+
+## F5.6 — Support intake, severity, response ownership, and evidence capture
+
+**STATUS:** SOP COMPLETE WITH EXPLICIT LIMITATIONS. PR #424 implementation head `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8` passed exact-head Quality `41678652745` and W9 `41678652739`; continuity reconciliation is added after those checks and requires fresh exact-head CI before merge. Deliverable: `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`. No support system/SLA/automation is claimed. F3 remains deferred/not done; F5.3 remains deferred/open risk.
+
+**EXACT NEXT TASK:** F5.7 — launch checklist validating only configured capabilities; no unsupported payments, booking, integrations or automation.
