@@ -32,9 +32,10 @@
 - **RESUME CONDITION:** separately authorized, test-first remediation and adversarial cross-tenant regression verification.
 
 ### F5.4 — Platform subscription, account & invoice operations
-- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
 - **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail.
+- **EXACT-HEAD CI:** Quality `41577752976` and W9 Orders QA `41577752967` SUCCESS on exact PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
+- **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail. Documentation only; no live billing/account/invoice operation or deployment.
 
 ---
 
