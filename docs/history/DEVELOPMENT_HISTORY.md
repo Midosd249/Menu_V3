@@ -7,7 +7,7 @@
 - **DEPLOYMENT:** no Vercel deployment was requested or verified; Production status UNKNOWN.
 - **SAFETY:** no customer onboarding, customer-owned data, production mutation, migration, Supabase/Vercel settings change, or deployment.
 - **F3:** DEFERRED BY OWNER — NOT DONE; the pre-commercial recovery gate remains mandatory.
-- **NEXT:** F5.3 read-only tenant/branch ownership discovery. No product or security implementation is authorized by this record.
+- **NEXT:** F5.3 read-only discovery began; it identified a potential cross-tenant side-effect risk in `saveBranch`. Follow-up remediation is a separately scoped task; no product/security implementation was authorized by this F5.2 closeout.
 
 ---
 
