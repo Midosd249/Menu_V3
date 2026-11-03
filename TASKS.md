@@ -7,7 +7,7 @@
 - **OBJECTIVE:** enforce active membership in every affected handler and `orders.write` on every order status transition while preserving tenant/branch derivation from the order row, status transition rules, row locking, compare-and-set behavior and audit events.
 - **REQUIRED TESTS:** retained inactive membership rows across orders/options/metadata; deleted membership; editor/staff denial; cross-tenant order ID; every allowed status transition; tenant-owner policy; no regression to W9 order confirmation and audit behavior.
 - **BOUNDARIES:** no broad auth refactor, no changes to F3/F5.3, no RLS/grant/secret/migration changes unless separately evidenced and authorized; no Production deployment.
-- **EXACT NEXT ACTION:** authorize and execute this one test-first order-authorization remediation. Do not begin F6.2 automatically.
+- **EXACT NEXT ACTION:** authorize and execute this one test-first remediation across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
 
 ## Completed F5 tasks
 ## Completed F5 tasks
