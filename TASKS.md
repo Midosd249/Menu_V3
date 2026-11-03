@@ -1,15 +1,17 @@
 # Active Task Queue — F-Series
 
-## Current task: F5.4 — Platform Subscription, Account & Invoice Operations
+## Current task: F5.5 — Safe Customer Communication for Planned Maintenance and Incidents
 
-- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
-- **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **OBJECTIVE:** document the actual Platform Owner controls for plan assignment, billing interval, trial extension/end, subscription status, owner-account freeze/unfreeze, invoice issuance/listing, and administrative audit review.
-- **EVIDENCE:** `src/lib/menu/platform-subscriptions.ts`, `src/lib/menu/platform-billing.ts`, `src/lib/menu/commercial-catalog.ts`, `src/routes/admin/users.tsx`, relevant migrations and registered PH-04 tests.
-- **SAFETY:** no live subscription/account/invoice operation, customer data, production mutation, migration, merge, or deployment. Invoice issuance is not payment collection or proof of payment.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real-customer onboarding/customer-owned data/commercial launch.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and not runtime-tested. This deferral is not acceptance or closure.
-- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
+- **STATUS:** IMPLEMENTED ON BRANCH — `docs/f5-5-customer-communications-2026-11-03`; PR not yet created; exact-head CI pending.
+- **DELIVERABLE:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **OBJECTIVE:** define safe owner-operated customer communication for planned maintenance, suspected/confirmed incidents, updates, and verified resolution.
+- **EVIDENCE:** `src/components/marketing-footer.tsx` (published email/WhatsApp links), F4 incident runbook, F5.1 customer journey, F5.2 onboarding SOP, and canonical production-safe operations runbook.
+- **RESEARCH:** CISA/FBI/international partners, *Communicating Under Pressure: Best Practices for Service Providers* (2026-09-02). Guidance is adapted as process principles, not legal advice or proof of Menuun capabilities.
+- **SAFETY:** no customer messages, maintenance, incident response, customer-data collection, production mutation, database operation, migration, or deployment. No SLA/status page/CRM/ticketing/automated broadcast is claimed.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; the potential `saveBranch` cross-tenant path remains unremediated and unverified at runtime.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; exact-head Quality/W9 succeeded.
+- **EXACT NEXT ACTION:** inspect final branch diff and exact-head Quality/W9; fix only evidenced failures, then create/review the F5.5 PR. No deployment.
 
 ## Completed F5 tasks
 
