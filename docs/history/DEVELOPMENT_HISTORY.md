@@ -6,8 +6,8 @@
 - **RESEARCH:** Exa reviewed ICO data protection by design/data minimisation and FTC business information security guidance; restaurant-tech vendor checklists were treated only as non-authoritative process examples.
 - **SAFETY:** no real customer onboarding or customer-owned data; no application code, database/schema/migration, Supabase/Vercel settings, secrets, billing operation, deployment, or rollback.
 - **F3:** remains DEFERRED BY OWNER — NOT DONE and blocks real-customer/commercial launch.
-- **STATUS:** F5.2 documentation implementation is on branch; exact PR-head CI and final diff review pending.
-- **EXACT NEXT ACTION:** inspect branch compare and run Quality/W9 on the PR head; fix only evidenced failures, then stop for owner decision.
+- **STATUS:** F5.2 documentation-only implementation and final diff review complete; exact-head Quality `41558933698` and W9 Orders QA `41558933805` succeeded on `c3dead2c0430caa515b44d830ce114c91da6e4c1`. The branch was subsequently amended to correct continuity headings; final amended-head CI is tracked separately.
+- **EXACT NEXT ACTION:** F5.3 — read-only discovery and documentation of tenant/branch creation and ownership verification.
 
 F2 UPDATE — 2026-11-02
 
