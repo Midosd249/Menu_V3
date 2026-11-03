@@ -8,16 +8,16 @@
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK. The potential `saveBranch` cross-tenant side-effect path remains unremediated and unverified at runtime. Do not represent F5.3 as complete or the risk as accepted/closed. Resume only under a separately authorized security-remediation task.
-- **F5.4:** IMPLEMENTATION IN PROGRESS on `docs/f5-4-platform-subscription-operations-2026-11-03`; documentation-only SOP at `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`. Existing Platform Owner controls are being documented; no runtime implementation or live operation.
+- **F5.4:** IMPLEMENTED ON BRANCH — documentation-only SOP at `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`; PR #421 OPEN / READY FOR REVIEW / NOT MERGED. No runtime implementation or live operation.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; PR #417 merged. No F4.4 package exists.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
 - **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview status.
-- **EXACT NEXT ACTION:** review the complete F5.4 branch diff, create/inspect the PR, and verify Quality/W9 on its exact final head. Do not merge or deploy.
+- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 
 ## Current active phase: F5 — Commercial Customer Operations
 
-- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 documentation in progress.
+- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 SOP implemented on PR #421, awaiting final review/merge decision.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
