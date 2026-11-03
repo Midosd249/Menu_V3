@@ -1,11 +1,11 @@
 # Active Task Queue — F-Series
 
-## Current task: F6.1-AUTH-01 — Order status authorization remediation
+## Current task: F6.1-AUTH-01 — Active-membership authorization consistency
 
 - **STATUS:** PROPOSED — NOT STARTED; requires a separately scoped implementation task. F6.1 itself is documentation-complete, with exact-head CI/merge verification tracked on its PR.
-- **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01. `src/lib/menu/orders.ts` only calls `authorizeMutation(..., "orders.write")` for `new → confirmed`; `getClientTenantIds` and `assertOrderAccess` omit `is_active = true`.
-- **OBJECTIVE:** enforce active membership and `orders.write` on every order status transition while preserving tenant/branch derivation from the order row, status transition rules, row locking, compare-and-set behavior and audit events.
-- **REQUIRED TESTS:** inactive/revoked owner/admin; editor/staff denial; cross-tenant order ID; every allowed status transition; tenant owner policy; no regression to W9 order confirmation and audit behavior.
+- **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01. `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts` contain membership lookups without `is_active = true`; order status authorization is only applied on `new → confirmed`. In-product inactive-row reachability is UNKNOWN.
+- **OBJECTIVE:** enforce active membership in every affected handler and `orders.write` on every order status transition while preserving tenant/branch derivation from the order row, status transition rules, row locking, compare-and-set behavior and audit events.
+- **REQUIRED TESTS:** retained inactive membership rows across orders/options/metadata; deleted membership; editor/staff denial; cross-tenant order ID; every allowed status transition; tenant-owner policy; no regression to W9 order confirmation and audit behavior.
 - **BOUNDARIES:** no broad auth refactor, no changes to F3/F5.3, no RLS/grant/secret/migration changes unless separately evidenced and authorized; no Production deployment.
 - **EXACT NEXT ACTION:** authorize and execute this one test-first order-authorization remediation. Do not begin F6.2 automatically.
 
