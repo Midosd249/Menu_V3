@@ -1,40 +1,30 @@
-## Current verified checkpoint — 2026-11-03
-
-- **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.2 — Owner-Led Customer Onboarding Operating Procedure.
-- **BASE MAIN:** `1cdf33335a1be9e1a7885c405418b9d646e844df`; branch: `docs/f5-2-owner-led-onboarding-sop-2026-11-03`.
-- **F5.1:** PR #418 MERGED at `1cdf33335a1be9e1a7885c405418b9d646e844df`. Exact PR-head Quality `41543919157` and W9 `41543919245` succeeded on `5dfad2399e2956e60baae6462d5d222aece957d9`.
-- **POST-MERGE:** main Quality run `41547643428` completed SUCCESS on the merge SHA. GitHub commit checks report Quality and Supabase Preview checks successful; this is not proof of a Production deployment.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
-- **F5.2 DELIVERABLE:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md` — process-only SOP based on verified F5.1 journey.
-- **SAFETY:** no real customer onboarding/data collection; no application code, DB/schema/migration, Supabase/Vercel settings, secrets, billing action, deployment, or rollback.
-- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** UNKNOWN; a successful Supabase Preview status check is not a verified Vercel Production deployment.
-- **EXACT NEXT ACTION:** inspect the F5.2 branch diff and exact-head Quality/W9 CI; fix only evidence-backed failures, then review and stop for owner decision.
-\n\n# Active Task Queue — F-Series
-
-## Current task: F5.1 — Actual sales-to-activation journey
-
-- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS — repository-evidence mapping only.
-- **BASE:** `main` `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
-- **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-- **SCOPE COMPLETED:** discovery/contact, public preview, account registration, self-serve workspace provisioning, brand/branch setup, menu creation/import, preview, publish, branch/table QR, staff invitations, support contacts, and manual commercial/billing boundaries mapped to current source/migrations.
-- **CONTINUITY CORRECTION:** `docs/CUSTOMER_LIFECYCLE_ACCESS_POLICY.md` marked as a historical 2026-09-16 snapshot; current code and later lifecycle retirement record establish self-serve provisioning without a manual approval gate.
-- **F4:** PR #417 CLOSED / MERGED at main SHA `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
-- **F3:** DEFERRED BY OWNER — NOT DONE; preserve mandatory pre-commercial gate. No real-customer data or onboarding was performed.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **PROHIBITIONS PRESERVED:** no product implementation, DB/Supabase mutation, migration, customer creation, production deployment, secrets/settings change, payment action, or CI rerun.
-- **UNKNOWN:** post-merge main CI, current Vercel deployment, production application of the latest trial migration, real-customer outcomes, and real-device QA were not verified in this task.
-- **EXACT NEXT ACTION:** F5.2 — owner-led operating procedure using the verified journey. Do not start automatically.
-
-
-
 # Active Task Queue — F-Series
 
+## Current task: F5.3 — Tenant/Branch Creation and Ownership Verification
+
+- **STATUS:** NEXT — NOT STARTED.
+- **CLASSIFICATION:** documentation-first, read-only discovery; implementation only if the roadmap explicitly requires and evidence proves a missing capability, which is not presumed.
+- **OBJECTIVE:** document how a restaurant tenant/workspace and its branches are created, how ownership/authorization is established and verified, and what safeguards prevent cross-tenant or cross-branch mistakes.
+- **REQUIRED DISCOVERY:** current account/signup/onboarding/workspace provisioning code; branch creation/edit flows; database schema and relevant migrations; server-side authorization and tenant/branch context derivation; platform-admin controls; tests and audit records; existing SOPs and ADRs.
+- **SAFETY:** do not create real tenants/branches, mutate production/customer data, change RLS/auth/grants, run migrations, modify subscriptions, or deploy. Use source/tests and safe isolated fixtures only.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real-customer onboarding, customer-owned data, or commercial launch.
+- **F5.1:** COMPLETE; `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged. `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **EXACT NEXT ACTION:** perform F5.3 read-only repository discovery and prove existing behavior before drafting any new procedure.
+
+## Completed F5 tasks
+
+### F5.1 — Actual sales-to-activation journey
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
+
+### F5.2 — Owner-led customer onboarding SOP
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`.
+- **DELIVERABLE:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **EXACT-HEAD CI:** Quality `41558933698` and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **SCOPE:** process-only SOP; no customer data or product changes. F3 gate preserved.
+
 ---
-
-
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)
 
