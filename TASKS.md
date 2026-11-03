@@ -2,14 +2,14 @@
 
 ## Current task: F5.4 — Platform Subscription, Account & Invoice Operations
 
-- **STATUS:** IMPLEMENTATION IN PROGRESS — documentation-only on branch `docs/f5-4-platform-subscription-operations-2026-11-03`.
+- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
 - **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **OBJECTIVE:** document the actual Platform Owner controls for plan assignment, billing interval, trial extension/end, subscription status, owner-account freeze/unfreeze, invoice issuance/listing, and administrative audit review.
 - **EVIDENCE:** `src/lib/menu/platform-subscriptions.ts`, `src/lib/menu/platform-billing.ts`, `src/lib/menu/commercial-catalog.ts`, `src/routes/admin/users.tsx`, relevant migrations and registered PH-04 tests.
 - **SAFETY:** no live subscription/account/invoice operation, customer data, production mutation, migration, merge, or deployment. Invoice issuance is not payment collection or proof of payment.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real-customer onboarding/customer-owned data/commercial launch.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and not runtime-tested. This deferral is not acceptance or closure.
-- **EXACT NEXT ACTION:** finish documentation diff review, create/inspect PR, and verify Quality/W9 on exact final PR head; do not merge or deploy without owner decision.
+- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 
 ## Completed F5 tasks
 
@@ -30,7 +30,7 @@
 - **RESUME CONDITION:** separately authorized, test-first remediation and adversarial cross-tenant regression verification.
 
 ### F5.4 — Platform subscription, account & invoice operations
-- **STATUS:** IMPLEMENTATION IN PROGRESS — documentation-only.
+- **STATUS:** IMPLEMENTED ON BRANCH — PR #421 OPEN / READY FOR REVIEW / NOT MERGED.
 - **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail.
 
