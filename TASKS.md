@@ -1,16 +1,13 @@
 # Active Task Queue — F-Series
 
-## Current task: F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture
+## Current task: F5.7 — Launch Readiness Checklist
 
-- **STATUS:** SOP CONTENT COMPLETE WITH EXPLICIT LIMITATIONS; implementation head `4fc3afd1ef1772e116fa3983912b6d40b8f63ae8` passed Quality `41678652745` and W9 `41678652739`; continuity update added and fresh exact-head CI required before merge.
-- **BASE:** `main` `5232e99cc5382a02d5b0322641403d9c528f1513`.
-- **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
-- **VERIFIED:** published email/WhatsApp links; restaurant guest workspace is not support CRM; Platform Admin is not a support queue; historical customer-request intake was retired.
-- **PROPOSED:** private manual intake register, P1–P4 internal triage, single-owner response accountability, evidence fields and bilingual templates. Not product features or SLA.
-- **RESEARCH:** official NIST SP 800-61 Rev.3 and CISA NCISS/notification guidance via Exa.
-- **BOUNDARIES:** documentation only; no customer contact, app/database/migration/production change, deployment, or data write. Do not claim ticketing, CRM, automated intake, SLA, 24/7, or backup responder.
-- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE; F5.3 remains DEFERRED BY OWNER — OPEN RISK.
-- **EXACT NEXT ACTION:** verify Quality and W9 on the continuity-updated final PR head, review the full diff, then merge only if both pass.
+- **STATUS:** NOT STARTED — next atomic task only.
+- **OBJECTIVE:** create an evidence-backed launch checklist that validates only capabilities currently configured and verified in repository/runtime evidence.
+- **BOUNDARIES:** do not claim online payments, booking, integrations, automated support, monitoring, or other capabilities unless independently verified. Do not perform launch, customer onboarding, production changes, or deployment as part of the checklist task.
+- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before first real customer/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
+- **DEPENDENCIES:** completed F5.1–F5.6 operating procedures; preserve all explicit limitations.
+- **EXACT NEXT ACTION:** inspect current configured capabilities and existing F5 documentation, then define the smallest evidence-backed F5.7 checklist. No deployment.
 
 ## Completed F5 tasks
 
