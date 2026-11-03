@@ -7,8 +7,8 @@
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`; SOP at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified. This is not a security acceptance or closure.
-- **F5.4:** IMPLEMENTATION IN PROGRESS — documentation-only on `docs/f5-4-platform-subscription-operations-2026-11-03`; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **EXACT NEXT TASK:** complete F5.4 diff review and exact-head Quality/W9 verification; do not merge or deploy without owner decision.
+- **F5.4:** IMPLEMENTED ON BRANCH — documentation-only SOP in PR #421, OPEN / READY FOR REVIEW / NOT MERGED; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **EXACT NEXT TASK:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
