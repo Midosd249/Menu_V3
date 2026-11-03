@@ -1,6 +1,7 @@
 # F5.5 — Customer Communication for Planned Maintenance and Incidents
 
-**Status:** IMPLEMENTED ON BRANCH — documentation-only; PR pending.  
+**Status:** COMPLETE WITH EXPLICIT LIMITATIONS — documentation-only; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.  
+**Exact-head CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.  
 **Date:** 2026-11-03  
 **Scope:** Owner-operated, evidence-based customer communication for planned maintenance and service/security incidents.  
 **Owner model:** One human Platform Owner/operator is accountable for incident decisions and customer-facing statements. Internal AI workflows are not human responders or spokespeople.
