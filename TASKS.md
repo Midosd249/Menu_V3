@@ -1,14 +1,15 @@
 # Active Task Queue — F-Series
 
-## Current task: F5.7 — Launch Readiness Checklist
+## Current task: F6.1 — Reconfirm auth/session/authorization paths for critical operations
 
 - **STATUS:** NOT STARTED — next atomic task only.
-- **OBJECTIVE:** create an evidence-backed launch checklist that validates only capabilities currently configured and verified in repository/runtime evidence.
-- **BOUNDARIES:** do not claim online payments, booking, integrations, automated support, monitoring, or other capabilities unless independently verified. Do not perform launch, customer onboarding, production changes, or deployment as part of the checklist task.
-- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before first real customer/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
-- **DEPENDENCIES:** completed F5.1–F5.6 operating procedures; preserve all explicit limitations.
-- **EXACT NEXT ACTION:** inspect current configured capabilities and existing F5 documentation, then define the smallest evidence-backed F5.7 checklist. No deployment.
+- **OBJECTIVE:** evidence-based review of critical authentication, session, and server-side authorization paths without broad refactoring or changing permissions by assumption.
+- **BOUNDARIES:** no privilege broadening, tenant/branch trust in client inputs, RLS/grant changes, secrets/settings changes, production mutation, or deployment without separately evidenced need and explicit scope.
+- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before first real customer/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; the potential `saveBranch` cross-tenant side-effect path is unremediated and runtime exploitability unverified.
+- **DEPENDENCIES:** F5.7 checklist records launch readiness as BLOCKED. Preserve all F5 limitations and owner decisions.
+- **EXACT NEXT ACTION:** map critical auth/session/authorization flows from current source, tests, migrations, and server boundaries; identify the smallest evidence-backed review scope. No deployment.
 
+## Completed F5 tasks
 ## Completed F5 tasks
 
 ### F5.1 — Actual sales-to-activation journey
