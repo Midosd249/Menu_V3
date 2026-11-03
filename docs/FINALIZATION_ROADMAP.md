@@ -1,16 +1,16 @@
-F5 UPDATE — 2026-11-03
+# F-Series Architecture, Operations & Continuity Roadmap
 
-**VERIFIED MAIN:** `1cdf33335a1be9e1a7885c405418b9d646e844df`; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-**POST-MERGE CI:** Quality run `41547643428` SUCCESS on main merge SHA. Supabase Preview check successful; Production deployment is not established by that check.
-**F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 package is defined.
-**F5.1:** COMPLETE; PR #418 merged. Exact PR-head Quality/W9 `41543919157` / `41543919245` passed.
-**F5.2:** owner-led onboarding SOP drafted at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`; current branch `docs/f5-2-owner-led-onboarding-sop-2026-11-03`; pending PR-head CI and final review.
-**F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-**SAFETY:** no real customer or customer-owned data; no production mutation, migration, settings/secrets change, billing action, deployment, or rollback.
-**EXACT NEXT ACTION:** inspect F5.2 branch diff and exact-head Quality/W9 CI; repair only evidence-backed failures and stop for owner decision.
-\n\n— F-Series Architecture, Operations & Continuity Roadmap
+## Current verified checkpoint — 2026-11-03
 
-
+- **VERIFIED MAIN BEFORE F5.2 MERGE:** `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **F5.1:** COMPLETE; PR #418 merged.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality `41558933698` SUCCESS and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
+- **SAFETY:** no real customer or customer-owned data; no application/database mutation, migration, settings/secrets change, billing action, deployment, or rollback.
+- **DEPLOYMENT:** UNKNOWN unless directly verified through Vercel.
+- **EXACT NEXT ACTION:** F5.3 — read-only discovery and documentation of tenant/branch creation and ownership verification. Prove current behavior before proposing changes.
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
