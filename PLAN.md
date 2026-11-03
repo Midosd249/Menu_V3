@@ -2,33 +2,27 @@
 
 ## Current verified checkpoint — 2026-11-03
 
-- **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture.
-- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK. The potential `saveBranch` cross-tenant side-effect path remains unremediated and unverified at runtime. Do not represent F5.3 as complete or the risk as accepted/closed. Resume only under a separately authorized security-remediation task.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; SOP `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains unchanged.
-- **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; PR #417 merged. No F4.4 package exists.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** NOT PERFORMED for F5.5; no Vercel deployment was requested or verified.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
-- **EXACT NEXT ACTION:** start F5.6 support intake, severity, response ownership, and evidence capture as one atomic task. No deployment.
+- **PHASE:** F5 — Commercial Customer Operations; F5.7 checklist completed with explicit blockers.
+- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425).
+- **F5.1–F5.2:** complete with explicit limitations.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path unremediated and runtime exploitability unverified.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged.
+- **F5.6:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`. Launch readiness is BLOCKED.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; no F4.4 package exists.
+- **PRODUCTION:** current deployed SHA/health UNKNOWN; no deployment performed for PR #425/F5.7.
+- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. No launch/deployment.
 
-## Current active phase: F5 — Commercial Customer Operations
+## Current active phase: F6 — Security, Isolation & Reliability Assurance
 
-- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 and F5.5 complete with explicit limitations; F5.3 remains a deferred open risk. F5.6 is the next task.
+- **STATUS:** F5 work packages F5.1–F5.7 are documented complete with explicit limitations, except F5.3 remains deferred/open risk. F6 is next; F3 remains an independent mandatory pre-commercial gate.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
-- **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-- **F5.2 RECORD:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.3:** deferred open risk; not complete.
-- **F5.4 RECORD:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **F5.5 RECORD:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **F5:** F5.1/F5.2/F5.4/F5.5/F5.6/F5.7 complete with explicit limitations; F5.3 deferred open risk.
+- **F5.7 RECORD:** `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -36,12 +30,10 @@
 | F1 | Verified Architecture Baseline | DONE | Architecture artifacts merged in PR #415 |
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
-| F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; PR #417 merged |
-| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3 deferred open risk; F5.4 complete; F5.5 complete; F5.6–F5.7 remain |
-| F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
+| F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; no F4.4 package |
+| F5 | Commercial Customer Operations | COMPLETE WITH EXPLICIT LIMITATIONS; F5.3 DEFERRED OPEN RISK | F5.1–F5.7 documented; no real-customer launch while F3 remains deferred |
+| F6 | Security, Isolation & Reliability Assurance | NEXT | Targeted auth/session/authorization and tenant/branch isolation evidence |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
-
-**F5.4 boundary:** this SOP documents existing Platform Owner controls only. It does not enable real-customer operations while F3 remains deferred, and it does not resolve the F5.3 tenant/branch risk.
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL
 
