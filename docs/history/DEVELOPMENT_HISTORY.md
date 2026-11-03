@@ -217,3 +217,17 @@ Future entries should link to:
 - **UNKNOWN:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI remains UNKNOWN.
 - **DEPLOYMENT:** NOT PERFORMED.
 - **EXACT NEXT TASK:** F5.6 — define support intake, severity, response ownership, and evidence capture.
+
+
+## 2026-11-03 — F5.6 support intake and evidence SOP
+
+- **CLASSIFICATION:** documentation-only operational procedure.
+- **VERIFIED BASE:** `5232e99cc5382a02d5b0322641403d9c528f1513`; branch `docs/f5-6-support-intake-severity-evidence-2026-11-03` created from current main.
+- **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
+- **EVIDENCE:** public email/WhatsApp links in marketing footer; Studio customer workspace is restaurant guest management; Platform Admin is account/subscription/invoice administration; legacy customer request flow retired by migration.
+- **RESEARCH:** Exa official NIST SP 800-61 Rev.3 and CISA NCISS/Federal Incident Notification guidance. Guidance is not a claim of Menuun implementation or local legal applicability.
+- **PROPOSED:** manual private intake record, P1–P4 triage, owner accountability, privacy-safe evidence capture, bilingual templates.
+- **LIMITS:** ticketing, support CRM, automated intake, SLA, 24/7 coverage, and backup responder remain UNKNOWN / NOT ESTABLISHED.
+- **SAFETY:** no customer contact/data, app code, database, migration, billing, production operation, or deployment.
+- **F3:** DEFERRED BY OWNER — NOT DONE. **F5.3:** DEFERRED BY OWNER — OPEN RISK.
+- **STATUS:** pending exact-head CI, final diff review, and merge.
