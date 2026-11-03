@@ -1,3 +1,14 @@
+## 2026-11-03 — F5.1 merge and F5.2 SOP implementation checkpoint
+
+- **VERIFIED:** PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`; final PR head `5dfad2399e2956e60baae6462d5d222aece957d9`; base `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
+- **VERIFIED CI:** PR Quality `41543919157` and W9 Orders QA `41543919245` succeeded on the exact PR head. Post-merge main Quality `41547643428` succeeded on the merge SHA. The Supabase Preview check was successful; this is not Production deployment evidence.
+- **IMPLEMENTED ON BRANCH:** `docs/f5-2-owner-led-onboarding-sop-2026-11-03` adds `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md` and reconciles F5 continuity documents. This is an owner-led process SOP grounded in F5.1 verified capabilities; no product feature is added.
+- **RESEARCH:** Exa reviewed ICO data protection by design/data minimisation and FTC business information security guidance; restaurant-tech vendor checklists were treated only as non-authoritative process examples.
+- **SAFETY:** no real customer onboarding or customer-owned data; no application code, database/schema/migration, Supabase/Vercel settings, secrets, billing operation, deployment, or rollback.
+- **F3:** remains DEFERRED BY OWNER — NOT DONE and blocks real-customer/commercial launch.
+- **STATUS:** F5.2 documentation implementation is on branch; exact PR-head CI and final diff review pending.
+- **EXACT NEXT ACTION:** inspect branch compare and run Quality/W9 on the PR head; fix only evidenced failures, then stop for owner decision.
+
 F2 UPDATE — 2026-11-02
 
 - **IMPLEMENTED ON BRANCH:** `feat/f2-production-safe-migrations`, based on F1 architecture commit `b42229bcab316f1d85d2ff189754ec56ad434c15`.

@@ -1,4 +1,18 @@
-# Active Task Queue — F-Series
+## Current verified checkpoint — 2026-11-03
+
+- **PHASE:** F5 — Commercial Customer Operations.
+- **CURRENT TASK:** F5.2 — Owner-Led Customer Onboarding Operating Procedure.
+- **BASE MAIN:** `1cdf33335a1be9e1a7885c405418b9d646e844df`; branch: `docs/f5-2-owner-led-onboarding-sop-2026-11-03`.
+- **F5.1:** PR #418 MERGED at `1cdf33335a1be9e1a7885c405418b9d646e844df`. Exact PR-head Quality `41543919157` and W9 `41543919245` succeeded on `5dfad2399e2956e60baae6462d5d222aece957d9`.
+- **POST-MERGE:** main Quality run `41547643428` completed SUCCESS on the merge SHA. GitHub commit checks report Quality and Supabase Preview checks successful; this is not proof of a Production deployment.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
+- **F5.2 DELIVERABLE:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md` — process-only SOP based on verified F5.1 journey.
+- **SAFETY:** no real customer onboarding/data collection; no application code, DB/schema/migration, Supabase/Vercel settings, secrets, billing action, deployment, or rollback.
+- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **DEPLOYMENT:** UNKNOWN; a successful Supabase Preview status check is not a verified Vercel Production deployment.
+- **EXACT NEXT ACTION:** inspect the F5.2 branch diff and exact-head Quality/W9 CI; fix only evidence-backed failures, then review and stop for owner decision.
+\n\n# Active Task Queue — F-Series
 
 ## Current task: F5.1 — Actual sales-to-activation journey
 

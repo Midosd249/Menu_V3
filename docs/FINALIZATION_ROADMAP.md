@@ -1,16 +1,14 @@
 F5 UPDATE — 2026-11-03
 
-**VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`; PR #417 CLOSED / MERGED at this SHA.
-**F4 STATUS:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`. Post-merge main CI and current Vercel deployment were not established in this task.
-**F4.4:** no F4.4 work package is defined in this roadmap. F4.3 is the final defined F4 package.
-**F3 DECISION:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
-**F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual sales-to-activation journey mapped from current code/migrations and capability boundaries documented in `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-**LIFECYCLE RECONCILIATION:** current code supports self-serve account/workspace provisioning. The 2026-09-16 manual-approval policy is historical and marked superseded; the later retirement record and current source take precedence.
-**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-**SAFETY:** no customer onboarding, production fault, deployment, rollback, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
-**EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff.
-
-— F-Series Architecture, Operations & Continuity Roadmap
+**VERIFIED MAIN:** `1cdf33335a1be9e1a7885c405418b9d646e844df`; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+**POST-MERGE CI:** Quality run `41547643428` SUCCESS on main merge SHA. Supabase Preview check successful; Production deployment is not established by that check.
+**F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 package is defined.
+**F5.1:** COMPLETE; PR #418 merged. Exact PR-head Quality/W9 `41543919157` / `41543919245` passed.
+**F5.2:** owner-led onboarding SOP drafted at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`; current branch `docs/f5-2-owner-led-onboarding-sop-2026-11-03`; pending PR-head CI and final review.
+**F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
+**SAFETY:** no real customer or customer-owned data; no production mutation, migration, settings/secrets change, billing action, deployment, or rollback.
+**EXACT NEXT ACTION:** inspect F5.2 branch diff and exact-head Quality/W9 CI; repair only evidence-backed failures and stop for owner decision.
+\n\n— F-Series Architecture, Operations & Continuity Roadmap
 
 
 
