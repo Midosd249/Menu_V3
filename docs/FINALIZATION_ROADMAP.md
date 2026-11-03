@@ -7,14 +7,14 @@
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
 - **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
-- **F6.1 VERIFIED FINDING:** `src/lib/menu/orders.ts` applies `authorizeMutation(..., "orders.write")` only to `new → confirmed`; the shared dashboard/order-access predicates omit `tenant_members.is_active`. A separately scoped test-first remediation is required.
+- **F6.1 VERIFIED FINDING:** active-membership predicates are inconsistent in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`. Inactive-row reachability through current product flows is UNKNOWN because team removal currently deletes rows and no in-product soft-deactivation write was found. A separately scoped test-first remediation is proposed.
 - **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
 - **REVIEW BRANCH:** `docs/f6-1-auth-session-authorization-assurance`.
 - **PR / EXACT-HEAD CI:** pending; do not claim Quality/W9 passed until exact-head runs are returned.
 - **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
 - **POST-MERGE CI:** UNKNOWN until directly queried for the actual merge SHA.
 - **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
-- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 (order status authorization and inactive-membership enforcement). Not started in F6.1; do not begin automatically.
+- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Not started; do not begin automatically.
 
 ---
 
