@@ -9,14 +9,30 @@
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK. Read-only review identified a potential cross-tenant side-effect path in `src/lib/menu/owner.ts` `saveBranch`: a tenant-scoped branch update may affect zero rows, after which branch-hours mutations may continue by `branch_id` without a confirmed ownership/affected-row guard. Runtime exploitability is not established; no exploit or data change is claimed. This is not a security acceptance or remediation.
 - **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`. Deliverable: `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** IMPLEMENTED ON BRANCH — documentation-only customer communication SOP; branch `docs/f5-5-customer-communications-2026-11-03`; PR not yet created. Deliverable: `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **EXACT NEXT ACTION:** verify exact-head Quality/W9 for the F5.5 branch, review the full diff, and create its PR only after checks succeed.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`. Deliverable: `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **F5.5 EXACT-HEAD CI:** Quality run `41579747196` and W9 Orders QA run `41579747129` both SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
+- **EXACT NEXT ACTION:** begin F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture — as a separate atomic task; preserve F3 and F5.3 gates. No deployment.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview checks.
+- **DEPLOYMENT:** NOT PERFORMED for F5.5; Production deployment state was not queried and is not inferred from merge or CI.
 - **SAFETY:** F5.4 and current F5.5 work are documentation-only. No customer was contacted, no customer data was added, and no application/database/schema/migration/settings/secrets/billing/production/deployment operation was performed.
 - **REPOSITORY NOTE:** `AGENTS.md` and `docs/automatic-specialist-routing.md` exist. The previously referenced `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at inspected paths; do not assume they exist.
+
+---
+
+## 2026-11-03 — F5.5 customer communications SOP closeout
+
+- **VERIFIED MAIN:** `0593f3f21a8fcf7ed1836a1b5ee87731b7454408` (PR #422 merge commit).
+- **VERIFIED PR:** #422 merged; exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
+- **VERIFIED EXACT-HEAD CI:** Quality `41579747196` SUCCESS; W9 Orders QA `41579747129` SUCCESS. Both runs completed on the exact PR head. Quality passed typecheck, tests, lint, production build, all-theme/browser QA, Studio and Platform Admin browser QA; W9 browser QA passed.
+- **VERIFIED DIFF:** seven documentation files only, including the F5.5 SOP and continuity updates. No runtime, database, migration, customer-data, billing, settings, or deployment changes.
+- **RESEARCH:** Exa reviewed official CISA/FBI/international service-provider outage communications guidance dated 2026-09-02; applied as process guidance only.
+- **UNKNOWN:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI remains UNKNOWN.
+- **DEPLOYMENT:** NOT PERFORMED; no Vercel deployment was requested or verified.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
+- **EXACT NEXT TASK:** F5.6 — define support intake, severity, response ownership, and evidence capture. Do not start it automatically.
 
 ---
 
