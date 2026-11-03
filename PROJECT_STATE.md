@@ -2,22 +2,40 @@
 
 ## Current checkpoint
 
-- **PHASE:** F5 — Commercial Customer Operations.
-- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK. Read-only review identified a potential cross-tenant side-effect path in `src/lib/menu/owner.ts` `saveBranch`: a tenant-scoped branch update may affect zero rows, after which branch-hours mutations may continue by `branch_id` without a confirmed ownership/affected-row guard. Runtime exploitability is not established; no exploit or data change is claimed. This is not a security acceptance or remediation.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`. Deliverable: `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
-- **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`. Deliverable: `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **F5.5 EXACT-HEAD CI:** Quality run `41579747196` and W9 Orders QA run `41579747129` both SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
-- **EXACT NEXT ACTION:** begin F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture — as a separate atomic task; preserve F3 and F5.3 gates. No deployment.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
-- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
+- **PHASE:** F5 — Commercial Customer Operations; F5.7 launch-readiness checklist is complete with explicit blockers.
+- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` — PR #425 squash merge.
+- **F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS; repository-backed sales-to-activation map.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK. Potential `saveBranch` cross-tenant side-effect path remains unremediated; runtime exploitability unverified. Not accepted or closed.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
+- **F5.6:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; launch checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`. Launch readiness is BLOCKED, not READY.
+- **PR #425 exact-head CI:** Quality run `41709298338` SUCCESS and W9 Orders QA run `41709298244` SUCCESS on exact PR head `5a536c91c0ac1bca59bf00251f52fa0b520ce4e9`; PR #425 merged at `4eed82ffddebf7d37f8818413672d465a37af9f2`.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch. Successful isolated restore, Storage recovery, and approved RPO/RTO remain unestablished.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; no F4.4 package exists.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** NOT PERFORMED for F5.5; Production deployment state was not queried and is not inferred from merge or CI.
-- **SAFETY:** F5.4 and current F5.5 work are documentation-only. No customer was contacted, no customer data was added, and no application/database/schema/migration/settings/secrets/billing/production/deployment operation was performed.
-- **REPOSITORY NOTE:** `AGENTS.md` and `docs/automatic-specialist-routing.md` exist. The previously referenced `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at inspected paths; do not assume they exist.
+- **POST-MERGE CI:** not established for PR #425 merge SHA; do not infer from exact PR-head CI.
+- **PRODUCTION:** no deployment was performed for PR #425/F5.7; current Production deployed SHA/health remains UNKNOWN.
+- **SAFETY:** F5.7 is documentation-only. No customer contact/data, application/runtime, database/migration, settings/secrets, billing, Production, or deployment operation occurred.
+- **REPOSITORY NOTE:** `AGENTS.md` and `docs/automatic-specialist-routing.md` exist. `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at inspected paths; do not assume they exist.
+- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. No launch/deployment.
+
+---
+
+## 2026-11-03 — F5.7 launch-readiness checklist and PR #425 continuity closeout
+
+- **CLASSIFICATION:** documentation-only launch-readiness assessment and continuity reconciliation.
+- **VERIFIED MAIN BEFORE F5.7:** `4eed82ffddebf7d37f8818413672d465a37af9f2`, PR #425 merge.
+- **PR #425:** exact-head Quality `41709298338` SUCCESS and W9 Orders QA `41709298244` SUCCESS on `5a536c91c0ac1bca59bf00251f52fa0b520ce4e9`; squash merge commit `4eed82ffddebf7d37f8818413672d465a37af9f2`.
+- **F5.7 DELIVERABLE:** `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; evidence-backed capability inventory, mandatory gates, evidence checklist, and explicit release decision.
+- **READINESS DECISION:** BLOCKED — F3 remains DEFERRED BY OWNER — NOT DONE; F5.3 remains DEFERRED BY OWNER — OPEN RISK; Production deployment/health and other operational controls remain UNKNOWN.
+- **RESEARCH:** repository-first evidence plus official NIST SP 1300 and CISA Cybersecurity Performance Goals 2.0 / Safe Software Deployment guidance. External guidance shapes checklist domains only; it does not prove Menuun capabilities.
+- **VERIFICATION:** PR #425 Quality and W9 both SUCCESS on its exact final PR head. F5.7 implementation PR verification is pending and must be recorded against its exact final head.
+- **SAFETY:** documentation-only; no customer contact, customer data, application/runtime, database/migration, settings/secrets, billing, Production, or deployment operation.
+- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. Preserve F3 and F5.3 gates; do not launch.
+
+---
 
 ---
 
