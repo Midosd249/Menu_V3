@@ -1,3 +1,17 @@
+## 2026-11-03 — F5.4 merge and F5.5 customer communications SOP implementation
+
+- **VERIFIED:** PR #421 merged into `main` at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; exact PR head `bb1881b21fb34944ae82e93434ec805ef625221e`; base `216810951925b338e63da0b3415a9ba15f022551`.
+- **VERIFIED exact-head CI:** Quality run `41577752976` SUCCESS and W9 Orders QA run `41577752967` SUCCESS on exact PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
+- **VERIFIED diff:** seven documentation files only; no runtime code, schema, migration, customer data, subscription/account/invoice operation, settings/secrets, or deployment changes.
+- **POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI remains UNKNOWN. No Vercel deployment was requested or performed.
+- **F5.3:** remains DEFERRED BY OWNER — OPEN RISK; the potential `saveBranch` cross-tenant side-effect path is not remediated or runtime-verified.
+- **IMPLEMENTED ON BRANCH:** F5.5 SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md` on `docs/f5-5-customer-communications-2026-11-03`. It documents existing email/WhatsApp channels, planned maintenance notices, incident updates/resolution, privacy safeguards, owner approval, and Arabic/English templates. It does not claim a status page, SLA, CRM, ticketing, or automated broadcast.
+- **RESEARCH:** repository-first evidence plus CISA/FBI/international partners' 2026-09-02 service-provider communications guidance via Exa. Guidance informs process only, not Menuun capability or legal obligations.
+- **SAFETY:** no customer was contacted; no incident/maintenance operation, customer-data collection, database mutation, migration, billing operation, or deployment occurred.
+- **EXACT NEXT ACTION:** verify F5.5 exact-head Quality/W9 and review the full diff; create the F5.5 PR only after successful checks.
+
+---
+
 ## 2026-11-03 — F5.3 owner deferral and F5.4 subscription operations SOP submitted for review
 
 - **OWNER DECISION:** defer F5.3 for now and continue with the next independent F5 work package. F5.3 is recorded as DEFERRED BY OWNER — OPEN RISK, NOT COMPLETE. The potential `saveBranch` cross-tenant side-effect path remains unremediated; runtime exploitability is not established. This decision is not security acceptance or proof of safety.
