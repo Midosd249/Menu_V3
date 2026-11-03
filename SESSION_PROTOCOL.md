@@ -47,11 +47,8 @@
 - No real database migration or deployment has been run in F2.
 
 
-# Menuun Session Protocol — F-Series Handoff
-
 ---
 
----
 
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
 
