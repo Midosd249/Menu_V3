@@ -4,9 +4,9 @@
 
 - **PHASE:** F5 — Commercial Customer Operations.
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`; SOP at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality run `41558933698` SUCCESS and W9 Orders QA run `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
-- **EXACT NEXT TASK:** F5.3 — document tenant/branch creation and ownership verification. Begin with read-only code/schema/migration/test discovery.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`; SOP at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality run `41564124218` SUCCESS and W9 Orders QA run `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
+- **EXACT NEXT TASK:** separately scoped, test-first remediation of the `saveBranch` cross-tenant side-effect risk; F5.3 remains BLOCKED until adversarial regression verification passes.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.

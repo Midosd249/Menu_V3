@@ -19,10 +19,14 @@
 - **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
 
 ### F5.2 — Owner-led customer onboarding SOP
-- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`.
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
 - **DELIVERABLE:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **EXACT-HEAD CI:** Quality `41558933698` and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **EXACT-HEAD CI:** Quality `41564124218` and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **SCOPE:** process-only SOP; no customer data or product changes. F3 gate preserved.
+
+### F5.3 — Tenant/branch creation and ownership verification
+- **STATUS:** BLOCKED — read-only discovery identified a high-priority potential cross-tenant side effect in `src/lib/menu/owner.ts` `saveBranch`; no runtime exploit test or remediation has been performed.
+- **NEXT:** separate test-first security remediation and adversarial cross-tenant regression coverage before resuming F5.3 documentation. No production data or deployment.
 
 ---
 

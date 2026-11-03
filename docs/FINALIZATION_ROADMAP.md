@@ -3,9 +3,10 @@
 ## Current verified checkpoint — 2026-11-03
 
 - **VERIFIED MAIN BEFORE F5.2 MERGE:** `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **VERIFIED MAIN AFTER F5.2 MERGE:** `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
 - **F5.1:** COMPLETE; PR #418 merged.
-- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality `41558933698` SUCCESS and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
 - **SAFETY:** no real customer or customer-owned data; no application/database mutation, migration, settings/secrets change, billing action, deployment, or rollback.
@@ -123,7 +124,7 @@ The F identifiers are permanent phase IDs. They are not sprint numbers, release 
 | **F2** | Production-Safe Build & Migration Boundary | Remove unintended database migration side effects from ordinary builds; define explicit migration execution and compatibility controls | F1; migration runner understanding | DONE — merged in PR #415 |
 | **F3** | Backup, Restore & Disaster Recovery | Inventory backup coverage and prove a safe isolated restore procedure | F1, F2, provider capabilities | DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate |
 | **F4** | Release, Monitoring & Incident Operations | One release checklist, rollback/forward-fix rules, monitoring signals, incident records, and post-release observation | F1, F2; F3 remains a pre-commercial gate | DONE WITH EXPLICIT LIMITATIONS — F4.1/F4.2/F4.3 complete; PR #417 merged |
-| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | IN_PROGRESS — F5.1 complete; F5.2 next |
+| **F5** | Commercial Customer Operations | Repeatable owner-led restaurant onboarding, account setup, support, and customer-safe change communication | F1, F4; product capabilities verified | IN_PROGRESS — F5.1/F5.2 complete; F5.3 blocked pending tenant-isolation remediation |
 | **F6** | Security, Isolation & Reliability Assurance | Evidence-backed assurance of auth, tenant/branch boundaries, secrets, data access, and operational resilience | F1–F4 | PLANNED; risk-based, not a blanket re-audit |
 | **F7** | Architecture Evolution & Governance | ADR lifecycle, technical debt decisions, architecture drift checks, and recurring continuity maintenance | F1–F6 | PLANNED |
 
