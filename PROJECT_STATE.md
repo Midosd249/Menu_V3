@@ -1,17 +1,18 @@
-# Current verified state — 2026-11-03 (supersedes stale historical entries below)
+# Current verified state — 2026-11-03
+
+## Current checkpoint
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.1 Actual Sales-to-Activation Journey — COMPLETE WITH EXPLICIT LIMITATIONS; evidence-backed documentation only.
-- **VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations. PR #417 is CLOSED / MERGED; merge commit is the current main SHA above. F4.3 exact-head Quality run `41526431191` and W9 Orders QA run `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
-- **F4.4:** no F4.4 work package is defined in the current roadmap. Do not invent one.
-- **F5.1 DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`; maps actual discovery/contact, signup, workspace provisioning, brand/branch, menu, preview, publication, QR, staff access, support, and manual billing boundaries.
-- **F5.1 FINDING:** actual active path is self-serve account/workspace provisioning. `docs/CUSTOMER_LIFECYCLE_ACCESS_POLICY.md` described an earlier manual-approval lifecycle and is now explicitly marked historical/superseded.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains. No real-customer onboarding or customer-owned data work was performed.
+- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`. Deliverable: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 CI:** Quality run `41558933698` SUCCESS and W9 Orders QA run `41558933805` SUCCESS on exact PR head `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **EXACT NEXT TASK:** F5.3 — document tenant/branch creation and ownership verification. Start with read-only source/code/migration/tests discovery; do not assume an operator workflow exists.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
+- **F3:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch. Do not reopen without owner direction.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **CI / DEPLOYMENT:** the GitHub workflow lookup for merge SHA returned no PR-triggered runs; post-merge main CI is UNKNOWN. No Vercel deployment lookup was performed for this task; current deployment status is UNKNOWN.
-- **SAFETY:** documentation-only; no application code, schema, migration, Supabase, secrets, billing, customer records, or production state changed.
-- **EXACT NEXT TASK:** F5.2 — define the owner-led operating procedure using the verified journey. Do not start it automatically.
+- **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview checks.
+- **SAFETY:** F5.2 was documentation-only; no real customer or customer-owned data, application code, database/schema/migration, settings/secrets, billing action, deployment, or rollback.
+- **REPOSITORY NOTE:** `AGENTS.md` exists. `docs/automatic-specialist-routing.md` exists. The previously referenced `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at the inspected branch paths; do not assume they exist.
 
 ---
 

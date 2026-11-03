@@ -1,18 +1,16 @@
-F5 UPDATE — 2026-11-03
+# F-Series Architecture, Operations & Continuity Roadmap
 
-**VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`; PR #417 CLOSED / MERGED at this SHA.
-**F4 STATUS:** F4.1, F4.2 and F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`. Post-merge main CI and current Vercel deployment were not established in this task.
-**F4.4:** no F4.4 work package is defined in this roadmap. F4.3 is the final defined F4 package.
-**F3 DECISION:** DEFERRED BY OWNER — NOT DONE; remains mandatory before first real customer/customer-owned data/commercial launch.
-**F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Actual sales-to-activation journey mapped from current code/migrations and capability boundaries documented in `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-**LIFECYCLE RECONCILIATION:** current code supports self-serve account/workspace provisioning. The 2026-09-16 manual-approval policy is historical and marked superseded; the later retirement record and current source take precedence.
-**OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-**SAFETY:** no customer onboarding, production fault, deployment, rollback, DB mutation/migration, settings/secrets change, backup/restore, paid upgrade, or manual CI rerun.
-**EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff.
+## Current verified checkpoint — 2026-11-03
 
-— F-Series Architecture, Operations & Continuity Roadmap
-
-
+- **VERIFIED MAIN BEFORE F5.2 MERGE:** `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **F5.1:** COMPLETE; PR #418 merged.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality `41558933698` SUCCESS and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
+- **SAFETY:** no real customer or customer-owned data; no application/database mutation, migration, settings/secrets change, billing action, deployment, or rollback.
+- **DEPLOYMENT:** UNKNOWN unless directly verified through Vercel.
+- **EXACT NEXT ACTION:** F5.3 — read-only discovery and documentation of tenant/branch creation and ownership verification. Prove current behavior before proposing changes.
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  

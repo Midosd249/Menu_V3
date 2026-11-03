@@ -3,18 +3,16 @@
 ## Current session checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.1 Actual Sales-to-Activation Journey — COMPLETE WITH EXPLICIT LIMITATIONS; documentation-only.
-- **MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
-- **PR #417:** CLOSED / MERGED; merge commit equals current main SHA. PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
-- **F4.3 CI:** exact PR-head Quality run `41526431191` SUCCESS; W9 Orders QA run `41526431206` SUCCESS. These are pre-merge PR-head results, not a post-merge main CI claim.
-- **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`; current source-backed sales-to-activation map and capability boundaries.
-- **LIFECYCLE CORRECTION:** current source uses self-serve signup/workspace provisioning; old manual-approval policy doc marked historical/superseded. No CRM, online payment, support ticketing, or demo booking is claimed.
-- **F4.4:** no such work package is defined in `docs/FINALIZATION_ROADMAP.md`.
+- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`; SOP at `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality run `41558933698` SUCCESS and W9 Orders QA run `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **EXACT NEXT TASK:** F5.3 — document tenant/branch creation and ownership verification. Begin with read-only code/schema/migration/test discovery.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **SAFETY:** no code, schema, DB, migration, production/customer action, secrets/settings, payment, deployment, or manual CI rerun.
-- **UNKNOWN:** post-merge main CI, current Vercel deployment, production application of the latest trial migration, actual customer outcomes, and physical-device QA remain unverified.
-- **EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure from the verified journey. Stop before starting it.
+- **DEPLOYMENT:** UNKNOWN; CI is not Production deployment evidence.
+- **SAFETY:** no real customer/data, app code, database/schema/migration, settings/secrets, billing action, deployment, or rollback changed in F5.2.
+- **REPOSITORY NOTE:** `AGENTS.md` and `docs/automatic-specialist-routing.md` exist. `docs/agents/agent-registry.md` and `docs/master-execution-plan.md` were not found at inspected paths.
 
 ## Permanent handoff rules
 
@@ -48,9 +46,9 @@
 - Successful isolated database restore and approved RPO/RTO remain UNKNOWN.
 - No real database migration or deployment has been run in F2.
 
----
 
 ---
+
 
 ## 2026-10-20 — Invitation context recovery after email verification — IMPLEMENTATION_IN_PROGRESS
 

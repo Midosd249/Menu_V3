@@ -1,16 +1,27 @@
 # Active Plan — Menuun F-Series
 
+## Current verified checkpoint — 2026-11-03
+
+- **PHASE:** F5 — Commercial Customer Operations.
+- **CURRENT TASK:** F5.3 — Tenant/Branch Creation and Ownership Verification (documentation-only discovery and procedure).
+- **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
+- **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.2 EXACT-HEAD CI:** Quality run `41558933698` SUCCESS and W9 Orders QA run `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
+- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
+- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **DEPLOYMENT:** UNKNOWN unless separately verified through Vercel; CI success and Supabase Preview status are not Production deployment evidence.
+- **SAFETY:** F5.2 was documentation-only. No real customer/data, app code, DB/schema/migration, settings/secrets, billing, deployment, or rollback changed.
+- **EXACT NEXT ACTION:** execute F5.3 read-only capability discovery, then document tenant/branch creation and ownership verification using verified current code and controls. Do not implement or mutate production data.
+
 ## Current active phase: F5 — Commercial Customer Operations
 
-- **STATUS:** F5.1 COMPLETE WITH EXPLICIT LIMITATIONS; F5.2 is the only next task.
-- **VERIFIED MAIN:** `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
+- **STATUS:** F5.1 and F5.2 complete with explicit limitations; F5.3 is the only next task.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
-- **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS. PR #417 CLOSED / MERGED at current main SHA. F4.3 exact-head Quality `41526431191` and W9 `41526431206` succeeded on PR head `7cf724eb7bbfdf7808935fa045e36a08b5732f6c`.
-- **F4.4:** no F4.4 work package exists in the authoritative roadmap.
+- **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
 - **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
-- **F5.1 RESULT:** current hybrid owner-assisted discovery / self-serve activation path mapped from code, migrations, and current docs. Legacy manual-approval lifecycle record marked historical. No product behavior changed.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
+- **F5.2 RECORD:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -19,17 +30,11 @@
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; PR #417 merged |
-| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1 complete; F5.2–F5.7 remain |
+| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3–F5.7 remain |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**F4.1/F4.2/F4.3:** complete with explicit limitations. Preserve existing runbooks and F3 deferral. No additional F4 work package is defined.
-
-**F5.1:** COMPLETE WITH EXPLICIT LIMITATIONS. Current sales-to-activation path documented. Product capabilities and unsupported claims separated. Production deployment, post-merge CI, real customer outcomes, and migration application status were not re-verified in this task.
-
-**EXACT NEXT ACTION:** F5.2 — define the owner-led operating procedure for discovery/demo, restaurant data collection, menu setup, preview/review, publish, QR handover, staff access, and support handoff. Do not start F5.2 automatically.
-
----
+**F5.1/F5.2:** completed with explicit limitations. F5.2 is an owner-led operating procedure grounded in verified F5.1 capabilities; it does not add product functionality or authorize real-customer onboarding while F3 remains deferred.
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL
 
