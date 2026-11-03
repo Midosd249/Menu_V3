@@ -1,17 +1,13 @@
 # Active Task Queue — F-Series
 
-## Current task: F5.5 — Safe Customer Communication for Planned Maintenance and Incidents
+## Current task: F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture
 
-- **STATUS:** IMPLEMENTED ON BRANCH — `docs/f5-5-customer-communications-2026-11-03`; PR not yet created; exact-head CI pending.
-- **DELIVERABLE:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **OBJECTIVE:** define safe owner-operated customer communication for planned maintenance, suspected/confirmed incidents, updates, and verified resolution.
-- **EVIDENCE:** `src/components/marketing-footer.tsx` (published email/WhatsApp links), F4 incident runbook, F5.1 customer journey, F5.2 onboarding SOP, and canonical production-safe operations runbook.
-- **RESEARCH:** CISA/FBI/international partners, *Communicating Under Pressure: Best Practices for Service Providers* (2026-09-02). Guidance is adapted as process principles, not legal advice or proof of Menuun capabilities.
-- **SAFETY:** no customer messages, maintenance, incident response, customer-data collection, production mutation, database operation, migration, or deployment. No SLA/status page/CRM/ticketing/automated broadcast is claimed.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; the potential `saveBranch` cross-tenant path remains unremediated and unverified at runtime.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; exact-head Quality/W9 succeeded.
-- **EXACT NEXT ACTION:** inspect final branch diff and exact-head Quality/W9; fix only evidenced failures, then create/review the F5.5 PR. No deployment.
+- **STATUS:** NOT STARTED — next task only; no implementation has begun.
+- **ROADMAP DEFINITION:** define support intake, severity, response ownership, and evidence capture.
+- **DEPENDENCIES:** reuse F5.1 sales-to-activation journey, F5.2 onboarding SOP, F5.4 subscription/account operations SOP, and completed F5.5 customer communications SOP.
+- **BOUNDARIES:** do not invent ticketing, CRM, SLA, 24/7 support, automated intake, or a support team. Document only currently available/manual channels and explicitly label proposed capabilities.
+- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before real-customer onboarding/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; no acceptance or closure.
+- **EXACT NEXT ACTION:** inspect current repository support/contact capabilities and existing F5 SOPs, then define the smallest evidence-backed F5.6 deliverable. No deployment.
 
 ## Completed F5 tasks
 
@@ -37,6 +33,12 @@
 - **EXACT-HEAD CI:** Quality `41577752976` and W9 Orders QA `41577752967` SUCCESS on exact PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
 - **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail. Documentation only; no live billing/account/invoice operation or deployment.
 
+
+### F5.5 — Safe customer communication for planned maintenance and incidents
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
+- **DELIVERABLE:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
+- **SCOPE:** manual owner-operated notices, incident updates and resolution; Arabic/English templates; privacy and security safeguards. No CRM, ticketing, SLA, status page, or automated broadcast is claimed. No customer communication or production operation occurred.
 ---
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)

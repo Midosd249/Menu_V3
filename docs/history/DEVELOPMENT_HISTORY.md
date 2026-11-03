@@ -206,3 +206,14 @@ Future entries should link to:
 - **SAFETY:** no application code, DB/schema/migration, customer data, production settings, secrets, billing, deployment, or manual CI rerun changed/performed.
 - **F3:** remains DEFERRED BY OWNER — NOT DONE; no real-customer onboarding or commercial launch.
 - **STATUS:** F5.1 COMPLETE WITH EXPLICIT LIMITATIONS. Exact next task: F5.2 owner-led operating procedure. No F5.2 work started.
+
+
+## 2026-11-03 — F5.5 customer communications SOP merged and verified
+
+- **VERIFIED MAIN:** PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
+- **VERIFIED EXACT-HEAD CI:** Quality run `41579747196` SUCCESS and W9 Orders QA run `41579747129` SUCCESS on the exact PR head. Quality steps passed typecheck, tests, lint, production build, template/browser checks and Studio/Platform Admin browser QA; W9 Orders browser QA passed.
+- **VERIFIED DIFF:** seven documentation-only files in PR #422; no runtime code, schema, migrations, customer data, billing, settings/secrets, or deployment changes.
+- **RESEARCH:** repository-first review and Exa search of official CISA/FBI/international guidance published 2026-09-02. Guidance used for process principles only, not as legal advice or evidence of product capability.
+- **UNKNOWN:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI remains UNKNOWN.
+- **DEPLOYMENT:** NOT PERFORMED.
+- **EXACT NEXT TASK:** F5.6 — define support intake, severity, response ownership, and evidence capture.

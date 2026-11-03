@@ -2,20 +2,22 @@
 
 ## Current verified checkpoint — 2026-11-03
 
-- **VERIFIED MAIN AFTER F5.4 MERGE:** PR #421 merge commit `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
+- **VERIFIED MAIN AFTER F5.5 MERGE:** PR #422 merge commit `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
 - **F5.1:** COMPLETE; PR #418 merged.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK. Potential cross-tenant side-effect path in `saveBranch` remains unremediated and runtime exploitability unverified; this is not accepted as safe or closed.
 - **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** documentation-only SOP implemented on branch `docs/f5-5-customer-communications-2026-11-03`; exact-head CI pending; deliverable `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; deliverable `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **SAFETY:** F5.4 documentation only; no customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
-- **DEPLOYMENT:** UNKNOWN unless directly verified through Vercel.
-- **POST-MERGE CI:** no PR-triggered workflow runs were returned for F5.4 merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN. No Vercel deployment performed.
-- **EXACT NEXT ACTION:** verify F5.5 exact-head Quality/W9, review the final diff, and create its PR after successful checks. No deployment.
+- **SAFETY:** F5.4 and F5.5 documentation only; no customer communication, customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
+- **DEPLOYMENT:** NOT PERFORMED for F5.5; no Vercel deployment was requested or verified.
+- **F5.4 POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN.
+- **POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI UNKNOWN.
+- **EXACT NEXT ACTION:** F5.6 — define support intake, severity, response ownership, and evidence capture. No deployment.
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
@@ -363,7 +365,7 @@ F5.3 is currently **DEFERRED BY OWNER — OPEN RISK**, not complete. The potenti
 
 F5.4 — Platform Subscription, Account & Invoice Operations — is complete with explicit limitations and merged in PR #421 at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`. It documents existing Platform Owner controls only; it does not authorize live customer operations while F3 remains deferred, and it does not resolve F5.3.
 
-F5.5 — Safe Customer Communication for Planned Maintenance and Incidents — is being documented from verified public contact channels and the existing F4 incident runbook. It does not add a status page, SLA, CRM, ticketing, or automated notifications.
+F5.5 — Safe Customer Communication for Planned Maintenance and Incidents — is complete with explicit limitations and merged in PR #422 at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`. Exact-head Quality and W9 Orders QA both succeeded. The SOP documents verified manual email/WhatsApp channels, maintenance notices, incident updates/resolution, privacy safeguards, and Arabic/English templates. It does not add a status page, SLA, CRM, ticketing, or automated notifications.
 
 ### F5 acceptance criteria
 - A restaurant can be onboarded using a repeatable documented process.
