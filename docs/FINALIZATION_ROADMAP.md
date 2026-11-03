@@ -7,12 +7,12 @@
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK. Potential cross-tenant side-effect path in `saveBranch` remains unremediated and runtime exploitability unverified; this is not accepted as safe or closed.
-- **F5.4:** documentation-only SOP implementation in progress on `docs/f5-4-platform-subscription-operations-2026-11-03`; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **F5.4:** documentation-only SOP implemented on branch `docs/f5-4-platform-subscription-operations-2026-11-03`; PR #421 OPEN / READY FOR REVIEW / NOT MERGED; deliverable `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged. No F4.4 work package is defined.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
 - **SAFETY:** F5.4 documentation only; no customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
 - **DEPLOYMENT:** UNKNOWN unless directly verified through Vercel.
-- **EXACT NEXT ACTION:** review the F5.4 documentation diff and verify Quality/W9 on the exact final PR head; do not merge or deploy without owner decision.
+- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
 
 **Phase ID convention:** `F` means **Finalization**; `F0` is the program charter and baseline, and `F1`–`F7` are the ordered finalization phases. These IDs are permanent and are not product release versions.  
 **Document ID:** F0  
