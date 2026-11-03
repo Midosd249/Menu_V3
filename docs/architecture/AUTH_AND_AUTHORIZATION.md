@@ -60,6 +60,16 @@ Source of truth: `src/lib/auth/permissions.ts`. This table summarizes the explic
 - The exact runtime DB login role remains UNKNOWN.
 - This document is not a penetration test and does not prove all server functions are correctly guarded.
 
+## F6.1 findings and caveats
+
+- `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md` is the current detailed assurance record.
+- Membership lookups in `src/lib/menu/orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts` do not consistently require `tenant_members.is_active = true`. The current team-removal path deletes membership rows; no in-product soft-deactivation write was found, so reachability of inactive rows is UNKNOWN. Do not treat these paths as verified safe.
+- `updateOrderStatus` applies `authorizeMutation(..., "orders.write")` only to the initial `new → confirmed` transition. Require consistent authorization on all transitions in a separate test-first remediation.
+- Better Auth cookie cache is configured for 300 seconds; revocation freshness is not runtime-verified.
+- `advanced.useSecureCookies: false` coexists with explicit `secure: true` defaults and `__Host-` cookie names; actual response headers remain UNKNOWN.
+- The effective PostgreSQL connection principal and its RLS/BYPASSRLS behavior remain UNKNOWN.
+- F5.3 `saveBranch` branch-hours side-effect path remains DEFERRED BY OWNER — OPEN RISK.
+
 ## Tests
 Relevant tests include:
 - `src/lib/auth/authorization.server.test.ts`

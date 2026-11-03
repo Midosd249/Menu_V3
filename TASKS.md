@@ -1,13 +1,13 @@
 # Active Task Queue — F-Series
 
-## Current task: F6.1 — Reconfirm auth/session/authorization paths for critical operations
+## Current task: F6.1-AUTH-01 — Active-membership authorization consistency
 
-- **STATUS:** NOT STARTED — next atomic task only.
-- **OBJECTIVE:** evidence-based review of critical authentication, session, and server-side authorization paths without broad refactoring or changing permissions by assumption.
-- **BOUNDARIES:** no privilege broadening, tenant/branch trust in client inputs, RLS/grant changes, secrets/settings changes, production mutation, or deployment without separately evidenced need and explicit scope.
-- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before first real customer/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; the potential `saveBranch` cross-tenant side-effect path is unremediated and runtime exploitability unverified.
-- **DEPENDENCIES:** F5.7 checklist records launch readiness as BLOCKED. Preserve all F5 limitations and owner decisions.
-- **EXACT NEXT ACTION:** map critical auth/session/authorization flows from current source, tests, migrations, and server boundaries; identify the smallest evidence-backed review scope. No deployment.
+- **STATUS:** PROPOSED — NOT STARTED; requires a separately scoped implementation task. F6.1 itself is documentation-complete, with exact-head CI/merge verification tracked on its PR.
+- **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01. `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts` contain membership lookups without `is_active = true`; order status authorization is only applied on `new → confirmed`. In-product inactive-row reachability is UNKNOWN.
+- **OBJECTIVE:** enforce active membership in every affected handler and `orders.write` on every order status transition while preserving tenant/branch derivation from the order row, status transition rules, row locking, compare-and-set behavior and audit events.
+- **REQUIRED TESTS:** retained inactive membership rows across orders/options/metadata; deleted membership; editor/staff denial; cross-tenant order ID; every allowed status transition; tenant-owner policy; no regression to W9 order confirmation and audit behavior.
+- **BOUNDARIES:** no broad auth refactor, no changes to F3/F5.3, no RLS/grant/secret/migration changes unless separately evidenced and authorized; no Production deployment.
+- **EXACT NEXT ACTION:** authorize and execute this one test-first remediation across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
 
 ## Completed F5 tasks
 ## Completed F5 tasks

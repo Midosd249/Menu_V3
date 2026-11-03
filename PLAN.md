@@ -1,23 +1,27 @@
 # Active Plan — Menuun F-Series
 
-## Current verified checkpoint — 2026-11-03
+## Current verified checkpoint — 2026-11-04
 
-- **PHASE:** F5 — Commercial Customer Operations; F5.7 checklist completed with explicit blockers.
-- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425).
-- **F5.1–F5.2:** complete with explicit limitations.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path unremediated and runtime exploitability unverified.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged.
-- **F5.6:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
-- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`. Launch readiness is BLOCKED.
+- **VERIFIED MAIN BASELINE FOR F6.1:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (PR #426 F5.7 squash merge).
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; no F4.4 package exists.
-- **PRODUCTION:** current deployed SHA/health UNKNOWN; no deployment performed for PR #425/F5.7.
-- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. No launch/deployment.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
+- **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
+- **F6.1 VERIFIED FINDING:** active-membership predicates are inconsistent in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`. Inactive-row reachability through current product flows is UNKNOWN because team removal currently deletes rows and no in-product soft-deactivation write was found. A separately scoped test-first remediation is proposed.
+- **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
+- **REVIEW BRANCH:** `docs/f6-1-auth-session-authorization-assurance`.
+- **PR / EXACT-HEAD CI:** pending; do not claim Quality/W9 passed until exact-head runs are returned.
+- **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
+- **POST-MERGE CI:** UNKNOWN until directly queried for the actual merge SHA.
+- **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
+- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Not started; do not begin automatically.
+
+---
+
 
 ## Current active phase: F6 — Security, Isolation & Reliability Assurance
 
-- **STATUS:** F5 work packages F5.1–F5.7 are documented complete with explicit limitations, except F5.3 remains deferred/open risk. F6 is next; F3 remains an independent mandatory pre-commercial gate.
+- **STATUS:** F5 work packages F5.1–F5.7 are documented complete with explicit limitations, except F5.3 remains deferred/open risk. F6 is in progress; F6.1 source assurance is documented and AUTH-01 remediation is the next proposed atomic task. F3 remains an independent mandatory pre-commercial gate.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
@@ -32,7 +36,7 @@
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; no F4.4 package |
 | F5 | Commercial Customer Operations | COMPLETE WITH EXPLICIT LIMITATIONS; F5.3 DEFERRED OPEN RISK | F5.1–F5.7 documented; no real-customer launch while F3 remains deferred |
-| F6 | Security, Isolation & Reliability Assurance | NEXT | Targeted auth/session/authorization and tenant/branch isolation evidence |
+| F6 | Security, Isolation & Reliability Assurance | IN PROGRESS — F6.1 DOCS COMPLETE; AUTH-01 REMEDIATION PROPOSED | Targeted auth/session/authorization and tenant/branch isolation evidence |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL

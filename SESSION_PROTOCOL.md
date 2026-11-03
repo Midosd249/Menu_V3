@@ -1,21 +1,23 @@
 # Menuun Session Protocol — F-Series Handoff
 
-## Current session checkpoint — 2026-11-03
+## Current verified checkpoint — 2026-11-04
 
-- **PHASE:** F5 complete with explicit limitations; F6.1 is the next atomic task.
-- **VERIFIED MAIN:** `4eed82ffddebf7d37f8818413672d465a37af9f2` (PR #425 merge).
-- **F5.1/F5.2:** complete with explicit limitations.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified.
-- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
-- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
-- **F5.6:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #424 merged at `5941b8e9b13583760150ccc94f005061c552ce0f`.
-- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; checklist `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch decision BLOCKED.
-- **PR #425 exact-head CI:** Quality `41709298338` and W9 `41709298244` SUCCESS on `5a536c91c0ac1bca59bf00251f52fa0b520ce4e9`; merge SHA `4eed82ffddebf7d37f8818413672d465a37af9f2`.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains.
-- **PRODUCTION:** current Production SHA/health UNKNOWN; no deployment for PR #425/F5.7.
-- **POST-MERGE CI:** UNKNOWN for PR #425 merge SHA; do not infer from PR-head CI.
-- **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **EXACT NEXT TASK:** F6.1 — Reconfirm auth/session/authorization paths for critical operations. Do not launch or deploy.
+- **VERIFIED MAIN BASELINE FOR F6.1:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (PR #426 F5.7 squash merge).
+- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
+- **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
+- **F6.1 VERIFIED FINDING:** active-membership predicates are inconsistent in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`. Inactive-row reachability through current product flows is UNKNOWN because team removal currently deletes rows and no in-product soft-deactivation write was found. A separately scoped test-first remediation is proposed.
+- **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
+- **REVIEW BRANCH:** `docs/f6-1-auth-session-authorization-assurance`.
+- **PR / EXACT-HEAD CI:** pending; do not claim Quality/W9 passed until exact-head runs are returned.
+- **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
+- **POST-MERGE CI:** UNKNOWN until directly queried for the actual merge SHA.
+- **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
+- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Not started; do not begin automatically.
+
+---
+
 
 ## Permanent handoff rules
 
