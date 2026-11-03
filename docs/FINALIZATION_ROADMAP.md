@@ -15,7 +15,7 @@
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
 - **SAFETY:** F5.4 and F5.5 documentation only; no customer communication, customer data, application/database mutation, migration, settings/secrets change, subscription/account/invoice operation, billing collection, deployment, or rollback.
 - **DEPLOYMENT:** NOT PERFORMED for F5.5; no Vercel deployment was requested or verified.
-- **POST-MERGE CI:** no PR-triggered workflow runs were returned for F5.4 merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN. No Vercel deployment performed.
+- **F5.4 POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN.
 - **POST-MERGE CI:** no PR-triggered workflow runs were returned for merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI UNKNOWN.
 - **EXACT NEXT ACTION:** F5.6 — define support intake, severity, response ownership, and evidence capture. No deployment.
 
@@ -365,7 +365,7 @@ F5.3 is currently **DEFERRED BY OWNER — OPEN RISK**, not complete. The potenti
 
 F5.4 — Platform Subscription, Account & Invoice Operations — is complete with explicit limitations and merged in PR #421 at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`. It documents existing Platform Owner controls only; it does not authorize live customer operations while F3 remains deferred, and it does not resolve F5.3.
 
-F5.5 — Safe Customer Communication for Planned Maintenance and Incidents — is being documented from verified public contact channels and the existing F4 incident runbook. It does not add a status page, SLA, CRM, ticketing, or automated notifications.
+F5.5 — Safe Customer Communication for Planned Maintenance and Incidents — is complete with explicit limitations and merged in PR #422 at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`. Exact-head Quality and W9 Orders QA both succeeded. The SOP documents verified manual email/WhatsApp channels, maintenance notices, incident updates/resolution, privacy safeguards, and Arabic/English templates. It does not add a status page, SLA, CRM, ticketing, or automated notifications.
 
 ### F5 acceptance criteria
 - A restaurant can be onboarded using a repeatable documented process.
