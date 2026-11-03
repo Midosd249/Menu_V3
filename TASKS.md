@@ -27,18 +27,18 @@
 - **DECISION:** owner explicitly deferred this item to continue with the next independent F5 work package. This is not a security acceptance, remediation, or declaration that the path is safe.
 - **RESUME CONDITION:** separately authorized, test-first remediation and adversarial cross-tenant regression verification.
 
-### F5.5 — Safe customer communication for planned maintenance and incidents
-- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
-- **DELIVERABLE:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
-- **EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
-- **SCOPE:** manual owner-operated notices, incident updates and resolution; Arabic/English templates; privacy and security safeguards. No CRM, ticketing, SLA, status page, or automated broadcast is claimed. No customer communication or production operation occurred.
-
 ### F5.4 — Platform subscription, account & invoice operations
 - **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`.
 - **DELIVERABLE:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **EXACT-HEAD CI:** Quality `41577752976` and W9 Orders QA `41577752967` SUCCESS on exact PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
 - **SCOPE:** existing Platform Owner controls, commercial plan limits, trial expiry, subscription states, account freeze, invoice issue/list, payment limitations, and audit trail. Documentation only; no live billing/account/invoice operation or deployment.
 
+
+### F5.5 — Safe customer communication for planned maintenance and incidents
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`.
+- **DELIVERABLE:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
+- **SCOPE:** manual owner-operated notices, incident updates and resolution; Arabic/English templates; privacy and security safeguards. No CRM, ticketing, SLA, status page, or automated broadcast is claimed. No customer communication or production operation occurred.
 ---
 
 ## Historical task record — F3.1 (superseded by owner's F3 deferral)
