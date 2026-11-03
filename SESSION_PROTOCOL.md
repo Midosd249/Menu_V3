@@ -3,20 +3,21 @@
 ## Current session checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **VERIFIED MAIN:** `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc` (PR #421 merge commit).
+- **VERIFIED MAIN:** `0593f3f21a8fcf7ed1836a1b5ee87731b7454408` (PR #422 merge commit).
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential `saveBranch` cross-tenant side-effect path remains unremediated and runtime exploitability unverified. Not accepted or closed.
 - **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; SOP `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 - **F5.4 EXACT-HEAD CI:** Quality `41577752976` SUCCESS and W9 Orders QA `41577752967` SUCCESS on `bb1881b21fb34944ae82e93434ec805ef625221e`.
-- **F5.5:** IMPLEMENTED ON BRANCH `docs/f5-5-customer-communications-2026-11-03`; documentation-only SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`; exact-head CI pending.
+- **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
+- **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact head `61e6b1db277753902a562d6ed4152d90172c5a62`.
 - **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 exists.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **POST-MERGE CI:** no PR-triggered runs were returned for F5.4 merge SHA `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; post-merge CI UNKNOWN.
+- **POST-MERGE CI:** no PR-triggered runs were returned for F5.5 merge SHA `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; post-merge CI UNKNOWN.
 - **DEPLOYMENT:** NOT PERFORMED. Production status not inferred from CI.
 - **SAFETY:** F5.5 documentation-only; no customer messages, customer data, application/runtime, database, billing, or production changes.
-- **EXACT NEXT ACTION:** verify exact-head Quality/W9 for F5.5, review the complete diff, and create the F5.5 PR only after successful checks.
+- **EXACT NEXT ACTION:** F5.6 — define support intake, severity, response ownership, and evidence capture. This is the next task only; do not begin automatically.
 
 ## Permanent handoff rules
 
