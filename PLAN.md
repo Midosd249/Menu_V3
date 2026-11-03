@@ -3,26 +3,28 @@
 ## Current verified checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.3 — BLOCKED pending separately scoped, test-first remediation of the `saveBranch` cross-tenant side-effect risk identified during read-only discovery.
+- **CURRENT TASK:** F5.4 — Platform Subscription, Account & Invoice Operations SOP (documentation-only).
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
-- **F5.2 EXACT-HEAD CI:** Quality run `41564124218` SUCCESS and W9 Orders QA run `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
-- **F5.3 BLOCKER:** `src/lib/menu/owner.ts` `saveBranch` may continue branch-hours mutations after a tenant-scoped branch update affects zero rows. Runtime exploitability remains unverified; no remediation or data mutation has occurred.
-- **F4:** F4.1/F4.2/F4.3 complete with explicit limitations; PR #417 merged at `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`. No F4.4 work package exists.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer, customer-owned data, or commercial launch.
+- **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK. The potential `saveBranch` cross-tenant side-effect path remains unremediated and unverified at runtime. Do not represent F5.3 as complete or the risk as accepted/closed. Resume only under a separately authorized security-remediation task.
+- **F5.4:** IMPLEMENTATION IN PROGRESS on `docs/f5-4-platform-subscription-operations-2026-11-03`; documentation-only SOP at `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`. Existing Platform Owner controls are being documented; no runtime implementation or live operation.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains unchanged.
+- **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; PR #417 merged. No F4.4 package exists.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** UNKNOWN unless separately verified through Vercel; CI success and Supabase Preview status are not Production deployment evidence.
-- **SAFETY:** F5.2 was documentation-only. No real customer/data, app code, DB/schema/migration, settings/secrets, billing, deployment, or rollback changed.
-- **EXACT NEXT ACTION:** execute F5.3 read-only capability discovery, then document tenant/branch creation and ownership verification using verified current code and controls. Do not implement or mutate production data.
+- **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview status.
+- **EXACT NEXT ACTION:** review the complete F5.4 branch diff, create/inspect the PR, and verify Quality/W9 on its exact final head. Do not merge or deploy.
 
 ## Current active phase: F5 — Commercial Customer Operations
 
-- **STATUS:** F5.1 and F5.2 complete with explicit limitations; F5.3 is the only next task.
+- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 documentation in progress.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
 - **F5.1 RECORD:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
 - **F5.2 RECORD:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
+- **F5.3:** deferred open risk; not complete.
+- **F5.4 RECORD:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -31,11 +33,11 @@
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; PR #417 merged |
-| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3–F5.7 remain |
+| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3 deferred open risk; F5.4 in progress; F5.5–F5.7 remain |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
-**F5.1/F5.2:** completed with explicit limitations. F5.2 is an owner-led operating procedure grounded in verified F5.1 capabilities; it does not add product functionality or authorize real-customer onboarding while F3 remains deferred.
+**F5.4 boundary:** this SOP documents existing Platform Owner controls only. It does not enable real-customer operations while F3 remains deferred, and it does not resolve the F5.3 tenant/branch risk.
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL
 
