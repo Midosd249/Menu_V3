@@ -1,4 +1,17 @@
-## 2026-11-03 — F5.1 merge and F5.2 SOP implementation checkpoint
+## 2026-11-03 — F5.2 final closure
+
+- **VERIFIED:** PR #419 merged; exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`; merge/main SHA `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
+- **VERIFIED exact-head CI:** Quality run `41564124218` SUCCESS; W9 Orders QA run `41564124226` SUCCESS. Both runs are associated with the exact final PR head.
+- **VERIFIED diff:** seven documentation files only; no application code, workflow/configuration, database/schema/migration, secrets/settings, customer data, or billing changes.
+- **VERIFIED post-merge workflow lookup:** no PR-triggered runs were returned for merge SHA `76e6e13dba919211885270bca4e09bbfa5b7bfc1`; post-merge main CI remains UNKNOWN (not rerun).
+- **DEPLOYMENT:** no Vercel deployment was requested or verified; Production status UNKNOWN.
+- **SAFETY:** no customer onboarding, customer-owned data, production mutation, migration, Supabase/Vercel settings change, or deployment.
+- **F3:** DEFERRED BY OWNER — NOT DONE; the pre-commercial recovery gate remains mandatory.
+- **NEXT:** F5.3 read-only tenant/branch ownership discovery. No product or security implementation is authorized by this record.
+
+---
+
+## 2026-11-03 — F5.1 merge and F5.2 SOP implementation checkpoint (historical; superseded by closeout below)
 
 - **VERIFIED:** PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`; final PR head `5dfad2399e2956e60baae6462d5d222aece957d9`; base `2c7f6fe6ff134466d43fe5c1fd166548c6aa9dd4`.
 - **VERIFIED CI:** PR Quality `41543919157` and W9 Orders QA `41543919245` succeeded on the exact PR head. Post-merge main Quality `41547643428` succeeded on the merge SHA. The Supabase Preview check was successful; this is not Production deployment evidence.
@@ -6,7 +19,7 @@
 - **RESEARCH:** Exa reviewed ICO data protection by design/data minimisation and FTC business information security guidance; restaurant-tech vendor checklists were treated only as non-authoritative process examples.
 - **SAFETY:** no real customer onboarding or customer-owned data; no application code, database/schema/migration, Supabase/Vercel settings, secrets, billing operation, deployment, or rollback.
 - **F3:** remains DEFERRED BY OWNER — NOT DONE and blocks real-customer/commercial launch.
-- **STATUS:** F5.2 documentation-only implementation and final diff review complete; exact-head Quality `41558933698` and W9 Orders QA `41558933805` succeeded on `c3dead2c0430caa515b44d830ce114c91da6e4c1`. The branch was subsequently amended to correct continuity headings; final amended-head CI is tracked separately.
+- **HISTORICAL:** intermediate branch checkpoint. Final exact-head verification and merge are recorded in the closeout entry above.
 - **EXACT NEXT ACTION:** F5.3 — read-only discovery and documentation of tenant/branch creation and ownership verification.
 
 F2 UPDATE — 2026-11-02

@@ -19,7 +19,7 @@
 - **DELIVERABLE:** `docs/operations/F5_SALES_TO_ACTIVATION_JOURNEY.md`.
 
 ### F5.2 — Owner-led customer onboarding SOP
-- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `<MERGE_SHA>`.
+- **STATUS:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`.
 - **DELIVERABLE:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **EXACT-HEAD CI:** Quality `41558933698` and W9 Orders QA `41558933805` SUCCESS on `c3dead2c0430caa515b44d830ce114c91da6e4c1`.
 - **SCOPE:** process-only SOP; no customer data or product changes. F3 gate preserved.

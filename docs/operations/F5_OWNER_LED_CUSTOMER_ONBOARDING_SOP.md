@@ -1,6 +1,8 @@
 # F5.2 — Owner-Led Customer Onboarding Operating Procedure
 
-**Status:** IMPLEMENTED ON BRANCH — PENDING REVIEW AND CI  
+**Status:** COMPLETE WITH EXPLICIT LIMITATIONS — MERGED in PR #419 at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`  
+**Exact PR head:** `710cc3aad35a745ce0545617fc507c64b7cb13db`  
+**Exact-head CI:** Quality `41564124218` SUCCESS; W9 Orders QA `41564124226` SUCCESS  
 **Baseline:** `main` at `1cdf33335a1be9e1a7885c405418b9d646e844df`  
 **Date:** 2026-11-03  
 **Owner model:** one human Platform Owner/operator; restaurant owner remains accountable for their business content and publication.  
