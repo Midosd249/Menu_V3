@@ -38,7 +38,7 @@ The review does not certify Production security or claim exhaustive coverage of 
 | F6.1-AUTH-06 | LOW / DESIGN CAVEAT | VERIFIED | Membership lookup without a tenant selector chooses the earliest active membership. Callers must not assume this means the currently selected workspace when multiple active memberships exist. |
 | F6.1-AUTH-07 | MEDIUM / CONDITIONAL | VERIFIED helper behavior; exploitability UNKNOWN | `canAccessBranch` returns true immediately for owner/admin without checking that the supplied branch belongs to the membership tenant. Callers must independently tenant-bind the branch resource. |
 
-No severity above is a claim that an external attacker has exploited the path. F6.1-AUTH-01 is a source-level authorization gap with a credible inactive-member access path; runtime exploitability and current affected data are not established.
+No severity above is a claim that an external attacker has exploited the path. F6.1-AUTH-01 is a verified source-level predicate inconsistency; current in-product reachability of inactive membership rows, runtime exploitability and any affected data are UNKNOWN.
 
 ## 3. Verified authentication architecture
 
@@ -250,12 +250,12 @@ This is a source-traced representative matrix, not an exhaustive generated inven
 | Team invitation acceptance | `authMiddleware` | Verified session email must match; invitation is locked and consumed in a transaction; membership is created for invitation tenant. | **VERIFIED** source and source-contract tests. |
 | Subscription plan/entitlement reads | Depends on calling server function | Tenant ID must be derived from authorized context; subscription helper itself is a data helper, not a complete auth boundary. | **PARTIAL / CALLER REVIEW REQUIRED.** |
 | Platform subscription/account/invoice mutations | `authMiddleware` | `requirePlatformAdmin`; tenant ID is a resource selector, not privilege; subscription mutations use transaction/lock/audit patterns. | **VERIFIED** representative source paths. |
-| Orders dashboard read | `authMiddleware` | Tenant IDs are selected from owner identity or owner/admin membership; query scopes orders to those IDs. Membership predicate omits `is_active`. | **HIGH finding F6.1-AUTH-01.** |
-| Order status mutation | `authMiddleware` | Initial order check accepts owner identity or owner/admin membership but omits `is_active`. `orders.write` is checked only for `new → confirmed`, not all later transitions. | **HIGH finding F6.1-AUTH-01.** |
+| Orders dashboard read | `authMiddleware` | Tenant IDs are selected from owner identity or owner/admin membership; query scopes orders to those IDs. Membership predicate omits `is_active`. | **MEDIUM / CONDITIONAL finding F6.1-AUTH-01.** |
+| Order status mutation | `authMiddleware` | Initial order check accepts owner identity or owner/admin membership but omits `is_active`. `orders.write` is checked only for `new → confirmed`, not all later transitions. | **MEDIUM / CONDITIONAL finding F6.1-AUTH-01.** |
 | Platform Admin dashboard/users/subscriptions | `authMiddleware` | Durable Platform Admin predicate plus configured server allowlist fallback. | **VERIFIED** representative source paths. |
 | Public menu read/public order submission | Intentionally public; not staff-authenticated | Public slug/publish predicates; order payload validation, server-loaded prices and server-resolved anonymous/QR context. | **VERIFIED** architecture/source references; separate from staff authorization. |
 
-### 7.1 Order status authorization gap — F6.1-AUTH-01
+### 7.1 Active-membership predicate inconsistency — F6.1-AUTH-01
 
 **VERIFIED source evidence**
 
@@ -424,4 +424,4 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate.  
 **F5.3:** DEFERRED BY OWNER — OPEN RISK; not remediated or accepted as safe.
 
-**EXACT NEXT ACTION:** complete the separately scoped, test-first remediation for F6.1-AUTH-01 (order status authorization and inactive-membership enforcement). Do not begin F6.2 automatically.
+**EXACT NEXT ACTION:** complete the separately scoped, test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
