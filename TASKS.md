@@ -2,12 +2,15 @@
 
 ## Current task: F5.6 — Support Intake, Severity, Response Ownership, and Evidence Capture
 
-- **STATUS:** NOT STARTED — next task only; no implementation has begun.
-- **ROADMAP DEFINITION:** define support intake, severity, response ownership, and evidence capture.
-- **DEPENDENCIES:** reuse F5.1 sales-to-activation journey, F5.2 onboarding SOP, F5.4 subscription/account operations SOP, and completed F5.5 customer communications SOP.
-- **BOUNDARIES:** do not invent ticketing, CRM, SLA, 24/7 support, automated intake, or a support team. Document only currently available/manual channels and explicitly label proposed capabilities.
-- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE and mandatory before real-customer onboarding/customer-owned data/commercial launch. F5.3 remains DEFERRED BY OWNER — OPEN RISK; no acceptance or closure.
-- **EXACT NEXT ACTION:** inspect current repository support/contact capabilities and existing F5 SOPs, then define the smallest evidence-backed F5.6 deliverable. No deployment.
+- **STATUS:** IMPLEMENTATION IN PROGRESS — SOP drafted on `docs/f5-6-support-intake-severity-evidence-2026-11-03`; pending exact-head CI, review, and merge.
+- **BASE:** `main` `5232e99cc5382a02d5b0322641403d9c528f1513`.
+- **DELIVERABLE:** `docs/operations/F5_SUPPORT_INTAKE_SEVERITY_AND_EVIDENCE_SOP.md`.
+- **VERIFIED:** published email/WhatsApp links; restaurant guest workspace is not support CRM; Platform Admin is not a support queue; historical customer-request intake was retired.
+- **PROPOSED:** private manual intake register, P1–P4 internal triage, single-owner response accountability, evidence fields and bilingual templates. Not product features or SLA.
+- **RESEARCH:** official NIST SP 800-61 Rev.3 and CISA NCISS/notification guidance via Exa.
+- **BOUNDARIES:** documentation only; no customer contact, app/database/migration/production change, deployment, or data write. Do not claim ticketing, CRM, automated intake, SLA, 24/7, or backup responder.
+- **GATES:** F3 remains DEFERRED BY OWNER — NOT DONE; F5.3 remains DEFERRED BY OWNER — OPEN RISK.
+- **EXACT NEXT ACTION:** verify Quality and W9 on the final F5.6 PR head, inspect the full diff, and merge only if both pass.
 
 ## Completed F5 tasks
 
