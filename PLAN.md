@@ -3,21 +3,23 @@
 ## Current verified checkpoint — 2026-11-03
 
 - **PHASE:** F5 — Commercial Customer Operations.
-- **CURRENT TASK:** F5.4 — Platform Subscription, Account & Invoice Operations SOP (documentation-only).
+- **CURRENT TASK:** F5.5 — Safe Customer Communication for Planned Maintenance and Incidents (documentation-only).
 - **F5.1:** COMPLETE; PR #418 merged at `1cdf33335a1be9e1a7885c405418b9d646e844df`.
 - **F5.2:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #419 merged at `76e6e13dba919211885270bca4e09bbfa5b7bfc1`. SOP: `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.2 EXACT-HEAD CI:** Quality `41564124218` SUCCESS and W9 Orders QA `41564124226` SUCCESS on exact PR head `710cc3aad35a745ce0545617fc507c64b7cb13db`.
 - **F5.3:** DEFERRED BY OWNER — OPEN RISK. The potential `saveBranch` cross-tenant side-effect path remains unremediated and unverified at runtime. Do not represent F5.3 as complete or the risk as accepted/closed. Resume only under a separately authorized security-remediation task.
-- **F5.4:** IMPLEMENTED ON BRANCH — documentation-only SOP at `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`; PR #421 OPEN / READY FOR REVIEW / NOT MERGED. No runtime implementation or live operation.
+- **F5.4:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #421 merged at `9fcea58af77bb86bb5d2cefcc2d6c5fa5272a2cc`; SOP `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **F5.4 EXACT-HEAD CI:** Quality run 41577752976 and W9 Orders QA run 41577752967 both SUCCESS on exact F5.4 PR head `bb1881b21fb34944ae82e93434ec805ef625221e`.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; PR #417 merged. No F4.4 package exists.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
 - **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview status.
-- **EXACT NEXT ACTION:** await the owner's decision on PR #421 after exact-head Quality/W9 verification; do not merge or deploy automatically.
+- **F5.5:** IMPLEMENTED ON BRANCH — customer maintenance/incident communication SOP at `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`; PR pending exact-head CI.
+- **EXACT NEXT ACTION:** verify the final F5.5 branch diff and exact-head Quality/W9; repair only evidence-backed failures, then close F5.5 with continuity. No deployment.
 
 ## Current active phase: F5 — Commercial Customer Operations
 
-- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 SOP implemented on PR #421, awaiting final review/merge decision.
+- **STATUS:** F5.1/F5.2 complete with explicit limitations; F5.3 deferred by owner with an open security risk; F5.4 merged; F5.5 communication SOP in progress on branch `docs/f5-5-customer-communications-2026-11-03`.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
@@ -25,6 +27,7 @@
 - **F5.2 RECORD:** `docs/operations/F5_OWNER_LED_CUSTOMER_ONBOARDING_SOP.md`.
 - **F5.3:** deferred open risk; not complete.
 - **F5.4 RECORD:** `docs/operations/F5_PLATFORM_SUBSCRIPTION_AND_INVOICE_OPERATIONS_SOP.md`.
+- **F5.5 RECORD:** `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
 
 | ID | Phase | Status | Gate |
 |---|---|---|---|
@@ -33,7 +36,7 @@
 | F2 | Production-Safe Build & Migration Boundary | DONE | Build/migration boundary merged; exact-head CI historical evidence retained |
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; PR #417 merged |
-| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3 deferred open risk; F5.4 in progress; F5.5–F5.7 remain |
+| F5 | Commercial Customer Operations | IN_PROGRESS | F5.1/F5.2 complete; F5.3 deferred open risk; F5.4 complete; F5.5 in progress; F5.6–F5.7 remain |
 | F6 | Security, Isolation & Reliability Assurance | PLANNED | Targeted evidence-backed assurance |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
