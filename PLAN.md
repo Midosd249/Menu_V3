@@ -13,7 +13,7 @@
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains unchanged.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; PR #417 merged. No F4.4 package exists.
 - **OWNER DECISION:** Leaked Password Protection Disabled remains CLOSED / DO NOT REOPEN.
-- **DEPLOYMENT:** UNKNOWN; no Production deployment is inferred from CI or Supabase Preview status.
+- **DEPLOYMENT:** NOT PERFORMED for F5.5; no Vercel deployment was requested or verified.
 - **F5.5:** COMPLETE WITH EXPLICIT LIMITATIONS; PR #422 merged at `0593f3f21a8fcf7ed1836a1b5ee87731b7454408`; SOP `docs/operations/F5_CUSTOMER_COMMUNICATIONS_MAINTENANCE_AND_INCIDENT_SOP.md`.
 - **F5.5 EXACT-HEAD CI:** Quality `41579747196` and W9 Orders QA `41579747129` SUCCESS on exact PR head `61e6b1db277753902a562d6ed4152d90172c5a62`.
 - **EXACT NEXT ACTION:** start F5.6 support intake, severity, response ownership, and evidence capture as one atomic task. No deployment.
