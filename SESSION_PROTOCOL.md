@@ -3,14 +3,14 @@
 ## Current verified checkpoint — 2026-11-10
 
 - **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
-- **TASK:** F6.1-AUTH-01 remediation (test-first, security-sensitive). Branch `fix/f6-1-auth-01-order-membership-authorization`; implementation SHA `afa5717b`; PR #429 OPEN / NOT MERGED.
-- **FINDINGS CLOSED (source-level):** A (active-membership `is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`); B (`orders.write` authorization on every permitted status transition; tenant/branch derived from the persisted order row); C (corrected compare-and-set predicate; no new transaction abstraction; stale concurrent transitions still conflict).
+- **TASK:** F6.1-AUTH-01 remediation + review corrections (test-first, security-sensitive). Branch `fix/f6-1-auth-01-order-membership-authorization`; **final PR head `c43d6f1a3b8b1617d5232add4b8a114e3c061c35`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` (historical); PR #429 OPEN / NOT MERGED.
+- **FINDINGS CLOSED (source-level):** A (active-membership `is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`); B (`orders.write` authorization on every permitted status transition; tenant/branch derived from the persisted order row); C (corrected compare-and-set predicate; no new transaction abstraction; stale concurrent transitions still conflict). Review correction: the regression test now exercises the real production `authorizeMutation` (optional injected `Sql`).
 - **FINDINGS STILL OPEN:** F6.1-AUTH-02..AUTH-07; F6.2; F3; F5.3. F6.1 is NOT complete.
-- **TESTS:** new `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (source-contract + isolated PGlite); RED observed pre-fix, GREEN post-fix (9/9). W9 concurrency contract aligned.
+- **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests) drives production `authorizeMutation` against isolated PGlite; RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
 - **LOCAL CHECKS:** typecheck pass; lint 0 errors; `npx vite build` pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main; pass on Linux CI).
-- **CI:** exact-head run PASS on final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS and W9 orders-browser `42875521059` SUCCESS. This confirms the new tests pass in Linux CI and the 6 local failures are Windows-only artifacts.
+- **CI:** superseded PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 orders-browser `42878632983` SUCCESS. Final-head CI for `c43d6f1a` must be read directly.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, merge, or deployment.
-- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
+- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the final PR #429 head `c43d6f1a`; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
 
 ---
 

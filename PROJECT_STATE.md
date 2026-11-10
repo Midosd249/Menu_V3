@@ -1,18 +1,19 @@
 ## Current verified checkpoint — 2026-11-10
 
 - **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750` (`main` HEAD at task start; equals local clone HEAD and remote `origin/main`).
-- **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first).
+- **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first) + review corrections.
 - **BRANCH:** `fix/f6-1-auth-01-order-membership-authorization`.
-- **IMPLEMENTATION SHA:** `afa5717b` (code head). **FINAL PR HEAD:** `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` (continuity-docs commit).
+- **FINAL PR HEAD (VERIFIED):** `c43d6f1a3b8b1617d5232add4b8a114e3c061c35`.
+- **PRIOR SHAs (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`.
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429 (OPEN / NOT MERGED).
-- **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `tests/w9-orders.test.mjs` (contract aligned to corrected predicate), new `tests/f6-1-auth-01-order-membership-authorization.test.mjs`, `package.json` (test registration).
-- **TEST-FIRST EVIDENCE:** RED observed on the contract assertions before the fix; GREEN after (9/9 new tests). Targeted order/lifecycle tests 33/33.
-- **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` 517/527; the 6 failures are all Windows-only path artifacts in `scripts/security-boundary.test.mjs` (`new URL(...).pathname` → `C:\C:\…`) and reproduce identically on pristine `main` — not application failures.
+- **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `src/lib/auth/authorization.server.ts` (optional injected `Sql` on `requireMembership`/`requireBranchAccess`/`authorizeMutation` — production callers omit it; behaviour unchanged), `tests/w9-orders.test.mjs` (contract aligned), `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (production-authorization behavioral tests), `package.json` (test registration).
+- **TEST-FIRST EVIDENCE:** RED observed before the fix; the review-corrected test now asserts denial behaviourally through the real production `authorizeMutation` (RED reproduced by removing the gate).
+- **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` 531/541; the 6 failures are all Windows-only path artifacts in `scripts/security-boundary.test.mjs` (`new URL(...).pathname` → `C:\C:\…`) and reproduce identically on pristine `main` — not application failures.
 - **ENV LIMITATIONS (Windows host, reproduce on pristine main):** `npm run test:platform` needs bash glob expansion; `npm run build` wrapper uses an admin-only symlink (`npx vite build` used instead); `npm run check:auth` returns exit 2 (no dev server to observe).
-- **CI:** Balanced exact-head run PASS on final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS (14m50s; typecheck, tests, lint, production build, all-theme/browser QA) and W9 orders-browser `42875521059` SUCCESS (2m30s). This confirms the new tests pass and the 6 local failures are Windows-only.
+- **CI:** superseded run PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 `42878632983` SUCCESS. Final-head CI for `c43d6f1a` must be read directly before treating it as verified.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
 - **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
-- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision; do not merge, deploy, or start F6.2 automatically.
+- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the final PR #429 head `c43d6f1a`; if green, stop for owner review and merge decision; do not merge, deploy, or start F6.2 automatically.
 
 ---
 

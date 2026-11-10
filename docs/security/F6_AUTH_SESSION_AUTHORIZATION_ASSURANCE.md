@@ -432,11 +432,12 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 
 ## 14. F6.1-AUTH-01 remediation record — 2026-11-10
 
-**STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; CI pending. Security-sensitive, test-first.
+**STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED. Security-sensitive, test-first.
 
 - **Base main (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`
 - **Branch:** `fix/f6-1-auth-01-order-membership-authorization`
-- **Implementation SHA:** `afa5717b`
+- **Final PR head (VERIFIED):** `c43d6f1a3b8b1617d5232add4b8a114e3c061c35`
+- **Prior heads (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`.
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429
 
 ### What was closed (source-level)
@@ -449,9 +450,14 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - **Finding B — order status authorization.** `updateOrderStatus` now calls `authorizeMutation(context.userId, "orders.write", …)` for every permitted state-changing transition, not only `new → confirmed`. Tenant and branch context are derived from the persisted order row (`currentRows[0].tenant_id` / `.branch_id`); the client never supplies tenant or branch identifiers. A request whose target status equals the current status returns the order without a write and without an audit event.
 - **Finding C — concurrency/atomicity.** The single-statement CTE with `FOR UPDATE` and compare-and-set is preserved. The over-restrictive predicate `(${isNewConfirmation} or locked.from_status <> 'new')` was replaced by `locked.from_status = ${fromStatus}`, which continues to reject stale concurrent transitions and additionally restores the documented `new → cancelled` transition (previously silently blocked). No new transaction abstraction was introduced; existing SQL adapter primitives are unchanged.
 
+### Review correction — behavioral authorization coverage
+
+- `authorizeMutation`, `requireMembership` and `requireBranchAccess` now accept an optional injected `Sql`. Production callers omit it, so their behaviour is unchanged (`getSql()` is still used); the injection exists solely so the regression test can drive the **real production authorization function** rather than a test-only simulation.
+- `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests) now calls the production `authorizeMutation` against isolated PGlite and proves: denial for missing `orders.write` (editor/staff), inactive membership, missing membership and cross-tenant access; permission for active owner/admin; every permitted transition applied through the authorization gate; denied transitions leave order status unchanged and create no audit event; `new → cancelled` permitted with exactly one audit event; stale concurrent transition conflicts. RED reproduced by removing the gate.
+
 ### Tests and evidence
 
-- New `tests/f6-1-auth-01-order-membership-authorization.test.mjs` — source-contract assertions bound to the real handler source, plus isolated **PGlite** behavioral proof (active/inactive/missing/cross-tenant access; permitted transitions including `new → cancelled`; exactly one audit event; stale concurrent transition conflicts). RED observed before the fix; GREEN after (9/9).
+- `tests/f6-1-auth-01-order-membership-authorization.test.mjs` — source-contract binding to the real handler source plus behavioral proof through the production authorization function. RED observed; GREEN after (14/14).
 - `tests/w9-orders.test.mjs` concurrency contract aligned to the corrected predicate.
 - Local: `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. The 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` that reproduce on pristine `main`.
 
@@ -461,5 +467,5 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - In-product reachability of inactive membership rows remains UNKNOWN; the correction is defensive and preserves the invariant regardless.
 
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED. No migration, database mutation, merge, or Production change.
-**EXACT-HEAD CI:** final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS and W9 orders-browser `42875521059` SUCCESS.
-**EXACT NEXT ACTION:** owner review of PR #429 and merge decision; do not begin F6.2 automatically.
+**EXACT-HEAD CI:** superseded PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 orders-browser `42878632983` SUCCESS. Final-head CI for `c43d6f1a` must be read directly.
+**EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the final PR head `c43d6f1a`; if green, stop for owner review and merge decision; do not begin F6.2 automatically.
