@@ -3,9 +3,9 @@
 ## Current verified checkpoint — 2026-11-10
 
 - **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
-- **TASK:** F6.1-AUTH-01 remediation; branch `fix/f6-1-auth-01-order-membership-authorization`; implementation SHA `afa5717b`; PR #429 OPEN / NOT MERGED.
+- **TASK:** F6.1-AUTH-01 remediation; branch `fix/f6-1-auth-01-order-membership-authorization`; code head `afa5717b`; final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae`; PR #429 OPEN / NOT MERGED.
 - **SCOPE:** enforce `tenant_members.is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; require `orders.write` on every permitted order status transition; server-derive tenant/branch from the persisted order row; correct the compare-and-set predicate; regression tests (source-contract + isolated PGlite).
-- **CI:** pending at write time; reconcile against exact PR head. No merge; no deployment; no migration.
+- **CI:** exact-head PASS on final PR head `fa207c05` — Quality `42875521188` SUCCESS and W9 `42875521059` SUCCESS. No merge; no deployment; no migration.
 - **F6.1 REMAINS:** NOT COMPLETE — AUTH-01 only.
 
 ---

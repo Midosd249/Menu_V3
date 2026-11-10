@@ -8,7 +8,7 @@
 - **FINDINGS STILL OPEN:** F6.1-AUTH-02..AUTH-07; F6.2; F3; F5.3. F6.1 is NOT complete.
 - **TESTS:** new `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (source-contract + isolated PGlite); RED observed pre-fix, GREEN post-fix (9/9). W9 concurrency contract aligned.
 - **LOCAL CHECKS:** typecheck pass; lint 0 errors; `npx vite build` pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main; pass on Linux CI).
-- **CI:** pending at write time; reconcile against exact PR head.
+- **CI:** exact-head run PASS on final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS and W9 orders-browser `42875521059` SUCCESS. This confirms the new tests pass in Linux CI and the 6 local failures are Windows-only artifacts.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, merge, or deployment.
 - **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
 

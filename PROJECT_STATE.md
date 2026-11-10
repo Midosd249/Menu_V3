@@ -3,15 +3,15 @@
 - **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750` (`main` HEAD at task start; equals local clone HEAD and remote `origin/main`).
 - **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first).
 - **BRANCH:** `fix/f6-1-auth-01-order-membership-authorization`.
-- **IMPLEMENTATION SHA:** `afa5717b` (branch head).
+- **IMPLEMENTATION SHA:** `afa5717b` (code head). **FINAL PR HEAD:** `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` (continuity-docs commit).
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429 (OPEN / NOT MERGED).
 - **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `tests/w9-orders.test.mjs` (contract aligned to corrected predicate), new `tests/f6-1-auth-01-order-membership-authorization.test.mjs`, `package.json` (test registration).
 - **TEST-FIRST EVIDENCE:** RED observed on the contract assertions before the fix; GREEN after (9/9 new tests). Targeted order/lifecycle tests 33/33.
 - **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` 517/527; the 6 failures are all Windows-only path artifacts in `scripts/security-boundary.test.mjs` (`new URL(...).pathname` → `C:\C:\…`) and reproduce identically on pristine `main` — not application failures.
 - **ENV LIMITATIONS (Windows host, reproduce on pristine main):** `npm run test:platform` needs bash glob expansion; `npm run build` wrapper uses an admin-only symlink (`npx vite build` used instead); `npm run check:auth` returns exit 2 (no dev server to observe).
-- **CI:** pending at continuity-write time (Quality + W9 orders-browser). Must be reconciled against exact PR head `afa5717b` unless a later continuity commit is pushed. Untrusted until read directly.
+- **CI:** Balanced exact-head run PASS on final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS (14m50s; typecheck, tests, lint, production build, all-theme/browser QA) and W9 orders-browser `42875521059` SUCCESS (2m30s). This confirms the new tests pass and the 6 local failures are Windows-only.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
-- **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated; AUTH-02 through AUTH-07 and F6.2 remain open.
+- **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
 - **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision; do not merge, deploy, or start F6.2 automatically.
 
 ---

@@ -461,4 +461,5 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - In-product reachability of inactive membership rows remains UNKNOWN; the correction is defensive and preserves the invariant regardless.
 
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED. No migration, database mutation, merge, or Production change.
-**EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
+**EXACT-HEAD CI:** final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae` — Quality `42875521188` SUCCESS and W9 orders-browser `42875521059` SUCCESS.
+**EXACT NEXT ACTION:** owner review of PR #429 and merge decision; do not begin F6.2 automatically.

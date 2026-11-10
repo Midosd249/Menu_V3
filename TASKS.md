@@ -2,13 +2,13 @@
 
 ## Current task: F6.1-AUTH-01 — Active-membership authorization consistency
 
-- **STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; CI pending. Base main `f3660c2cb6a1817df54a8552fc49a84ab7fee750`; branch `fix/f6-1-auth-01-order-membership-authorization`; implementation SHA `afa5717b`.
+- **STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; exact-head CI PASS. Base main `f3660c2cb6a1817df54a8552fc49a84ab7fee750`; branch `fix/f6-1-auth-01-order-membership-authorization`; code head `afa5717b`; final PR head `fa207c0547f6aa0e21c540503d9fc1172eaec8ae`.
 - **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01.
 - **IMPLEMENTED:** `is_active = true` added to membership lookups in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; `orders.write` authorization now applies to every permitted order status transition (not only `new → confirmed`); tenant/branch derived from the persisted order row; no-op transitions return the order without a write; compare-and-set predicate corrected to `locked.from_status = ${fromStatus}` (also fixes the previously blocked `new → cancelled` transition).
 - **TESTS:** new `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (source-contract + isolated PGlite). RED observed before the fix; GREEN after (9/9). W9 concurrency contract aligned to the corrected predicate.
 - **LOCAL CHECKS:** typecheck pass; lint 0 errors; vite build pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main); they pass on Linux CI.
 - **BOUNDARIES RESPECTED:** no broad auth refactor, no F3/F5.3 changes, no RLS/grant/secret/migration changes; no Production deployment; no merge.
-- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
+- **EXACT NEXT ACTION:** owner review of PR #429 and merge decision (exact-head Quality `42875521188` and W9 `42875521059` both SUCCESS on `fa207c05`). Do not begin F6.2 automatically.
 
 ## Prior task record: F6.1-AUTH-01 (proposal)
 
