@@ -140,7 +140,8 @@ test("W9 tenant isolation remains enforced for order access", () => {
 test("W9 concurrent confirmations keep compare-and-set locking and prevent a second update", () => {
   assert.match(orderSource, /for update/);
   assert.match(orderSource, /o\.status = locked\.from_status/);
-  assert.match(orderSource, /\$\{isNewConfirmation\} or locked\.from_status <> 'new'/);
+  assert.match(orderSource, /locked\.from_status = \$\{fromStatus\}/);
+  assert.doesNotMatch(orderSource, /\$\{isNewConfirmation\} or locked\.from_status <> 'new'/);
   assert.match(orderSource, /if \(!rows\[0\]\) return \{ ok: false, code: "conflict"/);
 });
 

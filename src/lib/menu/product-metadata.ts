@@ -18,7 +18,7 @@ function canWrite(role: Role) {
 }
 
 async function getMember(sql: Awaited<ReturnType<typeof getSql>>, userId: string) {
-  const rows = await sql<Member>`select tenant_id, role from tenant_members where user_id = ${userId} order by created_at limit 1`;
+  const rows = await sql<Member>`select tenant_id, role from tenant_members where user_id = ${userId} and is_active = true order by created_at limit 1`;
   return rows[0] ?? null;
 }
 

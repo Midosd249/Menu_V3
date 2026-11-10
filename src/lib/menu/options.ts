@@ -14,7 +14,7 @@ type Member = { tenant_id: string; role: Role };
 async function memberFor(sql: Awaited<ReturnType<typeof getSql>>, userId: string) {
   const rows = await sql<Member>`
     select tenant_id, role from tenant_members
-    where user_id = ${userId}
+    where user_id = ${userId} and is_active = true
     order by created_at
     limit 1
   `;

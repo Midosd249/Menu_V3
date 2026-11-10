@@ -16,7 +16,7 @@ export const listModifierGroups = createServerFn({ method: "GET" })
       const sql = await getSql();
       const members = await sql<{ tenant_id: string; role: Role }>`
         select tenant_id, role from tenant_members
-        where user_id = ${context.userId}
+        where user_id = ${context.userId} and is_active = true
         order by created_at
         limit 1
       `;
