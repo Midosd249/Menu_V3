@@ -47,9 +47,9 @@ export async function getMembership(sql: Sql, userId: string, tenantId?: string)
     : null;
 }
 
-export async function requireMembership(userId: string, tenantId?: string): Promise<Membership> {
-  const { getSql } = await import("../db.ts");
-  const membership = await getMembership(await getSql(), userId, tenantId);
+export async function requireMembership(userId: string, tenantId?: string, sqlOverride?: Sql): Promise<Membership> {
+  const sql = sqlOverride ?? (await (await import("../db.ts")).getSql());
+  const membership = await getMembership(sql, userId, tenantId);
   if (!membership) throw new AuthorizationError("forbidden");
   return membership;
 }
@@ -82,16 +82,16 @@ export async function canAccessBranch(sql: Sql, membership: Membership, branchId
   return Boolean(rows[0]);
 }
 
-export async function requireBranchAccess(membership: Membership, branchId: string): Promise<AuthorizationContext> {
-  const { getSql } = await import("../db.ts");
-  if (!(await canAccessBranch(await getSql(), membership, branchId))) throw new AuthorizationError("forbidden");
+export async function requireBranchAccess(membership: Membership, branchId: string, sqlOverride?: Sql): Promise<AuthorizationContext> {
+  const sql = sqlOverride ?? (await (await import("../db.ts")).getSql());
+  if (!(await canAccessBranch(sql, membership, branchId))) throw new AuthorizationError("forbidden");
   return { ...membership, branchId };
 }
 
-export async function authorizeMutation(userId: string, permission: Permission, options?: { tenantId?: string; branchId?: string }): Promise<AuthorizationContext> {
-  const membership = await requireMembership(userId, options?.tenantId);
+export async function authorizeMutation(userId: string, permission: Permission, options?: { tenantId?: string; branchId?: string; sql?: Sql }): Promise<AuthorizationContext> {
+  const membership = await requireMembership(userId, options?.tenantId, options?.sql);
   requirePermissionForRole(membership.role, permission);
-  if (options?.branchId) return requireBranchAccess(membership, options.branchId);
+  if (options?.branchId) return requireBranchAccess(membership, options.branchId, options?.sql);
   return { ...membership, branchId: null };
 }
 
