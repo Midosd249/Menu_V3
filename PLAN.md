@@ -1,6 +1,16 @@
 # Active Plan — Menuun F-Series
 
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-10
+
+- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
+- **TASK:** F6.1-AUTH-01 remediation; branch `fix/f6-1-auth-01-order-membership-authorization`; implementation SHA `afa5717b`; PR #429 OPEN / NOT MERGED.
+- **SCOPE:** enforce `tenant_members.is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; require `orders.write` on every permitted order status transition; server-derive tenant/branch from the persisted order row; correct the compare-and-set predicate; regression tests (source-contract + isolated PGlite).
+- **CI:** pending at write time; reconcile against exact PR head. No merge; no deployment; no migration.
+- **F6.1 REMAINS:** NOT COMPLETE — AUTH-01 only.
+
+---
+
+## Prior checkpoint — 2026-11-04
 
 - **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
@@ -36,7 +46,7 @@
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; no F4.4 package |
 | F5 | Commercial Customer Operations | COMPLETE WITH EXPLICIT LIMITATIONS; F5.3 DEFERRED OPEN RISK | F5.1–F5.7 documented; no real-customer launch while F3 remains deferred |
-| F6 | Security, Isolation & Reliability Assurance | IN PROGRESS — F6.1 DOCS COMPLETE; AUTH-01 REMEDIATION PROPOSED | Targeted auth/session/authorization and tenant/branch isolation evidence |
+| F6 | Security, Isolation & Reliability Assurance | IN PROGRESS — F6.1 DOCS COMPLETE; AUTH-01 REMEDIATION ON PR #429 (OPEN) | Targeted auth/session/authorization and tenant/branch isolation evidence |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL

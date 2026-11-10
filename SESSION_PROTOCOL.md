@@ -1,6 +1,20 @@
 # Menuun Session Protocol — F-Series Handoff
 
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-10
+
+- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
+- **TASK:** F6.1-AUTH-01 remediation (test-first, security-sensitive). Branch `fix/f6-1-auth-01-order-membership-authorization`; implementation SHA `afa5717b`; PR #429 OPEN / NOT MERGED.
+- **FINDINGS CLOSED (source-level):** A (active-membership `is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`); B (`orders.write` authorization on every permitted status transition; tenant/branch derived from the persisted order row); C (corrected compare-and-set predicate; no new transaction abstraction; stale concurrent transitions still conflict).
+- **FINDINGS STILL OPEN:** F6.1-AUTH-02..AUTH-07; F6.2; F3; F5.3. F6.1 is NOT complete.
+- **TESTS:** new `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (source-contract + isolated PGlite); RED observed pre-fix, GREEN post-fix (9/9). W9 concurrency contract aligned.
+- **LOCAL CHECKS:** typecheck pass; lint 0 errors; `npx vite build` pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main; pass on Linux CI).
+- **CI:** pending at write time; reconcile against exact PR head.
+- **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, merge, or deployment.
+- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
+
+---
+
+## Prior checkpoint — 2026-11-04
 
 - **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.

@@ -427,3 +427,38 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 **POST-MERGE EVIDENCE:** no PR-triggered workflow runs were returned for the merge SHA; post-merge CI remains UNKNOWN. GitHub combined status showed a pending Vercel context; this is not deployment evidence. No Production deployment was authorized or performed.
 
 **EXACT NEXT ACTION:** separately authorize and execute the test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Do not begin F6.2 automatically.
+
+---
+
+## 14. F6.1-AUTH-01 remediation record — 2026-11-10
+
+**STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; CI pending. Security-sensitive, test-first.
+
+- **Base main (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`
+- **Branch:** `fix/f6-1-auth-01-order-membership-authorization`
+- **Implementation SHA:** `afa5717b`
+- **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429
+
+### What was closed (source-level)
+
+- **Finding A — active membership.** `tenant_members.is_active = true` is now required in every scoped membership lookup:
+  - `src/lib/menu/orders.ts` — `getClientTenantIds` and `assertOrderAccess`
+  - `src/lib/menu/options.ts` — `memberFor`
+  - `src/lib/menu/option-groups.ts` — `listModifierGroups`
+  - `src/lib/menu/product-metadata.ts` — `getMember`
+- **Finding B — order status authorization.** `updateOrderStatus` now calls `authorizeMutation(context.userId, "orders.write", …)` for every permitted state-changing transition, not only `new → confirmed`. Tenant and branch context are derived from the persisted order row (`currentRows[0].tenant_id` / `.branch_id`); the client never supplies tenant or branch identifiers. A request whose target status equals the current status returns the order without a write and without an audit event.
+- **Finding C — concurrency/atomicity.** The single-statement CTE with `FOR UPDATE` and compare-and-set is preserved. The over-restrictive predicate `(${isNewConfirmation} or locked.from_status <> 'new')` was replaced by `locked.from_status = ${fromStatus}`, which continues to reject stale concurrent transitions and additionally restores the documented `new → cancelled` transition (previously silently blocked). No new transaction abstraction was introduced; existing SQL adapter primitives are unchanged.
+
+### Tests and evidence
+
+- New `tests/f6-1-auth-01-order-membership-authorization.test.mjs` — source-contract assertions bound to the real handler source, plus isolated **PGlite** behavioral proof (active/inactive/missing/cross-tenant access; permitted transitions including `new → cancelled`; exactly one audit event; stale concurrent transition conflicts). RED observed before the fix; GREEN after (9/9).
+- `tests/w9-orders.test.mjs` concurrency contract aligned to the corrected predicate.
+- Local: `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. The 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` that reproduce on pristine `main`.
+
+### Still open (F6.1 NOT complete)
+
+- **F6.1-AUTH-02** (Better Auth 300-second cookie-cache revocation freshness), **AUTH-03** (effective PostgreSQL login role/RLS boundary), **AUTH-04** (F5.3 `saveBranch`, deferred), **AUTH-05** (Secure cookie attributes), **AUTH-06** (multi-membership selection design caveat), **AUTH-07** (`canAccessBranch` owner/admin tenant-binding). F6.2, F3 and F5.3 remain open.
+- In-product reachability of inactive membership rows remains UNKNOWN; the correction is defensive and preserves the invariant regardless.
+
+**DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED. No migration, database mutation, merge, or Production change.
+**EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the exact final PR #429 head; if green, stop for owner review and merge decision. Do not begin F6.2 automatically.
