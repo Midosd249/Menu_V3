@@ -1,9 +1,9 @@
 # F6.1 — Auth, Session & Authorization Assurance
 
-**Status:** SOURCE-TRACED SECURITY REVIEW; F6.1-AUTH-01 remediation implemented on PR #429 (OPEN / NOT MERGED).  
+**Status:** SOURCE-TRACED SECURITY REVIEW; F6.1-AUTH-01 MERGED on main at `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. F6.1 remains IN PROGRESS; AUTH-02..AUTH-07 remain open.  
 **Review date:** 2026-11-04  
 **Repository:** `Midosd249/Menu_V3`  
-**Verified main baseline:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (F5.7 squash merge / PR #426).  
+**Original review baseline:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (historical F5.7 baseline). **Current main:** `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`.  
 **Review branch:** `docs/f6-1-auth-session-authorization-assurance`
 
 ## 1. Scope, boundaries and evidence rules
@@ -470,3 +470,41 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 **EXACT-HEAD CI:** EXACT-HEAD CI (VERIFIED on `34f2e74c8cfa35d5d349c0d97023437f49eec246`): Quality `42890615011` SUCCESS and W9 orders-browser `42890615211` SUCCESS.
 **LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); verify exact-head CI on the live PR #429 tip.
 **EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision; do not begin F6.2 automatically.
+
+
+---
+
+## 15. Post-merge status reconciliation — 2026-11-12
+
+**AUTH-01 STATUS: MERGED.** PR #429 is closed/merged; squash merge SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. Section 14 remains the historical implementation and coverage record.
+
+### Verified merge and release evidence
+
+- Exact final PR head: `df89a2e2d780e67aadc58d86e698f6795fa968f4`.
+- Exact-head Quality run `42965945543`: SUCCESS.
+- Exact-head W9 Orders QA run `42965945523`: SUCCESS.
+- No PR-triggered workflow runs were returned for merge SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; post-merge CI is UNKNOWN.
+- Vercel Production deployment `dpl_84mgticAAEAW8wskM8BqWPnMCzTw` is READY on `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`, target `production`, aliases `www.menuun.com` and `menuun.com`. Deployment was automatically created following the Git merge.
+- READY/alias evidence is not real-device/browser QA. Production smoke and customer-journey verification remain UNKNOWN.
+
+### Remaining F6.1 findings
+
+- **AUTH-02:** Better Auth cookie-cache revocation freshness. Current source config in `src/lib/auth/server.ts` enables cookie cache with `maxAge: 300`. Installed version from `package-lock.json`: `better-auth@1.6.30`.
+- **AUTH-03:** effective PostgreSQL login role and RLS boundary.
+- **AUTH-04:** F5.3 `saveBranch` ownership/side-effect risk; deferred and not remediated.
+- **AUTH-05:** observed Production/Preview `Set-Cookie` attributes and resolution of `useSecureCookies: false` alongside configured secure cookie attributes.
+- **AUTH-06:** multi-membership selection design caveat.
+- **AUTH-07:** `canAccessBranch` owner/admin tenant binding.
+- **F6.2:** separate tenant/branch adversarial isolation verification; not started by this closeout.
+
+### AUTH-02 research note
+
+Official Better Auth Session Management documentation explains that with cookie caching enabled, a revoked session may remain usable on other devices until the cache expires; `disableCookieCache: true` is documented as a way to force fresh validation for sensitive operations. This is authoritative library guidance, not proof of Menuun's deployed behavior or call paths. Verify against installed `1.6.30`, current source, and isolated behavioral tests before changing configuration.
+
+### Preserved launch gates
+
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before real customer/customer-owned data/commercial launch.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; potential cross-tenant `saveBranch` side-effect remains unremediated and exploitability UNKNOWN.
+- Launch readiness remains BLOCKED. Production deployment identity is now known, but no real-device/browser smoke evidence was collected.
+
+**EXACT NEXT ACTION:** F6.1-AUTH-02 — verify Better Auth cookie-cache revocation freshness, test-first. Do not begin AUTH-03, F6.2, F3, F5.3, or deployment automatically.

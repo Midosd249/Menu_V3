@@ -1,16 +1,30 @@
 # Active Task Queue — F-Series
 
-## Current task: F6.1-AUTH-01 — Active-membership authorization consistency
+## Current task: F6.1-AUTH-02 — Session revocation freshness with Better Auth cookie cache
 
-- **STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; review corrections applied. Base main `f3660c2cb6a1817df54a8552fc49a84ab7fee750`; branch `fix/f6-1-auth-01-order-membership-authorization`; **implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` / `c43d6f1a` (historical).
-- **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01.
-- **IMPLEMENTED:** `is_active = true` added to membership lookups in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; `orders.write` authorization now applies to every permitted order status transition (not only `new → confirmed`); tenant/branch derived from the persisted order row; no-op transitions return the order without a write; compare-and-set predicate corrected to `locked.from_status = ${fromStatus}` (also fixes the previously blocked `new → cancelled` transition).
-- **REVIEW CORRECTION:** `authorizeMutation`/`requireMembership`/`requireBranchAccess` accept an optional injected `Sql` (production callers omit it; behaviour unchanged), so the regression test drives the real production authorization function and behaviorally proves denial for missing `orders.write`, inactive membership, missing membership and cross-tenant access, and proves a denied representative `new → confirmed` attempt leaves status unchanged and creates no audit event.
-- **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests). RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
-- **LOCAL CHECKS:** typecheck pass; lint 0 errors; vite build pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main); they pass on Linux CI.
-- **BOUNDARIES RESPECTED:** no broad auth refactor, no F3/F5.3 changes, no RLS/grant/secret/migration changes; no Production deployment; no merge.
-- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
-- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or begin F6.2 automatically.
+- **STATUS:** QUEUED — NOT STARTED. AUTH-01 is merged; this is the single next atomic task.
+- **BASE MAIN (VERIFIED):** `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`.
+- **AUTH-01 MERGE (VERIFIED):** PR #429 merged at `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; exact PR-head Quality `42965945543` SUCCESS and W9 Orders QA `42965945523` SUCCESS on `df89a2e2d780e67aadc58d86e698f6795fa968f4`.
+- **SOURCE EVIDENCE (VERIFIED):** `src/lib/auth/server.ts` configures `session.cookieCache: { enabled: true, maxAge: 300 }`; `package-lock.json` resolves `better-auth@1.6.30`.
+- **EXTERNAL RESEARCH:** official Better Auth Session Management documentation says cookie-cached session data can remain usable on other devices until cache expiry; sensitive requests can bypass cache with `disableCookieCache: true`. This is library guidance, not Menuun runtime proof.
+- **OBJECTIVE:** establish actual revocation-freshness behavior for the installed Better Auth version and critical revocation actions, then compare observed behavior with an explicit owner-approved security requirement.
+- **REQUIRED DISCOVERY:** inspect current Better Auth config, session invalidation and account freeze/ban/password-reset flows, middleware/session-resolution call sites, current tests, and installed-version API/types. Confirm which operations revoke database sessions and which sensitive endpoints can force fresh validation.
+- **TEST-FIRST ACCEPTANCE:** isolated regression tests demonstrate current and required post-revocation behavior. Test cached session use, explicit revocation, expiry/refresh boundary, and cache-bypass behavior where supported. Verify no cross-tenant or privilege regression.
+- **DECISION GATE:** do not silently change `maxAge`, disable cache globally, or add per-route bypasses until measured behavior, impact, supported API semantics, and an owner-appropriate freshness target are documented. If the requirement is ambiguous, mark it UNKNOWN and propose bounded options rather than inventing an SLA.
+- **BOUNDARIES:** no broad auth rewrite; no RLS/grant/schema/migration changes; no secret exposure; no production account/session mutation; no deployment. Preserve Gate/preview bearer-session behavior and middleware contracts.
+- **VERIFICATION:** focused AUTH-02 tests; relevant auth/session tests; typecheck, lint, Quality and W9 on the same final PR head; diff/security review. Browser/runtime checks only if a safe supported environment exists.
+- **STOP CONDITION:** document observed behavior, test evidence, policy decision/unknowns, limitations, and exactly one next task. Do not begin AUTH-03 or F6.2 automatically.
+
+## Recently completed: F6.1-AUTH-01 — Active-membership authorization consistency
+
+- **STATUS:** MERGED — PR #429; merge SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`.
+- **EXACT-HEAD CI:** Quality `42965945543` SUCCESS; W9 Orders QA `42965945523` SUCCESS on PR head `df89a2e2d780e67aadc58d86e698f6795fa968f4`.
+- **IMPLEMENTED:** active-membership predicates in orders/options/modifier-group/product-metadata paths; `orders.write` on every permitted state-changing order transition; tenant/branch derived from persisted order; no-op avoids mutation/audit; corrected compare-and-set guard; regression tests call production `authorizeMutation`.
+- **COVERAGE LIMIT:** denied mutation/no-audit behavior is demonstrated for a representative `new → confirmed` attempt; allowed lifecycle transitions are exercised through the authorization gate. Do not claim denied users were individually tested against every transition.
+- **LOCAL REPORT LIMIT:** 14/14 AUTH-01 tests and focused 50/50 reported; typecheck/lint/Vite build reported passing. Full `npm test` aggregate was 531/541; six Windows path artifacts were reported, and four outcomes remain UNKNOWN from the supplied summary.
+- **POST-MERGE:** no PR-triggered workflow runs were returned for merge SHA; post-merge CI UNKNOWN.
+- **DEPLOYMENT:** automatic Vercel Production deployment READY on merge SHA; no real-device/browser QA claimed.
+- **NO DB/MIGRATION/PRODUCTION DATA CHANGE.**
 
 ## Prior task record: F6.1-AUTH-01 (proposal)
 

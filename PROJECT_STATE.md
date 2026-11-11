@@ -1,20 +1,32 @@
-## Current verified checkpoint — 2026-11-11
+## Current verified checkpoint — 2026-11-12
 
-- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750` (`main` HEAD at task start; equals local clone HEAD and remote `origin/main`).
-- **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first) + review corrections.
-- **BRANCH:** `fix/f6-1-auth-01-order-membership-authorization`.
-- **IMPLEMENTATION HEAD (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`. Later commits on PR #429 are documentation-only continuity closeouts; always resolve the live branch HEAD from GitHub PR metadata.
-- **PRIOR SHAs (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`; third review-correction head `c43d6f1a`.
-- **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429 (OPEN / NOT MERGED).
-- **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `src/lib/auth/authorization.server.ts` (optional injected `Sql` on `requireMembership`/`requireBranchAccess`/`authorizeMutation` — production callers omit it; behaviour unchanged), `tests/w9-orders.test.mjs` (contract aligned), `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (production-authorization behavioral tests), `package.json` (test registration).
-- **TEST-FIRST EVIDENCE:** RED observed before the fix; the review-corrected test now asserts denial behaviourally through the real production `authorizeMutation` (RED reproduced by removing the gate).
-- **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` reported 531/541; six failures were attributed to Windows-only path artifacts in `scripts/security-boundary.test.mjs`; the disposition of the remaining four outcomes is UNKNOWN from the supplied summary.
-- **ENV LIMITATIONS (Windows host, reproduce on pristine main):** `npm run test:platform` needs bash glob expansion; `npm run build` wrapper uses an admin-only symlink (`npx vite build` used instead); `npm run check:auth` returns exit 2 (no dev server to observe).
-- **EXACT-HEAD CI (VERIFIED on implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`):** Quality `42890615011` SUCCESS and W9 Orders QA `42890615211` SUCCESS. Subsequent documentation-only PR commits require their own exact-head CI verification.
-- **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
-- **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
-- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
-- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or start F6.2 automatically.
+- **MAIN (VERIFIED):** `main` HEAD = `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; latest repository commit and PR #429 squash merge.
+- **COMPLETED TASK:** F6.1-AUTH-01 — active-membership authorization consistency and order-status authorization remediation.
+- **PR #429 (VERIFIED):** MERGED/CLOSED at 2026-11-11 21:49:08 UTC; merge commit `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. PR URL: https://github.com/Midosd249/Menu_V3/pull/429.
+- **Exact PR-head CI (VERIFIED):** final PR head `df89a2e2d780e67aadc58d86e698f6795fa968f4`; Quality run `42965945543` SUCCESS; W9 Orders QA run `42965945523` SUCCESS.
+- **Post-merge CI (UNKNOWN):** GitHub returned no PR-triggered workflow runs associated with merge SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. Pre-merge checks are not post-merge checks.
+- **Production deployment (VERIFIED):** Vercel deployment `dpl_84mgticAAEAW8wskM8BqWPnMCzTw`, target `production`, state `READY`, deployed SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`, aliases `www.menuun.com` and `menuun.com`. The Git merge caused the connected Git/Vercel automatic deployment; no manual deployment command was issued.
+- **Production QA (UNKNOWN):** READY and alias assignment are deployment evidence only. No real-device/browser smoke test or customer-journey verification was performed in this session.
+- **AUTH-01 implementation:** active membership required in affected membership lookups; `orders.write` enforced for each permitted state-changing order transition; tenant/branch derived from persisted order row; no-op requests avoid writes/audit events; row locking and compare-and-set preserved. The denied-mutation/no-audit behavioral assertion covers a representative `new → confirmed` denial, not every transition individually.
+- **Implementation evidence:** local report recorded 14/14 AUTH-01 tests and focused 50/50; typecheck/lint/Vite build passed. Full local `npm test` summary was 531/541, with six Windows path artifacts reported and four outcomes unresolved in the supplied summary. Exact-head Linux CI is the stronger verified gate.
+- **No database migration, schema change, production data mutation, secrets/settings change, or customer-data change** was part of AUTH-01.
+- **F6.1:** IN PROGRESS — AUTH-01 complete; AUTH-02 through AUTH-07 remain open. F6.2 remains a later independent phase.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` potential cross-tenant side-effect path remains unremediated; exploitability UNKNOWN.
+- **Launch readiness:** BLOCKED. Verified deployment identity does not close F3, F5.3, or Production smoke/real-device evidence gaps.
+- **Exact next task:** F6.1-AUTH-02 — verify Better Auth cookie-cache session-revocation freshness, test-first and narrowly scoped. Do not start AUTH-03, F6.2, F3, F5.3, or release work automatically.
+
+## 2026-11-12 — Post-merge continuity reconciliation
+
+- Reconciled stale open/unmerged PR #429 references against live GitHub PR metadata, latest main commit history, exact-head CI evidence, and the current Vercel Production deployment record.
+- Recorded the distinction between pre-merge exact-head CI, absent post-merge workflow evidence, deployment READY, and unperformed real-device/browser QA.
+- Reviewed the F6.1 assurance record and installed Better Auth version. Source config enables `session.cookieCache` with `maxAge: 300`; package-lock resolves Better Auth `1.6.30`.
+- Official Better Auth documentation states cached session data may remain usable on other devices until cache expiry unless cache is bypassed for the request; this is external guidance, not proof of Menuun runtime behavior.
+- Documentation-only continuity work. No application code, migrations, database, secrets, settings, customer data, or deployment configuration changed.
+- **Implementation status:** documentation reconciliation prepared on a dedicated branch; pending PR checks/review.
+- **Deployment status:** existing Production deployment remains READY on `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; this documentation branch is not deployed.
+- **UNKNOWN:** post-merge GitHub Actions status; real-device/browser smoke; current runtime session revocation behavior.
+- **BLOCKED:** F6.1 completion and commercial launch remain blocked by open findings/gates above.
 
 ---
 
