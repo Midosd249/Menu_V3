@@ -13,8 +13,8 @@
 - **EXACT-HEAD CI (VERIFIED on implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`):** Quality `42890615011` SUCCESS and W9 Orders QA `42890615211` SUCCESS. Subsequent documentation-only PR commits require their own exact-head CI verification.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
 - **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
-- **LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); exact-head CI for the live PR tip must be read from GitHub after this commit.
-- **EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision. Do not merge, deploy, or start F6.2 automatically.
+- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
+- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or start F6.2 automatically.
 
 ---
 
