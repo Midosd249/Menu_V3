@@ -5,11 +5,12 @@
 - **STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; review corrections applied. Base main `f3660c2cb6a1817df54a8552fc49a84ab7fee750`; branch `fix/f6-1-auth-01-order-membership-authorization`; **implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` / `c43d6f1a` (historical).
 - **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01.
 - **IMPLEMENTED:** `is_active = true` added to membership lookups in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; `orders.write` authorization now applies to every permitted order status transition (not only `new → confirmed`); tenant/branch derived from the persisted order row; no-op transitions return the order without a write; compare-and-set predicate corrected to `locked.from_status = ${fromStatus}` (also fixes the previously blocked `new → cancelled` transition).
-- **REVIEW CORRECTION:** `authorizeMutation`/`requireMembership`/`requireBranchAccess` accept an optional injected `Sql` (production callers omit it; behaviour unchanged), so the regression test drives the real production authorization function and behaviorally proves denial for missing `orders.write`, inactive membership, missing membership and cross-tenant access, and proves denied transitions leave status unchanged and create no audit event.
+- **REVIEW CORRECTION:** `authorizeMutation`/`requireMembership`/`requireBranchAccess` accept an optional injected `Sql` (production callers omit it; behaviour unchanged), so the regression test drives the real production authorization function and behaviorally proves denial for missing `orders.write`, inactive membership, missing membership and cross-tenant access, and proves a denied representative `new → confirmed` attempt leaves status unchanged and creates no audit event.
 - **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests). RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
 - **LOCAL CHECKS:** typecheck pass; lint 0 errors; vite build pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main); they pass on Linux CI.
 - **BOUNDARIES RESPECTED:** no broad auth refactor, no F3/F5.3 changes, no RLS/grant/secret/migration changes; no Production deployment; no merge.
-- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not begin F6.2 automatically.
+- **LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); verify exact-head CI on the live PR #429 tip.
+- **EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision. Do not begin F6.2 automatically.
 
 ## Prior task record: F6.1-AUTH-01 (proposal)
 

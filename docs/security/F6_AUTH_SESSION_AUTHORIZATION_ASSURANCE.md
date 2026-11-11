@@ -468,4 +468,5 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED. No migration, database mutation, merge, or Production change.
 **EXACT-HEAD CI:** EXACT-HEAD CI (VERIFIED on `34f2e74c8cfa35d5d349c0d97023437f49eec246`): Quality `42890615011` SUCCESS and W9 orders-browser `42890615211` SUCCESS.
-**EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision; do not begin F6.2 automatically.
+**LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); verify exact-head CI on the live PR #429 tip.
+**EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision; do not begin F6.2 automatically.
