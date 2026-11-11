@@ -1,19 +1,19 @@
-## Current verified checkpoint — 2026-11-10
+## Current verified checkpoint — 2026-11-11
 
 - **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750` (`main` HEAD at task start; equals local clone HEAD and remote `origin/main`).
 - **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first) + review corrections.
 - **BRANCH:** `fix/f6-1-auth-01-order-membership-authorization`.
-- **FINAL PR HEAD (VERIFIED):** `c43d6f1a3b8b1617d5232add4b8a114e3c061c35`.
+- **FINAL PR HEAD (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`.
 - **PRIOR SHAs (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`.
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429 (OPEN / NOT MERGED).
 - **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `src/lib/auth/authorization.server.ts` (optional injected `Sql` on `requireMembership`/`requireBranchAccess`/`authorizeMutation` — production callers omit it; behaviour unchanged), `tests/w9-orders.test.mjs` (contract aligned), `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (production-authorization behavioral tests), `package.json` (test registration).
 - **TEST-FIRST EVIDENCE:** RED observed before the fix; the review-corrected test now asserts denial behaviourally through the real production `authorizeMutation` (RED reproduced by removing the gate).
 - **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` 531/541; the 6 failures are all Windows-only path artifacts in `scripts/security-boundary.test.mjs` (`new URL(...).pathname` → `C:\C:\…`) and reproduce identically on pristine `main` — not application failures.
 - **ENV LIMITATIONS (Windows host, reproduce on pristine main):** `npm run test:platform` needs bash glob expansion; `npm run build` wrapper uses an admin-only symlink (`npx vite build` used instead); `npm run check:auth` returns exit 2 (no dev server to observe).
-- **CI:** superseded run PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 `42878632983` SUCCESS. Final-head CI for `c43d6f1a` must be read directly before treating it as verified.
+- **CI:** superseded run PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 `42878632983` SUCCESS. Final-head CI for `34f2e74c` must be read directly before treating it as verified.
 - **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
 - **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
-- **EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the final PR #429 head `c43d6f1a`; if green, stop for owner review and merge decision; do not merge, deploy, or start F6.2 automatically.
+- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or start F6.2 automatically.
 
 ---
 

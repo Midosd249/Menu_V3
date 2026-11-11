@@ -1,6 +1,6 @@
 # F6.1 — Auth, Session & Authorization Assurance
 
-**Status:** SOURCE-TRACED SECURITY REVIEW — documentation-only; no remediation applied.  
+**Status:** SOURCE-TRACED SECURITY REVIEW; F6.1-AUTH-01 remediation implemented on PR #429 (OPEN / NOT MERGED).  
 **Review date:** 2026-11-04  
 **Repository:** `Midosd249/Menu_V3`  
 **Verified main baseline:** `fbfe745fc76fd5674fbff2e2524272c8a2269839` (F5.7 squash merge / PR #426).  
@@ -436,7 +436,7 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 
 - **Base main (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`
 - **Branch:** `fix/f6-1-auth-01-order-membership-authorization`
-- **Final PR head (VERIFIED):** `c43d6f1a3b8b1617d5232add4b8a114e3c061c35`
+- **Final PR head (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`
 - **Prior heads (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`.
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429
 
@@ -467,5 +467,5 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 - In-product reachability of inactive membership rows remains UNKNOWN; the correction is defensive and preserves the invariant regardless.
 
 **DEPLOYMENT STATUS:** NOT AUTHORIZED / NOT PERFORMED. No migration, database mutation, merge, or Production change.
-**EXACT-HEAD CI:** superseded PASS on `3cda00f0` — Quality `42878632973` SUCCESS and W9 orders-browser `42878632983` SUCCESS. Final-head CI for `c43d6f1a` must be read directly.
-**EXACT NEXT ACTION:** read Quality and W9 orders-browser results on the final PR head `c43d6f1a`; if green, stop for owner review and merge decision; do not begin F6.2 automatically.
+**EXACT-HEAD CI:** EXACT-HEAD CI (VERIFIED on `34f2e74c8cfa35d5d349c0d97023437f49eec246`): Quality `42890615011` SUCCESS and W9 orders-browser `42890615211` SUCCESS.
+**EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision; do not begin F6.2 automatically.
