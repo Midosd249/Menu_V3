@@ -1,4 +1,24 @@
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-11
+
+- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750` (`main` HEAD at task start; equals local clone HEAD and remote `origin/main`).
+- **TASK:** F6.1-AUTH-01 — security-sensitive backend authorization remediation (test-first) + review corrections.
+- **BRANCH:** `fix/f6-1-auth-01-order-membership-authorization`.
+- **IMPLEMENTATION HEAD (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`. Later commits on PR #429 are documentation-only continuity closeouts; always resolve the live branch HEAD from GitHub PR metadata.
+- **PRIOR SHAs (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`; third review-correction head `c43d6f1a`.
+- **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429 (OPEN / NOT MERGED).
+- **CHANGES:** `src/lib/menu/orders.ts` (active-membership predicates + `orders.write` authorization on every permitted status transition + no-op read short-circuit + corrected compare-and-set predicate), `src/lib/menu/options.ts`, `src/lib/menu/option-groups.ts`, `src/lib/menu/product-metadata.ts` (active-membership `is_active = true`), `src/lib/auth/authorization.server.ts` (optional injected `Sql` on `requireMembership`/`requireBranchAccess`/`authorizeMutation` — production callers omit it; behaviour unchanged), `tests/w9-orders.test.mjs` (contract aligned), `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (production-authorization behavioral tests), `package.json` (test registration).
+- **TEST-FIRST EVIDENCE:** RED observed before the fix; the review-corrected test now asserts denial behaviourally through the real production `authorizeMutation` (RED reproduced by removing the gate).
+- **LOCAL CHECKS:** `npm run typecheck` pass; `npm run lint` 0 errors; `npx vite build` pass. `npm test` reported 531/541; six failures were attributed to Windows-only path artifacts in `scripts/security-boundary.test.mjs`; the disposition of the remaining four outcomes is UNKNOWN from the supplied summary.
+- **ENV LIMITATIONS (Windows host, reproduce on pristine main):** `npm run test:platform` needs bash glob expansion; `npm run build` wrapper uses an admin-only symlink (`npx vite build` used instead); `npm run check:auth` returns exit 2 (no dev server to observe).
+- **EXACT-HEAD CI (VERIFIED on implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`):** Quality `42890615011` SUCCESS and W9 Orders QA `42890615211` SUCCESS. Subsequent documentation-only PR commits require their own exact-head CI verification.
+- **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, or deployment. No merge.
+- **F6.1 STATUS:** NOT COMPLETE — only AUTH-01 remediated (source-level); AUTH-02 through AUTH-07 and F6.2 remain open.
+- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
+- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or start F6.2 automatically.
+
+---
+
+## Prior verified checkpoint — 2026-11-04
 
 - **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.

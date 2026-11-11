@@ -1,6 +1,21 @@
 # Menuun Session Protocol — F-Series Handoff
 
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-11
+
+- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
+- **TASK:** F6.1-AUTH-01 remediation + review corrections (test-first, security-sensitive). Branch `fix/f6-1-auth-01-order-membership-authorization`; **implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` / `c43d6f1a` (historical); PR #429 OPEN / NOT MERGED.
+- **FINDINGS CLOSED (source-level):** A (active-membership `is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`); B (`orders.write` authorization on every permitted status transition; tenant/branch derived from the persisted order row); C (corrected compare-and-set predicate; no new transaction abstraction; stale concurrent transitions still conflict). Review correction: the regression test now exercises the real production `authorizeMutation` (optional injected `Sql`).
+- **FINDINGS STILL OPEN:** F6.1-AUTH-02..AUTH-07; F6.2; F3; F5.3. F6.1 is NOT complete.
+- **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests) drives production `authorizeMutation` against isolated PGlite; RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
+- **LOCAL CHECKS:** typecheck pass; lint 0 errors; `npx vite build` pass. The `npm test` summary reported 531/541; six failures were attributed to Windows-only path artifacts in `scripts/security-boundary.test.mjs`; disposition of the remaining four outcomes is UNKNOWN from the supplied summary.
+- **IMPLEMENTATION CI (VERIFIED on `34f2e74c8cfa35d5d349c0d97023437f49eec246`):** Quality `42890615011` SUCCESS and W9 orders-browser `42890615211` SUCCESS. A later documentation-only continuity tip is on PR #429; verify its exact-head CI from live GitHub evidence.
+- **SAFETY:** no migrations, database writes, customer-data changes, settings/secrets changes, merge, or deployment.
+- **LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); verify exact-head CI on the live PR #429 tip.
+- **EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision. Do not begin F6.2 automatically.
+
+---
+
+## Prior checkpoint — 2026-11-04
 
 - **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.

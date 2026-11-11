@@ -2,6 +2,18 @@
 
 ## Current task: F6.1-AUTH-01 — Active-membership authorization consistency
 
+- **STATUS:** IMPLEMENTED ON PR #429 — OPEN / NOT MERGED; review corrections applied. Base main `f3660c2cb6a1817df54a8552fc49a84ab7fee750`; branch `fix/f6-1-auth-01-order-membership-authorization`; **implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` / `c43d6f1a` (historical).
+- **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01.
+- **IMPLEMENTED:** `is_active = true` added to membership lookups in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; `orders.write` authorization now applies to every permitted order status transition (not only `new → confirmed`); tenant/branch derived from the persisted order row; no-op transitions return the order without a write; compare-and-set predicate corrected to `locked.from_status = ${fromStatus}` (also fixes the previously blocked `new → cancelled` transition).
+- **REVIEW CORRECTION:** `authorizeMutation`/`requireMembership`/`requireBranchAccess` accept an optional injected `Sql` (production callers omit it; behaviour unchanged), so the regression test drives the real production authorization function and behaviorally proves denial for missing `orders.write`, inactive membership, missing membership and cross-tenant access, and proves a denied representative `new → confirmed` attempt leaves status unchanged and creates no audit event.
+- **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests). RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
+- **LOCAL CHECKS:** typecheck pass; lint 0 errors; vite build pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main); they pass on Linux CI.
+- **BOUNDARIES RESPECTED:** no broad auth refactor, no F3/F5.3 changes, no RLS/grant/secret/migration changes; no Production deployment; no merge.
+- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
+- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or begin F6.2 automatically.
+
+## Prior task record: F6.1-AUTH-01 (proposal)
+
 - **STATUS:** PROPOSED — NOT STARTED; requires a separately scoped implementation task. F6.1 itself is documentation-complete, with exact-head CI/merge verification tracked on its PR.
 - **EVIDENCE:** `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`, finding F6.1-AUTH-01. `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts` contain membership lookups without `is_active = true`; order status authorization is only applied on `new → confirmed`. In-product inactive-row reachability is UNKNOWN.
 - **OBJECTIVE:** enforce active membership in every affected handler and `orders.write` on every order status transition while preserving tenant/branch derivation from the order row, status transition rules, row locking, compare-and-set behavior and audit events.

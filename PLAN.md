@@ -1,6 +1,16 @@
 # Active Plan — Menuun F-Series
 
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-11
+
+- **BASE MAIN (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`.
+- **TASK:** F6.1-AUTH-01 remediation (+ review corrections); branch `fix/f6-1-auth-01-order-membership-authorization`; **implementation head `34f2e74c8cfa35d5d349c0d97023437f49eec246`**; prior heads `afa5717b` / `fa207c05` / `3cda00f0` / `c43d6f1a` (historical); PR #429 OPEN / NOT MERGED.
+- **SCOPE:** enforce `tenant_members.is_active = true` in `orders.ts`, `options.ts`, `option-groups.ts`, `product-metadata.ts`; require `orders.write` on every permitted order status transition; server-derive tenant/branch from the persisted order row; correct the compare-and-set predicate; production `authorizeMutation` made directly testable via an optional injected `Sql` (production callers omit it); regression tests exercise the real production authorization function.
+- **IMPLEMENTATION CI (VERIFIED on `34f2e74c8cfa35d5d349c0d97023437f49eec246`):** Quality `42890615011` SUCCESS and W9 Orders QA `42890615211` SUCCESS. A later documentation-only continuity tip is on PR #429; verify its exact-head CI from live GitHub evidence. No merge; no deployment; no migration.
+- **F6.1 REMAINS:** NOT COMPLETE — AUTH-01 only.
+
+---
+
+## Prior checkpoint — 2026-11-04
 
 - **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
 - **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
@@ -21,7 +31,7 @@
 
 ## Current active phase: F6 — Security, Isolation & Reliability Assurance
 
-- **STATUS:** F5 work packages F5.1–F5.7 are documented complete with explicit limitations, except F5.3 remains deferred/open risk. F6 is in progress; F6.1 source assurance is documented and AUTH-01 remediation is the next proposed atomic task. F3 remains an independent mandatory pre-commercial gate.
+- **STATUS:** F5 work packages F5.1–F5.7 are documented complete with explicit limitations, except F5.3 remains deferred/open risk. F6 is in progress; F6.1 source assurance is documented and AUTH-01 remediation is implemented on PR #429 (OPEN / NOT MERGED). F3 remains an independent mandatory pre-commercial gate.
 - **F0/F1/F2:** DONE; preserve and do not repeat without new defect evidence.
 - **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate remains.
 - **F4:** F4.1/F4.2/F4.3 COMPLETE WITH EXPLICIT LIMITATIONS; no F4.4 package exists.
@@ -36,7 +46,7 @@
 | F3 | Backup, Restore & Disaster Recovery | DEFERRED BY OWNER — NOT DONE | Complete evidence-backed recovery before first real customer/customer-owned data/commercial launch |
 | F4 | Release, Monitoring & Incident Operations | DONE WITH EXPLICIT LIMITATIONS | F4.1/F4.2/F4.3 complete; no F4.4 package |
 | F5 | Commercial Customer Operations | COMPLETE WITH EXPLICIT LIMITATIONS; F5.3 DEFERRED OPEN RISK | F5.1–F5.7 documented; no real-customer launch while F3 remains deferred |
-| F6 | Security, Isolation & Reliability Assurance | IN PROGRESS — F6.1 DOCS COMPLETE; AUTH-01 REMEDIATION PROPOSED | Targeted auth/session/authorization and tenant/branch isolation evidence |
+| F6 | Security, Isolation & Reliability Assurance | IN PROGRESS — F6.1 DOCS COMPLETE; AUTH-01 REMEDIATION ON PR #429 (OPEN) | Targeted auth/session/authorization and tenant/branch isolation evidence |
 | F7 | Architecture Evolution & Governance | PLANNED | ADR and drift-management process |
 
 ## F2 acceptance gate — COMPLETED / HISTORICAL

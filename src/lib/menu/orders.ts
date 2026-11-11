@@ -33,6 +33,7 @@ async function getClientTenantIds(userId: string): Promise<string[]> {
        or exists (
          select 1 from tenant_members tm
          where tm.tenant_id = t.id and tm.user_id = ${userId}
+           and tm.is_active = true
            and tm.role in ('owner', 'admin')
        )
   `;
@@ -48,7 +49,7 @@ async function assertOrderAccess(userId: string, orderId: string): Promise<FnRes
       where o.id = ${orderId}
         and (
           o.tenant_id in (select t.id from tenants t where t.owner_user_id = ${userId})
-          or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.role in ('owner','admin'))
+          or exists (select 1 from tenant_members tm where tm.tenant_id = o.tenant_id and tm.user_id = ${userId} and tm.is_active = true and tm.role in ('owner','admin'))
         )
       limit 1
     `;
@@ -197,14 +198,33 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       const transitionError = getOrderStatusTransitionError(fromStatus, data.status);
       if (transitionError) return transitionError;
 
+      // A request that would not change the persisted status is a read, not a
+      // write: return the current order without authorizing a mutation, without
+      // issuing an UPDATE and without recording an audit event.
+      if (fromStatus === data.status) {
+        const current = await sql<Record<string, unknown>>`
+          select o.*, t.name_ar as restaurant_name, coalesce(b.name_ar, 'كل الفروع') as branch_name, rt.label as table_label,
+            (select count(*) from order_items oi where oi.order_id = o.id) as item_count,
+            coalesce((select jsonb_agg(jsonb_build_object('id', oi.id, 'product_id', oi.product_id, 'product_name_ar', oi.product_name_ar, 'product_name_en', oi.product_name_en, 'quantity', oi.quantity, 'unit_price', oi.unit_price, 'line_total', oi.line_total, 'selected_options', oi.selected_options) order by oi.created_at) from order_items oi where oi.order_id = o.id), '[]'::jsonb) as items
+          from orders o join tenants t on t.id = o.tenant_id left join branches b on b.id = o.branch_id
+          left join restaurant_tables rt on rt.id = o.table_id and rt.tenant_id = o.tenant_id and rt.branch_id = o.branch_id
+          where o.id = ${data.id} and o.archived_at is null limit 1
+        `;
+        return current[0] ? { ok: true, data: mapOrder(current[0]) } : { ok: false, code: "not_found", error: "الطلب غير موجود" };
+      }
+
+      // Authorization is required for every permitted state-changing transition.
+      // Tenant and branch context is derived from the persisted order row; the
+      // client never supplies tenant or branch identifiers.
+      try {
+        await authorizeMutation(context.userId, "orders.write", { tenantId: currentRows[0].tenant_id, ...(currentRows[0].branch_id ? { branchId: currentRows[0].branch_id } : {}) });
+      } catch {
+        return { ok: false, code: "forbidden", error: "لا تملك صلاحية تحديث حالة هذا الطلب." };
+      }
+
       const isNewConfirmation = fromStatus === "new" && data.status === "confirmed";
       let duration: number | null = null;
       if (isNewConfirmation) {
-        try {
-          await authorizeMutation(context.userId, "orders.write", { tenantId: currentRows[0].tenant_id, ...(currentRows[0].branch_id ? { branchId: currentRows[0].branch_id } : {}) });
-        } catch {
-          return { ok: false, code: "forbidden", error: "لا تملك صلاحية تأكيد هذا الطلب." };
-        }
         const validation = validatePreparationDurationMinutes(data.preparationDurationMinutes);
         if (!validation.ok) return validation;
         duration = validation.data;
@@ -231,7 +251,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
               updated_at = locked.confirmation_timestamp
           from locked
           where o.id = ${data.id} and o.archived_at is null and o.status = locked.from_status
-            and (${isNewConfirmation} or locked.from_status <> 'new')
+            and locked.from_status = ${fromStatus}
           returning o.*, locked.from_status
         ),
         audit as (
