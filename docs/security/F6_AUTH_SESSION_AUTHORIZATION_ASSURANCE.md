@@ -436,8 +436,8 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 
 - **Base main (VERIFIED):** `f3660c2cb6a1817df54a8552fc49a84ab7fee750`
 - **Branch:** `fix/f6-1-auth-01-order-membership-authorization`
-- **Final PR head (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`
-- **Prior heads (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`.
+- **Implementation head (VERIFIED):** `34f2e74c8cfa35d5d349c0d97023437f49eec246`
+- **Prior heads (HISTORICAL):** code head `afa5717b`; first continuity head `fa207c05`; second continuity head `3cda00f0`; third review-correction head `c43d6f1a`.
 - **PR:** #429 — https://github.com/Midosd249/Menu_V3/pull/429
 
 ### What was closed (source-level)
@@ -453,7 +453,7 @@ External sources below are authoritative guidance, not evidence that Menuun impl
 ### Review correction — behavioral authorization coverage
 
 - `authorizeMutation`, `requireMembership` and `requireBranchAccess` now accept an optional injected `Sql`. Production callers omit it, so their behaviour is unchanged (`getSql()` is still used); the injection exists solely so the regression test can drive the **real production authorization function** rather than a test-only simulation.
-- `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests) now calls the production `authorizeMutation` against isolated PGlite and proves: denial for missing `orders.write` (editor/staff), inactive membership, missing membership and cross-tenant access; permission for active owner/admin; every permitted transition applied through the authorization gate; denied transitions leave order status unchanged and create no audit event; `new → cancelled` permitted with exactly one audit event; stale concurrent transition conflicts. RED reproduced by removing the gate.
+- `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests) now calls the production `authorizeMutation` against isolated PGlite and proves: denial for missing `orders.write` (editor/staff), inactive membership, missing membership and cross-tenant access; permission for active owner/admin; every permitted transition applied through the authorization gate; a denied representative `new → confirmed` attempt leaves order status unchanged and creates no audit event; `new → cancelled` permitted with exactly one audit event; stale concurrent transition conflicts. RED reproduced by removing the gate.
 
 ### Tests and evidence
 
