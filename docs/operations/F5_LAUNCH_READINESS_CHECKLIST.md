@@ -167,3 +167,20 @@ These sources inform the structure of the checklist only. They do not establish 
 **F5.7 STATUS: COMPLETE WITH EXPLICIT BLOCKERS — documentation-only.**
 
 **EXACT NEXT TASK: F6.1 — Reconfirm auth/session/authorization paths for critical operations.** Keep F3 as a mandatory pre-commercial gate and F5.3 as an open risk; do not start a launch or deployment.
+
+
+---
+
+## 9. Production deployment evidence update — 2026-11-12
+
+The original F5.7 decision dated 2026-11-03 remains historically correct for the evidence available at that time. The following read-only deployment evidence was obtained after PR #429 merged:
+
+- **VERIFIED Production deployment:** Vercel deployment `dpl_84mgticAAEAW8wskM8BqWPnMCzTw`.
+- **VERIFIED state/target:** `READY`, target `production`.
+- **VERIFIED deployed commit:** `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`, branch `main`.
+- **VERIFIED aliases:** `www.menuun.com`, `menuun.com`.
+- **VERIFIED merge:** PR #429 merged at `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; the connected Git/Vercel integration automatically produced the Production deployment.
+- **UNKNOWN:** post-merge GitHub Actions workflow results for the merge SHA; real-device/browser smoke test; signup/login, tenant isolation, Studio, published menu, QR/order, and customer-contact journey health on the deployed Production version.
+- **No database migration, database mutation, or customer-data change** was performed as part of the continuity reconciliation.
+
+**Updated gate:** Production deployment identity is no longer UNKNOWN; it is VERIFIED as READY on the merge SHA. Production smoke/real-device QA remains UNKNOWN. Overall launch readiness remains **BLOCKED** because F3 is deferred/not done and F5.3 remains an open risk. Deployment READY does not authorize onboarding a real restaurant or waive either mandatory gate.

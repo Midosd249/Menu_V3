@@ -1,23 +1,36 @@
 # F-Series Architecture, Operations & Continuity Roadmap
 
-## Current verified checkpoint — 2026-11-04
+## Current verified checkpoint — 2026-11-12
 
-- **VERIFIED MAIN:** `1f0933c6f5008114a7019c70f8742038e544da71` (PR #427 F6.1 squash merge). F6.1 source-review baseline: `fbfe745fc76fd5674fbff2e2524272c8a2269839`.
-- **F5.7:** COMPLETE WITH EXPLICIT BLOCKERS; `docs/operations/F5_LAUNCH_READINESS_CHECKLIST.md`; launch readiness remains BLOCKED.
-- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory before first real customer/customer-owned data/commercial launch.
-- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` branch-hours side-effect path remains unremediated and runtime exploitability unverified.
-- **F6.1:** source-traced auth/session/authorization assurance documented in `docs/security/F6_AUTH_SESSION_AUTHORIZATION_ASSURANCE.md`. Documentation-only; no code, migration, database, settings, secrets or deployment changes.
-- **F6.1 VERIFIED FINDING:** active-membership predicates are inconsistent in `orders.ts`, `options.ts`, `option-groups.ts` and `product-metadata.ts`. Inactive-row reachability through current product flows is UNKNOWN because team removal currently deletes rows and no in-product soft-deactivation write was found. A separately scoped test-first remediation is proposed.
-- **OTHER F6.1 RISKS:** 300-second Better Auth cookie cache needs revocation-freshness verification; effective PostgreSQL login role/RLS boundary is UNKNOWN; Secure cookie flags require runtime header verification; branch access helper callers must independently tenant-bind owner/admin branch selectors.
-- **F6.1 PR:** #427 MERGED; final PR head `3330ae5391fcadf3eed81494c04738ecfb3a7c87`; merge SHA `1f0933c6f5008114a7019c70f8742038e544da71`.
-- **PR #427 EXACT-HEAD CI:** Quality `41729637458` SUCCESS and W9 Orders QA `41729637474` SUCCESS on exact head `3330ae5391fcadf3eed81494c04738ecfb3a7c87`. PR #427 merged at `1f0933c6f5008114a7019c70f8742038e544da71`.
-- **CURRENT PRODUCTION SHA/HEALTH:** UNKNOWN. No Production deployment performed or authorized.
-- **POST-MERGE CI:** queried for merge SHA `1f0933c6f5008114a7019c70f8742038e544da71`; no PR-triggered workflow runs were returned. Post-merge CI remains UNKNOWN.
-- **SAFETY:** no migrations, database writes, customer data changes, settings/secrets changes, or deployment.
-- **EXACT NEXT TASK:** separately scoped test-first remediation for F6.1-AUTH-01 across order status, product options/modifier groups and product metadata membership checks. Not started; do not begin automatically.
+- **MAIN (VERIFIED):** `main` HEAD = `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; latest repository commit and PR #429 squash merge.
+- **COMPLETED TASK:** F6.1-AUTH-01 — active-membership authorization consistency and order-status authorization remediation.
+- **PR #429 (VERIFIED):** MERGED/CLOSED at 2026-11-11 21:49:08 UTC; merge commit `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. PR URL: https://github.com/Midosd249/Menu_V3/pull/429.
+- **Exact PR-head CI (VERIFIED):** final PR head `df89a2e2d780e67aadc58d86e698f6795fa968f4`; Quality run `42965945543` SUCCESS; W9 Orders QA run `42965945523` SUCCESS.
+- **Post-merge CI (UNKNOWN):** GitHub returned no PR-triggered workflow runs associated with merge SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`. Pre-merge checks are not post-merge checks.
+- **Production deployment (VERIFIED):** Vercel deployment `dpl_84mgticAAEAW8wskM8BqWPnMCzTw`, target `production`, state `READY`, deployed SHA `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`, aliases `www.menuun.com` and `menuun.com`. The Git merge caused the connected Git/Vercel automatic deployment; no manual deployment command was issued.
+- **Production QA (UNKNOWN):** READY and alias assignment are deployment evidence only. No real-device/browser smoke test or customer-journey verification was performed in this session.
+- **AUTH-01 implementation:** active membership required in affected membership lookups; `orders.write` enforced for each permitted state-changing order transition; tenant/branch derived from persisted order row; no-op requests avoid writes/audit events; row locking and compare-and-set preserved. The denied-mutation/no-audit behavioral assertion covers a representative `new → confirmed` denial, not every transition individually.
+- **Implementation evidence:** local report recorded 14/14 AUTH-01 tests and focused 50/50; typecheck/lint/Vite build passed. Full local `npm test` summary was 531/541, with six Windows path artifacts reported and four outcomes unresolved in the supplied summary. Exact-head Linux CI is the stronger verified gate.
+- **No database migration, schema change, production data mutation, secrets/settings change, or customer-data change** was part of AUTH-01.
+- **F6.1:** IN PROGRESS — AUTH-01 complete; AUTH-02 through AUTH-07 remain open. F6.2 remains a later independent phase.
+- **F3:** DEFERRED BY OWNER — NOT DONE; mandatory pre-commercial recovery gate.
+- **F5.3:** DEFERRED BY OWNER — OPEN RISK; `src/lib/menu/owner.ts` `saveBranch` potential cross-tenant side-effect path remains unremediated; exploitability UNKNOWN.
+- **Launch readiness:** BLOCKED. Verified deployment identity does not close F3, F5.3, or Production smoke/real-device evidence gaps.
+- **Exact next task:** F6.1-AUTH-02 — verify Better Auth cookie-cache session-revocation freshness, test-first and narrowly scoped. Do not start AUTH-03, F6.2, F3, F5.3, or release work automatically.
+
+## 2026-11-12 — Post-merge continuity reconciliation
+
+- Reconciled stale open/unmerged PR #429 references against live GitHub PR metadata, latest main commit history, exact-head CI evidence, and the current Vercel Production deployment record.
+- Recorded the distinction between pre-merge exact-head CI, absent post-merge workflow evidence, deployment READY, and unperformed real-device/browser QA.
+- Reviewed the F6.1 assurance record and installed Better Auth version. Source config enables `session.cookieCache` with `maxAge: 300`; package-lock resolves Better Auth `1.6.30`.
+- Official Better Auth documentation states cached session data may remain usable on other devices until cache expiry unless cache is bypassed for the request; this is external guidance, not proof of Menuun runtime behavior.
+- Documentation-only continuity work. No application code, migrations, database, secrets, settings, customer data, or deployment configuration changed.
+- **Implementation status:** documentation reconciliation prepared on a dedicated branch; pending PR checks/review.
+- **Deployment status:** existing Production deployment remains READY on `a28810a1c75035f0c843ecf09cb1c2f9b49199bd`; this documentation branch is not deployed.
+- **UNKNOWN:** post-merge GitHub Actions status; real-device/browser smoke; current runtime session revocation behavior.
+- **BLOCKED:** F6.1 completion and commercial launch remain blocked by open findings/gates above.
 
 ---
-
 
 ## 1. Mission and outcome
 
