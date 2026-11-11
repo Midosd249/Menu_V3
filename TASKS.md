@@ -9,8 +9,8 @@
 - **TESTS:** `tests/f6-1-auth-01-order-membership-authorization.test.mjs` (14 tests). RED observed (by removing the gate); GREEN after. W9 concurrency contract aligned.
 - **LOCAL CHECKS:** typecheck pass; lint 0 errors; vite build pass. 6 `npm test` failures are Windows-only path artifacts in `scripts/security-boundary.test.mjs` (reproduce on pristine main); they pass on Linux CI.
 - **BOUNDARIES RESPECTED:** no broad auth refactor, no F3/F5.3 changes, no RLS/grant/secret/migration changes; no Production deployment; no merge.
-- **LATEST DOCS-ONLY CHECKPOINT (VERIFIED):** `47259db1983274353e975b4ddf21dc24383f80ca` (parent of this final continuity correction); verify exact-head CI on the live PR #429 tip.
-- **EXACT NEXT ACTION:** verify Quality and W9 exact-head runs on the live PR #429 head; if both succeed, stop for owner review and an explicit merge decision. Do not begin F6.2 automatically.
+- **LATEST PR HEAD (VERIFIED):** `2b822bbfcebd2a991918bc406b0d10fb45533f4d` (documentation-only continuity correction; implementation head remains `34f2e74c8cfa35d5d349c0d97023437f49eec246`). Exact-head Quality `42955185612` and W9 Orders QA `42955185814` both SUCCESS.
+- **EXACT NEXT ACTION:** owner review of PR #429 and an explicit merge decision. Do not merge, deploy, or begin F6.2 automatically.
 
 ## Prior task record: F6.1-AUTH-01 (proposal)
 
